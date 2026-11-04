@@ -1,0 +1,38 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Join Quiz</title>
+<style>
+body{margin:0;font-family:system-ui,sans-serif;background:#46178f;color:#fff;text-align:center;min-height:100vh}
+#app{padding:20px;max-width:500px;margin:auto}
+input{display:block;width:100%;box-sizing:border-box;font-size:1.4em;padding:14px;margin:10px 0;border-radius:6px;border:0;text-align:center}
+button.go{width:100%;font-size:1.4em;padding:14px;border:0;border-radius:6px;background:#333;color:#fff}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.grid button{height:35vh;font-size:3em;border:0;border-radius:8px;color:#fff}
+.c0{background:#e21b3c}.c1{background:#1368ce}.c2{background:#d89e00}.c3{background:#26890c}
+.big{font-size:2em;margin-top:25vh}.err{color:#ffb3b3}
+</style></head><body><div id="app"></div>
+<script>
+let pin, pid, S = {}, name = '';
+const $ = document.getElementById('app'), sh = ["▲","◆","●","■"];
+async function post(u,b){const r=await fetch(u,{method:'POST',body:JSON.stringify(b)});return {ok:r.ok,...await r.json()}}
+function esc(s){return s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+function form(err){$.innerHTML=`<h1>Join game</h1><input id="p" placeholder="Game PIN" inputmode="numeric"><input id="n" placeholder="Nickname" maxlength="16">
+ <button class="go" onclick="join()">Enter</button><p class="err">${err||''}</p>`}
+async function join(){pin=p.value.trim();const r=await post('/api/join',{pin,name:n.value});
+ if(!r.ok)return form(r.error);pid=r.pid;poll();setInterval(poll,700)}
+async function ans(c){await post('/api/answer',{pin,pid,choice:c});poll()}
+async function poll(){const r=await fetch(`/api/state?pin=${pin}&pid=${pid}`);S=await r.json();render()}
+let last='';
+function render(){
+ const k=JSON.stringify({...S,left:0});if(k==last)return;last=k;
+ const m=S.me||{};
+ if(S.phase=='lobby')$.innerHTML=`<div class="big">You're in, ${esc(m.name||'')}!<br><small>Waiting for host to start…</small></div>`;
+ else if(S.phase=='question'){
+  if(m.answered)$.innerHTML='<div class="big">Answer sent!<br><small>Waiting for others…</small></div>';
+  else $.innerHTML=`<div class="grid">${[0,1,2,3].slice(0,S.answers.length).map(i=>`<button class="c${i}" onclick="ans(${i})">${sh[i]}</button>`).join('')}</div>`;
+ } else if(S.phase=='results')
+  $.innerHTML=`<div class="big">${!m.answered?"⏰ Time's up":m.correct?'✅ Correct! +'+m.gained:'❌ Incorrect'}<br><small>Score ${m.score} &middot; Rank #${m.rank}</small></div>`;
+ else $.innerHTML=`<div class="big">Game over<br>You placed #${m.rank}<br><small>${m.score} points</small></div>`;
+}
+form();
+</script></body></html>

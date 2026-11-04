@@ -1,0 +1,7 @@
+[
+  {"q": "What is the capital of France?", "a": ["Berlin", "Paris", "Madrid", "Rome"], "c": 1, "t": 10},
+  {"q": "Which planet is known as the Red Planet?", "a": ["Venus", "Jupiter", "Mars", "Mercury"], "c": 2, "t": 15},
+  {"q": "What is 7 x 8?", "a": ["54", "56", "64", "48"], "c": 1, "t": 15},
+  {"q": "Which ocean is the largest?", "a": ["Atlantic", "Indian", "Arctic", "Pacific"], "c": 3, "t": 20},
+  {"q": "Who painted the Mona Lisa?", "a": ["Van Gogh", "Picasso", "Da Vinci", "Monet"], "c": 2}
+]

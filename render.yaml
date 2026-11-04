@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: quiz
+    runtime: python
+    plan: free
+    buildCommand: echo ok
+    startCommand: python3 server.py

@@ -1,0 +1,38 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Quiz Host</title>
+<style>
+body{margin:0;font-family:system-ui,sans-serif;background:#46178f;color:#fff;text-align:center;min-height:100vh}
+#app{padding:24px;max-width:1000px;margin:auto}
+h1{font-size:2.4em}.pin{font-size:5em;font-weight:800;background:#fff;color:#46178f;display:inline-block;padding:0 30px;border-radius:12px}
+button{font-size:1.3em;padding:12px 32px;border:0;border-radius:8px;background:#26890c;color:#fff;cursor:pointer;margin-top:20px}
+.names span{display:inline-block;background:#fff3;border-radius:8px;padding:8px 14px;margin:5px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:20px}
+.a{padding:30px;border-radius:8px;font-size:1.5em;font-weight:700;position:relative}
+.a.dim{opacity:.3}.c0{background:#e21b3c}.c1{background:#1368ce}.c2{background:#d89e00}.c3{background:#26890c}
+.timer{font-size:3em;font-weight:800}
+.row{background:#fff2;margin:6px auto;padding:10px 20px;border-radius:8px;max-width:500px;display:flex;justify-content:space-between;font-size:1.3em}
+</style></head><body><div id="app"><button onclick="create()">Create game</button></div>
+<script>
+let pin, host, S = {};
+const $ = document.getElementById('app'), sh = ["▲ ","◆ ","● ","■ "];
+async function post(u, b){return (await fetch(u,{method:'POST',body:JSON.stringify(b)})).json()}
+async function create(){const r=await post('/api/create',{});pin=r.pin;host=r.host;poll();setInterval(poll,700)}
+async function next(){await post('/api/next',{pin,host});poll()}
+async function poll(){const r=await fetch('/api/state?pin='+pin);S=await r.json();render()}
+function board(b){return b.map((x,i)=>`<div class="row"><span>${i+1}. ${esc(x.name)}</span><b>${x.score}</b></div>`).join('')}
+function esc(s){return s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+function render(){
+ if(S.phase=='lobby')$.innerHTML=`<h1>Join at <u>${location.host}/play</u> with PIN</h1><div class="pin">${pin}</div>
+  <p>${S.n} player(s)</p><div class="names">${S.names.map(n=>`<span>${esc(n)}</span>`).join('')}</div>
+  ${S.n?'<button onclick="next()">Start</button>':''}`;
+ else if(S.phase=='question'||S.phase=='results'){
+  const r=S.phase=='results';
+  $.innerHTML=`<p>Question ${S.index+1}/${S.total} &middot; ${S.answered}/${S.n} answered</p><h1>${esc(S.question)}</h1>
+  ${r?'':`<div class="timer">${Math.ceil(S.left)}</div>`}
+  <div class="grid">${S.answers.map((a,i)=>`<div class="a c${i} ${r&&i!=S.correct?'dim':''}">${sh[i]}${esc(a)}${r?` <small>(${S.counts[i]})</small>${i==S.correct?' ✓':''}`:''}</div>`).join('')}</div>
+  ${r?'<h2>Top players</h2>'+board(S.board):''}
+  <button onclick="next()">${r?(S.index+1>=S.total?'Final results':'Next'):'Skip'}</button>`;
+ } else $.innerHTML='<h1>🏆 Final results</h1>'+board(S.board)+'<button onclick="location.reload()">New game</button>';
+}
+</script></body></html>
