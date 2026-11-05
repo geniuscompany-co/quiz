@@ -12,10 +12,16 @@ button.go{width:100%;font-size:1.4em;padding:14px;border:0;border-radius:6px;bac
 .teams{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0}
 .tm{padding:10px;border-radius:8px;background:#fff2;border:2px solid transparent;cursor:pointer;font-weight:700;font-size:.95em;user-select:none}
 .tm.sel{border-color:#ffdf5d;background:#fff4;transform:scale(1.03)}
-.pu-bar{display:flex;justify-content:center;gap:10px;margin-bottom:10px}
-.pu-btn{flex:1;padding:10px 12px;border:2px solid #fff6;border-radius:99px;background:#fff2;color:#fff;font-size:1em;font-weight:800;cursor:pointer}
+.pu-bar{display:flex;justify-content:center;gap:8px;margin-bottom:10px}
+.pu-btn{flex:1;padding:10px 8px;border:2px solid #fff6;border-radius:99px;background:#fff2;color:#fff;font-size:.92em;font-weight:800;cursor:pointer}
 .pu-btn.active{background:linear-gradient(90deg,#ff9800,#ffd600);color:#2b0d57;border-color:#fff}
 .pu-btn:disabled{opacity:.35;cursor:default;text-decoration:line-through}
+.sab-btn{margin-top:12px;padding:10px 18px;border-radius:99px;border:2px solid #80deea;background:#00acc155;color:#fff;font-weight:800;font-size:.95em;cursor:pointer}
+.sab-btn:disabled{opacity:.4;cursor:default}
+.ice-overlay{position:fixed;inset:0;background:linear-gradient(135deg,#00b4dbdd,#0083b0ee);z-index:40;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;user-select:none;cursor:pointer}
+.ice-overlay h1{font-size:2.4em;margin:.2em 0}
+.ice-cube{font-size:5em;transition:transform .1s}
+.ice-cube:active{transform:scale(.85)}
 .wager-box{background:#0004;border:2px solid #ffdf5d;border-radius:12px;padding:12px;margin:10px 0}
 .wager-btns{display:flex;gap:8px;margin-top:8px}
 .wager-btn{flex:1;padding:10px;border-radius:8px;border:2px solid #fff5;background:#fff2;color:#fff;font-weight:800;font-size:1.05em;cursor:pointer}
@@ -25,15 +31,20 @@ button.go{width:100%;font-size:1.4em;padding:14px;border:0;border-radius:6px;bac
 .grid button .sh{font-size:2em;line-height:1}
 .grid button.elim{opacity:.18;pointer-events:none;filter:grayscale(1)}
 .c0{background:#e21b3c}.c1{background:#1368ce}.c2{background:#d89e00}.c3{background:#26890c}
-.big{font-size:1.85em;margin-top:12vh}
+.big{font-size:1.85em;margin-top:10vh}
 .big:has(+blockquote){margin-top:4vh}
 .streak-pill{display:inline-block;background:#ff6d00;color:#fff;font-size:.65em;padding:4px 14px;border-radius:99px;margin-top:8px;font-weight:800}
-.double-pill{display:inline-block;background:linear-gradient(90deg,#ff9800,#ffd600);color:#2b0d57;font-weight:900;padding:4px 14px;border-radius:99px;font-size:.95em;margin-bottom:8px}
+.double-pill{display:inline-block;background:linear-gradient(90deg,#ff9800,#ffd600);color:#2b0d57;font-weight:900;padding:4px 14px;border-radius:99px;font-size:.95em;margin-bottom:6px}
+.underdog-pill{display:inline-block;background:linear-gradient(90deg,#00c853,#b2ff59);color:#1b5e20;font-weight:900;padding:4px 14px;border-radius:99px;font-size:.88em;margin-bottom:6px}
 .react-bar{display:flex;justify-content:center;gap:10px;margin-top:22px;flex-wrap:wrap}
 .react-bar button{font-size:1.7em;background:#fff2;border:0;border-radius:99px;padding:8px 14px;cursor:pointer;transition:transform .12s}
 .react-bar button:active{transform:scale(1.3)}
 blockquote{background:#fff;color:#2b0d57;border-radius:10px;padding:14px 18px;margin:16px 0 0;font-style:italic;line-height:1.4;text-align:left}
 blockquote cite{display:block;font-style:normal;font-size:.8em;margin-top:8px;opacity:.7}.err{color:#ffb3b3}
+.trophy-card{background:linear-gradient(135deg,#ffd700,#ff9800);color:#2b0d57;border-radius:16px;padding:16px;margin:14px auto;max-width:360px;box-shadow:0 8px 24px #0006;font-weight:800}
+.trophy-card.silver{background:linear-gradient(135deg,#f5f7fa,#b8c6db)}
+.trophy-card.bronze{background:linear-gradient(135deg,#f3a683,#c47135);color:#fff}
+.trophy-card button{margin-top:10px;padding:8px 16px;border-radius:99px;border:0;background:#2b0d57;color:#fff;font-weight:800;cursor:pointer}
 .report-card{background:#fff2;border-radius:12px;padding:14px 16px;margin-top:16px;text-align:left;font-size:.95em}
 .report-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;text-align:center;margin-bottom:12px}
 .stat-pill{background:#0004;padding:8px;border-radius:8px;font-weight:700}
@@ -43,6 +54,7 @@ blockquote cite{display:block;font-style:normal;font-size:.8em;margin-top:8px;op
 </style></head><body><div id="app"></div>
 <script>
 let pin, pid, S = {}, avatar = '🦊', team = '';
+let iceBrokenQ = -1, iceTaps = 0;
 const AVS = ['🦊','🐼','🦁','🐸','🦄','🐙','🦖','🐝','🦋','🐧','🚀','⚡'];
 const TEAMS = [
  {id:'', label:'🎲 Auto Team'},
@@ -109,10 +121,52 @@ async function tryReconnect(){
  form();
 }
 
+async function sendWord(){
+ const inp = document.getElementById('iceInp');
+ if(!inp || !inp.value.trim()) return;
+ await post('/api/word',{pin,pid,word:inp.value.trim()});
+ poll();
+}
 async function ans(c){await post('/api/answer',{pin,pid,choice:c});poll()}
 async function usePu(kind){await post('/api/powerup',{pin,pid,kind});poll()}
 async function setWager(pct){await post('/api/wager',{pin,pid,pct});poll()}
+async function sabotage(){await post('/api/sabotage',{pin,pid});poll()}
 async function react(emoji){await post('/api/react',{pin,pid,emoji})}
+function tapIce(){
+ iceTaps++;
+ const rem = Math.max(0, 5 - iceTaps);
+ const lbl = document.getElementById('iceRem');
+ if(lbl) lbl.textContent = rem;
+ if(rem <= 0){
+  iceBrokenQ = S.index;
+  const ov = document.getElementById('iceOv');
+  if(ov) ov.remove();
+ }
+}
+function saveCert(name, rank, score, acc){
+ const c = document.createElement('canvas');
+ c.width = 800; c.height = 500;
+ const ctx = c.getContext('2d');
+ const g = ctx.createLinearGradient(0,0,800,500);
+ g.addColorStop(0,'#46178f'); g.addColorStop(1,'#1a0938');
+ ctx.fillStyle = g; ctx.fillRect(0,0,800,500);
+ ctx.strokeStyle = '#ffd700'; ctx.lineWidth = 10;
+ ctx.strokeRect(24,24,752,452);
+ ctx.fillStyle = '#ffd700'; ctx.font = 'bold 44px system-ui,sans-serif';
+ ctx.textAlign = 'center';
+ const medals = {1:'🥇 1ST PLACE CHAMPION', 2:'🥈 2ND PLACE WINNER', 3:'🥉 3RD PLACE PODIUM'};
+ ctx.fillText(medals[rank] || `🏆 RANK #${rank}`, 400, 120);
+ ctx.fillStyle = '#ffffff'; ctx.font = 'bold 54px system-ui,sans-serif';
+ ctx.fillText(name, 400, 220);
+ ctx.fillStyle = '#7dff6b'; ctx.font = 'bold 36px system-ui,sans-serif';
+ ctx.fillText(`${score} Points  •  ${acc}% Accuracy`, 400, 310);
+ ctx.fillStyle = '#ffffffbb'; ctx.font = '24px system-ui,sans-serif';
+ ctx.fillText('Brainrush! Live Quiz Award', 400, 415);
+ const a = document.createElement('a');
+ a.download = `brainrush_award_${name}.png`;
+ a.href = c.toDataURL('image/png');
+ a.click();
+}
 function reactBar(){return `<div class="react-bar">${REACTS.map(e=>`<button onclick="react('${e}')">${e}</button>`).join('')}</div>`}
 async function poll(){
  const r=await fetch(`/api/state?pin=${pin}&pid=${pid}`);
@@ -124,15 +178,34 @@ function render(){
  const inPrev = S.phase==='question' && (S.preview_left||0) > 0;
  const m=S.me||{};
  const k = S.phase==='question'
-  ? `q:${S.index}:${inPrev?1:0}:${m.answered?1:0}:${m.active_2x?1:0}:${(m.hide||[]).join(',')}:${m.wager_pct??''}`
+  ? `q:${S.index}:${inPrev?1:0}:${m.answered?1:0}:${m.active_2x?1:0}:${m.active_shield?1:0}:${(m.hide||[]).join(',')}:${m.wager_pct??''}:${m.frozen?1:0}`
   : JSON.stringify({...S,left:0,qtime:0,answered:0,team_board:null,preview_left:0,auto_left:0,reactions:null});
  if(k==last)return;last=k;
  const tag = esc((m.team_emoji?m.team_emoji+' ':'')+(m.avatar?m.avatar+' ':'')+(m.name||''));
  if(S.phase=='lobby'){
   const tmBadge = m.team_name ? `<br><small>Team: ${m.team_emoji} ${esc(m.team_name)}</small>` : '';
   $.innerHTML=`<div class="big">You're in, ${tag}!${tmBadge}<br><small>Waiting for host to start…</small></div>${reactBar()}`;
+ } else if(S.phase=='icebreaker'){
+  if(m.word_sent){
+   $.innerHTML=`<div class="big">💭 Word sent!<br><small>Look at the live Word Cloud on the big screen…</small></div>${reactBar()}`;
+  } else {
+   $.innerHTML=`<h2>💭 Warm-Up Question</h2><p style="font-size:1.2em">${esc(S.prompt)}</p>
+   <input id="iceInp" placeholder="Type 1-2 words…" maxlength="28">
+   <button class="go" onclick="sendWord()">Send to Word Cloud</button>${reactBar()}`;
+  }
  } else if(S.phase=='question'){
+  if(S.index !== iceBrokenQ && m.frozen && !inPrev && !m.answered){
+   iceTaps = 0;
+  }
+  const showIce = m.frozen && iceBrokenQ !== S.index && !inPrev && !m.answered;
+  const iceHtml = showIce ? `<div class="ice-overlay" id="iceOv" onclick="tapIce()">
+   <div class="ice-cube">❄️</div>
+   <h1>YOU'RE FROZEN!</h1>
+   <p style="font-size:1.25em"><b>${esc(m.frozen_by)}</b> threw an Ice Cube at you!</p>
+   <p style="font-size:1.4em;font-weight:900;color:#ffdf5d">Tap <span id="iceRem">5</span> times to break the ice!</p>
+  </div>` : '';
   const dbl = S.redemption ? `<div class="double-pill">🔄 REDEMPTION BONUS (2x)! 🔄</div>` : S.boss ? `<div class="double-pill">🎰 FINAL BOSS WAGER! 🎰</div>` : (S.double || m.active_2x) ? `<div class="double-pill">⚡ ${S.double && m.active_2x ? '4x' : 'DOUBLE'} POINTS ACTIVE! ⚡</div>` : '';
+  const udog = m.underdog ? `<div><span class="underdog-pill">🎯 UNDERDOG 1.5x CATCH-UP BOOST!</span></div>` : '';
   const curW = m.wager_pct ?? 0;
   const stake = Math.max(500, m.score || 0);
   const wagerUi = (S.boss && !m.answered) ? `<div class="wager-box">
@@ -141,24 +214,36 @@ function render(){
     ${[0,50,100].map(pct=>`<button class="wager-btn ${curW===pct?'sel':''}" onclick="setWager(${pct})">${pct}% (${Math.round(stake*pct/100)} pts)</button>`).join('')}
    </div>
   </div>` : '';
-  if(m.answered)$.innerHTML=`<div class="big">${dbl}<br>Answer sent!<br><small>Waiting for others…</small></div>`;
-  else if(inPrev)$.innerHTML=`<div class="big" style="margin-top:8vh">${dbl}<br>👀 Get ready!<br><small>Read the question on the host screen…</small></div>${wagerUi}`;
+  if(m.answered)$.innerHTML=`<div class="big">${dbl}${udog}<br>Answer sent!<br><small>Waiting for others…</small></div>`;
+  else if(inPrev)$.innerHTML=`<div class="big" style="margin-top:8vh">${dbl}${udog}<br>👀 Get ready!<br><small>Read the question on the host screen…</small></div>${wagerUi}`;
   else {
    const hide = m.hide || [];
    const puBar = `<div class="pu-bar">
     <button class="pu-btn" ${m.pu_5050?'':'disabled'} onclick="usePu('5050')">✂️ 50/50</button>
-    <button class="pu-btn ${m.active_2x?'active':''}" ${m.pu_2x||m.active_2x?'':'disabled'} onclick="usePu('2x')">⚡ ${m.active_2x?'2x ON!':'2x Points'}</button>
+    <button class="pu-btn ${m.active_2x?'active':''}" ${m.pu_2x||m.active_2x?'':'disabled'} onclick="usePu('2x')">⚡ ${m.active_2x?'2x ON':'2x'}</button>
+    <button class="pu-btn ${m.active_shield?'active':''}" ${m.pu_shield||m.active_shield?'':'disabled'} onclick="usePu('shield')">🛡️ ${m.active_shield?'Shielded':'Shield'}</button>
    </div>`;
-   $.innerHTML=`${dbl}${wagerUi}${puBar}<div class="grid">${S.answers.map((a,i)=>`<button class="c${i} ${hide.includes(i)?'elim':''}" onclick="ans(${i})"><span class="sh">${sh[i]}</span><span>${esc(a)}</span></button>`).join('')}</div>`;
+   $.innerHTML=`${iceHtml}${dbl}${udog}${wagerUi}${puBar}<div class="grid">${S.answers.map((a,i)=>`<button class="c${i} ${hide.includes(i)?'elim':''}" onclick="ans(${i})"><span class="sh">${sh[i]}</span><span>${esc(a)}</span></button>`).join('')}</div>`;
   }
  } else if(S.phase=='results'){
   const st = m.streak >= 2 ? `<br><span class="streak-pill">🔥 ${m.streak} in a row! ${m.bonus?`(+${m.bonus} bonus)`:''}</span>` : '';
+  const shMsg = (!m.correct && m.shielded) ? `<br><small style="color:#80deea">🛡️ Streak Shield protected your streak!</small>` : '';
   const gTxt = m.gained >= 0 ? '+'+m.gained : m.gained;
-  $.innerHTML=`<div class="big">${!m.answered?"⏰ Time's up":m.correct?'✅ Correct! '+gTxt:'❌ Incorrect'+(m.gained<0?' ('+m.gained+')':'')}${st}<br><small>Score ${m.score}</small></div>${S.quote?`<blockquote>&ldquo;${esc(S.quote)}&rdquo;${S.source?`<cite>&mdash; ${esc(S.source)}</cite>`:''}</blockquote>`:''}${reactBar()}`;
- } else if(S.phase=='board')
-  $.innerHTML=`<div class="big">🏆 You're #${m.rank}<br><small>${m.score} points</small>${m.streak>=2?`<br><span class="streak-pill">🔥 ${m.streak} Streak</span>`:''}</div>${reactBar()}`;
- else {
+  const canSab = S.sabotage_enabled && !S.is_last && m.pu_freeze && m.score >= 200 && S.n > 1;
+  const sabBtn = canSab ? `<div><button class="sab-btn" onclick="sabotage()">❄️ Freeze Leader (-200 pts)</button></div>` : m.ice_sent ? `<div><small style="color:#80deea">❄️ Ice Cube thrown at the leader for next round!</small></div>` : '';
+  $.innerHTML=`<div class="big">${!m.answered?"⏰ Time's up":m.correct?'✅ Correct! '+gTxt:'❌ Incorrect'+(m.gained<0?' ('+m.gained+')':'')}${st}${shMsg}<br><small>Score ${m.score}</small></div>${sabBtn}${S.quote?`<blockquote>&ldquo;${esc(S.quote)}&rdquo;${S.source?`<cite>&mdash; ${esc(S.source)}</cite>`:''}</blockquote>`:''}${reactBar()}`;
+ } else if(S.phase=='board'){
+  const canSab = S.sabotage_enabled && m.pu_freeze && m.score >= 200 && S.n > 1;
+  const sabBtn = canSab ? `<div><button class="sab-btn" onclick="sabotage()">❄️ Freeze Leader (-200 pts)</button></div>` : m.ice_sent ? `<div><small style="color:#80deea">❄️ Ice Cube thrown at the leader for next round!</small></div>` : '';
+  $.innerHTML=`<div class="big">🏆 You're #${m.rank}<br><small>${m.score} points</small>${m.streak>=2?`<br><span class="streak-pill">🔥 ${m.streak} Streak</span>`:''}</div>${sabBtn}${reactBar()}`;
+ } else {
   const rep = m.report || {};
+  const tClass = m.rank===1?'':m.rank===2?'silver':m.rank===3?'bronze':'';
+  const trophyHtml = m.rank <= 3 ? `<div class="trophy-card ${tClass}">
+   <div style="font-size:2em">${m.rank===1?'🥇 1st Place Champion!':m.rank===2?'🥈 2nd Place Podium!':'🥉 3rd Place Podium!'}</div>
+   <div>${tag} &middot; ${m.score} pts</div>
+   <button onclick="saveCert('${esc(m.name)}',${m.rank},${m.score},${rep.accuracy||0})">🏅 Save Winner Certificate</button>
+  </div>` : '';
   const missedHtml = (rep.missed && rep.missed.length) ? `<div style="margin-top:8px"><b>📝 Questions to Review:</b>${rep.missed.map(x=>`<div class="missed-item"><b>Q${x.num}:</b> ${esc(x.q)}<br><span style="color:#ff9b9b">You: ${esc(x.your_ans)}</span> &middot; <span style="color:#7dff6b">✅ ${esc(x.correct_ans)}</span></div>`).join('')}</div>` : `<div style="text-align:center;color:#7dff6b;font-weight:800">🌟 Perfect Score! You got every question right!</div>`;
   const repHtml = rep.total ? `<div class="report-card">
    <div class="report-stats">
@@ -168,7 +253,7 @@ function render(){
    </div>
    ${missedHtml}
   </div>` : '';
-  $.innerHTML=`<div class="big" style="margin-top:4vh">🎉 Game over!<br>You placed #${m.rank}<br><small>${m.score} points</small></div>${repHtml}${reactBar()}`;
+  $.innerHTML=`<div class="big" style="margin-top:3vh">🎉 Game over!<br>You placed #${m.rank}<br><small>${m.score} points</small></div>${trophyHtml}${repHtml}${reactBar()}`;
  }
 }
 tryReconnect();

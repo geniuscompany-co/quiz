@@ -101,6 +101,8 @@ def save_custom_quiz(title, questions):
             item["quote"] = str(q["quote"]).strip()
         if q.get("src"):
             item["src"] = str(q["src"]).strip()
+        if q.get("img"):
+            item["img"] = str(q["img"]).strip()
         cleaned.append(item)
     if not cleaned:
         raise ValueError("No valid questions provided")
@@ -131,6 +133,8 @@ def new_game(quiz_file="quiz.json", count=None, shuffle=False):
         "phase": "lobby", "q": -1, "start": 0, "preview": PREVIEW_TIME, "players": {},
         "reactions": [], "rseq": 0,
         "teams": False, "wager": True, "redemption": False, "redemption_added": False,
+        "sabotage": True, "icebreaker": False, "icebreaker_prompt": "In one word, how are you feeling right now?",
+        "words": [],
         "auto": False, "phase_entered": time.time(),
         "paused": False, "pause_rem": 0.0, "pause_prev": 0.0, "extra_time": 0.0,
     }
@@ -143,6 +147,8 @@ def calc_streak(p, up_to_q):
         a = p["answers"].get(qi)
         if a and a.get("correct"):
             s += 1
+        elif a and a.get("shielded"):
+            pass
         else:
             s = 0
     return s
@@ -156,6 +162,8 @@ def calc_max_streak(p, total_q):
             cur += 1
             if cur > best:
                 best = cur
+        elif a and a.get("shielded"):
+            pass
         else:
             cur = 0
     return best
@@ -175,6 +183,11 @@ BOT_NAMES = [
     ("🤠", "Tex"), ("👾", "Pixel"), ("🚀", "Nova"), ("⚡", "Flash"),
     ("🦉", "Athena"), ("🦈", "Finn"), ("🐝", "Buzz"), ("🦖", "Rex"),
     ("🐧", "Pip"), ("🦋", "Skye"), ("🐢", "Turbo"), ("🐺", "Luna"),
+]
+
+BOT_ICE_WORDS = [
+    "Ready!", "Pumped", "Excited", "Curious", "Unstoppable", "Focused",
+    "Hyped", "Let'sGo", "Brainy", "Confident", "Caffeine", "Winning",
 ]
 
 
@@ -233,6 +246,16 @@ def cur_timer_state(g):
     return prev_left, q_left, q_elapsed, qt
 
 
+def is_underdog(g, p, qi):
+    if qi < 3 or len(g["players"]) < 2:
+        return False
+    scores = sorted([x["score"] for x in g["players"].values()], reverse=True)
+    if scores[0] <= 0:
+        return False
+    median = scores[len(scores) // 2]
+    return p["score"] < median
+
+
 def record_answer(g, p, choice, t):
     qi = g["q"]
     q = g["quiz"][qi]
@@ -240,6 +263,9 @@ def record_answer(g, p, choice, t):
     is_correct = (choice == q["c"])
     pu = p.get("powerups", {})
     p_mult = 2 if pu.get("2x_q") == qi else 1
+    shielded = (pu.get("shield_q") == qi)
+    underdog = is_underdog(g, p, qi)
+    u_mult = 1.5 if underdog else 1.0
     wager_pct = p.get("wagers", {}).get(qi)
     wager_amt = 0
     if wager_pct is not None and wager_pct > 0:
@@ -249,15 +275,16 @@ def record_answer(g, p, choice, t):
         prev_streak = calc_streak(p, qi - 1) if qi > 0 else 0
         new_streak = prev_streak + 1
         bonus = min(300, (new_streak - 1) * 100) if new_streak >= 2 else 0
-        base = round(1000 * (1 - min(1.0, t / qt) / 2)) * qmult(g) * p_mult
+        base = round(1000 * (1 - min(1.0, t / qt) / 2) * qmult(g) * p_mult * u_mult)
         gained = base + bonus + wager_amt
     else:
         bonus = 0
-        gained = -wager_amt if wager_amt > 0 else 0
+        gained = -wager_amt if (wager_amt > 0 and not shielded) else 0
     p["score"] = max(0, p["score"] + gained)
     p["answers"][qi] = {
         "choice": choice, "gained": gained, "bonus": bonus,
         "wager": wager_amt, "correct": is_correct, "time": round(t, 2),
+        "shielded": shielded, "underdog": underdog and is_correct,
     }
 
 
@@ -268,6 +295,11 @@ def start_question(g, qi):
     g["phase_entered"] = time.time()
     g["paused"] = False
     g["extra_time"] = 0.0
+    for p in g["players"].values():
+        if p.get("frozen_next"):
+            p["frozen_q"] = qi
+            p["frozen_by_q"] = p.get("frozen_by", "Someone")
+            p["frozen_next"] = False
 
 
 def find_most_missed(g):
@@ -343,8 +375,17 @@ def advance_game(g):
             g["phase_entered"] = time.time()
         else:
             start_question(g, g["q"] + 1)
-    elif g["phase"] == "lobby":
+    elif g["phase"] == "icebreaker":
         start_question(g, 0)
+    elif g["phase"] == "lobby":
+        if g.get("icebreaker"):
+            g["phase"] = "icebreaker"
+            g["phase_entered"] = time.time()
+            for p in g["players"].values():
+                if p.get("bot"):
+                    g["words"].append({"text": random.choice(BOT_ICE_WORDS), "name": p["name"]})
+        else:
+            start_question(g, 0)
 
 
 def tick(g):
@@ -371,6 +412,9 @@ def tick(g):
                     if not pu.get("2x_used") and random.random() < 0.2:
                         pu["2x_used"] = True
                         pu["2x_q"] = qi
+                    elif not pu.get("shield_used") and calc_streak(p, qi - 1) >= 2 and random.random() < 0.25:
+                        pu["shield_used"] = True
+                        pu["shield_q"] = qi
                     if is_boss_q(g, qi):
                         p.setdefault("wagers", {})[qi] = random.choice([0, 50, 50, 100])
                 delay, ch = plan[qi]
@@ -408,6 +452,7 @@ def leaderboard(g):
             "team": p.get("team", ""), "team_emoji": t_info.get("emoji", ""),
             "score": p["score"], "prev": p["score"] - gained,
             "gained": gained, "streak": streak,
+            "frozen_next": bool(p.get("frozen_next")),
         })
     prev_order = [x["name"] for x in sorted(rows, key=lambda x: -x["prev"])]
     rows.sort(key=lambda x: -x["score"])
@@ -492,7 +537,6 @@ def final_stats(g):
         awards.append({"title": "⚡ Speed Demon", "winner": ptag(speed_best[1]), "detail": "%.1fs avg" % speed_best[0]})
     if streak_best:
         awards.append({"title": "🔥 Longest Streak", "winner": ptag(streak_best[1]), "detail": "%d in a row" % streak_best[0]})
-    # Tough ones recap: questions with lowest accuracy
     q_stats = []
     n_p = max(1, len(g["players"]))
     for qi, q in enumerate(g["quiz"]):
@@ -579,10 +623,19 @@ def view(g, pid=None, host=False):
         "names": [ptag(p) for p in g["players"].values()] if ph == "lobby" else None,
         "reactions": g["reactions"][-25:],
         "teams_enabled": bool(g.get("teams")),
+        "sabotage_enabled": bool(g.get("sabotage", True)),
         "team_board": team_leaderboard(g) if g.get("teams") else [],
         "auto": bool(g.get("auto")),
         "paused": bool(g.get("paused")),
     }
+    if ph == "icebreaker":
+        out["prompt"] = g.get("icebreaker_prompt") or "In one word, how are you feeling right now?"
+        counts = {}
+        for w in g.get("words", []):
+            txt = w["text"]
+            counts[txt] = counts.get(txt, 0) + 1
+        out["words"] = [{"text": k, "count": v} for k, v in counts.items()]
+        out["word_total"] = len(g.get("words", []))
     if ph in ("results", "board") and g.get("auto"):
         wait_s = 7.0 if ph == "results" else 6.0
         out["auto_left"] = max(0, round(wait_s - (now - g.get("phase_entered", now))))
@@ -590,7 +643,7 @@ def view(g, pid=None, host=False):
         q = g["quiz"][g["q"]]
         prev_left, q_left, q_elapsed, qt = cur_timer_state(g)
         out.update(
-            index=g["q"], question=q["q"], answers=q["a"], qtime=round(qt),
+            index=g["q"], question=q["q"], answers=q["a"], img=q.get("img"), qtime=round(qt),
             left=round(q_left, 2),
             preview_left=round(prev_left, 2),
             preview_total=g.get("preview", PREVIEW_TIME),
@@ -625,6 +678,9 @@ def view(g, pid=None, host=False):
         pu = p.get("powerups", {})
         wagers = p.get("wagers", {})
         t_info = TEAM_MAP.get(p.get("team", ""), {})
+        lb = leaderboard(g)
+        my_rank = [x["name"] for x in lb].index(p["name"]) + 1
+        leader_name = lb[0]["name"] if lb else ""
         me = {
             "name": p["name"], "avatar": p.get("avatar", ""),
             "team": p.get("team", ""), "team_name": t_info.get("name", ""), "team_emoji": t_info.get("emoji", ""),
@@ -636,11 +692,21 @@ def view(g, pid=None, host=False):
             "wager_amt": a.get("wager", 0) if a else 0,
             "wager_pct": wagers.get(g["q"]),
             "correct": a.get("correct", False) if a else False,
+            "shielded": a.get("shielded", False) if a else False,
+            "underdog": (is_underdog(g, p, g["q"]) if ph == "question" else (a.get("underdog", False) if a else False)),
             "streak": streak,
-            "rank": [x["name"] for x in leaderboard(g)].index(p["name"]) + 1,
+            "rank": my_rank,
+            "leader": leader_name,
             "pu_5050": not pu.get("5050_used", False),
             "pu_2x": not pu.get("2x_used", False),
+            "pu_shield": not pu.get("shield_used", False),
+            "pu_freeze": not pu.get("freeze_used", False),
             "active_2x": pu.get("2x_q") == g["q"],
+            "active_shield": pu.get("shield_q") == g["q"],
+            "frozen": p.get("frozen_q") == g["q"],
+            "frozen_by": p.get("frozen_by_q", "Someone"),
+            "ice_sent": bool(p.get("ice_sent_q") == g["q"]),
+            "word_sent": bool(p.get("word_sent")),
             "hide": pu.get("hide", []) if pu.get("5050_q") == g["q"] else [],
         }
         if ph == "final":
@@ -696,7 +762,11 @@ class H(BaseHTTPRequestHandler):
                 if not g:
                     return self.send({"error": "Game not found"}, 404)
                 return self.send(view(g, q.get("pid")))
-        files = {"/": "host.html", "/host": "host.html", "/play": "play.html", "/logo.jpg": "logo.jpg"}
+        files = {
+            "/": "host.html", "/host": "host.html",
+            "/play": "play.html", "/remote": "remote.html",
+            "/logo.jpg": "logo.jpg",
+        }
         if path in files:
             ctype = "image/jpeg" if path.endswith(".jpg") else "text/html; charset=utf-8"
             with open(os.path.join(ROOT, files[path]), "rb") as f:
@@ -728,6 +798,12 @@ class H(BaseHTTPRequestHandler):
                     g["wager"] = bool(body["wager"])
                 if "redemption" in body:
                     g["redemption"] = bool(body["redemption"])
+                if "sabotage" in body:
+                    g["sabotage"] = bool(body["sabotage"])
+                if "icebreaker" in body:
+                    g["icebreaker"] = bool(body["icebreaker"])
+                if body.get("icebreaker_prompt"):
+                    g["icebreaker_prompt"] = str(body["icebreaker_prompt"]).strip()[:120]
                 if "auto" in body:
                     g["auto"] = bool(body["auto"])
                 if body.get("bots"):
@@ -772,7 +848,7 @@ class H(BaseHTTPRequestHandler):
                 name = (body.get("name") or "").strip()[:16]
                 avatar = (body.get("avatar") or "").strip()[:4]
                 team_req = (body.get("team") or "").strip()
-                if g["phase"] != "lobby":
+                if g["phase"] not in ("lobby", "icebreaker"):
                     return self.send({"error": "Game already started"}, 400)
                 if not name or any(p["name"].lower() == name.lower() for p in g["players"].values()):
                     return self.send({"error": "Pick a unique nickname"}, 400)
@@ -783,6 +859,14 @@ class H(BaseHTTPRequestHandler):
                     "score": 0, "answers": {}, "powerups": {}, "wagers": {},
                 }
                 return self.send({"pid": pid, "team": team_id})
+            if path == "/api/word":
+                p = g["players"].get(body.get("pid"))
+                word = (body.get("word") or "").strip()[:28]
+                if not p or g["phase"] != "icebreaker" or not word:
+                    return self.send({"error": "Cannot submit word"}, 400)
+                g.setdefault("words", []).append({"text": word, "name": p["name"]})
+                p["word_sent"] = True
+                return self.send({"ok": True})
             if path == "/api/wager":
                 p = g["players"].get(body.get("pid"))
                 if not p or g["phase"] != "question":
@@ -790,6 +874,32 @@ class H(BaseHTTPRequestHandler):
                 pct = max(0, min(100, int(body.get("pct", 0))))
                 p.setdefault("wagers", {})[g["q"]] = pct
                 return self.send({"ok": True, "pct": pct})
+            if path == "/api/sabotage":
+                p = g["players"].get(body.get("pid"))
+                if not p or not g.get("sabotage", True):
+                    return self.send({"error": "Cannot sabotage"}, 400)
+                pu = p.setdefault("powerups", {})
+                if pu.get("freeze_used") or p["score"] < 200:
+                    return self.send({"error": "Need 200 pts (once per game)"}, 400)
+                lb = leaderboard(g)
+                if not lb:
+                    return self.send({"error": "No target"}, 400)
+                target_name = lb[0]["name"]
+                if target_name == p["name"] and len(lb) > 1:
+                    target_name = lb[1]["name"]
+                for tp in g["players"].values():
+                    if tp["name"] == target_name:
+                        tp["frozen_next"] = True
+                        tp["frozen_by"] = p["name"]
+                        break
+                p["score"] = max(0, p["score"] - 200)
+                pu["freeze_used"] = True
+                p["ice_sent_q"] = g["q"]
+                g["rseq"] = g.get("rseq", 0) + 1
+                g["reactions"].append({
+                    "id": g["rseq"], "emoji": "❄️", "name": "%s → %s" % (p["name"], target_name), "t": time.time(),
+                })
+                return self.send({"ok": True, "target": target_name})
             if path == "/api/powerup":
                 p = g["players"].get(body.get("pid"))
                 kind = body.get("kind")
@@ -807,6 +917,10 @@ class H(BaseHTTPRequestHandler):
                 if kind == "2x" and not pu.get("2x_used"):
                     pu["2x_used"] = True
                     pu["2x_q"] = g["q"]
+                    return self.send({"ok": True})
+                if kind == "shield" and not pu.get("shield_used"):
+                    pu["shield_used"] = True
+                    pu["shield_q"] = g["q"]
                     return self.send({"ok": True})
                 return self.send({"error": "Already used"}, 400)
             if path == "/api/react":

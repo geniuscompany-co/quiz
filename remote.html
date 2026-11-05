@@ -1,0 +1,72 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Brainrush! Host Remote</title>
+<style>
+body{margin:0;font-family:system-ui,sans-serif;background:#1a0938;color:#fff;text-align:center;min-height:100vh;padding:16px;box-sizing:border-box}
+.card{max-width:460px;margin:0 auto;background:#ffffff14;border:1px solid #ffffff28;border-radius:16px;padding:18px;box-shadow:0 8px 28px #0006}
+.badge{display:inline-block;background:#ffdf5d;color:#2b0d57;font-weight:900;padding:4px 14px;border-radius:99px;font-size:.9em;margin-bottom:8px}
+h1{font-size:1.45em;margin:.3em 0}
+.big-btn{width:100%;font-size:1.5em;padding:20px;border:0;border-radius:14px;background:#26890c;color:#fff;font-weight:800;cursor:pointer;margin:12px 0;box-shadow:0 6px 18px #0005}
+.big-btn:active{transform:scale(.98)}
+.ctrl-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.ctrl-btn{padding:14px 10px;font-size:1.1em;font-weight:700;border:1px solid #fff4;border-radius:12px;background:#ffffff1f;color:#fff;cursor:pointer}
+.ctrl-btn.on{background:#26890c;border-color:#fff}
+.ans-box{background:#0005;border-radius:10px;padding:10px 14px;margin:10px 0;text-align:left;font-size:.95em}
+.ans-box b{color:#7dff6b}
+</style></head><body>
+<div class="card" id="app">Loading remote…</div>
+<script>
+const qs = new URLSearchParams(location.search);
+let pin = qs.get('pin') || '', host = qs.get('host') || '', S = {};
+const $ = document.getElementById('app'), sh = ["▲ ","◆ ","● ","■ "];
+function esc(s){return String(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+async function post(u,b){return (await fetch(u,{method:'POST',body:JSON.stringify(b)})).json()}
+async function next(){await post('/api/next',{pin,host});poll()}
+async function ctl(action,sec=10){await post('/api/host_ctl',{pin,host,action,sec});poll()}
+async function addBots(n=5){await post('/api/bots',{pin,host,count:n});poll()}
+
+async function poll(){
+ if(!pin || !host){
+  $.innerHTML=`<h2>🕹️ Host Remote</h2><p>Open the <b>📱 Remote</b> button on your Host screen to pair this phone with your live game.</p>`;
+  return;
+ }
+ const r = await fetch('/api/state?pin='+pin);
+ if(!r.ok){ $.innerHTML=`<h2>Game ended or not found</h2>`; return; }
+ S = await r.json();
+ render();
+}
+
+function render(){
+ const ph = S.phase;
+ let mainLbl = 'Next Step ➔';
+ if(ph==='lobby') mainLbl = '🚀 Start Game';
+ else if(ph==='icebreaker') mainLbl = '🚀 Start Question 1';
+ else if(ph==='question') mainLbl = '⏭️ Skip Timer / Show Results';
+ else if(ph==='results') mainLbl = S.is_last ? '🏆 Show Final Podium' : '🏆 Show Leaderboard';
+ else if(ph==='board') mainLbl = S.index+1>=S.total ? '🏆 Final Podium' : '➡️ Next Question';
+
+ const qInfo = (ph==='question' || ph==='results') ? `
+  <div class="ans-box">
+   <div><b>Q${S.index+1}/${S.total}:</b> ${esc(S.question)}</div>
+   ${ph==='question'?`<div style="margin-top:6px">⏱️ <b>${Math.ceil(S.left)}s</b> left &middot; <b>${S.answered}/${S.n}</b> answered</div>`:''}
+   ${ph==='results'?`<div style="margin-top:6px">✅ Correct: <b>${sh[S.correct]}${esc((S.answers||[])[S.correct])}</b></div>`:''}
+  </div>` : '';
+
+ $.innerHTML = `
+  <div class="badge">🕹️ HOST REMOTE &middot; PIN ${esc(pin)}</div>
+  <h1>Phase: ${esc(ph.toUpperCase())} (${S.n} players)</h1>
+  ${qInfo}
+  ${ph!=='final' ? `<button class="big-btn" onclick="next()">${mainLbl}</button>` : `<p>🎉 Game Complete!</p>`}
+  <div class="ctrl-grid">
+   ${ph==='question' ? `
+    <button class="ctrl-btn" onclick="ctl('pause')">${S.paused?'▶️ Resume':'⏸️ Pause'}</button>
+    <button class="ctrl-btn" onclick="ctl('add_time',10)">⏱️ +10 Sec</button>
+   ` : ''}
+   <button class="ctrl-btn ${S.auto?'on':''}" onclick="ctl('toggle_auto')">⏭️ Auto: ${S.auto?'ON':'Off'}</button>
+   <button class="ctrl-btn" onclick="addBots(5)">🤖 +5 Bots</button>
+  </div>
+ `;
+}
+poll();
+setInterval(poll, 700);
+</script></body></html>
