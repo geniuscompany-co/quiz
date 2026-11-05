@@ -650,6 +650,13 @@ class H(BaseHTTPRequestHandler):
 
     def do_GET(self):
         path, _, qs = self.path.partition("?")
+        if path == "/api/active":
+            with LOCK:
+                if not GAMES:
+                    return self.send({"pin": ""})
+                latest = list(GAMES.values())[-1]
+                pin_val = latest["pin"] if latest.get("phase") != "final" else ""
+                return self.send({"pin": pin_val})
         if path == "/api/quizzes":
             return self.send({"quizzes": list_quizzes()})
         if path == "/api/export":

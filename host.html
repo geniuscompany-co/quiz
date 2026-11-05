@@ -503,7 +503,9 @@ const QR = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 29 29" width="2
 let last='';
 function render(){
  const inPrev = S.phase==='question' && (S.preview_left||0) > 0;
- const k=JSON.stringify({...S,left:0,qtime:0,answered:0,team_board:S.phase==='question'?null:S.team_board,preview_left:inPrev?1:0,auto_left:0,reactions:null});
+ const k = S.phase==='question'
+  ? `q:${S.index}:${inPrev?1:0}`
+  : JSON.stringify({...S,left:0,qtime:0,answered:0,preview_left:0,auto_left:0,reactions:null});
  if(k==last){
   const t=document.getElementById('t');
   if(t){
@@ -512,6 +514,8 @@ function render(){
    t.classList.toggle('urgent', !S.paused && sec <= 5);
    t.classList.toggle('paused', !!S.paused);
   }
+  const pb=document.getElementById('pauseBtn');
+  if(pb) pb.textContent = S.paused ? '▶️ Resume' : '⏸️ Pause';
   const ac=document.getElementById('ansCnt');
   if(ac) ac.textContent = `${S.answered}/${S.n}`;
   const pf=document.getElementById('pf');
@@ -545,7 +549,7 @@ function render(){
    <h1>${esc(S.question)}</h1>
    <div class="ans-reveal">
     <div class="timer-row">
-     <button class="btn-sm" onclick="hostCtl('pause')">${S.paused?'▶️ Resume':'⏸️ Pause'}</button>
+     <button class="btn-sm" id="pauseBtn" onclick="hostCtl('pause')">${S.paused?'▶️ Resume':'⏸️ Pause'}</button>
      <div class="timer ${!S.paused&&sec<=5?'urgent':''} ${S.paused?'paused':''}" id="t">${S.paused?'⏸️ '+sec:sec}</div>
      <button class="btn-sm" onclick="hostCtl('add_time',10)">+10s</button>
     </div>

@@ -60,6 +60,16 @@ function pickTm(t){team=t;document.querySelectorAll('.tm').forEach(el=>el.classL
 
 const urlPin = new URLSearchParams(location.search).get('pin') || '';
 
+async function autoFillActivePin(){
+ const pEl = document.getElementById('p');
+ if(!pEl || pEl.value) return;
+ try{
+  const r = await (await fetch('/api/active')).json();
+  const inp = document.getElementById('p');
+  if(inp && !inp.value && r && r.pin) inp.value = r.pin;
+ }catch(e){}
+}
+
 function form(err){
  const savedPin = urlPin || pin || '';
  $.innerHTML=`<img class="logo" src="/logo.jpg" alt="Brainrush!"><h1>Join game</h1>
@@ -68,6 +78,7 @@ function form(err){
  <div class="avatars">${AVS.map(a=>`<span class="av ${a===avatar?'sel':''}" data-av="${a}" onclick="pickAv('${a}')">${a}</span>`).join('')}</div>
  <div class="teams">${TEAMS.slice(1).map(t=>`<div class="tm ${t.id===team?'sel':''}" data-tm="${t.id}" onclick="pickTm('${t.id}')">${t.label}</div>`).join('')}</div>
  <button class="go" onclick="join()">Enter</button><p class="err">${err||''}</p>`;
+ if(!savedPin) autoFillActivePin();
 }
 
 async function join(){
@@ -112,7 +123,10 @@ let last='';
 function render(){
  const inPrev = S.phase==='question' && (S.preview_left||0) > 0;
  const m=S.me||{};
- const k=JSON.stringify({...S,left:0,qtime:0,answered:0,team_board:null,preview_left:inPrev?1:0,auto_left:0,reactions:null,me:S.phase==='question'?{...m,score:0,rank:0,gained:0,bonus:0,streak:0}:m});if(k==last)return;last=k;
+ const k = S.phase==='question'
+  ? `q:${S.index}:${inPrev?1:0}:${m.answered?1:0}:${m.active_2x?1:0}:${(m.hide||[]).join(',')}:${m.wager_pct??''}`
+  : JSON.stringify({...S,left:0,qtime:0,answered:0,team_board:null,preview_left:0,auto_left:0,reactions:null});
+ if(k==last)return;last=k;
  const tag = esc((m.team_emoji?m.team_emoji+' ':'')+(m.avatar?m.avatar+' ':'')+(m.name||''));
  if(S.phase=='lobby'){
   const tmBadge = m.team_name ? `<br><small>Team: ${m.team_emoji} ${esc(m.team_name)}</small>` : '';
