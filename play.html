@@ -76,9 +76,7 @@ function render(){
   }
  } else if(S.phase=='results'){
   const st = m.streak >= 2 ? `<br><span class="streak-pill">🔥 ${m.streak} in a row! ${m.bonus?`(+${m.bonus} bonus)`:''}</span>` : '';
-  $.innerHTML=`<div class="big">${!m.answered?"⏰ Time's up":m.correct?'✅ Correct! +'+m.gained:'❌ Incorrect'}${st}<br><small>Score ${m.score}</small></div>${reactBar()}`;
- } else if(S.phase=='quote'){
-  $.innerHTML=`<div class="big" style="margin-top:4vh;font-size:1.4em">📖 Why?</div>${S.quote?`<blockquote>&ldquo;${esc(S.quote)}&rdquo;${S.source?`<cite>&mdash; ${esc(S.source)}</cite>`:''}</blockquote>`:''}${reactBar()}`;
+  $.innerHTML=`<div class="big">${!m.answered?"⏰ Time's up":m.correct?'✅ Correct! +'+m.gained:'❌ Incorrect'}${st}<br><small>Score ${m.score}</small></div>${S.quote?`<blockquote>&ldquo;${esc(S.quote)}&rdquo;${S.source?`<cite>&mdash; ${esc(S.source)}</cite>`:''}</blockquote>`:''}${reactBar()}`;
  } else if(S.phase=='board')
   $.innerHTML=`<div class="big">🏆 You're #${m.rank}<br><small>${m.score} points</small>${m.streak>=2?`<br><span class="streak-pill">🔥 ${m.streak} Streak</span>`:''}</div>${reactBar()}`;
  else $.innerHTML=`<div class="big">🎉 Game over!<br>You placed #${m.rank}<br><small>${m.score} points</small></div>${reactBar()}`;

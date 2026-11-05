@@ -217,7 +217,7 @@ def view(g, pid=None, host=False):
         "names": [ptag(p) for p in g["players"].values()] if ph == "lobby" else None,
         "reactions": g["reactions"][-25:],
     }
-    if g["q"] >= 0 and ph in ("question", "results", "quote"):
+    if g["q"] >= 0 and ph in ("question", "results"):
         q = g["quiz"][g["q"]]
         prev_t = g.get("preview", PREVIEW_TIME)
         elapsed = now - g["start"]
@@ -231,7 +231,7 @@ def view(g, pid=None, host=False):
             double=(qmult(g) == 2),
         )
         out["answered"] = sum(1 for p in g["players"].values() if g["q"] in p["answers"])
-        if ph in ("results", "quote"):
+        if ph == "results":
             out["correct"] = q["c"]
             out["quote"] = q.get("quote")
             out["source"] = q.get("src")
@@ -386,9 +386,6 @@ class H(BaseHTTPRequestHandler):
                 if g["phase"] == "question":
                     g["phase"] = "results"  # skip
                 elif g["phase"] == "results":
-                    q = g["quiz"][g["q"]]
-                    g["phase"] = "quote" if q.get("quote") else "board"
-                elif g["phase"] == "quote":
                     g["phase"] = "board"  # top players page
                 elif g["phase"] == "board" and g["q"] + 1 >= len(g["quiz"]):
                     g["phase"] = "final"
