@@ -12,12 +12,17 @@ button:hover{filter:brightness(1.08)}
 .mute-btn{position:fixed;top:14px;right:16px;z-index:20;font-size:1em;padding:8px 14px;margin:0;background:#0005;border-radius:99px}
 .names span{display:inline-block;background:#fff3;border-radius:8px;padding:8px 14px;margin:5px;font-weight:600;animation:pop .25s ease-out}
 @keyframes pop{from{transform:scale(.6);opacity:0}to{transform:scale(1);opacity:1}}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:20px}
-.a{padding:28px;border-radius:8px;font-size:1.5em;font-weight:700;position:relative}
-.a.dim{opacity:.3}.c0{background:#e21b3c}.c1{background:#1368ce}.c2{background:#d89e00}.c3{background:#26890c}
-blockquote{margin:14px auto 0;max-width:820px;background:#fff;color:#2b0d57;border-radius:14px;padding:18px 28px;font-size:1.35em;font-style:italic;line-height:1.42;box-shadow:0 8px 28px #0005;animation:slideUp .35s cubic-bezier(.22,1,.36,1)}
-blockquote cite{display:block;font-size:.72em;font-style:normal;margin-top:8px;opacity:.75;font-weight:700}
-.win-pill{display:inline-block;padding:12px 26px;border-radius:10px;font-size:1.4em;font-weight:800;margin:8px auto 4px;box-shadow:0 4px 14px #0004}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
+.a{padding:24px;border-radius:10px;font-size:1.45em;font-weight:700;position:relative;overflow:hidden}
+.a.res{padding:16px 20px;font-size:1.25em;display:flex;align-items:center;justify-content:space-between;gap:12px;text-align:left}
+.a.res.win{box-shadow:0 0 0 3px #fff,0 6px 20px #0006}
+.a-fill{position:absolute;left:0;top:0;bottom:0;background:#fff3;transition:width .6s cubic-bezier(.22,1,.36,1);pointer-events:none}
+.a-txt{position:relative;z-index:1;flex:1}
+.a-cnt{position:relative;z-index:1;background:#0004;padding:4px 12px;border-radius:99px;font-size:.9em;white-space:nowrap}
+.a.win .a-cnt{background:#fff;color:#2b0d57;font-weight:900}
+.a.dim{opacity:.38}.c0{background:#e21b3c}.c1{background:#1368ce}.c2{background:#d89e00}.c3{background:#26890c}
+blockquote{margin:14px auto 0;max-width:860px;background:#fff;color:#2b0d57;border-radius:14px;padding:16px 26px;font-size:1.28em;font-style:italic;line-height:1.4;box-shadow:0 8px 28px #0005;animation:slideUp .35s cubic-bezier(.22,1,.36,1)}
+blockquote cite{display:block;font-size:.74em;font-style:normal;margin-top:6px;opacity:.75;font-weight:700}
 .timer{font-size:3em;font-weight:800}
 .timer.urgent{color:#ffdf5d;animation:pulse .5s infinite alternate}
 @keyframes pulse{from{transform:scale(1)}to{transform:scale(1.15)}}
@@ -384,13 +389,22 @@ function render(){
   }
  } else if(S.phase=='results'){
   const ci = S.correct;
-  $.innerHTML=`<p>Question ${S.index+1}/${S.total} &middot; ${S.answered}/${S.n} answered</p>
-  <h2 style="margin:.15em auto .3em;max-width:860px;font-size:1.75em;line-height:1.25">${esc(S.question)}</h2>
+  const tot = Math.max(1, (S.counts||[]).reduce((a,b)=>a+b, 0));
+  $.innerHTML=`<p style="margin:.2em 0">Question ${S.index+1}/${S.total} &middot; ${S.answered}/${S.n} answered</p>
+  <h2 style="margin:.15em auto .3em;max-width:880px;font-size:1.7em;line-height:1.25">${esc(S.question)}</h2>
   <div class="ans-reveal">
-   <div class="win-pill c${ci}">✅ ${sh[ci]}${esc(S.answers[ci])}</div>
-   ${barsChart(S.counts,ci)}
+   <div class="grid" style="margin-top:10px">${S.answers.map((a,i)=>{
+    const cnt = (S.counts&&S.counts[i])||0;
+    const pct = Math.round((cnt / tot) * 100);
+    const win = i===ci;
+    return `<div class="a res c${i} ${win?'win':'dim'}">
+     <div class="a-fill" style="width:${pct}%"></div>
+     <span class="a-txt">${sh[i]}${esc(a)}</span>
+     <span class="a-cnt">${cnt}${win?' ✓':''}</span>
+    </div>`;
+   }).join('')}</div>
    ${S.quote?quoteBox():''}
-   <div><button onclick="next()">Top players</button></div>
+   <div><button style="margin-top:14px" onclick="next()">Top players</button></div>
   </div>`;
  } else if(S.phase=='board'){
   const shHtml = (S.shoutouts&&S.shoutouts.length)?`<div class="shouts">${S.shoutouts.map(s=>`<span class="shout">${esc(s)}</span>`).join('')}</div>`:'';
