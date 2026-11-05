@@ -57,6 +57,7 @@ def list_quizzes():
         "quiz.json": "Current Default Quiz",
         "quiz_chapter8.json": "Chapter 8: Overcoming Challenges & Regulations",
         "quiz_fun_facts.json": "Fun Facts Trivia",
+        "quiz_ultimate_silly_trivia.json": "Ultimate Silly Trivia",
     }
     files = sorted(f for f in os.listdir(ROOT) if f == "quiz.json" or (f.startswith("quiz_") and f.endswith(".json")))
     for f in files:

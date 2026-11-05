@@ -1,0 +1,1202 @@
+[
+  {
+    "q": "What is a group of crows called?",
+    "a": [
+      "A murder",
+      "A parade",
+      "A school",
+      "A colony"
+    ],
+    "c": 0,
+    "t": 20,
+    "quote": "A group of crows is called a murder. What a spooky name!"
+  },
+  {
+    "q": "Which animal can shoot its tongue far out to catch insects?",
+    "a": [
+      "Giraffe",
+      "Chameleon",
+      "Horse",
+      "Rabbit"
+    ],
+    "c": 1,
+    "t": 20,
+    "quote": "A chameleon can shoot its tongue out very fast to snatch a bug."
+  },
+  {
+    "q": "What food do giant pandas mostly eat?",
+    "a": [
+      "Fish",
+      "Bamboo",
+      "Berries",
+      "Meat"
+    ],
+    "c": 1,
+    "t": 20,
+    "quote": "Pandas spend hours munching bamboo."
+  },
+  {
+    "q": "Which bird can fly backward?",
+    "a": [
+      "Penguin",
+      "Ostrich",
+      "Hummingbird",
+      "Pelican"
+    ],
+    "c": 2,
+    "t": 20,
+    "quote": "Hummingbirds can hover and fly backward."
+  },
+  {
+    "q": "Which animal carries a baby in a pouch?",
+    "a": [
+      "Meerkat",
+      "Kangaroo",
+      "Lemur",
+      "Otter"
+    ],
+    "c": 1,
+    "t": 20,
+    "quote": "A baby kangaroo grows inside its mother's pouch."
+  },
+  {
+    "q": "What color is a polar bear's skin?",
+    "a": [
+      "White",
+      "Pink",
+      "Blue",
+      "Black"
+    ],
+    "c": 3,
+    "t": 20,
+    "quote": "Its skin is black beneath its fur."
+  },
+  {
+    "q": "Which animal has an extra eyelid to protect its eyes from sand?",
+    "a": [
+      "Camel",
+      "Pig",
+      "Sheep",
+      "Goat"
+    ],
+    "c": 0,
+    "t": 20,
+    "quote": "Camels have a special eyelid that helps in sandy wind."
+  },
+  {
+    "q": "What do woodpeckers tap trees with?",
+    "a": [
+      "Feet",
+      "Beaks",
+      "Tails",
+      "Wings"
+    ],
+    "c": 1,
+    "t": 20,
+    "quote": "Woodpeckers drum on trees using their beaks."
+  },
+  {
+    "q": "What does a snake flick to smell?",
+    "a": [
+      "Ears",
+      "Tail",
+      "Tongue",
+      "Scales"
+    ],
+    "c": 2,
+    "t": 20,
+    "quote": "Snakes use their tongues to gather scent particles."
+  },
+  {
+    "q": "Which animal can sleep standing up?",
+    "a": [
+      "Horse",
+      "Seal",
+      "Lizard",
+      "Dolphin"
+    ],
+    "c": 0,
+    "t": 20,
+    "quote": "Horses have special leg joints that help them rest standing up."
+  },
+  {
+    "q": "Which insect makes honey?",
+    "a": [
+      "Dragonfly",
+      "Honeybee",
+      "Ladybug",
+      "Moth"
+    ],
+    "c": 1,
+    "t": 20,
+    "quote": "Honeybees make honey using flower nectar."
+  },
+  {
+    "q": "How do penguins sometimes slide across snow?",
+    "a": [
+      "On bellies",
+      "On beaks",
+      "On backs",
+      "On tails"
+    ],
+    "c": 0,
+    "t": 20,
+    "quote": "Penguins can slide on their bellies like little sleds."
+  },
+  {
+    "q": "Which animal builds dams?",
+    "a": [
+      "Badger",
+      "Beaver",
+      "Fox",
+      "Mole"
+    ],
+    "c": 1,
+    "t": 20,
+    "quote": "Beavers build dams from branches and mud."
+  },
+  {
+    "q": "How do many bats find their way in the dark?",
+    "a": [
+      "Echoes",
+      "Flashlights",
+      "Stars",
+      "Glowing wings"
+    ],
+    "c": 0,
+    "t": 20,
+    "quote": "Bats listen for echoes from sounds they make."
+  },
+  {
+    "q": "Which bird is the biggest living bird?",
+    "a": [
+      "Eagle",
+      "Swan",
+      "Ostrich",
+      "Flamingo"
+    ],
+    "c": 2,
+    "t": 20,
+    "quote": "An ostrich is enormous and cannot fly."
+  },
+  {
+    "q": "Which creature spins webs to catch flies?",
+    "a": [
+      "Spider",
+      "Ant",
+      "Grasshopper",
+      "Beetle"
+    ],
+    "c": 0,
+    "t": 20,
+    "quote": "Many spiders spin sticky webs to catch dinner."
+  },
+  {
+    "q": "What is a baby goat called?",
+    "a": [
+      "Pup",
+      "Cub",
+      "Kid",
+      "Calf"
+    ],
+    "c": 2,
+    "t": 20,
+    "quote": "Baby goats are kids, just like children!"
+  },
+  {
+    "q": "Which vegetable can naturally be purple?",
+    "a": [
+      "Carrot",
+      "Lettuce",
+      "Celery",
+      "Cauliflower"
+    ],
+    "c": 0,
+    "t": 20,
+    "quote": "Some carrots grow purple, and others grow orange."
+  },
+  {
+    "q": "Where do peanut pods grow?",
+    "a": [
+      "On trees",
+      "Underground",
+      "On vines",
+      "In water"
+    ],
+    "c": 1,
+    "t": 20,
+    "quote": "Peanut pods develop under the soil."
+  },
+  {
+    "q": "What is guacamole mainly made from?",
+    "a": [
+      "Peas",
+      "Lettuce",
+      "Avocado",
+      "Cucumber"
+    ],
+    "c": 2,
+    "t": 20,
+    "quote": "Mashed avocado is the star of guacamole."
+  },
+  {
+    "q": "What are tofu blocks made from?",
+    "a": [
+      "Rice",
+      "Soybeans",
+      "Potatoes",
+      "Wheat"
+    ],
+    "c": 1,
+    "t": 20,
+    "quote": "Tofu is made from soy milk."
+  },
+  {
+    "q": "Which grain pops into a fluffy snack?",
+    "a": [
+      "Rice",
+      "Corn",
+      "Oats",
+      "Barley"
+    ],
+    "c": 1,
+    "t": 20,
+    "quote": "Water inside popcorn kernels creates pressure until they burst."
+  },
+  {
+    "q": "What are dried grapes called?",
+    "a": [
+      "Dates",
+      "Prunes",
+      "Raisins",
+      "Figs"
+    ],
+    "c": 2,
+    "t": 20,
+    "quote": "Raisins are shriveled grapes."
+  },
+  {
+    "q": "What food is made by culturing milk?",
+    "a": [
+      "Yogurt",
+      "Bread",
+      "Pasta",
+      "Jam"
+    ],
+    "c": 0,
+    "t": 20,
+    "quote": "Helpful bacteria turn milk into yogurt."
+  },
+  {
+    "q": "Which fruit has tiny seed-bearing bits on its outside?",
+    "a": [
+      "Peach",
+      "Strawberry",
+      "Plum",
+      "Cherry"
+    ],
+    "c": 1,
+    "t": 20,
+    "quote": "The dots on strawberries are tiny fruits with seeds inside."
+  },
+  {
+    "q": "Which food can make your eyes water when chopped?",
+    "a": [
+      "Pepper",
+      "Carrot",
+      "Onion",
+      "Zucchini"
+    ],
+    "c": 2,
+    "t": 20,
+    "quote": "Onions release irritating chemicals when cut."
+  },
+  {
+    "q": "Which of these is a pasta?",
+    "a": [
+      "Penne",
+      "Pesto",
+      "Salsa",
+      "Hummus"
+    ],
+    "c": 0,
+    "t": 20,
+    "quote": "Penne is pasta with a tube-like form."
+  },
+  {
+    "q": "Which treat is made from spun sugar?",
+    "a": [
+      "Toffee",
+      "Cotton candy",
+      "Jelly beans",
+      "Licorice"
+    ],
+    "c": 1,
+    "t": 20,
+    "quote": "Cotton candy is spun into fluffy sugar strands."
+  },
+  {
+    "q": "What is dried plum called?",
+    "a": [
+      "Raisin",
+      "Date",
+      "Prune",
+      "Fig"
+    ],
+    "c": 2,
+    "t": 20,
+    "quote": "A prune is a dried plum."
+  },
+  {
+    "q": "What fruit usually gives lemonade its tangy taste?",
+    "a": [
+      "Orange",
+      "Lime",
+      "Grapefruit",
+      "Lemon"
+    ],
+    "c": 3,
+    "t": 20,
+    "quote": "Traditional lemonade is made with lemons."
+  },
+  {
+    "q": "Which spicy green paste is often served with sushi?",
+    "a": [
+      "Wasabi",
+      "Pesto",
+      "Hummus",
+      "Guacamole"
+    ],
+    "c": 0,
+    "t": 20,
+    "quote": "Wasabi can give your nose quite a surprise."
+  },
+  {
+    "q": "Which snack often looks like a twisted knot?",
+    "a": [
+      "Bagel",
+      "Pretzel",
+      "Cracker",
+      "Waffle"
+    ],
+    "c": 1,
+    "t": 20,
+    "quote": "Pretzels are famous for their loops."
+  },
+  {
+    "q": "Which dessert wobbles when you shake the plate?",
+    "a": [
+      "Brownie",
+      "Cookie",
+      "Gelatin",
+      "Cupcake"
+    ],
+    "c": 2,
+    "t": 20,
+    "quote": "Gelatin jiggles because of its springy gel."
+  },
+  {
+    "q": "What do bees collect from flowers to make honey?",
+    "a": [
+      "Pebbles",
+      "Bark",
+      "Nectar",
+      "Dirt"
+    ],
+    "c": 2,
+    "t": 20,
+    "quote": "Bees collect sweet nectar from flowers."
+  },
+  {
+    "q": "Which planet has famous giant rings?",
+    "a": [
+      "Mars",
+      "Saturn",
+      "Mercury",
+      "Venus"
+    ],
+    "c": 1,
+    "t": 20,
+    "quote": "Saturn has rings made mostly of icy pieces."
+  },
+  {
+    "q": "What galaxy do we live in?",
+    "a": [
+      "Andromeda",
+      "Whirlpool",
+      "Milky Way",
+      "Sombrero"
+    ],
+    "c": 2,
+    "t": 20,
+    "quote": "Our Sun is one of the Milky Way's stars."
+  },
+  {
+    "q": "Where does moonlight mostly come from?",
+    "a": [
+      "The Sun",
+      "Moon fire",
+      "Streetlights",
+      "The Moon's lamps"
+    ],
+    "c": 0,
+    "t": 20,
+    "quote": "The Moon reflects light from the Sun."
+  },
+  {
+    "q": "Which planet is closest to the Sun?",
+    "a": [
+      "Earth",
+      "Mercury",
+      "Mars",
+      "Neptune"
+    ],
+    "c": 1,
+    "t": 20,
+    "quote": "Mercury is the nearest planet to the Sun."
+  },
+  {
+    "q": "Which planet is nicknamed the Red Planet?",
+    "a": [
+      "Jupiter",
+      "Uranus",
+      "Mars",
+      "Venus"
+    ],
+    "c": 2,
+    "t": 20,
+    "quote": "Iron-rich dust makes Mars look red."
+  },
+  {
+    "q": "What is the biggest planet in our solar system?",
+    "a": [
+      "Neptune",
+      "Earth",
+      "Saturn",
+      "Jupiter"
+    ],
+    "c": 3,
+    "t": 20,
+    "quote": "Jupiter is the biggest planet in our solar system."
+  },
+  {
+    "q": "What must astronauts wear during spacewalks?",
+    "a": [
+      "Spacesuits",
+      "Raincoats",
+      "Pajamas",
+      "Ski jackets"
+    ],
+    "c": 0,
+    "t": 20,
+    "quote": "Spacesuits provide air and protection in space."
+  },
+  {
+    "q": "Which space object can grow a glowing tail?",
+    "a": [
+      "Asteroid",
+      "Comet",
+      "Moon",
+      "Planet"
+    ],
+    "c": 1,
+    "t": 20,
+    "quote": "Comets can grow tails as the Sun warms their ice."
+  },
+  {
+    "q": "Which planet is tipped almost on its side?",
+    "a": [
+      "Mars",
+      "Venus",
+      "Uranus",
+      "Mercury"
+    ],
+    "c": 2,
+    "t": 20,
+    "quote": "Uranus has an extremely tilted spin."
+  },
+  {
+    "q": "Which object is the biggest cause of ocean tides?",
+    "a": [
+      "Moon",
+      "Mars",
+      "Clouds",
+      "Mountains"
+    ],
+    "c": 0,
+    "t": 20,
+    "quote": "The Moon's gravity helps move Earth's oceans."
+  },
+  {
+    "q": "What is at the center of our solar system?",
+    "a": [
+      "Earth",
+      "Sun",
+      "Jupiter",
+      "Moon"
+    ],
+    "c": 1,
+    "t": 20,
+    "quote": "All eight planets orbit the Sun."
+  },
+  {
+    "q": "What do you call a space rock that lands on Earth?",
+    "a": [
+      "Comet",
+      "Asteroid",
+      "Meteorite",
+      "Satellite"
+    ],
+    "c": 2,
+    "t": 20,
+    "quote": "A meteorite is a space rock that reaches the ground."
+  },
+  {
+    "q": "Which planet is almost Earth's size?",
+    "a": [
+      "Mars",
+      "Mercury",
+      "Neptune",
+      "Venus"
+    ],
+    "c": 3,
+    "t": 20,
+    "quote": "Venus is close to Earth in size."
+  },
+  {
+    "q": "How long is one trip by Earth around the Sun?",
+    "a": [
+      "A year",
+      "A week",
+      "A month",
+      "A day"
+    ],
+    "c": 0,
+    "t": 20,
+    "quote": "Earth completes one orbit in about a year."
+  },
+  {
+    "q": "Which star is closest to Earth?",
+    "a": [
+      "Sirius",
+      "Sun",
+      "Polaris",
+      "Betelgeuse"
+    ],
+    "c": 1,
+    "t": 20,
+    "quote": "The Sun is our nearest star."
+  },
+  {
+    "q": "What helps people see distant stars?",
+    "a": [
+      "Microscope",
+      "Periscope",
+      "Telescope",
+      "Stethoscope"
+    ],
+    "c": 2,
+    "t": 20,
+    "quote": "Telescopes gather light from faraway places."
+  },
+  {
+    "q": "What is a huge group of stars held together by gravity?",
+    "a": [
+      "Galaxy",
+      "Cloud",
+      "Volcano",
+      "Glacier"
+    ],
+    "c": 0,
+    "t": 20,
+    "quote": "A galaxy contains huge numbers of stars."
+  },
+  {
+    "q": "Which planet has the Great Red Spot?",
+    "a": [
+      "Saturn",
+      "Jupiter",
+      "Mars",
+      "Neptune"
+    ],
+    "c": 1,
+    "t": 20,
+    "quote": "Jupiter's Great Red Spot is a giant storm."
+  },
+  {
+    "q": "What does a thermometer measure?",
+    "a": [
+      "Weight",
+      "Speed",
+      "Temperature",
+      "Distance"
+    ],
+    "c": 2,
+    "t": 20,
+    "quote": "Thermometers tell us how hot or cold something is."
+  },
+  {
+    "q": "What does water become when it freezes?",
+    "a": [
+      "Ice",
+      "Sand",
+      "Smoke",
+      "Metal"
+    ],
+    "c": 0,
+    "t": 20,
+    "quote": "Water turns solid at its freezing point."
+  },
+  {
+    "q": "Which storm looks like a spinning funnel?",
+    "a": [
+      "Rainbow",
+      "Tornado",
+      "Fog",
+      "Hail"
+    ],
+    "c": 1,
+    "t": 20,
+    "quote": "Tornadoes are spinning columns of air."
+  },
+  {
+    "q": "What is it called when light bends through water?",
+    "a": [
+      "Reflection",
+      "Evaporation",
+      "Refraction",
+      "Condensation"
+    ],
+    "c": 2,
+    "t": 20,
+    "quote": "Refraction helps create rainbows."
+  },
+  {
+    "q": "What is it called when water vapor becomes droplets?",
+    "a": [
+      "Condensation",
+      "Freezing",
+      "Melting",
+      "Boiling"
+    ],
+    "c": 0,
+    "t": 20,
+    "quote": "Condensation makes tiny drops from water vapor."
+  },
+  {
+    "q": "Which clouds often look like cotton balls?",
+    "a": [
+      "Cirrus",
+      "Cumulus",
+      "Stratus",
+      "Fog"
+    ],
+    "c": 1,
+    "t": 20,
+    "quote": "Cumulus clouds are often big and fluffy."
+  },
+  {
+    "q": "Which storm brings thunder and lightning?",
+    "a": [
+      "Blizzard",
+      "Sandstorm",
+      "Thunderstorm",
+      "Dust storm"
+    ],
+    "c": 2,
+    "t": 20,
+    "quote": "Lightning heats the air and makes thunder."
+  },
+  {
+    "q": "What is the hardest natural mineral on the Mohs scale?",
+    "a": [
+      "Diamond",
+      "Quartz",
+      "Calcite",
+      "Gypsum"
+    ],
+    "c": 0,
+    "t": 20,
+    "quote": "Diamond ranks 10 on the mineral hardness scale."
+  },
+  {
+    "q": "What do we call melted rock underground?",
+    "a": [
+      "Lava",
+      "Magma",
+      "Ash",
+      "Coal"
+    ],
+    "c": 1,
+    "t": 20,
+    "quote": "Melted rock is called magma while underground."
+  },
+  {
+    "q": "What type of rock forms when lava cools?",
+    "a": [
+      "Limestone",
+      "Sandstone",
+      "Igneous",
+      "Chalk"
+    ],
+    "c": 2,
+    "t": 20,
+    "quote": "Cooling lava becomes igneous rock."
+  },
+  {
+    "q": "Which is the largest ocean?",
+    "a": [
+      "Pacific",
+      "Arctic",
+      "Indian",
+      "Atlantic"
+    ],
+    "c": 0,
+    "t": 20,
+    "quote": "The Pacific is Earth's largest ocean."
+  },
+  {
+    "q": "Which continent is also the name of a country?",
+    "a": [
+      "Europe",
+      "Australia",
+      "Antarctica",
+      "Africa"
+    ],
+    "c": 1,
+    "t": 20,
+    "quote": "Australia is both a country and a continent."
+  },
+  {
+    "q": "What falls from thunderclouds as balls of ice?",
+    "a": [
+      "Snow",
+      "Dew",
+      "Hail",
+      "Mist"
+    ],
+    "c": 2,
+    "t": 20,
+    "quote": "Hailstones form in powerful storm clouds."
+  },
+  {
+    "q": "What pulls a dropped ball toward the ground?",
+    "a": [
+      "Gravity",
+      "Friction",
+      "Magnetism",
+      "Wind"
+    ],
+    "c": 0,
+    "t": 20,
+    "quote": "Gravity pulls objects toward Earth."
+  },
+  {
+    "q": "What kind of mountain can erupt with lava?",
+    "a": [
+      "Canyon",
+      "Volcano",
+      "Glacier",
+      "Dune"
+    ],
+    "c": 1,
+    "t": 20,
+    "quote": "Volcanoes can release molten rock."
+  },
+  {
+    "q": "What season follows spring in the Northern Hemisphere?",
+    "a": [
+      "Autumn",
+      "Winter",
+      "Summer",
+      "Spring"
+    ],
+    "c": 2,
+    "t": 20,
+    "quote": "Summer follows spring."
+  },
+  {
+    "q": "What is the largest living animal?",
+    "a": [
+      "Blue whale",
+      "Great white shark",
+      "Giant squid",
+      "Orca"
+    ],
+    "c": 0,
+    "t": 20,
+    "quote": "Blue whales are the largest living animals."
+  },
+  {
+    "q": "What is a ring-shaped coral reef around a lagoon called?",
+    "a": [
+      "Volcano",
+      "Atoll",
+      "Fjord",
+      "Plateau"
+    ],
+    "c": 1,
+    "t": 20,
+    "quote": "An atoll surrounds a lagoon."
+  },
+  {
+    "q": "Which gas do plants take in during photosynthesis?",
+    "a": [
+      "Oxygen",
+      "Helium",
+      "Carbon dioxide",
+      "Hydrogen"
+    ],
+    "c": 2,
+    "t": 20,
+    "quote": "Plants use carbon dioxide to make sugar using sunlight."
+  },
+  {
+    "q": "Which fabric comes from silkworm cocoons?",
+    "a": [
+      "Cotton",
+      "Linen",
+      "Wool",
+      "Silk"
+    ],
+    "c": 3,
+    "t": 20,
+    "quote": "Silkworms spin fine silk threads into cocoons."
+  },
+  {
+    "q": "Where are the smallest bones in your body?",
+    "a": [
+      "Ear",
+      "Elbow",
+      "Toe",
+      "Nose"
+    ],
+    "c": 0,
+    "t": 20,
+    "quote": "Your tiny middle-ear bones pass along sound."
+  },
+  {
+    "q": "How many adult teeth can people have with wisdom teeth?",
+    "a": [
+      "20",
+      "32",
+      "40",
+      "24"
+    ],
+    "c": 1,
+    "t": 20,
+    "quote": "A full set of adult teeth includes 32 teeth."
+  },
+  {
+    "q": "What protects your brain?",
+    "a": [
+      "Ribs",
+      "Kneecap",
+      "Skull",
+      "Spine"
+    ],
+    "c": 2,
+    "t": 20,
+    "quote": "The skull is a strong helmet made of bone."
+  },
+  {
+    "q": "What vibrates to make your speaking voice?",
+    "a": [
+      "Vocal folds",
+      "Eyebrows",
+      "Kneecaps",
+      "Fingernails"
+    ],
+    "c": 0,
+    "t": 20,
+    "quote": "Vocal folds vibrate when air moves past them."
+  },
+  {
+    "q": "What is the colored part of an eye called?",
+    "a": [
+      "Retina",
+      "Iris",
+      "Pupil",
+      "Lens"
+    ],
+    "c": 1,
+    "t": 20,
+    "quote": "The iris controls the size of your pupil."
+  },
+  {
+    "q": "Which organ pumps blood?",
+    "a": [
+      "Stomach",
+      "Liver",
+      "Heart",
+      "Lungs"
+    ],
+    "c": 2,
+    "t": 20,
+    "quote": "The heart pumps blood through the body."
+  },
+  {
+    "q": "Which sense uses your nose?",
+    "a": [
+      "Taste",
+      "Sight",
+      "Touch",
+      "Smell"
+    ],
+    "c": 3,
+    "t": 20,
+    "quote": "Your nose senses scents in the air."
+  },
+  {
+    "q": "Which organs take in oxygen as you breathe?",
+    "a": [
+      "Lungs",
+      "Kidneys",
+      "Stomach",
+      "Bones"
+    ],
+    "c": 0,
+    "t": 20,
+    "quote": "Your lungs bring oxygen into your blood."
+  },
+  {
+    "q": "What is a baby frog called?",
+    "a": [
+      "Tadpole",
+      "Puppy",
+      "Chick",
+      "Cub"
+    ],
+    "c": 0,
+    "t": 20,
+    "quote": "Tadpoles begin life swimming with tails."
+  },
+  {
+    "q": "Which insect grows from a caterpillar?",
+    "a": [
+      "Grasshopper",
+      "Butterfly",
+      "Ant",
+      "Cricket"
+    ],
+    "c": 1,
+    "t": 20,
+    "quote": "Butterflies grow from caterpillars through metamorphosis."
+  },
+  {
+    "q": "Which instrument has black and white keys?",
+    "a": [
+      "Drum",
+      "Flute",
+      "Piano",
+      "Violin"
+    ],
+    "c": 2,
+    "t": 20,
+    "quote": "Pianos have black and white keys."
+  },
+  {
+    "q": "Which instrument is often played with a bow?",
+    "a": [
+      "Violin",
+      "Flute",
+      "Tuba",
+      "Cymbals"
+    ],
+    "c": 0,
+    "t": 20,
+    "quote": "A violin bow rubs against strings to make sound."
+  },
+  {
+    "q": "What sport uses a shuttlecock?",
+    "a": [
+      "Baseball",
+      "Badminton",
+      "Hockey",
+      "Soccer"
+    ],
+    "c": 1,
+    "t": 20,
+    "quote": "Badminton players hit a shuttlecock across a net."
+  },
+  {
+    "q": "Which game includes a knight piece?",
+    "a": [
+      "Checkers",
+      "Scrabble",
+      "Chess",
+      "Monopoly"
+    ],
+    "c": 2,
+    "t": 20,
+    "quote": "The knight in chess jumps in an L pattern."
+  },
+  {
+    "q": "What is a word that reads the same backward?",
+    "a": [
+      "Palindrome",
+      "Anagram",
+      "Acronym",
+      "Homonym"
+    ],
+    "c": 0,
+    "t": 20,
+    "quote": "The word 'level' is a palindrome."
+  },
+  {
+    "q": "What is Roman numeral X?",
+    "a": [
+      "Five",
+      "Ten",
+      "Fifty",
+      "One hundred"
+    ],
+    "c": 1,
+    "t": 20,
+    "quote": "The Roman numeral X means ten."
+  },
+  {
+    "q": "What is the dot on a lowercase i called?",
+    "a": [
+      "Speck",
+      "Pin",
+      "Tittle",
+      "Nib"
+    ],
+    "c": 2,
+    "t": 20,
+    "quote": "That tiny dot has the funny name tittle."
+  },
+  {
+    "q": "What creature is on the flag of Wales?",
+    "a": [
+      "Lion",
+      "Horse",
+      "Eagle",
+      "Dragon"
+    ],
+    "c": 3,
+    "t": 20,
+    "quote": "Wales has a red dragon on its flag."
+  },
+  {
+    "q": "Which city has a famous leaning tower?",
+    "a": [
+      "Pisa",
+      "Paris",
+      "London",
+      "Athens"
+    ],
+    "c": 0,
+    "t": 20,
+    "quote": "The Leaning Tower of Pisa tilts to one side."
+  },
+  {
+    "q": "Where did the ancient Olympic Games begin?",
+    "a": [
+      "Brazil",
+      "Greece",
+      "Canada",
+      "Japan"
+    ],
+    "c": 1,
+    "t": 20,
+    "quote": "The ancient Olympics were held in Greece."
+  },
+  {
+    "q": "Which landmark in London has a huge bell nicknamed Big Ben?",
+    "a": [
+      "Tower Bridge",
+      "Buckingham Palace",
+      "Elizabeth Tower",
+      "London Eye"
+    ],
+    "c": 2,
+    "t": 20,
+    "quote": "Big Ben is the nickname for the bell in Elizabeth Tower."
+  },
+  {
+    "q": "What color do blue and yellow paints make when mixed?",
+    "a": [
+      "Orange",
+      "Purple",
+      "Green",
+      "Red"
+    ],
+    "c": 2,
+    "t": 20,
+    "quote": "Blue and yellow paint pigments usually make green."
+  },
+  {
+    "q": "What is a baby sheep called?",
+    "a": [
+      "Foal",
+      "Calf",
+      "Cub",
+      "Lamb"
+    ],
+    "c": 3,
+    "t": 20,
+    "quote": "A baby sheep is called a lamb."
+  },
+  {
+    "q": "What is the name for the plastic tip of a shoelace?",
+    "a": [
+      "Aglet",
+      "Toggle",
+      "Buckle",
+      "Rivet"
+    ],
+    "c": 0,
+    "t": 20,
+    "quote": "The tip of a shoelace is called an aglet."
+  },
+  {
+    "q": "What does a cow chew again after swallowing food?",
+    "a": [
+      "Cud",
+      "Hay bale",
+      "Hoof",
+      "Horn"
+    ],
+    "c": 0,
+    "t": 20,
+    "quote": "Cows bring partly digested food back up and chew it again."
+  },
+  {
+    "q": "What type of animal is a dolphin?",
+    "a": [
+      "Fish",
+      "Mammal",
+      "Reptile",
+      "Amphibian"
+    ],
+    "c": 1,
+    "t": 20,
+    "quote": "Dolphins breathe air and feed milk to their young."
+  },
+  {
+    "q": "Which animal has a shell and moves very slowly?",
+    "a": [
+      "Cheetah",
+      "Ostrich",
+      "Snail",
+      "Falcon"
+    ],
+    "c": 2,
+    "t": 20,
+    "quote": "Snails carry protective shells on their backs."
+  },
+  {
+    "q": "What do you call a male chicken?",
+    "a": [
+      "Rooster",
+      "Gander",
+      "Bull",
+      "Ram"
+    ],
+    "c": 0,
+    "t": 20,
+    "quote": "A rooster is an adult male chicken."
+  }
+]
