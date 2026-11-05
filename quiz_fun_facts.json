@@ -3,70 +3,70 @@
     "q": "Which animal makes cube-shaped poop?",
     "a": ["Kangaroo", "Wombat", "Koala", "Hedgehog"],
     "c": 1,
-    "t": 10,
+    "t": 20,
     "quote": "Wombats make little poop cubes! The cubes are less likely to roll away."
   },
   {
     "q": "How many hearts does an octopus have?",
     "a": ["One", "Two", "Three", "Four"],
     "c": 2,
-    "t": 10,
+    "t": 20,
     "quote": "An octopus has three hearts! Two pump blood to its gills, and one pumps it around its body."
   },
   {
     "q": "Which imaginary animal is Scotland's national animal?",
     "a": ["Dragon", "Phoenix", "Unicorn", "Mermaid"],
     "c": 2,
-    "t": 10,
+    "t": 20,
     "quote": "It's the unicorn! Scotland has used this magical creature as a royal symbol for centuries."
   },
   {
     "q": "Which planet has a day longer than its year?",
     "a": ["Mars", "Jupiter", "Neptune", "Venus"],
     "c": 3,
-    "t": 10,
+    "t": 20,
     "quote": "Venus takes 243 Earth days to spin once, but only 225 Earth days to travel around the Sun."
   },
   {
     "q": "What body part can butterflies use to taste?",
     "a": ["Feet", "Wings", "Eyes", "Tails"],
     "c": 0,
-    "t": 10,
+    "t": 20,
     "quote": "Butterflies have taste sensors on their feet. They can taste a leaf just by standing on it!"
   },
   {
     "q": "What color are baby flamingos?",
     "a": ["Pink", "Purple", "Gray", "Green"],
     "c": 2,
-    "t": 10,
+    "t": 20,
     "quote": "Baby flamingos are gray or white. Their food helps turn their feathers pink as they grow!"
   },
   {
     "q": "What do some sea otters do while sleeping?",
     "a": ["Sing songs", "Hold paws", "Spin around", "Blow bubbles"],
     "c": 1,
-    "t": 10,
+    "t": 20,
     "quote": "Some sea otters hold paws while floating so they don't drift apart. That's a pretty cute bedtime trick!"
   },
   {
     "q": "Which animal has fingerprints surprisingly similar to ours?",
     "a": ["Panda", "Sloth", "Raccoon", "Koala"],
     "c": 3,
-    "t": 10,
+    "t": 20,
     "quote": "Koala fingerprints look remarkably like human fingerprints, even under a microscope!"
   },
   {
     "q": "Which food is actually a berry, according to scientists?",
     "a": ["Strawberry", "Raspberry", "Banana", "Blackberry"],
     "c": 2,
-    "t": 10,
+    "t": 20,
     "quote": "Bananas are berries in botany! Strawberries aren't technically berries. Fruit names can be confusing."
   },
   {
     "q": "About how long was the shortest recorded war?",
     "a": ["45 minutes", "3 hours", "1 day", "1 week"],
     "c": 0,
-    "t": 10,
+    "t": 20,
     "quote": "The Anglo-Zanzibar War of 1896 lasted about 45 minutes. That's shorter than many family board games!"
   }
 ]
