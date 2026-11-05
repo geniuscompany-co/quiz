@@ -3,14 +3,20 @@
 <title>Join Quiz</title>
 <style>
 body{margin:0;font-family:system-ui,sans-serif;background:#46178f;color:#fff;text-align:center;min-height:100vh}
-#app{padding:20px;max-width:500px;margin:auto}
+#app{padding:16px;max-width:500px;margin:auto}
 input{display:block;width:100%;box-sizing:border-box;font-size:1.4em;padding:14px;margin:10px 0;border-radius:6px;border:0;text-align:center}
 button.go{width:100%;font-size:1.4em;padding:14px;border:0;border-radius:6px;background:#26890c;color:#fff;font-weight:700;cursor:pointer}
 .avatars{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin:12px 0}
 .av{font-size:1.7em;padding:6px 10px;border-radius:10px;background:#fff2;border:2px solid transparent;cursor:pointer;user-select:none}
 .av.sel{background:#fff4;border-color:#ffdf5d;transform:scale(1.12)}
+.pu-bar{display:flex;justify-content:center;gap:10px;margin-bottom:10px}
+.pu-btn{flex:1;padding:10px 12px;border:2px solid #fff6;border-radius:99px;background:#fff2;color:#fff;font-size:1em;font-weight:800;cursor:pointer}
+.pu-btn.active{background:linear-gradient(90deg,#ff9800,#ffd600);color:#2b0d57;border-color:#fff}
+.pu-btn:disabled{opacity:.35;cursor:default;text-decoration:line-through}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.grid button{height:35vh;font-size:3em;border:0;border-radius:8px;color:#fff;cursor:pointer}
+.grid button{min-height:30vh;padding:12px 10px;border:0;border-radius:10px;color:#fff;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;font-weight:700;font-size:1.15em;line-height:1.25;word-break:break-word}
+.grid button .sh{font-size:2em;line-height:1}
+.grid button.elim{opacity:.18;pointer-events:none;filter:grayscale(1)}
 .c0{background:#e21b3c}.c1{background:#1368ce}.c2{background:#d89e00}.c3{background:#26890c}
 .big{font-size:1.9em;margin-top:16vh}
 .big:has(+blockquote){margin-top:6vh}
@@ -45,6 +51,7 @@ async function join(){
  pid=r.pid;poll();setInterval(poll,600);
 }
 async function ans(c){await post('/api/answer',{pin,pid,choice:c});poll()}
+async function usePu(kind){await post('/api/powerup',{pin,pid,kind});poll()}
 async function react(emoji){await post('/api/react',{pin,pid,emoji})}
 function reactBar(){return `<div class="react-bar">${REACTS.map(e=>`<button onclick="react('${e}')">${e}</button>`).join('')}</div>`}
 async function poll(){const r=await fetch(`/api/state?pin=${pin}&pid=${pid}`);S=await r.json();render()}
@@ -56,10 +63,17 @@ function render(){
  const tag = esc((m.avatar?m.avatar+' ':'')+(m.name||''));
  if(S.phase=='lobby')$.innerHTML=`<div class="big">You're in, ${tag}!<br><small>Waiting for host to start…</small></div>${reactBar()}`;
  else if(S.phase=='question'){
-  const dbl = S.double ? '<div class="double-pill">⚡ DOUBLE POINTS! ⚡</div>' : '';
+  const dbl = (S.double || m.active_2x) ? `<div class="double-pill">⚡ ${S.double && m.active_2x ? '4x' : 'DOUBLE'} POINTS ACTIVE! ⚡</div>` : '';
   if(m.answered)$.innerHTML=`<div class="big">${dbl}<br>Answer sent!<br><small>Waiting for others…</small></div>`;
   else if(inPrev)$.innerHTML=`<div class="big">${dbl}<br>👀 Get ready!<br><small>Read the question on the host screen…</small></div>`;
-  else $.innerHTML=`${dbl}<div class="grid">${[0,1,2,3].slice(0,S.answers.length).map(i=>`<button class="c${i}" onclick="ans(${i})">${sh[i]}</button>`).join('')}</div>`;
+  else {
+   const hide = m.hide || [];
+   const puBar = `<div class="pu-bar">
+    <button class="pu-btn" ${m.pu_5050?'':'disabled'} onclick="usePu('5050')">✂️ 50/50</button>
+    <button class="pu-btn ${m.active_2x?'active':''}" ${m.pu_2x||m.active_2x?'':'disabled'} onclick="usePu('2x')">⚡ ${m.active_2x?'2x ON!':'2x Points'}</button>
+   </div>`;
+   $.innerHTML=`${dbl}${puBar}<div class="grid">${S.answers.map((a,i)=>`<button class="c${i} ${hide.includes(i)?'elim':''}" onclick="ans(${i})"><span class="sh">${sh[i]}</span><span>${esc(a)}</span></button>`).join('')}</div>`;
+  }
  } else if(S.phase=='results'){
   const st = m.streak >= 2 ? `<br><span class="streak-pill">🔥 ${m.streak} in a row! ${m.bonus?`(+${m.bonus} bonus)`:''}</span>` : '';
   $.innerHTML=`<div class="big">${!m.answered?"⏰ Time's up":m.correct?'✅ Correct! +'+m.gained:'❌ Incorrect'}${st}<br><small>Score ${m.score}</small></div>${S.quote?`<blockquote>&ldquo;${esc(S.quote)}&rdquo;${S.source?`<cite>&mdash; ${esc(S.source)}</cite>`:''}</blockquote>`:''}${reactBar()}`;
