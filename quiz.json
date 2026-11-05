@@ -1,7 +1,12 @@
 [
-  {"q": "What is the capital of France?", "a": ["Berlin", "Paris", "Madrid", "Rome"], "c": 1, "t": 10},
-  {"q": "Which planet is known as the Red Planet?", "a": ["Venus", "Jupiter", "Mars", "Mercury"], "c": 2, "t": 15},
-  {"q": "What is 7 x 8?", "a": ["54", "56", "64", "48"], "c": 1, "t": 15},
-  {"q": "Which ocean is the largest?", "a": ["Atlantic", "Indian", "Arctic", "Pacific"], "c": 3, "t": 20},
-  {"q": "Who painted the Mona Lisa?", "a": ["Van Gogh", "Picasso", "Da Vinci", "Monet"], "c": 2}
+  {"q": "Which planet is closest to the Sun?", "a": ["Venus", "Mercury", "Earth", "Mars"], "c": 1, "t": 10},
+  {"q": "How many continents are there?", "a": ["5", "6", "7", "8"], "c": 2, "t": 10},
+  {"q": "What is the chemical symbol for water?", "a": ["O2", "CO2", "H2O", "HO"], "c": 2, "t": 10},
+  {"q": "Which country is home to the kangaroo?", "a": ["New Zealand", "South Africa", "Brazil", "Australia"], "c": 3, "t": 10},
+  {"q": "What is 12 x 12?", "a": ["122", "144", "124", "154"], "c": 1, "t": 15},
+  {"q": "Which U.S. state is known as the Aloha State?", "a": ["Hawaii", "Alaska", "Florida", "California"], "c": 0, "t": 10},
+  {"q": "Who wrote 'Romeo and Juliet'?", "a": ["Charles Dickens", "Mark Twain", "Jane Austen", "William Shakespeare"], "c": 3, "t": 15},
+  {"q": "How many sides does a hexagon have?", "a": ["5", "6", "7", "8"], "c": 1, "t": 10},
+  {"q": "What gas do plants absorb from the air?", "a": ["Oxygen", "Nitrogen", "Carbon dioxide", "Helium"], "c": 2, "t": 15},
+  {"q": "Which is the largest mammal?", "a": ["African elephant", "Blue whale", "Giraffe", "Hippopotamus"], "c": 1, "t": 15}
 ]
