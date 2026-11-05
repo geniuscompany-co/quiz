@@ -192,8 +192,12 @@ Quote: Paris has been the capital since 987 CE."></textarea>
     <label class="mode-pill"><input id="qRedemp" type="checkbox" checked> 🔄 Redemption Round</label>
     <label class="mode-pill"><input id="qSabotage" type="checkbox" checked> ❄️ Ice Sabotage</label>
     <label class="mode-pill"><input id="qTeams" type="checkbox"> 🛡️ Team Mode</label>
-    <label class="mode-pill"><input id="qIce" type="checkbox"> 💭 Word Cloud Warm-Up</label>
+    <label class="mode-pill"><input id="qIce" type="checkbox" onchange="document.getElementById('icePromptRow').style.display=this.checked?'block':'none'"> 💭 Word Cloud Warm-Up</label>
     <label class="mode-pill"><input id="qAuto" type="checkbox"> ⏭️ Auto-Advance</label>
+   </div>
+   <div id="icePromptRow" style="display:none;margin-bottom:12px">
+    <label style="display:block;font-size:.86em;font-weight:700;opacity:.85;margin-bottom:4px">💭 Warm-Up Question:</label>
+    <input id="qIcePrompt" type="text" maxlength="120" value="In one word, how are you feeling today?" placeholder="e.g. In one word, what's your favorite food?" style="width:100%;box-sizing:border-box;padding:9px 12px;border-radius:8px;border:0;font-size:.96em;font-weight:600;color:#2b0d57">
    </div>
    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;padding-top:8px;border-top:1px solid #fff2;font-weight:700;font-size:.95em">
     <label style="display:inline-flex;align-items:center;gap:8px">🤖 Phantom Bot Players: <input id="qBots" type="number" min="0" max="30" value="0"></label>
@@ -529,6 +533,7 @@ async function create(){
  const redemp = document.getElementById('qRedemp');
  const sab = document.getElementById('qSabotage');
  const ice = document.getElementById('qIce');
+ const icePrompt = document.getElementById('qIcePrompt');
  const auto = document.getElementById('qAuto');
  const qf = sel ? sel.value : 'quiz.json';
  const picked = quizList.find(x=>x.file===qf);
@@ -543,6 +548,7 @@ async function create(){
   redemption:redemp ? redemp.checked : true,
   sabotage:sab ? sab.checked : true,
   icebreaker:ice ? ice.checked : false,
+  icebreaker_prompt:icePrompt ? icePrompt.value.trim() : '',
   auto:auto ? auto.checked : false
  });
  pin=r.pin;host=r.host;
@@ -553,7 +559,11 @@ async function create(){
  poll();setInterval(poll,600);
 }
 async function addBots(n=5){ensureAudio();await post('/api/bots',{pin,host,count:n});await poll()}
-async function hostCtl(action, sec=10){ensureAudio();await post('/api/host_ctl',{pin,host,action,sec});await poll()}
+async function hostCtl(action, sec=10, prompt=''){ensureAudio();await post('/api/host_ctl',{pin,host,action,sec,prompt});await poll()}
+async function editIcePrompt(){
+ const np = window.prompt('Enter new Word Cloud Warm-Up question:', S.prompt || '');
+ if(np && np.trim()) await hostCtl('set_prompt', 0, np.trim());
+}
 let busy=false;
 async function next(){ensureAudio();if(busy)return;busy=true;try{await post('/api/next',{pin,host});await poll()}finally{setTimeout(()=>busy=false,500)}}
 async function poll(){
@@ -716,7 +726,7 @@ function render(){
    return `<span class="word-tag" style="font-size:${sz}em;background:${cols[i%cols.length]}">${esc(w.text)}${w.count>1?` <small>(${w.count})</small>`:''}</span>`;
   }).join('') : `<p style="opacity:.7;font-size:1.3em">Waiting for players to type a word on their phones…</p>`;
   $.innerHTML=`<div class="double-banner">💭 LIVE WORD CLOUD WARM-UP</div>
-  <h1>${esc(S.prompt)}</h1>
+  <h1>${esc(S.prompt)} <button class="btn-sm" style="font-size:.42em;vertical-align:middle" onclick="editIcePrompt()">✏️ Edit</button></h1>
   <p>${S.word_total||0} response(s)</p>
   <div class="word-cloud">${cloud}</div>
   <button onclick="next()">Start Question 1 ➔</button>`;

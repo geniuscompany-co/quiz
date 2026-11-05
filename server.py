@@ -855,6 +855,14 @@ class H(BaseHTTPRequestHandler):
                     g["extra_time"] = g.get("extra_time", 0.0) + add_s
                     if g.get("paused"):
                         g["pause_rem"] = g.get("pause_rem", 0.0) + add_s
+                elif act == "set_prompt":
+                    pr = str(body.get("prompt") or "").strip()[:120]
+                    if pr:
+                        g["icebreaker_prompt"] = pr
+                        g["words"] = []
+                        for p in g["players"].values():
+                            p["word_sent"] = False
+                            p.get("plan", {}).pop("ice_t", None)
                 return self.send({"ok": True, "auto": g["auto"], "paused": g["paused"]})
             if path == "/api/join":
                 name = (body.get("name") or "").strip()[:16]
