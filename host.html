@@ -26,6 +26,10 @@ button:hover{filter:brightness(1.08)}
 .menu-drop button:hover{background:#fff2}
 .menu-drop button .state{font-size:.82em;padding:2px 8px;border-radius:99px;background:#fff2;color:#fffc}
 .menu-drop button.on .state{background:#26890c;color:#fff;font-weight:800}
+.voice-cfg{background:#0004;border-radius:9px;padding:8px 10px;margin:2px 4px;display:none;flex-direction:column;gap:6px;font-size:.84em}
+.voice-cfg.open{display:flex}
+.voice-cfg label{display:flex;align-items:center;justify-content:space-between;gap:8px;color:#fffd;font-weight:600}
+.voice-cfg select{flex:1;max-width:165px;padding:5px 8px;border-radius:6px;border:0;background:#fff;color:#2b0d57;font-weight:700;font-size:.95em;cursor:pointer}
 .menu-sep{height:1px;background:#fff2;margin:4px 6px}
 .menu-kb{font-size:.76em;opacity:.65;padding:6px 10px 4px;line-height:1.45}
 .names span{display:inline-block;background:#fff3;border-radius:8px;padding:8px 14px;margin:5px;font-weight:600;animation:pop .25s ease-out}
@@ -128,6 +132,17 @@ blockquote cite{display:block;font-size:.74em;font-style:normal;margin-top:6px;o
  <div class="menu-drop" id="navMenu">
   <button id="muteBtn" class="on" onclick="toggleMute()"><span>🔊 Sound Effects</span><span class="state" id="muteState">ON</span></button>
   <button id="ttsBtn" onclick="toggleTts()"><span>🗣️ Voice Announcer</span><span class="state" id="ttsState">Off</span></button>
+  <div class="voice-cfg" id="voiceCfg" onclick="event.stopPropagation()">
+   <label>🎙️ Voice <select id="voiceSel" onchange="onVoiceChange()"><option value="">System Default</option></select></label>
+   <label>🎭 Style <select id="voiceStyle" onchange="onVoiceChange()">
+    <option value="1.04,1.0">🎙️ Natural Host</option>
+    <option value="1.15,1.18">⚡ Hype Show Host</option>
+    <option value="0.92,0.68">🎬 Movie Trailer</option>
+    <option value="0.96,0.95">🎩 Calm Narrator</option>
+    <option value="1.22,1.65">🐿️ Chipmunk</option>
+    <option value="0.95,0.45">🤖 Robot</option>
+   </select></label>
+  </div>
   <button id="autoBtn" style="display:none" onclick="hostCtl('toggle_auto')"><span>⏭️ Auto-Advance</span><span class="state" id="autoState">Off</span></button>
   <button onclick="cycleTheme()"><span>🎨 Visual Theme</span><span class="state" id="themeState">Purple</span></button>
   <div class="menu-sep"></div>
@@ -252,21 +267,60 @@ function cycleTheme(){
 }
 
 // --- AI Voice Announcer (SpeechSynthesis) ---
-let ttsOn = false;
+let ttsOn = false, availVoices = [];
+function loadVoices(){
+ if(!window.speechSynthesis) return;
+ const all = window.speechSynthesis.getVoices() || [];
+ if(!all.length) return;
+ const en = all.filter(v=>/^en/i.test(v.lang));
+ availVoices = en.length ? en : all;
+ const sel = document.getElementById('voiceSel');
+ if(!sel) return;
+ const saved = localStorage.getItem('brainrush_voice') || '';
+ sel.innerHTML = `<option value="">✨ Auto Best Voice</option>` + availVoices.map(v=>{
+  const tag = v.lang ? ` (${v.lang})` : '';
+  return `<option value="${esc(v.name)}">${esc(v.name.replace(/^(Microsoft|Google|Apple)\s+/i,''))}${esc(tag)}</option>`;
+ }).join('');
+ if(saved && availVoices.some(v=>v.name===saved)) sel.value = saved;
+ const savedStyle = localStorage.getItem('brainrush_voice_style');
+ const stSel = document.getElementById('voiceStyle');
+ if(savedStyle && stSel) stSel.value = savedStyle;
+}
+if(window.speechSynthesis){
+ loadVoices();
+ window.speechSynthesis.onvoiceschanged = loadVoices;
+}
 function toggleTts(){
  ttsOn = !ttsOn;
- const b = document.getElementById('ttsBtn'), st = document.getElementById('ttsState');
+ const b = document.getElementById('ttsBtn'), st = document.getElementById('ttsState'), cfg = document.getElementById('voiceCfg');
  if(b) b.classList.toggle('on', ttsOn);
  if(st) st.textContent = ttsOn ? 'ON' : 'Off';
+ if(cfg) cfg.classList.toggle('open', ttsOn);
+ loadVoices();
  if(ttsOn) speak('Voice announcer activated!');
  else if(window.speechSynthesis) window.speechSynthesis.cancel();
+}
+function onVoiceChange(){
+ const sel = document.getElementById('voiceSel'), stSel = document.getElementById('voiceStyle');
+ if(sel) localStorage.setItem('brainrush_voice', sel.value);
+ if(stSel) localStorage.setItem('brainrush_voice_style', stSel.value);
+ if(!ttsOn) toggleTts();
+ else speak("Voice updated! Let's play Brainrush!");
 }
 function speak(txt){
  if(!ttsOn || !window.speechSynthesis || !txt) return;
  try{
   window.speechSynthesis.cancel();
   const u = new SpeechSynthesisUtterance(txt);
-  u.rate = 1.04;
+  const sel = document.getElementById('voiceSel'), stSel = document.getElementById('voiceStyle');
+  const vName = sel ? sel.value : '';
+  if(vName && availVoices.length){
+   const match = availVoices.find(v=>v.name === vName);
+   if(match) u.voice = match;
+  }
+  const [rate, pitch] = ((stSel && stSel.value) || '1.04,1.0').split(',').map(Number);
+  u.rate = rate || 1.04;
+  u.pitch = pitch || 1.0;
   window.speechSynthesis.speak(u);
  }catch(e){}
 }
