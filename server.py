@@ -29,6 +29,8 @@ def qmult(g, i=None):
     q = g["quiz"][idx]
     if "double" in q:
         return 2 if q["double"] else 1
+    if is_boss_q(g, idx):
+        return 1
     return 2 if idx == len(g["quiz"]) - 1 and len(g["quiz"]) > 1 else 1
 
 
@@ -37,7 +39,7 @@ def is_boss_q(g, i=None):
     q = g["quiz"][idx]
     if q.get("redemption"):
         return False
-    return bool(g.get("wager") and idx == len(g["quiz"]) - 1 and len(g["quiz"]) > 1)
+    return bool(g.get("wager") and idx == len(g["quiz"]) - 1)
 
 
 QUIZ = [
@@ -240,8 +242,9 @@ def record_answer(g, p, choice, t):
     p_mult = 2 if pu.get("2x_q") == qi else 1
     wager_pct = p.get("wagers", {}).get(qi)
     wager_amt = 0
-    if wager_pct is not None and p["score"] > 0:
-        wager_amt = round(p["score"] * (wager_pct / 100.0))
+    if wager_pct is not None and wager_pct > 0:
+        stake = max(500, p["score"])
+        wager_amt = round(stake * (wager_pct / 100.0))
     if is_correct:
         prev_streak = calc_streak(p, qi - 1) if qi > 0 else 0
         new_streak = prev_streak + 1
@@ -291,6 +294,14 @@ def find_most_missed(g):
     return best[1] if best else None
 
 
+def will_finish_after_results(g):
+    if g["q"] + 1 < len(g["quiz"]):
+        return False
+    if g.get("redemption") and not g.get("redemption_added"):
+        return find_most_missed(g) is None
+    return True
+
+
 def advance_game(g):
     if g["phase"] == "question":
         qi = g["q"]
@@ -309,9 +320,6 @@ def advance_game(g):
         g["phase_entered"] = time.time()
         g["paused"] = False
     elif g["phase"] == "results":
-        g["phase"] = "board"
-        g["phase_entered"] = time.time()
-    elif g["phase"] == "board":
         if g["q"] + 1 >= len(g["quiz"]):
             if g.get("redemption") and not g.get("redemption_added"):
                 missed_qi = find_most_missed(g)
@@ -321,8 +329,16 @@ def advance_game(g):
                     rq["redemption"] = True
                     rq["double"] = True
                     g["quiz"].append(rq)
-                    start_question(g, g["q"] + 1)
+                    g["phase"] = "board"
+                    g["phase_entered"] = time.time()
                     return
+            g["phase"] = "final"
+            g["phase_entered"] = time.time()
+        else:
+            g["phase"] = "board"
+            g["phase_entered"] = time.time()
+    elif g["phase"] == "board":
+        if g["q"] + 1 >= len(g["quiz"]):
             g["phase"] = "final"
             g["phase_entered"] = time.time()
         else:
@@ -587,6 +603,7 @@ def view(g, pid=None, host=False):
             out["correct"] = q["c"]
             out["quote"] = q.get("quote")
             out["source"] = q.get("src")
+            out["is_last"] = will_finish_after_results(g)
             counts = [0] * len(q["a"])
             for p in g["players"].values():
                 a = p["answers"].get(g["q"])
@@ -651,12 +668,14 @@ class H(BaseHTTPRequestHandler):
     def do_GET(self):
         path, _, qs = self.path.partition("?")
         if path == "/api/active":
+            q = dict(x.split("=", 1) for x in qs.split("&") if "=" in x)
             with LOCK:
                 if not GAMES:
-                    return self.send({"pin": ""})
-                latest = list(GAMES.values())[-1]
-                pin_val = latest["pin"] if latest.get("phase") != "final" else ""
-                return self.send({"pin": pin_val})
+                    return self.send({"pin": "", "teams": False})
+                g = GAMES.get(q.get("pin")) if q.get("pin") else list(GAMES.values())[-1]
+                if not g or g.get("phase") == "final":
+                    return self.send({"pin": "", "teams": False})
+                return self.send({"pin": g["pin"], "teams": bool(g.get("teams"))})
         if path == "/api/quizzes":
             return self.send({"quizzes": list_quizzes()})
         if path == "/api/export":

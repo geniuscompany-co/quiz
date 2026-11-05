@@ -532,7 +532,7 @@ function render(){
  else if(S.phase=='question'){
   const sec = Math.ceil(S.left);
   const pct = Math.min(100, ((S.preview_left||0)/(S.preview_total||5))*100);
-  const badges = `${S.redemption?'<div class="redemp-banner">🔄 REDEMPTION QUESTION (MOST MISSED!) 🔄</div>':''}${S.boss?'<div class="double-banner">🎰 FINAL BOSS WAGER + 2x POINTS! 🎰</div>':S.double?'<div class="double-banner">⚡ DOUBLE POINTS! ⚡</div>':''}`;
+  const badges = `${S.redemption?'<div class="redemp-banner">🔄 REDEMPTION QUESTION (MOST MISSED!) 🔄</div>':''}${S.boss?'<div class="double-banner">🎰 FINAL BOSS WAGER! 🎰</div>':S.double?'<div class="double-banner">⚡ DOUBLE POINTS! ⚡</div>':''}`;
   if(inPrev){
    $.innerHTML=`<p>Question ${S.index+1}/${S.total}</p>
    <div class="q-stage">
@@ -574,7 +574,7 @@ function render(){
     </div>`;
    }).join('')}</div>
    ${S.quote?quoteBox():''}
-   <div><button style="margin-top:14px" onclick="next()">Top players${autoSuffix}</button></div>
+   <div><button style="margin-top:14px" onclick="next()">${S.is_last?'🏆 Final Podium':'Top players'}${autoSuffix}</button></div>
   </div>`;
  } else if(S.phase=='board'){
   const shHtml = (S.shoutouts&&S.shoutouts.length)?`<div class="shouts">${S.shoutouts.map(s=>`<span class="shout">${esc(s)}</span>`).join('')}</div>`:'';

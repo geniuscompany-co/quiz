@@ -60,25 +60,25 @@ function pickTm(t){team=t;document.querySelectorAll('.tm').forEach(el=>el.classL
 
 const urlPin = new URLSearchParams(location.search).get('pin') || '';
 
-async function autoFillActivePin(){
- const pEl = document.getElementById('p');
- if(!pEl || pEl.value) return;
+async function checkPinConfig(pinVal){
  try{
-  const r = await (await fetch('/api/active')).json();
+  const r = await (await fetch('/api/active' + (pinVal ? '?pin='+encodeURIComponent(pinVal) : ''))).json();
   const inp = document.getElementById('p');
   if(inp && !inp.value && r && r.pin) inp.value = r.pin;
+  const tmBox = document.getElementById('teamBox');
+  if(tmBox) tmBox.style.display = (r && r.teams) ? 'grid' : 'none';
  }catch(e){}
 }
 
 function form(err){
  const savedPin = urlPin || pin || '';
  $.innerHTML=`<img class="logo" src="/logo.jpg" alt="Brainrush!"><h1>Join game</h1>
- <input id="p" placeholder="Game PIN" inputmode="numeric" value="${esc(savedPin)}">
+ <input id="p" placeholder="Game PIN" inputmode="numeric" value="${esc(savedPin)}" oninput="if(this.value.length===6)checkPinConfig(this.value)">
  <input id="n" placeholder="Nickname" maxlength="16">
  <div class="avatars">${AVS.map(a=>`<span class="av ${a===avatar?'sel':''}" data-av="${a}" onclick="pickAv('${a}')">${a}</span>`).join('')}</div>
- <div class="teams">${TEAMS.slice(1).map(t=>`<div class="tm ${t.id===team?'sel':''}" data-tm="${t.id}" onclick="pickTm('${t.id}')">${t.label}</div>`).join('')}</div>
+ <div class="teams" id="teamBox" style="display:none">${TEAMS.slice(1).map(t=>`<div class="tm ${t.id===team?'sel':''}" data-tm="${t.id}" onclick="pickTm('${t.id}')">${t.label}</div>`).join('')}</div>
  <button class="go" onclick="join()">Enter</button><p class="err">${err||''}</p>`;
- if(!savedPin) autoFillActivePin();
+ checkPinConfig(savedPin);
 }
 
 async function join(){
@@ -132,12 +132,13 @@ function render(){
   const tmBadge = m.team_name ? `<br><small>Team: ${m.team_emoji} ${esc(m.team_name)}</small>` : '';
   $.innerHTML=`<div class="big">You're in, ${tag}!${tmBadge}<br><small>Waiting for host to start…</small></div>${reactBar()}`;
  } else if(S.phase=='question'){
-  const dbl = S.redemption ? `<div class="double-pill">🔄 REDEMPTION BONUS (2x)! 🔄</div>` : (S.double || m.active_2x) ? `<div class="double-pill">⚡ ${S.double && m.active_2x ? '4x' : 'DOUBLE'} POINTS ACTIVE! ⚡</div>` : '';
+  const dbl = S.redemption ? `<div class="double-pill">🔄 REDEMPTION BONUS (2x)! 🔄</div>` : S.boss ? `<div class="double-pill">🎰 FINAL BOSS WAGER! 🎰</div>` : (S.double || m.active_2x) ? `<div class="double-pill">⚡ ${S.double && m.active_2x ? '4x' : 'DOUBLE'} POINTS ACTIVE! ⚡</div>` : '';
   const curW = m.wager_pct ?? 0;
-  const wagerUi = (S.boss && !m.answered && m.score > 0) ? `<div class="wager-box">
-   <div>🎰 <b>Final Boss Wager!</b> Risk points (${m.score} pts):</div>
+  const stake = Math.max(500, m.score || 0);
+  const wagerUi = (S.boss && !m.answered) ? `<div class="wager-box">
+   <div>🎰 <b>Final Boss Wager!</b> Tap how much to risk:</div>
    <div class="wager-btns">
-    ${[0,50,100].map(pct=>`<button class="wager-btn ${curW===pct?'sel':''}" onclick="setWager(${pct})">${pct}% (${Math.round(m.score*pct/100)})</button>`).join('')}
+    ${[0,50,100].map(pct=>`<button class="wager-btn ${curW===pct?'sel':''}" onclick="setWager(${pct})">${pct}% (${Math.round(stake*pct/100)} pts)</button>`).join('')}
    </div>
   </div>` : '';
   if(m.answered)$.innerHTML=`<div class="big">${dbl}<br>Answer sent!<br><small>Waiting for others…</small></div>`;

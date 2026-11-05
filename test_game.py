@@ -47,9 +47,10 @@ for qi in range(len(quiz)):
     check(st["phase"] == "results" and st["correct"] == c and st["me"]["correct"], "results after all answered")
     check(sum(st["counts"]) == 3 and "board" not in st, "answer counts add up; no leaderboard on results page")
     call("/api/next", {"pin": pin, "host": host})
-    st = call("/api/state?pin=%s&pid=%s" % (pin, ids["Ann"]))[1]
-    check(st["phase"] == "board" and st["board"][0]["name"] in ("Ann", "Cy") and st["me"]["rank"] >= 1, "top players page follows results")
-    call("/api/next", {"pin": pin, "host": host})
+    if qi + 1 < len(quiz):
+        st = call("/api/state?pin=%s&pid=%s" % (pin, ids["Ann"]))[1]
+        check(st["phase"] == "board" and st["board"][0]["name"] in ("Ann", "Cy") and st["me"]["rank"] >= 1, "top players page follows results")
+        call("/api/next", {"pin": pin, "host": host})
 st = call("/api/state?pin=%s&pid=%s" % (pin, ids["Bob"]))[1]
 check(st["phase"] == "final" and st["me"]["score"] == 0 and st["me"]["rank"] == 3, "final: Bob scored 0, rank 3")
 check(st["board"][0]["score"] > 4000, "winner score is high")
