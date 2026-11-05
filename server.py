@@ -75,7 +75,9 @@ def view(g, pid=None, host=False):
                 if a:
                     counts[a["choice"]] += 1
             out["counts"] = counts
-            out["board"] = leaderboard(g)[:10]
+    if ph == "board":
+        out["index"] = g["q"]
+        out["board"] = leaderboard(g)[:10]
     if ph == "final":
         out["board"] = leaderboard(g)[:10]
     if pid and pid in g["players"]:
@@ -154,9 +156,11 @@ class H(BaseHTTPRequestHandler):
                 tick(g)
                 if g["phase"] == "question":
                     g["phase"] = "results"  # skip
-                elif g["q"] + 1 >= len(g["quiz"]) and g["phase"] == "results":
+                elif g["phase"] == "results":
+                    g["phase"] = "board"  # top players page
+                elif g["phase"] == "board" and g["q"] + 1 >= len(g["quiz"]):
                     g["phase"] = "final"
-                elif g["phase"] in ("lobby", "results"):
+                elif g["phase"] in ("lobby", "board"):
                     g["q"] += 1
                     g["phase"] = "question"
                     g["start"] = time.time()

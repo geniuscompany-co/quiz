@@ -35,8 +35,10 @@ function render(){
   ${r?'':`<div class="timer">${Math.ceil(S.left)}</div>`}
   <div class="grid">${S.answers.map((a,i)=>`<div class="a c${i} ${r&&i!=S.correct?'dim':''}">${sh[i]}${esc(a)}${r?` <small>(${S.counts[i]})</small>${i==S.correct?' ✓':''}`:''}</div>`).join('')}</div>
   ${r&&S.quote?quoteBox():''}
-  ${r?'<h2>Top players</h2>'+board(S.board):''}
-  <button onclick="next()">${r?(S.index+1>=S.total?'Final results':'Next'):'Skip'}</button>`;
- } else $.innerHTML='<h1>🏆 Final results</h1>'+board(S.board)+'<button onclick="location.reload()">New game</button>';
+  <button onclick="next()">${r?'Top players':'Skip'}</button>`;
+ } else if(S.phase=='board')
+  $.innerHTML=`<p>After question ${S.index+1}/${S.total}</p><h1>🏆 Top players</h1>${board(S.board)}
+  <button onclick="next()">${S.index+1>=S.total?'Final results':'Next question'}</button>`;
+ else $.innerHTML='<h1>🏆 Final results</h1>'+board(S.board)+'<button onclick="location.reload()">New game</button>';
 }
 </script></body></html>

@@ -34,7 +34,9 @@ function render(){
   if(m.answered)$.innerHTML='<div class="big">Answer sent!<br><small>Waiting for others…</small></div>';
   else $.innerHTML=`<div class="grid">${[0,1,2,3].slice(0,S.answers.length).map(i=>`<button class="c${i}" onclick="ans(${i})">${sh[i]}</button>`).join('')}</div>`;
  } else if(S.phase=='results')
-  $.innerHTML=`<div class="big">${!m.answered?"⏰ Time's up":m.correct?'✅ Correct! +'+m.gained:'❌ Incorrect'}<br><small>Score ${m.score} &middot; Rank #${m.rank}</small></div>${S.quote?`<blockquote>&ldquo;${esc(S.quote)}&rdquo;${S.source?`<cite>&mdash; ${esc(S.source)}</cite>`:''}</blockquote>`:''}`;
+  $.innerHTML=`<div class="big">${!m.answered?"⏰ Time's up":m.correct?'✅ Correct! +'+m.gained:'❌ Incorrect'}<br><small>Score ${m.score}</small></div>${S.quote?`<blockquote>&ldquo;${esc(S.quote)}&rdquo;${S.source?`<cite>&mdash; ${esc(S.source)}</cite>`:''}</blockquote>`:''}`;
+  else if(S.phase=='board')
+   $.innerHTML=`<div class="big">🏆 You're #${m.rank}<br><small>${m.score} points</small></div>`;
  else $.innerHTML=`<div class="big">Game over<br>You placed #${m.rank}<br><small>${m.score} points</small></div>`;
 }
 form();
