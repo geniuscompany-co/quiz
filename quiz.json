@@ -1,5 +1,5 @@
 [
-  {"q": "Which planet is closest to the Sun?", "a": ["Venus", "Mercury", "Earth", "Mars"], "c": 1, "t": 10},
+  {"q": "Which planet is closest to the Sun?", "a": ["Venus", "Mercury", "Earth", "Mars"], "c": 1, "t": 10, "quote": "Mercury is the smallest planet in our solar system and the closest to the Sun.", "src": "Sample source, p. 12"},
   {"q": "How many continents are there?", "a": ["5", "6", "7", "8"], "c": 2, "t": 10},
   {"q": "What is the chemical symbol for water?", "a": ["O2", "CO2", "H2O", "HO"], "c": 2, "t": 10},
   {"q": "Which country is home to the kangaroo?", "a": ["New Zealand", "South Africa", "Brazil", "Australia"], "c": 3, "t": 10},

@@ -1,7 +1,7 @@
 import os, subprocess
 D = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(D, "shots"); os.makedirs(OUT, exist_ok=True)
-Q = dict(index=1, total=5, question="Which planet is known as the Red Planet?", answers=["Venus", "Jupiter", "Mars", "Mercury"], qtime=20, left=14.2, n=3, answered=2)
+Q = dict(index=1, total=5, question="Which planet is known as the Red Planet?", answers=["Venus", "Jupiter", "Mars", "Mercury"], qtime=20, left=14.2, n=3, answered=2, quote="Mars is often called the Red Planet because of the iron oxide on its surface.", source="Sample source, p. 12")
 BOARD = [{"name": "Ann", "score": 1969}, {"name": "Cy", "score": 1917}, {"name": "Bob", "score": 0}]
 host = {
  "lobby": dict(phase="lobby", n=3, names=["Ann", "Bob", "Cy"]),

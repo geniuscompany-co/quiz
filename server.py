@@ -67,6 +67,8 @@ def view(g, pid=None, host=False):
         out["answered"] = sum(1 for p in g["players"].values() if g["q"] in p["answers"])
         if ph == "results":
             out["correct"] = q["c"]
+            out["quote"] = q.get("quote")
+            out["source"] = q.get("src")
             counts = [0] * len(q["a"])
             for p in g["players"].values():
                 a = p["answers"].get(g["q"])

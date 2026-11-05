@@ -9,7 +9,10 @@ button.go{width:100%;font-size:1.4em;padding:14px;border:0;border-radius:6px;bac
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .grid button{height:35vh;font-size:3em;border:0;border-radius:8px;color:#fff}
 .c0{background:#e21b3c}.c1{background:#1368ce}.c2{background:#d89e00}.c3{background:#26890c}
-.big{font-size:2em;margin-top:25vh}.err{color:#ffb3b3}
+.big{font-size:2em;margin-top:25vh}
+.big:has(+blockquote){margin-top:8vh}
+blockquote{background:#fff;color:#2b0d57;border-radius:10px;padding:14px 18px;margin:24px 0 0;font-style:italic;line-height:1.4;text-align:left}
+blockquote cite{display:block;font-style:normal;font-size:.8em;margin-top:8px;opacity:.7}.err{color:#ffb3b3}
 </style></head><body><div id="app"></div>
 <script>
 let pin, pid, S = {}, name = '';
@@ -31,7 +34,7 @@ function render(){
   if(m.answered)$.innerHTML='<div class="big">Answer sent!<br><small>Waiting for others…</small></div>';
   else $.innerHTML=`<div class="grid">${[0,1,2,3].slice(0,S.answers.length).map(i=>`<button class="c${i}" onclick="ans(${i})">${sh[i]}</button>`).join('')}</div>`;
  } else if(S.phase=='results')
-  $.innerHTML=`<div class="big">${!m.answered?"⏰ Time's up":m.correct?'✅ Correct! +'+m.gained:'❌ Incorrect'}<br><small>Score ${m.score} &middot; Rank #${m.rank}</small></div>`;
+  $.innerHTML=`<div class="big">${!m.answered?"⏰ Time's up":m.correct?'✅ Correct! +'+m.gained:'❌ Incorrect'}<br><small>Score ${m.score} &middot; Rank #${m.rank}</small></div>${S.quote?`<blockquote>&ldquo;${esc(S.quote)}&rdquo;${S.source?`<cite>&mdash; ${esc(S.source)}</cite>`:''}</blockquote>`:''}`;
  else $.innerHTML=`<div class="big">Game over<br>You placed #${m.rank}<br><small>${m.score} points</small></div>`;
 }
 form();
