@@ -1,12 +1,12 @@
 [
-  {"q": "Which planet is closest to the Sun?", "a": ["Venus", "Mercury", "Earth", "Mars"], "c": 1, "t": 10, "quote": "Mercury is the smallest planet in our solar system and the closest to the Sun.", "src": "Sample source, p. 12"},
-  {"q": "How many continents are there?", "a": ["5", "6", "7", "8"], "c": 2, "t": 10},
-  {"q": "What is the chemical symbol for water?", "a": ["O2", "CO2", "H2O", "HO"], "c": 2, "t": 10},
-  {"q": "Which country is home to the kangaroo?", "a": ["New Zealand", "South Africa", "Brazil", "Australia"], "c": 3, "t": 10},
-  {"q": "What is 12 x 12?", "a": ["122", "144", "124", "154"], "c": 1, "t": 15},
-  {"q": "Which U.S. state is known as the Aloha State?", "a": ["Hawaii", "Alaska", "Florida", "California"], "c": 0, "t": 10},
-  {"q": "Who wrote 'Romeo and Juliet'?", "a": ["Charles Dickens", "Mark Twain", "Jane Austen", "William Shakespeare"], "c": 3, "t": 15},
-  {"q": "How many sides does a hexagon have?", "a": ["5", "6", "7", "8"], "c": 1, "t": 10},
-  {"q": "What gas do plants absorb from the air?", "a": ["Oxygen", "Nitrogen", "Carbon dioxide", "Helium"], "c": 2, "t": 15},
-  {"q": "Which is the largest mammal?", "a": ["African elephant", "Blue whale", "Giraffe", "Hippopotamus"], "c": 1, "t": 15}
+  {"q": "Which planet is closest to the Sun?", "a": ["Venus", "Mercury", "Earth", "Mars"], "c": 1, "t": 10, "quote": "Mercury is the smallest planet in our solar system and the closest to the Sun.", "src": "Sample text, ch. 1"},
+  {"q": "How many continents are there?", "a": ["5", "6", "7", "8"], "c": 2, "t": 10, "quote": "Earth's land is traditionally divided into seven continents.", "src": "Sample text, ch. 2"},
+  {"q": "What is the chemical symbol for water?", "a": ["O2", "CO2", "H2O", "HO"], "c": 2, "t": 10, "quote": "Each water molecule is made of two hydrogen atoms and one oxygen atom, written H2O.", "src": "Sample text, ch. 3"},
+  {"q": "Which country is home to the kangaroo?", "a": ["New Zealand", "South Africa", "Brazil", "Australia"], "c": 3, "t": 10, "quote": "Kangaroos are marsupials found only in Australia and nearby islands.", "src": "Sample text, ch. 4"},
+  {"q": "What is 12 x 12?", "a": ["122", "144", "124", "154"], "c": 1, "t": 15, "quote": "Twelve times twelve is one gross, or 144.", "src": "Sample text, ch. 5"},
+  {"q": "Which U.S. state is known as the Aloha State?", "a": ["Hawaii", "Alaska", "Florida", "California"], "c": 0, "t": 10, "quote": "Hawaii is nicknamed the Aloha State.", "src": "Sample text, ch. 6"},
+  {"q": "Who wrote 'Romeo and Juliet'?", "a": ["Charles Dickens", "Mark Twain", "Jane Austen", "William Shakespeare"], "c": 3, "t": 15, "quote": "Romeo and Juliet is a tragedy written by William Shakespeare early in his career.", "src": "Sample text, ch. 7"},
+  {"q": "How many sides does a hexagon have?", "a": ["5", "6", "7", "8"], "c": 1, "t": 10, "quote": "A hexagon is a polygon with six sides and six angles.", "src": "Sample text, ch. 8"},
+  {"q": "What gas do plants absorb from the air?", "a": ["Oxygen", "Nitrogen", "Carbon dioxide", "Helium"], "c": 2, "t": 15, "quote": "Plants take in carbon dioxide and use sunlight to turn it into food.", "src": "Sample text, ch. 9"},
+  {"q": "Which is the largest mammal?", "a": ["African elephant", "Blue whale", "Giraffe", "Hippopotamus"], "c": 1, "t": 15, "quote": "The blue whale is the largest animal known to have ever lived.", "src": "Sample text, ch. 10"}
 ]

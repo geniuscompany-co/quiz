@@ -75,7 +75,7 @@ def view(g, pid=None, host=False):
                 if a:
                     counts[a["choice"]] += 1
             out["counts"] = counts
-            out["board"] = leaderboard(g)[:5]
+            out["board"] = leaderboard(g)[:10]
     if ph == "final":
         out["board"] = leaderboard(g)[:10]
     if pid and pid in g["players"]:
