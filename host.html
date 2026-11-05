@@ -40,8 +40,12 @@ blockquote cite{display:block;font-size:.68em;font-style:normal;margin-top:12px;
 .shift{font-size:.85em;margin-left:6px;opacity:.9}
 .up{color:#7dff6b}.down{color:#ff9b9b}
 .logo{max-width:340px;width:80%;border-radius:16px;margin:20px auto 10px;display:block;box-shadow:0 4px 16px #0004}
-.quiz-pick{margin:16px auto 4px}
+.quiz-pick{margin:16px auto 4px;display:flex;flex-direction:column;align-items:center;gap:12px}
 .quiz-pick select{font-size:1.15em;padding:10px 18px;border-radius:8px;border:0;background:#fff;color:#2b0d57;font-weight:700;max-width:90%;cursor:pointer}
+.quiz-opts{display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;font-size:1.1em;font-weight:600;background:#fff2;padding:8px 18px;border-radius:10px}
+.quiz-opts input[type=number]{width:68px;font-size:1.05em;padding:6px 8px;border-radius:6px;border:0;text-align:center;font-weight:800;color:#2b0d57}
+.quiz-opts label{display:inline-flex;align-items:center;gap:6px;cursor:pointer}
+.quiz-opts input[type=checkbox]{width:18px;height:18px;cursor:pointer}
 .bars{display:flex;align-items:flex-end;justify-content:center;gap:18px;height:150px;max-width:560px;margin:18px auto 6px;padding:0 12px}
 .bar-col{flex:1;display:flex;flex-direction:column;align-items:center;height:100%;justify-content:flex-end}
 .bar-cnt{font-weight:800;font-size:1.15em;margin-bottom:4px}
@@ -71,7 +75,7 @@ blockquote cite{display:block;font-size:.68em;font-style:normal;margin-top:12px;
 <button class="mute-btn" id="muteBtn" onclick="toggleMute()">🔊 Sound On</button>
 <canvas id="confetti"></canvas>
 <div id="reactions"></div>
-<div id="app"><img class="logo" src="/logo.jpg" alt="Brainrush!"><div class="quiz-pick"><select id="quizSel"><option value="quiz.json">Loading quizzes…</option></select></div><button onclick="create()">Create game</button></div>
+<div id="app"><img class="logo" src="/logo.jpg" alt="Brainrush!"><div class="quiz-pick"><select id="quizSel" onchange="syncQuizCount()"><option value="quiz.json">Loading quizzes…</option></select><div class="quiz-opts"><label>Questions: <input id="qCount" type="number" min="1" max="50" value="15"> <span id="qMax">/ 15</span></label><label><input id="qShuffle" type="checkbox" checked> Randomize from bank</label></div></div><button onclick="create()">Create game</button></div>
 <script>
 let pin, host, S = {};
 const $ = document.getElementById('app'), sh = ["▲ ","◆ ","● ","■ "];
@@ -197,20 +201,35 @@ function showReactions(list){
 }
 
 async function post(u, b){return (await fetch(u,{method:'POST',body:JSON.stringify(b)})).json()}
+let quizList = [];
+function syncQuizCount(){
+ const sel = document.getElementById('quizSel');
+ const q = quizList.find(x=>x.file===(sel&&sel.value));
+ if(q){
+  const inp = document.getElementById('qCount'), mx = document.getElementById('qMax');
+  if(inp){ inp.max = q.count; inp.value = q.count; }
+  if(mx) mx.textContent = '/ ' + q.count;
+ }
+}
 (async()=>{
  try{
   const r = await (await fetch('/api/quizzes')).json();
   const sel = document.getElementById('quizSel');
   if(sel && r.quizzes && r.quizzes.length){
+   quizList = r.quizzes;
    sel.innerHTML = r.quizzes.map(q=>`<option value="${esc(q.file)}">${esc(q.title)}</option>`).join('');
+   syncQuizCount();
   }
  }catch(e){}
 })();
 async function create(){
  ensureAudio();sfxJoin();
  const sel = document.getElementById('quizSel');
+ const inp = document.getElementById('qCount');
+ const shuf = document.getElementById('qShuffle');
  const qf = sel ? sel.value : 'quiz.json';
- const r=await post('/api/create',{quiz:qf});
+ const cnt = inp ? parseInt(inp.value, 10) : null;
+ const r=await post('/api/create',{quiz:qf, count:cnt, shuffle:shuf ? shuf.checked : false});
  pin=r.pin;host=r.host;poll();setInterval(poll,600);
 }
 let busy=false;

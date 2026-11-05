@@ -60,13 +60,25 @@ def load_quiz(fname="quiz.json"):
     return QUIZ
 
 
-def new_game(quiz_file="quiz.json"):
+def new_game(quiz_file="quiz.json", count=None, shuffle=False):
     while True:
         pin = str(random.randint(100000, 999999))
         if pin not in GAMES:
             break
+    bank = list(load_quiz(quiz_file))
+    if count is not None:
+        try:
+            k = max(1, min(len(bank), int(count)))
+        except Exception:
+            k = len(bank)
+    else:
+        k = len(bank)
+    if k < len(bank) or shuffle:
+        quiz = random.sample(bank, k)
+    else:
+        quiz = bank
     GAMES[pin] = {
-        "pin": pin, "host": "h%08x" % random.getrandbits(32), "quiz": load_quiz(quiz_file),
+        "pin": pin, "host": "h%08x" % random.getrandbits(32), "quiz": quiz,
         "phase": "lobby", "q": -1, "start": 0, "preview": PREVIEW_TIME, "players": {},
         "reactions": [], "rseq": 0,
     }
@@ -295,7 +307,7 @@ class H(BaseHTTPRequestHandler):
         path = self.path
         with LOCK:
             if path == "/api/create":
-                g = new_game(body.get("quiz") or "quiz.json")
+                g = new_game(body.get("quiz") or "quiz.json", body.get("count"), bool(body.get("shuffle")))
                 if "preview" in body:
                     g["preview"] = float(body["preview"])
                 return self.send({"pin": g["pin"], "host": g["host"]})
