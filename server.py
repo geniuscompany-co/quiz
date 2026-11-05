@@ -113,13 +113,99 @@ def ptag(p):
     return ((p.get("avatar") + " ") if p.get("avatar") else "") + p["name"]
 
 
+BOT_NAMES = [
+    ("🦊", "FoxBot"), ("🐼", "Panda"), ("🦁", "Leo"), ("🐯", "Tigger"),
+    ("🐸", "Hopper"), ("🐙", "Octo"), ("🦄", "Sparkle"), ("🐲", "Draco"),
+    ("🤠", "Tex"), ("👾", "Pixel"), ("🚀", "Nova"), ("⚡", "Flash"),
+    ("🦉", "Athena"), ("🦈", "Finn"), ("🐝", "Buzz"), ("🦖", "Rex"),
+    ("🐧", "Pip"), ("🦋", "Skye"), ("🐢", "Turbo"), ("🐺", "Luna"),
+]
+
+
+def add_bots(g, count=5):
+    existing = {p["name"].lower() for p in g["players"].values()}
+    pool = [(av, nm) for av, nm in BOT_NAMES if nm.lower() not in existing]
+    random.shuffle(pool)
+    added = 0
+    for i in range(max(1, min(30, int(count or 5)))):
+        if pool:
+            av, nm = pool.pop()
+        else:
+            av = random.choice(["🤖", "👾", "🦊", "🐼", "🦁", "🚀"])
+            nm = "Bot %d" % (len(g["players"]) + 1)
+            while nm.lower() in existing:
+                nm = "Bot %d" % random.randint(10, 999)
+        existing.add(nm.lower())
+        pid = "b%08x" % random.getrandbits(32)
+        g["players"][pid] = {
+            "name": nm, "avatar": av, "score": 0, "answers": {}, "powerups": {},
+            "bot": True, "skill": round(random.uniform(0.45, 0.88), 2),
+            "plan": {},
+        }
+        added += 1
+    return added
+
+
+def record_answer(g, p, choice, t):
+    q = g["quiz"][g["q"]]
+    is_correct = (choice == q["c"])
+    pu = p.get("powerups", {})
+    p_mult = 2 if pu.get("2x_q") == g["q"] else 1
+    if is_correct:
+        prev_streak = calc_streak(p, g["q"] - 1) if g["q"] > 0 else 0
+        new_streak = prev_streak + 1
+        bonus = min(300, (new_streak - 1) * 100) if new_streak >= 2 else 0
+        base = round(1000 * (1 - min(1.0, t / qtime(g)) / 2)) * qmult(g) * p_mult
+        gained = base + bonus
+    else:
+        bonus = 0
+        gained = 0
+    p["score"] += gained
+    p["answers"][g["q"]] = {
+        "choice": choice, "gained": gained, "bonus": bonus,
+        "correct": is_correct, "time": round(t, 2),
+    }
+
+
 def tick(g):
-    """Move question -> results when time is up or everyone answered."""
+    """Move question -> results when time is up or everyone answered, and run phantom bots."""
     if g["phase"] == "question":
-        ps = g["players"].values()
-        done = ps and all(g["q"] in p["answers"] for p in ps)
+        qi = g["q"]
+        q = g["quiz"][qi]
+        qt = qtime(g)
         elapsed = time.time() - g["start"] - g.get("preview", PREVIEW_TIME)
-        if elapsed >= qtime(g) or done:
+        if elapsed > 0:
+            for p in g["players"].values():
+                if not p.get("bot") or qi in p["answers"]:
+                    continue
+                plan = p.setdefault("plan", {})
+                if qi not in plan:
+                    # Stagger bot answers realistically between 1.5s and 75% of the timer
+                    delay = round(random.uniform(1.4, max(2.5, qt * 0.75)), 2)
+                    if random.random() < p.get("skill", 0.65):
+                        ch = q["c"]
+                    else:
+                        wrongs = [i for i in range(len(q["a"])) if i != q["c"]]
+                        ch = random.choice(wrongs) if wrongs else 0
+                    plan[qi] = (delay, ch)
+                    # Occasional 2x powerup on a question
+                    pu = p.setdefault("powerups", {})
+                    if not pu.get("2x_used") and random.random() < 0.2:
+                        pu["2x_used"] = True
+                        pu["2x_q"] = qi
+                delay, ch = plan[qi]
+                if elapsed >= delay:
+                    record_answer(g, p, ch, delay)
+                    if random.random() < 0.22:
+                        g["rseq"] = g.get("rseq", 0) + 1
+                        g["reactions"].append({
+                            "id": g["rseq"],
+                            "emoji": random.choice(("🔥", "😂", "😮", "🎉", "👏", "❤️")),
+                            "name": p["name"], "t": time.time(),
+                        })
+        ps = g["players"].values()
+        done = ps and all(qi in p["answers"] for p in ps)
+        if elapsed >= qt or done:
             g["phase"] = "results"
 
 
@@ -310,10 +396,17 @@ class H(BaseHTTPRequestHandler):
                 g = new_game(body.get("quiz") or "quiz.json", body.get("count"), bool(body.get("shuffle")))
                 if "preview" in body:
                     g["preview"] = float(body["preview"])
+                if body.get("bots"):
+                    add_bots(g, body.get("bots"))
                 return self.send({"pin": g["pin"], "host": g["host"]})
             g = GAMES.get(body.get("pin"))
             if not g:
                 return self.send({"error": "Game not found"}, 404)
+            if path == "/api/bots":
+                if body.get("host") != g["host"]:
+                    return self.send({"error": "Forbidden"}, 403)
+                n = add_bots(g, body.get("count", 5))
+                return self.send({"ok": True, "added": n})
             if path == "/api/join":
                 name = (body.get("name") or "").strip()[:16]
                 avatar = (body.get("avatar") or "").strip()[:4]
@@ -358,32 +451,25 @@ class H(BaseHTTPRequestHandler):
                 if not p or g["phase"] != "question" or g["q"] in p["answers"]:
                     return self.send({"error": "Cannot answer"}, 400)
                 choice = int(body["choice"])
-                q = g["quiz"][g["q"]]
                 prev_t = g.get("preview", PREVIEW_TIME)
                 t = max(0.0, time.time() - g["start"] - prev_t)
-                is_correct = (choice == q["c"])
-                pu = p.get("powerups", {})
-                p_mult = 2 if pu.get("2x_q") == g["q"] else 1
-                if is_correct:
-                    prev_streak = calc_streak(p, g["q"] - 1) if g["q"] > 0 else 0
-                    new_streak = prev_streak + 1
-                    bonus = min(300, (new_streak - 1) * 100) if new_streak >= 2 else 0
-                    base = round(1000 * (1 - min(1.0, t / qtime(g)) / 2)) * qmult(g) * p_mult
-                    gained = base + bonus
-                else:
-                    bonus = 0
-                    gained = 0
-                p["score"] += gained
-                p["answers"][g["q"]] = {
-                    "choice": choice, "gained": gained, "bonus": bonus,
-                    "correct": is_correct, "time": round(t, 2),
-                }
+                record_answer(g, p, choice, t)
                 return self.send({"ok": True})
             if path == "/api/next":
                 if body.get("host") != g["host"]:
                     return self.send({"error": "Forbidden"}, 403)
                 tick(g)
                 if g["phase"] == "question":
+                    qi = g["q"]
+                    for p in g["players"].values():
+                        if p.get("bot") and qi not in p["answers"]:
+                            plan = p.get("plan", {})
+                            if qi in plan:
+                                delay, ch = plan[qi]
+                            else:
+                                delay = round(random.uniform(2.0, qtime(g) * 0.7), 2)
+                                ch = g["quiz"][qi]["c"] if random.random() < p.get("skill", 0.65) else random.randint(0, len(g["quiz"][qi]["a"]) - 1)
+                            record_answer(g, p, ch, delay)
                     g["phase"] = "results"  # skip
                 elif g["phase"] == "results":
                     g["phase"] = "board"  # top players page

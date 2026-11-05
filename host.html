@@ -9,6 +9,7 @@ h1{font-size:2.3em;margin:.35em 0}.pin{font-size:5em;font-weight:800;background:
 a.join-link{color:#fff;text-decoration:underline}
 button{font-size:1.3em;padding:12px 32px;border:0;border-radius:8px;background:#26890c;color:#fff;cursor:pointer;margin-top:20px;font-weight:700}
 button:hover{filter:brightness(1.08)}
+.btn-sec{background:#ffffff2b;font-size:1.05em;padding:10px 22px;margin:10px 6px 0}
 .mute-btn{position:fixed;top:14px;right:16px;z-index:20;font-size:1em;padding:8px 14px;margin:0;background:#0005;border-radius:99px}
 .names span{display:inline-block;background:#fff3;border-radius:8px;padding:8px 14px;margin:5px;font-weight:600;animation:pop .25s ease-out}
 @keyframes pop{from{transform:scale(.6);opacity:0}to{transform:scale(1);opacity:1}}
@@ -80,7 +81,7 @@ blockquote cite{display:block;font-size:.74em;font-style:normal;margin-top:6px;o
 <button class="mute-btn" id="muteBtn" onclick="toggleMute()">🔊 Sound On</button>
 <canvas id="confetti"></canvas>
 <div id="reactions"></div>
-<div id="app"><img class="logo" src="/logo.jpg" alt="Brainrush!"><div class="quiz-pick"><select id="quizSel" onchange="syncQuizCount()"><option value="quiz.json">Loading quizzes…</option></select><div class="quiz-opts"><label>Questions: <input id="qCount" type="number" min="1" max="50" value="15"> <span id="qMax">/ 15</span></label><label><input id="qShuffle" type="checkbox" checked> Randomize from bank</label></div></div><button onclick="create()">Create game</button></div>
+<div id="app"><img class="logo" src="/logo.jpg" alt="Brainrush!"><div class="quiz-pick"><select id="quizSel" onchange="syncQuizCount()"><option value="quiz.json">Loading quizzes…</option></select><div class="quiz-opts"><label>Questions: <input id="qCount" type="number" min="1" max="50" value="15"> <span id="qMax">/ 15</span></label><label><input id="qShuffle" type="checkbox" checked> Randomize from bank</label><label>🤖 Phantom players: <input id="qBots" type="number" min="0" max="30" value="0"></label></div></div><button onclick="create()">Create game</button></div>
 <script>
 let pin, host, S = {};
 const $ = document.getElementById('app'), sh = ["▲ ","◆ ","● ","■ "];
@@ -232,11 +233,14 @@ async function create(){
  const sel = document.getElementById('quizSel');
  const inp = document.getElementById('qCount');
  const shuf = document.getElementById('qShuffle');
+ const bots = document.getElementById('qBots');
  const qf = sel ? sel.value : 'quiz.json';
  const cnt = inp ? parseInt(inp.value, 10) : null;
- const r=await post('/api/create',{quiz:qf, count:cnt, shuffle:shuf ? shuf.checked : false});
+ const bcnt = bots ? parseInt(bots.value, 10) || 0 : 0;
+ const r=await post('/api/create',{quiz:qf, count:cnt, shuffle:shuf ? shuf.checked : false, bots:bcnt});
  pin=r.pin;host=r.host;poll();setInterval(poll,600);
 }
+async function addBots(n=5){ensureAudio();await post('/api/bots',{pin,host,count:n});await poll()}
 let busy=false;
 async function next(){ensureAudio();if(busy)return;busy=true;try{await post('/api/next',{pin,host});await poll()}finally{setTimeout(()=>busy=false,500)}}
 async function poll(){const r=await fetch('/api/state?pin='+pin);S=await r.json();showReactions(S.reactions);handleAudio();render()}
@@ -363,7 +367,7 @@ function render(){
  last=k;
  if(S.phase=='lobby')$.innerHTML=`<h1>Join at <a class="join-link" href="https://plw.me/play" target="_blank">plw.me/play</a> with PIN</h1><div class="lobby-box"><div class="pin">${pin}</div>${QR}</div>
   <p>${S.n} player(s)</p><div class="names">${S.names.map(n=>`<span>${esc(n)}</span>`).join('')}</div>
-  ${S.n?'<button onclick="next()">Start</button>':''}`;
+  <div><button class="btn-sec" onclick="addBots(5)">🤖 +5 Phantom players</button>${S.n?'<button onclick="next()">Start</button>':''}</div>`;
  else if(S.phase=='question'){
   const sec = Math.ceil(S.left);
   const pct = Math.min(100, ((S.preview_left||0)/(S.preview_total||5))*100);
