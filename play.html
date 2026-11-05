@@ -5,40 +5,67 @@
 body{margin:0;font-family:system-ui,sans-serif;background:#46178f;color:#fff;text-align:center;min-height:100vh}
 #app{padding:20px;max-width:500px;margin:auto}
 input{display:block;width:100%;box-sizing:border-box;font-size:1.4em;padding:14px;margin:10px 0;border-radius:6px;border:0;text-align:center}
-button.go{width:100%;font-size:1.4em;padding:14px;border:0;border-radius:6px;background:#333;color:#fff}
+button.go{width:100%;font-size:1.4em;padding:14px;border:0;border-radius:6px;background:#26890c;color:#fff;font-weight:700;cursor:pointer}
+.avatars{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin:12px 0}
+.av{font-size:1.7em;padding:6px 10px;border-radius:10px;background:#fff2;border:2px solid transparent;cursor:pointer;user-select:none}
+.av.sel{background:#fff4;border-color:#ffdf5d;transform:scale(1.12)}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.grid button{height:35vh;font-size:3em;border:0;border-radius:8px;color:#fff}
+.grid button{height:35vh;font-size:3em;border:0;border-radius:8px;color:#fff;cursor:pointer}
 .c0{background:#e21b3c}.c1{background:#1368ce}.c2{background:#d89e00}.c3{background:#26890c}
-.big{font-size:2em;margin-top:25vh}
-.big:has(+blockquote){margin-top:8vh}
-blockquote{background:#fff;color:#2b0d57;border-radius:10px;padding:14px 18px;margin:24px 0 0;font-style:italic;line-height:1.4;text-align:left}
+.big{font-size:1.9em;margin-top:16vh}
+.big:has(+blockquote){margin-top:6vh}
+.streak-pill{display:inline-block;background:#ff6d00;color:#fff;font-size:.65em;padding:4px 14px;border-radius:99px;margin-top:8px;font-weight:800}
+.double-pill{display:inline-block;background:linear-gradient(90deg,#ff9800,#ffd600);color:#2b0d57;font-weight:900;padding:4px 14px;border-radius:99px;font-size:.95em;margin-bottom:10px}
+.react-bar{display:flex;justify-content:center;gap:10px;margin-top:26px;flex-wrap:wrap}
+.react-bar button{font-size:1.7em;background:#fff2;border:0;border-radius:99px;padding:8px 14px;cursor:pointer;transition:transform .12s}
+.react-bar button:active{transform:scale(1.3)}
+blockquote{background:#fff;color:#2b0d57;border-radius:10px;padding:14px 18px;margin:20px 0 0;font-style:italic;line-height:1.4;text-align:left}
 blockquote cite{display:block;font-style:normal;font-size:.8em;margin-top:8px;opacity:.7}.err{color:#ffb3b3}
 .logo{max-width:260px;width:75%;border-radius:16px;margin:4px auto 12px;display:block;box-shadow:0 4px 16px #0004}
 </style></head><body><div id="app"></div>
 <script>
-let pin, pid, S = {}, name = '';
+let pin, pid, S = {}, avatar = '🦊';
+const AVS = ['🦊','🐼','🦁','🐸','🦄','🐙','🦖','🐝','🦋','🐧','🚀','⚡'];
+const REACTS = ['🔥','😂','😮','🎉','👏','❤️'];
 const $ = document.getElementById('app'), sh = ["▲","◆","●","■"];
 async function post(u,b){const r=await fetch(u,{method:'POST',body:JSON.stringify(b)});return {ok:r.ok,...await r.json()}}
-function esc(s){return s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
-function form(err){$.innerHTML=`<img class="logo" src="/logo.jpg" alt="Brainrush!"><h1>Join game</h1><input id="p" placeholder="Game PIN" inputmode="numeric"><input id="n" placeholder="Nickname" maxlength="16">
- <button class="go" onclick="join()">Enter</button><p class="err">${err||''}</p>`}
-async function join(){pin=p.value.trim();const r=await post('/api/join',{pin,name:n.value});
- if(!r.ok)return form(r.error);pid=r.pid;poll();setInterval(poll,700)}
+function esc(s){return String(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+function pickAv(a){avatar=a;document.querySelectorAll('.av').forEach(el=>el.classList.toggle('sel',el.dataset.av===a))}
+function form(err){
+ $.innerHTML=`<img class="logo" src="/logo.jpg" alt="Brainrush!"><h1>Join game</h1>
+ <input id="p" placeholder="Game PIN" inputmode="numeric">
+ <input id="n" placeholder="Nickname" maxlength="16">
+ <div class="avatars">${AVS.map(a=>`<span class="av ${a===avatar?'sel':''}" data-av="${a}" onclick="pickAv('${a}')">${a}</span>`).join('')}</div>
+ <button class="go" onclick="join()">Enter</button><p class="err">${err||''}</p>`;
+}
+async function join(){
+ pin=p.value.trim();
+ const r=await post('/api/join',{pin,name:n.value,avatar});
+ if(!r.ok)return form(r.error);
+ pid=r.pid;poll();setInterval(poll,600);
+}
 async function ans(c){await post('/api/answer',{pin,pid,choice:c});poll()}
+async function react(emoji){await post('/api/react',{pin,pid,emoji})}
+function reactBar(){return `<div class="react-bar">${REACTS.map(e=>`<button onclick="react('${e}')">${e}</button>`).join('')}</div>`}
 async function poll(){const r=await fetch(`/api/state?pin=${pin}&pid=${pid}`);S=await r.json();render()}
 let last='';
 function render(){
- const k=JSON.stringify({...S,left:0});if(k==last)return;last=k;
+ const inPrev = S.phase==='question' && (S.preview_left||0) > 0;
+ const k=JSON.stringify({...S,left:0,preview_left:inPrev?1:0,reactions:null});if(k==last)return;last=k;
  const m=S.me||{};
- if(S.phase=='lobby')$.innerHTML=`<div class="big">You're in, ${esc(m.name||'')}!<br><small>Waiting for host to start…</small></div>`;
+ const tag = esc((m.avatar?m.avatar+' ':'')+(m.name||''));
+ if(S.phase=='lobby')$.innerHTML=`<div class="big">You're in, ${tag}!<br><small>Waiting for host to start…</small></div>${reactBar()}`;
  else if(S.phase=='question'){
-  if(m.answered)$.innerHTML='<div class="big">Answer sent!<br><small>Waiting for others…</small></div>';
-  else $.innerHTML=`<div class="grid">${[0,1,2,3].slice(0,S.answers.length).map(i=>`<button class="c${i}" onclick="ans(${i})">${sh[i]}</button>`).join('')}</div>`;
- } else if(S.phase=='results')
-  $.innerHTML=`<div class="big">${!m.answered?"⏰ Time's up":m.correct?'✅ Correct! +'+m.gained:'❌ Incorrect'}<br><small>Score ${m.score}</small></div>${S.quote?`<blockquote>&ldquo;${esc(S.quote)}&rdquo;${S.source?`<cite>&mdash; ${esc(S.source)}</cite>`:''}</blockquote>`:''}`;
-  else if(S.phase=='board')
-   $.innerHTML=`<div class="big">🏆 You're #${m.rank}<br><small>${m.score} points</small></div>`;
- else $.innerHTML=`<div class="big">Game over<br>You placed #${m.rank}<br><small>${m.score} points</small></div>`;
+  const dbl = S.double ? '<div class="double-pill">⚡ DOUBLE POINTS! ⚡</div>' : '';
+  if(m.answered)$.innerHTML=`<div class="big">${dbl}<br>Answer sent!<br><small>Waiting for others…</small></div>`;
+  else if(inPrev)$.innerHTML=`<div class="big">${dbl}<br>👀 Get ready!<br><small>Read the question on the host screen…</small></div>`;
+  else $.innerHTML=`${dbl}<div class="grid">${[0,1,2,3].slice(0,S.answers.length).map(i=>`<button class="c${i}" onclick="ans(${i})">${sh[i]}</button>`).join('')}</div>`;
+ } else if(S.phase=='results'){
+  const st = m.streak >= 2 ? `<br><span class="streak-pill">🔥 ${m.streak} in a row! ${m.bonus?`(+${m.bonus} bonus)`:''}</span>` : '';
+  $.innerHTML=`<div class="big">${!m.answered?"⏰ Time's up":m.correct?'✅ Correct! +'+m.gained:'❌ Incorrect'}${st}<br><small>Score ${m.score}</small></div>${S.quote?`<blockquote>&ldquo;${esc(S.quote)}&rdquo;${S.source?`<cite>&mdash; ${esc(S.source)}</cite>`:''}</blockquote>`:''}${reactBar()}`;
+ } else if(S.phase=='board')
+  $.innerHTML=`<div class="big">🏆 You're #${m.rank}<br><small>${m.score} points</small>${m.streak>=2?`<br><span class="streak-pill">🔥 ${m.streak} Streak</span>`:''}</div>${reactBar()}`;
+ else $.innerHTML=`<div class="big">🎉 Game over!<br>You placed #${m.rank}<br><small>${m.score} points</small></div>${reactBar()}`;
 }
 form();
 </script></body></html>
