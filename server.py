@@ -51,8 +51,16 @@ def tick(g):
 
 
 def leaderboard(g):
-    return sorted(({"name": p["name"], "score": p["score"]} for p in g["players"].values()),
-                  key=lambda x: -x["score"])
+    q = g["q"]
+    rows = []
+    for p in g["players"].values():
+        gained = p["answers"].get(q, {}).get("gained", 0) if q >= 0 else 0
+        rows.append({"name": p["name"], "score": p["score"], "prev": p["score"] - gained, "gained": gained})
+    prev_order = [x["name"] for x in sorted(rows, key=lambda x: -x["prev"])]
+    rows.sort(key=lambda x: -x["score"])
+    for r in rows:
+        r["prev_rank"] = prev_order.index(r["name"]) + 1
+    return rows
 
 
 def view(g, pid=None, host=False):

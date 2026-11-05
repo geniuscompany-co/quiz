@@ -15,7 +15,14 @@ button{font-size:1.3em;padding:12px 32px;border:0;border-radius:8px;background:#
 blockquote{margin:24px auto 0;max-width:800px;background:#fff;color:#2b0d57;border-radius:10px;padding:18px 28px;font-size:1.4em;font-style:italic;line-height:1.4}
 blockquote cite{display:block;font-size:.7em;font-style:normal;margin-top:8px;opacity:.7}
 .timer{font-size:3em;font-weight:800}
-.row{background:#fff2;margin:4px auto;padding:6px 20px;border-radius:8px;max-width:500px;display:flex;justify-content:space-between;font-size:1.15em}
+.board-wrap{position:relative;max-width:540px;margin:10px auto}
+.row{background:#fff2;padding:0 20px;height:40px;border-radius:8px;max-width:540px;box-sizing:border-box;display:flex;align-items:center;justify-content:space-between;font-size:1.15em;margin:4px auto}
+.board-wrap .row{position:absolute;left:0;right:0;margin:0;transition:transform .85s cubic-bezier(.22,1,.36,1),background .4s}
+.row.moved-up{background:#26890caa;box-shadow:0 4px 14px #0005}
+.gain{font-size:.82em;background:#fff3;padding:2px 8px;border-radius:99px;margin-right:8px;opacity:0;transition:opacity .35s}
+.gain.show{opacity:1}
+.shift{font-size:.85em;margin-left:6px;opacity:.9}
+.up{color:#7dff6b}.down{color:#ff9b9b}
 .logo{max-width:340px;width:80%;border-radius:16px;margin:20px auto 10px;display:block;box-shadow:0 4px 16px #0004}
 </style></head><body><div id="app"><img class="logo" src="/logo.jpg" alt="Brainrush!"><button onclick="create()">Create game</button></div>
 <script>
@@ -27,6 +34,47 @@ let busy=false;
 async function next(){if(busy)return;busy=true;try{await post('/api/next',{pin,host});await poll()}finally{setTimeout(()=>busy=false,500)}}
 async function poll(){const r=await fetch('/api/state?pin='+pin);S=await r.json();render()}
 function board(b){return b.map((x,i)=>`<div class="row"><span>${i+1}. ${esc(x.name)}</span><b>${x.score}</b></div>`).join('')}
+let animDone = -1;
+function animBoard(b, qIdx){
+ const H = 46, first = animDone !== qIdx && qIdx > 0;
+ const prevOrder = [...b].sort((a,c)=>(a.prev_rank||99)-(c.prev_rank||99));
+ const prevPos = new Map(prevOrder.map((x,i)=>[x.name, i]));
+ const rows = b.map((x,i)=>{
+  const pIdx = first ? (prevPos.get(x.name) ?? i) : i;
+  const sc = first ? (x.prev ?? x.score) : x.score;
+  const rk = first ? (pIdx + 1) : (i + 1);
+  const diff = (x.prev_rank || (i+1)) - (i + 1);
+  const arrow = qIdx > 0 && diff > 0 ? `<span class="shift up">▲${diff}</span>` : qIdx > 0 && diff < 0 ? `<span class="shift down">▼${-diff}</span>` : '';
+  const gain = x.gained > 0 ? `<span class="gain ${first?'':'show'}">+${x.gained}</span>` : '';
+  return `<div class="row" data-idx="${i}" data-prev="${sc}" data-score="${x.score}" data-diff="${diff}" style="transform:translateY(${pIdx*H}px)"><span><b class="rk">${rk}</b>. ${esc(x.name)}${arrow}</span><span>${gain}<b class="sc">${sc}</b></span></div>`;
+ }).join('');
+ if(first){
+  animDone = qIdx;
+  setTimeout(()=>{
+   const els = document.querySelectorAll('.board-wrap .row');
+   els.forEach(el=>{
+    const i = +el.dataset.idx, diff = +el.dataset.diff, p = +el.dataset.prev, s = +el.dataset.score;
+    el.style.transform = `translateY(${i*H}px)`;
+    if(diff > 0) el.classList.add('moved-up');
+    el.querySelector('.rk').textContent = i + 1;
+    const g = el.querySelector('.gain'); if(g) g.classList.add('show');
+    const scEl = el.querySelector('.sc');
+    if(s !== p){
+     const t0 = performance.now(), dur = 750;
+     const step = now => {
+      const k = Math.min(1, (now - t0) / dur);
+      scEl.textContent = Math.round(p + (s - p) * k);
+      if(k < 1) requestAnimationFrame(step);
+     };
+     requestAnimationFrame(step);
+    }
+   });
+  }, 450);
+ } else if(animDone !== qIdx){
+  animDone = qIdx;
+ }
+ return `<div class="board-wrap" style="height:${b.length*H}px">${rows}</div>`;
+}
 function quoteBox(){return `<blockquote>&ldquo;${esc(S.quote)}&rdquo;${S.source?`<cite>&mdash; ${esc(S.source)}</cite>`:''}</blockquote>`}
 function esc(s){return s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
 const QR = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 29 29" width="240" height="240" style="background:#fff;border-radius:12px;display:block"><path d="M2,2h7v1h-7zM12,2h3v1h-3zM16,2h2v1h-2zM20,2h7v1h-7zM2,3h1v1h-1zM8,3h1v1h-1zM10,3h4v1h-4zM15,3h1v1h-1zM17,3h1v1h-1zM20,3h1v1h-1zM26,3h1v1h-1zM2,4h1v1h-1zM4,4h3v1h-3zM8,4h1v1h-1zM11,4h2v1h-2zM14,4h1v1h-1zM20,4h1v1h-1zM22,4h3v1h-3zM26,4h1v1h-1zM2,5h1v1h-1zM4,5h3v1h-3zM8,5h1v1h-1zM11,5h2v1h-2zM16,5h1v1h-1zM20,5h1v1h-1zM22,5h3v1h-3zM26,5h1v1h-1zM2,6h1v1h-1zM4,6h3v1h-3zM8,6h1v1h-1zM10,6h1v1h-1zM12,6h1v1h-1zM14,6h2v1h-2zM17,6h1v1h-1zM20,6h1v1h-1zM22,6h3v1h-3zM26,6h1v1h-1zM2,7h1v1h-1zM8,7h1v1h-1zM11,7h3v1h-3zM15,7h1v1h-1zM17,7h1v1h-1zM20,7h1v1h-1zM26,7h1v1h-1zM2,8h7v1h-7zM10,8h1v1h-1zM12,8h1v1h-1zM14,8h1v1h-1zM16,8h1v1h-1zM18,8h1v1h-1zM20,8h7v1h-7zM14,9h4v1h-4zM2,10h1v1h-1zM4,10h1v1h-1zM6,10h1v1h-1zM8,10h1v1h-1zM11,10h1v1h-1zM13,10h1v1h-1zM16,10h1v1h-1zM22,10h1v1h-1zM25,10h1v1h-1zM2,11h1v1h-1zM4,11h2v1h-2zM7,11h1v1h-1zM9,11h1v1h-1zM11,11h1v1h-1zM13,11h2v1h-2zM18,11h3v1h-3zM26,11h1v1h-1zM2,12h1v1h-1zM4,12h2v1h-2zM7,12h3v1h-3zM15,12h1v1h-1zM19,12h1v1h-1zM22,12h1v1h-1zM24,12h3v1h-3zM3,13h1v1h-1zM6,13h1v1h-1zM9,13h1v1h-1zM12,13h3v1h-3zM18,13h2v1h-2zM21,13h1v1h-1zM25,13h1v1h-1zM2,14h1v1h-1zM7,14h4v1h-4zM12,14h3v1h-3zM17,14h5v1h-5zM23,14h1v1h-1zM25,14h2v1h-2zM3,15h1v1h-1zM5,15h1v1h-1zM7,15h1v1h-1zM9,15h1v1h-1zM13,15h3v1h-3zM20,15h1v1h-1zM23,15h1v1h-1zM26,15h1v1h-1zM2,16h1v1h-1zM4,16h1v1h-1zM6,16h1v1h-1zM8,16h1v1h-1zM10,16h2v1h-2zM13,16h2v1h-2zM16,16h1v1h-1zM19,16h3v1h-3zM24,16h3v1h-3zM3,17h1v1h-1zM6,17h2v1h-2zM9,17h1v1h-1zM11,17h1v1h-1zM14,17h5v1h-5zM20,17h1v1h-1zM22,17h1v1h-1zM25,17h1v1h-1zM2,18h1v1h-1zM5,18h1v1h-1zM7,18h2v1h-2zM10,18h4v1h-4zM16,18h1v1h-1zM18,18h6v1h-6zM10,19h1v1h-1zM12,19h2v1h-2zM16,19h3v1h-3zM22,19h2v1h-2zM25,19h2v1h-2zM2,20h7v1h-7zM15,20h1v1h-1zM17,20h2v1h-2zM20,20h1v1h-1zM22,20h2v1h-2zM25,20h2v1h-2zM2,21h1v1h-1zM8,21h1v1h-1zM13,21h1v1h-1zM18,21h1v1h-1zM22,21h2v1h-2zM26,21h1v1h-1zM2,22h1v1h-1zM4,22h3v1h-3zM8,22h1v1h-1zM10,22h3v1h-3zM14,22h1v1h-1zM18,22h6v1h-6zM26,22h1v1h-1zM2,23h1v1h-1zM4,23h3v1h-3zM8,23h1v1h-1zM12,23h4v1h-4zM19,23h1v1h-1zM21,23h4v1h-4zM2,24h1v1h-1zM4,24h3v1h-3zM8,24h1v1h-1zM10,24h5v1h-5zM16,24h2v1h-2zM22,24h1v1h-1zM26,24h1v1h-1zM2,25h1v1h-1zM8,25h1v1h-1zM14,25h5v1h-5zM20,25h1v1h-1zM22,25h2v1h-2zM25,25h1v1h-1zM2,26h7v1h-7zM10,26h1v1h-1zM13,26h1v1h-1zM16,26h3v1h-3zM21,26h1v1h-1zM25,26h2v1h-2z" fill="#2b0d57"/></svg>';
@@ -46,7 +94,7 @@ function render(){
   ${r&&S.quote?quoteBox():''}
   <button onclick="next()">${r?'Top players':'Skip'}</button>`;
  } else if(S.phase=='board')
-  $.innerHTML=`<p>After question ${S.index+1}/${S.total}</p><h1>🏆 Top players</h1>${board(S.board)}
+  $.innerHTML=`<p>After question ${S.index+1}/${S.total}</p><h1>🏆 Top players</h1>${animBoard(S.board,S.index)}
   <button onclick="next()">${S.index+1>=S.total?'Final results':'Next question'}</button>`;
  else $.innerHTML='<h1>🏆 Final results</h1>'+board(S.board)+'<button onclick="location.reload()">New game</button>';
 }
