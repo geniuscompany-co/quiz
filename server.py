@@ -86,11 +86,9 @@ def load_quiz(fname="quiz.json"):
     return QUIZ
 
 
-def save_custom_quiz(title, questions):
-    slug = re.sub(r"[^a-z0-9]+", "_", (title or "custom").lower()).strip("_") or "custom"
-    fname = "quiz_%s.json" % slug
+def clean_questions(questions):
     cleaned = []
-    for q in questions:
+    for q in questions or []:
         if not isinstance(q, dict) or not q.get("q") or not isinstance(q.get("a"), list) or len(q["a"]) < 2:
             continue
         ans = [str(x).strip() for x in q["a"][:4]]
@@ -104,19 +102,27 @@ def save_custom_quiz(title, questions):
         if q.get("img"):
             item["img"] = str(q["img"]).strip()
         cleaned.append(item)
+    return cleaned
+
+
+def save_custom_quiz(title, questions):
+    slug = re.sub(r"[^a-z0-9]+", "_", (title or "custom").lower()).strip("_") or "custom"
+    fname = "quiz_%s.json" % slug
+    cleaned = clean_questions(questions)
     if not cleaned:
         raise ValueError("No valid questions provided")
     with open(os.path.join(ROOT, fname), "w") as f:
         json.dump(cleaned, f, indent=2)
-    return fname, len(cleaned)
+    return fname, len(cleaned), cleaned
 
 
-def new_game(quiz_file="quiz.json", count=None, shuffle=False):
+def new_game(quiz_file="quiz.json", count=None, shuffle=False, custom_questions=None):
     while True:
         pin = str(random.randint(100000, 999999))
         if pin not in GAMES:
             break
-    bank = [dict(x) for x in load_quiz(quiz_file)]
+    cleaned_custom = clean_questions(custom_questions) if custom_questions else []
+    bank = cleaned_custom if cleaned_custom else [dict(x) for x in load_quiz(quiz_file)]
     if count is not None:
         try:
             k = max(1, min(len(bank), int(count)))
@@ -779,12 +785,17 @@ class H(BaseHTTPRequestHandler):
         with LOCK:
             if path == "/api/upload_quiz":
                 try:
-                    fname, cnt = save_custom_quiz(body.get("title"), body.get("questions") or [])
-                    return self.send({"ok": True, "file": fname, "count": cnt, "quizzes": list_quizzes()})
+                    fname, cnt, cleaned = save_custom_quiz(body.get("title"), body.get("questions") or [])
+                    return self.send({"ok": True, "file": fname, "count": cnt, "questions": cleaned, "quizzes": list_quizzes()})
                 except Exception as e:
                     return self.send({"error": str(e)}, 400)
             if path == "/api/create":
-                g = new_game(body.get("quiz") or "quiz.json", body.get("count"), bool(body.get("shuffle")))
+                g = new_game(
+                    body.get("quiz") or "quiz.json",
+                    body.get("count"),
+                    bool(body.get("shuffle")),
+                    custom_questions=body.get("custom_questions"),
+                )
                 if "preview" in body:
                     g["preview"] = float(body["preview"])
                 if body.get("qtime"):

@@ -380,6 +380,30 @@ function parseCustomQuestions(raw){
   return {q, a, c, quote, img};
  }).filter(Boolean);
 }
+function getSavedCustomQuizzes(){
+ try{ return JSON.parse(localStorage.getItem('brainrush_custom_quizzes') || '[]'); }catch(e){ return []; }
+}
+function storeCustomQuizLocal(item){
+ try{
+  const list = getSavedCustomQuizzes().filter(x=>x.file !== item.file);
+  list.push(item);
+  localStorage.setItem('brainrush_custom_quizzes', JSON.stringify(list));
+ }catch(e){}
+}
+function mergeQuizLists(serverList){
+ const map = new Map();
+ (serverList||[]).forEach(q=>map.set(q.file, q));
+ getSavedCustomQuizzes().forEach(q=>{ if(!map.has(q.file)) map.set(q.file, q); else map.get(q.file).questions = q.questions; });
+ return Array.from(map.values());
+}
+function renderQuizSelect(selectedFile){
+ const sel = document.getElementById('quizSel');
+ if(!sel) return;
+ sel.innerHTML = quizList.map(q=>`<option value="${esc(q.file)}">${esc(q.title)}</option>`).join('');
+ if(selectedFile) sel.value = selectedFile;
+ syncQuizCount();
+}
+
 async function saveCustomQuiz(){
  const title = document.getElementById('customTitle').value.trim() || 'Custom Quiz';
  const raw = document.getElementById('customText').value;
@@ -387,13 +411,15 @@ async function saveCustomQuiz(){
   const qs = parseCustomQuestions(raw);
   const r = await post('/api/upload_quiz', {title, questions: qs});
   if(r.error){ document.getElementById('customErr').textContent = r.error; return; }
-  quizList = r.quizzes || quizList;
-  const sel = document.getElementById('quizSel');
-  if(sel && r.quizzes){
-   sel.innerHTML = r.quizzes.map(q=>`<option value="${esc(q.file)}">${esc(q.title)}</option>`).join('');
-   sel.value = r.file;
-   syncQuizCount();
-  }
+  const savedQuestions = r.questions || qs;
+  storeCustomQuizLocal({
+   file: r.file,
+   title: `${title} (${r.count} Qs)`,
+   count: r.count,
+   questions: savedQuestions
+  });
+  quizList = mergeQuizLists(r.quizzes || quizList);
+  renderQuizSelect(r.file);
   closeQuizModal();
  }catch(e){
   document.getElementById('customErr').textContent = 'Could not parse questions: ' + e.message;
@@ -414,13 +440,12 @@ function syncQuizCount(){
 (async()=>{
  try{
   const r = await (await fetch('/api/quizzes')).json();
-  const sel = document.getElementById('quizSel');
-  if(sel && r.quizzes && r.quizzes.length){
-   quizList = r.quizzes;
-   sel.innerHTML = r.quizzes.map(q=>`<option value="${esc(q.file)}">${esc(q.title)}</option>`).join('');
-   syncQuizCount();
-  }
- }catch(e){}
+  quizList = mergeQuizLists((r && r.quizzes) || []);
+  if(quizList.length) renderQuizSelect();
+ }catch(e){
+  quizList = mergeQuizLists([]);
+  if(quizList.length) renderQuizSelect();
+ }
 })();
 async function create(){
  ensureAudio();sfxJoin();
@@ -436,11 +461,13 @@ async function create(){
  const ice = document.getElementById('qIce');
  const auto = document.getElementById('qAuto');
  const qf = sel ? sel.value : 'quiz.json';
+ const picked = quizList.find(x=>x.file===qf);
  const cnt = inp ? parseInt(inp.value, 10) : null;
  const qtm = tm ? parseInt(tm.value, 10) || 20 : 20;
  const bcnt = bots ? parseInt(bots.value, 10) || 0 : 0;
  const r=await post('/api/create',{
-  quiz:qf, count:cnt, shuffle:shuf ? shuf.checked : false, qtime:qtm, bots:bcnt,
+  quiz:qf, custom_questions: picked && picked.questions ? picked.questions : null,
+  count:cnt, shuffle:shuf ? shuf.checked : false, qtime:qtm, bots:bcnt,
   teams:teams ? teams.checked : false,
   wager:wager ? wager.checked : true,
   redemption:redemp ? redemp.checked : true,
