@@ -1,0 +1,197 @@
+[
+  {
+    "q": "Fatima's textile sales drop every rainy season, so she starts making waterproof bags. Which strategy is she using?",
+    "a": [
+      "Cutting costs during a slow season",
+      "Selling something that peaks when sales dip",
+      "Offering subscriptions to smooth her income",
+      "Building a reserve during strong months"
+    ],
+    "c": 1,
+    "t": 10,
+    "quote": "Develop complementary products or services that sell when your main offerings slow down. Fatima developed waterproof bags that sell especially well during the rainy season, balancing her annual cash flow.",
+    "src": "Chapter 8, p. 91"
+  },
+  {
+    "q": "Three new vendors open near Samuel's stall and undercut his prices. What does the chapter suggest he do?",
+    "a": [
+      "Match their prices to keep his regulars.",
+      "Lower his quality slightly to cut costs.",
+      "Move his stall to a less crowded spot.",
+      "Add extras like delivery and cooking tips."
+    ],
+    "c": 3,
+    "t": 10,
+    "quote": "Samuel in Kenya stopped competing on price. Instead, he began offering free delivery for regular customers and providing cooking suggestions with each purchase.",
+    "src": "Chapter 8, pp. 91–92"
+  },
+  {
+    "q": "Elena is worn out from cleaning, scheduling, and talking with customers. Which change follows the chapter's advice?",
+    "a": [
+      "Hand scheduling to a low-cost helper",
+      "Add new services to raise her income",
+      "Work longer days during busy weeks",
+      "Hire a manager to run the business"
+    ],
+    "c": 0,
+    "t": 10,
+    "quote": "Find low-cost help for time-consuming but simple activities. Elena hired her teenage nephew to handle customer scheduling.",
+    "src": "Chapter 8, p. 92"
+  },
+  {
+    "q": "Carlos worries that his food stall doesn't meet all the rules. What approach does the chapter recommend?",
+    "a": [
+      "Avoid inspectors until he is fully registered.",
+      "Pay for full registration right away.",
+      "Ask a health inspector for advice.",
+      "Move to a market with fewer rules."
+    ],
+    "c": 2,
+    "t": 10,
+    "quote": "He built a relationship with a local health inspector, asking for advice rather than avoiding contact.",
+    "src": "Chapter 8, p. 94"
+  },
+  {
+    "q": "Ahmed does carpentry for homeowners, small shops, a hotel, and government offices. Which kind of diversification is this?",
+    "a": [
+      "Product",
+      "Location",
+      "Seasonal",
+      "Customer"
+    ],
+    "c": 3,
+    "t": 10,
+    "quote": "Customer diversification: Develop multiple customer segments to avoid dependence on any single group. When economic conditions affected one customer segment, others sustained his business.",
+    "src": "Chapter 8, p. 95"
+  },
+  {
+    "q": "Priya sells at a village stall, through city shops, at a tourist market, and on WhatsApp. What does this mainly protect her from?",
+    "a": [
+      "Losing income when one sales spot has problems",
+      "Competitors copying her best-selling products",
+      "Running short of materials in busy months",
+      "Paying higher taxes as her sales grow"
+    ],
+    "c": 0,
+    "t": 10,
+    "quote": "When one location experienced problems (like weather affecting the market), other channels maintained her income.",
+    "src": "Chapter 8, p. 95"
+  },
+  {
+    "q": "How should a small business think about formalization?",
+    "a": [
+      "As a yes-or-no choice made once at the start",
+      "As a step required before making any sales",
+      "As a series of levels to climb as it grows",
+      "As a task only for businesses with employees"
+    ],
+    "c": 2,
+    "t": 10,
+    "quote": "Rather than seeing formalization as a yes/no decision, view it as a spectrum with multiple levels.",
+    "src": "Chapter 8, p. 96"
+  },
+  {
+    "q": "A tailor joins the local market association and pays the standard stall fee. Which formalization level is this?",
+    "a": [
+      "Basic safety and community standards",
+      "Local recognition",
+      "Partial formalization",
+      "Full formalization"
+    ],
+    "c": 1,
+    "t": 10,
+    "quote": "Level 2, Local Recognition: A tailor registering with the local market association and paying standard fees for their stall.",
+    "src": "Chapter 8, p. 96"
+  },
+  {
+    "q": "Which of these is a benefit of formalizing a business?",
+    "a": [
+      "Lower overall tax payments",
+      "Less record-keeping each month",
+      "Fewer rules to follow",
+      "The chance to serve larger clients"
+    ],
+    "c": 3,
+    "t": 10,
+    "quote": "Benefits of increased formalization include the Ability to serve larger customers who require documentation.",
+    "src": "Chapter 8, p. 97"
+  },
+  {
+    "q": "Elena's cleaning service has five employees, and formalizing worries her because of the cost. What did she do?",
+    "a": [
+      "Registered everything at once to avoid penalties",
+      "Stayed informal until the costs came down",
+      "Registered the business, then workers one at a time",
+      "Registered her workers first, then the business"
+    ],
+    "c": 2,
+    "t": 10,
+    "quote": "She formalized gradually, first registering the business while learning about labor requirements, then formally registering employees one by one as revenue from new corporate clients increased.",
+    "src": "Chapter 8, p. 98"
+  },
+  {
+    "q": "A home food producer can't afford formal certification yet. What should she focus on first?",
+    "a": [
+      "Saving until she can pay for certification",
+      "Following real safety practices and writing them down",
+      "Waiting until an inspector visits her kitchen",
+      "Getting the paperwork in order before anything else"
+    ],
+    "c": 1,
+    "t": 10,
+    "quote": "Focus first on actual safety practices, not just compliance paperwork. Document your safety procedures, even in simple form.",
+    "src": "Chapter 8, p. 100"
+  },
+  {
+    "q": "A furniture maker runs his workshop from home. How can he avoid trouble with neighbors?",
+    "a": [
+      "Keep set hours and control the dust.",
+      "Move into a rented shop right away.",
+      "Work late when neighbors are away.",
+      "Register as a formal business first."
+    ],
+    "c": 0,
+    "t": 10,
+    "quote": "The furniture maker maintained strict working hours and dust control to accommodate neighbors.",
+    "src": "Chapter 8, p. 101"
+  },
+  {
+    "q": "An inspector visits Maria's production space, which isn't fully up to standard yet. What's her best approach?",
+    "a": [
+      "Say it already meets every requirement.",
+      "Close until the space fully complies.",
+      "Ask a friend to speak for her instead.",
+      "Show a written plan for gradual fixes."
+    ],
+    "c": 3,
+    "t": 10,
+    "quote": "Progressive compliance: She showed him her written plan for gradually improving the facility. He allowed her to continue operating while implementing improvements on an agreed timeline.",
+    "src": "Chapter 8, p. 102"
+  },
+  {
+    "q": "Street vendors want set vending areas and simpler permits from the city. What's most likely to work?",
+    "a": [
+      "Each vendor applies for a permit alone",
+      "The vendors form an association together",
+      "The vendors hire a lawyer to fight the city",
+      "Each vendor moves to a less-watched area"
+    ],
+    "c": 1,
+    "t": 10,
+    "quote": "Street vendors in a Colombian city formed an association that successfully negotiated with municipal authorities for designated vending areas and simplified permit processes that individual vendors couldn't have achieved alone.",
+    "src": "Chapter 8, pp. 102–103"
+  },
+  {
+    "q": "Jasmine's skincare sales are strong some weeks and almost zero in others. What did she do?",
+    "a": [
+      "Cut her prices to draw steady buyers",
+      "Took a loan to cover the slow weeks",
+      "Created monthly subscription packages",
+      "Stopped selling individual products"
+    ],
+    "c": 2,
+    "t": 10,
+    "quote": "She analyzed her sales patterns and created a subscription model where customers received monthly product packages. This created reliable base income.",
+    "src": "Chapter 8, p. 103"
+  }
+]
