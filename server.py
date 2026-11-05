@@ -7,7 +7,7 @@ ROOT = os.path.dirname(os.path.abspath(__file__))
 LOCK = threading.Lock()
 GAMES = {}
 DEFAULT_TIME = 20  # seconds; override per question with "t" in quiz.json
-PREVIEW_TIME = 3.5  # seconds to read question before answers unlock
+PREVIEW_TIME = 5.0  # seconds to read question alone before answers appear and timer starts
 
 
 def qtime(g, i=None):
@@ -115,6 +115,7 @@ def view(g, pid=None, host=False):
             index=g["q"], question=q["q"], answers=q["a"], qtime=qtime(g),
             left=max(0.0, qtime(g) - q_elapsed),
             preview_left=round(preview_left, 2),
+            preview_total=prev_t,
             double=(qmult(g) == 2),
         )
         out["answered"] = sum(1 for p in g["players"].values() if g["q"] in p["answers"])

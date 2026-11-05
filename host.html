@@ -21,10 +21,14 @@ blockquote cite{display:block;font-size:.7em;font-style:normal;margin-top:8px;op
 .timer.urgent{color:#ffdf5d;animation:pulse .5s infinite alternate}
 @keyframes pulse{from{transform:scale(1)}to{transform:scale(1.15)}}
 .double-banner{display:inline-block;background:linear-gradient(90deg,#ff9800,#ffd600);color:#2b0d57;font-weight:900;padding:6px 20px;border-radius:99px;font-size:1.15em;letter-spacing:.5px;box-shadow:0 4px 14px #0004;animation:pulse .6s infinite alternate}
-.preview-box{margin:30px auto;max-width:600px}
-.preview-label{font-size:1.4em;font-weight:700;color:#ffdf5d;margin-bottom:10px}
-.preview-bar{height:12px;background:#fff3;border-radius:99px;overflow:hidden}
+.preview-box{margin:40px auto;max-width:640px}
+.preview-label{font-size:1.4em;font-weight:700;color:#ffdf5d;margin-bottom:12px}
+.preview-bar{height:14px;background:#fff3;border-radius:99px;overflow:hidden}
 .preview-fill{height:100%;background:#ffdf5d;transition:width .2s linear}
+.q-stage{min-height:48vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:20px}
+.q-stage h1{font-size:2.9em;line-height:1.25;max-width:880px}
+.ans-reveal{animation:slideUp .35s cubic-bezier(.22,1,.36,1)}
+@keyframes slideUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
 .board-wrap{position:relative;max-width:580px;margin:10px auto}
 .row{background:#fff2;padding:0 20px;height:40px;border-radius:8px;max-width:580px;box-sizing:border-box;display:flex;align-items:center;justify-content:space-between;font-size:1.15em;margin:4px auto}
 .board-wrap .row{position:absolute;left:0;right:0;margin:0;transition:transform .85s cubic-bezier(.22,1,.36,1),background .4s}
@@ -285,7 +289,7 @@ function render(){
    t.classList.toggle('urgent', sec <= 5);
   }
   const pf=document.getElementById('pf');
-  if(pf) pf.style.width = Math.min(100, ((S.preview_left||0)/3.5)*100)+'%';
+  if(pf) pf.style.width = Math.min(100, ((S.preview_left||0)/(S.preview_total||5))*100)+'%';
   return;
  }
  last=k;
@@ -295,14 +299,28 @@ function render(){
  else if(S.phase=='question'||S.phase=='results'){
   const r=S.phase=='results';
   const sec = Math.ceil(S.left);
-  $.innerHTML=`<p>Question ${S.index+1}/${S.total} &middot; ${S.answered}/${S.n} answered</p>
-  ${S.double?'<div class="double-banner">⚡ DOUBLE POINTS! ⚡</div>':''}
-  <h1>${esc(S.question)}</h1>
-  ${inPrev?`<div class="preview-box"><div class="preview-label">👀 Read the question…</div><div class="preview-bar"><div class="preview-fill" id="pf" style="width:${Math.min(100,((S.preview_left||0)/3.5)*100)}%"></div></div></div>`:
-    `${r?'':`<div class="timer ${sec<=5?'urgent':''}" id="t">${sec}</div>`}
-     <div class="grid">${S.answers.map((a,i)=>`<div class="a c${i} ${r&&i!=S.correct?'dim':''}">${sh[i]}${esc(a)}${r?` <small>(${S.counts[i]})</small>${i==S.correct?' ✓':''}`:''}</div>`).join('')}</div>`}
-  ${r&&S.quote?quoteBox():''}
-  <button onclick="next()">${r?'Top players':'Skip'}</button>`;
+  const pct = Math.min(100, ((S.preview_left||0)/(S.preview_total||5))*100);
+  if(inPrev){
+   $.innerHTML=`<p>Question ${S.index+1}/${S.total}</p>
+   <div class="q-stage">
+    ${S.double?'<div class="double-banner">⚡ DOUBLE POINTS! ⚡</div>':''}
+    <h1>${esc(S.question)}</h1>
+    <div class="preview-box" style="width:100%">
+     <div class="preview-label">👀 Read the question…</div>
+     <div class="preview-bar"><div class="preview-fill" id="pf" style="width:${pct}%"></div></div>
+    </div>
+   </div>`;
+  } else {
+   $.innerHTML=`<p>Question ${S.index+1}/${S.total} &middot; ${S.answered}/${S.n} answered</p>
+   ${S.double?'<div class="double-banner">⚡ DOUBLE POINTS! ⚡</div>':''}
+   <h1>${esc(S.question)}</h1>
+   <div class="ans-reveal">
+    ${r?'':`<div class="timer ${sec<=5?'urgent':''}" id="t">${sec}</div>`}
+    <div class="grid">${S.answers.map((a,i)=>`<div class="a c${i} ${r&&i!=S.correct?'dim':''}">${sh[i]}${esc(a)}${r?` <small>(${S.counts[i]})</small>${i==S.correct?' ✓':''}`:''}</div>`).join('')}</div>
+    ${r&&S.quote?quoteBox():''}
+    <button onclick="next()">${r?'Top players':'Skip'}</button>
+   </div>`;
+  }
  } else if(S.phase=='board')
   $.innerHTML=`<p>After question ${S.index+1}/${S.total}</p><h1>🏆 Top players</h1>${animBoard(S.board,S.index)}
   <button onclick="next()">${S.index+1>=S.total?'Final results':'Next question'}</button>`;
