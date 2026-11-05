@@ -20,19 +20,24 @@ let pin, host, S = {};
 const $ = document.getElementById('app'), sh = ["▲ ","◆ ","● ","■ "];
 async function post(u, b){return (await fetch(u,{method:'POST',body:JSON.stringify(b)})).json()}
 async function create(){const r=await post('/api/create',{});pin=r.pin;host=r.host;poll();setInterval(poll,700)}
-async function next(){await post('/api/next',{pin,host});poll()}
+let busy=false;
+async function next(){if(busy)return;busy=true;try{await post('/api/next',{pin,host});await poll()}finally{setTimeout(()=>busy=false,500)}}
 async function poll(){const r=await fetch('/api/state?pin='+pin);S=await r.json();render()}
 function board(b){return b.map((x,i)=>`<div class="row"><span>${i+1}. ${esc(x.name)}</span><b>${x.score}</b></div>`).join('')}
 function quoteBox(){return `<blockquote>&ldquo;${esc(S.quote)}&rdquo;${S.source?`<cite>&mdash; ${esc(S.source)}</cite>`:''}</blockquote>`}
 function esc(s){return s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+let last='';
 function render(){
+ const k=JSON.stringify({...S,left:0});
+ if(k==last){const t=document.getElementById('t');if(t)t.textContent=Math.ceil(S.left);return}
+ last=k;
  if(S.phase=='lobby')$.innerHTML=`<h1>Join at <u>${location.host}/play</u> with PIN</h1><div class="pin">${pin}</div>
   <p>${S.n} player(s)</p><div class="names">${S.names.map(n=>`<span>${esc(n)}</span>`).join('')}</div>
   ${S.n?'<button onclick="next()">Start</button>':''}`;
  else if(S.phase=='question'||S.phase=='results'){
   const r=S.phase=='results';
   $.innerHTML=`<p>Question ${S.index+1}/${S.total} &middot; ${S.answered}/${S.n} answered</p><h1>${esc(S.question)}</h1>
-  ${r?'':`<div class="timer">${Math.ceil(S.left)}</div>`}
+  ${r?'':`<div class="timer" id="t">${Math.ceil(S.left)}</div>`}
   <div class="grid">${S.answers.map((a,i)=>`<div class="a c${i} ${r&&i!=S.correct?'dim':''}">${sh[i]}${esc(a)}${r?` <small>(${S.counts[i]})</small>${i==S.correct?' ✓':''}`:''}</div>`).join('')}</div>
   ${r&&S.quote?quoteBox():''}
   <button onclick="next()">${r?'Top players':'Skip'}</button>`;
