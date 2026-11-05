@@ -81,7 +81,7 @@ blockquote cite{display:block;font-size:.74em;font-style:normal;margin-top:6px;o
 <button class="mute-btn" id="muteBtn" onclick="toggleMute()">🔊 Sound On</button>
 <canvas id="confetti"></canvas>
 <div id="reactions"></div>
-<div id="app"><img class="logo" src="/logo.jpg" alt="Brainrush!"><div class="quiz-pick"><select id="quizSel" onchange="syncQuizCount()"><option value="quiz.json">Loading quizzes…</option></select><div class="quiz-opts"><label>Questions: <input id="qCount" type="number" min="1" max="50" value="15"> <span id="qMax">/ 15</span></label><label><input id="qShuffle" type="checkbox" checked> Randomize from bank</label><label>🤖 Phantom players: <input id="qBots" type="number" min="0" max="30" value="0"></label></div></div><button onclick="create()">Create game</button></div>
+<div id="app"><img class="logo" src="/logo.jpg" alt="Brainrush!"><div class="quiz-pick"><select id="quizSel" onchange="syncQuizCount()"><option value="quiz.json">Loading quizzes…</option></select><div class="quiz-opts"><label>Questions: <input id="qCount" type="number" min="1" max="50" value="15"> <span id="qMax">/ 15</span></label><label><input id="qShuffle" type="checkbox" checked> Randomize from bank</label><label>⏱️ Time (sec): <input id="qTime" type="number" min="5" max="120" value="20"></label><label>🤖 Phantom players: <input id="qBots" type="number" min="0" max="30" value="0"></label></div></div><button onclick="create()">Create game</button></div>
 <script>
 let pin, host, S = {};
 const $ = document.getElementById('app'), sh = ["▲ ","◆ ","● ","■ "];
@@ -233,11 +233,13 @@ async function create(){
  const sel = document.getElementById('quizSel');
  const inp = document.getElementById('qCount');
  const shuf = document.getElementById('qShuffle');
+ const tm = document.getElementById('qTime');
  const bots = document.getElementById('qBots');
  const qf = sel ? sel.value : 'quiz.json';
  const cnt = inp ? parseInt(inp.value, 10) : null;
+ const qtm = tm ? parseInt(tm.value, 10) || 20 : 20;
  const bcnt = bots ? parseInt(bots.value, 10) || 0 : 0;
- const r=await post('/api/create',{quiz:qf, count:cnt, shuffle:shuf ? shuf.checked : false, bots:bcnt});
+ const r=await post('/api/create',{quiz:qf, count:cnt, shuffle:shuf ? shuf.checked : false, qtime:qtm, bots:bcnt});
  pin=r.pin;host=r.host;poll();setInterval(poll,600);
 }
 async function addBots(n=5){ensureAudio();await post('/api/bots',{pin,host,count:n});await poll()}

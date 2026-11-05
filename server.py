@@ -11,6 +11,8 @@ PREVIEW_TIME = 5.0  # seconds to read question alone before answers appear and t
 
 
 def qtime(g, i=None):
+    if g.get("qtime"):
+        return g["qtime"]
     return g["quiz"][g["q"] if i is None else i].get("t", DEFAULT_TIME)
 
 
@@ -396,6 +398,11 @@ class H(BaseHTTPRequestHandler):
                 g = new_game(body.get("quiz") or "quiz.json", body.get("count"), bool(body.get("shuffle")))
                 if "preview" in body:
                     g["preview"] = float(body["preview"])
+                if body.get("qtime"):
+                    try:
+                        g["qtime"] = max(5, min(120, int(body["qtime"])))
+                    except Exception:
+                        pass
                 if body.get("bots"):
                     add_bots(g, body.get("bots"))
                 return self.send({"pin": g["pin"], "host": g["host"]})
