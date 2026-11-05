@@ -10,7 +10,10 @@ a.join-link{color:#fff;text-decoration:underline}
 button{font-size:1.3em;padding:12px 32px;border:0;border-radius:8px;background:#26890c;color:#fff;cursor:pointer;margin-top:20px;font-weight:700}
 button:hover{filter:brightness(1.08)}
 .btn-sec{background:#ffffff2b;font-size:1.05em;padding:10px 22px;margin:10px 6px 0}
-.mute-btn{position:fixed;top:14px;right:16px;z-index:20;font-size:1em;padding:8px 14px;margin:0;background:#0005;border-radius:99px}
+.btn-sm{background:#ffffff2b;font-size:.95em;padding:8px 16px;margin:0 4px;border-radius:99px}
+.top-bar{position:fixed;top:14px;right:16px;z-index:20;display:flex;gap:8px;align-items:center}
+.top-bar button{font-size:.95em;padding:8px 14px;margin:0;background:#0006;border-radius:99px}
+.top-bar button.on{background:#26890c;box-shadow:0 0 0 2px #fff8}
 .names span{display:inline-block;background:#fff3;border-radius:8px;padding:8px 14px;margin:5px;font-weight:600;animation:pop .25s ease-out}
 @keyframes pop{from{transform:scale(.6);opacity:0}to{transform:scale(1);opacity:1}}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
@@ -24,10 +27,13 @@ button:hover{filter:brightness(1.08)}
 .a.dim{opacity:.38}.c0{background:#e21b3c}.c1{background:#1368ce}.c2{background:#d89e00}.c3{background:#26890c}
 blockquote{margin:14px auto 0;max-width:860px;background:#fff;color:#2b0d57;border-radius:14px;padding:16px 26px;font-size:1.28em;font-style:italic;line-height:1.4;box-shadow:0 8px 28px #0005;animation:slideUp .35s cubic-bezier(.22,1,.36,1)}
 blockquote cite{display:block;font-size:.74em;font-style:normal;margin-top:6px;opacity:.75;font-weight:700}
-.timer{font-size:3em;font-weight:800}
+.timer-row{display:flex;align-items:center;justify-content:center;gap:14px;margin:4px 0}
+.timer{font-size:3em;font-weight:800;min-width:70px}
 .timer.urgent{color:#ffdf5d;animation:pulse .5s infinite alternate}
+.timer.paused{color:#ff9800;opacity:.85}
 @keyframes pulse{from{transform:scale(1)}to{transform:scale(1.15)}}
-.double-banner{display:inline-block;background:linear-gradient(90deg,#ff9800,#ffd600);color:#2b0d57;font-weight:900;padding:6px 20px;border-radius:99px;font-size:1.15em;letter-spacing:.5px;box-shadow:0 4px 14px #0004;animation:pulse .6s infinite alternate}
+.double-banner{display:inline-block;background:linear-gradient(90deg,#ff9800,#ffd600);color:#2b0d57;font-weight:900;padding:6px 20px;border-radius:99px;font-size:1.15em;letter-spacing:.5px;box-shadow:0 4px 14px #0004;animation:pulse .6s infinite alternate;margin:4px}
+.redemp-banner{display:inline-block;background:linear-gradient(90deg,#ff2e63,#ff9800);color:#fff;font-weight:900;padding:6px 22px;border-radius:99px;font-size:1.15em;letter-spacing:.5px;box-shadow:0 4px 14px #0004;animation:pulse .6s infinite alternate;margin:4px}
 .preview-box{margin:40px auto;max-width:640px}
 .preview-label{font-size:1.4em;font-weight:700;color:#ffdf5d;margin-bottom:12px}
 .preview-bar{height:14px;background:#fff3;border-radius:99px;overflow:hidden}
@@ -48,20 +54,22 @@ blockquote cite{display:block;font-size:.74em;font-style:normal;margin-top:6px;o
 .logo{max-width:340px;width:80%;border-radius:16px;margin:20px auto 10px;display:block;box-shadow:0 4px 16px #0004}
 .quiz-pick{margin:16px auto 4px;display:flex;flex-direction:column;align-items:center;gap:12px}
 .quiz-pick select{font-size:1.15em;padding:10px 18px;border-radius:8px;border:0;background:#fff;color:#2b0d57;font-weight:700;max-width:90%;cursor:pointer}
-.quiz-opts{display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;font-size:1.1em;font-weight:600;background:#fff2;padding:8px 18px;border-radius:10px}
-.quiz-opts input[type=number]{width:68px;font-size:1.05em;padding:6px 8px;border-radius:6px;border:0;text-align:center;font-weight:800;color:#2b0d57}
+.quiz-opts{display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;font-size:1.05em;font-weight:600;background:#fff2;padding:10px 18px;border-radius:10px;max-width:860px}
+.quiz-opts input[type=number]{width:64px;font-size:1.05em;padding:6px 8px;border-radius:6px;border:0;text-align:center;font-weight:800;color:#2b0d57}
 .quiz-opts label{display:inline-flex;align-items:center;gap:6px;cursor:pointer}
 .quiz-opts input[type=checkbox]{width:18px;height:18px;cursor:pointer}
-.bars{display:flex;align-items:flex-end;justify-content:center;gap:18px;height:125px;max-width:520px;margin:10px auto 6px;padding:0 12px}
-.bar-col{flex:1;display:flex;flex-direction:column;align-items:center;height:100%;justify-content:flex-end}
-.bar-cnt{font-weight:800;font-size:1.15em;margin-bottom:4px}
-.bar-fill{width:100%;border-radius:8px 8px 0 0;min-height:10px;transition:height .6s cubic-bezier(.22,1,.36,1);box-shadow:0 4px 10px #0004}
-.bar-lbl{margin-top:6px;font-weight:800;font-size:1.1em}
 .shouts{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin:8px auto 14px;max-width:780px}
 .shout{background:#fff2;border:1px solid #fff4;padding:6px 16px;border-radius:99px;font-size:1.05em;font-weight:700;animation:pop .3s ease-out}
+.team-grid{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin:10px auto 16px;max-width:780px}
+.team-card{padding:10px 18px;border-radius:10px;font-weight:800;min-width:140px;box-shadow:0 4px 12px #0004}
+.team-card small{display:block;font-weight:600;opacity:.9;font-size:.82em;margin-top:2px}
 .awards{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin:16px auto;max-width:740px}
 .award{background:#fff2;border-radius:10px;padding:10px 18px;min-width:180px}
 .award b{display:block;color:#ffdf5d;font-size:1.05em;margin-bottom:2px}
+.tough-box{max-width:760px;margin:18px auto;background:#0004;border-radius:12px;padding:14px 20px;text-align:left}
+.tough-box h3{margin:0 0 10px;text-align:center;color:#ffdf5d}
+.tough-item{padding:8px 0;border-top:1px solid #fff2;font-size:1.02em}
+.tough-item:first-of-type{border-top:0}
 .acc-pill{display:inline-block;background:#fff3;padding:8px 20px;border-radius:99px;font-weight:800;font-size:1.15em;margin:6px 0 12px}
 .podium{display:flex;align-items:flex-end;justify-content:center;gap:14px;margin:26px auto 24px;max-width:640px;min-height:240px}
 .pod{flex:1;max-width:190px;display:flex;flex-direction:column;align-items:center;opacity:0;transform:translateY(40px);transition:opacity .6s ease,transform .6s cubic-bezier(.22,1,.36,1)}
@@ -72,16 +80,73 @@ blockquote cite{display:block;font-size:.74em;font-style:normal;margin-top:6px;o
 .pod-1 .pod-bar{height:165px;background:linear-gradient(180deg,#ffd700,#d49b00);color:#2b0d57}
 .pod-2 .pod-bar{height:125px;background:linear-gradient(180deg,#e0e6ed,#9aa5b1);color:#2b0d57}
 .pod-3 .pod-bar{height:95px;background:linear-gradient(180deg,#e69a58,#a85d24);color:#2b0d57}
+.modal-bg{position:fixed;inset:0;background:#0009;z-index:50;display:none;align-items:center;justify-content:center;padding:16px}
+.modal-bg.open{display:flex}
+.modal{background:#2b0d57;border:2px solid #fff4;border-radius:16px;padding:24px;max-width:680px;width:100%;max-height:88vh;overflow-y:auto;text-align:left;box-shadow:0 12px 40px #0009}
+.modal h2{margin-top:0;text-align:center}
+.modal input,.modal textarea{width:100%;box-sizing:border-box;padding:10px 12px;margin:6px 0 12px;border-radius:8px;border:0;font-family:inherit;font-size:1em}
+.modal textarea{min-height:170px;font-family:ui-monospace,monospace;font-size:.92em}
 #reactions{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:15}
 .float-emo{position:absolute;bottom:-40px;font-size:2.4em;animation:floatUp 3.2s ease-out forwards;filter:drop-shadow(0 3px 6px #0006)}
 .float-emo small{display:block;font-size:.36em;background:#0008;color:#fff;padding:2px 6px;border-radius:99px;margin-top:-4px;white-space:nowrap}
 @keyframes floatUp{0%{transform:translateY(0) scale(.7);opacity:0}12%{opacity:1;transform:translateY(-40px) scale(1.1)}100%{transform:translateY(-88vh) scale(1);opacity:0}}
 #confetti{position:fixed;inset:0;pointer-events:none;z-index:10}
 </style></head><body>
-<button class="mute-btn" id="muteBtn" onclick="toggleMute()">🔊 Sound On</button>
+<div class="top-bar">
+ <button id="autoBtn" style="display:none" onclick="hostCtl('toggle_auto')">⏭️ Auto: Off</button>
+ <button id="muteBtn" onclick="toggleMute()">🔊 Sound On</button>
+</div>
 <canvas id="confetti"></canvas>
 <div id="reactions"></div>
-<div id="app"><img class="logo" src="/logo.jpg" alt="Brainrush!"><div class="quiz-pick"><select id="quizSel" onchange="syncQuizCount()"><option value="quiz.json">Loading quizzes…</option></select><div class="quiz-opts"><label>Questions: <input id="qCount" type="number" min="1" max="50" value="15"> <span id="qMax">/ 15</span></label><label><input id="qShuffle" type="checkbox" checked> Randomize from bank</label><label>⏱️ Time (sec): <input id="qTime" type="number" min="5" max="120" value="20"></label><label>🤖 Phantom players: <input id="qBots" type="number" min="0" max="30" value="0"></label></div></div><button onclick="create()">Create game</button></div>
+<div class="modal-bg" id="quizModal">
+ <div class="modal">
+  <h2>➕ Create / Upload Custom Quiz</h2>
+  <label><b>Quiz Title:</b></label>
+  <input id="customTitle" placeholder="e.g. Chapter 9 Review">
+  <label><b>Upload .json or .csv file (optional):</b></label>
+  <input type="file" id="customFile" accept=".json,.csv" onchange="loadCustomFile(event)">
+  <label><b>Or type/paste questions (one per block, mark correct answer with *):</b></label>
+  <textarea id="customText" placeholder="What is the capital of France?
+Berlin
+*Paris
+Madrid
+Rome
+Quote: Paris has been the capital since 987 CE.
+
+Which planet is the Red Planet?
+Venus
+*Mars
+Jupiter
+Mercury"></textarea>
+  <div id="customErr" style="color:#ff9b9b;font-weight:700"></div>
+  <div style="display:flex;justify-content:flex-end;gap:10px">
+   <button class="btn-sec" style="margin:0" onclick="closeQuizModal()">Cancel</button>
+   <button style="margin:0;font-size:1.05em;padding:10px 24px" onclick="saveCustomQuiz()">Save Quiz</button>
+  </div>
+ </div>
+</div>
+<div id="app">
+ <img class="logo" src="/logo.jpg" alt="Brainrush!">
+ <div class="quiz-pick">
+  <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;width:100%">
+   <select id="quizSel" onchange="syncQuizCount()"><option value="quiz.json">Loading quizzes…</option></select>
+   <button class="btn-sec" style="margin:0;padding:10px 16px;font-size:1em" onclick="openQuizModal()">➕ Add Quiz</button>
+  </div>
+  <div class="quiz-opts">
+   <label>Questions: <input id="qCount" type="number" min="1" max="50" value="15"> <span id="qMax">/ 15</span></label>
+   <label><input id="qShuffle" type="checkbox" checked> Randomize</label>
+   <label>⏱️ Time (s): <input id="qTime" type="number" min="5" max="120" value="20"></label>
+   <label>🤖 Bots: <input id="qBots" type="number" min="0" max="30" value="0"></label>
+  </div>
+  <div class="quiz-opts">
+   <label><input id="qTeams" type="checkbox"> 🛡️ Team Mode</label>
+   <label><input id="qWager" type="checkbox" checked> 🎰 Final Boss Wager</label>
+   <label><input id="qRedemp" type="checkbox" checked> 🔄 Redemption Question</label>
+   <label><input id="qAuto" type="checkbox"> ⏭️ Auto-Advance</label>
+  </div>
+ </div>
+ <button onclick="create()">Create game</button>
+</div>
 <script>
 let pin, host, S = {};
 const $ = document.getElementById('app'), sh = ["▲ ","◆ ","● ","■ "];
@@ -139,7 +204,7 @@ function startQuestionBgm(){
  const lead = [440, 523.25, 659.25, 587.33, 659.25, 783.99, 659.25, 587.33];
  bgmStep = 0;
  bgmTimer = setInterval(()=>{
-  if(muted || S.phase !== 'question') return;
+  if(muted || S.phase !== 'question' || S.paused) return;
   const i = bgmStep++ % bass.length;
   const urgent = (S.preview_left||0) <= 0 && S.left <= 5;
   const mult = urgent ? 1.122 : 1;
@@ -206,6 +271,71 @@ function showReactions(list){
  });
 }
 
+// --- Custom Quiz Builder / Uploader ---
+function openQuizModal(){ document.getElementById('quizModal').classList.add('open'); }
+function closeQuizModal(){ document.getElementById('quizModal').classList.remove('open'); document.getElementById('customErr').textContent=''; }
+function loadCustomFile(ev){
+ const f = ev.target.files && ev.target.files[0];
+ if(!f) return;
+ if(!document.getElementById('customTitle').value){
+  document.getElementById('customTitle').value = f.name.replace(/\.(json|csv)$/i,'').replace(/[_-]+/g,' ');
+ }
+ const reader = new FileReader();
+ reader.onload = () => { document.getElementById('customText').value = reader.result; };
+ reader.readAsText(f);
+}
+function parseCustomQuestions(raw){
+ const s = (raw||'').trim();
+ if(!s) return [];
+ if(s.startsWith('[') || s.startsWith('{')){
+  const j = JSON.parse(s);
+  return Array.isArray(j) ? j : (j.questions || []);
+ }
+ // Check if CSV (lines with commas)
+ const blocks = s.split(/\n\s*\n/).map(b=>b.trim()).filter(Boolean);
+ if(blocks.length === 1 && s.includes(',') && s.split('\n').length > 1){
+  return s.split('\n').map(l=>l.trim()).filter(Boolean).map(line=>{
+   const p = line.split(',').map(x=>x.trim());
+   if(p.length < 5 || p[0].toLowerCase()==='question') return null;
+   return {q:p[0], a:p.slice(1,5), c:Math.max(0, (parseInt(p[5],10)||1)-1), quote:p[6]||''};
+  }).filter(Boolean);
+ }
+ return blocks.map(b=>{
+  const lines = b.split('\n').map(l=>l.trim()).filter(Boolean);
+  if(lines.length < 3) return null;
+  const q = lines[0];
+  const a = [];
+  let c = 0, quote = '';
+  lines.slice(1).forEach(l=>{
+   if(/^quote:/i.test(l)){ quote = l.replace(/^quote:\s*/i,''); }
+   else if(a.length < 4){
+    if(l.startsWith('*')){ c = a.length; a.push(l.slice(1).trim()); }
+    else a.push(l);
+   }
+  });
+  return {q, a, c, quote};
+ }).filter(Boolean);
+}
+async function saveCustomQuiz(){
+ const title = document.getElementById('customTitle').value.trim() || 'Custom Quiz';
+ const raw = document.getElementById('customText').value;
+ try{
+  const qs = parseCustomQuestions(raw);
+  const r = await post('/api/upload_quiz', {title, questions: qs});
+  if(r.error){ document.getElementById('customErr').textContent = r.error; return; }
+  quizList = r.quizzes || quizList;
+  const sel = document.getElementById('quizSel');
+  if(sel && r.quizzes){
+   sel.innerHTML = r.quizzes.map(q=>`<option value="${esc(q.file)}">${esc(q.title)}</option>`).join('');
+   sel.value = r.file;
+   syncQuizCount();
+  }
+  closeQuizModal();
+ }catch(e){
+  document.getElementById('customErr').textContent = 'Could not parse questions: ' + e.message;
+ }
+}
+
 async function post(u, b){return (await fetch(u,{method:'POST',body:JSON.stringify(b)})).json()}
 let quizList = [];
 function syncQuizCount(){
@@ -235,17 +365,38 @@ async function create(){
  const shuf = document.getElementById('qShuffle');
  const tm = document.getElementById('qTime');
  const bots = document.getElementById('qBots');
+ const teams = document.getElementById('qTeams');
+ const wager = document.getElementById('qWager');
+ const redemp = document.getElementById('qRedemp');
+ const auto = document.getElementById('qAuto');
  const qf = sel ? sel.value : 'quiz.json';
  const cnt = inp ? parseInt(inp.value, 10) : null;
  const qtm = tm ? parseInt(tm.value, 10) || 20 : 20;
  const bcnt = bots ? parseInt(bots.value, 10) || 0 : 0;
- const r=await post('/api/create',{quiz:qf, count:cnt, shuffle:shuf ? shuf.checked : false, qtime:qtm, bots:bcnt});
- pin=r.pin;host=r.host;poll();setInterval(poll,600);
+ const r=await post('/api/create',{
+  quiz:qf, count:cnt, shuffle:shuf ? shuf.checked : false, qtime:qtm, bots:bcnt,
+  teams:teams ? teams.checked : false,
+  wager:wager ? wager.checked : true,
+  redemption:redemp ? redemp.checked : true,
+  auto:auto ? auto.checked : false
+ });
+ pin=r.pin;host=r.host;
+ document.getElementById('autoBtn').style.display = 'inline-block';
+ poll();setInterval(poll,600);
 }
 async function addBots(n=5){ensureAudio();await post('/api/bots',{pin,host,count:n});await poll()}
+async function hostCtl(action, sec=10){ensureAudio();await post('/api/host_ctl',{pin,host,action,sec});await poll()}
 let busy=false;
 async function next(){ensureAudio();if(busy)return;busy=true;try{await post('/api/next',{pin,host});await poll()}finally{setTimeout(()=>busy=false,500)}}
-async function poll(){const r=await fetch('/api/state?pin='+pin);S=await r.json();showReactions(S.reactions);handleAudio();render()}
+async function poll(){
+ const r=await fetch('/api/state?pin='+pin);S=await r.json();
+ const ab = document.getElementById('autoBtn');
+ if(ab){
+  ab.textContent = S.auto ? '⏭️ Auto: ON' : '⏭️ Auto: Off';
+  ab.classList.toggle('on', !!S.auto);
+ }
+ showReactions(S.reactions);handleAudio();render();
+}
 
 function handleAudio(){
  if(S.phase === 'lobby' && S.n > lastPlayers){ sfxJoin(); }
@@ -259,7 +410,7 @@ function handleAudio(){
   else if(S.phase === 'board') sfxBoard();
   else if(S.phase === 'final'){ sfxPodium(); startConfetti(); }
  }
- if(S.phase === 'question' && (S.preview_left || 0) <= 0){
+ if(S.phase === 'question' && !S.paused && (S.preview_left || 0) <= 0){
   const sec = Math.ceil(S.left);
   if(sec > 0 && sec !== lastTickSec){
    lastTickSec = sec;
@@ -268,7 +419,12 @@ function handleAudio(){
  }
 }
 
-function board(b){return b.map((x,i)=>`<div class="row"><span>${i+1}. ${esc((x.avatar?x.avatar+' ':'')+x.name)}${x.streak>=2?`<span class="streak">🔥${x.streak}</span>`:''}</span><b>${x.score}</b></div>`).join('')}
+function teamStandingsHtml(){
+ if(!S.teams_enabled || !S.team_board || !S.team_board.length) return '';
+ return `<div class="team-grid">${S.team_board.map((t,i)=>`<div class="team-card" style="background:${t.color}">${i===0?'👑 ':''}${t.emoji} ${esc(t.name)}<small>${t.avg} avg pts (${t.members})</small></div>`).join('')}</div>`;
+}
+
+function board(b){return b.map((x,i)=>`<div class="row"><span>${i+1}. ${x.team_emoji?x.team_emoji+' ':''}${esc((x.avatar?x.avatar+' ':'')+x.name)}${x.streak>=2?`<span class="streak">🔥${x.streak}</span>`:''}</span><b>${x.score}</b></div>`).join('')}
 
 let animDone = -1;
 function animBoard(b, qIdx){
@@ -282,8 +438,8 @@ function animBoard(b, qIdx){
   const diff = (x.prev_rank || (i+1)) - (i + 1);
   const arrow = qIdx > 0 && diff > 0 ? `<span class="shift up">▲${diff}</span>` : qIdx > 0 && diff < 0 ? `<span class="shift down">▼${-diff}</span>` : '';
   const streak = x.streak >= 2 ? `<span class="streak">🔥${x.streak}</span>` : '';
-  const gain = x.gained > 0 ? `<span class="gain ${first?'':'show'}">+${x.gained}</span>` : '';
-  const label = esc((x.avatar ? x.avatar + ' ' : '') + x.name);
+  const gain = x.gained !== 0 ? `<span class="gain ${first?'':'show'}">${x.gained>0?'+'+x.gained:x.gained}</span>` : '';
+  const label = (x.team_emoji ? x.team_emoji + ' ' : '') + esc((x.avatar ? x.avatar + ' ' : '') + x.name);
   return `<div class="row" data-idx="${i}" data-prev="${sc}" data-score="${x.score}" data-diff="${diff}" style="transform:translateY(${pIdx*H}px)"><span><b class="rk">${rk}</b>. ${label}${streak}${arrow}</span><span>${gain}<b class="sc">${sc}</b></span></div>`;
  }).join('');
  if(first){
@@ -318,7 +474,7 @@ let podiumShown = false;
 function renderFinal(b){
  const p1 = b[0], p2 = b[1], p3 = b[2];
  const podSlot = (p, place, medal) => p ? `<div class="pod pod-${place} ${podiumShown?'show':''}" id="pod${place}">
-  <div class="pod-name">${esc((p.avatar?p.avatar+' ':'')+p.name)}</div>
+  <div class="pod-name">${p.team_emoji?p.team_emoji+' ':''}${esc((p.avatar?p.avatar+' ':'')+p.name)}</div>
   <div class="pod-score">${p.score} pts</div>
   <div class="pod-bar">${medal}</div>
  </div>` : '';
@@ -333,19 +489,12 @@ function renderFinal(b){
  const st = S.stats || {};
  const accHtml = st.possible ? `<div class="acc-pill">🎯 Group Accuracy: ${st.accuracy}% (${st.correct}/${st.possible} correct)</div>` : '';
  const awHtml = (st.awards && st.awards.length) ? `<div class="awards">${st.awards.map(a=>`<div class="award"><b>${esc(a.title)}</b>${esc(a.winner)} <small>(${esc(a.detail)})</small></div>`).join('')}</div>` : '';
- return `<h1>🏆 Final Podium</h1>${accHtml}${podiumHtml}${awHtml}${rest.length?'<h2>Runners-up</h2>'+board(rest):''}<button onclick="location.reload()">New game</button>`;
-}
-
-function barsChart(counts, correct){
- const tot = Math.max(1, counts.reduce((a,b)=>a+b, 0));
- return `<div class="bars">${counts.map((c,i)=>{
-  const h = Math.max(10, Math.round((c / tot) * 85));
-  return `<div class="bar-col ${i!=correct?'dim':''}">
-   <div class="bar-cnt">${c}${i==correct?' ✓':''}</div>
-   <div class="bar-fill c${i}" style="height:${h}px"></div>
-   <div class="bar-lbl">${sh[i]}</div>
-  </div>`;
- }).join('')}</div>`;
+ const toughHtml = (st.tough && st.tough.length) ? `<div class="tough-box"><h3>🧠 Tough Ones Recap (Most Missed)</h3>${st.tough.map(t=>`<div class="tough-item"><b>Q${t.index}${t.redemption?' (Redemption)':''} (${t.pct}% correct):</b> ${esc(t.q)}<br><span style="color:#7dff6b">✅ ${esc(t.ans)}</span></div>`).join('')}</div>` : '';
+ return `<h1>🏆 Final Podium</h1>${accHtml}${teamStandingsHtml()}${podiumHtml}${awHtml}${toughHtml}${rest.length?'<h2>Runners-up</h2>'+board(rest):''}
+ <div>
+  <a href="/api/export?pin=${pin}" download="brainrush_${pin}_results.csv"><button class="btn-sec">📥 Download Results (CSV)</button></a>
+  <button onclick="location.reload()">New game</button>
+ </div>`;
 }
 
 function quoteBox(){return `<blockquote>&ldquo;${esc(S.quote)}&rdquo;${S.source?`<cite>&mdash; ${esc(S.source)}</cite>`:''}</blockquote>`}
@@ -354,41 +503,50 @@ const QR = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 29 29" width="2
 let last='';
 function render(){
  const inPrev = S.phase==='question' && (S.preview_left||0) > 0;
- const k=JSON.stringify({...S,left:0,preview_left:inPrev?1:0,reactions:null});
+ const k=JSON.stringify({...S,left:0,preview_left:inPrev?1:0,auto_left:0,reactions:null});
  if(k==last){
   const t=document.getElementById('t');
   if(t){
    const sec = Math.ceil(S.left);
-   t.textContent = sec;
-   t.classList.toggle('urgent', sec <= 5);
+   t.textContent = S.paused ? '⏸️ ' + sec : sec;
+   t.classList.toggle('urgent', !S.paused && sec <= 5);
+   t.classList.toggle('paused', !!S.paused);
   }
   const pf=document.getElementById('pf');
   if(pf) pf.style.width = Math.min(100, ((S.preview_left||0)/(S.preview_total||5))*100)+'%';
+  const ab=document.getElementById('autoNextLbl');
+  if(ab && S.auto_left != null) ab.textContent = ` (${S.auto_left}s)`;
   return;
  }
  last=k;
- if(S.phase=='lobby')$.innerHTML=`<h1>Join at <a class="join-link" href="https://plw.me/play" target="_blank">plw.me/play</a> with PIN</h1><div class="lobby-box"><div class="pin">${pin}</div>${QR}</div>
-  <p>${S.n} player(s)</p><div class="names">${S.names.map(n=>`<span>${esc(n)}</span>`).join('')}</div>
+ const autoSuffix = S.auto && S.auto_left != null ? `<span id="autoNextLbl"> (${S.auto_left}s)</span>` : '';
+ if(S.phase=='lobby')$.innerHTML=`<h1>Join at <a class="join-link" href="/play?pin=${pin}" target="_blank">plw.me/play</a> with PIN</h1><div class="lobby-box"><div class="pin">${pin}</div>${QR}</div>
+  <p>${S.n} player(s)</p>${teamStandingsHtml()}<div class="names">${S.names.map(n=>`<span>${esc(n)}</span>`).join('')}</div>
   <div><button class="btn-sec" onclick="addBots(5)">🤖 +5 Phantom players</button>${S.n?'<button onclick="next()">Start</button>':''}</div>`;
  else if(S.phase=='question'){
   const sec = Math.ceil(S.left);
   const pct = Math.min(100, ((S.preview_left||0)/(S.preview_total||5))*100);
+  const badges = `${S.redemption?'<div class="redemp-banner">🔄 REDEMPTION QUESTION (MOST MISSED!) 🔄</div>':''}${S.boss?'<div class="double-banner">🎰 FINAL BOSS WAGER + 2x POINTS! 🎰</div>':S.double?'<div class="double-banner">⚡ DOUBLE POINTS! ⚡</div>':''}`;
   if(inPrev){
    $.innerHTML=`<p>Question ${S.index+1}/${S.total}</p>
    <div class="q-stage">
-    ${S.double?'<div class="double-banner">⚡ DOUBLE POINTS! ⚡</div>':''}
+    <div>${badges}</div>
     <h1>${esc(S.question)}</h1>
     <div class="preview-box" style="width:100%">
-     <div class="preview-label">👀 Read the question…</div>
+     <div class="preview-label">${S.boss?'🎰 Place your wagers & read the question…':'👀 Read the question…'}</div>
      <div class="preview-bar"><div class="preview-fill" id="pf" style="width:${pct}%"></div></div>
     </div>
    </div>`;
   } else {
    $.innerHTML=`<p>Question ${S.index+1}/${S.total} &middot; ${S.answered}/${S.n} answered</p>
-   ${S.double?'<div class="double-banner">⚡ DOUBLE POINTS! ⚡</div>':''}
+   <div>${badges}</div>
    <h1>${esc(S.question)}</h1>
    <div class="ans-reveal">
-    <div class="timer ${sec<=5?'urgent':''}" id="t">${sec}</div>
+    <div class="timer-row">
+     <button class="btn-sm" onclick="hostCtl('pause')">${S.paused?'▶️ Resume':'⏸️ Pause'}</button>
+     <div class="timer ${!S.paused&&sec<=5?'urgent':''} ${S.paused?'paused':''}" id="t">${S.paused?'⏸️ '+sec:sec}</div>
+     <button class="btn-sm" onclick="hostCtl('add_time',10)">+10s</button>
+    </div>
     <div class="grid">${S.answers.map((a,i)=>`<div class="a c${i}">${sh[i]}${esc(a)}</div>`).join('')}</div>
     <button onclick="next()">Skip</button>
    </div>`;
@@ -410,12 +568,12 @@ function render(){
     </div>`;
    }).join('')}</div>
    ${S.quote?quoteBox():''}
-   <div><button style="margin-top:14px" onclick="next()">Top players</button></div>
+   <div><button style="margin-top:14px" onclick="next()">Top players${autoSuffix}</button></div>
   </div>`;
  } else if(S.phase=='board'){
   const shHtml = (S.shoutouts&&S.shoutouts.length)?`<div class="shouts">${S.shoutouts.map(s=>`<span class="shout">${esc(s)}</span>`).join('')}</div>`:'';
-  $.innerHTML=`<p>After question ${S.index+1}/${S.total}</p><h1>🏆 Top players</h1>${shHtml}${animBoard(S.board,S.index)}
-  <button onclick="next()">${S.index+1>=S.total?'Final results':'Next question'}</button>`;
+  $.innerHTML=`<p>After question ${S.index+1}/${S.total}</p><h1>🏆 Top players</h1>${teamStandingsHtml()}${shHtml}${animBoard(S.board,S.index)}
+  <button onclick="next()">${S.index+1>=S.total?'Final results':'Next question'}${autoSuffix}</button>`;
  } else $.innerHTML=renderFinal(S.board);
 }
 </script></body></html>

@@ -9,77 +9,152 @@ button.go{width:100%;font-size:1.4em;padding:14px;border:0;border-radius:6px;bac
 .avatars{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin:12px 0}
 .av{font-size:1.7em;padding:6px 10px;border-radius:10px;background:#fff2;border:2px solid transparent;cursor:pointer;user-select:none}
 .av.sel{background:#fff4;border-color:#ffdf5d;transform:scale(1.12)}
+.teams{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0}
+.tm{padding:10px;border-radius:8px;background:#fff2;border:2px solid transparent;cursor:pointer;font-weight:700;font-size:.95em;user-select:none}
+.tm.sel{border-color:#ffdf5d;background:#fff4;transform:scale(1.03)}
 .pu-bar{display:flex;justify-content:center;gap:10px;margin-bottom:10px}
 .pu-btn{flex:1;padding:10px 12px;border:2px solid #fff6;border-radius:99px;background:#fff2;color:#fff;font-size:1em;font-weight:800;cursor:pointer}
 .pu-btn.active{background:linear-gradient(90deg,#ff9800,#ffd600);color:#2b0d57;border-color:#fff}
 .pu-btn:disabled{opacity:.35;cursor:default;text-decoration:line-through}
+.wager-box{background:#0004;border:2px solid #ffdf5d;border-radius:12px;padding:12px;margin:10px 0}
+.wager-btns{display:flex;gap:8px;margin-top:8px}
+.wager-btn{flex:1;padding:10px;border-radius:8px;border:2px solid #fff5;background:#fff2;color:#fff;font-weight:800;font-size:1.05em;cursor:pointer}
+.wager-btn.sel{background:#ffdf5d;color:#2b0d57;border-color:#fff}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.grid button{min-height:30vh;padding:12px 10px;border:0;border-radius:10px;color:#fff;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;font-weight:700;font-size:1.15em;line-height:1.25;word-break:break-word}
+.grid button{min-height:28vh;padding:12px 10px;border:0;border-radius:10px;color:#fff;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;font-weight:700;font-size:1.15em;line-height:1.25;word-break:break-word}
 .grid button .sh{font-size:2em;line-height:1}
 .grid button.elim{opacity:.18;pointer-events:none;filter:grayscale(1)}
 .c0{background:#e21b3c}.c1{background:#1368ce}.c2{background:#d89e00}.c3{background:#26890c}
-.big{font-size:1.9em;margin-top:16vh}
-.big:has(+blockquote){margin-top:6vh}
+.big{font-size:1.85em;margin-top:12vh}
+.big:has(+blockquote){margin-top:4vh}
 .streak-pill{display:inline-block;background:#ff6d00;color:#fff;font-size:.65em;padding:4px 14px;border-radius:99px;margin-top:8px;font-weight:800}
-.double-pill{display:inline-block;background:linear-gradient(90deg,#ff9800,#ffd600);color:#2b0d57;font-weight:900;padding:4px 14px;border-radius:99px;font-size:.95em;margin-bottom:10px}
-.react-bar{display:flex;justify-content:center;gap:10px;margin-top:26px;flex-wrap:wrap}
+.double-pill{display:inline-block;background:linear-gradient(90deg,#ff9800,#ffd600);color:#2b0d57;font-weight:900;padding:4px 14px;border-radius:99px;font-size:.95em;margin-bottom:8px}
+.react-bar{display:flex;justify-content:center;gap:10px;margin-top:22px;flex-wrap:wrap}
 .react-bar button{font-size:1.7em;background:#fff2;border:0;border-radius:99px;padding:8px 14px;cursor:pointer;transition:transform .12s}
 .react-bar button:active{transform:scale(1.3)}
-blockquote{background:#fff;color:#2b0d57;border-radius:10px;padding:14px 18px;margin:20px 0 0;font-style:italic;line-height:1.4;text-align:left}
+blockquote{background:#fff;color:#2b0d57;border-radius:10px;padding:14px 18px;margin:16px 0 0;font-style:italic;line-height:1.4;text-align:left}
 blockquote cite{display:block;font-style:normal;font-size:.8em;margin-top:8px;opacity:.7}.err{color:#ffb3b3}
+.report-card{background:#fff2;border-radius:12px;padding:14px 16px;margin-top:16px;text-align:left;font-size:.95em}
+.report-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;text-align:center;margin-bottom:12px}
+.stat-pill{background:#0004;padding:8px;border-radius:8px;font-weight:700}
+.stat-pill b{display:block;font-size:1.25em;color:#ffdf5d}
+.missed-item{border-top:1px solid #fff3;padding:8px 0;font-size:.92em}
 .logo{max-width:260px;width:75%;border-radius:16px;margin:4px auto 12px;display:block;box-shadow:0 4px 16px #0004}
 </style></head><body><div id="app"></div>
 <script>
-let pin, pid, S = {}, avatar = '🦊';
+let pin, pid, S = {}, avatar = '🦊', team = '';
 const AVS = ['🦊','🐼','🦁','🐸','🦄','🐙','🦖','🐝','🦋','🐧','🚀','⚡'];
+const TEAMS = [
+ {id:'', label:'🎲 Auto Team'},
+ {id:'red', label:'🔴 Red Dragons'},
+ {id:'blue', label:'🔵 Blue Sharks'},
+ {id:'gold', label:'🟡 Gold Lions'},
+ {id:'green', label:'🟢 Green Vipers'}
+];
 const REACTS = ['🔥','😂','😮','🎉','👏','❤️'];
 const $ = document.getElementById('app'), sh = ["▲","◆","●","■"];
 async function post(u,b){const r=await fetch(u,{method:'POST',body:JSON.stringify(b)});return {ok:r.ok,...await r.json()}}
 function esc(s){return String(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
 function pickAv(a){avatar=a;document.querySelectorAll('.av').forEach(el=>el.classList.toggle('sel',el.dataset.av===a))}
+function pickTm(t){team=t;document.querySelectorAll('.tm').forEach(el=>el.classList.toggle('sel',el.dataset.tm===t))}
+
+const urlPin = new URLSearchParams(location.search).get('pin') || '';
+
 function form(err){
+ const savedPin = urlPin || pin || '';
  $.innerHTML=`<img class="logo" src="/logo.jpg" alt="Brainrush!"><h1>Join game</h1>
- <input id="p" placeholder="Game PIN" inputmode="numeric">
+ <input id="p" placeholder="Game PIN" inputmode="numeric" value="${esc(savedPin)}">
  <input id="n" placeholder="Nickname" maxlength="16">
  <div class="avatars">${AVS.map(a=>`<span class="av ${a===avatar?'sel':''}" data-av="${a}" onclick="pickAv('${a}')">${a}</span>`).join('')}</div>
+ <div class="teams">${TEAMS.slice(1).map(t=>`<div class="tm ${t.id===team?'sel':''}" data-tm="${t.id}" onclick="pickTm('${t.id}')">${t.label}</div>`).join('')}</div>
  <button class="go" onclick="join()">Enter</button><p class="err">${err||''}</p>`;
 }
+
 async function join(){
  pin=p.value.trim();
- const r=await post('/api/join',{pin,name:n.value,avatar});
+ const r=await post('/api/join',{pin,name:n.value,avatar,team});
  if(!r.ok)return form(r.error);
- pid=r.pid;poll();setInterval(poll,600);
+ pid=r.pid;
+ try{ localStorage.setItem('brainrush_session', JSON.stringify({pin, pid})); }catch(e){}
+ poll();setInterval(poll,600);
 }
+
+async function tryReconnect(){
+ try{
+  const raw = localStorage.getItem('brainrush_session');
+  if(!raw) return form();
+  const s = JSON.parse(raw);
+  if(!s.pin || !s.pid) return form();
+  if(urlPin && urlPin !== s.pin) return form();
+  const r = await fetch(`/api/state?pin=${s.pin}&pid=${s.pid}`);
+  if(!r.ok) return form();
+  const st = await r.json();
+  if(st && st.me && st.phase !== 'final'){
+   pin = s.pin; pid = s.pid; S = st;
+   render(); setInterval(poll, 600);
+   return;
+  }
+ }catch(e){}
+ form();
+}
+
 async function ans(c){await post('/api/answer',{pin,pid,choice:c});poll()}
 async function usePu(kind){await post('/api/powerup',{pin,pid,kind});poll()}
+async function setWager(pct){await post('/api/wager',{pin,pid,pct});poll()}
 async function react(emoji){await post('/api/react',{pin,pid,emoji})}
 function reactBar(){return `<div class="react-bar">${REACTS.map(e=>`<button onclick="react('${e}')">${e}</button>`).join('')}</div>`}
-async function poll(){const r=await fetch(`/api/state?pin=${pin}&pid=${pid}`);S=await r.json();render()}
+async function poll(){
+ const r=await fetch(`/api/state?pin=${pin}&pid=${pid}`);
+ if(!r.ok) return;
+ S=await r.json();render();
+}
 let last='';
 function render(){
  const inPrev = S.phase==='question' && (S.preview_left||0) > 0;
- const k=JSON.stringify({...S,left:0,preview_left:inPrev?1:0,reactions:null});if(k==last)return;last=k;
+ const k=JSON.stringify({...S,left:0,preview_left:inPrev?1:0,auto_left:0,reactions:null});if(k==last)return;last=k;
  const m=S.me||{};
- const tag = esc((m.avatar?m.avatar+' ':'')+(m.name||''));
- if(S.phase=='lobby')$.innerHTML=`<div class="big">You're in, ${tag}!<br><small>Waiting for host to start…</small></div>${reactBar()}`;
- else if(S.phase=='question'){
-  const dbl = (S.double || m.active_2x) ? `<div class="double-pill">⚡ ${S.double && m.active_2x ? '4x' : 'DOUBLE'} POINTS ACTIVE! ⚡</div>` : '';
+ const tag = esc((m.team_emoji?m.team_emoji+' ':'')+(m.avatar?m.avatar+' ':'')+(m.name||''));
+ if(S.phase=='lobby'){
+  const tmBadge = m.team_name ? `<br><small>Team: ${m.team_emoji} ${esc(m.team_name)}</small>` : '';
+  $.innerHTML=`<div class="big">You're in, ${tag}!${tmBadge}<br><small>Waiting for host to start…</small></div>${reactBar()}`;
+ } else if(S.phase=='question'){
+  const dbl = S.redemption ? `<div class="double-pill">🔄 REDEMPTION BONUS (2x)! 🔄</div>` : (S.double || m.active_2x) ? `<div class="double-pill">⚡ ${S.double && m.active_2x ? '4x' : 'DOUBLE'} POINTS ACTIVE! ⚡</div>` : '';
+  const curW = m.wager_pct ?? 0;
+  const wagerUi = (S.boss && !m.answered && m.score > 0) ? `<div class="wager-box">
+   <div>🎰 <b>Final Boss Wager!</b> Risk points (${m.score} pts):</div>
+   <div class="wager-btns">
+    ${[0,50,100].map(pct=>`<button class="wager-btn ${curW===pct?'sel':''}" onclick="setWager(${pct})">${pct}% (${Math.round(m.score*pct/100)})</button>`).join('')}
+   </div>
+  </div>` : '';
   if(m.answered)$.innerHTML=`<div class="big">${dbl}<br>Answer sent!<br><small>Waiting for others…</small></div>`;
-  else if(inPrev)$.innerHTML=`<div class="big">${dbl}<br>👀 Get ready!<br><small>Read the question on the host screen…</small></div>`;
+  else if(inPrev)$.innerHTML=`<div class="big" style="margin-top:8vh">${dbl}<br>👀 Get ready!<br><small>Read the question on the host screen…</small></div>${wagerUi}`;
   else {
    const hide = m.hide || [];
    const puBar = `<div class="pu-bar">
     <button class="pu-btn" ${m.pu_5050?'':'disabled'} onclick="usePu('5050')">✂️ 50/50</button>
     <button class="pu-btn ${m.active_2x?'active':''}" ${m.pu_2x||m.active_2x?'':'disabled'} onclick="usePu('2x')">⚡ ${m.active_2x?'2x ON!':'2x Points'}</button>
    </div>`;
-   $.innerHTML=`${dbl}${puBar}<div class="grid">${S.answers.map((a,i)=>`<button class="c${i} ${hide.includes(i)?'elim':''}" onclick="ans(${i})"><span class="sh">${sh[i]}</span><span>${esc(a)}</span></button>`).join('')}</div>`;
+   $.innerHTML=`${dbl}${wagerUi}${puBar}<div class="grid">${S.answers.map((a,i)=>`<button class="c${i} ${hide.includes(i)?'elim':''}" onclick="ans(${i})"><span class="sh">${sh[i]}</span><span>${esc(a)}</span></button>`).join('')}</div>`;
   }
  } else if(S.phase=='results'){
   const st = m.streak >= 2 ? `<br><span class="streak-pill">🔥 ${m.streak} in a row! ${m.bonus?`(+${m.bonus} bonus)`:''}</span>` : '';
-  $.innerHTML=`<div class="big">${!m.answered?"⏰ Time's up":m.correct?'✅ Correct! +'+m.gained:'❌ Incorrect'}${st}<br><small>Score ${m.score}</small></div>${S.quote?`<blockquote>&ldquo;${esc(S.quote)}&rdquo;${S.source?`<cite>&mdash; ${esc(S.source)}</cite>`:''}</blockquote>`:''}${reactBar()}`;
+  const gTxt = m.gained >= 0 ? '+'+m.gained : m.gained;
+  $.innerHTML=`<div class="big">${!m.answered?"⏰ Time's up":m.correct?'✅ Correct! '+gTxt:'❌ Incorrect'+(m.gained<0?' ('+m.gained+')':'')}${st}<br><small>Score ${m.score}</small></div>${S.quote?`<blockquote>&ldquo;${esc(S.quote)}&rdquo;${S.source?`<cite>&mdash; ${esc(S.source)}</cite>`:''}</blockquote>`:''}${reactBar()}`;
  } else if(S.phase=='board')
   $.innerHTML=`<div class="big">🏆 You're #${m.rank}<br><small>${m.score} points</small>${m.streak>=2?`<br><span class="streak-pill">🔥 ${m.streak} Streak</span>`:''}</div>${reactBar()}`;
- else $.innerHTML=`<div class="big">🎉 Game over!<br>You placed #${m.rank}<br><small>${m.score} points</small></div>${reactBar()}`;
+ else {
+  const rep = m.report || {};
+  const missedHtml = (rep.missed && rep.missed.length) ? `<div style="margin-top:8px"><b>📝 Questions to Review:</b>${rep.missed.map(x=>`<div class="missed-item"><b>Q${x.num}:</b> ${esc(x.q)}<br><span style="color:#ff9b9b">You: ${esc(x.your_ans)}</span> &middot; <span style="color:#7dff6b">✅ ${esc(x.correct_ans)}</span></div>`).join('')}</div>` : `<div style="text-align:center;color:#7dff6b;font-weight:800">🌟 Perfect Score! You got every question right!</div>`;
+  const repHtml = rep.total ? `<div class="report-card">
+   <div class="report-stats">
+    <div class="stat-pill"><b>${rep.accuracy}%</b>${rep.correct}/${rep.total} Correct</div>
+    <div class="stat-pill"><b>🔥 ${rep.max_streak||0}</b>Best Streak</div>
+    <div class="stat-pill"><b>${rep.fastest!=null?rep.fastest+'s':'-'}</b>Fastest</div>
+   </div>
+   ${missedHtml}
+  </div>` : '';
+  $.innerHTML=`<div class="big" style="margin-top:4vh">🎉 Game over!<br>You placed #${m.rank}<br><small>${m.score} points</small></div>${repHtml}${reactBar()}`;
+ }
 }
-form();
+tryReconnect();
 </script></body></html>
