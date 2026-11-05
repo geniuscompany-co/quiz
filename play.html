@@ -13,13 +13,14 @@ button.go{width:100%;font-size:1.4em;padding:14px;border:0;border-radius:6px;bac
 .big:has(+blockquote){margin-top:8vh}
 blockquote{background:#fff;color:#2b0d57;border-radius:10px;padding:14px 18px;margin:24px 0 0;font-style:italic;line-height:1.4;text-align:left}
 blockquote cite{display:block;font-style:normal;font-size:.8em;margin-top:8px;opacity:.7}.err{color:#ffb3b3}
+.logo{max-width:260px;width:75%;border-radius:16px;margin:4px auto 12px;display:block;box-shadow:0 4px 16px #0004}
 </style></head><body><div id="app"></div>
 <script>
 let pin, pid, S = {}, name = '';
 const $ = document.getElementById('app'), sh = ["▲","◆","●","■"];
 async function post(u,b){const r=await fetch(u,{method:'POST',body:JSON.stringify(b)});return {ok:r.ok,...await r.json()}}
 function esc(s){return s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
-function form(err){$.innerHTML=`<h1>Join game</h1><input id="p" placeholder="Game PIN" inputmode="numeric"><input id="n" placeholder="Nickname" maxlength="16">
+function form(err){$.innerHTML=`<img class="logo" src="/logo.jpg" alt="Brainrush!"><h1>Join game</h1><input id="p" placeholder="Game PIN" inputmode="numeric"><input id="n" placeholder="Nickname" maxlength="16">
  <button class="go" onclick="join()">Enter</button><p class="err">${err||''}</p>`}
 async function join(){pin=p.value.trim();const r=await post('/api/join',{pin,name:n.value});
  if(!r.ok)return form(r.error);pid=r.pid;poll();setInterval(poll,700)}

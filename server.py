@@ -113,10 +113,11 @@ class H(BaseHTTPRequestHandler):
                 if not g:
                     return self.send({"error": "Game not found"}, 404)
                 return self.send(view(g, q.get("pid")))
-        files = {"/": "host.html", "/host": "host.html", "/play": "play.html"}
+        files = {"/": "host.html", "/host": "host.html", "/play": "play.html", "/logo.jpg": "logo.jpg"}
         if path in files:
+            ctype = "image/jpeg" if path.endswith(".jpg") else "text/html; charset=utf-8"
             with open(os.path.join(ROOT, files[path]), "rb") as f:
-                return self.send(f.read(), ctype="text/html; charset=utf-8")
+                return self.send(f.read(), ctype=ctype)
         self.send({"error": "not found"}, 404)
 
     def do_POST(self):
