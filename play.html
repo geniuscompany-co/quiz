@@ -12,10 +12,17 @@ button.go{width:100%;font-size:1.4em;padding:14px;border:0;border-radius:6px;bac
 .teams{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0}
 .tm{padding:10px;border-radius:8px;background:#fff2;border:2px solid transparent;cursor:pointer;font-weight:700;font-size:.95em;user-select:none}
 .tm.sel{border-color:#ffdf5d;background:#fff4;transform:scale(1.03)}
-.pu-bar{display:flex;justify-content:center;gap:8px;margin-bottom:10px}
-.pu-btn{flex:1;padding:10px 8px;border:2px solid #fff6;border-radius:99px;background:#fff2;color:#fff;font-size:.92em;font-weight:800;cursor:pointer}
+.pu-bar{display:flex;justify-content:center;gap:6px;margin-bottom:8px;flex-wrap:wrap}
+.pu-btn{flex:1;min-width:74px;padding:9px 6px;border:2px solid #fff6;border-radius:99px;background:#fff2;color:#fff;font-size:.86em;font-weight:800;cursor:pointer}
 .pu-btn.active{background:linear-gradient(90deg,#ff9800,#ffd600);color:#2b0d57;border-color:#fff}
 .pu-btn:disabled{opacity:.35;cursor:default;text-decoration:line-through}
+.conf-btn{width:100%;padding:9px 14px;margin-bottom:8px;border-radius:99px;border:2px solid #ffdf5d88;background:#0004;color:#ffdf5d;font-weight:800;font-size:.92em;cursor:pointer}
+.conf-btn.on{background:linear-gradient(90deg,#ff6d00,#ffd600);color:#2b0d57;border-color:#fff;box-shadow:0 0 12px #ff980088}
+.wheel-pill{display:inline-block;background:linear-gradient(90deg,#00c853,#00b0ff,#aa00ff);color:#fff;font-weight:900;padding:5px 14px;border-radius:99px;font-size:.86em;margin-bottom:6px;border:1px solid #fff8}
+.rival-pill{display:inline-block;background:#0005;border:1px solid #fff4;color:#ffdf5d;font-size:.85em;padding:5px 14px;border-radius:99px;margin:6px 4px;font-weight:700}
+.overtook-pill{display:inline-block;background:linear-gradient(90deg,#00c853,#64dd17);color:#0b3d0b;font-size:.9em;padding:5px 14px;border-radius:99px;margin:6px 4px;font-weight:900}
+.title-badge{display:inline-block;background:#ffffff28;border:1px solid #fff6;color:#ffdf5d;font-size:.55em;padding:3px 12px;border-radius:99px;margin-top:6px;font-weight:800}
+.aud-badge{background:#0006;padding:2px 10px;border-radius:99px;font-size:.85em;color:#ffdf5d;font-weight:900}
 .sab-btn{margin-top:12px;padding:10px 18px;border-radius:99px;border:2px solid #80deea;background:#00acc155;color:#fff;font-weight:800;font-size:.95em;cursor:pointer}
 .sab-btn:disabled{opacity:.4;cursor:default}
 .ice-overlay{position:fixed;inset:0;background:linear-gradient(135deg,#00b4dbdd,#0083b0ee);z-index:40;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;user-select:none;cursor:pointer}
@@ -130,8 +137,19 @@ async function sendWord(){
 async function ans(c){await post('/api/answer',{pin,pid,choice:c});poll()}
 async function usePu(kind){await post('/api/powerup',{pin,pid,kind});poll()}
 async function setWager(pct){await post('/api/wager',{pin,pid,pct});poll()}
+async function toggleConf(){await post('/api/confident',{pin,pid});poll()}
 async function sabotage(){await post('/api/sabotage',{pin,pid});poll()}
 async function react(emoji){await post('/api/react',{pin,pid,emoji})}
+function rivalHtml(m){
+ let h = '';
+ if(m.overtook) h += `<div><span class="overtook-pill">🚀 You overtook ${esc(m.overtook)}!</span></div>`;
+ if(m.rival){
+  const rv = m.rival, rName = esc((rv.avatar?rv.avatar+' ':'')+rv.name);
+  if(rv.type === 'ahead') h += `<div><span class="rival-pill">🎯 ${rv.gap} pts behind ${rName}</span></div>`;
+  else h += `<div><span class="rival-pill">👑 Leading ${rName} by ${rv.gap} pts</span></div>`;
+ }
+ return h;
+}
 function tapIce(){
  iceTaps++;
  const rem = Math.max(0, 5 - iceTaps);
@@ -178,9 +196,15 @@ function render(){
  const inPrev = S.phase==='question' && (S.preview_left||0) > 0;
  const m=S.me||{};
  const k = S.phase==='question'
-  ? `q:${S.index}:${inPrev?1:0}:${m.answered?1:0}:${m.active_2x?1:0}:${m.active_shield?1:0}:${(m.hide||[]).join(',')}:${m.wager_pct??''}:${m.frozen?1:0}`
+  ? `q:${S.index}:${inPrev?1:0}:${m.answered?1:0}:${m.active_2x?1:0}:${m.active_shield?1:0}:${m.active_audience?1:0}:${m.confident?1:0}:${(m.hide||[]).join(',')}:${m.wager_pct??''}:${m.frozen?1:0}`
   : JSON.stringify({...S,left:0,qtime:0,answered:0,team_board:null,preview_left:0,auto_left:0,reactions:null});
- if(k==last)return;last=k;
+ if(k==last){
+  if(S.phase==='question' && m.active_audience && m.audience_pcts){
+   m.audience_pcts.forEach((p,i)=>{const el=document.getElementById('aud'+i);if(el)el.textContent=`📊 ${p}%`;});
+  }
+  return;
+ }
+ last=k;
  const tag = esc((m.team_emoji?m.team_emoji+' ':'')+(m.avatar?m.avatar+' ':'')+(m.name||''));
  if(S.phase=='lobby'){
   const tmBadge = m.team_name ? `<br><small>Team: ${m.team_emoji} ${esc(m.team_name)}</small>` : '';
@@ -204,6 +228,7 @@ function render(){
    <p style="font-size:1.25em"><b>${esc(m.frozen_by)}</b> threw an Ice Cube at you!</p>
    <p style="font-size:1.4em;font-weight:900;color:#ffdf5d">Tap <span id="iceRem">5</span> times to break the ice!</p>
   </div>` : '';
+  const whl = S.wheel_mod ? `<div><span class="wheel-pill">🎡 ${esc(S.wheel_mod)}</span></div>` : '';
   const dbl = S.redemption ? `<div class="double-pill">🔄 REDEMPTION BONUS (2x)! 🔄</div>` : S.boss ? `<div class="double-pill">🎰 FINAL BOSS WAGER! 🎰</div>` : (S.double || m.active_2x) ? `<div class="double-pill">⚡ ${S.double && m.active_2x ? '4x' : 'DOUBLE'} POINTS ACTIVE! ⚡</div>` : '';
   const udog = m.underdog ? `<div><span class="underdog-pill">🎯 UNDERDOG 1.5x CATCH-UP BOOST!</span></div>` : '';
   const curW = m.wager_pct ?? 0;
@@ -213,29 +238,34 @@ function render(){
    <div class="wager-btns">
     ${[0,50,100].map(pct=>`<button class="wager-btn ${curW===pct?'sel':''}" onclick="setWager(${pct})">${pct}% (${Math.round(stake*pct/100)} pts)</button>`).join('')}
    </div>
-  </div>` : '';
-  if(m.answered)$.innerHTML=`<div class="big">${dbl}${udog}<br>Answer sent!<br><small>Waiting for others…</small></div>`;
-  else if(inPrev)$.innerHTML=`<div class="big" style="margin-top:8vh">${dbl}${udog}<br>👀 Get ready!<br><small>Read the question on the host screen…</small></div>${wagerUi}`;
+  </div>` : (!S.boss && !m.answered) ? `<button class="conf-btn ${m.confident?'on':''}" onclick="toggleConf()">🔥 ${m.confident?'Confidence Bet ON (+250 / -150)':'Bet on Yourself (+250 / -150)'}</button>` : '';
+  if(m.answered)$.innerHTML=`<div class="big">${whl}${dbl}${udog}<br>Answer sent!<br><small>Waiting for others…</small></div>`;
+  else if(inPrev)$.innerHTML=`<div class="big" style="margin-top:6vh">${whl}${dbl}${udog}<br>👀 Get ready!<br><small>Read the question on the host screen…</small></div>${wagerUi}${rivalHtml(m)}`;
   else {
    const hide = m.hide || [];
+   const pcts = m.audience_pcts || null;
    const puBar = `<div class="pu-bar">
     <button class="pu-btn" ${m.pu_5050?'':'disabled'} onclick="usePu('5050')">✂️ 50/50</button>
     <button class="pu-btn ${m.active_2x?'active':''}" ${m.pu_2x||m.active_2x?'':'disabled'} onclick="usePu('2x')">⚡ ${m.active_2x?'2x ON':'2x'}</button>
-    <button class="pu-btn ${m.active_shield?'active':''}" ${m.pu_shield||m.active_shield?'':'disabled'} onclick="usePu('shield')">🛡️ ${m.active_shield?'Shielded':'Shield'}</button>
+    <button class="pu-btn ${m.active_shield?'active':''}" ${m.pu_shield||m.active_shield?'':'disabled'} onclick="usePu('shield')">🛡️ ${m.active_shield?'Shield':'Shield'}</button>
+    <button class="pu-btn ${m.active_audience?'active':''}" ${m.pu_audience||m.active_audience?'':'disabled'} onclick="usePu('audience')">📊 ${m.active_audience?'Poll ON':'Audience'}</button>
    </div>`;
-   $.innerHTML=`${iceHtml}${dbl}${udog}${wagerUi}${puBar}<div class="grid">${S.answers.map((a,i)=>`<button class="c${i} ${hide.includes(i)?'elim':''}" onclick="ans(${i})"><span class="sh">${sh[i]}</span><span>${esc(a)}</span></button>`).join('')}</div>`;
+   $.innerHTML=`${iceHtml}${whl}${dbl}${udog}${wagerUi}${puBar}<div class="grid">${S.answers.map((a,i)=>`<button class="c${i} ${hide.includes(i)?'elim':''}" onclick="ans(${i})"><span class="sh">${sh[i]}</span><span>${esc(a)}</span>${pcts?`<span class="aud-badge" id="aud${i}">📊 ${pcts[i]}%</span>`:''}</button>`).join('')}</div>`;
   }
  } else if(S.phase=='results'){
   const st = m.streak >= 2 ? `<br><span class="streak-pill">🔥 ${m.streak} in a row! ${m.bonus?`(+${m.bonus} bonus)`:''}</span>` : '';
-  const shMsg = (!m.correct && m.shielded) ? `<br><small style="color:#80deea">🛡️ Streak Shield protected your streak!</small>` : '';
+  const whMsg = m.wheel_bonus ? `<br><small style="color:#b2ff59">🎡 Mystery Wheel Bonus: +${m.wheel_bonus} pts!</small>` : '';
+  const cfMsg = m.conf_delta ? `<br><small style="color:${m.conf_delta>0?'#ffdf5d':'#ff9b9b'}">🔥 Confidence Bet: ${m.conf_delta>0?'+'+m.conf_delta:m.conf_delta} pts</small>` : '';
+  const shMsg = (!m.correct && m.shielded) ? `<br><small style="color:#80deea">🛡️ Streak Shield protected your streak &amp; bets!</small>` : '';
   const gTxt = m.gained >= 0 ? '+'+m.gained : m.gained;
   const canSab = S.sabotage_enabled && !S.is_last && m.pu_freeze && m.score >= 200 && S.n > 1;
   const sabBtn = canSab ? `<div><button class="sab-btn" onclick="sabotage()">❄️ Freeze Leader (-200 pts)</button></div>` : m.ice_sent ? `<div><small style="color:#80deea">❄️ Ice Cube thrown at the leader for next round!</small></div>` : '';
-  $.innerHTML=`<div class="big">${!m.answered?"⏰ Time's up":m.correct?'✅ Correct! '+gTxt:'❌ Incorrect'+(m.gained<0?' ('+m.gained+')':'')}${st}${shMsg}<br><small>Score ${m.score}</small></div>${sabBtn}${S.quote?`<blockquote>&ldquo;${esc(S.quote)}&rdquo;${S.source?`<cite>&mdash; ${esc(S.source)}</cite>`:''}</blockquote>`:''}${reactBar()}`;
+  $.innerHTML=`<div class="big">${!m.answered?"⏰ Time's up":m.correct?'✅ Correct! '+gTxt:'❌ Incorrect'+(m.gained<0?' ('+m.gained+')':'')}${st}${whMsg}${cfMsg}${shMsg}<br><small>Score ${m.score}</small></div>${rivalHtml(m)}${sabBtn}${S.quote?`<blockquote>&ldquo;${esc(S.quote)}&rdquo;${S.source?`<cite>&mdash; ${esc(S.source)}</cite>`:''}</blockquote>`:''}${reactBar()}`;
  } else if(S.phase=='board'){
   const canSab = S.sabotage_enabled && m.pu_freeze && m.score >= 200 && S.n > 1;
   const sabBtn = canSab ? `<div><button class="sab-btn" onclick="sabotage()">❄️ Freeze Leader (-200 pts)</button></div>` : m.ice_sent ? `<div><small style="color:#80deea">❄️ Ice Cube thrown at the leader for next round!</small></div>` : '';
-  $.innerHTML=`<div class="big">🏆 You're #${m.rank}<br><small>${m.score} points</small>${m.streak>=2?`<br><span class="streak-pill">🔥 ${m.streak} Streak</span>`:''}</div>${sabBtn}${reactBar()}`;
+  const ttlBadge = m.title ? `<br><span class="title-badge">${esc(m.title)}</span>` : '';
+  $.innerHTML=`<div class="big">🏆 You're #${m.rank}<br><small>${m.score} points</small>${ttlBadge}${m.streak>=2?`<br><span class="streak-pill">🔥 ${m.streak} Streak</span>`:''}</div>${rivalHtml(m)}${sabBtn}${reactBar()}`;
  } else {
   const rep = m.report || {};
   const tClass = m.rank===1?'':m.rank===2?'silver':m.rank===3?'bronze':'';
