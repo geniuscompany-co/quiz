@@ -15,8 +15,9 @@ button:hover{filter:brightness(1.08)}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:20px}
 .a{padding:28px;border-radius:8px;font-size:1.5em;font-weight:700;position:relative}
 .a.dim{opacity:.3}.c0{background:#e21b3c}.c1{background:#1368ce}.c2{background:#d89e00}.c3{background:#26890c}
-blockquote{margin:24px auto 0;max-width:800px;background:#fff;color:#2b0d57;border-radius:10px;padding:18px 28px;font-size:1.35em;font-style:italic;line-height:1.4}
-blockquote cite{display:block;font-size:.7em;font-style:normal;margin-top:8px;opacity:.7}
+blockquote{margin:24px auto 0;max-width:820px;background:#fff;color:#2b0d57;border-radius:14px;padding:28px 36px;font-size:1.65em;font-style:italic;line-height:1.45;box-shadow:0 8px 28px #0005;animation:slideUp .35s cubic-bezier(.22,1,.36,1)}
+blockquote cite{display:block;font-size:.68em;font-style:normal;margin-top:12px;opacity:.75;font-weight:700}
+.win-pill{display:inline-block;padding:12px 26px;border-radius:10px;font-size:1.35em;font-weight:800;margin:8px auto 4px;box-shadow:0 4px 14px #0004}
 .timer{font-size:3em;font-weight:800}
 .timer.urgent{color:#ffdf5d;animation:pulse .5s infinite alternate}
 @keyframes pulse{from{transform:scale(1)}to{transform:scale(1.15)}}
@@ -360,10 +361,16 @@ function render(){
    <div class="ans-reveal">
     ${r?barsChart(S.counts,S.correct):`<div class="timer ${sec<=5?'urgent':''}" id="t">${sec}</div>`}
     <div class="grid">${S.answers.map((a,i)=>`<div class="a c${i} ${r&&i!=S.correct?'dim':''}">${sh[i]}${esc(a)}${r?` <small>(${S.counts[i]})</small>${i==S.correct?' ✓':''}`:''}</div>`).join('')}</div>
-    ${r&&S.quote?quoteBox():''}
-    <button onclick="next()">${r?'Top players':'Skip'}</button>
+    <button onclick="next()">${r?(S.quote?'Explanation':'Top players'):'Skip'}</button>
    </div>`;
   }
+ } else if(S.phase=='quote'){
+  const ci = S.correct;
+  $.innerHTML=`<p>Question ${S.index+1}/${S.total}</p>
+  <h2 style="opacity:.9;margin:.2em 0">${esc(S.question)}</h2>
+  <div class="win-pill c${ci}">${sh[ci]}${esc(S.answers[ci])} ✓</div>
+  ${quoteBox()}
+  <button onclick="next()">Top players</button>`;
  } else if(S.phase=='board'){
   const shHtml = (S.shoutouts&&S.shoutouts.length)?`<div class="shouts">${S.shoutouts.map(s=>`<span class="shout">${esc(s)}</span>`).join('')}</div>`:'';
   $.innerHTML=`<p>After question ${S.index+1}/${S.total}</p><h1>🏆 Top players</h1>${shHtml}${animBoard(S.board,S.index)}

@@ -72,7 +72,7 @@ while True:
     s = call("/api/state?pin=" + pin)[1]
     if s.get("phase") == "final":
         break
-    if s.get("phase") in ("results", "board") or (s.get("phase") == "question" and s["answered"] == s["n"]):
+    if s.get("phase") in ("results", "quote", "board") or (s.get("phase") == "question" and s["answered"] == s["n"]):
         call("/api/next", {"pin": pin, "host": host})
     if time.time() - start > 300:
         print("timeout"); break
