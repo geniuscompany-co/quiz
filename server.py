@@ -6,7 +6,7 @@ from http.server import ThreadingHTTPServer, BaseHTTPRequestHandler
 ROOT = os.path.dirname(os.path.abspath(__file__))
 LOCK = threading.Lock()
 GAMES = {}
-DEFAULT_TIME = 20  # seconds; override per question with "t" in quiz.json
+DEFAULT_TIME = 15  # seconds; override per question with "t" in quiz.json
 PREVIEW_TIME = 5.0  # seconds to read question alone before answers appear and timer starts
 
 TEAMS = [

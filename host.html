@@ -225,7 +225,7 @@ Quote: Paris has been the capital since 987 CE."></textarea>
   </div>
   <div class="quick-bar">
    <label>📝 Questions: <input id="qCount" type="number" min="1" max="200" value="15"> <span id="qMax" style="opacity:.8">/ 15</span></label>
-   <label>⏱️ Timer: <input id="qTime" type="number" min="5" max="120" value="20"><span style="opacity:.8">s</span></label>
+   <label>⏱️ Timer: <input id="qTime" type="number" min="5" max="120" value="15"><span style="opacity:.8">s</span></label>
    <button type="button" class="drawer-toggle" id="advBtn" onclick="toggleAdvPanel()">⚙️ Options <span id="optSummary" style="background:#26890c;padding:2px 8px;border-radius:99px;font-size:.85em">5 active</span> <span id="advCaret">▾</span></button>
   </div>
   <div class="adv-panel" id="advPanel" onchange="updateOptSummary()">
@@ -688,7 +688,7 @@ async function create(){
  const qf = sel ? sel.value : 'quiz.json';
  const picked = quizList.find(x=>x.file===qf);
  const cnt = inp ? parseInt(inp.value, 10) : null;
- const qtm = tm ? parseInt(tm.value, 10) || 20 : 20;
+ const qtm = tm ? parseInt(tm.value, 10) || 15 : 15;
  const bcnt = bots ? parseInt(bots.value, 10) || 0 : 0;
  const r=await post('/api/create',{
   quiz:qf, custom_questions: picked && picked.questions ? picked.questions : null,
