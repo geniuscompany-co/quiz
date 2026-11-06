@@ -233,7 +233,7 @@ Quote: Paris has been the capital since 987 CE."></textarea>
   <div class="quick-bar">
    <label>📝 Questions: <input id="qCount" type="number" min="1" max="200" value="15"> <span id="qMax" style="opacity:.8">/ 15</span></label>
    <label>⏱️ Timer: <input id="qTime" type="number" min="5" max="120" value="15"><span style="opacity:.8">s</span></label>
-   <button type="button" class="drawer-toggle" id="advBtn" onclick="toggleAdvPanel()">⚙️ Options <span id="optSummary" style="background:#26890c;padding:2px 8px;border-radius:99px;font-size:.85em">5 active</span> <span id="advCaret">▾</span></button>
+   <button type="button" class="drawer-toggle" id="advBtn" onclick="toggleAdvPanel()">⚙️ Options <span id="optSummary" style="background:#26890c;padding:2px 8px;border-radius:99px;font-size:.85em">6 active</span> <span id="advCaret">▾</span></button>
   </div>
   <div class="adv-panel" id="advPanel" onchange="updateOptSummary()">
    <div class="adv-sec-title">Game Modes & Power-Ups</div>
@@ -244,12 +244,12 @@ Quote: Paris has been the capital since 987 CE."></textarea>
     <label class="mode-pill"><input id="qSabotage" type="checkbox" checked> ⛄ Snowballs</label>
     <label class="mode-pill"><input id="qWheel" type="checkbox" checked> 🎡 Mystery Wheel</label>
     <label class="mode-pill"><input id="qTeams" type="checkbox"> 🛡️ Team Mode</label>
-    <label class="mode-pill"><input id="qIce" type="checkbox" onchange="document.getElementById('icePromptRow').style.display=this.checked?'block':'none'"> 💭 Word Cloud Warm-Up</label>
+    <label class="mode-pill"><input id="qIce" type="checkbox" checked onchange="document.getElementById('icePromptRow').style.display=this.checked?'block':'none'"> 💭 Word Cloud Warm-Up</label>
     <label class="mode-pill"><input id="qAuto" type="checkbox"> ⏭️ Auto-Advance</label>
    </div>
-   <div id="icePromptRow" style="display:none;margin-bottom:12px">
+   <div id="icePromptRow" style="display:block;margin-bottom:12px">
     <label style="display:block;font-size:.86em;font-weight:700;opacity:.85;margin-bottom:4px">💭 Warm-Up Question:</label>
-    <input id="qIcePrompt" type="text" maxlength="120" value="In one word, how are you feeling today?" placeholder="e.g. In one word, what's your favorite food?" style="width:100%;box-sizing:border-box;padding:9px 12px;border-radius:8px;border:0;font-size:.96em;font-weight:600;color:#2b0d57">
+    <input id="qIcePrompt" type="text" maxlength="120" value="In one word, how are you feeling about today's quiz?" placeholder="e.g. In one word, what's your favorite food?" style="width:100%;box-sizing:border-box;padding:9px 12px;border-radius:8px;border:0;font-size:.96em;font-weight:600;color:#2b0d57">
    </div>
    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;padding-top:8px;border-top:1px solid #fff2;font-weight:700;font-size:.95em">
     <label style="display:inline-flex;align-items:center;gap:8px">🤖 Phantom Bot Players: <input id="qBots" type="number" min="0" max="30" value="0"></label>

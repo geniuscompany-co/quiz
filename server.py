@@ -147,7 +147,7 @@ def new_game(quiz_file="quiz.json", count=None, shuffle=False, custom_questions=
         "phase": "lobby", "q": -1, "start": 0, "preview": PREVIEW_TIME, "players": {},
         "reactions": [], "rseq": 0,
         "teams": False, "wager": True, "redemption": False, "redemption_added": False,
-        "sabotage": True, "icebreaker": False, "icebreaker_prompt": "In one word, how are you feeling right now?",
+        "sabotage": True, "icebreaker": False, "icebreaker_prompt": "In one word, how are you feeling about today's quiz?",
         "words": [],
         "wheel": True, "wheel_mods": {}, "robin_stolen": {},
         "auto": False, "phase_entered": time.time(),
@@ -743,7 +743,7 @@ def view(g, pid=None, host=False):
         "paused": bool(g.get("paused")),
     }
     if ph == "icebreaker":
-        out["prompt"] = g.get("icebreaker_prompt") or "In one word, how are you feeling right now?"
+        out["prompt"] = g.get("icebreaker_prompt") or "In one word, how are you feeling about today's quiz?"
         counts = {}
         for w in g.get("words", []):
             txt = w["text"]
