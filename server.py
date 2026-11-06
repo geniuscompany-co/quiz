@@ -645,7 +645,11 @@ def start_question(g, qi):
 
 def intro_len(g):
     base = g.get("preview", PREVIEW_TIME)
-    return base + 2.0 if g["quiz"][g["q"]].get("redemption") else base
+    if g["quiz"][g["q"]].get("redemption"):
+        return base + 2.0
+    if g["q"] in g.get("wheel_mods", {}):
+        return base + 3.0
+    return base
 
 
 def begin_question(g):

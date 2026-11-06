@@ -175,6 +175,10 @@ body.hc .a{outline:3px solid #fff}body.hc .row{border:2px solid #fff}
 .intro-wheel .wheel-wrap{width:290px;height:290px}
 .intro-wheel .wheel-disc span{font-size:2.6em}
 .intro-wheel .spin-result{font-size:1.6em}
+.g-sec{margin:14px 0 6px;font-size:1.05em;color:#ffdf5d;font-weight:800;border-bottom:1px solid #fff3;padding-bottom:4px}
+.g-item{padding:7px 0;border-bottom:1px solid #fff1;font-size:.95em;line-height:1.4}
+.g-item b{display:block;font-size:1.02em}
+.g-chip{background:#fff2;border:0;border-radius:99px;padding:5px 12px;margin:0;font-size:.82em;font-weight:700;cursor:pointer}
 </style></head><body>
 <div class="late-join" id="lateJoin">
  <button class="late-btn" onclick="toggleLateQr(event)" title="Click to toggle QR code for late joiners">
@@ -214,6 +218,7 @@ body.hc .a{outline:3px solid #fff}body.hc .row{border:2px solid #fff}
   <button id="remoteBtn" style="display:none" onclick="closeNavMenu();openRemoteModal()"><span>📱 Phone Host Remote</span><span class="state">Open ↗</span></button>
   <button onclick="closeNavMenu();openHistory()"><span>📈 Results History</span><span class="state">View</span></button>
    <button onclick="closeNavMenu();openLinks()"><span>🖥️ Spectator &amp; Practice Links</span><span class="state">Open ↗</span></button>
+   <button onclick="closeNavMenu();openGuide()"><span>📖 Feature Guide</span><span class="state">What's what</span></button>
    <button id="addQuizMenuBtn" onclick="closeNavMenu();openQuizModal()"><span>➕ Create / Upload Quiz</span><span class="state">New</span></button>
   <div class="menu-sep"></div>
   <div class="menu-kb">⌨️ <b>Shortcuts:</b> [Space/→] Next &middot; [P] Pause &middot; [+] +10s &middot; [M] Mute &middot; [V] Voice</div>
@@ -262,6 +267,15 @@ Quote: Paris has been the capital since 987 CE."></textarea>
   </div>
  </div>
 </div>
+<div class="modal-bg" id="guideModal">
+ <div class="modal" style="max-width:820px">
+  <h2>📖 Feature Guide</h2>
+  <input id="guideSearch" placeholder="🔍 Search features (e.g. snowball, wheel, roster)…" oninput="renderGuide()" style="margin:0 0 10px">
+  <div id="guideNav" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px"></div>
+  <div id="guideBody"></div>
+  <div style="text-align:center"><button style="margin:12px 0 0;padding:10px 22px;font-size:1.05em" onclick="document.getElementById('guideModal').classList.remove('open')">Close</button></div>
+ </div>
+</div>
 <div class="modal-bg" id="histModal">
  <div class="modal" style="max-width:760px">
   <h2>📈 Results History</h2>
@@ -293,7 +307,7 @@ Quote: Paris has been the capital since 987 CE."></textarea>
    <button type="button" class="drawer-toggle" id="advBtn" onclick="toggleAdvPanel()">⚙️ Options <span id="optSummary" style="background:#26890c;padding:2px 8px;border-radius:99px;font-size:.85em">8 active</span> <span id="advCaret">▾</span></button>
   </div>
   <div class="adv-panel" id="advPanel" onchange="updateOptSummary()">
-   <div class="adv-sec-title">Game Modes & Power-Ups</div>
+   <div class="adv-sec-title"><a href="#" onclick="openGuide('setup');return false" style="float:right;color:#ffdf5d;text-transform:none;letter-spacing:0;font-weight:700">📖 What do these do?</a>Game Modes & Power-Ups</div>
    <div class="mode-grid">
     <label class="mode-pill"><input id="qShuffle" type="checkbox" checked> 🎲 Randomize Order</label>
     <label class="mode-pill"><input id="qWager" type="checkbox" checked> 🎰 Final Boss Wager</label>
@@ -1321,4 +1335,110 @@ function enterGame(){
 })();
 function resumeGame(){ const sv = window._resumeSaved; pin = sv.pin; host = sv.host; ensureAudio(); enterGame(); }
 function discardGame(btn){ localStorage.removeItem('brainrush_host'); btn.closest('.resume-card').remove(); }
+</script>
+<script>
+// ===== Feature Guide =====
+const GUIDE = [
+ {id:'setup', title:'⚙️ Game Setup Options', items:[
+  ['📝 Questions', 'How many questions to play. Picks a random set from the quiz if you choose fewer than the total.'],
+  ['⏱️ Timer', 'Seconds players get to answer each question (default 15). A 5-second reading period comes first, with answers hidden.'],
+  ['🎲 Randomize Order', 'Shuffles the question order every game.'],
+  ['🎰 Final Boss Wager', 'The last regular question lets players risk 0%, 50% or 100% of their score (minimum stake 500) for a big swing instead of plain double points.'],
+  ['🔄 Redemption Round', 'After the last question, the question the class missed most comes back for DOUBLE points, introduced by a full-screen REDEMPTION announcement.'],
+  ['⛄ Snowballs (off by default)', 'Once per game, a player with 200+ points can spend 200 to throw a snowball at the leader. The leader is frozen on the next question and must tap 5 times to shake off the snow before answering.'],
+  ['🎡 Mystery Wheel', 'Every 4th question (Q4, Q8, Q12…) opens with a spinning wheel that picks a special rule for that question (see Special Rounds).'],
+  ['🛡️ Team Mode', 'Players are split into 4 teams (Red Dragons, Blue Sharks, Gold Lions, Green Vipers) with a live team-average scoreboard. Players can pick a team or get auto-balanced.'],
+  ['💭 Word Cloud Warm-Up', 'Before Question 1, players type a one-or-two word answer to your warm-up question and a live word cloud builds on screen. Edit the warm-up question here or live with the ✏️ Edit button.'],
+  ['⏭️ Auto-Advance', 'Moves from results to leaderboard to next question automatically. Can also be toggled live from the menu.'],
+  ['🔥 Hot Seat Rounds', 'Every 6th question (3+ players) puts one random player in the Hot Seat. Everyone else predicts if they will get it right.'],
+  ['🤝 Team Battle Rounds', 'With Team Mode on, every 5th question gives teams a longer 12-second discussion before answers open.'],
+  ['⚔️ Sudden-Death Tiebreaker', 'If the top players tie at the end, an extra question is played only by the tied players; fastest correct answer wins by 1 point.'],
+  ['🤖 Phantom Bot Players', 'Computer players that answer, use power-ups, wager and send reactions. Good for testing or making a small class feel full. You can also add 5 more from the lobby.'],
+  ['👥 Class Roster', 'Paste student names (one per line). Players then pick their name from a dropdown instead of typing a nickname, and a student who loses connection can rejoin under the same name. Saved on this computer.'],
+  ['🖼️ Logo URL / 🌄 Background URL', 'Use your own logo (shown to you and on players\' join screens) and a custom host-screen background image.']
+ ]},
+ {id:'scoring', title:'🏆 Scoring Basics', items:[
+  ['Base points', 'Up to 1000 per correct answer, shrinking to 500 as the timer runs out. Faster is better.'],
+  ['🔥 Streak bonus', '+100 per consecutive correct answer after the first, up to +300. A wrong or missing answer resets it.'],
+  ['⚡ Double points', 'The final question is worth 2x (unless it is the Final Boss Wager or a Redemption/Tiebreaker question).'],
+  ['🎯 Underdog boost', 'From Question 4 on, players in the bottom half of the standings earn 1.5x points on correct answers.'],
+  ['Streak fire', 'Players on a 5+ streak get a flaming glow on the leaderboard and a bigger streak badge on their phone.']
+ ]},
+ {id:'powerups', title:'💪 Player Power-Ups & Bets (on phones)', items:[
+  ['✂️ 50/50', 'Once per game on multiple-choice or True/False: removes wrong answers.'],
+  ['⚡ 2x', 'Once per game: doubles the points for the current question if answered correctly.'],
+  ['🛡️ Shield', 'Once per game: protects the streak and any bet or wager if the answer is wrong.'],
+  ['📊 Audience', 'Once per game: shows what percentage of the room favors each answer (multiple-choice and True/False only).'],
+  ['🔥 Bet on Yourself', 'Toggle on a normal question: +250 for a correct answer, -150 for a wrong one.'],
+  ['⛄ Snowball', 'See Snowballs above. Shown on the results screen when enabled.'],
+  ['Reactions', 'Players can tap emoji to send floating reactions to the big screen.']
+ ]},
+ {id:'rounds', title:'🎪 Special Rounds', items:[
+  ['🎡 Mystery Wheel effects', 'Speed Demon: 1.35x points for answers in the first 45% of the timer. Robin Hood: correct answers steal 150 from the leader (max 300 stolen). Mystery Crate: random +150 to +400 on a correct answer. Double Streak: streak bonuses are doubled.'],
+  ['🔥 Hot Seat', 'The chosen player gets +400 if they answer correctly. Players who predicted correctly (👍/👎) get +200 each.'],
+  ['🤝 Team Battle', 'Each team\'s most popular answer decides it. If it is correct, every teammate who answered gets +300.'],
+  ['🔄 Redemption', 'Introduced with its own screen. The most-missed question returns at double points.'],
+  ['🎰 Final Boss Wager', 'Players choose how much to risk on the last regular question.'],
+  ['⚔️ Sudden Death', 'Only tied leaders answer; everyone else watches. The result is announced on screen.']
+ ]},
+ {id:'types', title:'❓ Question Types & Media', items:[
+  ['Multiple choice', 'Four colored answers (▲ ◆ ● ■).'],
+  ['True / False', 'Two answers. In the quiz editor use "Type: tf" and "*True" or "*False".'],
+  ['Type the answer', 'Players type their answer; capitalization and punctuation do not matter. Use "Type: text" and list every accepted answer on its own line.'],
+  ['Put in order', 'Players tap items in the correct sequence. Use "Type: order" and list the items in the correct order.'],
+  ['Pictures', 'Question image with "Image: url". Answer pictures with "Answer text | url".'],
+  ['Fun facts', 'A "Quote:" line shows after the answer is revealed.'],
+  ['Question numbers', 'Every question shows "Question X of Y" on the big screen and on phones.']
+ ]},
+ {id:'host', title:'🎛️ Host Tools', items:[
+  ['☰ Menu – Sound Effects', 'Turns sound effects and music on or off (shortcut: M).'],
+  ['☰ Menu – Voice Announcer', 'Reads questions and results aloud. Pick a voice and a style (Natural, Hype, Movie Trailer, Calm, Chipmunk, Robot). Shortcut: V.'],
+  ['☰ Menu – Auto-Advance', 'Live toggle for automatic advancing.'],
+  ['☰ Menu – Visual Theme', 'Cycles through Purple, Neon, Emerald and Sunset themes.'],
+  ['☰ Menu – Background Music', 'Cycles Classic, Chill, Upbeat or Off for background music (sound effects stay on).'],
+  ['☰ Menu – Colorblind / High Contrast', 'Switches to a colorblind-safe answer palette, or a high-contrast display.'],
+  ['☰ Menu – Phone Host Remote', 'Gives you a link to run the game from your phone (next, pause, +10s, bots).'],
+  ['☰ Menu – Results History', 'Saved summaries of past games, a "topics to reteach" list and CSV export. May reset if the server restarts, so export what you need.'],
+  ['☰ Menu – Spectator & Practice Links', 'Links for a second-screen leaderboard / word cloud and the student practice page.'],
+  ['☰ Menu – Create / Upload Quiz', 'Build a quiz by typing or uploading, or load an existing quiz to edit, export as .json or delete.'],
+  ['⏸️ Pause / +10s / Skip', 'During a question: pause the clock, add 10 seconds, or skip to the results.'],
+  ['⌨️ Keyboard shortcuts', 'Space or → next, P pause, + add 10 seconds, M mute, V voice.'],
+  ['✖ Kick', 'In the lobby, the ✖ next to a player removes them and blocks that name. Nicknames and word-cloud words are also filtered for bad language.'],
+  ['📱 Late-join badge', 'During play, the top-left badge shows the PIN and a mini QR code so latecomers can join.'],
+  ['▶️ Resume', 'If you refresh the host page mid-game, a Resume card brings your game back.'],
+  ['🔒 Host password', 'Optional: set a HOST_PASSWORD environment variable on Render to protect game creation and quiz editing.']
+ ]},
+ {id:'after', title:'🏁 After the Game', items:[
+  ['🏆 Final Podium', 'Animated 3rd, 2nd, 1st podium with a drumroll, group accuracy, awards (Speed Demon, Longest Streak), runners-up and a Tough Ones recap.'],
+  ['🔁 Play Again (Keep Players)', 'Pick another quiz and start a new round without anyone rejoining; scores reset to 0.'],
+  ['📄 Study Guide', 'Printable page of the most-missed questions with answers and fun facts.'],
+  ['📥 Results CSV', 'Downloads each player\'s score, accuracy, streak and answers.'],
+  ['Player report cards & certificates', 'On their phones, players see accuracy, best streak and questions to review. The top 3 can save a winner certificate image.'],
+  ['Player titles', 'Badges like ⚡ Speedster, 🔥 Unstoppable, 🚀 Climber, 🎰 High Roller and 🛡️ Tank appear beside names and on phones.']
+ ]},
+ {id:'screens', title:'🖥️ Other Screens', items:[
+  ['/spectator', 'A second-screen view with the live leaderboard and word cloud. Add ?mode=board or ?mode=cloud for just one. Standings hide the current question\'s results until it ends.'],
+  ['/practice', 'Students study alone with any quiz: instant feedback, a score, an optional 20-second timer and a review of missed questions. Nothing is shared with the class.'],
+  ['/remote', 'The phone remote for the host (open it from the menu).'],
+  ['👁️ Phone accessibility button', 'On the join screen and in-game, cycles normal, colorblind and high-contrast colors.']
+ ]}
+];
+function openGuide(sec){
+ document.getElementById('guideModal').classList.add('open');
+ document.getElementById('guideSearch').value = '';
+ renderGuide();
+ if(sec){ setTimeout(()=>{ const el = document.getElementById('g-'+sec); if(el) el.scrollIntoView({behavior:'smooth', block:'start'}); }, 50); }
+}
+function renderGuide(){
+ const q = (document.getElementById('guideSearch').value || '').toLowerCase().trim();
+ const nav = document.getElementById('guideNav'), body = document.getElementById('guideBody');
+ nav.innerHTML = GUIDE.map(g=>`<button class="g-chip" onclick="document.getElementById('g-${g.id}').scrollIntoView({behavior:'smooth',block:'start'})">${esc(g.title)}</button>`).join('');
+ let any = false;
+ body.innerHTML = GUIDE.map(g=>{
+  const items = g.items.filter(it=>!q || (it[0]+' '+it[1]).toLowerCase().includes(q));
+  if(!items.length) return '';
+  any = true;
+  return `<div class="g-sec" id="g-${g.id}">${esc(g.title)}</div>` + items.map(it=>`<div class="g-item"><b>${esc(it[0])}</b>${esc(it[1])}</div>`).join('');
+ }).join('') || '<p>No matching features. Try another word.</p>';
+}
 </script></body></html>
