@@ -18,6 +18,7 @@ button.go{width:100%;font-size:1.4em;padding:14px;border:0;border-radius:6px;bac
 .pu-btn:disabled{opacity:.35;cursor:default;text-decoration:line-through}
 .conf-btn{width:100%;padding:9px 14px;margin-bottom:8px;border-radius:99px;border:2px solid #ffdf5d88;background:#0004;color:#ffdf5d;font-weight:800;font-size:.92em;cursor:pointer}
 .conf-btn.on{background:linear-gradient(90deg,#ff6d00,#ffd600);color:#2b0d57;border-color:#fff;box-shadow:0 0 12px #ff980088}
+.qnum{display:inline-block;background:#fff;color:#46178f;font-weight:900;font-size:.95em;padding:4px 16px;border-radius:99px;margin-bottom:8px}
 .wheel-pill{display:inline-block;background:linear-gradient(90deg,#00c853,#00b0ff,#aa00ff);color:#fff;font-weight:900;padding:5px 14px;border-radius:99px;font-size:.86em;margin-bottom:6px;border:1px solid #fff8}
 .rival-pill{display:inline-block;background:#0005;border:1px solid #fff4;color:#ffdf5d;font-size:.85em;padding:5px 14px;border-radius:99px;margin:6px 4px;font-weight:700}
 .overtook-pill{display:inline-block;background:linear-gradient(90deg,#00c853,#64dd17);color:#0b3d0b;font-size:.9em;padding:5px 14px;border-radius:99px;margin:6px 4px;font-weight:900}
@@ -91,7 +92,7 @@ async function checkPinConfig(pinVal){
 
 function form(err){
  const savedPin = urlPin || pin || '';
- $.innerHTML=`<img class="logo" src="/logo.jpg" alt="Brainrush!"><h1>Join game</h1>
+ $.innerHTML=`<img class="logo" src="/logo.jpg?v=2" alt="Brainrush!" onerror="this.outerHTML='<h1 style=&quot;font-size:2.4em;margin:.3em 0&quot;>🧠 Brainrush!</h1>'"><h1>Join game</h1>
  <input id="p" placeholder="Game PIN" inputmode="numeric" value="${esc(savedPin)}" oninput="if(this.value.length===6)checkPinConfig(this.value)">
  <input id="n" placeholder="Nickname" maxlength="16">
  <div class="avatars">${AVS.map(a=>`<span class="av ${a===avatar?'sel':''}" data-av="${a}" onclick="pickAv('${a}')">${a}</span>`).join('')}</div>
@@ -228,7 +229,8 @@ function render(){
    <p style="font-size:1.25em"><b>${esc(m.frozen_by)}</b> threw an Ice Cube at you!</p>
    <p style="font-size:1.4em;font-weight:900;color:#ffdf5d">Tap <span id="iceRem">5</span> times to break the ice!</p>
   </div>` : '';
-  const whl = S.wheel_mod ? `<div><span class="wheel-pill">🎡 ${esc(S.wheel_mod)}</span></div>` : '';
+  const qn = `<div><span class="qnum">Question ${S.index+1} of ${S.total}</span></div>`;
+  const whl = qn + (S.wheel_mod ? `<div><span class="wheel-pill">🎡 ${esc(S.wheel_mod)}</span></div>` : '');
   const dbl = S.redemption ? `<div class="double-pill">🔄 REDEMPTION BONUS (2x)! 🔄</div>` : S.boss ? `<div class="double-pill">🎰 FINAL BOSS WAGER! 🎰</div>` : (S.double || m.active_2x) ? `<div class="double-pill">⚡ ${S.double && m.active_2x ? '4x' : 'DOUBLE'} POINTS ACTIVE! ⚡</div>` : '';
   const udog = m.underdog ? `<div><span class="underdog-pill">🎯 UNDERDOG 1.5x CATCH-UP BOOST!</span></div>` : '';
   const curW = m.wager_pct ?? 0;
@@ -260,7 +262,7 @@ function render(){
   const gTxt = m.gained >= 0 ? '+'+m.gained : m.gained;
   const canSab = S.sabotage_enabled && !S.is_last && m.pu_freeze && m.score >= 200 && S.n > 1;
   const sabBtn = canSab ? `<div><button class="sab-btn" onclick="sabotage()">❄️ Freeze Leader (-200 pts)</button></div>` : m.ice_sent ? `<div><small style="color:#80deea">❄️ Ice Cube thrown at the leader for next round!</small></div>` : '';
-  $.innerHTML=`<div class="big">${!m.answered?"⏰ Time's up":m.correct?'✅ Correct! '+gTxt:'❌ Incorrect'+(m.gained<0?' ('+m.gained+')':'')}${st}${whMsg}${cfMsg}${shMsg}<br><small>Score ${m.score}</small></div>${rivalHtml(m)}${sabBtn}${S.quote?`<blockquote>&ldquo;${esc(S.quote)}&rdquo;${S.source?`<cite>&mdash; ${esc(S.source)}</cite>`:''}</blockquote>`:''}${reactBar()}`;
+  $.innerHTML=`<div><span class="qnum">Question ${S.index+1} of ${S.total}</span></div><div class="big" style="margin-top:4vh">${!m.answered?"⏰ Time's up":m.correct?'✅ Correct! '+gTxt:'❌ Incorrect'+(m.gained<0?' ('+m.gained+')':'')}${st}${whMsg}${cfMsg}${shMsg}<br><small>Score ${m.score}</small></div>${rivalHtml(m)}${sabBtn}${S.quote?`<blockquote>&ldquo;${esc(S.quote)}&rdquo;${S.source?`<cite>&mdash; ${esc(S.source)}</cite>`:''}</blockquote>`:''}${reactBar()}`;
  } else if(S.phase=='board'){
   const canSab = S.sabotage_enabled && m.pu_freeze && m.score >= 200 && S.n > 1;
   const sabBtn = canSab ? `<div><button class="sab-btn" onclick="sabotage()">❄️ Freeze Leader (-200 pts)</button></div>` : m.ice_sent ? `<div><small style="color:#80deea">❄️ Ice Cube thrown at the leader for next round!</small></div>` : '';

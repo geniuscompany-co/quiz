@@ -22,6 +22,7 @@ button:hover{filter:brightness(1.08)}
 .late-qr{position:absolute;top:46px;left:0;background:#fff;color:#2b0d57;padding:12px;border-radius:14px;box-shadow:0 12px 36px #000b;display:none;flex-direction:column;align-items:center;gap:6px;font-weight:800;font-size:.88em}
 .late-qr.open{display:flex;animation:pop .16s ease-out}
 .late-qr svg{width:150px;height:150px}
+.qnum{display:inline-block;background:#fff;color:#46178f;font-weight:900;font-size:1.35em;padding:6px 22px;border-radius:99px;margin:6px 0;box-shadow:0 4px 14px #0004}.qnum small{font-weight:700;opacity:.65;font-size:.7em}
 .wheel-banner{display:inline-block;background:linear-gradient(90deg,#00c853,#00b0ff,#aa00ff);color:#fff;font-weight:900;padding:7px 22px;border-radius:99px;font-size:1.12em;letter-spacing:.4px;box-shadow:0 4px 16px #0006;animation:pulse .55s infinite alternate;margin:4px;border:2px solid #fff8}
 .title-pill{font-size:.72em;background:#ffffff28;border:1px solid #fff5;color:#ffdf5d;padding:2px 8px;border-radius:99px;margin-left:6px;font-weight:800;vertical-align:middle}
 .replay-box{max-width:680px;margin:18px auto 8px;background:#0005;border:1px solid #fff3;border-radius:14px;padding:14px 18px;display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap}
@@ -911,7 +912,7 @@ function render(){
   const wheelHtml = S.wheel_mod ? `<div class="wheel-banner">🎡 MYSTERY WHEEL: ${esc(S.wheel_mod)}</div>` : '';
   const badges = `${wheelHtml}${S.redemption?'<div class="redemp-banner">🔄 REDEMPTION QUESTION (MOST MISSED!) 🔄</div>':''}${S.boss?'<div class="double-banner">🎰 FINAL BOSS WAGER! 🎰</div>':S.double?'<div class="double-banner">⚡ DOUBLE POINTS! ⚡</div>':''}`;
   if(inPrev){
-   $.innerHTML=`<p>Question ${S.index+1}/${S.total}</p>
+   $.innerHTML=`<div class="qnum">Question ${S.index+1} <small>of ${S.total}</small></div>
    <div class="q-stage">
     <div>${badges}</div>
     <h1>${esc(S.question)}</h1>
@@ -922,7 +923,7 @@ function render(){
     </div>
    </div>`;
   } else {
-   $.innerHTML=`<p>Question ${S.index+1}/${S.total} &middot; <span id="ansCnt">${S.answered}/${S.n}</span> answered</p>
+   $.innerHTML=`<div class="qnum">Question ${S.index+1} <small>of ${S.total} &middot; <span id="ansCnt">${S.answered}/${S.n}</span> answered</small></div>
    <div>${badges}</div>
    <h1>${esc(S.question)}</h1>
    ${imgHtml}
@@ -939,7 +940,7 @@ function render(){
  } else if(S.phase=='results'){
   const ci = S.correct;
   const tot = Math.max(1, (S.counts||[]).reduce((a,b)=>a+b, 0));
-  $.innerHTML=`<p style="margin:.2em 0">Question ${S.index+1}/${S.total} &middot; ${S.answered}/${S.n} answered</p>
+  $.innerHTML=`<div class="qnum" style="font-size:1.1em;margin:2px 0">Question ${S.index+1} <small>of ${S.total} &middot; ${S.answered}/${S.n} answered</small></div>
   <h2 style="margin:.15em auto .3em;max-width:880px;font-size:1.7em;line-height:1.25">${esc(S.question)}</h2>
   <div class="ans-reveal">
    <div class="grid" style="margin-top:10px">${S.answers.map((a,i)=>{
