@@ -1,0 +1,59 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Brainrush! Spectator</title>
+<style>
+body{margin:0;font-family:system-ui,sans-serif;background:#46178f;color:#fff;min-height:100vh}
+body.cb .c0{background:#D55E00}
+header{display:flex;align-items:center;justify-content:space-between;padding:14px 28px;background:#0004;font-weight:800;font-size:1.3em}
+header b{background:#fff;color:#46178f;padding:2px 14px;border-radius:10px;letter-spacing:2px}
+main{display:grid;gap:24px;padding:24px 28px}
+main.both{grid-template-columns:1fr 1fr}
+h2{margin:.2em 0 .5em;text-align:center}
+.row{display:flex;align-items:center;justify-content:space-between;background:#fff2;border-radius:10px;padding:10px 18px;margin:6px 0;font-size:1.35em}
+.row.top1{background:linear-gradient(90deg,#ffd70055,#fff2)}
+.row .rk{display:inline-block;width:1.6em;font-weight:900;color:#ffdf5d}
+.row b.sc{font-size:1.15em}
+.ttl{font-size:.6em;background:#ffffff28;color:#ffdf5d;padding:2px 8px;border-radius:99px;margin-left:8px}
+.fire{animation:fl .6s infinite alternate}@keyframes fl{from{filter:brightness(1)}to{filter:brightness(1.6) drop-shadow(0 0 6px #ff9800)}}
+.cloud{display:flex;flex-wrap:wrap;gap:14px;justify-content:center;align-items:center;background:#0003;border-radius:16px;padding:24px;min-height:300px}
+.tag{padding:8px 18px;border-radius:99px;font-weight:800;box-shadow:0 4px 12px #0004}
+.center{text-align:center;padding:60px 20px;font-size:1.6em}
+.names span{display:inline-block;background:#fff3;border-radius:8px;padding:8px 14px;margin:5px;font-weight:600}
+.pill{display:inline-block;background:#fff;color:#46178f;font-weight:900;padding:4px 18px;border-radius:99px}
+</style></head><body>
+<header><span>🧠 Brainrush! Live Standings</span><span id="hd"></span></header>
+<main id="m"><div class="center">Looking for a live game…</div></main>
+<script>
+const q=new URLSearchParams(location.search), mode=q.get('mode')||'both';
+let pin=q.get('pin')||'', lastKey='';
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+try{ if(localStorage.getItem('brainrush_a11y')==='cb')document.body.classList.add('cb'); }catch(e){}
+const cols=['#e21b3c','#1368ce','#d89e00','#26890c','#9c27b0','#00897b'];
+function board(S){
+  if(!S.board.length) return `<div class="center" style="font-size:1.2em;opacity:.8">Scores appear after the first question…</div>`;
+  return S.board.map(r=>`<div class="row ${r.rank===1?'top1':''}"><span><span class="rk">${r.rank}</span>${esc(r.team_emoji?r.team_emoji+' ':'')}${esc((r.avatar?r.avatar+' ':'')+r.name)}${r.title?`<span class="ttl">${esc(r.title)}</span>`:''}${r.streak>=5?'<span class="fire"> 🔥🔥</span>':r.streak>=2?' 🔥'+r.streak:''}</span><b class="sc">${r.score}</b></div>`).join('');
+}
+function cloud(S){
+  const w=S.words||[];
+  return `<div class="cloud">${w.length?w.map((x,i)=>`<span class="tag" style="font-size:${Math.min(2.8,1.1+(x.count-1)*.4)}em;background:${cols[i%cols.length]}">${esc(x.text)}${x.count>1?` <small>(${x.count})</small>`:''}</span>`).join(''):'<span style="opacity:.7;font-size:1.3em">Waiting for words…</span>'}</div>`;
+}
+function render(S){
+  document.getElementById('hd').innerHTML=`Join: plw.me/play · PIN <b>${esc(S.pin)}</b> · ${S.n} players${S.index>=0&&S.phase!=='final'?` · <span class="pill">Q ${S.index+1}/${S.total}</span>`:''}`;
+  const m=document.getElementById('m');
+  m.className=(mode==='both'&&S.words&&S.word_total>0&&S.phase!=='final')?'both':'';
+  if(S.phase==='lobby'){ m.innerHTML=`<div class="center">Waiting for players…<div class="names">${(S.names||[]).map(n=>`<span>${esc(n)}</span>`).join('')}</div></div>`; return; }
+  if(S.phase==='icebreaker'){ m.innerHTML=`<div><h2>💭 ${esc(S.prompt||'')}</h2>${cloud(S)}</div>`; return; }
+  const showCloud=(mode==='cloud')||(mode==='both'&&S.word_total>0&&S.phase!=='final');
+  const showBoard=(mode==='board')||mode==='both';
+  m.innerHTML=(showBoard?`<div><h2>${S.phase==='final'?'🏆 Final Standings':S.phase==='question'?'🏆 Standings (before this question)':'🏆 Leaderboard'}</h2>${board(S)}</div>`:'')+(showCloud?`<div><h2>💭 ${esc(S.prompt||'Word Cloud')}</h2>${cloud(S)}</div>`:'');
+}
+async function poll(){
+  try{
+    const r=await fetch('/api/spectator'+(pin?'?pin='+pin:''));
+    if(!r.ok){ document.getElementById('m').innerHTML='<div class="center">Looking for a live game…</div>'; return; }
+    const S=await r.json(); pin=S.pin;
+    const k=JSON.stringify(S); if(k!==lastKey){ lastKey=k; render(S); }
+  }catch(e){}
+}
+poll(); setInterval(poll,1200);
+</script></body></html>

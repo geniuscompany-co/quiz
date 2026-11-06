@@ -1,0 +1,117 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Brainrush! Practice</title>
+<style>
+:root{--bg:#46178f}
+body{margin:0;font-family:system-ui,sans-serif;background:var(--bg);color:#fff;text-align:center;min-height:100vh}
+body.hc{--bg:#000}
+#app{padding:16px;max-width:560px;margin:auto}
+h1{margin:.3em 0}
+select,input[type=text],input[type=number]{display:block;width:100%;box-sizing:border-box;font-size:1.15em;padding:12px;margin:8px 0;border-radius:8px;border:0;text-align:center;color:#2b0d57;font-weight:700}
+button.go{width:100%;font-size:1.3em;padding:14px;border:0;border-radius:8px;background:#26890c;color:#fff;font-weight:700;cursor:pointer;margin-top:10px}
+button.sec{background:#ffffff2b;color:#fff;border:0;border-radius:8px;padding:10px 18px;font-size:1em;font-weight:700;cursor:pointer;margin:6px}
+.logo{max-width:220px;width:70%;border-radius:16px;margin:6px auto;display:block;box-shadow:0 4px 16px #0004}
+.qnum{display:inline-block;background:#fff;color:#46178f;font-weight:900;padding:4px 16px;border-radius:99px;margin:6px 0}
+.q{font-size:1.5em;font-weight:800;margin:12px 0}
+.q-img{max-height:200px;max-width:100%;border-radius:12px;margin:6px auto;display:block;background:#fff;object-fit:contain}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.grid button{min-height:20vh;padding:12px 10px;border:0;border-radius:10px;color:#fff;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;font-weight:700;font-size:1.1em;line-height:1.25;word-break:break-word}
+.grid button .sh{font-size:1.8em;line-height:1}
+.grid button img{max-height:90px;max-width:100%;border-radius:8px;background:#fff}
+.c0{background:#e21b3c}.c1{background:#1368ce}.c2{background:#d89e00}.c3{background:#26890c}
+body.cb .c0{background:#D55E00}body.cb .c1{background:#0072B2}body.cb .c2{background:#F0E442;color:#222!important}body.cb .c3{background:#009E73}
+body.hc .grid button{border:4px solid #fff}
+.grid button.right{outline:5px solid #fff;box-shadow:0 0 22px #7dff6b}
+.grid button.dim{opacity:.3}
+.fb{margin-top:14px;padding:14px;border-radius:12px;font-weight:800;font-size:1.2em}
+.fb.ok{background:#26890c}.fb.no{background:#c62828}
+blockquote{background:#fff;color:#2b0d57;border-radius:10px;padding:12px 16px;margin:12px 0 0;font-style:italic;text-align:left;font-weight:500}
+.slot{background:#fff3;border-radius:8px;padding:8px 12px;margin:4px 0;font-weight:700;text-align:left}
+.stat{display:inline-block;background:#0004;border-radius:10px;padding:8px 16px;margin:4px;font-weight:700}
+.stat b{display:block;font-size:1.3em;color:#ffdf5d}
+.missed{border-top:1px solid #fff3;padding:8px 0;text-align:left;font-size:.95em}
+.bar{height:8px;background:#fff3;border-radius:99px;overflow:hidden;margin:8px 0}.bar i{display:block;height:100%;background:#ffdf5d}
+a{color:#fff}
+</style></head><body>
+<div id="app"></div>
+<script>
+const $ = document.getElementById('app'), sh = ["▲","◆","●","■"];
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+function norm(s){return String(s).toLowerCase().replace(/[^a-z0-9]+/g,' ').trim()}
+function qtype(q){return q.type||'mc'}
+try{ const a=localStorage.getItem('brainrush_a11y'); if(a==='cb')document.body.classList.add('cb'); if(a==='hc')document.body.classList.add('hc'); }catch(e){}
+
+let quizzes=[], run=null;
+async function setup(){
+  try{ quizzes=(await (await fetch('/api/quizzes')).json()).quizzes||[]; }catch(e){}
+  $.innerHTML=`<img class="logo" src="/logo.jpg" alt="" onerror="this.style.display='none'"><h1>🧑‍🎓 Practice Mode</h1>
+  <p style="opacity:.85">Study on your own, at your own pace. No score is shared with the class.</p>
+  <select id="qs">${quizzes.map(q=>`<option value="${esc(q.file)}" data-n="${q.count}">${esc(q.title)}</option>`).join('')}</select>
+  <input id="cnt" type="number" min="1" value="10" placeholder="How many questions?">
+  <label style="display:block;margin:6px"><input type="checkbox" id="timed"> ⏱️ Add a 20-second timer</label>
+  <button class="go" onclick="start()">▶️ Start Practice</button>
+  <p><a href="/play">← Back to join a live game</a></p>`;
+  const sel=document.getElementById('qs');
+  sel.onchange=()=>{const n=sel.selectedOptions[0].dataset.n; document.getElementById('cnt').max=n; document.getElementById('cnt').value=Math.min(10,n)};
+  sel.onchange();
+}
+async function start(){
+  const file=document.getElementById('qs').value, n=Math.max(1,parseInt(document.getElementById('cnt').value)||10), timed=document.getElementById('timed').checked;
+  const r=await (await fetch('/api/quiz_data?file='+encodeURIComponent(file))).json();
+  let qs=(r.questions||[]).slice();
+  for(let i=qs.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[qs[i],qs[j]]=[qs[j],qs[i]]}
+  qs=qs.slice(0,n);
+  run={qs,i:0,score:0,streak:0,best:0,right:0,missed:[],timed,t:20,timer:null,sel:[],perm:null,done:false};
+  show();
+}
+function stopTimer(){ if(run&&run.timer){clearInterval(run.timer);run.timer=null} }
+function show(){
+  stopTimer();
+  if(run.i>=run.qs.length) return finish();
+  const q=run.qs[run.i], t=qtype(q); run.done=false; run.sel=[];
+  if(t==='order'){ const n=q.a.length; let p=[...Array(n).keys()]; for(let k=0;k<12;k++){p.sort(()=>Math.random()-.5); if(p.some((v,i)=>v!==i))break} run.perm=p; }
+  let body='';
+  if(t==='text') body=`<input type="text" id="txt" placeholder="Type your answer…" autocomplete="off" autocapitalize="off" onkeydown="if(event.key==='Enter')submitText()"><button class="go" onclick="submitText()">Submit</button>`;
+  else if(t==='order') body=`<p>Tap the items in the correct order:</p><div id="ord"></div>`;
+  else body=`<div class="grid">${q.a.map((a,i)=>`<button class="c${i}" onclick="pick(${i})">${q.aimg&&q.aimg[i]?`<img src="${esc(q.aimg[i])}" alt="">`:''}<span class="sh">${sh[i]}</span><span>${esc(a)}</span></button>`).join('')}</div>`;
+  $.innerHTML=`<div class="qnum">Question ${run.i+1} of ${run.qs.length}</div> <span class="stat" style="padding:4px 12px">⭐ ${run.score}</span>
+  ${run.timed?'<div class="bar"><i id="tb" style="width:100%"></i></div>':''}
+  <div class="q">${esc(q.q)}</div>${q.img?`<img class="q-img" src="${esc(q.img)}" alt="">`:''}${body}<div id="fb"></div>`;
+  if(t==='order') drawOrder();
+  if(t==='text'){const e=document.getElementById('txt'); e&&e.focus()}
+  if(run.timed){ run.t=20; run.timer=setInterval(()=>{run.t-=0.2; const b=document.getElementById('tb'); if(b)b.style.width=Math.max(0,run.t/20*100)+'%'; if(run.t<=0){stopTimer(); grade(false,'(time ran out)')}},200); }
+}
+function pick(i){ if(run.done)return; const q=run.qs[run.i]; grade(i===q.c, q.a[i], i); }
+function submitText(){ if(run.done)return; const q=run.qs[run.i]; const v=document.getElementById('txt').value; if(!v.trim())return; grade(q.a.some(a=>norm(a)===norm(v)), v); }
+function drawOrder(){
+  const q=run.qs[run.i], el=document.getElementById('ord'); if(!el)return;
+  const disp=run.perm.map(k=>q.a[k]);
+  el.innerHTML=run.sel.map((j,n)=>`<div class="slot">${n+1}. ${esc(disp[j])}</div>`).join('')+
+   `<div class="grid">${disp.map((a,j)=>run.sel.includes(j)?'':`<button class="c${j}" style="min-height:10vh" onclick="tapOrd(${j})">${esc(a)}</button>`).join('')}</div>`+
+   `<div><button class="sec" onclick="run.sel.pop();drawOrder()">↩ Undo</button>${run.sel.length===disp.length?'<button class="go" onclick="submitOrder()">Submit order</button>':''}</div>`;
+}
+function tapOrd(j){ if(run.done)return; run.sel.push(j); drawOrder(); }
+function submitOrder(){ const q=run.qs[run.i]; const orig=run.sel.map(j=>run.perm[j]); grade(orig.every((v,i)=>v===i), orig.map(k=>q.a[k]).join(' → ')); }
+function ansText(q){ const t=qtype(q); return t==='order'?q.a.join(' → '):t==='text'?q.a.slice(0,3).join(' / '):q.a[q.c]; }
+function grade(ok, given, idx){
+  if(run.done)return; run.done=true; stopTimer();
+  const q=run.qs[run.i];
+  if(ok){ run.streak++; run.best=Math.max(run.best,run.streak); run.right++; run.score+=100+Math.min(100,(run.streak-1)*25); }
+  else { run.streak=0; run.missed.push({q:q.q,your:given,ans:ansText(q)}); }
+  document.querySelectorAll('.grid button').forEach((b,i)=>{ if(qtype(q)==='mc'||qtype(q)==='tf'){ b.disabled=true; if(i===q.c)b.classList.add('right'); else b.classList.add('dim'); } });
+  const fb=document.getElementById('fb');
+  fb.innerHTML=`<div class="fb ${ok?'ok':'no'}">${ok?'✅ Correct!'+(run.streak>1?' 🔥 '+run.streak+' in a row':''):'❌ Not quite'}${ok?'':'<br><small>Answer: '+esc(ansText(q))+'</small>'}</div>
+  ${q.quote?`<blockquote>“${esc(q.quote)}”</blockquote>`:''}
+  <button class="go" onclick="run.i++;show()">${run.i+1>=run.qs.length?'See results':'Next ➔'}</button>`;
+  fb.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+function finish(){
+  const pct=Math.round(100*run.right/run.qs.length);
+  $.innerHTML=`<h1>${pct>=90?'🏆':pct>=70?'🎉':'💪'} Practice complete!</h1>
+  <div><span class="stat"><b>${pct}%</b>${run.right}/${run.qs.length} correct</span><span class="stat"><b>⭐ ${run.score}</b>Points</span><span class="stat"><b>🔥 ${run.best}</b>Best streak</span></div>
+  ${run.missed.length?`<h3>📝 Review these</h3>${run.missed.map(m=>`<div class="missed"><b>${esc(m.q)}</b><br><span style="color:#ff9b9b">You: ${esc(m.your)}</span> · <span style="color:#7dff6b">✅ ${esc(m.ans)}</span></div>`).join('')}`:'<p style="color:#7dff6b;font-weight:800">🌟 Perfect! You got every question right.</p>'}
+  <button class="go" onclick="start()">🔁 Practice again</button>
+  <button class="sec" onclick="setup()">Choose another quiz</button>`;
+}
+setup();
+</script></body></html>

@@ -4,3 +4,4 @@ shots/
 __pycache__/
 .DS_Store
 .render_hook
+.data/
