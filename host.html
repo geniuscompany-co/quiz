@@ -23,6 +23,13 @@ button:hover{filter:brightness(1.08)}
 .late-qr.open{display:flex;animation:pop .16s ease-out}
 .late-qr svg{width:150px;height:150px}
 .qnum{display:inline-block;background:#fff;color:#46178f;font-weight:900;font-size:1.35em;padding:6px 22px;border-radius:99px;margin:6px 0;box-shadow:0 4px 14px #0004}.qnum small{font-weight:700;opacity:.65;font-size:.7em}
+.spin-stage{display:flex;flex-direction:column;align-items:center;gap:10px;margin:10px 0 4px}
+.wheel-wrap{position:relative;width:230px;height:230px}
+.wheel-ptr{position:absolute;top:-14px;left:50%;transform:translateX(-50%);font-size:2.2em;z-index:3;filter:drop-shadow(0 3px 4px #0008)}
+.wheel-disc{position:absolute;inset:0;border-radius:50%;border:6px solid #fff;box-shadow:0 8px 28px #0007;background:conic-gradient(#e21b3c 0 25%,#1368ce 0 50%,#d89e00 0 75%,#26890c 0 100%);transition:transform 3.4s cubic-bezier(.12,.7,.1,1)}
+.wheel-disc span{position:absolute;left:50%;top:50%;font-size:2.1em;transform-origin:0 0}
+.spin-result{font-size:1.25em;font-weight:900;min-height:1.5em;opacity:0;transition:opacity .4s}
+.spin-result.show{opacity:1}
 .wheel-banner{display:inline-block;background:linear-gradient(90deg,#00c853,#00b0ff,#aa00ff);color:#fff;font-weight:900;padding:7px 22px;border-radius:99px;font-size:1.12em;letter-spacing:.4px;box-shadow:0 4px 16px #0006;animation:pulse .55s infinite alternate;margin:4px;border:2px solid #fff8}
 .title-pill{font-size:.72em;background:#ffffff28;border:1px solid #fff5;color:#ffdf5d;padding:2px 8px;border-radius:99px;margin-left:6px;font-weight:800;vertical-align:middle}
 .replay-box{max-width:680px;margin:18px auto 8px;background:#0005;border:1px solid #fff3;border-radius:14px;padding:14px 18px;display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap}
@@ -234,7 +241,7 @@ Quote: Paris has been the capital since 987 CE."></textarea>
     <label class="mode-pill"><input id="qShuffle" type="checkbox" checked> 🎲 Randomize Order</label>
     <label class="mode-pill"><input id="qWager" type="checkbox" checked> 🎰 Final Boss Wager</label>
     <label class="mode-pill"><input id="qRedemp" type="checkbox" checked> 🔄 Redemption Round</label>
-    <label class="mode-pill"><input id="qSabotage" type="checkbox" checked> ❄️ Ice Sabotage</label>
+    <label class="mode-pill"><input id="qSabotage" type="checkbox" checked> ⛄ Snowballs</label>
     <label class="mode-pill"><input id="qWheel" type="checkbox" checked> 🎡 Mystery Wheel</label>
     <label class="mode-pill"><input id="qTeams" type="checkbox"> 🛡️ Team Mode</label>
     <label class="mode-pill"><input id="qIce" type="checkbox" onchange="document.getElementById('icePromptRow').style.display=this.checked?'block':'none'"> 💭 Word Cloud Warm-Up</label>
@@ -762,7 +769,7 @@ function teamStandingsHtml(){
  return `<div class="team-grid">${S.team_board.map((t,i)=>`<div class="team-card" style="background:${t.color}">${i===0?'👑 ':''}${t.emoji} ${esc(t.name)}<small>${t.avg} avg pts (${t.members})</small></div>`).join('')}</div>`;
 }
 
-function board(b){return b.map((x,i)=>`<div class="row"><span>${i+1}. ${x.team_emoji?x.team_emoji+' ':''}${esc((x.avatar?x.avatar+' ':'')+x.name)}${x.title?`<span class="title-pill">${esc(x.title)}</span>`:''}${x.streak>=2?`<span class="streak">🔥${x.streak}</span>`:''}${x.frozen_next?' ❄️':''}</span><b>${x.score}</b></div>`).join('')}
+function board(b){return b.map((x,i)=>`<div class="row"><span>${i+1}. ${x.team_emoji?x.team_emoji+' ':''}${esc((x.avatar?x.avatar+' ':'')+x.name)}${x.title?`<span class="title-pill">${esc(x.title)}</span>`:''}${x.streak>=2?`<span class="streak">🔥${x.streak}</span>`:''}${x.frozen_next?' ⛄':''}</span><b>${x.score}</b></div>`).join('')}
 
 let animDone = -1;
 function animBoard(b, qIdx){
@@ -777,7 +784,7 @@ function animBoard(b, qIdx){
   const arrow = qIdx > 0 && diff > 0 ? `<span class="shift up">▲${diff}</span>` : qIdx > 0 && diff < 0 ? `<span class="shift down">▼${-diff}</span>` : '';
   const ttl = x.title ? `<span class="title-pill">${esc(x.title)}</span>` : '';
   const streak = x.streak >= 2 ? `<span class="streak">🔥${x.streak}</span>` : '';
-  const ice = x.frozen_next ? ` <span title="Frozen for next question!">❄️</span>` : '';
+  const ice = x.frozen_next ? ` <span title="Frozen by a snowball for next question!">⛄</span>` : '';
   const gain = x.gained !== 0 ? `<span class="gain ${first?'':'show'}">${x.gained>0?'+'+x.gained:x.gained}</span>` : '';
   const label = (x.team_emoji ? x.team_emoji + ' ' : '') + esc((x.avatar ? x.avatar + ' ' : '') + x.name);
   return `<div class="row" data-idx="${i}" data-prev="${sc}" data-score="${x.score}" data-diff="${diff}" style="transform:translateY(${pIdx*H}px)"><span><b class="rk">${rk}</b>. ${label}${ttl}${streak}${ice}${arrow}</span><span>${gain}<b class="sc">${sc}</b></span></div>`;
@@ -861,6 +868,26 @@ function renderFinal(b){
 function quoteBox(){return `<blockquote>&ldquo;${esc(S.quote)}&rdquo;${S.source?`<cite>&mdash; ${esc(S.source)}</cite>`:''}</blockquote>`}
 function esc(s){return String(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
 const QR = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 29 29" width="240" height="240" style="background:#fff;border-radius:12px;display:block"><path d="M2,2h7v1h-7zM12,2h3v1h-3zM16,2h2v1h-2zM20,2h7v1h-7zM2,3h1v1h-1zM8,3h1v1h-1zM10,3h4v1h-4zM15,3h1v1h-1zM17,3h1v1h-1zM20,3h1v1h-1zM26,3h1v1h-1zM2,4h1v1h-1zM4,4h3v1h-3zM8,4h1v1h-1zM11,4h2v1h-2zM14,4h1v1h-1zM20,4h1v1h-1zM22,4h3v1h-3zM26,4h1v1h-1zM2,5h1v1h-1zM4,5h3v1h-3zM8,5h1v1h-1zM11,5h2v1h-2zM16,5h1v1h-1zM20,5h1v1h-1zM22,5h3v1h-3zM26,5h1v1h-1zM2,6h1v1h-1zM4,6h3v1h-3zM8,6h1v1h-1zM10,6h1v1h-1zM12,6h1v1h-1zM14,6h2v1h-2zM17,6h1v1h-1zM20,6h1v1h-1zM22,6h3v1h-3zM26,6h1v1h-1zM2,7h1v1h-1zM8,7h1v1h-1zM11,7h3v1h-3zM15,7h1v1h-1zM17,7h1v1h-1zM20,7h1v1h-1zM26,7h1v1h-1zM2,8h7v1h-7zM10,8h1v1h-1zM12,8h1v1h-1zM14,8h1v1h-1zM16,8h1v1h-1zM18,8h1v1h-1zM20,8h7v1h-7zM14,9h4v1h-4zM2,10h1v1h-1zM4,10h1v1h-1zM6,10h1v1h-1zM8,10h1v1h-1zM11,10h1v1h-1zM13,10h1v1h-1zM16,10h1v1h-1zM22,10h1v1h-1zM25,10h1v1h-1zM2,11h1v1h-1zM4,11h2v1h-2zM7,11h1v1h-1zM9,11h1v1h-1zM11,11h1v1h-1zM13,11h2v1h-2zM18,11h3v1h-3zM26,11h1v1h-1zM2,12h1v1h-1zM4,12h2v1h-2zM7,12h3v1h-3zM15,12h1v1h-1zM19,12h1v1h-1zM22,12h1v1h-1zM24,12h3v1h-3zM3,13h1v1h-1zM6,13h1v1h-1zM9,13h1v1h-1zM12,13h3v1h-3zM18,13h2v1h-2zM21,13h1v1h-1zM25,13h1v1h-1zM2,14h1v1h-1zM7,14h4v1h-4zM12,14h3v1h-3zM17,14h5v1h-5zM23,14h1v1h-1zM25,14h2v1h-2zM3,15h1v1h-1zM5,15h1v1h-1zM7,15h1v1h-1zM9,15h1v1h-1zM13,15h3v1h-3zM20,15h1v1h-1zM23,15h1v1h-1zM26,15h1v1h-1zM2,16h1v1h-1zM4,16h1v1h-1zM6,16h1v1h-1zM8,16h1v1h-1zM10,16h2v1h-2zM13,16h2v1h-2zM16,16h1v1h-1zM19,16h3v1h-3zM24,16h3v1h-3zM3,17h1v1h-1zM6,17h2v1h-2zM9,17h1v1h-1zM11,17h1v1h-1zM14,17h5v1h-5zM20,17h1v1h-1zM22,17h1v1h-1zM25,17h1v1h-1zM2,18h1v1h-1zM5,18h1v1h-1zM7,18h2v1h-2zM10,18h4v1h-4zM16,18h1v1h-1zM18,18h6v1h-6zM10,19h1v1h-1zM12,19h2v1h-2zM16,19h3v1h-3zM22,19h2v1h-2zM25,19h2v1h-2zM2,20h7v1h-7zM15,20h1v1h-1zM17,20h2v1h-2zM20,20h1v1h-1zM22,20h2v1h-2zM25,20h2v1h-2zM2,21h1v1h-1zM8,21h1v1h-1zM13,21h1v1h-1zM18,21h1v1h-1zM22,21h2v1h-2zM26,21h1v1h-1zM2,22h1v1h-1zM4,22h3v1h-3zM8,22h1v1h-1zM10,22h3v1h-3zM14,22h1v1h-1zM18,22h6v1h-6zM26,22h1v1h-1zM2,23h1v1h-1zM4,23h3v1h-3zM8,23h1v1h-1zM12,23h4v1h-4zM19,23h1v1h-1zM21,23h4v1h-4zM2,24h1v1h-1zM4,24h3v1h-3zM8,24h1v1h-1zM10,24h5v1h-5zM16,24h2v1h-2zM22,24h1v1h-1zM26,24h1v1h-1zM2,25h1v1h-1zM8,25h1v1h-1zM14,25h5v1h-5zM20,25h1v1h-1zM22,25h2v1h-2zM25,25h1v1h-1zM2,26h7v1h-7zM10,26h1v1h-1zM13,26h1v1h-1zM16,26h3v1h-3zM21,26h1v1h-1zM25,26h2v1h-2z" fill="#2b0d57"/></svg>';
+const WHEEL_IDS = ['speed','robin','crate','streak2x'], WHEEL_EMO = ['⚡','🏹','🎁','🔥'];
+let spunQ = -1;
+function wheelHtml(){
+ const segs = WHEEL_EMO.map((e,i)=>`<span style="transform:rotate(${i*90+45}deg) translate(-.5em,-5.1em) rotate(${-(i*90+45)}deg)">${e}</span>`).join('');
+ return `<div class="spin-stage"><div class="wheel-wrap"><div class="wheel-ptr">🔻</div><div class="wheel-disc" id="wheelDisc">${segs}</div></div><div class="spin-result" id="spinRes">🎡 Spinning the Mystery Wheel…</div></div>`;
+}
+function runWheel(){
+ if(spunQ === S.index) return;
+ spunQ = S.index;
+ const d = document.getElementById('wheelDisc'), r = document.getElementById('spinRes');
+ if(!d) return;
+ const i = Math.max(0, WHEEL_IDS.indexOf(S.wheel_id));
+ const final = 360*5 - (i*90 + 45);
+ requestAnimationFrame(()=>requestAnimationFrame(()=>{ d.style.transform = `rotate(${final}deg)`; }));
+ for(let k=0;k<14;k++) setTimeout(()=>tone(500+k*35, 0.05, 'square', 0.12), k*k*17);
+ setTimeout(()=>{
+  if(r){ r.textContent = '🎡 ' + (S.wheel_mod||''); r.classList.add('show'); }
+  sfxReveal();
+ }, 3500);
+}
 let last='';
 function render(){
  const lj = document.getElementById('lateJoin'), lp = document.getElementById('latePin');
@@ -909,12 +936,13 @@ function render(){
  } else if(S.phase=='question'){
   const sec = Math.ceil(S.left);
   const pct = Math.min(100, ((S.preview_left||0)/(S.preview_total||5))*100);
-  const wheelHtml = S.wheel_mod ? `<div class="wheel-banner">🎡 MYSTERY WHEEL: ${esc(S.wheel_mod)}</div>` : '';
-  const badges = `${wheelHtml}${S.redemption?'<div class="redemp-banner">🔄 REDEMPTION QUESTION (MOST MISSED!) 🔄</div>':''}${S.boss?'<div class="double-banner">🎰 FINAL BOSS WAGER! 🎰</div>':S.double?'<div class="double-banner">⚡ DOUBLE POINTS! ⚡</div>':''}`;
+  const wheelBanner = (S.wheel_mod && !inPrev) ? `<div class="wheel-banner">🎡 MYSTERY WHEEL: ${esc(S.wheel_mod)}</div>` : '';
+  const badges = `${wheelBanner}${S.redemption?'<div class="redemp-banner">🔄 REDEMPTION QUESTION (MOST MISSED!) 🔄</div>':''}${S.boss?'<div class="double-banner">🎰 FINAL BOSS WAGER! 🎰</div>':S.double?'<div class="double-banner">⚡ DOUBLE POINTS! ⚡</div>':''}`;
   if(inPrev){
    $.innerHTML=`<div class="qnum">Question ${S.index+1} <small>of ${S.total}</small></div>
    <div class="q-stage">
     <div>${badges}</div>
+    ${S.wheel_mod?wheelHtml():''}
     <h1>${esc(S.question)}</h1>
     ${imgHtml}
     <div class="preview-box" style="width:100%">
@@ -922,6 +950,7 @@ function render(){
      <div class="preview-bar"><div class="preview-fill" id="pf" style="width:${pct}%"></div></div>
     </div>
    </div>`;
+   if(S.wheel_mod) runWheel();
   } else {
    $.innerHTML=`<div class="qnum">Question ${S.index+1} <small>of ${S.total} &middot; <span id="ansCnt">${S.answered}/${S.n}</span> answered</small></div>
    <div>${badges}</div>

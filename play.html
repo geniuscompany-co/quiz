@@ -224,13 +224,13 @@ function render(){
   }
   const showIce = m.frozen && iceBrokenQ !== S.index && !inPrev && !m.answered;
   const iceHtml = showIce ? `<div class="ice-overlay" id="iceOv" onclick="tapIce()">
-   <div class="ice-cube">❄️</div>
+   <div class="ice-cube">⛄</div>
    <h1>YOU'RE FROZEN!</h1>
-   <p style="font-size:1.25em"><b>${esc(m.frozen_by)}</b> threw an Ice Cube at you!</p>
-   <p style="font-size:1.4em;font-weight:900;color:#ffdf5d">Tap <span id="iceRem">5</span> times to break the ice!</p>
+   <p style="font-size:1.25em"><b>${esc(m.frozen_by)}</b> threw a Snowball at you!</p>
+   <p style="font-size:1.4em;font-weight:900;color:#ffdf5d">Tap <span id="iceRem">5</span> times to shake off the snow!</p>
   </div>` : '';
   const qn = `<div><span class="qnum">Question ${S.index+1} of ${S.total}</span></div>`;
-  const whl = qn + (S.wheel_mod ? `<div><span class="wheel-pill">🎡 ${esc(S.wheel_mod)}</span></div>` : '');
+  const whl = qn + (S.wheel_mod ? `<div><span class="wheel-pill">${inPrev?'🎡 Mystery Wheel spinning on the big screen…':'🎡 '+esc(S.wheel_mod)}</span></div>` : '');
   const dbl = S.redemption ? `<div class="double-pill">🔄 REDEMPTION BONUS (2x)! 🔄</div>` : S.boss ? `<div class="double-pill">🎰 FINAL BOSS WAGER! 🎰</div>` : (S.double || m.active_2x) ? `<div class="double-pill">⚡ ${S.double && m.active_2x ? '4x' : 'DOUBLE'} POINTS ACTIVE! ⚡</div>` : '';
   const udog = m.underdog ? `<div><span class="underdog-pill">🎯 UNDERDOG 1.5x CATCH-UP BOOST!</span></div>` : '';
   const curW = m.wager_pct ?? 0;
@@ -261,11 +261,11 @@ function render(){
   const shMsg = (!m.correct && m.shielded) ? `<br><small style="color:#80deea">🛡️ Streak Shield protected your streak &amp; bets!</small>` : '';
   const gTxt = m.gained >= 0 ? '+'+m.gained : m.gained;
   const canSab = S.sabotage_enabled && !S.is_last && m.pu_freeze && m.score >= 200 && S.n > 1;
-  const sabBtn = canSab ? `<div><button class="sab-btn" onclick="sabotage()">❄️ Freeze Leader (-200 pts)</button></div>` : m.ice_sent ? `<div><small style="color:#80deea">❄️ Ice Cube thrown at the leader for next round!</small></div>` : '';
+  const sabBtn = canSab ? `<div><button class="sab-btn" onclick="sabotage()">⛄ Throw Snowball at Leader (-200 pts)</button></div>` : m.ice_sent ? `<div><small style="color:#80deea">⛄ Snowball thrown at the leader for next round!</small></div>` : '';
   $.innerHTML=`<div><span class="qnum">Question ${S.index+1} of ${S.total}</span></div><div class="big" style="margin-top:4vh">${!m.answered?"⏰ Time's up":m.correct?'✅ Correct! '+gTxt:'❌ Incorrect'+(m.gained<0?' ('+m.gained+')':'')}${st}${whMsg}${cfMsg}${shMsg}<br><small>Score ${m.score}</small></div>${rivalHtml(m)}${sabBtn}${S.quote?`<blockquote>&ldquo;${esc(S.quote)}&rdquo;${S.source?`<cite>&mdash; ${esc(S.source)}</cite>`:''}</blockquote>`:''}${reactBar()}`;
  } else if(S.phase=='board'){
   const canSab = S.sabotage_enabled && m.pu_freeze && m.score >= 200 && S.n > 1;
-  const sabBtn = canSab ? `<div><button class="sab-btn" onclick="sabotage()">❄️ Freeze Leader (-200 pts)</button></div>` : m.ice_sent ? `<div><small style="color:#80deea">❄️ Ice Cube thrown at the leader for next round!</small></div>` : '';
+  const sabBtn = canSab ? `<div><button class="sab-btn" onclick="sabotage()">⛄ Throw Snowball at Leader (-200 pts)</button></div>` : m.ice_sent ? `<div><small style="color:#80deea">⛄ Snowball thrown at the leader for next round!</small></div>` : '';
   const ttlBadge = m.title ? `<br><span class="title-badge">${esc(m.title)}</span>` : '';
   $.innerHTML=`<div class="big">🏆 You're #${m.rank}<br><small>${m.score} points</small>${ttlBadge}${m.streak>=2?`<br><span class="streak-pill">🔥 ${m.streak} Streak</span>`:''}</div>${rivalHtml(m)}${sabBtn}${reactBar()}`;
  } else {

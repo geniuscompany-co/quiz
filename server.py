@@ -766,6 +766,7 @@ def view(g, pid=None, host=False):
             boss=is_boss_q(g),
             redemption=bool(q.get("redemption")),
             wheel_mod=wmod["label"] if wmod else None,
+            wheel_id=wmod["id"] if wmod else None,
         )
         out["answered"] = sum(1 for p in g["players"].values() if g["q"] in p["answers"])
         if ph == "results":
@@ -1083,7 +1084,7 @@ class H(BaseHTTPRequestHandler):
                 p["ice_sent_q"] = g["q"]
                 g["rseq"] = g.get("rseq", 0) + 1
                 g["reactions"].append({
-                    "id": g["rseq"], "emoji": "❄️", "name": "%s → %s" % (p["name"], target_name), "t": time.time(),
+                    "id": g["rseq"], "emoji": "⛄", "name": "%s → %s" % (p["name"], target_name), "t": time.time(),
                 })
                 return self.send({"ok": True, "target": target_name})
             if path == "/api/powerup":
