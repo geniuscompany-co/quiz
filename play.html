@@ -264,7 +264,7 @@ function render(){
  const m=S.me||{};
  const k = S.phase==='question'
   ? `q:${S.index}:${inPrev?1:0}:${m.answered?1:0}:${m.active_2x?1:0}:${m.active_shield?1:0}:${m.active_audience?1:0}:${m.confident?1:0}:${(m.hide||[]).join(',')}:${m.wager_pct??''}:${m.frozen?1:0}:${m.hot?(m.hot.pred===null||m.hot.pred===undefined?'n':m.hot.pred?'y':'x'):''}:${m.spectating?1:0}`
-  : JSON.stringify({...S,left:0,qtime:0,answered:0,team_board:null,preview_left:0,auto_left:0,reactions:null});
+  : JSON.stringify({...S,left:0,qtime:0,answered:0,team_board:null,preview_left:0,auto_left:0,intro_left:0,reactions:null});
  if(k==last){
   if(S.phase==='question' && m.active_audience && m.audience_pcts){
    m.audience_pcts.forEach((p,i)=>{const el=document.getElementById('aud'+i);if(el)el.textContent=`📊 ${p}%`;});
@@ -284,6 +284,11 @@ function render(){
    <input id="iceInp" placeholder="Type 1-2 words…" maxlength="28">
    <button class="go" onclick="sendWord()">Send to Word Cloud</button>${reactBar()}`;
   }
+ } else if(S.phase=='intro'){
+  const qn0 = `<div><span class="qnum">Question ${S.index+1} of ${S.total}</span></div>`;
+  $.innerHTML = S.redemption
+   ? `<div class="big">${qn0}🔄 REDEMPTION!<br><small>The question the class missed most is back for a second chance — worth DOUBLE points!</small></div>${reactBar()}`
+   : `<div class="big">${qn0}🎡 Mystery Wheel!<br><small>Watch the big screen to see what's in play…</small></div>${reactBar()}`;
  } else if(S.phase=='question'){
   if(S.index !== iceBrokenQ && m.frozen && !inPrev && !m.answered){
    iceTaps = 0;
@@ -297,7 +302,7 @@ function render(){
    <p style="font-size:1.4em;font-weight:900;color:#ffdf5d">Tap <span id="iceRem">5</span> times to shake off the snow!</p>
   </div>` : '';
   const qn = `<div><span class="qnum">Question ${S.index+1} of ${S.total}</span></div>`;
-  const whl = qn + (S.wheel_mod ? `<div><span class="wheel-pill">${inPrev?'🎡 Mystery Wheel spinning on the big screen…':'🎡 '+esc(S.wheel_mod)}</span></div>` : '')
+  const whl = qn + (S.wheel_mod ? `<div><span class="wheel-pill">🎡 ${esc(S.wheel_mod)}</span></div>` : '')
    + (S.team_battle ? `<div><span class="team-pill">🤝 TEAM BATTLE — ${inPrev?'discuss with your team now!':'majority answer earns +300 each'}</span></div>` : '')
    + (S.tiebreak ? `<div><span class="hot-pill">⚔️ SUDDEN DEATH TIEBREAKER</span></div>` : '');
   const dbl = S.redemption ? `<div class="double-pill">🔄 REDEMPTION BONUS (2x)! 🔄</div>` : S.boss ? `<div class="double-pill">🎰 FINAL BOSS WAGER! 🎰</div>` : (S.double || m.active_2x) ? `<div class="double-pill">⚡ ${S.double && m.active_2x ? '4x' : 'DOUBLE'} POINTS ACTIVE! ⚡</div>` : '';

@@ -250,7 +250,7 @@ def new_game(quiz_file="quiz.json", count=None, shuffle=False, custom_questions=
         "phase": "lobby", "q": -1, "start": 0, "preview": PREVIEW_TIME, "players": {},
         "reactions": [], "rseq": 0,
         "teams": False, "wager": True, "redemption": False, "redemption_added": False,
-        "sabotage": True, "icebreaker": False, "icebreaker_prompt": "In one word, how are you feeling about today's quiz?",
+        "sabotage": False, "icebreaker": False, "icebreaker_prompt": "In one word, how are you feeling about today's quiz?",
         "words": [],
         "wheel": True, "wheel_mods": {}, "robin_stolen": {},
         "hotseat": True, "team_battle": True, "tiebreak": True,
@@ -606,8 +606,6 @@ def settle_question(g):
 def start_question(g, qi):
     g["q"] = qi
     g["phase"] = "question"
-    g["start"] = time.time()
-    g["phase_entered"] = time.time()
     g["paused"] = False
     g["extra_time"] = 0.0
     if g.get("wheel", True) and qi > 0 and (qi + 1) % 4 == 0 and not is_boss_q(g, qi) and not g["quiz"][qi].get("redemption"):
@@ -637,6 +635,24 @@ def start_question(g, qi):
             p["frozen_q"] = qi
             p["frozen_by_q"] = p.get("frozen_by", "Someone")
             p["frozen_next"] = False
+    if qi in g.get("wheel_mods", {}) or q.get("redemption"):
+        g["phase"] = "intro"
+        g["intro_start"] = time.time()
+        g["phase_entered"] = time.time()
+    else:
+        begin_question(g)
+
+
+def intro_len(g):
+    base = g.get("preview", PREVIEW_TIME)
+    return base + 2.0 if g["quiz"][g["q"]].get("redemption") else base
+
+
+def begin_question(g):
+    g["phase"] = "question"
+    g["start"] = time.time()
+    g["phase_entered"] = time.time()
+    g["paused"] = False
 
 
 def find_most_missed(g):
@@ -808,6 +824,8 @@ def advance_game(g):
             go_final(g)
         else:
             start_question(g, g["q"] + 1)
+    elif g["phase"] == "intro":
+        begin_question(g)
     elif g["phase"] == "icebreaker":
         start_question(g, 0)
     elif g["phase"] == "lobby":
@@ -865,6 +883,9 @@ def tick(g):
             g["phase_entered"] = now
             g["paused"] = False
             settle_question(g)
+    elif g["phase"] == "intro":
+        if now - g.get("intro_start", now) >= intro_len(g):
+            begin_question(g)
     elif g["phase"] in ("results", "board") and g.get("auto"):
         wait_s = 7.0 if g["phase"] == "results" else 6.0
         if now - g.get("phase_entered", now) >= wait_s:
@@ -1207,6 +1228,15 @@ def view(g, pid=None, host=False):
                 if a and 0 <= a["choice"] < len(counts):
                     counts[a["choice"]] += 1
             out["counts"] = counts
+    if ph == "intro":
+        iq = g["quiz"][g["q"]]
+        iw = g.get("wheel_mods", {}).get(g["q"])
+        il = intro_len(g)
+        out.update(
+            index=g["q"], redemption=bool(iq.get("redemption")),
+            wheel_mod=iw["label"] if iw else None, wheel_id=iw["id"] if iw else None,
+            intro_total=il, intro_left=round(max(0.0, il - (now - g.get("intro_start", now))), 2),
+        )
     if ph == "board":
         rows = leaderboard(g)
         out["index"] = g["q"]
@@ -1718,6 +1748,8 @@ def restore_games():
                     if isinstance(p.get(k), dict):
                         p[k] = _ik(p[k])
             g["phase_entered"] = now
+            if g.get("phase") == "intro":
+                g["intro_start"] = now
             if g.get("phase") == "question":
                 g["start"] = now - 0.1
                 g["paused"] = True

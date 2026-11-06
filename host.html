@@ -168,6 +168,13 @@ body.hc .a{outline:3px solid #fff}body.hc .row{border:2px solid #fff}
 .hist-game small{opacity:.75}.hist-q{padding:4px 0;border-top:1px solid #fff2;font-size:.92em;display:flex;justify-content:space-between;gap:10px}
 .link-row{display:flex;gap:8px;align-items:center;margin:8px 0}.link-row input{margin:0}
 #qRoster{min-height:90px;font-family:inherit;font-size:.95em}
+.redemp-screen{max-width:760px;margin:40px auto;background:#0004;border:3px solid #ff9800;border-radius:20px;padding:30px 26px}
+.redemp-big{font-size:3.4em;font-weight:900;color:#ffdf5d;letter-spacing:3px;animation:pulse .7s infinite alternate}
+.redemp-screen p{font-size:1.5em;margin:.5em 0}
+.intro-wheel{margin:10px auto}
+.intro-wheel .wheel-wrap{width:290px;height:290px}
+.intro-wheel .wheel-disc span{font-size:2.6em}
+.intro-wheel .spin-result{font-size:1.6em}
 </style></head><body>
 <div class="late-join" id="lateJoin">
  <button class="late-btn" onclick="toggleLateQr(event)" title="Click to toggle QR code for late joiners">
@@ -283,7 +290,7 @@ Quote: Paris has been the capital since 987 CE."></textarea>
   <div class="quick-bar">
    <label>📝 Questions: <input id="qCount" type="number" min="1" max="200" value="15"> <span id="qMax" style="opacity:.8">/ 15</span></label>
    <label>⏱️ Timer: <input id="qTime" type="number" min="5" max="120" value="15"><span style="opacity:.8">s</span></label>
-   <button type="button" class="drawer-toggle" id="advBtn" onclick="toggleAdvPanel()">⚙️ Options <span id="optSummary" style="background:#26890c;padding:2px 8px;border-radius:99px;font-size:.85em">9 active</span> <span id="advCaret">▾</span></button>
+   <button type="button" class="drawer-toggle" id="advBtn" onclick="toggleAdvPanel()">⚙️ Options <span id="optSummary" style="background:#26890c;padding:2px 8px;border-radius:99px;font-size:.85em">8 active</span> <span id="advCaret">▾</span></button>
   </div>
   <div class="adv-panel" id="advPanel" onchange="updateOptSummary()">
    <div class="adv-sec-title">Game Modes & Power-Ups</div>
@@ -291,7 +298,7 @@ Quote: Paris has been the capital since 987 CE."></textarea>
     <label class="mode-pill"><input id="qShuffle" type="checkbox" checked> 🎲 Randomize Order</label>
     <label class="mode-pill"><input id="qWager" type="checkbox" checked> 🎰 Final Boss Wager</label>
     <label class="mode-pill"><input id="qRedemp" type="checkbox" checked> 🔄 Redemption Round</label>
-    <label class="mode-pill"><input id="qSabotage" type="checkbox" checked> ⛄ Snowballs</label>
+    <label class="mode-pill"><input id="qSabotage" type="checkbox"> ⛄ Snowballs</label>
     <label class="mode-pill"><input id="qWheel" type="checkbox" checked> 🎡 Mystery Wheel</label>
     <label class="mode-pill"><input id="qTeams" type="checkbox"> 🛡️ Team Mode</label>
     <label class="mode-pill"><input id="qIce" type="checkbox" checked onchange="document.getElementById('icePromptRow').style.display=this.checked?'block':'none'"> 💭 Word Cloud Warm-Up</label>
@@ -824,7 +831,8 @@ function handleAudio(){
   lastQIdx = S.index;
   startBgmForPhase();
   if(S.phase === 'icebreaker'){ speak(S.prompt); }
-  else if(S.phase === 'question'){ sfxQuestion(); lastTickSec = -1; speak(S.question); }
+  else if(S.phase === 'intro'){ if(S.redemption){ sfxReveal(); speak('Redemption question! The most missed question is back for double points.'); } }
+   else if(S.phase === 'question'){ sfxQuestion(); lastTickSec = -1; speak(S.question); }
   else if(S.phase === 'results'){
    sfxReveal();
    const winAns = S.qtype==='text' ? (S.answers_correct||[''])[0] : S.qtype==='order' ? (S.answers_correct||[]).join(', then ') : ((S.answers||[])[S.correct] || '');
@@ -981,7 +989,7 @@ function render(){
  const inPrev = S.phase==='question' && (S.preview_left||0) > 0;
  const k = S.phase==='question'
   ? `q:${S.index}:${inPrev?1:0}`
-  : JSON.stringify({...S,left:0,qtime:0,answered:0,preview_left:0,auto_left:0,reactions:null});
+  : JSON.stringify({...S,left:0,qtime:0,answered:0,preview_left:0,auto_left:0,intro_left:0,reactions:null});
  if(k==last){
   const t=document.getElementById('t');
   if(t){
@@ -996,7 +1004,9 @@ function render(){
   if(ac) ac.textContent = `${S.answered}/${(S.n_active != null ? S.n_active : S.n)}`;
   const pf=document.getElementById('pf');
   if(pf) pf.style.width = Math.min(100, ((S.preview_left||0)/(S.preview_total||5))*100)+'%';
-  const ab=document.getElementById('autoNextLbl');
+  const ib=document.getElementById('ib');
+   if(ib) ib.style.width = Math.max(0, Math.min(100, ((S.intro_left||0)/(S.intro_total||5))*100))+'%';
+   const ab=document.getElementById('autoNextLbl');
   if(ab && S.auto_left != null) ab.textContent = ` (${S.auto_left}s)`;
   return;
  }
@@ -1005,6 +1015,7 @@ function render(){
  const imgHtml = S.img ? `<img class="q-img" src="${esc(S.img)}" alt="">` : '';
  const nAct = (S.n_active != null ? S.n_active : S.n);
  if(S.phase=='lobby'){
+  spunQ = -1;
   const nm = (S.lobby||[]).map(p=>`<span>${esc(p.tag)}<button class="kick" title="Remove ${esc(p.name)}" data-n="${esc(p.name)}" onclick="kickPlayer(this.dataset.n)">✖</button></span>`).join('');
   $.innerHTML=`<h1>Join at <a class="join-link" href="/play?pin=${pin}" target="_blank">plw.me/play</a> with PIN</h1><div class="lobby-box"><div class="pin">${pin}</div>${QR}</div>
   <p>${S.n} player(s)</p>${teamStandingsHtml()}<div class="names">${nm}</div>
@@ -1021,17 +1032,32 @@ function render(){
   <p>${S.word_total||0} response(s)</p>
   <div class="word-cloud">${cloud}</div>
   <button onclick="next()">Start Question 1 ➔</button>`;
+ } else if(S.phase=='intro'){
+  const ipct = Math.max(0, Math.min(100, ((S.intro_left||0)/(S.intro_total||5))*100));
+  if(S.redemption){
+   $.innerHTML=`<div class="qnum">Question ${S.index+1} <small>of ${S.total}</small></div>
+   <div class="redemp-screen"><div class="redemp-big">🔄 REDEMPTION 🔄</div>
+    <p>The question the class struggled with most is <b>back for a second chance!</b></p>
+    <p>Everybody gets a fresh shot — and it's worth <b>DOUBLE POINTS</b>.</p>
+    <div class="preview-bar"><div class="preview-fill" id="ib" style="width:${ipct}%"></div></div>
+   </div>`;
+  } else {
+   $.innerHTML=`<div class="qnum">Question ${S.index+1} <small>of ${S.total}</small></div>
+   <div class="intro-wheel"><div class="double-banner">🎡 MYSTERY WHEEL ROUND</div>${wheelHtml()}
+    <div class="preview-bar" style="max-width:500px;margin:14px auto"><div class="preview-fill" id="ib" style="width:${ipct}%"></div></div>
+   </div>`;
+   runWheel();
+  }
  } else if(S.phase=='question'){
   const sec = Math.ceil(S.left);
   const pct = Math.min(100, ((S.preview_left||0)/(S.preview_total||5))*100);
-  const wheelBanner = (S.wheel_mod && !inPrev) ? `<div class="wheel-banner">🎡 MYSTERY WHEEL: ${esc(S.wheel_mod)}</div>` : '';
+  const wheelBanner = S.wheel_mod ? `<div class="wheel-banner">🎡 MYSTERY WHEEL: ${esc(S.wheel_mod)}</div>` : '';
   const extraB = `${S.team_battle?`<div class="team-banner">🤝 TEAM BATTLE! Your team's most popular answer earns +300 each</div>`:''}${S.hot?`<div class="hot-banner">🔥 HOT SEAT: ${esc(S.hot.name)} — will they nail it?</div>`:''}${S.tiebreak?`<div class="tb-banner">⚔️ SUDDEN DEATH TIEBREAKER: ${(S.tb_names||[]).map(esc).join(' vs ')}</div>`:''}`;
   const badges = `${wheelBanner}${extraB}${S.redemption?'<div class="redemp-banner">🔄 REDEMPTION QUESTION (MOST MISSED!) 🔄</div>':''}${S.boss?'<div class="double-banner">🎰 FINAL BOSS WAGER! 🎰</div>':S.double?'<div class="double-banner">⚡ DOUBLE POINTS! ⚡</div>':''}`;
   if(inPrev){
    $.innerHTML=`<div class="qnum">Question ${S.index+1} <small>of ${S.total}</small></div>
    <div class="q-stage">
     <div>${badges}</div>
-    ${S.wheel_mod?wheelHtml():''}
     <h1>${esc(S.question)}</h1>
     ${imgHtml}
     <div class="preview-box" style="width:100%">
@@ -1039,7 +1065,6 @@ function render(){
      <div class="preview-bar"><div class="preview-fill" id="pf" style="width:${pct}%"></div></div>
     </div>
    </div>`;
-   if(S.wheel_mod) runWheel();
   } else {
    $.innerHTML=`<div class="qnum">Question ${S.index+1} <small>of ${S.total} &middot; <span id="ansCnt">${S.answered}/${nAct}</span> answered</small></div>
    <div>${badges}</div>
