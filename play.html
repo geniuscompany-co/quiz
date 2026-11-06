@@ -59,7 +59,19 @@ blockquote cite{display:block;font-style:normal;font-size:.8em;margin-top:8px;op
 .stat-pill b{display:block;font-size:1.25em;color:#ffdf5d}
 .missed-item{border-top:1px solid #fff3;padding:8px 0;font-size:.92em}
 .logo{max-width:260px;width:75%;border-radius:16px;margin:4px auto 12px;display:block;box-shadow:0 4px 16px #0004}
-</style></head><body><div id="app"></div>
+
+body.cb .c0{background:#D55E00}body.cb .c1{background:#0072B2}body.cb .c2{background:#F0E442;color:#222}body.cb .c3{background:#009E73}
+body.hc{background:#000}body.hc .grid button{border:4px solid #fff}body.hc .pu-btn,body.hc .wager-btn{border-color:#fff}
+#a11y{position:fixed;top:8px;right:8px;z-index:60;width:auto;font-size:.8em;padding:4px 10px;border-radius:99px;border:1px solid #fff5;background:#0006;color:#fff;cursor:pointer}
+.hot-pill{display:inline-block;background:linear-gradient(90deg,#ff6d00,#ff1744);color:#fff;font-weight:900;padding:5px 14px;border-radius:99px;font-size:.85em;margin-bottom:6px;border:1px solid #fff8}
+.hot-box{background:#0004;border:2px solid #ff6d00;border-radius:12px;padding:10px;margin:8px 0;font-size:.95em}
+.team-pill{display:inline-block;background:linear-gradient(90deg,#1368ce,#00b0ff);color:#fff;font-weight:900;padding:5px 14px;border-radius:99px;font-size:.85em;margin-bottom:6px;border:1px solid #fff8}
+.txtans{font-size:1.5em}
+.slot{background:#fff3;border-radius:8px;padding:10px 14px;margin:5px 0;font-weight:800;text-align:left;font-size:1.05em}
+.grid button img{max-height:80px;max-width:100%;border-radius:8px;background:#fff}
+.rosterSel{display:block;width:100%;box-sizing:border-box;font-size:1.3em;padding:14px;margin:10px 0;border-radius:6px;border:0;text-align:center;color:#2b0d57;background:#fff}
+.plink{display:inline-block;margin-top:10px;color:#fff;font-size:.95em}
+</style></head><body><button id="a11y" onclick="cycleA11y()" title="Accessibility">👁️</button><div id="app"></div>
 <script>
 let pin, pid, S = {}, avatar = '🦊', team = '';
 let iceBrokenQ = -1, iceTaps = 0;
@@ -86,18 +98,30 @@ async function checkPinConfig(pinVal){
   const inp = document.getElementById('p');
   if(inp && !inp.value && r && r.pin) inp.value = r.pin;
   const tmBox = document.getElementById('teamBox');
-  if(tmBox) tmBox.style.display = (r && r.teams) ? 'grid' : 'none';
- }catch(e){}
+   if(tmBox) tmBox.style.display = (r && r.teams) ? 'grid' : 'none';
+   const nb = document.getElementById('nameBox');
+   if(nb){
+    const sig = (r && r.has_roster) ? 'R:' + JSON.stringify(r.roster) : 'T';
+    if(nb.dataset.sig !== sig){
+     nb.dataset.sig = sig;
+     nb.innerHTML = (r && r.has_roster)
+      ? `<select id="n" class="rosterSel"><option value="">— Pick your name —</option>${(r.roster||[]).map(x=>`<option>${esc(x)}</option>`).join('')}</select>`
+      : `<input id="n" placeholder="Nickname" maxlength="16">`;
+    }
+   }
+   if(r && r.logo){ const lg = document.querySelector('img.logo'); if(lg && lg.dataset.cl !== r.logo){ lg.dataset.cl = r.logo; lg.src = r.logo; } }
+  }catch(e){}
 }
 
 function form(err){
  const savedPin = urlPin || pin || '';
  $.innerHTML=`<img class="logo" src="/logo.jpg?v=2" alt="Brainrush!" onerror="this.outerHTML='<h1 style=&quot;font-size:2.4em;margin:.3em 0&quot;>🧠 Brainrush!</h1>'"><h1>Join game</h1>
  <input id="p" placeholder="Game PIN" inputmode="numeric" value="${esc(savedPin)}" oninput="if(this.value.length===6)checkPinConfig(this.value)">
- <input id="n" placeholder="Nickname" maxlength="16">
+ <div id="nameBox" data-sig="T"><input id="n" placeholder="Nickname" maxlength="16"></div>
  <div class="avatars">${AVS.map(a=>`<span class="av ${a===avatar?'sel':''}" data-av="${a}" onclick="pickAv('${a}')">${a}</span>`).join('')}</div>
  <div class="teams" id="teamBox" style="display:none">${TEAMS.slice(1).map(t=>`<div class="tm ${t.id===team?'sel':''}" data-tm="${t.id}" onclick="pickTm('${t.id}')">${t.label}</div>`).join('')}</div>
- <button class="go" onclick="join()">Enter</button><p class="err">${err||''}</p>`;
+ <button class="go" onclick="join()">Enter</button><p class="err">${err||''}</p>
+  <a class="plink" href="/practice">🧑‍🎓 Practice on your own →</a>`;
  checkPinConfig(savedPin);
 }
 
@@ -140,6 +164,35 @@ async function usePu(kind){await post('/api/powerup',{pin,pid,kind});poll()}
 async function setWager(pct){await post('/api/wager',{pin,pid,pct});poll()}
 async function toggleConf(){await post('/api/confident',{pin,pid});poll()}
 async function sabotage(){await post('/api/sabotage',{pin,pid});poll()}
+async function predict(g){await post('/api/predict',{pin,pid,guess:g});poll()}
+async function sendText(){
+ const e=document.getElementById('txtAns'); if(!e||!e.value.trim()) return;
+ await post('/api/answer',{pin,pid,text:e.value.trim()}); poll();
+}
+let ordSel=[], ordIdx=-1;
+function drawOrd(){
+ const el=document.getElementById('ordWrap'); if(!el) return;
+ const d=S.answers||[];
+ el.innerHTML=`<p style="margin:6px 0">Tap the items in the <b>correct order</b>:</p>`+
+  ordSel.map((j,n)=>`<div class="slot">${n+1}. ${esc(d[j])}</div>`).join('')+
+  `<div class="grid">${d.map((a,j)=>ordSel.includes(j)?'':`<button class="c${j}" style="min-height:11vh" onclick="tapOrd(${j})"><span>${esc(a)}</span></button>`).join('')}</div>`+
+  `<div style="margin-top:8px">${ordSel.length?`<button class="pu-btn" style="width:auto;padding:8px 18px" onclick="ordSel.pop();drawOrd()">↩ Undo</button>`:''}</div>`+
+  (ordSel.length===d.length?`<button class="go" style="margin-top:8px" onclick="submitOrd()">Submit order</button>`:'');
+}
+function tapOrd(j){ ordSel.push(j); drawOrd(); }
+async function submitOrd(){ await post('/api/answer',{pin,pid,seq:ordSel}); poll(); }
+function hotHtml(m){
+ const h=m.hot; if(!h) return '';
+ if(h.you) return `<div><span class="hot-pill">🔥 YOU'RE IN THE HOT SEAT! Nail it for +400</span></div>`;
+ return `<div class="hot-box"><div>🔥 <b>HOT SEAT:</b> ${esc((h.avatar?h.avatar+' ':'')+h.name)}</div><div style="opacity:.9">Will they get it right? Guess right for +200!</div><div class="wager-btns"><button class="wager-btn ${h.pred===true?'sel':''}" onclick="predict(true)">👍 Yes</button><button class="wager-btn ${h.pred===false?'sel':''}" onclick="predict(false)">👎 No</button></div></div>`;
+}
+function applyA11y(){
+ const a=localStorage.getItem('brainrush_a11y')||'off';
+ document.body.classList.toggle('cb',a==='cb'); document.body.classList.toggle('hc',a==='hc');
+ const b=document.getElementById('a11y'); if(b) b.textContent = a==='cb' ? '👁️ Colorblind' : a==='hc' ? '👁️ High contrast' : '👁️';
+}
+function cycleA11y(){ const o=['off','cb','hc']; const a=localStorage.getItem('brainrush_a11y')||'off'; localStorage.setItem('brainrush_a11y', o[(o.indexOf(a)+1)%3]); applyA11y(); }
+applyA11y();
 async function react(emoji){await post('/api/react',{pin,pid,emoji})}
 function rivalHtml(m){
  let h = '';
@@ -187,17 +240,30 @@ function saveCert(name, rank, score, acc){
  a.click();
 }
 function reactBar(){return `<div class="react-bar">${REACTS.map(e=>`<button onclick="react('${e}')">${e}</button>`).join('')}</div>`}
+let dead=false;
 async function poll(){
- const r=await fetch(`/api/state?pin=${pin}&pid=${pid}`);
- if(!r.ok) return;
- S=await r.json();render();
-}
+  if(dead) return;
+  const r=await fetch(`/api/state?pin=${pin}&pid=${pid}`);
+  if(r.status===404){
+   dead=true; try{localStorage.removeItem('brainrush_session')}catch(e){}
+   $.innerHTML=`<div class="big">😴 This game ended or the server restarted.</div><button class="go" onclick="location.reload()">Join a new game</button>`;
+   return;
+  }
+  if(!r.ok) return;
+  S=await r.json();
+  if(S.kicked){
+   dead=true; try{localStorage.removeItem('brainrush_session')}catch(e){}
+   $.innerHTML=`<div class="big">🚪 You were removed from this game.</div><button class="go" onclick="location.reload()">OK</button>`;
+   return;
+  }
+  render();
+ }
 let last='';
 function render(){
  const inPrev = S.phase==='question' && (S.preview_left||0) > 0;
  const m=S.me||{};
  const k = S.phase==='question'
-  ? `q:${S.index}:${inPrev?1:0}:${m.answered?1:0}:${m.active_2x?1:0}:${m.active_shield?1:0}:${m.active_audience?1:0}:${m.confident?1:0}:${(m.hide||[]).join(',')}:${m.wager_pct??''}:${m.frozen?1:0}`
+  ? `q:${S.index}:${inPrev?1:0}:${m.answered?1:0}:${m.active_2x?1:0}:${m.active_shield?1:0}:${m.active_audience?1:0}:${m.confident?1:0}:${(m.hide||[]).join(',')}:${m.wager_pct??''}:${m.frozen?1:0}:${m.hot?(m.hot.pred===null||m.hot.pred===undefined?'n':m.hot.pred?'y':'x'):''}:${m.spectating?1:0}`
   : JSON.stringify({...S,left:0,qtime:0,answered:0,team_board:null,preview_left:0,auto_left:0,reactions:null});
  if(k==last){
   if(S.phase==='question' && m.active_audience && m.audience_pcts){
@@ -222,6 +288,7 @@ function render(){
   if(S.index !== iceBrokenQ && m.frozen && !inPrev && !m.answered){
    iceTaps = 0;
   }
+  if(ordIdx !== S.index){ ordIdx = S.index; ordSel = []; }
   const showIce = m.frozen && iceBrokenQ !== S.index && !inPrev && !m.answered;
   const iceHtml = showIce ? `<div class="ice-overlay" id="iceOv" onclick="tapIce()">
    <div class="ice-cube">⛄</div>
@@ -230,9 +297,12 @@ function render(){
    <p style="font-size:1.4em;font-weight:900;color:#ffdf5d">Tap <span id="iceRem">5</span> times to shake off the snow!</p>
   </div>` : '';
   const qn = `<div><span class="qnum">Question ${S.index+1} of ${S.total}</span></div>`;
-  const whl = qn + (S.wheel_mod ? `<div><span class="wheel-pill">${inPrev?'🎡 Mystery Wheel spinning on the big screen…':'🎡 '+esc(S.wheel_mod)}</span></div>` : '');
+  const whl = qn + (S.wheel_mod ? `<div><span class="wheel-pill">${inPrev?'🎡 Mystery Wheel spinning on the big screen…':'🎡 '+esc(S.wheel_mod)}</span></div>` : '')
+   + (S.team_battle ? `<div><span class="team-pill">🤝 TEAM BATTLE — ${inPrev?'discuss with your team now!':'majority answer earns +300 each'}</span></div>` : '')
+   + (S.tiebreak ? `<div><span class="hot-pill">⚔️ SUDDEN DEATH TIEBREAKER</span></div>` : '');
   const dbl = S.redemption ? `<div class="double-pill">🔄 REDEMPTION BONUS (2x)! 🔄</div>` : S.boss ? `<div class="double-pill">🎰 FINAL BOSS WAGER! 🎰</div>` : (S.double || m.active_2x) ? `<div class="double-pill">⚡ ${S.double && m.active_2x ? '4x' : 'DOUBLE'} POINTS ACTIVE! ⚡</div>` : '';
   const udog = m.underdog ? `<div><span class="underdog-pill">🎯 UNDERDOG 1.5x CATCH-UP BOOST!</span></div>` : '';
+  const hot = hotHtml(m);
   const curW = m.wager_pct ?? 0;
   const stake = Math.max(500, m.score || 0);
   const wagerUi = (S.boss && !m.answered) ? `<div class="wager-box">
@@ -240,29 +310,52 @@ function render(){
    <div class="wager-btns">
     ${[0,50,100].map(pct=>`<button class="wager-btn ${curW===pct?'sel':''}" onclick="setWager(${pct})">${pct}% (${Math.round(stake*pct/100)} pts)</button>`).join('')}
    </div>
-  </div>` : (!S.boss && !m.answered) ? `<button class="conf-btn ${m.confident?'on':''}" onclick="toggleConf()">🔥 ${m.confident?'Confidence Bet ON (+250 / -150)':'Bet on Yourself (+250 / -150)'}</button>` : '';
-  if(m.answered)$.innerHTML=`<div class="big">${whl}${dbl}${udog}<br>Answer sent!<br><small>Waiting for others…</small></div>`;
-  else if(inPrev)$.innerHTML=`<div class="big" style="margin-top:6vh">${whl}${dbl}${udog}<br>👀 Get ready!<br><small>Read the question on the host screen…</small></div>${wagerUi}${rivalHtml(m)}`;
-  else {
+  </div>` : (!S.boss && !S.tiebreak && !m.answered) ? `<button class="conf-btn ${m.confident?'on':''}" onclick="toggleConf()">🔥 ${m.confident?'Confidence Bet ON (+250 / -150)':'Bet on Yourself (+250 / -150)'}</button>` : '';
+  const t = S.qtype || 'mc';
+  if(m.spectating){
+   $.innerHTML=`<div class="big">${whl}<br>⚔️ Sudden death!<br><small>Only the tied leaders play this one.<br>Watch the big screen!</small></div>${reactBar()}`;
+  } else if(m.answered){
+   $.innerHTML=`<div class="big">${whl}${dbl}${udog}<br>Answer sent!<br><small>Waiting for others…</small></div>${hot}`;
+  } else if(inPrev){
+   $.innerHTML=`<div class="big" style="margin-top:6vh">${whl}${dbl}${udog}<br>👀 Get ready!<br><small>Read the question on the host screen…</small></div>${hot}${wagerUi}${rivalHtml(m)}`;
+  } else {
    const hide = m.hide || [];
    const pcts = m.audience_pcts || null;
+   const choiceQ = (t==='mc' || t==='tf');
    const puBar = `<div class="pu-bar">
-    <button class="pu-btn" ${m.pu_5050?'':'disabled'} onclick="usePu('5050')">✂️ 50/50</button>
+    ${choiceQ?`<button class="pu-btn" ${m.pu_5050?'':'disabled'} onclick="usePu('5050')">✂️ 50/50</button>`:''}
     <button class="pu-btn ${m.active_2x?'active':''}" ${m.pu_2x||m.active_2x?'':'disabled'} onclick="usePu('2x')">⚡ ${m.active_2x?'2x ON':'2x'}</button>
-    <button class="pu-btn ${m.active_shield?'active':''}" ${m.pu_shield||m.active_shield?'':'disabled'} onclick="usePu('shield')">🛡️ ${m.active_shield?'Shield':'Shield'}</button>
-    <button class="pu-btn ${m.active_audience?'active':''}" ${m.pu_audience||m.active_audience?'':'disabled'} onclick="usePu('audience')">📊 ${m.active_audience?'Poll ON':'Audience'}</button>
+    <button class="pu-btn ${m.active_shield?'active':''}" ${m.pu_shield||m.active_shield?'':'disabled'} onclick="usePu('shield')">🛡️ Shield</button>
+    ${choiceQ?`<button class="pu-btn ${m.active_audience?'active':''}" ${m.pu_audience||m.active_audience?'':'disabled'} onclick="usePu('audience')">📊 ${m.active_audience?'Poll ON':'Audience'}</button>`:''}
    </div>`;
-   $.innerHTML=`${iceHtml}${whl}${dbl}${udog}${wagerUi}${puBar}<div class="grid">${S.answers.map((a,i)=>`<button class="c${i} ${hide.includes(i)?'elim':''}" onclick="ans(${i})"><span class="sh">${sh[i]}</span><span>${esc(a)}</span>${pcts?`<span class="aud-badge" id="aud${i}">📊 ${pcts[i]}%</span>`:''}</button>`).join('')}</div>`;
+   let inputUi;
+   if(t==='text') inputUi = `<input id="txtAns" class="txtans" placeholder="Type your answer…" autocomplete="off" autocapitalize="off" onkeydown="if(event.key==='Enter')sendText()"><button class="go" onclick="sendText()">Submit answer</button>`;
+   else if(t==='order') inputUi = `<div id="ordWrap"></div>`;
+   else inputUi = `<div class="grid">${S.answers.map((a,i)=>`<button class="c${i} ${hide.includes(i)?'elim':''}" onclick="ans(${i})">${S.aimg&&S.aimg[i]?`<img src="${esc(S.aimg[i])}" alt="">`:''}<span class="sh">${sh[i]}</span><span>${esc(a)}</span>${pcts?`<span class="aud-badge" id="aud${i}">📊 ${pcts[i]}%</span>`:''}</button>`).join('')}</div>`;
+   $.innerHTML=`${iceHtml}${whl}${dbl}${udog}${hot}${wagerUi}${puBar}${inputUi}`;
+   if(t==='order') drawOrd();
   }
  } else if(S.phase=='results'){
-  const st = m.streak >= 2 ? `<br><span class="streak-pill">🔥 ${m.streak} in a row! ${m.bonus?`(+${m.bonus} bonus)`:''}</span>` : '';
+  if(m.spectating){
+   $.innerHTML=`<div class="big">⚔️ Tiebreaker results<br><small>See the big screen!</small></div>${reactBar()}`;
+  } else {
+  const st = m.streak >= 5 ? `<br><span class="streak-pill">🔥🔥 ${m.streak} in a row! ON FIRE ${m.bonus?`(+${m.bonus} bonus)`:''}</span>` : m.streak >= 2 ? `<br><span class="streak-pill">🔥 ${m.streak} in a row! ${m.bonus?`(+${m.bonus} bonus)`:''}</span>` : '';
   const whMsg = m.wheel_bonus ? `<br><small style="color:#b2ff59">🎡 Mystery Wheel Bonus: +${m.wheel_bonus} pts!</small>` : '';
   const cfMsg = m.conf_delta ? `<br><small style="color:${m.conf_delta>0?'#ffdf5d':'#ff9b9b'}">🔥 Confidence Bet: ${m.conf_delta>0?'+'+m.conf_delta:m.conf_delta} pts</small>` : '';
+  const tbMsg = m.team_bonus ? `<br><small style="color:#7dd3ff">🤝 Team Battle bonus: +${m.team_bonus}</small>` : '';
+  let hotMsg = '';
+  if(m.hot){
+   if(m.hot.you) hotMsg = `<br><small style="color:#ffab40">🔥 Hot Seat: ${m.hot.ok?'You nailed it! +400':'you missed it'}</small>`;
+   else if(m.hot.pred===null||m.hot.pred===undefined) hotMsg = `<br><small style="opacity:.8">🔥 You skipped the Hot Seat prediction</small>`;
+   else hotMsg = `<br><small style="color:#ffab40">🔥 Hot Seat prediction: ${m.hot.pred===m.hot.ok?'🎯 great read! +200':'not this time'}</small>`;
+  }
+  const reveal = (S.qtype==='text'||S.qtype==='order') ? `<br><small style="opacity:.9">✅ Answer: ${esc(S.qtype==='order'?(S.answers_correct||[]).join(' → '):(S.answers_correct||[''])[0])}</small>` : '';
   const shMsg = (!m.correct && m.shielded) ? `<br><small style="color:#80deea">🛡️ Streak Shield protected your streak &amp; bets!</small>` : '';
   const gTxt = m.gained >= 0 ? '+'+m.gained : m.gained;
   const canSab = S.sabotage_enabled && !S.is_last && m.pu_freeze && m.score >= 200 && S.n > 1;
   const sabBtn = canSab ? `<div><button class="sab-btn" onclick="sabotage()">⛄ Throw Snowball at Leader (-200 pts)</button></div>` : m.ice_sent ? `<div><small style="color:#80deea">⛄ Snowball thrown at the leader for next round!</small></div>` : '';
-  $.innerHTML=`<div><span class="qnum">Question ${S.index+1} of ${S.total}</span></div><div class="big" style="margin-top:4vh">${!m.answered?"⏰ Time's up":m.correct?'✅ Correct! '+gTxt:'❌ Incorrect'+(m.gained<0?' ('+m.gained+')':'')}${st}${whMsg}${cfMsg}${shMsg}<br><small>Score ${m.score}</small></div>${rivalHtml(m)}${sabBtn}${S.quote?`<blockquote>&ldquo;${esc(S.quote)}&rdquo;${S.source?`<cite>&mdash; ${esc(S.source)}</cite>`:''}</blockquote>`:''}${reactBar()}`;
+  $.innerHTML=`<div><span class="qnum">Question ${S.index+1} of ${S.total}</span></div><div class="big" style="margin-top:4vh">${!m.answered?"⏰ Time's up":m.correct?'✅ Correct! '+gTxt:'❌ Incorrect'+(m.gained<0?' ('+m.gained+')':'')}${st}${whMsg}${cfMsg}${tbMsg}${hotMsg}${shMsg}${reveal}<br><small>Score ${m.score}</small></div>${rivalHtml(m)}${sabBtn}${S.quote?`<blockquote>&ldquo;${esc(S.quote)}&rdquo;${S.source?`<cite>&mdash; ${esc(S.source)}</cite>`:''}</blockquote>`:''}${reactBar()}`;
+  }
  } else if(S.phase=='board'){
   const canSab = S.sabotage_enabled && m.pu_freeze && m.score >= 200 && S.n > 1;
   const sabBtn = canSab ? `<div><button class="sab-btn" onclick="sabotage()">⛄ Throw Snowball at Leader (-200 pts)</button></div>` : m.ice_sent ? `<div><small style="color:#80deea">⛄ Snowball thrown at the leader for next round!</small></div>` : '';

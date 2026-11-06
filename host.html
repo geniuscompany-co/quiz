@@ -142,6 +142,32 @@ blockquote cite{display:block;font-size:.74em;font-style:normal;margin-top:6px;o
 .float-emo small{display:block;font-size:.36em;background:#0008;color:#fff;padding:2px 6px;border-radius:99px;margin-top:-4px;white-space:nowrap}
 @keyframes floatUp{0%{transform:translateY(0) scale(.7);opacity:0}12%{opacity:1;transform:translateY(-40px) scale(1.1)}100%{transform:translateY(-88vh) scale(1);opacity:0}}
 #confetti{position:fixed;inset:0;pointer-events:none;z-index:10}
+
+.menu-drop{max-height:82vh;overflow-y:auto}
+body.cb .c0{background:#D55E00}body.cb .c1{background:#0072B2}body.cb .c2{background:#F0E442;color:#222}body.cb .c3{background:#009E73}
+body.hc{--bg:#000;--card:#000;--accent:#007a00;background:#000}
+body.hc .a{outline:3px solid #fff}body.hc .row{border:2px solid #fff}
+.kick{font-size:.8em;margin:0 0 0 8px;padding:0 6px;border-radius:99px;background:#e21b3c99;line-height:1.5}
+.team-banner{display:inline-block;background:linear-gradient(90deg,#1368ce,#00b0ff);color:#fff;font-weight:900;padding:7px 22px;border-radius:99px;font-size:1.05em;margin:4px;border:2px solid #fff8;box-shadow:0 4px 14px #0005}
+.hot-banner{display:inline-block;background:linear-gradient(90deg,#ff6d00,#ff1744);color:#fff;font-weight:900;padding:7px 22px;border-radius:99px;font-size:1.1em;margin:4px;border:2px solid #fff8;box-shadow:0 4px 14px #0005;animation:pulse .7s infinite alternate}
+.tb-banner{display:inline-block;background:linear-gradient(90deg,#212121,#b71c1c);color:#fff;font-weight:900;padding:7px 22px;border-radius:99px;font-size:1.1em;margin:4px;border:2px solid #ffdf5d;box-shadow:0 4px 14px #0007}
+.team-res{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:8px 0}.team-res .tr{padding:6px 14px;border-radius:99px;font-weight:800;font-size:.95em}
+.textq{font-size:2em;font-weight:800;background:#0004;border-radius:16px;padding:36px 20px;margin:20px auto;max-width:760px}.textq small{display:block;font-size:.42em;opacity:.7;margin-top:8px}
+.oq-title{font-size:1.4em;font-weight:800;color:#ffdf5d;margin:8px 0}
+.reveal-box{background:#0004;border:2px solid #7dff6b;border-radius:16px;padding:16px 20px;margin:12px auto;max-width:760px}
+.rb-label{color:#7dff6b;font-weight:800}.rb-ans{font-size:2em;font-weight:900;margin:6px 0}.rb-count{margin-top:8px;opacity:.85;font-weight:700}
+.rb-ol{display:inline-block;text-align:left;font-size:1.5em;font-weight:800;margin:6px 0}
+.a-img{max-height:110px;max-width:90%;border-radius:8px;display:block;margin:0 auto 8px;background:#fff;object-fit:contain}
+.a.res .a-img{max-height:56px;margin:0 10px 0 0;display:inline-block;position:relative;z-index:1}
+.row.onfire{background:#ff6d0044;box-shadow:0 0 16px #ff6d00,inset 0 0 14px #ff980055;animation:flick .5s infinite alternate}
+@keyframes flick{from{box-shadow:0 0 10px #ff6d00,inset 0 0 8px #ff980044}to{box-shadow:0 0 22px #ffab00,inset 0 0 16px #ff980077}}
+.streak.fire{background:linear-gradient(90deg,#ff1744,#ff9100);font-size:.9em}
+.resume-card{max-width:640px;margin:0 auto 14px;background:#ffdf5d;color:#2b0d57;border-radius:14px;padding:12px 18px;font-weight:800;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.resume-card button{margin:0;padding:8px 18px;font-size:.95em}
+.hist-game{background:#0004;border-radius:10px;padding:10px 14px;margin:8px 0;cursor:pointer}
+.hist-game small{opacity:.75}.hist-q{padding:4px 0;border-top:1px solid #fff2;font-size:.92em;display:flex;justify-content:space-between;gap:10px}
+.link-row{display:flex;gap:8px;align-items:center;margin:8px 0}.link-row input{margin:0}
+#qRoster{min-height:90px;font-family:inherit;font-size:.95em}
 </style></head><body>
 <div class="late-join" id="lateJoin">
  <button class="late-btn" onclick="toggleLateQr(event)" title="Click to toggle QR code for late joiners">
@@ -174,9 +200,14 @@ blockquote cite{display:block;font-size:.74em;font-style:normal;margin-top:6px;o
   </div>
   <button id="autoBtn" style="display:none" onclick="hostCtl('toggle_auto')"><span>⏭️ Auto-Advance</span><span class="state" id="autoState">Off</span></button>
   <button onclick="cycleTheme()"><span>🎨 Visual Theme</span><span class="state" id="themeState">Purple</span></button>
+   <button id="musicBtn" onclick="cycleMusic()"><span>🎵 Background Music</span><span class="state" id="musicState">Classic</span></button>
+   <button id="cbBtn" onclick="toggleCb()"><span>👁️ Colorblind-safe Colors</span><span class="state" id="cbState">Off</span></button>
+   <button id="hcBtn" onclick="toggleHc()"><span>◐ High Contrast</span><span class="state" id="hcState">Off</span></button>
   <div class="menu-sep"></div>
   <button id="remoteBtn" style="display:none" onclick="closeNavMenu();openRemoteModal()"><span>📱 Phone Host Remote</span><span class="state">Open ↗</span></button>
-  <button id="addQuizMenuBtn" onclick="closeNavMenu();openQuizModal()"><span>➕ Create / Upload Quiz</span><span class="state">New</span></button>
+  <button onclick="closeNavMenu();openHistory()"><span>📈 Results History</span><span class="state">View</span></button>
+   <button onclick="closeNavMenu();openLinks()"><span>🖥️ Spectator &amp; Practice Links</span><span class="state">Open ↗</span></button>
+   <button id="addQuizMenuBtn" onclick="closeNavMenu();openQuizModal()"><span>➕ Create / Upload Quiz</span><span class="state">New</span></button>
   <div class="menu-sep"></div>
   <div class="menu-kb">⌨️ <b>Shortcuts:</b> [Space/→] Next &middot; [P] Pause &middot; [+] +10s &middot; [M] Mute &middot; [V] Voice</div>
  </div>
@@ -209,6 +240,7 @@ blockquote cite{display:block;font-size:.74em;font-style:normal;margin-top:6px;o
   <label><b>Upload .json or .csv file (optional):</b></label>
   <input type="file" id="customFile" accept=".json,.csv" onchange="loadCustomFile(event)">
   <label><b>Or type/paste questions (one per block, mark correct answer with *, optional Image: or Quote:):</b></label>
+  <div style="font-size:.8em;opacity:.75;margin:2px 0 6px">Extras: <code>Type: tf</code> (True/False — put <code>*True</code> or <code>*False</code>), <code>Type: text</code> (each line is an accepted typed answer), <code>Type: order</code> (list items in the correct order). Answer pictures: <code>Paris | https://…/paris.jpg</code></div>
   <textarea id="customText" placeholder="What is the capital of France?
 Berlin
 *Paris
@@ -223,6 +255,24 @@ Quote: Paris has been the capital since 987 CE."></textarea>
   </div>
  </div>
 </div>
+<div class="modal-bg" id="histModal">
+ <div class="modal" style="max-width:760px">
+  <h2>📈 Results History</h2>
+  <div id="histBody">Loading…</div>
+  <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:10px;flex-wrap:wrap">
+   <button class="btn-sec" style="margin:0" onclick="exportHistory()">📥 Export CSV</button>
+   <button class="btn-sec" style="margin:0;background:#e21b3c88" onclick="clearHistory()">🗑️ Clear</button>
+   <button style="margin:0;padding:10px 22px;font-size:1.05em" onclick="document.getElementById('histModal').classList.remove('open')">Close</button>
+  </div>
+ </div>
+</div>
+<div class="modal-bg" id="linksModal">
+ <div class="modal" style="max-width:560px">
+  <h2>🖥️ Extra Screens &amp; Links</h2>
+  <div id="linksBody"></div>
+  <div style="text-align:center"><button style="margin:10px 0 0;padding:10px 22px;font-size:1.05em" onclick="document.getElementById('linksModal').classList.remove('open')">Done</button></div>
+ </div>
+</div>
 <div id="app">
  <img class="logo" src="/logo.jpg" alt="Brainrush!">
  <div class="setup-card">
@@ -233,7 +283,7 @@ Quote: Paris has been the capital since 987 CE."></textarea>
   <div class="quick-bar">
    <label>📝 Questions: <input id="qCount" type="number" min="1" max="200" value="15"> <span id="qMax" style="opacity:.8">/ 15</span></label>
    <label>⏱️ Timer: <input id="qTime" type="number" min="5" max="120" value="15"><span style="opacity:.8">s</span></label>
-   <button type="button" class="drawer-toggle" id="advBtn" onclick="toggleAdvPanel()">⚙️ Options <span id="optSummary" style="background:#26890c;padding:2px 8px;border-radius:99px;font-size:.85em">6 active</span> <span id="advCaret">▾</span></button>
+   <button type="button" class="drawer-toggle" id="advBtn" onclick="toggleAdvPanel()">⚙️ Options <span id="optSummary" style="background:#26890c;padding:2px 8px;border-radius:99px;font-size:.85em">9 active</span> <span id="advCaret">▾</span></button>
   </div>
   <div class="adv-panel" id="advPanel" onchange="updateOptSummary()">
    <div class="adv-sec-title">Game Modes & Power-Ups</div>
@@ -246,12 +296,23 @@ Quote: Paris has been the capital since 987 CE."></textarea>
     <label class="mode-pill"><input id="qTeams" type="checkbox"> 🛡️ Team Mode</label>
     <label class="mode-pill"><input id="qIce" type="checkbox" checked onchange="document.getElementById('icePromptRow').style.display=this.checked?'block':'none'"> 💭 Word Cloud Warm-Up</label>
     <label class="mode-pill"><input id="qAuto" type="checkbox"> ⏭️ Auto-Advance</label>
+    <label class="mode-pill"><input id="qHot" type="checkbox" checked> 🔥 Hot Seat Rounds</label>
+    <label class="mode-pill"><input id="qBattle" type="checkbox" checked> 🤝 Team Battle Rounds</label>
+    <label class="mode-pill"><input id="qTie" type="checkbox" checked> ⚔️ Sudden-Death Tiebreaker</label>
    </div>
    <div id="icePromptRow" style="display:block;margin-bottom:12px">
     <label style="display:block;font-size:.86em;font-weight:700;opacity:.85;margin-bottom:4px">💭 Warm-Up Question:</label>
     <input id="qIcePrompt" type="text" maxlength="120" value="In one word, how are you feeling about today's quiz?" placeholder="e.g. In one word, what's your favorite food?" style="width:100%;box-sizing:border-box;padding:9px 12px;border-radius:8px;border:0;font-size:.96em;font-weight:600;color:#2b0d57">
    </div>
-   <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;padding-top:8px;border-top:1px solid #fff2;font-weight:700;font-size:.95em">
+   <div style="margin-bottom:12px">
+     <label style="display:block;font-size:.86em;font-weight:700;opacity:.85;margin-bottom:4px">👥 Class Roster (optional — one name per line; students pick their name from a list instead of typing one. Saved on this computer.)</label>
+     <textarea id="qRoster" oninput="saveSetup()" placeholder="Ava Johnson&#10;Ben Carter&#10;..." style="width:100%;box-sizing:border-box;padding:9px 12px;border-radius:8px;border:0;color:#2b0d57"></textarea>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">
+     <div><label style="display:block;font-size:.8em;font-weight:700;opacity:.85">🖼️ Logo image URL (optional)</label><input id="qLogo" oninput="saveSetup()" placeholder="https://…/logo.png" style="width:100%;box-sizing:border-box;padding:8px 10px;border-radius:8px;border:0;color:#2b0d57"></div>
+     <div><label style="display:block;font-size:.8em;font-weight:700;opacity:.85">🌄 Host background image URL</label><input id="qBg" oninput="saveSetup()" placeholder="https://…/bg.jpg" style="width:100%;box-sizing:border-box;padding:8px 10px;border-radius:8px;border:0;color:#2b0d57"></div>
+    </div>
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;padding-top:8px;border-top:1px solid #fff2;font-weight:700;font-size:.95em">
     <label style="display:inline-flex;align-items:center;gap:8px">🤖 Phantom Bot Players: <input id="qBots" type="number" min="0" max="30" value="0"></label>
     <span style="opacity:.68;font-size:.88em">Bots answer &amp; compete alongside live players</span>
    </div>
@@ -292,7 +353,7 @@ function toggleAdvPanel(){
  if(c) c.textContent = open ? '▴' : '▾';
 }
 function updateOptSummary(){
- const ids = ['qShuffle','qWager','qRedemp','qSabotage','qWheel','qTeams','qIce','qAuto'];
+ const ids = ['qShuffle','qWager','qRedemp','qSabotage','qWheel','qTeams','qIce','qAuto','qHot','qBattle','qTie'];
  let n = ids.filter(id=>{const el=document.getElementById(id); return el && el.checked;}).length;
  const bots = document.getElementById('qBots');
  if(bots && parseInt(bots.value,10) > 0) n++;
@@ -520,8 +581,11 @@ function openQuizModal(){
 function closeQuizModal(){ document.getElementById('quizModal').classList.remove('open'); document.getElementById('customErr').textContent=''; }
 function formatQuestionsBlock(qs){
  return (qs||[]).map(q=>{
+  const t = q.type || 'mc';
   const lines = [q.q];
-  (q.a||[]).forEach((ans,i)=>lines.push((i===q.c?'*':'')+ans));
+  if(t !== 'mc') lines.push('Type: '+t);
+  if(t === 'tf') lines.push('*'+(q.a[q.c]||'True'));
+  else (q.a||[]).forEach((ans,i)=>lines.push((t==='mc'&&i===q.c?'*':'')+ans+((q.aimg&&q.aimg[i])?' | '+q.aimg[i]:'')));
   if(q.img) lines.push('Image: '+q.img);
   if(q.quote) lines.push('Quote: '+q.quote);
   return lines.join('\n');
@@ -563,7 +627,7 @@ async function deleteSelectedQuiz(){
   const list = getSavedCustomQuizzes().filter(x=>x.file !== es.value);
   localStorage.setItem('brainrush_custom_quizzes', JSON.stringify(list));
  }catch(e){}
- const r = await post('/api/delete_quiz', {file: es.value});
+ const r = await postPw('/api/delete_quiz', {file: es.value});
  quizList = mergeQuizLists((r && r.quizzes) || []);
  renderQuizSelect();
  openQuizModal();
@@ -593,22 +657,35 @@ function parseCustomQuestions(raw){
    return {q:p[0], a:p.slice(1,5), c:Math.max(0, (parseInt(p[5],10)||1)-1), quote:p[6]||''};
   }).filter(Boolean);
  }
- return blocks.map(b=>{
-  const lines = b.split('\n').map(l=>l.trim()).filter(Boolean);
-  if(lines.length < 3) return null;
-  const q = lines[0];
-  const a = [];
-  let c = 0, quote = '', img = '';
-  lines.slice(1).forEach(l=>{
-   if(/^quote:/i.test(l)){ quote = l.replace(/^quote:\s*/i,''); }
-   else if(/^image:/i.test(l)){ img = l.replace(/^image:\s*/i,''); }
-   else if(a.length < 4){
-    if(l.startsWith('*')){ c = a.length; a.push(l.slice(1).trim()); }
-    else a.push(l);
-   }
-  });
-  return {q, a, c, quote, img};
- }).filter(Boolean);
+  return blocks.map(b=>{
+   const lines = b.split('\n').map(l=>l.trim()).filter(Boolean);
+   if(lines.length < 3) return null;
+   const q = lines[0];
+   const tl = lines.find(l=>/^type:/i.test(l));
+   const type = tl ? tl.replace(/^type:\s*/i,'').toLowerCase().trim() : 'mc';
+   const maxA = (type==='order'||type==='text') ? 6 : 4;
+   const a = [], aimg = [];
+   let c = 0, quote = '', img = '', starTxt = '';
+   lines.slice(1).forEach(l=>{
+    if(/^quote:/i.test(l)){ quote = l.replace(/^quote:\s*/i,''); }
+    else if(/^image:/i.test(l)){ img = l.replace(/^image:\s*/i,''); }
+    else if(/^type:/i.test(l)){ }
+    else if(a.length < maxA){
+     let t = l, star = false;
+     if(t.startsWith('*')){ star = true; t = t.slice(1).trim(); }
+     let im = '';
+     const m = t.match(/^(.*?)\s*\|\s*((?:https?:\/\/|\/)\S+)$/);
+     if(m){ t = m[1].trim(); im = m[2]; }
+     if(star){ c = a.length; starTxt = t; }
+     a.push(t); aimg.push(im);
+    }
+   });
+   const out = {q, a, c, quote, img};
+   if(type==='tf'){ out.type='tf'; out.a=['True','False']; out.c=/^f/i.test(starTxt||'t')?1:0; }
+   else if(type==='text'||type==='order'){ out.type=type; out.c=0; }
+   else if(aimg.some(Boolean)) out.aimg = aimg;
+   return out;
+  }).filter(Boolean);
 }
 function getSavedCustomQuizzes(){
  try{ return JSON.parse(localStorage.getItem('brainrush_custom_quizzes') || '[]'); }catch(e){ return []; }
@@ -639,7 +716,7 @@ async function saveCustomQuiz(){
  const raw = document.getElementById('customText').value;
  try{
   const qs = parseCustomQuestions(raw);
-  const r = await post('/api/upload_quiz', {title, questions: qs});
+  const r = await postPw('/api/upload_quiz', {title, questions: qs});
   if(r.error){ document.getElementById('customErr').textContent = r.error; return; }
   const savedQuestions = r.questions || qs;
   storeCustomQuizLocal({
@@ -697,7 +774,7 @@ async function create(){
  const cnt = inp ? parseInt(inp.value, 10) : null;
  const qtm = tm ? parseInt(tm.value, 10) || 15 : 15;
  const bcnt = bots ? parseInt(bots.value, 10) || 0 : 0;
- const r=await post('/api/create',{
+ const r=await postPw('/api/create',{
   quiz:qf, custom_questions: picked && picked.questions ? picked.questions : null,
   count:cnt, shuffle:shuf ? shuf.checked : false, qtime:qtm, bots:bcnt,
   teams:teams ? teams.checked : false,
@@ -705,11 +782,18 @@ async function create(){
   redemption:redemp ? redemp.checked : true,
   sabotage:sab ? sab.checked : true,
   wheel:wheel ? wheel.checked : true,
+  hotseat:(document.getElementById('qHot')||{checked:true}).checked,
+  team_battle:(document.getElementById('qBattle')||{checked:true}).checked,
+  tiebreak:(document.getElementById('qTie')||{checked:true}).checked,
+  roster:(document.getElementById('qRoster').value||'').split('\n').map(x=>x.trim()).filter(Boolean),
+  logo:(document.getElementById('qLogo').value||'').trim(),
   icebreaker:ice ? ice.checked : false,
   icebreaker_prompt:icePrompt ? icePrompt.value.trim() : '',
   auto:auto ? auto.checked : false
  });
+ if(!r || !r.pin){ return; }
  pin=r.pin;host=r.host;
+ try{ localStorage.setItem('brainrush_host', JSON.stringify({pin,host})); }catch(e){}
  document.getElementById('autoBtn').style.display = 'flex';
  document.getElementById('remoteBtn').style.display = 'flex';
  const aq = document.getElementById('addQuizMenuBtn');
@@ -743,7 +827,7 @@ function handleAudio(){
   else if(S.phase === 'question'){ sfxQuestion(); lastTickSec = -1; speak(S.question); }
   else if(S.phase === 'results'){
    sfxReveal();
-   const winAns = (S.answers||[])[S.correct] || '';
+   const winAns = S.qtype==='text' ? (S.answers_correct||[''])[0] : S.qtype==='order' ? (S.answers_correct||[]).join(', then ') : ((S.answers||[])[S.correct] || '');
    speak('Correct answer: ' + winAns);
   }
   else if(S.phase === 'board'){
@@ -783,11 +867,11 @@ function animBoard(b, qIdx){
   const diff = (x.prev_rank || (i+1)) - (i + 1);
   const arrow = qIdx > 0 && diff > 0 ? `<span class="shift up">▲${diff}</span>` : qIdx > 0 && diff < 0 ? `<span class="shift down">▼${-diff}</span>` : '';
   const ttl = x.title ? `<span class="title-pill">${esc(x.title)}</span>` : '';
-  const streak = x.streak >= 2 ? `<span class="streak">🔥${x.streak}</span>` : '';
+  const streak = x.streak >= 5 ? `<span class="streak fire">🔥🔥${x.streak}</span>` : x.streak >= 2 ? `<span class="streak">🔥${x.streak}</span>` : '';
   const ice = x.frozen_next ? ` <span title="Frozen by a snowball for next question!">⛄</span>` : '';
   const gain = x.gained !== 0 ? `<span class="gain ${first?'':'show'}">${x.gained>0?'+'+x.gained:x.gained}</span>` : '';
   const label = (x.team_emoji ? x.team_emoji + ' ' : '') + esc((x.avatar ? x.avatar + ' ' : '') + x.name);
-  return `<div class="row" data-idx="${i}" data-prev="${sc}" data-score="${x.score}" data-diff="${diff}" style="transform:translateY(${pIdx*H}px)"><span><b class="rk">${rk}</b>. ${label}${ttl}${streak}${ice}${arrow}</span><span>${gain}<b class="sc">${sc}</b></span></div>`;
+  return `<div class="row${x.streak>=5?' onfire':''}" data-idx="${i}" data-prev="${sc}" data-score="${x.score}" data-diff="${diff}" style="transform:translateY(${pIdx*H}px)"><span><b class="rk">${rk}</b>. ${label}${ttl}${streak}${ice}${arrow}</span><span>${gain}<b class="sc">${sc}</b></span></div>`;
  }).join('');
  if(first){
   animDone = qIdx;
@@ -860,6 +944,7 @@ function renderFinal(b){
   <button style="margin:0;padding:10px 20px;font-size:1.05em" onclick="replayRound()">🔁 Play Again</button>
  </div>
  <div>
+  <a href="/api/study?pin=${pin}" target="_blank"><button class="btn-sec">📄 Study Guide</button></a>
   <a href="/api/export?pin=${pin}" download="brainrush_${pin}_results.csv"><button class="btn-sec">📥 Download Results (CSV)</button></a>
   <button class="btn-sec" onclick="location.reload()">🏠 New Lobby</button>
  </div>`;
@@ -908,7 +993,7 @@ function render(){
   const pb=document.getElementById('pauseBtn');
   if(pb) pb.textContent = S.paused ? '▶️ Resume' : '⏸️ Pause';
   const ac=document.getElementById('ansCnt');
-  if(ac) ac.textContent = `${S.answered}/${S.n}`;
+  if(ac) ac.textContent = `${S.answered}/${(S.n_active != null ? S.n_active : S.n)}`;
   const pf=document.getElementById('pf');
   if(pf) pf.style.width = Math.min(100, ((S.preview_left||0)/(S.preview_total||5))*100)+'%';
   const ab=document.getElementById('autoNextLbl');
@@ -918,10 +1003,13 @@ function render(){
  last=k;
  const autoSuffix = S.auto && S.auto_left != null ? `<span id="autoNextLbl"> (${S.auto_left}s)</span>` : '';
  const imgHtml = S.img ? `<img class="q-img" src="${esc(S.img)}" alt="">` : '';
- if(S.phase=='lobby')$.innerHTML=`<h1>Join at <a class="join-link" href="/play?pin=${pin}" target="_blank">plw.me/play</a> with PIN</h1><div class="lobby-box"><div class="pin">${pin}</div>${QR}</div>
-  <p>${S.n} player(s)</p>${teamStandingsHtml()}<div class="names">${S.names.map(n=>`<span>${esc(n)}</span>`).join('')}</div>
+ const nAct = (S.n_active != null ? S.n_active : S.n);
+ if(S.phase=='lobby'){
+  const nm = (S.lobby||[]).map(p=>`<span>${esc(p.tag)}<button class="kick" title="Remove ${esc(p.name)}" data-n="${esc(p.name)}" onclick="kickPlayer(this.dataset.n)">✖</button></span>`).join('');
+  $.innerHTML=`<h1>Join at <a class="join-link" href="/play?pin=${pin}" target="_blank">plw.me/play</a> with PIN</h1><div class="lobby-box"><div class="pin">${pin}</div>${QR}</div>
+  <p>${S.n} player(s)</p>${teamStandingsHtml()}<div class="names">${nm}</div>
   <div><button class="btn-sec" onclick="addBots(5)">🤖 +5 Phantom players</button>${S.n?'<button onclick="next()">Start</button>':''}</div>`;
- else if(S.phase=='icebreaker'){
+ } else if(S.phase=='icebreaker'){
   const cols = ['#e21b3c','#1368ce','#d89e00','#26890c','#9c27b0','#00897b'];
   const words = S.words || [];
   const cloud = words.length ? words.map((w,i)=>{
@@ -937,7 +1025,8 @@ function render(){
   const sec = Math.ceil(S.left);
   const pct = Math.min(100, ((S.preview_left||0)/(S.preview_total||5))*100);
   const wheelBanner = (S.wheel_mod && !inPrev) ? `<div class="wheel-banner">🎡 MYSTERY WHEEL: ${esc(S.wheel_mod)}</div>` : '';
-  const badges = `${wheelBanner}${S.redemption?'<div class="redemp-banner">🔄 REDEMPTION QUESTION (MOST MISSED!) 🔄</div>':''}${S.boss?'<div class="double-banner">🎰 FINAL BOSS WAGER! 🎰</div>':S.double?'<div class="double-banner">⚡ DOUBLE POINTS! ⚡</div>':''}`;
+  const extraB = `${S.team_battle?`<div class="team-banner">🤝 TEAM BATTLE! Your team's most popular answer earns +300 each</div>`:''}${S.hot?`<div class="hot-banner">🔥 HOT SEAT: ${esc(S.hot.name)} — will they nail it?</div>`:''}${S.tiebreak?`<div class="tb-banner">⚔️ SUDDEN DEATH TIEBREAKER: ${(S.tb_names||[]).map(esc).join(' vs ')}</div>`:''}`;
+  const badges = `${wheelBanner}${extraB}${S.redemption?'<div class="redemp-banner">🔄 REDEMPTION QUESTION (MOST MISSED!) 🔄</div>':''}${S.boss?'<div class="double-banner">🎰 FINAL BOSS WAGER! 🎰</div>':S.double?'<div class="double-banner">⚡ DOUBLE POINTS! ⚡</div>':''}`;
   if(inPrev){
    $.innerHTML=`<div class="qnum">Question ${S.index+1} <small>of ${S.total}</small></div>
    <div class="q-stage">
@@ -946,13 +1035,13 @@ function render(){
     <h1>${esc(S.question)}</h1>
     ${imgHtml}
     <div class="preview-box" style="width:100%">
-     <div class="preview-label">${S.boss?'🎰 Place your wagers & read the question…':'👀 Read the question…'}</div>
+     <div class="preview-label">${S.boss?'🎰 Place your wagers & read the question…':S.team_battle?'🤝 Discuss with your team…':'👀 Read the question…'}</div>
      <div class="preview-bar"><div class="preview-fill" id="pf" style="width:${pct}%"></div></div>
     </div>
    </div>`;
    if(S.wheel_mod) runWheel();
   } else {
-   $.innerHTML=`<div class="qnum">Question ${S.index+1} <small>of ${S.total} &middot; <span id="ansCnt">${S.answered}/${S.n}</span> answered</small></div>
+   $.innerHTML=`<div class="qnum">Question ${S.index+1} <small>of ${S.total} &middot; <span id="ansCnt">${S.answered}/${nAct}</span> answered</small></div>
    <div>${badges}</div>
    <h1>${esc(S.question)}</h1>
    ${imgHtml}
@@ -962,26 +1051,16 @@ function render(){
      <div class="timer ${!S.paused&&sec<=5?'urgent':''} ${S.paused?'paused':''}" id="t">${S.paused?'⏸️ '+sec:sec}</div>
      <button class="btn-sm" onclick="hostCtl('add_time',10)">+10s</button>
     </div>
-    <div class="grid">${S.answers.map((a,i)=>`<div class="a c${i}">${sh[i]}${esc(a)}</div>`).join('')}</div>
+    ${answerArea()}
     <button onclick="next()">Skip</button>
    </div>`;
   }
  } else if(S.phase=='results'){
-  const ci = S.correct;
-  const tot = Math.max(1, (S.counts||[]).reduce((a,b)=>a+b, 0));
-  $.innerHTML=`<div class="qnum" style="font-size:1.1em;margin:2px 0">Question ${S.index+1} <small>of ${S.total} &middot; ${S.answered}/${S.n} answered</small></div>
+  $.innerHTML=`<div class="qnum" style="font-size:1.1em;margin:2px 0">Question ${S.index+1} <small>of ${S.total} &middot; ${S.answered}/${nAct} answered</small></div>
   <h2 style="margin:.15em auto .3em;max-width:880px;font-size:1.7em;line-height:1.25">${esc(S.question)}</h2>
   <div class="ans-reveal">
-   <div class="grid" style="margin-top:10px">${S.answers.map((a,i)=>{
-    const cnt = (S.counts&&S.counts[i])||0;
-    const pct = Math.round((cnt / tot) * 100);
-    const win = i===ci;
-    return `<div class="a res c${i} ${win?'win':'dim'}">
-     <div class="a-fill" style="width:${pct}%"></div>
-     <span class="a-txt">${sh[i]}${esc(a)}</span>
-     <span class="a-cnt">${cnt}${win?' ✓':''}</span>
-    </div>`;
-   }).join('')}</div>
+   ${resultArea()}
+   ${resultExtras()}
    ${S.quote?quoteBox():''}
    <div><button style="margin-top:14px" onclick="next()">${S.is_last?'🏆 Final Podium':'Top players'}${autoSuffix}</button></div>
   </div>`;
@@ -991,4 +1070,230 @@ function render(){
   <button style="margin-top:12px" onclick="next()">${S.index+1>=S.total?'Final results':'Next question'}${autoSuffix}</button>`;
  } else $.innerHTML=renderFinal(S.board);
 }
+</script>
+<script>
+// ===== Extra features =====
+const LET = 'ABCD';
+function tileHtml(a,i){
+ const im = (S.aimg && S.aimg[i]) ? `<img class="a-img" src="${esc(S.aimg[i])}" alt="">` : '';
+ return `<div class="a c${i}">${im}<span>${sh[i]}${esc(a)}</span></div>`;
+}
+function answerArea(){
+ if(S.qtype==='text') return `<div class="textq">✍️ Players are typing their answers…<small>Spelling counts — capitalization doesn't</small></div>`;
+ if(S.qtype==='order') return `<div><div class="oq-title">🔢 Put these in the right order!</div><div class="grid">${S.answers.map((a,i)=>`<div class="a c${i}"><span>${LET[i]}. ${esc(a)}</span></div>`).join('')}</div></div>`;
+ return `<div class="grid">${S.answers.map((a,i)=>tileHtml(a,i)).join('')}</div>`;
+}
+function resultArea(){
+ const nAct = (S.n_active != null ? S.n_active : S.n), nOk = S.n_correct||0;
+ const cnt = `<div class="rb-count">${nOk} of ${nAct} got it right</div>`;
+ if(S.qtype==='text'){
+  const ac = S.answers_correct||[];
+  return `<div class="reveal-box"><div class="rb-label">✅ Correct answer</div><div class="rb-ans">${esc(ac[0]||'')}</div>${ac.length>1?`<small>Also accepted: ${ac.slice(1).map(esc).join(', ')}</small>`:''}${cnt}</div>`;
+ }
+ if(S.qtype==='order'){
+  return `<div class="reveal-box"><div class="rb-label">✅ Correct order</div><ol class="rb-ol">${(S.answers_correct||[]).map(a=>`<li>${esc(a)}</li>`).join('')}</ol>${cnt}</div>`;
+ }
+ const ci = S.correct, tot = Math.max(1, (S.counts||[]).reduce((a,b)=>a+b, 0));
+ return `<div class="grid" style="margin-top:10px">${S.answers.map((a,i)=>{
+  const c = (S.counts&&S.counts[i])||0, pct = Math.round((c / tot) * 100), win = i===ci;
+  const im = (S.aimg && S.aimg[i]) ? `<img class="a-img" src="${esc(S.aimg[i])}" alt="">` : '';
+  return `<div class="a res c${i} ${win?'win':'dim'}"><div class="a-fill" style="width:${pct}%"></div>${im}<span class="a-txt">${sh[i]}${esc(a)}</span><span class="a-cnt">${c}${win?' ✓':''}</span></div>`;
+ }).join('')}</div>`;
+}
+function resultExtras(){
+ let h = '';
+ if(S.team_results && S.team_results.length) h += `<div class="team-res">${S.team_results.map(t=>`<span class="tr" style="background:${t.color}">${t.emoji} ${esc(t.name)} ${t.correct?'✅ +300 each':'❌'}</span>`).join('')}</div>`;
+ if(S.hot) h += `<div class="hot-banner">🔥 ${esc(S.hot.name)} ${S.hot.ok?'NAILED IT! (+400)':'missed it!'} · ${S.hot.right||0} predictor(s) guessed right (+200 each)</div>`;
+ if(S.tiebreak && S.tb_winner) h += `<div class="tb-banner">👑 ${esc(S.tb_winner)} wins the tiebreaker!</div>`;
+ return h;
+}
+
+// --- Password-aware POST ---
+async function postPw(u,b){
+ b.password = sessionStorage.getItem('brainrush_pw') || '';
+ let r = await post(u,b);
+ if(r && r.need_pw){
+  const pw = window.prompt('🔒 Host password required:');
+  if(pw === null) return r;
+  sessionStorage.setItem('brainrush_pw', pw);
+  b.password = pw;
+  r = await post(u,b);
+  if(r && r.need_pw){ sessionStorage.removeItem('brainrush_pw'); alert('Wrong password'); }
+ }
+ return r;
+}
+
+// --- Kick ---
+async function kickPlayer(name){ if(!name) return; await post('/api/kick',{pin,host,name}); await poll(); }
+
+// --- Theme (keeps accessibility classes) ---
+function cycleTheme(){
+ themeIdx = (themeIdx + 1) % THEMES.length;
+ THEMES.forEach(t=>{ if(t) document.body.classList.remove(t); });
+ if(THEMES[themeIdx]) document.body.classList.add(THEMES[themeIdx]);
+ const ts = document.getElementById('themeState');
+ if(ts) ts.textContent = THEME_NAMES[themeIdx];
+}
+
+// --- Accessibility ---
+function applyA11y(){
+ const cb = localStorage.getItem('brainrush_cb')==='1', hc = localStorage.getItem('brainrush_hc')==='1';
+ document.body.classList.toggle('cb', cb); document.body.classList.toggle('hc', hc);
+ const a = document.getElementById('cbState'), b = document.getElementById('hcState');
+ if(a) a.textContent = cb ? 'ON' : 'Off'; if(b) b.textContent = hc ? 'ON' : 'Off';
+ const cbB = document.getElementById('cbBtn'), hcB = document.getElementById('hcBtn');
+ if(cbB) cbB.classList.toggle('on', cb); if(hcB) hcB.classList.toggle('on', hc);
+}
+function toggleCb(){ localStorage.setItem('brainrush_cb', localStorage.getItem('brainrush_cb')==='1' ? '0' : '1'); applyA11y(); }
+function toggleHc(){ localStorage.setItem('brainrush_hc', localStorage.getItem('brainrush_hc')==='1' ? '0' : '1'); applyA11y(); }
+
+// --- Music styles ---
+const MUSIC_NAMES = {classic:'Classic', chill:'Chill', upbeat:'Upbeat', off:'Off'};
+let musicStyle = localStorage.getItem('brainrush_music') || 'classic';
+function cycleMusic(){
+ const keys = Object.keys(MUSIC_NAMES);
+ musicStyle = keys[(keys.indexOf(musicStyle)+1) % keys.length];
+ localStorage.setItem('brainrush_music', musicStyle);
+ updateMusicLabel();
+ stopBgm(); startBgmForPhase();
+}
+function updateMusicLabel(){
+ const m = document.getElementById('musicState'), b = document.getElementById('musicBtn');
+ if(m) m.textContent = MUSIC_NAMES[musicStyle]; if(b) b.classList.toggle('on', musicStyle!=='off');
+}
+function startLobbyBgm(){
+ stopBgm();
+ if(musicStyle==='off') return;
+ const set = {
+  classic:{n:[261.63,329.63,392.00,523.25,392.00,329.63,293.66,392.00], ms:360, t:'triangle', v:.18, d:.22},
+  chill:{n:[261.63,293.66,329.63,392,440,392,329.63,293.66], ms:560, t:'sine', v:.16, d:.45},
+  upbeat:{n:[329.63,392,493.88,392,440,523.25,440,392], ms:230, t:'square', v:.07, d:.14}
+ }[musicStyle];
+ bgmStep = 0;
+ bgmTimer = setInterval(()=>{
+  if(muted || (S.phase !== 'lobby' && S.phase !== 'icebreaker')) return;
+  tone(set.n[bgmStep++ % set.n.length], set.d, set.t, set.v, 0);
+ }, set.ms);
+}
+function startQuestionBgm(){
+ stopBgm();
+ if(musicStyle==='off') return;
+ const bass = [220,220,261.63,293.66,329.63,329.63,293.66,261.63], lead = [440,523.25,659.25,587.33,659.25,783.99,659.25,587.33];
+ const st = {classic:{ms:320,b:'sawtooth',l:'triangle',bv:.14,lv:.22}, chill:{ms:440,b:'sine',l:'sine',bv:.14,lv:.14}, upbeat:{ms:210,b:'square',l:'square',bv:.06,lv:.08}}[musicStyle];
+ bgmStep = 0;
+ bgmTimer = setInterval(()=>{
+  if(muted || S.phase !== 'question' || S.paused) return;
+  const i = bgmStep++ % bass.length;
+  const urgent = (S.preview_left||0) <= 0 && S.left <= 5;
+  const mult = urgent ? 1.122 : 1;
+  tone(bass[i]*mult, 0.16, st.b, st.bv, 0);
+  tone(lead[i]*mult, 0.18, st.l, st.lv, st.ms/2000);
+ }, st.ms);
+}
+
+// --- Setup persistence & branding ---
+function applyBranding(){
+ const bg = (document.getElementById('qBg')||{}).value || localStorage.getItem('brainrush_bg') || '';
+ if(/^(https?:\/\/|\/)/.test(bg)){ document.body.style.backgroundImage = `url("${bg.replace(/"/g,'')}")`; document.body.style.backgroundSize='cover'; document.body.style.backgroundAttachment='fixed'; }
+ else { document.body.style.backgroundImage=''; }
+ const lg = (document.getElementById('qLogo')||{}).value || '';
+ const img = document.querySelector('#app img.logo');
+ if(img && /^(https?:\/\/|\/)/.test(lg)) img.src = lg;
+}
+function saveSetup(){
+ try{
+  localStorage.setItem('brainrush_roster', document.getElementById('qRoster').value);
+  localStorage.setItem('brainrush_logo', document.getElementById('qLogo').value);
+  localStorage.setItem('brainrush_bg', document.getElementById('qBg').value);
+ }catch(e){}
+ applyBranding();
+}
+function loadSetup(){
+ try{
+  document.getElementById('qRoster').value = localStorage.getItem('brainrush_roster') || '';
+  document.getElementById('qLogo').value = localStorage.getItem('brainrush_logo') || '';
+  document.getElementById('qBg').value = localStorage.getItem('brainrush_bg') || '';
+ }catch(e){}
+ applyBranding();
+}
+
+// --- History ---
+let histData = null;
+async function fetchHistory(){
+ const url = () => '/api/history?pw=' + encodeURIComponent(sessionStorage.getItem('brainrush_pw')||'');
+ let r = await fetch(url());
+ if(r.status === 403){
+  const pw = window.prompt('🔒 Host password required:');
+  if(pw === null) return null;
+  sessionStorage.setItem('brainrush_pw', pw);
+  r = await fetch(url());
+  if(r.status === 403){ sessionStorage.removeItem('brainrush_pw'); alert('Wrong password'); return null; }
+ }
+ return r.json();
+}
+async function openHistory(){
+ document.getElementById('histModal').classList.add('open');
+ const body = document.getElementById('histBody'); body.textContent = 'Loading…';
+ histData = await fetchHistory();
+ if(!histData){ body.textContent = 'Could not load history.'; return; }
+ const g = histData.games||[], rt = histData.reteach||[];
+ const fmt = ts => new Date(ts*1000).toLocaleString([], {dateStyle:'medium', timeStyle:'short'});
+ body.innerHTML = (rt.length ? `<div class="tough-box" style="max-width:none"><h3>🎯 Topics to reteach (lowest average across all games)</h3>${rt.map(x=>`<div class="tough-item"><b>${x.avg}% correct</b> <small>(${x.games} game${x.games>1?'s':''})</small> — ${esc(x.q)}<br><span style="color:#7dff6b">✅ ${esc(x.ans)}</span></div>`).join('')}</div>` : '')
+  + (g.length ? g.map((e,i)=>`<div class="hist-game" onclick="document.getElementById('hq${i}').style.display=document.getElementById('hq${i}').style.display==='none'?'block':'none'">
+    <b>${esc(e.quiz)}</b> <small>· ${fmt(e.ts)}</small><br>
+    <small>👥 ${e.humans} students (${e.players} total) · 🎯 ${e.accuracy}% accuracy · 🏆 ${(e.top||[]).map(t=>esc(t.name)+' '+t.score).join(' / ')}</small>
+    <div id="hq${i}" style="display:none;margin-top:8px">${(e.qs||[]).slice().sort((a,b)=>a.pct-b.pct).map(q=>`<div class="hist-q"><span>${esc(q.q)}</span><b>${q.pct}%</b></div>`).join('')}</div></div>`).join('') : '<p>No finished games yet. Results are saved here automatically when a game ends.</p>');
+}
+function exportHistory(){
+ if(!histData) return;
+ const rows = [['Date','Quiz','Students','Total Players','Accuracy %','1st','2nd','3rd']];
+ (histData.games||[]).forEach(e=>{ const t=e.top||[]; rows.push([new Date(e.ts*1000).toISOString(), e.quiz, e.humans, e.players, e.accuracy, ...[0,1,2].map(i=>t[i]?t[i].name+' ('+t[i].score+')':'')]); });
+ const csv = rows.map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(',')).join('\n');
+ const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([csv],{type:'text/csv'})); a.download = 'brainrush_history.csv'; a.click();
+}
+async function clearHistory(){
+ if(!confirm('Delete all saved game history?')) return;
+ await postPw('/api/history_clear', {});
+ openHistory();
+}
+
+// --- Links modal ---
+function openLinks(){
+ const o = location.origin;
+ const rows = [
+  ['🖥️ Spectator screen (leaderboard + word cloud)', o + '/spectator' + (pin ? '?pin='+pin : '')],
+  ['🏆 Leaderboard only', o + '/spectator?mode=board' + (pin ? '&pin='+pin : '')],
+  ['💭 Word cloud only', o + '/spectator?mode=cloud' + (pin ? '&pin='+pin : '')],
+  ['🧑‍🎓 Student practice mode (no live game needed)', o + '/practice']
+ ];
+ document.getElementById('linksBody').innerHTML = '<p style="opacity:.8">Open on a second screen or share with students:</p>' + rows.map(r=>`<div><b style="font-size:.9em">${r[0]}</b><div class="link-row"><input readonly value="${esc(r[1])}" onclick="this.select()"><button class="btn-sm" style="margin:0" onclick="navigator.clipboard.writeText(this.previousElementSibling.value)">📋</button><a href="${esc(r[1])}" target="_blank"><button class="btn-sm" style="margin:0">↗</button></a></div></div>`).join('');
+ document.getElementById('linksModal').classList.add('open');
+}
+
+// --- Resume a saved game (survives refresh / server restart) ---
+function enterGame(){
+ document.getElementById('autoBtn').style.display = 'flex';
+ document.getElementById('remoteBtn').style.display = 'flex';
+ const aq = document.getElementById('addQuizMenuBtn'); if(aq) aq.style.display = 'none';
+ poll(); setInterval(poll, 600);
+}
+(async()=>{
+ applyA11y(); updateMusicLabel(); loadSetup(); updateOptSummary();
+ try{
+  const sv = JSON.parse(localStorage.getItem('brainrush_host') || 'null');
+  if(!sv) return;
+  const r = await fetch('/api/state?pin=' + sv.pin);
+  if(!r.ok){ localStorage.removeItem('brainrush_host'); return; }
+  const st = await r.json();
+  if(st.phase === 'final'){ localStorage.removeItem('brainrush_host'); return; }
+  const card = document.createElement('div');
+  card.className = 'resume-card';
+  card.innerHTML = `<span>▶️ Game ${esc(sv.pin)} is still running (${st.n} players${st.index>=0?', Q'+(st.index+1)+'/'+st.total:''})</span><span><button onclick="resumeGame()">Resume</button> <button style="background:#0006" onclick="discardGame(this)">Discard</button></span>`;
+  window._resumeSaved = sv;
+  const setup = document.querySelector('.setup-card');
+  if(setup) setup.parentNode.insertBefore(card, setup);
+ }catch(e){}
+})();
+function resumeGame(){ const sv = window._resumeSaved; pin = sv.pin; host = sv.host; ensureAudio(); enterGame(); }
+function discardGame(btn){ localStorage.removeItem('brainrush_host'); btn.closest('.resume-card').remove(); }
 </script></body></html>
