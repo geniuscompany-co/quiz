@@ -212,6 +212,7 @@ body.hc .a{outline:3px solid #fff}body.hc .row{border:2px solid #fff}
   <button id="autoBtn" style="display:none" onclick="hostCtl('toggle_auto')"><span>⏭️ Auto-Advance</span><span class="state" id="autoState">Off</span></button>
   <button onclick="cycleTheme()"><span>🎨 Visual Theme</span><span class="state" id="themeState">Purple</span></button>
    <button id="musicBtn" onclick="cycleMusic()"><span>🎵 Background Music</span><span class="state" id="musicState">Classic</span></button>
+   <button id="awakeBtn" onclick="toggleAwake()"><span>☀️ Keep Screen Awake</span><span class="state" id="awakeState">ON</span></button>
    <button id="cbBtn" onclick="toggleCb()"><span>👁️ Colorblind-safe Colors</span><span class="state" id="cbState">Off</span></button>
    <button id="hcBtn" onclick="toggleHc()"><span>◐ High Contrast</span><span class="state" id="hcState">Off</span></button>
   <div class="menu-sep"></div>
@@ -1401,6 +1402,7 @@ const GUIDE = [
   ['☰ Menu – Results History', 'Saved summaries of past games, a "topics to reteach" list and CSV export. May reset if the server restarts, so export what you need.'],
   ['☰ Menu – Spectator & Practice Links', 'Links for a second-screen leaderboard / word cloud and the student practice page.'],
   ['☰ Menu – Create / Upload Quiz', 'Build a quiz by typing or uploading, or load an existing quiz to edit, export as .json or delete.'],
+  ['☀️ Keep Screen Awake', 'On by default: asks your browser not to let this computer dim or sleep while the host page is open and visible, so you can run the quiz from your phone remote. Toggle it in the menu. It stops working if you switch to another tab, minimize the window, or close the laptop lid.'],
   ['⏸️ Pause / +10s / Skip', 'During a question: pause the clock, add 10 seconds, or skip to the results.'],
   ['⌨️ Keyboard shortcuts', 'Space or → next, P pause, + add 10 seconds, M mute, V voice.'],
   ['✖ Kick', 'In the lobby, the ✖ next to a player removes them and blocks that name. Nicknames and word-cloud words are also filtered for bad language.'],
@@ -1441,4 +1443,32 @@ function renderGuide(){
   return `<div class="g-sec" id="g-${g.id}">${esc(g.title)}</div>` + items.map(it=>`<div class="g-item"><b>${esc(it[0])}</b>${esc(it[1])}</div>`).join('');
  }).join('') || '<p>No matching features. Try another word.</p>';
 }
+
+// ===== Keep screen awake (Screen Wake Lock API) =====
+let wakeLock = null;
+function setAwakeLabel(txt){
+ const el = document.getElementById('awakeState'), b = document.getElementById('awakeBtn');
+ const off = localStorage.getItem('brainrush_awake') === '0';
+ if(el) el.textContent = txt || (off ? 'Off' : (wakeLock ? 'ON' : 'ON (waiting)'));
+ if(b) b.classList.toggle('on', !off && !!wakeLock);
+}
+async function acquireWake(){
+ if(localStorage.getItem('brainrush_awake') === '0') return;
+ if(!('wakeLock' in navigator)){ setAwakeLabel('Not supported'); return; }
+ if(wakeLock || document.visibilityState !== 'visible') return;
+ try{
+  wakeLock = await navigator.wakeLock.request('screen');
+  wakeLock.addEventListener('release', ()=>{ wakeLock = null; setAwakeLabel(); });
+  setAwakeLabel();
+ }catch(e){ wakeLock = null; setAwakeLabel('Blocked'); }
+}
+function toggleAwake(){
+ const on = localStorage.getItem('brainrush_awake') !== '0';
+ localStorage.setItem('brainrush_awake', on ? '0' : '1');
+ if(on){ if(wakeLock){ wakeLock.release(); wakeLock = null; } } else acquireWake();
+ setAwakeLabel();
+}
+document.addEventListener('visibilitychange', ()=>{ if(document.visibilityState === 'visible') acquireWake(); });
+['pointerdown','keydown','touchstart'].forEach(ev=>window.addEventListener(ev, ()=>{ if(!wakeLock) acquireWake(); }, {passive:true}));
+acquireWake();
 </script></body></html>

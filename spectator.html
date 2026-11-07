@@ -56,4 +56,32 @@ async function poll(){
   }catch(e){}
 }
 poll(); setInterval(poll,1200);
+
+// ===== Keep screen awake (Screen Wake Lock API) =====
+let wakeLock = null;
+function setAwakeLabel(txt){
+ const el = document.getElementById('awakeState'), b = document.getElementById('awakeBtn');
+ const off = localStorage.getItem('brainrush_awake') === '0';
+ if(el) el.textContent = txt || (off ? 'Off' : (wakeLock ? 'ON' : 'ON (waiting)'));
+ if(b) b.classList.toggle('on', !off && !!wakeLock);
+}
+async function acquireWake(){
+ if(localStorage.getItem('brainrush_awake') === '0') return;
+ if(!('wakeLock' in navigator)){ setAwakeLabel('Not supported'); return; }
+ if(wakeLock || document.visibilityState !== 'visible') return;
+ try{
+  wakeLock = await navigator.wakeLock.request('screen');
+  wakeLock.addEventListener('release', ()=>{ wakeLock = null; setAwakeLabel(); });
+  setAwakeLabel();
+ }catch(e){ wakeLock = null; setAwakeLabel('Blocked'); }
+}
+function toggleAwake(){
+ const on = localStorage.getItem('brainrush_awake') !== '0';
+ localStorage.setItem('brainrush_awake', on ? '0' : '1');
+ if(on){ if(wakeLock){ wakeLock.release(); wakeLock = null; } } else acquireWake();
+ setAwakeLabel();
+}
+document.addEventListener('visibilitychange', ()=>{ if(document.visibilityState === 'visible') acquireWake(); });
+['pointerdown','keydown','touchstart'].forEach(ev=>window.addEventListener(ev, ()=>{ if(!wakeLock) acquireWake(); }, {passive:true}));
+acquireWake();
 </script></body></html>
