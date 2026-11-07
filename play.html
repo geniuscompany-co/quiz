@@ -193,7 +193,12 @@ function applyA11y(){
 }
 function cycleA11y(){ const o=['off','cb','hc']; const a=localStorage.getItem('brainrush_a11y')||'off'; localStorage.setItem('brainrush_a11y', o[(o.indexOf(a)+1)%3]); applyA11y(); }
 applyA11y();
-async function react(emoji){await post('/api/react',{pin,pid,emoji})}
+let lastReact=0;
+async function react(emoji){
+ const now=Date.now(); if(now-lastReact<700) return; lastReact=now;
+ document.querySelectorAll('.react-bar button').forEach(b=>{b.style.opacity='.35'; setTimeout(()=>{b.style.opacity=''},700)});
+ await post('/api/react',{pin,pid,emoji});
+}
 function rivalHtml(m){
  let h = '';
  if(m.overtook) h += `<div><span class="overtook-pill">🚀 You overtook ${esc(m.overtook)}!</span></div>`;
@@ -264,7 +269,9 @@ function render(){
  const m=S.me||{};
  const k = S.phase==='question'
   ? `q:${S.index}:${inPrev?1:0}:${m.answered?1:0}:${m.active_2x?1:0}:${m.active_shield?1:0}:${m.active_audience?1:0}:${m.confident?1:0}:${(m.hide||[]).join(',')}:${m.wager_pct??''}:${m.frozen?1:0}:${m.hot?(m.hot.pred===null||m.hot.pred===undefined?'n':m.hot.pred?'y':'x'):''}:${m.spectating?1:0}`
-  : JSON.stringify({...S,left:0,qtime:0,answered:0,team_board:null,preview_left:0,auto_left:0,intro_left:0,reactions:null});
+  : S.phase==='icebreaker' ? `ice:${S.prompt}:${m.word_sent?1:0}`
+  : S.phase==='lobby' ? `lobby:${m.name}:${m.team_name}`
+  : JSON.stringify({...S,left:0,qtime:0,answered:0,team_board:null,preview_left:0,auto_left:0,intro_left:0,reactions:null,n:0,names:null,lobby:null,words:null,word_total:0});
  if(k==last){
   if(S.phase==='question' && m.active_audience && m.audience_pcts){
    m.audience_pcts.forEach((p,i)=>{const el=document.getElementById('aud'+i);if(el)el.textContent=`📊 ${p}%`;});

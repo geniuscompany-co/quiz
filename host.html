@@ -179,6 +179,7 @@ body.hc .a{outline:3px solid #fff}body.hc .row{border:2px solid #fff}
 .g-item{padding:7px 0;border-bottom:1px solid #fff1;font-size:.95em;line-height:1.4}
 .g-item b{display:block;font-size:1.02em}
 .g-chip{background:#fff2;border:0;border-radius:99px;padding:5px 12px;margin:0;font-size:.82em;font-weight:700;cursor:pointer}
+.word-tag{animation:none}.word-tag.new{animation:pop .3s ease-out}
 </style></head><body>
 <div class="late-join" id="lateJoin">
  <button class="late-btn" onclick="toggleLateQr(event)" title="Click to toggle QR code for late joiners">
@@ -582,7 +583,7 @@ function showReactions(list){
    el.className = 'float-emo';
    el.style.left = (10 + Math.random()*80) + '%';
    el.innerHTML = `${esc(r.emoji)}<small>${esc(r.name)}</small>`;
-   box.appendChild(el);
+   if(box.children.length < 14) box.appendChild(el);
    setTimeout(()=>el.remove(), 3300);
   }
  });
@@ -1030,7 +1031,7 @@ function render(){
  const imgHtml = S.img ? `<img class="q-img" src="${esc(S.img)}" alt="">` : '';
  const nAct = (S.n_active != null ? S.n_active : S.n);
  if(S.phase=='lobby'){
-  spunQ = -1;
+  spunQ = -1; seenWords.clear();
   const nm = (S.lobby||[]).map(p=>`<span>${esc(p.tag)}<button class="kick" title="Remove ${esc(p.name)}" data-n="${esc(p.name)}" onclick="kickPlayer(this.dataset.n)">✖</button></span>`).join('');
   $.innerHTML=`<h1>Join at <a class="join-link" href="/play?pin=${pin}" target="_blank">plw.me/play</a> with PIN</h1><div class="lobby-box"><div class="pin">${pin}</div>${QR}</div>
   <p>${S.n} player(s)</p>${teamStandingsHtml()}<div class="names">${nm}</div>
@@ -1038,9 +1039,10 @@ function render(){
  } else if(S.phase=='icebreaker'){
   const cols = ['#e21b3c','#1368ce','#d89e00','#26890c','#9c27b0','#00897b'];
   const words = S.words || [];
+  const prevSeen = new Set(seenWords); words.forEach(w=>seenWords.add(w.text));
   const cloud = words.length ? words.map((w,i)=>{
    const sz = Math.min(2.6, 1.15 + (w.count - 1)*0.35);
-   return `<span class="word-tag" style="font-size:${sz}em;background:${cols[i%cols.length]}">${esc(w.text)}${w.count>1?` <small>(${w.count})</small>`:''}</span>`;
+   return `<span class="word-tag${prevSeen.has(w.text)?'':' new'}" style="font-size:${sz}em;background:${cols[i%cols.length]}">${esc(w.text)}${w.count>1?` <small>(${w.count})</small>`:''}</span>`;
   }).join('') : `<p style="opacity:.7;font-size:1.3em">Waiting for players to type a word on their phones…</p>`;
   $.innerHTML=`<div class="double-banner">💭 LIVE WORD CLOUD WARM-UP</div>
   <h1>${esc(S.prompt)} <button class="btn-sm" style="font-size:.42em;vertical-align:middle" onclick="editIcePrompt()">✏️ Edit</button></h1>
@@ -1114,6 +1116,7 @@ function render(){
 <script>
 // ===== Extra features =====
 const LET = 'ABCD';
+const seenWords = new Set();
 function tileHtml(a,i){
  const im = (S.aimg && S.aimg[i]) ? `<img class="a-img" src="${esc(S.aimg[i])}" alt="">` : '';
  return `<div class="a c${i}">${im}<span>${sh[i]}${esc(a)}</span></div>`;

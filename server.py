@@ -1329,6 +1329,8 @@ def view(g, pid=None, host=False):
         out["me"] = me
     elif pid:
         out["kicked"] = True
+    if pid:
+        out["reactions"] = []
     return out
 
 
@@ -1679,7 +1681,8 @@ class H(BaseHTTPRequestHandler):
             if path == "/api/react":
                 p = g["players"].get(body.get("pid"))
                 emo = (body.get("emoji") or "").strip()[:4]
-                if p and emo in ("🔥", "😂", "😮", "🎉", "👏", "❤️"):
+                if p and emo in ("🔥", "😂", "😮", "🎉", "👏", "❤️") and time.time() - p.get("last_react", 0) >= 0.6:
+                    p["last_react"] = time.time()
                     g["rseq"] = g.get("rseq", 0) + 1
                     g["reactions"].append({
                         "id": g["rseq"], "emoji": emo, "name": p["name"], "t": time.time()
