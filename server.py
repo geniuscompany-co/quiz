@@ -3,6 +3,7 @@
 import csv, hmac, html, io, json, os, random, re, sys, threading, time
 from http.server import ThreadingHTTPServer, BaseHTTPRequestHandler
 from urllib.parse import unquote
+import kstore as K
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 LOCK = threading.Lock()
@@ -19,12 +20,13 @@ TEAMS = [
 TEAM_MAP = {t["id"]: t for t in TEAMS}
 
 HOST_PW = os.environ.get("HOST_PASSWORD", "")
+REQUIRE_LOGIN = os.environ.get("REQUIRE_LOGIN", "") == "1"
 DATA_DIR = os.environ.get("DATA_DIR") or os.path.join(ROOT, ".data")
 TEAM_BONUS = 300
 HOT_BONUS = 400
 PRED_BONUS = 200
-INT_KEY_G = ("wheel_mods", "robin_stolen", "shuf", "hot", "team_results")
-INT_KEY_P = ("answers", "wagers", "confident", "plan")
+INT_KEY_G = ("wheel_mods", "robin_stolen", "shuf", "hot", "team_results", "team_prompts")
+INT_KEY_P = ("answers", "wagers", "confident", "plan", "don")
 
 
 def pw_ok(val):
@@ -94,10 +96,84 @@ WHEEL_EVENTS = [
 ]
 
 
+TEAM_PROMPTS = [
+    "Everyone say your answer out loud and ONE reason why.",
+    "Does anyone disagree? You have 10 seconds to convince your team!",
+    "First rule out one answer you KNOW is wrong, together.",
+    "Whoever is least sure goes first: what are you thinking?",
+    "Pick a captain now. If your team splits, the captain decides.",
+    "Each teammate: rate your confidence 1-5, then follow the most confident.",
+    "Find a clue in the question wording. What does it hint at?",
+    "Quiet vote! Everyone points to an answer on 3, 2, 1.",
+]
+NAME_COLORS = {"#ff6b6b", "#ffd166", "#7bed9f", "#70a1ff", "#ff9ff3", "#a29bfe", "#ffa502", "#2ed573", "#1e90ff", "#ffffff"}
+
+
+def authed(token, pw):
+    if HOST_PW:
+        return bool(K.check_token(token)) or pw_ok(pw)
+    if REQUIRE_LOGIN:
+        return bool(K.check_token(token))
+    return True
+
+
+def owner_of(token):
+    return K.check_token(token) or "_shared"
+
+
+def speed_start(g):
+    n = g.get("n_base") or len(g["quiz"])
+    return n // 2 - 2 if (g.get("speed") and n >= 12) else None
+
+
+def is_speed_q(g, idx):
+    ss = speed_start(g)
+    if ss is None or not (0 <= idx < len(g["quiz"])):
+        return False
+    q = g["quiz"][idx]
+    return ss <= idx < ss + 5 and not q.get("redemption") and not q.get("tiebreak")
+
+
+def dbl_index(g):
+    n = g.get("n_base") or len(g["quiz"])
+    if n < 8:
+        return None
+    i = n // 2
+    ss = speed_start(g)
+    if ss is not None and ss <= i < ss + 5:
+        i = ss - 1
+    return i
+
+
+def is_dbl_q(g, idx):
+    if not g.get("dbl") or not (0 <= idx < len(g["quiz"])) or idx != dbl_index(g):
+        return False
+    q = g["quiz"][idx]
+    return not q.get("redemption") and not q.get("tiebreak")
+
+
+def modlog(g, kind, text):
+    g.setdefault("modlog", []).append({"ts": int(time.time()), "kind": kind, "text": str(text)[:60]})
+    g["modlog"] = g["modlog"][-120:]
+
+
+def activate_pending(g, pid):
+    rec = g.get("pending", {}).pop(pid, None)
+    if not rec:
+        return False
+    team_req = rec.pop("team_req", "")
+    rec["team"] = pick_balanced_team(g, team_req) if g.get("teams") else ""
+    g["players"][pid] = rec
+    return True
+
+
 def qtime(g, i=None):
+    idx = g["q"] if i is None else i
+    if is_speed_q(g, idx):
+        return 5
     if g.get("qtime"):
         return g["qtime"]
-    return g["quiz"][g["q"] if i is None else i].get("t", DEFAULT_TIME)
+    return g["quiz"][idx].get("t", DEFAULT_TIME)
 
 
 def qmult(g, i=None):
@@ -127,7 +203,7 @@ QUIZ = [
 ]
 
 
-def list_quizzes():
+def list_quizzes(owner="_shared"):
     items = []
     labels = {
         "quiz.json": "Current Default Quiz",
@@ -147,13 +223,18 @@ def list_quizzes():
                 q = data
                 title = labels.get(f) or f[5:-5].replace("_", " ").title()
             if isinstance(q, list) and q:
-                items.append({"file": f, "title": "%s (%d Qs)" % (title, len(q)), "count": len(q)})
+                items.append({"file": f, "title": "%s (%d Qs)" % (title, len(q)), "count": len(q), "folder": "Built-in", "tags": [], "builtin": True})
         except Exception:
             pass
+    owners = ["_shared"] + ([owner] if owner != "_shared" else [])
+    items += K.uq_list(owners)
     return items
 
 
 def load_quiz(fname="quiz.json"):
+    if str(fname or "").startswith("uq:"):
+        rec = K.uq_get(fname)
+        return rec["questions"] if rec else QUIZ
     safe = os.path.basename(fname or "quiz.json")
     p = os.path.join(ROOT, safe)
     if os.path.exists(p):
@@ -174,7 +255,9 @@ def clean_questions(questions):
         if not isinstance(q, dict) or not q.get("q") or not isinstance(q.get("a"), list):
             continue
         qtype = str(q.get("type") or "mc").lower()
-        if qtype not in ("mc", "tf", "text", "order"):
+        if qtype not in ("mc", "tf", "text", "order", "zoom"):
+            qtype = "mc"
+        if qtype == "zoom" and not clean_url(q.get("img")):
             qtype = "mc"
         raw = [str(x).strip() for x in q["a"] if str(x).strip()]
         try:
@@ -206,6 +289,10 @@ def clean_questions(questions):
             ai += [""] * (len(ans) - len(ai))
             if any(ai):
                 item["aimg"] = ai
+        if q.get("topic"):
+            item["topic"] = str(q["topic"]).strip()[:40]
+        if q.get("note"):
+            item["note"] = str(q["note"]).strip()[:400]
         if q.get("quote"):
             item["quote"] = str(q["quote"]).strip()
         if q.get("src"):
@@ -216,18 +303,15 @@ def clean_questions(questions):
     return cleaned
 
 
-def save_custom_quiz(title, questions):
-    slug = re.sub(r"[^a-z0-9]+", "_", (title or "custom").lower()).strip("_") or "custom"
-    fname = "quiz_%s.json" % slug
+def save_custom_quiz(title, questions, owner="_shared", folder="", tags=None):
     cleaned = clean_questions(questions)
     if not cleaned:
         raise ValueError("No valid questions provided")
-    with open(os.path.join(ROOT, fname), "w") as f:
-        json.dump(cleaned, f, indent=2)
-    return fname, len(cleaned), cleaned
+    qid = K.uq_save(owner, title or "Custom Quiz", cleaned, folder, tags)
+    return qid, len(cleaned), cleaned
 
 
-def new_game(quiz_file="quiz.json", count=None, shuffle=False, custom_questions=None):
+def new_game(quiz_file="quiz.json", count=None, shuffle=False, custom_questions=None, owner="_shared"):
     while True:
         pin = str(random.randint(100000, 999999))
         if pin not in GAMES:
@@ -255,7 +339,9 @@ def new_game(quiz_file="quiz.json", count=None, shuffle=False, custom_questions=
         "wheel": True, "wheel_mods": {}, "robin_stolen": {},
         "hotseat": True, "team_battle": True, "tiebreak": True,
         "roster": [], "banned": [], "logo": "", "bank": bank, "quiz_file": quiz_file,
-        "created": time.time(), "shuf": {}, "hot": {}, "team_results": {},
+        "created": time.time(), "shuf": {}, "hot": {}, "team_results": {}, "team_prompts": {},
+        "owner": owner, "n_base": len(quiz), "speed": False, "dbl": False, "steal": False, "moderate": False,
+        "pending": {}, "modlog": [],
         "auto": False, "phase_entered": time.time(),
         "paused": False, "pause_rem": 0.0, "pause_prev": 0.0, "extra_time": 0.0,
     }
@@ -292,6 +378,8 @@ def replay_game(g, quiz_file="quiz.json", count=None, shuffle=True, custom_quest
     g["hist_saved"] = False
     g["bank"] = bank
     g["quiz_file"] = quiz_file
+    g["n_base"] = len(g["quiz"])
+    g["team_prompts"] = {}
     g["paused"] = False
     g["extra_time"] = 0.0
     g["phase_entered"] = time.time()
@@ -301,11 +389,47 @@ def replay_game(g, quiz_file="quiz.json", count=None, shuffle=True, custom_quest
         p["powerups"] = {}
         p["wagers"] = {}
         p["confident"] = {}
+        p["don"] = {}
         p["plan"] = {}
         p["frozen_next"] = False
         p["frozen_q"] = -1
         p["word_sent"] = False
         p["ice_sent_q"] = -1
+
+
+def do_steal(g, pid, mode):
+    p = g["players"].get(pid)
+    if not p or not g.get("steal"):
+        return None, "Steal/Swap is not enabled"
+    if g["phase"] != "results" or will_finish_after_results(g):
+        return None, "Only available on results screens before the final question"
+    pu = p.setdefault("powerups", {})
+    if pu.get("steal_used"):
+        return None, "Already used"
+    lb = leaderboard(g)
+    names = [r["name"] for r in lb]
+    idx = names.index(p["name"])
+    if idx == 0:
+        return None, "You're already in 1st place"
+    tname = lb[idx - 1]["name"]
+    target = next(x for x in g["players"].values() if x["name"] == tname)
+    qi = g["q"]
+    if mode == "swap":
+        gap = target["score"] - p["score"]
+        if gap > 1500:
+            return None, "Too far ahead to swap (max gap 1500)"
+        add_bonus(p, qi, gap, "swap")
+        add_bonus(target, qi, -gap, "swap")
+    else:
+        amt = min(150, target["score"])
+        if amt <= 0:
+            return None, "Nothing to steal"
+        add_bonus(p, qi, amt, "steal_bonus")
+        add_bonus(target, qi, -amt, "stolen")
+    pu["steal_used"] = True
+    g["rseq"] = g.get("rseq", 0) + 1
+    g["reactions"].append({"id": g["rseq"], "emoji": "🔀" if mode == "swap" else "🕵️", "name": "%s → %s" % (p["name"], tname), "t": time.time()})
+    return {"target": tname, "mode": mode}, None
 
 
 def calc_streak(p, up_to_q):
@@ -400,7 +524,7 @@ def add_bots(g, count=5):
 def is_team_battle(g, qi):
     if not g.get("teams") or not g.get("team_battle", True):
         return False
-    if qi < 4 or (qi + 1) % 5 != 0:
+    if qi < 4 or (qi + 1) % 5 != 0 or is_speed_q(g, qi):
         return False
     q = g["quiz"][qi]
     if q.get("redemption") or q.get("tiebreak") or is_boss_q(g, qi):
@@ -411,6 +535,8 @@ def is_team_battle(g, qi):
 def prev_time(g, qi=None):
     idx = g["q"] if qi is None else qi
     base = g.get("preview", PREVIEW_TIME)
+    if idx is not None and is_speed_q(g, idx):
+        return 0.0
     if idx is not None and 0 <= idx < len(g["quiz"]) and is_team_battle(g, idx):
         return max(base, 12.0)
     return base
@@ -480,6 +606,7 @@ def record_answer(g, p, choice, t, given=None):
     u_mult = 1.5 if underdog else 1.0
     wmod = g.get("wheel_mods", {}).get(qi)
     confident = bool(p.get("confident", {}).get(qi))
+    don = bool(p.get("don", {}).get(qi)) and is_dbl_q(g, qi)
     wager_pct = p.get("wagers", {}).get(qi)
     wager_amt = 0
     if wager_pct is not None and wager_pct > 0:
@@ -493,7 +620,7 @@ def record_answer(g, p, choice, t, given=None):
         s_mult = 2 if (wmod and wmod["id"] == "streak2x") else 1
         bonus = (min(300, (new_streak - 1) * 100) if new_streak >= 2 else 0) * s_mult
         spd_mult = 1.35 if (wmod and wmod["id"] == "speed" and t <= qt * 0.45) else 1.0
-        base = round(1000 * (1 - min(1.0, t / qt) / 2) * qmult(g) * p_mult * u_mult * spd_mult)
+        base = round(1000 * (1 - min(1.0, t / qt) / 2) * qmult(g) * p_mult * u_mult * spd_mult * (2 if don else 1))
         if wmod and wmod["id"] == "crate":
             wheel_bonus = random.choice([150, 200, 250, 300, 400])
         elif wmod and wmod["id"] == "robin" and len(g["players"]) > 1:
@@ -513,14 +640,14 @@ def record_answer(g, p, choice, t, given=None):
         wager_loss = wager_amt if (wager_amt > 0 and not shielded) else 0
         if confident and not shielded:
             conf_delta = -150
-        gained = -wager_loss + conf_delta
+        gained = -wager_loss + conf_delta - (400 if (don and not shielded) else 0)
     p["score"] = max(0, p["score"] + gained)
     p["answers"][qi] = {
         "choice": choice, "gained": gained, "bonus": bonus,
         "wager": wager_amt, "correct": is_correct, "time": round(t, 2),
         "shielded": shielded, "underdog": underdog and is_correct,
         "confident": confident, "conf_delta": conf_delta, "wheel_bonus": wheel_bonus,
-        "given": given,
+        "given": given, "don": don,
     }
 
 
@@ -608,7 +735,7 @@ def start_question(g, qi):
     g["phase"] = "question"
     g["paused"] = False
     g["extra_time"] = 0.0
-    if g.get("wheel", True) and qi > 0 and (qi + 1) % 4 == 0 and not is_boss_q(g, qi) and not g["quiz"][qi].get("redemption"):
+    if g.get("wheel", True) and qi > 0 and (qi + 1) % 4 == 0 and not is_boss_q(g, qi) and not g["quiz"][qi].get("redemption") and not is_speed_q(g, qi):
         g.setdefault("wheel_mods", {})[qi] = random.choice(WHEEL_EVENTS)
     q = g["quiz"][qi]
     if qtype_of(q) == "order":
@@ -619,7 +746,10 @@ def start_question(g, qi):
             if perm != list(range(n)):
                 break
         g.setdefault("shuf", {})[qi] = perm
-    if (g.get("hotseat", True) and qi >= 5 and (qi + 1) % 6 == 0 and len(g["players"]) >= 3
+    if is_team_battle(g, qi):
+        used = random.sample(TEAM_PROMPTS, min(len(TEAM_PROMPTS), len(TEAMS)))
+        g.setdefault("team_prompts", {})[qi] = {t["id"]: used[i % len(used)] for i, t in enumerate(TEAMS)}
+    if (g.get("hotseat", True) and qi >= 5 and not is_speed_q(g, qi) and (qi + 1) % 6 == 0 and len(g["players"]) >= 3
             and qi not in g.get("wheel_mods", {}) and not is_team_battle(g, qi)
             and not is_boss_q(g, qi) and not q.get("redemption") and not q.get("tiebreak")):
         humans = [pid for pid, p in g["players"].items() if not p.get("bot")]
@@ -635,7 +765,7 @@ def start_question(g, qi):
             p["frozen_q"] = qi
             p["frozen_by_q"] = p.get("frozen_by", "Someone")
             p["frozen_next"] = False
-    if qi in g.get("wheel_mods", {}) or q.get("redemption"):
+    if qi in g.get("wheel_mods", {}) or q.get("redemption") or (is_speed_q(g, qi) and qi == speed_start(g)):
         g["phase"] = "intro"
         g["intro_start"] = time.time()
         g["phase_entered"] = time.time()
@@ -716,28 +846,27 @@ def make_tiebreak_q(g):
 
 def quiz_title(g):
     f = g.get("quiz_file") or "quiz.json"
+    if f.startswith("uq:"):
+        rec = K.uq_get(f)
+        return rec["title"] if rec else "Custom Quiz"
     for item in list_quizzes():
         if item["file"] == f:
             return re.sub(r"\s*\(\d+ Qs\)$", "", item["title"])
     return f[5:-5].replace("_", " ").title() if f.startswith("quiz_") else f
 
 
-def load_history():
-    try:
-        with open(data_path("history.json")) as fp:
-            return json.load(fp)
-    except Exception:
-        return []
-
-
-def save_history(h):
-    try:
-        tmp = data_path("history.json.tmp")
-        with open(tmp, "w") as fp:
-            json.dump(h, fp)
-        os.replace(tmp, data_path("history.json"))
-    except Exception:
-        pass
+def topic_stats(g):
+    n_p = max(1, len(g["players"]))
+    agg = {}
+    for qi, q in enumerate(g["quiz"]):
+        t = q.get("topic")
+        if not t or q.get("tiebreak"):
+            continue
+        cor = sum(1 for p in g["players"].values() if p["answers"].get(qi, {}).get("correct"))
+        a = agg.setdefault(t, [0, 0])
+        a[0] += cor
+        a[1] += n_p
+    return sorted(({"topic": t, "pct": round(100.0 * c / n), "n": n} for t, (c, n) in agg.items()), key=lambda r: r["pct"])
 
 
 def finalize_game(g):
@@ -753,17 +882,31 @@ def finalize_game(g):
             if q.get("tiebreak"):
                 continue
             cor = sum(1 for p in g["players"].values() if p["answers"].get(qi, {}).get("correct"))
-            qs.append({"q": q["q"], "pct": round(100.0 * cor / n_p), "ans": ans_text(q)})
+            qs.append({"q": q["q"], "pct": round(100.0 * cor / n_p), "ans": ans_text(q), "topic": q.get("topic", "")})
+        owner = g.get("owner", "_shared")
+        title = quiz_title(g)
         entry = {
-            "id": "%s-%d" % (g["pin"], int(time.time())), "ts": int(time.time()), "pin": g["pin"],
-            "quiz": quiz_title(g), "players": len(g["players"]),
+            "id": "%s-%d" % (g["pin"], int(time.time())), "ts": int(time.time()), "pin": g["pin"], "owner": owner,
+            "quiz": title, "players": len(g["players"]),
             "humans": sum(1 for p in g["players"].values() if not p.get("bot")),
-            "questions": len(qs), "accuracy": st["accuracy"],
+            "questions": len(qs), "accuracy": st["accuracy"], "topics": st.get("topics", []),
             "top": [{"name": r["name"], "score": r["score"]} for r in lb[:3]], "qs": qs,
         }
-        h = load_history()
-        h.append(entry)
-        save_history(h[-200:])
+        K.hist_add(entry)
+        if g.get("roster"):
+            for p in g["players"].values():
+                if p.get("bot") or not any(not a.get("blank") for a in p["answers"].values()):
+                    continue
+                rep_ = player_report(g, p)
+                topics = {}
+                for qi, q in enumerate(g["quiz"]):
+                    t = q.get("topic")
+                    if not t or q.get("tiebreak"):
+                        continue
+                    c = topics.setdefault(t, [0, 0])
+                    c[1] += 1
+                    c[0] += 1 if p["answers"].get(qi, {}).get("correct") else 0
+                K.progress_update(owner, p["name"], {"ts": int(time.time()), "quiz": title, "pct": rep_["accuracy"], "topics": topics})
     except Exception:
         pass
 
@@ -820,6 +963,8 @@ def advance_game(g):
                 return
             g["redemption_added"] = True
             go_final(g)
+        elif is_speed_q(g, g["q"]) and is_speed_q(g, g["q"] + 1):
+            start_question(g, g["q"] + 1)
         else:
             g["phase"] = "board"
             g["phase_entered"] = time.time()
@@ -890,6 +1035,9 @@ def tick(g):
     elif g["phase"] == "intro":
         if now - g.get("intro_start", now) >= intro_len(g):
             begin_question(g)
+    elif g["phase"] == "results" and is_speed_q(g, g["q"]) and is_speed_q(g, g["q"] + 1):
+        if now - g.get("phase_entered", now) >= 3.5:
+            advance_game(g)
     elif g["phase"] in ("results", "board") and g.get("auto"):
         wait_s = 7.0 if g["phase"] == "results" else 6.0
         if now - g.get("phase_entered", now) >= wait_s:
@@ -910,6 +1058,7 @@ def leaderboard(g):
             "score": p["score"], "prev": p["score"] - gained,
             "gained": gained, "streak": streak,
             "frozen_next": bool(p.get("frozen_next")),
+            "color": p.get("color", ""), "ctag": p.get("ctag", ""),
             "_ans": a,
         })
     prev_order = [x["name"] for x in sorted(rows, key=lambda x: -x["prev"])]
@@ -1025,7 +1174,7 @@ def final_stats(g):
     q_stats.sort(key=lambda x: x["pct"])
     return {
         "accuracy": accuracy, "correct": total_cor, "possible": denom,
-        "awards": awards, "tough": q_stats[:3],
+        "awards": awards, "tough": q_stats[:3], "topics": topic_stats(g),
     }
 
 
@@ -1140,7 +1289,8 @@ def spectator_view(g):
                 r["rank"] = i + 1
         for r in lb[:10]:
             rows.append({"name": r["name"], "avatar": r.get("avatar", ""), "team_emoji": r.get("team_emoji", ""),
-                         "score": r["score"], "streak": r["streak"], "title": r.get("title", ""), "rank": r["rank"]})
+                         "score": r["score"], "streak": r["streak"], "title": r.get("title", ""), "rank": r["rank"],
+                         "color": r.get("color", ""), "ctag": r.get("ctag", "")})
     counts = {}
     for w in g.get("words", []):
         counts[w["text"]] = counts.get(w["text"], 0) + 1
@@ -1161,7 +1311,8 @@ def view(g, pid=None, host=False):
     out = {
         "phase": ph, "pin": g["pin"], "n": len(g["players"]), "total": len(g["quiz"]),
         "names": [ptag(p) for p in g["players"].values()] if ph == "lobby" else None,
-        "lobby": [{"name": p["name"], "tag": ptag(p), "bot": bool(p.get("bot"))} for p in g["players"].values()] if ph == "lobby" else None,
+        "pending_list": [{"name": r["name"], "avatar": r.get("avatar", "")} for r in g.get("pending", {}).values()] if (host or not pid) else [],
+        "lobby": [{"name": p["name"], "tag": ptag(p), "bot": bool(p.get("bot")), "color": p.get("color", ""), "ctag": p.get("ctag", "")} for p in g["players"].values()] if ph == "lobby" else None,
         "reactions": g["reactions"][-25:],
         "teams_enabled": bool(g.get("teams")),
         "sabotage_enabled": bool(g.get("sabotage", True)),
@@ -1205,6 +1356,11 @@ def view(g, pid=None, host=False):
             wheel_mod=wmod["label"] if wmod else None,
             wheel_id=wmod["id"] if wmod else None,
         )
+        out["speed"] = is_speed_q(g, g["q"])
+        out["dbl"] = is_dbl_q(g, g["q"])
+        out["topic"] = q.get("topic")
+        if host and q.get("note"):
+            out["note"] = q["note"]
         el = eligible(g)
         out["answered"] = sum(1 for p in el if g["q"] in p["answers"] and not p["answers"][g["q"]].get("blank"))
         out["n_active"] = len(el)
@@ -1239,6 +1395,7 @@ def view(g, pid=None, host=False):
         out.update(
             index=g["q"], redemption=bool(iq.get("redemption")),
             wheel_mod=iw["label"] if iw else None, wheel_id=iw["id"] if iw else None,
+            speed=(is_speed_q(g, g["q"]) and g["q"] == speed_start(g)),
             intro_total=il, intro_left=round(max(0.0, il - (now - g.get("intro_start", now))), 2),
         )
     if ph == "board":
@@ -1278,7 +1435,7 @@ def view(g, pid=None, host=False):
         me = {
             "name": p["name"], "avatar": p.get("avatar", ""),
             "team": p.get("team", ""), "team_name": t_info.get("name", ""), "team_emoji": t_info.get("emoji", ""),
-            "title": my_row.get("title", ""),
+            "title": my_row.get("title", ""), "color": p.get("color", ""), "ctag": p.get("ctag", ""),
             "score": p["score"],
             "answered": a is not None and not a.get("blank"),
             "choice": a["choice"] if a else None,
@@ -1321,12 +1478,25 @@ def view(g, pid=None, host=False):
                 "pred_bonus": a.get("pred_bonus", 0) if a else 0, "hot_bonus": a.get("hot_bonus", 0) if a else 0,
             }
         me["team_bonus"] = a.get("team_bonus", 0) if a else 0
+        pu_ = p.get("powerups", {})
+        me["pu_steal"] = bool(g.get("steal")) and not pu_.get("steal_used")
+        if my_idx > 0:
+            ab_ = lb[my_idx - 1]
+            me["steal_target"] = ab_["name"]
+            me["steal_gap"] = max(0, ab_["score"] - p["score"])
+        me["don"] = bool(p.get("don", {}).get(g["q"])) if g["q"] >= 0 else False
+        tp_ = g.get("team_prompts", {}).get(g["q"], {}).get(p.get("team")) if g["q"] >= 0 else None
+        if tp_ and ph in ("question", "results"):
+            me["team_prompt"] = tp_
+        p["seen"] = time.time()
         cq = g["quiz"][g["q"]] if 0 <= g["q"] < len(g["quiz"]) else {}
         if cq.get("tiebreak") and pid not in g.get("tb_pids", []):
             me["spectating"] = True
         if ph == "final":
             me["report"] = player_report(g, p)
         out["me"] = me
+    elif pid and pid in g.get("pending", {}):
+        out["pending"] = True
     elif pid:
         out["kicked"] = True
     if pid:
@@ -1350,8 +1520,192 @@ class H(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(data)
 
+    def _q(self, qs):
+        q = {}
+        for x in qs.split("&"):
+            if "=" in x:
+                k, v = x.split("=", 1)
+                q[k] = unquote(v.replace("+", " "))
+        return q
+
+    def store_get(self, path, qs):
+        q = self._q(qs)
+        tok = q.get("token", "")
+        owner = owner_of(tok)
+        if path == "/api/config":
+            self.send({"pw": bool(HOST_PW), "login_required": bool(HOST_PW or REQUIRE_LOGIN), "accounts": K.has_accounts(),
+                       "ai": bool(os.environ.get("GEMINI_API_KEY")), "storage": K.store.status(), "user": K.check_token(tok)})
+            return True
+        if path == "/api/storage":
+            self.send(K.store.status())
+            return True
+        if path == "/api/quizzes":
+            self.send({"quizzes": list_quizzes(owner)})
+            return True
+        if path == "/api/quiz_data":
+            qs_ = [dict((k, v) for k, v in x.items() if k != "note") for x in load_quiz(q.get("file") or "quiz.json")]
+            self.send({"file": q.get("file"), "questions": qs_})
+            return True
+        if path == "/api/hw_info":
+            d = K.hw_get(q.get("id", ""))
+            if not d:
+                self.send({"error": "Assignment not found"}, 404)
+            else:
+                self.send({"title": d["title"], "deadline": d["deadline"], "open": K.hw_open(d), "roster": d.get("roster", []), "n": len(d["questions"])})
+            return True
+        if path in ("/api/history", "/api/progress", "/api/hw_list", "/api/hw_results"):
+            if not authed(tok, q.get("pw", "")):
+                self.send({"error": "Host login required", "need_pw": True}, 403)
+                return True
+            if path == "/api/progress":
+                self.send({"students": K.progress_report(owner)})
+            elif path == "/api/hw_list":
+                self.send({"assignments": K.hw_list(owner)})
+            elif path == "/api/hw_results":
+                d = K.hw_get(q.get("id", ""))
+                if not d or d["owner"] != owner:
+                    self.send({"error": "Not found"}, 404)
+                else:
+                    self.send(K.hw_results(d))
+            else:
+                hist = K.hist_get(owner)
+                agg, tagg = {}, {}
+                for e_ in hist:
+                    for qq in e_.get("qs", []):
+                        d = agg.setdefault(qq["q"], {"q": qq["q"], "ans": qq.get("ans", ""), "sum": 0, "n": 0})
+                        d["sum"] += qq["pct"]
+                        d["n"] += 1
+                    for t in e_.get("topics", []):
+                        d = tagg.setdefault(t["topic"], {"topic": t["topic"], "sum": 0, "n": 0})
+                        d["sum"] += t["pct"] * t["n"]
+                        d["n"] += t["n"]
+                reteach = sorted(({"q": d["q"], "ans": d["ans"], "avg": round(d["sum"] / d["n"]), "games": d["n"]}
+                                  for d in agg.values()), key=lambda r: r["avg"])
+                topics = sorted(({"topic": d["topic"], "avg": round(d["sum"] / d["n"]), "n": d["n"]} for d in tagg.values() if d["n"]), key=lambda r: r["avg"])
+                self.send({"games": list(reversed(hist))[:50], "reteach": [r for r in reteach if r["avg"] < 85][:12], "topics": topics})
+            return True
+        if path == "/api/moderation":
+            with LOCK:
+                g = GAMES.get(q.get("pin"))
+                if not g or q.get("host") != g["host"]:
+                    self.send({"error": "Forbidden"}, 403)
+                    return True
+                self.send({
+                    "players": [{"name": p["name"], "avatar": p.get("avatar", ""), "bot": bool(p.get("bot")), "score": p["score"]} for p in g["players"].values()],
+                    "pending": [{"name": r["name"], "avatar": r.get("avatar", ""), "ctag": r.get("ctag", "")} for r in g.get("pending", {}).values()],
+                    "log": list(reversed(g.get("modlog", [])))[:60], "moderate": bool(g.get("moderate")),
+                })
+            return True
+        return False
+
+    def store_post(self, path, body):
+        tok = body.get("token", "")
+        owner = owner_of(tok)
+        if path in ("/api/register", "/api/login"):
+            if path == "/api/register":
+                user, err = K.register(body.get("username"), body.get("password"), body.get("code"))
+            else:
+                user = K.login(body.get("username"), body.get("password"))
+                err = None if user else "Wrong username or password"
+            if err:
+                self.send({"error": err}, 400)
+            else:
+                self.send({"ok": True, "user": user, "token": K.make_token(user)})
+            return True
+        if path == "/api/hw_start":
+            d = K.hw_get(body.get("id", ""))
+            if not d:
+                self.send({"error": "Assignment not found"}, 404)
+                return True
+            sub, err = K.hw_start(d, body.get("name"))
+            if err:
+                self.send({"error": err}, 400)
+                return True
+            d = K.hw_get(d["id"])
+            sub = d["subs"][sub["name"].lower()]
+            self.send({"name": sub["name"], "done": sub["done"], "answered": len(sub["answers"]), "score": sub["score"], "correct": sub["correct"],
+                       "n": len(d["questions"]), "title": d["title"], "question": None if sub["done"] else K.hw_question(d, sub)})
+            return True
+        if path == "/api/hw_answer":
+            d = K.hw_get(body.get("id", ""))
+            if not d:
+                self.send({"error": "Assignment not found"}, 404)
+                return True
+            key = str(body.get("name") or "").strip().lower()
+            ans, err = K.hw_answer(d, key, body)
+            if err:
+                self.send({"error": err}, 400)
+                return True
+            d = K.hw_get(d["id"])
+            sub = d["subs"][key]
+            ans["question"] = None if sub["done"] else K.hw_question(d, sub)
+            self.send(ans)
+            return True
+        gated = ("/api/upload_quiz", "/api/delete_quiz", "/api/dup_quiz", "/api/history_clear", "/api/ai_quiz",
+                 "/api/import_sheet", "/api/hw_create")
+        if path not in gated:
+            return False
+        if not authed(tok, body.get("password")):
+            self.send({"error": "Host login required", "need_pw": True}, 403)
+            return True
+        if path == "/api/history_clear":
+            K.hist_clear(owner)
+            self.send({"ok": True})
+        elif path == "/api/upload_quiz":
+            try:
+                fname, cnt, cleaned = save_custom_quiz(body.get("title"), body.get("questions") or [], owner,
+                                                       body.get("folder", ""), body.get("tags") or [])
+                self.send({"ok": True, "file": fname, "count": cnt, "questions": cleaned, "quizzes": list_quizzes(owner)})
+            except Exception as e:
+                self.send({"error": str(e)}, 400)
+        elif path == "/api/delete_quiz":
+            f = body.get("file") or ""
+            if f.startswith("uq:") and f.split(":", 2)[1] in (owner, "_shared"):
+                K.uq_delete(f.split(":", 2)[1], f)
+            self.send({"ok": True, "quizzes": list_quizzes(owner)})
+        elif path == "/api/dup_quiz":
+            f = body.get("file") or "quiz.json"
+            src = next((x for x in list_quizzes(owner) if x["file"] == f), None)
+            title = re.sub(r"\s*\(\d+ Qs\)$", "", src["title"]) if src else "Quiz"
+            try:
+                fname, cnt, cleaned = save_custom_quiz("Copy of " + title, load_quiz(f), owner, (src or {}).get("folder", "") if src and not src.get("builtin") else "", (src or {}).get("tags", []))
+                self.send({"ok": True, "file": fname, "count": cnt, "quizzes": list_quizzes(owner)})
+            except Exception as e:
+                self.send({"error": str(e)}, 400)
+        elif path == "/api/import_sheet":
+            txt, err = K.fetch_sheet_csv(body.get("url"))
+            self.send({"error": err} if err else {"csv": txt}, 400 if err else 200)
+        elif path == "/api/ai_quiz":
+            items, msg = K.ai_generate(str(body.get("text") or ""), str(body.get("topic") or "")[:80], body.get("count", 8))
+            if items is None:
+                self.send({"error": msg}, 400)
+            else:
+                cl = clean_questions(items)
+                if not cl:
+                    self.send({"error": "The generator did not return usable questions. Try again."}, 400)
+                else:
+                    self.send({"questions": cl, "message": msg})
+        elif path == "/api/hw_create":
+            bank = clean_questions(body.get("custom_questions")) if body.get("custom_questions") else [dict(x) for x in load_quiz(body.get("quiz") or "quiz.json")]
+            bank = clean_questions(bank)
+            try:
+                k = max(1, min(len(bank), int(body.get("count") or len(bank))))
+            except Exception:
+                k = len(bank)
+            qs_ = random.sample(bank, k) if (body.get("shuffle", True) or k < len(bank)) else bank
+            roster = []
+            for r_ in (body.get("roster") or [])[:120]:
+                r_ = re.sub(r"\s+", " ", str(r_)).strip()[:24]
+                if r_ and r_ not in roster:
+                    roster.append(r_)
+            doc = K.hw_create(owner, str(body.get("title") or "Homework"), qs_, body.get("deadline") or 0, roster)
+            self.send({"ok": True, "id": doc["id"], "questions": len(qs_)})
+        return True
+
     def do_GET(self):
         path, _, qs = self.path.partition("?")
+        if self.store_get(path, qs):
+            return
         if path == "/api/active":
             q = dict(x.split("=", 1) for x in qs.split("&") if "=" in x)
             with LOCK:
@@ -1364,22 +1718,6 @@ class H(BaseHTTPRequestHandler):
                 roster = [r for r in g.get("roster", []) if r.lower() not in taken]
                 return self.send({"pin": g["pin"], "teams": bool(g.get("teams")), "roster": roster,
                                   "has_roster": bool(g.get("roster")), "logo": g.get("logo", "")})
-        if path == "/api/config":
-            return self.send({"pw": bool(HOST_PW)})
-        if path == "/api/history":
-            q = dict(x.split("=", 1) for x in qs.split("&") if "=" in x)
-            if not pw_ok(unquote(q.get("pw", ""))):
-                return self.send({"error": "Host password required", "need_pw": True}, 403)
-            hist = load_history()
-            agg = {}
-            for e_ in hist:
-                for qq in e_.get("qs", []):
-                    d = agg.setdefault(qq["q"], {"q": qq["q"], "ans": qq.get("ans", ""), "sum": 0, "n": 0})
-                    d["sum"] += qq["pct"]
-                    d["n"] += 1
-            reteach = sorted(({"q": d["q"], "ans": d["ans"], "avg": round(d["sum"] / d["n"]), "games": d["n"]}
-                              for d in agg.values()), key=lambda r: r["avg"])
-            return self.send({"games": list(reversed(hist))[:50], "reteach": [r for r in reteach if r["avg"] < 85][:12]})
         if path == "/api/study":
             q = dict(x.split("=", 1) for x in qs.split("&") if "=" in x)
             with LOCK:
@@ -1394,12 +1732,6 @@ class H(BaseHTTPRequestHandler):
                 if not g:
                     return self.send({"error": "Game not found"}, 404)
                 return self.send(spectator_view(g))
-        if path == "/api/quizzes":
-            return self.send({"quizzes": list_quizzes()})
-        if path == "/api/quiz_data":
-            q = dict(x.split("=", 1) for x in qs.split("&") if "=" in x)
-            safe = os.path.basename(q.get("file") or "quiz.json")
-            return self.send({"file": safe, "questions": load_quiz(safe)})
         if path == "/api/export":
             q = dict(x.split("=", 1) for x in qs.split("&") if "=" in x)
             with LOCK:
@@ -1417,11 +1749,11 @@ class H(BaseHTTPRequestHandler):
                 g = GAMES.get(q.get("pin"))
                 if not g:
                     return self.send({"error": "Game not found"}, 404)
-                return self.send(view(g, q.get("pid")))
+                return self.send(view(g, q.get("pid"), host=(q.get("host") == g["host"])))
         files = {
             "/": "host.html", "/host": "host.html",
             "/play": "play.html", "/remote": "remote.html",
-            "/practice": "practice.html", "/spectator": "spectator.html",
+            "/practice": "practice.html", "/spectator": "spectator.html", "/hw": "homework.html",
             "/logo.jpg": "logo.jpg",
         }
         if path in files:
@@ -1433,33 +1765,23 @@ class H(BaseHTTPRequestHandler):
     def do_POST(self):
         body = json.loads(self.rfile.read(int(self.headers.get("Content-Length", 0))) or b"{}")
         path = self.path
+        if self.store_post(path, body):
+            return
         with LOCK:
-            if path in ("/api/upload_quiz", "/api/delete_quiz", "/api/create", "/api/history_clear") and not pw_ok(body.get("password")):
-                return self.send({"error": "Host password required", "need_pw": True}, 403)
-            if path == "/api/history_clear":
-                save_history([])
-                return self.send({"ok": True})
-            if path == "/api/upload_quiz":
-                try:
-                    fname, cnt, cleaned = save_custom_quiz(body.get("title"), body.get("questions") or [])
-                    return self.send({"ok": True, "file": fname, "count": cnt, "questions": cleaned, "quizzes": list_quizzes()})
-                except Exception as e:
-                    return self.send({"error": str(e)}, 400)
-            if path == "/api/delete_quiz":
-                safe = os.path.basename(body.get("file") or "")
-                protected = {"quiz.json", "quiz_chapter8.json", "quiz_fun_facts.json", "quiz_ultimate_silly_trivia.json"}
-                if safe and safe not in protected and safe.startswith("quiz_") and safe.endswith(".json"):
-                    p = os.path.join(ROOT, safe)
-                    if os.path.exists(p):
-                        os.remove(p)
-                return self.send({"ok": True, "quizzes": list_quizzes()})
+            if path == "/api/create" and not authed(body.get("token"), body.get("password")):
+                return self.send({"error": "Host login required", "need_pw": True}, 403)
             if path == "/api/create":
                 g = new_game(
                     body.get("quiz") or "quiz.json",
                     body.get("count"),
                     bool(body.get("shuffle")),
                     custom_questions=body.get("custom_questions"),
+                    owner=owner_of(body.get("token")),
                 )
+                for k_ in ("speed", "dbl", "steal", "moderate"):
+                    if k_ in body:
+                        g[k_] = bool(body[k_])
+                g["n_base"] = len(g["quiz"])
                 if "preview" in body:
                     g["preview"] = float(body["preview"])
                 if body.get("qtime"):
@@ -1510,6 +1832,8 @@ class H(BaseHTTPRequestHandler):
                     del g["players"][pid]
                 if gone and not body.get("allow_rejoin"):
                     g.setdefault("banned", []).append(nm)
+                if gone:
+                    modlog(g, "kicked", nm)
                 return self.send({"ok": True, "removed": len(gone)})
             if path == "/api/predict":
                 p = g["players"].get(body.get("pid"))
@@ -1518,6 +1842,29 @@ class H(BaseHTTPRequestHandler):
                     return self.send({"error": "Cannot predict"}, 400)
                 hs["preds"][body["pid"]] = bool(body.get("guess"))
                 return self.send({"ok": True})
+            if path == "/api/approve":
+                if body.get("host") != g["host"]:
+                    return self.send({"error": "Forbidden"}, 403)
+                nm = str(body.get("name") or "").strip().lower()
+                pids = [pid for pid, r in g.get("pending", {}).items() if r["name"].lower() == nm]
+                for pid in pids:
+                    if body.get("approve", True):
+                        activate_pending(g, pid)
+                    else:
+                        g["pending"].pop(pid, None)
+                        g.setdefault("banned", []).append(nm)
+                        modlog(g, "rejected", nm)
+                return self.send({"ok": True, "n": len(pids)})
+            if path == "/api/don":
+                p = g["players"].get(body.get("pid"))
+                if not p or g["phase"] != "question" or not is_dbl_q(g, g["q"]) or g["q"] in p["answers"]:
+                    return self.send({"error": "Cannot toggle now"}, 400)
+                d_ = p.setdefault("don", {})
+                d_[g["q"]] = not d_.get(g["q"])
+                return self.send({"ok": True, "don": d_[g["q"]]})
+            if path == "/api/steal":
+                res, err = do_steal(g, body.get("pid"), body.get("mode"))
+                return self.send({"error": err}, 400) if err else self.send({"ok": True, **res})
             if path == "/api/replay":
                 if body.get("host") != g["host"]:
                     return self.send({"error": "Forbidden"}, 403)
@@ -1573,6 +1920,12 @@ class H(BaseHTTPRequestHandler):
                 name = (body.get("name") or "").strip()[:24]
                 avatar = (body.get("avatar") or "").strip()[:4]
                 team_req = (body.get("team") or "").strip()
+                color = body.get("color") if body.get("color") in NAME_COLORS else ""
+                ctag = re.sub(r"\s+", " ", str(body.get("ctag") or "")).strip()[:14]
+                if ctag and is_profane(ctag):
+                    modlog(g, "blocked title", ctag)
+                    ctag = ""
+                reclaim = bool(body.get("reclaim"))
                 if g["phase"] == "final":
                     return self.send({"error": "Game already finished"}, 400)
                 if g.get("roster"):
@@ -1582,22 +1935,36 @@ class H(BaseHTTPRequestHandler):
                     name = match
                     for old_pid, op in g["players"].items():
                         if op["name"].lower() == name.lower() and not op.get("bot"):
+                            modlog(g, "rejoined", name)
                             return self.send({"pid": old_pid, "team": op.get("team", "")})
                 else:
                     name = name[:16]
                     if is_profane(name):
+                        modlog(g, "blocked name", name)
                         return self.send({"error": "That nickname isn't allowed. Pick another!"}, 400)
+                    ex = next(((pid_, p_) for pid_, p_ in g["players"].items() if p_["name"].lower() == name.lower() and not p_.get("bot")), None)
+                    if ex and reclaim:
+                        if time.time() - ex[1].get("seen", 0) < 8:
+                            return self.send({"error": "That player is still connected on another device"}, 400)
+                        modlog(g, "rejoined", name)
+                        return self.send({"pid": ex[0], "team": ex[1].get("team", "")})
                 if name.lower() in g.get("banned", []):
+                    modlog(g, "banned name tried to join", name)
                     return self.send({"error": "You were removed from this game"}, 400)
-                if not name or any(p["name"].lower() == name.lower() for p in g["players"].values()):
-                    return self.send({"error": "Pick a unique nickname"}, 400)
+                taken = any(p_["name"].lower() == name.lower() for p_ in g["players"].values()) or \
+                    any(r_["name"].lower() == name.lower() for r_ in g.get("pending", {}).values())
+                if not name or taken:
+                    return self.send({"error": "Pick a unique nickname. If that's you, tap 'Rejoin as this name'.", "can_reclaim": bool(name)}, 400)
                 pid = "p%08x" % random.getrandbits(32)
-                team_id = pick_balanced_team(g, team_req) if g.get("teams") else ""
-                g["players"][pid] = {
-                    "name": name, "avatar": avatar, "team": team_id,
-                    "score": 0, "answers": {}, "powerups": {}, "wagers": {}, "confident": {},
-                }
-                return self.send({"pid": pid, "team": team_id})
+                rec = {"name": name, "avatar": avatar, "color": color, "ctag": ctag, "team": "",
+                       "score": 0, "answers": {}, "powerups": {}, "wagers": {}, "confident": {}, "don": {}, "seen": time.time()}
+                if g.get("moderate"):
+                    rec["team_req"] = team_req
+                    g.setdefault("pending", {})[pid] = rec
+                    return self.send({"pid": pid, "team": "", "pending": True})
+                rec["team"] = pick_balanced_team(g, team_req) if g.get("teams") else ""
+                g["players"][pid] = rec
+                return self.send({"pid": pid, "team": rec["team"]})
             if path == "/api/confident":
                 p = g["players"].get(body.get("pid"))
                 if not p or g["phase"] != "question" or g["q"] in p["answers"]:
@@ -1611,6 +1978,7 @@ class H(BaseHTTPRequestHandler):
                 if not p or g["phase"] != "icebreaker" or not word:
                     return self.send({"error": "Cannot submit word"}, 400)
                 if is_profane(word):
+                    modlog(g, "blocked word", word)
                     p["word_sent"] = True
                     return self.send({"ok": True})
                 g.setdefault("words", []).append({"text": word, "name": p["name"]})
@@ -1736,10 +2104,8 @@ def _ik(d):
 
 
 def restore_games():
-    try:
-        with open(data_path("games.json")) as fp:
-            raw = json.load(fp)
-    except Exception:
+    raw = K.store.get_json("games", None)
+    if not raw:
         return 0
     n = 0
     now = time.time()
@@ -1754,6 +2120,10 @@ def restore_games():
                 for k in INT_KEY_P:
                     if isinstance(p.get(k), dict):
                         p[k] = _ik(p[k])
+            for r in g.get("pending", {}).values():
+                for k in INT_KEY_P:
+                    if isinstance(r.get(k), dict):
+                        r[k] = _ik(r[k])
             g["phase_entered"] = now
             if g.get("phase") == "intro":
                 g["intro_start"] = now
@@ -1777,11 +2147,9 @@ def snapshot_loop():
             with LOCK:
                 snap = json.dumps(GAMES)
             if snap != last:
-                tmp = data_path("games.json.tmp")
-                with open(tmp, "w") as fp:
-                    fp.write(snap)
-                os.replace(tmp, data_path("games.json"))
                 last = snap
+                K.store.set_json("games", json.loads(snap), compress=True, remote_every=20)
+            K.store.flush_deferred(20)
         except Exception:
             pass
 
