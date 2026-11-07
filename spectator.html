@@ -31,7 +31,7 @@ try{ if(localStorage.getItem('brainrush_a11y')==='cb')document.body.classList.ad
 const cols=['#e21b3c','#1368ce','#d89e00','#26890c','#9c27b0','#00897b'];
 function board(S){
   if(!S.board.length) return `<div class="center" style="font-size:1.2em;opacity:.8">Scores appear after the first question…</div>`;
-  return S.board.map(r=>`<div class="row ${r.rank===1?'top1':''}"><span><span class="rk">${r.rank}</span>${esc(r.team_emoji?r.team_emoji+' ':'')}${esc((r.avatar?r.avatar+' ':'')+r.name)}${r.title?`<span class="ttl">${esc(r.title)}</span>`:''}${r.streak>=5?'<span class="fire"> 🔥🔥</span>':r.streak>=2?' 🔥'+r.streak:''}</span><b class="sc">${r.score}</b></div>`).join('');
+  return S.board.map(r=>`<div class="row ${r.rank===1?'top1':''}"><span><span class="rk">${r.rank}</span>${esc(r.team_emoji?r.team_emoji+' ':'')}${esc(r.avatar?r.avatar+' ':'')}<span${r.color?` style="color:${r.color}"`:''}>${esc(r.name)}</span>${r.ctag?`<span class="ttl">${esc(r.ctag)}</span>`:''}${r.title?`<span class="ttl">${esc(r.title)}</span>`:''}${r.streak>=5?'<span class="fire"> 🔥🔥</span>':r.streak>=2?' 🔥'+r.streak:''}</span><b class="sc">${r.score}</b></div>`).join('');
 }
 function cloud(S){
   const w=S.words||[];

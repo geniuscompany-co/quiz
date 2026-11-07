@@ -23,6 +23,7 @@ function esc(s){return String(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt
 async function post(u,b){return (await fetch(u,{method:'POST',body:JSON.stringify(b)})).json()}
 async function next(){await post('/api/next',{pin,host});poll()}
 async function ctl(action,sec=10){await post('/api/host_ctl',{pin,host,action,sec});poll()}
+async function appr(name,ok){await post('/api/approve',{pin,host,name,approve:ok});poll()}
 async function addBots(n=5){await post('/api/bots',{pin,host,count:n});poll()}
 
 async function poll(){
@@ -30,7 +31,7 @@ async function poll(){
   $.innerHTML=`<h2>🕹️ Host Remote</h2><p>Open the <b>📱 Remote</b> button on your Host screen to pair this phone with your live game.</p>`;
   return;
  }
- const r = await fetch('/api/state?pin='+pin);
+ const r = await fetch('/api/state?pin='+pin+'&host='+encodeURIComponent(host));
  if(!r.ok){ $.innerHTML=`<h2>Game ended or not found</h2>`; return; }
  S = await r.json();
  render();
@@ -50,13 +51,15 @@ function render(){
   <div class="ans-box">
    <div><b>Q${S.index+1}/${S.total}:</b> ${esc(S.question)}</div>
    ${ph==='question'?`<div style="margin-top:6px">⏱️ <b>${Math.ceil(S.left)}s</b> left &middot; <b>${S.answered}/${S.n}</b> answered</div>`:''}
-   ${ph==='results'?`<div style="margin-top:6px">✅ Correct: <b>${sh[S.correct]}${esc((S.answers||[])[S.correct])}</b></div>`:''}
+   ${ph==='results'?`<div style="margin-top:6px">✅ Correct: <b>${S.qtype==='text'?esc((S.answers_correct||[''])[0]):S.qtype==='order'?esc((S.answers_correct||[]).join(' → ')):sh[S.correct]+esc((S.answers||[])[S.correct])}</b></div>`:''}
   </div>` : '';
 
- $.innerHTML = `
+ const noteHtml = ((ph==='question'||ph==='results') && S.note) ? `<div class="ans-box" style="background:#fffbe6;color:#2b0d57">📝 <b style="color:#2b0d57">Teacher note:</b> ${esc(S.note)}</div>` : '';
+  const pendHtml = (S.pending_list||[]).length ? `<div class="ans-box" style="background:#ffdf5d;color:#2b0d57"><b style="color:#2b0d57">🛡️ Waiting for approval:</b><br>${S.pending_list.map(p=>`${esc((p.avatar||'')+' '+p.name)} <button class="ctrl-btn" style="padding:4px 10px" data-n="${esc(p.name)}" onclick="appr(this.dataset.n,true)">✓</button><button class="ctrl-btn" style="padding:4px 10px" data-n="${esc(p.name)}" onclick="appr(this.dataset.n,false)">✕</button>`).join('<br>')}</div>` : '';
+  $.innerHTML = `
   <div class="badge">🕹️ HOST REMOTE &middot; PIN ${esc(pin)}</div>
   <h1>Phase: ${esc(ph.toUpperCase())} (${S.n} players)</h1>
-  ${qInfo}
+  ${pendHtml}${qInfo}${noteHtml}
   ${ph!=='final' ? `<button class="big-btn" onclick="next()">${mainLbl}</button>` : `<p>🎉 Game Complete!</p>`}
   <div class="ctrl-grid">
    ${ph==='question' ? `

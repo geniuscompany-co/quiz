@@ -233,6 +233,8 @@ body.hc .a{outline:3px solid #fff}body.hc .row{border:2px solid #fff}
 .chip.struggling{background:#c62828}.chip.declining{background:#ef6c00}.chip.improving{background:#2e7d32}.chip.ok{background:#ffffff2b}
 .modal .row2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .close-x{float:right;margin:0;padding:6px 14px;font-size:.9em;border-radius:99px;background:#e21b3c}
+.q-img.zoom-hold,.q-img.zoom-go{max-height:300px}.zoom-hold{filter:blur(34px)}.zoom-go{animation:zoomrev 15s linear forwards}
+@keyframes zoomrev{from{filter:blur(34px)}to{filter:blur(0)}}
 </style></head><body>
 <div class="late-join" id="lateJoin">
  <button class="late-btn" onclick="toggleLateQr(event)" title="Click to toggle QR code for late joiners">
@@ -1151,7 +1153,8 @@ function render(){
  }
  last=k;
  const autoSuffix = S.auto && S.auto_left != null ? `<span id="autoNextLbl"> (${S.auto_left}s)</span>` : '';
- const imgHtml = S.img ? `<img class="q-img" src="${esc(S.img)}" alt="">` : '';
+ const zm = S.qtype==='zoom' && S.phase==='question';
+ const imgHtml = S.img ? `<img class="q-img${zm?(inPrev?' zoom-hold':' zoom-go'):''}"${zm&&!inPrev?` style="animation-duration:${S.qtime||15}s"`:''} src="${esc(S.img)}" alt="">` : '';
  const nAct = (S.n_active != null ? S.n_active : S.n);
  if(S.phase=='lobby'){
   spunQ = -1; seenWords.clear();
