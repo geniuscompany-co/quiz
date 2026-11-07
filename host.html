@@ -910,7 +910,7 @@ function teamStandingsHtml(){
  return `<div class="team-grid">${S.team_board.map((t,i)=>`<div class="team-card" style="background:${t.color}">${i===0?'👑 ':''}${t.emoji} ${esc(t.name)}<small>${t.avg} avg pts (${t.members})</small></div>`).join('')}</div>`;
 }
 
-function board(b){return b.map((x,i)=>`<div class="row"><span>${i+1}. ${x.team_emoji?x.team_emoji+' ':''}${esc((x.avatar?x.avatar+' ':'')+x.name)}${x.title?`<span class="title-pill">${esc(x.title)}</span>`:''}${x.streak>=2?`<span class="streak">🔥${x.streak}</span>`:''}${x.frozen_next?' ⛄':''}</span><b>${x.score}</b></div>`).join('')}
+function board(b,off=0){return b.map((x,i)=>`<div class="row"><span>${i+1+off}. ${x.team_emoji?x.team_emoji+' ':''}${esc((x.avatar?x.avatar+' ':'')+x.name)}${x.title?`<span class="title-pill">${esc(x.title)}</span>`:''}${x.streak>=2?`<span class="streak">🔥${x.streak}</span>`:''}${x.frozen_next?' ⛄':''}</span><b>${x.score}</b></div>`).join('')}
 
 let animDone = -1;
 function animBoard(b, qIdx){
@@ -998,7 +998,7 @@ function renderFinal(b){
  let lg = window.lastGame; if(!lg){ try{ lg = JSON.parse(localStorage.getItem('brainrush_last')||'null'); }catch(e){} }
  const qOpts = quizList.map(q=>`<option value="${esc(q.file)}" ${lg&&lg.file===q.file?'selected':''}>${esc(q.title)}</option>`).join('');
  const repCount = (lg && lg.count) ? lg.count : 15;
- return `<h1 class="final-title">🏆 FINAL PODIUM 🏆</h1>${accHtml}${teamStandingsHtml()}${podiumHtml}${awHtml}${toughHtml}${rest.length?'<h2>Runners-up</h2>'+board(rest):''}
+ return `<h1 class="final-title">🏆 FINAL PODIUM 🏆</h1>${accHtml}${teamStandingsHtml()}${podiumHtml}${awHtml}${toughHtml}${rest.length?'<h2>Runners-up</h2>'+board(rest,3):''}
  <div class="replay-box" id="replayBox">
   <b>🔁 Next Round (Keep Players):</b>
   <select id="repQuizSel">${qOpts}</select>
