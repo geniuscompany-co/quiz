@@ -180,6 +180,8 @@ body.hc .a{outline:3px solid #fff}body.hc .row{border:2px solid #fff}
 .g-item b{display:block;font-size:1.02em}
 .g-chip{background:#fff2;border:0;border-radius:99px;padding:5px 12px;margin:0;font-size:.82em;font-weight:700;cursor:pointer}
 .word-tag{animation:none}.word-tag.new{animation:pop .3s ease-out}
+.guide-head{position:sticky;top:-24px;z-index:3;display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--card);margin:-24px -24px 12px;padding:14px 24px;border-bottom:1px solid #fff3;border-radius:14px 14px 0 0}
+.g-close{margin:0;padding:8px 16px;font-size:.95em;border-radius:99px;background:#e21b3c}
 </style></head><body>
 <div class="late-join" id="lateJoin">
  <button class="late-btn" onclick="toggleLateQr(event)" title="Click to toggle QR code for late joiners">
@@ -271,7 +273,7 @@ Quote: Paris has been the capital since 987 CE."></textarea>
 </div>
 <div class="modal-bg" id="guideModal">
  <div class="modal" style="max-width:820px">
-  <h2>📖 Feature Guide</h2>
+  <div class="guide-head"><h2 style="margin:0">📖 Feature Guide</h2><button class="g-close" onclick="document.getElementById('guideModal').classList.remove('open')">✕ Close</button></div>
   <input id="guideSearch" placeholder="🔍 Search features (e.g. snowball, wheel, roster)…" oninput="renderGuide()" style="margin:0 0 10px">
   <div id="guideNav" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px"></div>
   <div id="guideBody"></div>
