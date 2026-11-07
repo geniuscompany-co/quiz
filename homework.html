@@ -1,0 +1,108 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Brainrush! Homework</title>
+<style>
+body{margin:0;font-family:system-ui,sans-serif;background:#46178f;color:#fff;text-align:center;min-height:100vh}
+body.hc{background:#000}
+#app{padding:16px;max-width:560px;margin:auto}
+h1{margin:.3em 0}
+select,input[type=text]{display:block;width:100%;box-sizing:border-box;font-size:1.2em;padding:12px;margin:8px 0;border-radius:8px;border:0;text-align:center;color:#2b0d57;font-weight:700;background:#fff}
+button.go{width:100%;font-size:1.3em;padding:14px;border:0;border-radius:8px;background:#26890c;color:#fff;font-weight:700;cursor:pointer;margin-top:10px}
+button.sec{background:#ffffff2b;color:#fff;border:0;border-radius:8px;padding:10px 18px;font-size:1em;font-weight:700;cursor:pointer;margin:6px}
+.logo{max-width:200px;width:65%;border-radius:16px;margin:6px auto;display:block;box-shadow:0 4px 16px #0004}
+.qnum{display:inline-block;background:#fff;color:#46178f;font-weight:900;padding:4px 16px;border-radius:99px;margin:6px 0}
+.q{font-size:1.45em;font-weight:800;margin:12px 0}
+.q-img{max-height:220px;max-width:100%;border-radius:12px;margin:6px auto;display:block;background:#fff;object-fit:contain}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.grid button{min-height:18vh;padding:12px 10px;border:0;border-radius:10px;color:#fff;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;font-weight:700;font-size:1.1em;line-height:1.25;word-break:break-word}
+.grid button .sh{font-size:1.8em;line-height:1}
+.grid button img{max-height:90px;max-width:100%;border-radius:8px;background:#fff}
+.c0{background:#e21b3c}.c1{background:#1368ce}.c2{background:#d89e00}.c3{background:#26890c}
+body.cb .c0{background:#D55E00}body.cb .c1{background:#0072B2}body.cb .c2{background:#F0E442;color:#222!important}body.cb .c3{background:#009E73}
+body.hc .grid button{border:4px solid #fff}
+.grid button.right{outline:5px solid #fff;box-shadow:0 0 22px #7dff6b}.grid button.dim{opacity:.3}
+.fb{margin-top:14px;padding:14px;border-radius:12px;font-weight:800;font-size:1.2em}.fb.ok{background:#26890c}.fb.no{background:#c62828}
+blockquote{background:#fff;color:#2b0d57;border-radius:10px;padding:12px 16px;margin:12px 0 0;font-style:italic;text-align:left;font-weight:500}
+.slot{background:#fff3;border-radius:8px;padding:8px 12px;margin:4px 0;font-weight:700;text-align:left}
+.stat{display:inline-block;background:#0004;border-radius:10px;padding:8px 16px;margin:4px;font-weight:700}.stat b{display:block;font-size:1.3em;color:#ffdf5d}
+.bar{height:8px;background:#fff3;border-radius:99px;overflow:hidden;margin:8px 0}.bar i{display:block;height:100%;background:#ffdf5d}
+.err{color:#ffb3b3;font-weight:700}.note{background:#0004;border-radius:10px;padding:10px;margin:10px 0;font-weight:600}
+</style></head><body>
+<div id="app"></div>
+<script>
+const $ = document.getElementById('app'), sh = ["▲","◆","●","■"];
+const hid = new URLSearchParams(location.search).get('id') || '';
+let info = null, me = null, cur = null, sel = [], busy = false;
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+async function post(u,b){const r=await fetch(u,{method:'POST',body:JSON.stringify(b)});return {ok:r.ok,...await r.json()}}
+try{ const a=localStorage.getItem('brainrush_a11y'); if(a==='cb')document.body.classList.add('cb'); if(a==='hc')document.body.classList.add('hc'); }catch(e){}
+
+async function init(){
+  const r = await fetch('/api/hw_info?id='+encodeURIComponent(hid));
+  if(!r.ok){ $.innerHTML='<h1>😕 Assignment not found</h1><p>Check the link your teacher gave you.</p>'; return; }
+  info = await r.json();
+  const saved = localStorage.getItem('hw_name_'+hid);
+  if(saved) return begin(saved);
+  welcome();
+}
+function welcome(err){
+  const dl = info.deadline ? new Date(info.deadline*1000).toLocaleString([], {dateStyle:'medium', timeStyle:'short'}) : '';
+  $.innerHTML = `<img class="logo" src="/logo.jpg" alt="" onerror="this.style.display='none'"><h1>📚 ${esc(info.title)}</h1>
+  <p>${info.n} questions${dl?` · due <b>${esc(dl)}</b>`:''}</p>
+  ${info.open?'':'<p class="err">This assignment is closed.</p>'}
+  ${info.roster.length ? `<select id="nm"><option value="">— Pick your name —</option>${info.roster.map(x=>`<option>${esc(x)}</option>`).join('')}</select>` : `<input type="text" id="nm" placeholder="Your name" maxlength="24">`}
+  <button class="go" onclick="begin(document.getElementById('nm').value)">▶️ Start</button><p class="err">${esc(err||'')}</p>
+  <p style="opacity:.8;font-size:.9em">You can close this page and come back later — your progress is saved. Each question can only be answered once.</p>`;
+}
+async function begin(name){
+  const r = await post('/api/hw_start', {id:hid, name});
+  if(!r.ok){ localStorage.removeItem('hw_name_'+hid); return welcome(r.error); }
+  me = r; localStorage.setItem('hw_name_'+hid, r.name);
+  if(r.done) return finish(r);
+  cur = r.question; show();
+}
+function show(){
+  sel = [];
+  const q = cur, t = q.type || 'mc';
+  let body = '';
+  if(t==='text') body = `<input type="text" id="txt" placeholder="Type your answer…" autocomplete="off" autocapitalize="off" onkeydown="if(event.key==='Enter')submitText()"><button class="go" onclick="submitText()">Submit</button>`;
+  else if(t==='order') body = `<p>Tap the items in the correct order:</p><div id="ord"></div>`;
+  else body = `<div class="grid">${q.a.map((a,i)=>`<button class="c${i}" onclick="pick(${i})">${q.aimg&&q.aimg[i]?`<img src="${esc(q.aimg[i])}" alt="">`:''}<span class="sh">${sh[i]}</span><span>${esc(a)}</span></button>`).join('')}</div>`;
+  $.innerHTML = `<div class="qnum">Question ${q.i+1} of ${q.n}</div> <span class="stat" style="padding:4px 12px">⭐ ${me.score||0}</span>
+  <div class="bar"><i style="width:${Math.round(q.i/q.n*100)}%"></i></div>
+  <div class="q">${esc(q.q)}</div>${q.img?`<img class="q-img" src="${esc(q.img)}" alt="">`:''}${body}<div id="fb"></div>`;
+  if(t==='order') drawOrd();
+  if(t==='text'){ const e=document.getElementById('txt'); e&&e.focus(); }
+}
+function drawOrd(){
+  const el=document.getElementById('ord'); if(!el) return; const d=cur.a;
+  el.innerHTML = sel.map((j,n)=>`<div class="slot">${n+1}. ${esc(d[j])}</div>`).join('') +
+   `<div class="grid">${d.map((a,j)=>sel.includes(j)?'':`<button class="c${j}" style="min-height:10vh" onclick="sel.push(${j});drawOrd()"><span>${esc(a)}</span></button>`).join('')}</div>` +
+   `<div><button class="sec" onclick="sel.pop();drawOrd()">↩ Undo</button>${sel.length===d.length?'<button class="go" onclick="submitOrd()">Submit order</button>':''}</div>`;
+}
+function pick(i){ send({choice:i}, i); }
+function submitText(){ const v=document.getElementById('txt').value.trim(); if(v) send({text:v}); }
+function submitOrd(){ send({seq:sel.slice()}); }
+async function send(payload, idx){
+  if(busy) return; busy = true;
+  const r = await post('/api/hw_answer', {id:hid, name:me.name, ...payload});
+  busy = false;
+  if(!r.ok){ alert(r.error || 'Something went wrong'); if((r.error||'').includes('closed')) location.reload(); return; }
+  me.score = r.score;
+  document.querySelectorAll('.grid button').forEach(b=>b.disabled=true);
+  const fb = document.getElementById('fb');
+  fb.innerHTML = `<div class="fb ${r.ok?'ok':'no'}">${r.ok?'✅ Correct!':'❌ Not quite'}${r.ok?'':'<br><small>Answer: '+esc(r.answer)+'</small>'}</div>
+   ${r.quote?`<blockquote>“${esc(r.quote)}”</blockquote>`:''}
+   <button class="go" id="nx">${r.done?'See my results':'Next ➔'}</button>`;
+  document.getElementById('nx').onclick = ()=>{ if(r.done) finish(r); else { cur = r.question; show(); } };
+  fb.scrollIntoView({behavior:'smooth', block:'nearest'});
+}
+function finish(r){
+  const pct = Math.round(100*r.correct/r.n);
+  $.innerHTML = `<h1>${pct>=90?'🏆':pct>=70?'🎉':'💪'} All done, ${esc(me.name)}!</h1>
+  <div><span class="stat"><b>${pct}%</b>${r.correct}/${r.n} correct</span><span class="stat"><b>⭐ ${r.score}</b>Points</span></div>
+  <p>Your teacher can see your results. You can close this page.</p>
+  <p><a href="/practice" style="color:#fff">🧑‍🎓 Practice more →</a></p>`;
+}
+init();
+</script></body></html>

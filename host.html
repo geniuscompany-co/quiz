@@ -212,6 +212,27 @@ body.hc .a{outline:3px solid #fff}body.hc .row{border:2px solid #fff}
 .final-bar button small{font-weight:600;opacity:.8;font-size:.7em}
 .final-bar .fb-new{background:#1368ce}.final-bar .fb-sec{background:#ffffff2b;font-size:1em}
 @media (max-height:820px){.podium{min-height:420px}.pod-1 .pod-bar{height:240px}.pod-2 .pod-bar{height:180px}.pod-3 .pod-bar{height:135px}.pod-medal{font-size:70px}.pod-1 .pod-medal{font-size:100px}.pod-3 .pod-medal{font-size:60px}.pod-rank{font-size:70px}.pod-1 .pod-rank{font-size:90px}.pod-1 .pod-avatar{font-size:4.5em}.final-title{font-size:2.6em}}
+
+.speed-banner{display:inline-block;background:linear-gradient(90deg,#00b8d4,#2979ff);color:#fff;font-weight:900;padding:7px 22px;border-radius:99px;font-size:1.1em;margin:4px;border:2px solid #fff8;box-shadow:0 4px 14px #0005;animation:pulse .5s infinite alternate}
+.dbl-banner{display:inline-block;background:linear-gradient(90deg,#d500f9,#ff1744);color:#fff;font-weight:900;padding:7px 22px;border-radius:99px;font-size:1.1em;margin:4px;border:2px solid #fff8;box-shadow:0 4px 14px #0005;animation:pulse .6s infinite alternate}
+.ctag{font-size:.6em;font-style:normal;background:#ffffff28;border:1px solid #fff5;padding:1px 8px;border-radius:99px;margin-left:6px;vertical-align:middle;color:#ffdf5d;font-weight:800}
+.pend-box{max-width:760px;margin:10px auto;background:#ffdf5d;color:#2b0d57;border-radius:12px;padding:10px 14px;font-weight:700}
+.pend{display:inline-block;background:#fff;border-radius:99px;padding:4px 6px 4px 12px;margin:4px}
+.pend button{margin:0 2px;padding:2px 10px;font-size:.9em;border-radius:99px}
+#metaBar{position:fixed;left:14px;bottom:14px;z-index:35;display:none;flex-direction:column;align-items:flex-start;gap:8px;max-width:420px}
+.topic-chip{background:#0007;border:1px solid #fff4;border-radius:99px;padding:6px 14px;font-weight:800;font-size:.95em}
+.note-btn,.mod-btn{margin:0;padding:7px 14px;font-size:.9em;border-radius:99px;background:#0009;border:1px solid #fff5}
+.mod-btn{background:#ffdf5d;color:#2b0d57}
+.note-box{background:#fffbe6;color:#2b0d57;border-radius:12px;padding:12px 16px;font-weight:700;box-shadow:0 8px 24px #000a;text-align:left;font-size:1.05em}
+.tbar{height:8px;background:#fff2;border-radius:99px;overflow:hidden;margin-top:4px}.tbar i{display:block;height:100%}
+.toolbox{background:#0004;border-radius:10px;padding:10px 12px;margin:8px 0;font-size:.9em}
+.toolbox textarea{min-height:90px}.toolbox p{margin:0 0 6px;opacity:.85}
+.qtools{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0}
+.mt{width:100%;border-collapse:collapse;font-size:.92em}.mt th,.mt td{padding:6px 8px;border-bottom:1px solid #fff2;text-align:left}
+.chip{display:inline-block;border-radius:99px;padding:2px 10px;font-size:.82em;font-weight:800}
+.chip.struggling{background:#c62828}.chip.declining{background:#ef6c00}.chip.improving{background:#2e7d32}.chip.ok{background:#ffffff2b}
+.modal .row2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.close-x{float:right;margin:0;padding:6px 14px;font-size:.9em;border-radius:99px;background:#e21b3c}
 </style></head><body>
 <div class="late-join" id="lateJoin">
  <button class="late-btn" onclick="toggleLateQr(event)" title="Click to toggle QR code for late joiners">
@@ -250,7 +271,12 @@ body.hc .a{outline:3px solid #fff}body.hc .row{border:2px solid #fff}
    <button id="hcBtn" onclick="toggleHc()"><span>◐ High Contrast</span><span class="state" id="hcState">Off</span></button>
   <div class="menu-sep"></div>
   <button id="remoteBtn" style="display:none" onclick="closeNavMenu();openRemoteModal()"><span>📱 Phone Host Remote</span><span class="state">Open ↗</span></button>
-  <button onclick="closeNavMenu();openHistory()"><span>📈 Results History</span><span class="state">View</span></button>
+  <button onclick="closeNavMenu();openAccount()"><span>👤 Teacher Account</span><span class="state" id="acctState">Guest</span></button>
+   <button onclick="closeNavMenu();openProgress()"><span>👥 Student Progress</span><span class="state">View</span></button>
+   <button onclick="closeNavMenu();openHomework()"><span>📚 Homework</span><span class="state">Assign</span></button>
+   <button onclick="closeNavMenu();openModeration()"><span>🛡️ Moderation</span><span class="state">Live</span></button>
+   <button onclick="closeNavMenu();openStorage()"><span>💾 Saved Storage</span><span class="state" id="storState">…</span></button>
+   <button onclick="closeNavMenu();openHistory()"><span>📈 Results History</span><span class="state">View</span></button>
    <button onclick="closeNavMenu();openLinks()"><span>🖥️ Spectator &amp; Practice Links</span><span class="state">Open ↗</span></button>
    <button onclick="closeNavMenu();openGuide()"><span>📖 Feature Guide</span><span class="state">What's what</span></button>
    <button id="addQuizMenuBtn" onclick="closeNavMenu();openQuizModal()"><span>➕ Create / Upload Quiz</span><span class="state">New</span></button>
@@ -278,13 +304,32 @@ body.hc .a{outline:3px solid #fff}body.hc .row{border:2px solid #fff}
    <span style="font-size:.88em;font-weight:700;opacity:.85">📂 Existing Quiz:</span>
    <select id="editQuizSel" style="flex:1;min-width:160px;padding:7px 10px;border-radius:6px;border:0;font-weight:700;color:#2b0d57"></select>
    <button class="btn-sm" style="margin:0" onclick="loadExistingQuiz()">✏️ Load</button>
+   <button class="btn-sm" style="margin:0" onclick="duplicateSelectedQuiz()">⧉ Duplicate</button>
    <button class="btn-sm" style="margin:0" onclick="exportSelectedQuiz()">📥 Export .json</button>
    <button class="btn-sm" style="margin:0;background:#e21b3c88" onclick="deleteSelectedQuiz()">🗑️ Delete</button>
   </div>
   <label><b>Quiz Title:</b></label>
   <input id="customTitle" placeholder="e.g. Chapter 9 Review">
+  <div class="row2"><div><label><b>Folder (optional):</b></label><input id="customFolder" list="folderList" placeholder="e.g. Math"><datalist id="folderList"></datalist></div>
+  <div><label><b>Tags (comma separated):</b></label><input id="customTags" placeholder="unit 3, fractions"></div></div>
   <label><b>Upload .json or .csv file (optional):</b></label>
   <input type="file" id="customFile" accept=".json,.csv" onchange="loadCustomFile(event)">
+  <div class="qtools">
+   <button class="btn-sm" style="margin:0" onclick="toggleTool('import')">📋 Import table / Google Sheet</button>
+   <button class="btn-sm" style="margin:0" onclick="toggleTool('ai')">✨ AI draft</button>
+  </div>
+  <div class="toolbox" id="toolImport" style="display:none">
+   <p>Copy rows from Excel or Google Sheets (or a CSV) and paste below. Use a header row such as <code>Question, A, B, C, D, Correct, Topic, Quote, Note</code> (Correct can be A–D, 1–4 or the answer text). Or paste a Google Sheet link that is shared as "Anyone with the link can view".</p>
+   <div style="display:flex;gap:6px"><input id="sheetUrl" placeholder="https://docs.google.com/spreadsheets/d/…" style="margin:0"><button class="btn-sm" style="margin:0;white-space:nowrap" onclick="importSheet()">Fetch sheet</button></div>
+   <textarea id="tableText" placeholder="Paste table here (tab or comma separated)"></textarea>
+   <button class="btn-sm" style="margin:0" onclick="importTable()">Convert to questions ↓</button>
+  </div>
+  <div class="toolbox" id="toolAi" style="display:none">
+   <p>Paste a paragraph or article and get a draft quiz to review and edit. <span id="aiHint"></span></p>
+   <div class="row2"><input id="aiTopic" placeholder="Topic (e.g. The Water Cycle)" style="margin:0"><input id="aiCount" type="number" min="1" max="25" value="8" style="margin:0"></div>
+   <textarea id="aiText" placeholder="Paste text here…"></textarea>
+   <button class="btn-sm" style="margin:0" onclick="aiGenerate()">✨ Generate draft ↓</button> <span id="aiMsg" style="font-weight:700"></span>
+  </div>
   <label><b>Or type/paste questions (one per block, mark correct answer with *, optional Image: or Quote:):</b></label>
   <div style="font-size:.8em;opacity:.75;margin:2px 0 6px">Extras: <code>Type: tf</code> (True/False — put <code>*True</code> or <code>*False</code>), <code>Type: text</code> (each line is an accepted typed answer), <code>Type: order</code> (list items in the correct order). Answer pictures: <code>Paris | https://…/paris.jpg</code></div>
   <textarea id="customText" placeholder="What is the capital of France?
@@ -301,6 +346,27 @@ Quote: Paris has been the capital since 987 CE."></textarea>
   </div>
  </div>
 </div>
+<div class="modal-bg" id="acctModal"><div class="modal" style="max-width:440px">
+  <h2>👤 Teacher Account</h2><div id="acctBody"></div>
+  <div style="text-align:center"><button style="margin:12px 0 0;padding:10px 22px;font-size:1.05em" onclick="document.getElementById('acctModal').classList.remove('open')">Close</button></div>
+</div></div>
+<div class="modal-bg" id="storModal"><div class="modal" style="max-width:640px">
+  <h2>💾 Saved Storage</h2><div id="storBody"></div>
+  <div style="text-align:center"><button style="margin:12px 0 0;padding:10px 22px;font-size:1.05em" onclick="document.getElementById('storModal').classList.remove('open')">Close</button></div>
+</div></div>
+<div class="modal-bg" id="modModal"><div class="modal" style="max-width:700px">
+  <button class="close-x" onclick="closeModeration()">✕ Close</button>
+  <h2>🛡️ Moderation</h2><div id="modBody">Loading…</div>
+</div></div>
+<div class="modal-bg" id="progModal"><div class="modal" style="max-width:820px">
+  <button class="close-x" onclick="document.getElementById('progModal').classList.remove('open')">✕ Close</button>
+  <h2>👥 Student Progress</h2><div id="progBody">Loading…</div>
+  <div style="text-align:right"><button class="btn-sec" style="margin:0" onclick="exportProgress()">📥 Export CSV</button></div>
+</div></div>
+<div class="modal-bg" id="hwModal"><div class="modal" style="max-width:820px">
+  <button class="close-x" onclick="document.getElementById('hwModal').classList.remove('open')">✕ Close</button>
+  <h2>📚 Homework</h2><div id="hwBody">Loading…</div>
+</div></div>
 <div class="modal-bg" id="guideModal">
  <div class="modal" style="max-width:820px">
   <div class="guide-head"><h2 style="margin:0">📖 Feature Guide</h2><button class="g-close" onclick="document.getElementById('guideModal').classList.remove('open')">✕ Close</button></div>
@@ -354,6 +420,10 @@ Quote: Paris has been the capital since 987 CE."></textarea>
     <label class="mode-pill"><input id="qHot" type="checkbox" checked> 🔥 Hot Seat Rounds</label>
     <label class="mode-pill"><input id="qBattle" type="checkbox" onchange="if(this.checked){document.getElementById('qTeams').checked=true}updateOptSummary()"> 🤝 Team Battle (every 5th Q)</label>
     <label class="mode-pill"><input id="qTie" type="checkbox" checked> ⚔️ Sudden-Death Tiebreaker</label>
+    <label class="mode-pill"><input id="qSpeed" type="checkbox"> ⚡ Speed Round (5 rapid Qs)</label>
+    <label class="mode-pill"><input id="qDbl" type="checkbox"> 💥 Double or Nothing Question</label>
+    <label class="mode-pill"><input id="qSteal" type="checkbox"> 🕵️ Steal / Swap Power-Up</label>
+    <label class="mode-pill"><input id="qMod" type="checkbox"> 🛡️ Approve Names First</label>
    </div>
    <div id="icePromptRow" style="display:block;margin-bottom:12px">
     <label style="display:block;font-size:.86em;font-weight:700;opacity:.85;margin-bottom:4px">💭 Warm-Up Question:</label>
@@ -408,7 +478,7 @@ function toggleAdvPanel(){
  if(c) c.textContent = open ? '▴' : '▾';
 }
 function updateOptSummary(){
- const ids = ['qShuffle','qWager','qRedemp','qSabotage','qWheel','qTeams','qIce','qAuto','qHot','qBattle','qTie'];
+ const ids = ['qShuffle','qWager','qRedemp','qSabotage','qWheel','qTeams','qIce','qAuto','qHot','qBattle','qTie','qSpeed','qDbl','qSteal','qMod'];
  let n = ids.filter(id=>{const el=document.getElementById(id); return el && el.checked;}).length;
  const bots = document.getElementById('qBots');
  if(bots && parseInt(bots.value,10) > 0) n++;
@@ -642,6 +712,8 @@ function formatQuestionsBlock(qs){
   if(t === 'tf') lines.push('*'+(q.a[q.c]||'True'));
   else (q.a||[]).forEach((ans,i)=>lines.push((t==='mc'&&i===q.c?'*':'')+ans+((q.aimg&&q.aimg[i])?' | '+q.aimg[i]:'')));
   if(q.img) lines.push('Image: '+q.img);
+  if(q.topic) lines.push('Topic: '+q.topic);
+  if(q.note) lines.push('Note: '+q.note);
   if(q.quote) lines.push('Quote: '+q.quote);
   return lines.join('\n');
  }).join('\n\n');
@@ -720,11 +792,13 @@ function parseCustomQuestions(raw){
    const type = tl ? tl.replace(/^type:\s*/i,'').toLowerCase().trim() : 'mc';
    const maxA = (type==='order'||type==='text') ? 6 : 4;
    const a = [], aimg = [];
-   let c = 0, quote = '', img = '', starTxt = '';
+   let c = 0, quote = '', img = '', starTxt = '', topic = '', note = '';
    lines.slice(1).forEach(l=>{
     if(/^quote:/i.test(l)){ quote = l.replace(/^quote:\s*/i,''); }
     else if(/^image:/i.test(l)){ img = l.replace(/^image:\s*/i,''); }
     else if(/^type:/i.test(l)){ }
+    else if(/^topic:/i.test(l)){ topic = l.replace(/^topic:\s*/i,''); }
+    else if(/^note:/i.test(l)){ note = l.replace(/^note:\s*/i,''); }
     else if(a.length < maxA){
      let t = l, star = false;
      if(t.startsWith('*')){ star = true; t = t.slice(1).trim(); }
@@ -735,9 +809,10 @@ function parseCustomQuestions(raw){
      a.push(t); aimg.push(im);
     }
    });
-   const out = {q, a, c, quote, img};
+   const out = {q, a, c, quote, img, topic, note};
    if(type==='tf'){ out.type='tf'; out.a=['True','False']; out.c=/^f/i.test(starTxt||'t')?1:0; }
    else if(type==='text'||type==='order'){ out.type=type; out.c=0; }
+   else if(type==='zoom'){ out.type='zoom'; if(aimg.some(Boolean)) out.aimg = aimg; }
    else if(aimg.some(Boolean)) out.aimg = aimg;
    return out;
   }).filter(Boolean);
@@ -761,7 +836,10 @@ function mergeQuizLists(serverList){
 function renderQuizSelect(selectedFile){
  const sel = document.getElementById('quizSel');
  if(!sel) return;
- sel.innerHTML = quizList.map(q=>`<option value="${esc(q.file)}">${esc(q.title)}</option>`).join('');
+ const groups = {};
+  quizList.forEach(q=>{ const f = q.folder || (q.questions ? 'Saved on this device' : 'My Quizzes'); (groups[f] = groups[f] || []).push(q); });
+  const order = Object.keys(groups).sort((a,b)=> (a==='Built-in')-(b==='Built-in') || a.localeCompare(b));
+  sel.innerHTML = order.map(f=>`<optgroup label="${esc(f)}">${groups[f].map(q=>`<option value="${esc(q.file)}">${esc(q.title)}${(q.tags&&q.tags.length)?' — #'+esc(q.tags.join(' #')):''}</option>`).join('')}</optgroup>`).join('');
  if(selectedFile) sel.value = selectedFile;
  syncQuizCount();
 }
@@ -771,7 +849,7 @@ async function saveCustomQuiz(){
  const raw = document.getElementById('customText').value;
  try{
   const qs = parseCustomQuestions(raw);
-  const r = await postPw('/api/upload_quiz', {title, questions: qs});
+  const r = await postPw('/api/upload_quiz', {title, questions: qs, folder: (document.getElementById('customFolder')||{}).value||'', tags: ((document.getElementById('customTags')||{}).value||'').split(',').map(x=>x.trim()).filter(Boolean)});
   if(r.error){ document.getElementById('customErr').textContent = r.error; return; }
   const savedQuestions = r.questions || qs;
   storeCustomQuizLocal({
@@ -801,7 +879,7 @@ function syncQuizCount(){
 }
 (async()=>{
  try{
-  const r = await (await fetch('/api/quizzes')).json();
+  const r = await (await fetch('/api/quizzes?token='+encodeURIComponent(localStorage.getItem('brainrush_token')||''))).json();
   quizList = mergeQuizLists((r && r.quizzes) || []);
   if(quizList.length) renderQuizSelect();
  }catch(e){
@@ -841,6 +919,10 @@ async function create(){
   hotseat:(document.getElementById('qHot')||{checked:true}).checked,
   team_battle:(document.getElementById('qBattle')||{checked:true}).checked,
   tiebreak:(document.getElementById('qTie')||{checked:true}).checked,
+  speed:(document.getElementById('qSpeed')||{}).checked||false,
+  dbl:(document.getElementById('qDbl')||{}).checked||false,
+  steal:(document.getElementById('qSteal')||{}).checked||false,
+  moderate:(document.getElementById('qMod')||{}).checked||false,
   roster:(document.getElementById('qRoster').value||'').split('\n').map(x=>x.trim()).filter(Boolean),
   logo:(document.getElementById('qLogo').value||'').trim(),
   icebreaker:ice ? ice.checked : false,
@@ -865,11 +947,11 @@ async function editIcePrompt(){
 let busy=false;
 async function next(){ensureAudio();if(busy)return;busy=true;try{await post('/api/next',{pin,host});await poll()}finally{setTimeout(()=>busy=false,500)}}
 async function poll(){
- const r=await fetch('/api/state?pin='+pin);S=await r.json();
+ const r=await fetch('/api/state?pin='+pin+'&host='+encodeURIComponent(host||''));S=await r.json();
  const ab = document.getElementById('autoBtn'), ast = document.getElementById('autoState');
  if(ab) ab.classList.toggle('on', !!S.auto);
  if(ast) ast.textContent = S.auto ? 'ON' : 'Off';
- showReactions(S.reactions);handleAudio();render();
+ showReactions(S.reactions);handleAudio();render();updateMeta();
 }
 
 function handleAudio(){
@@ -910,7 +992,7 @@ function teamStandingsHtml(){
  return `<div class="team-grid">${S.team_board.map((t,i)=>`<div class="team-card" style="background:${t.color}">${i===0?'👑 ':''}${t.emoji} ${esc(t.name)}<small>${t.avg} avg pts (${t.members})</small></div>`).join('')}</div>`;
 }
 
-function board(b,off=0){return b.map((x,i)=>`<div class="row"><span>${i+1+off}. ${x.team_emoji?x.team_emoji+' ':''}${esc((x.avatar?x.avatar+' ':'')+x.name)}${x.title?`<span class="title-pill">${esc(x.title)}</span>`:''}${x.streak>=2?`<span class="streak">🔥${x.streak}</span>`:''}${x.frozen_next?' ⛄':''}</span><b>${x.score}</b></div>`).join('')}
+function board(b,off=0){return b.map((x,i)=>`<div class="row"><span>${i+1+off}. ${x.team_emoji?x.team_emoji+' ':''}${esc(x.avatar?x.avatar+' ':'')}${nameHtml(x)}${x.title?`<span class="title-pill">${esc(x.title)}</span>`:''}${x.streak>=2?`<span class="streak">🔥${x.streak}</span>`:''}${x.frozen_next?' ⛄':''}</span><b>${x.score}</b></div>`).join('')}
 
 let animDone = -1;
 function animBoard(b, qIdx){
@@ -927,7 +1009,7 @@ function animBoard(b, qIdx){
   const streak = x.streak >= 5 ? `<span class="streak fire">🔥🔥${x.streak}</span>` : x.streak >= 2 ? `<span class="streak">🔥${x.streak}</span>` : '';
   const ice = x.frozen_next ? ` <span title="Frozen by a snowball for next question!">⛄</span>` : '';
   const gain = x.gained !== 0 ? `<span class="gain ${first?'':'show'}">${x.gained>0?'+'+x.gained:x.gained}</span>` : '';
-  const label = (x.team_emoji ? x.team_emoji + ' ' : '') + esc((x.avatar ? x.avatar + ' ' : '') + x.name);
+  const label = (x.team_emoji ? x.team_emoji + ' ' : '') + esc(x.avatar ? x.avatar + ' ' : '') + nameHtml(x);
   return `<div class="row${x.streak>=5?' onfire':''}" data-idx="${i}" data-prev="${sc}" data-score="${x.score}" data-diff="${diff}" style="transform:translateY(${pIdx*H}px)"><span><b class="rk">${rk}</b>. ${label}${ttl}${streak}${ice}${arrow}</span><span>${gain}<b class="sc">${sc}</b></span></div>`;
  }).join('');
  if(first){
@@ -979,7 +1061,7 @@ function renderFinal(b){
  const podSlot = (p, place, medal) => p ? `<div class="pod pod-${place} ${podiumShown?'show':''}" id="pod${place}">
   ${place===1?'<div class="pod-crown">👑</div>':''}
   <div class="pod-avatar">${esc(p.avatar||'🙂')}</div>
-  <div class="pod-name">${p.team_emoji?p.team_emoji+' ':''}${esc(p.name)}</div>
+  <div class="pod-name">${p.team_emoji?p.team_emoji+' ':''}${nameHtml(p)}</div>
   <div class="pod-score">${p.score} pts</div>
   <div class="pod-bar"><div class="pod-medal">${medal}</div><div class="pod-rank">${place}</div></div>
  </div>` : '';
@@ -998,7 +1080,7 @@ function renderFinal(b){
  let lg = window.lastGame; if(!lg){ try{ lg = JSON.parse(localStorage.getItem('brainrush_last')||'null'); }catch(e){} }
  const qOpts = quizList.map(q=>`<option value="${esc(q.file)}" ${lg&&lg.file===q.file?'selected':''}>${esc(q.title)}</option>`).join('');
  const repCount = (lg && lg.count) ? lg.count : 15;
- return `<h1 class="final-title">🏆 FINAL PODIUM 🏆</h1>${accHtml}${teamStandingsHtml()}${podiumHtml}${awHtml}${toughHtml}${rest.length?'<h2>Runners-up</h2>'+board(rest,3):''}
+ return `<h1 class="final-title">🏆 FINAL PODIUM 🏆</h1>${accHtml}${teamStandingsHtml()}${podiumHtml}${awHtml}${topicPanel()}${toughHtml}${rest.length?'<h2>Runners-up</h2>'+board(rest,3):''}
  <div class="replay-box" id="replayBox">
   <b>🔁 Next Round (Keep Players):</b>
   <select id="repQuizSel">${qOpts}</select>
@@ -1073,9 +1155,9 @@ function render(){
  const nAct = (S.n_active != null ? S.n_active : S.n);
  if(S.phase=='lobby'){
   spunQ = -1; seenWords.clear();
-  const nm = (S.lobby||[]).map(p=>`<span>${esc(p.tag)}<button class="kick" title="Remove ${esc(p.name)}" data-n="${esc(p.name)}" onclick="kickPlayer(this.dataset.n)">✖</button></span>`).join('');
+  const nm = (S.lobby||[]).map(p=>`<span${p.color?` style="color:${p.color}"`:''}>${esc(p.tag)}${p.ctag?`<em class="ctag">${esc(p.ctag)}</em>`:''}<button class="kick" title="Remove ${esc(p.name)}" data-n="${esc(p.name)}" onclick="kickPlayer(this.dataset.n)">✖</button></span>`).join('');
   $.innerHTML=`<h1>Join at <a class="join-link" href="/play?pin=${pin}" target="_blank">plw.me/play</a> with PIN</h1><div class="lobby-box"><div class="pin">${pin}</div>${QR}</div>
-  <p>${S.n} player(s)</p>${teamStandingsHtml()}<div class="names">${nm}</div>
+  <p>${S.n} player(s)</p>${teamStandingsHtml()}${pendingHtml()}<div class="names">${nm}</div>
   <div><button class="btn-sec" onclick="addBots(5)">🤖 +5 Phantom players</button>${S.n?'<button onclick="next()">Start</button>':''}</div>`;
  } else if(S.phase=='icebreaker'){
   const cols = ['#e21b3c','#1368ce','#d89e00','#26890c','#9c27b0','#00897b'];
@@ -1092,7 +1174,14 @@ function render(){
   <button onclick="next()">Start Question 1 ➔</button>`;
  } else if(S.phase=='intro'){
   const ipct = Math.max(0, Math.min(100, ((S.intro_left||0)/(S.intro_total||5))*100));
-  if(S.redemption){
+  if(S.speed && !S.redemption){
+   $.innerHTML=`<div class="qnum">Question ${S.index+1} <small>of ${S.total}</small></div>
+   <div class="redemp-screen" style="border-color:#00e5ff"><div class="redemp-big" style="color:#00e5ff">⚡ SPEED ROUND ⚡</div>
+    <p>Five rapid-fire questions — just <b>5 seconds</b> each, no reading time.</p>
+    <p>The leaderboard stays hidden until the round ends. Fast fingers win!</p>
+    <div class="preview-bar"><div class="preview-fill" id="ib" style="width:${ipct}%"></div></div>
+   </div>`;
+  } else if(S.redemption){
    $.innerHTML=`<div class="qnum">Question ${S.index+1} <small>of ${S.total}</small></div>
    <div class="redemp-screen"><div class="redemp-big">🔄 REDEMPTION 🔄</div>
     <p>The question the class struggled with most is <b>back for a second chance!</b></p>
@@ -1111,7 +1200,7 @@ function render(){
   const pct = Math.min(100, ((S.preview_left||0)/(S.preview_total||5))*100);
   const wheelBanner = S.wheel_mod ? `<div class="wheel-banner">🎡 MYSTERY WHEEL: ${esc(S.wheel_mod)}</div>` : '';
   const extraB = `${S.team_battle?`<div class="team-banner">🤝 TEAM BATTLE! Your team's most popular answer earns +300 each</div>`:''}${S.hot?`<div class="hot-banner">🔥 HOT SEAT: ${esc(S.hot.name)} — will they nail it?</div>`:''}${S.tiebreak?`<div class="tb-banner">⚔️ SUDDEN DEATH TIEBREAKER: ${(S.tb_names||[]).map(esc).join(' vs ')}</div>`:''}`;
-  const badges = `${wheelBanner}${extraB}${S.redemption?'<div class="redemp-banner">🔄 REDEMPTION QUESTION (MOST MISSED!) 🔄</div>':''}${S.boss?'<div class="double-banner">🎰 FINAL BOSS WAGER! 🎰</div>':S.double?'<div class="double-banner">⚡ DOUBLE POINTS! ⚡</div>':''}`;
+  const badges = `${wheelBanner}${S.speed?'<div class="speed-banner">⚡ SPEED ROUND — 5 seconds, no waiting!</div>':''}${S.dbl?'<div class="dbl-banner">💥 DOUBLE OR NOTHING — opt in on your phone!</div>':''}${extraB}${S.redemption?'<div class="redemp-banner">🔄 REDEMPTION QUESTION (MOST MISSED!) 🔄</div>':''}${S.boss?'<div class="double-banner">🎰 FINAL BOSS WAGER! 🎰</div>':S.double?'<div class="double-banner">⚡ DOUBLE POINTS! ⚡</div>':''}`;
   if(inPrev){
    $.innerHTML=`<div class="qnum">Question ${S.index+1} <small>of ${S.total}</small></div>
    <div class="q-stage">
@@ -1515,4 +1604,374 @@ function toggleAwake(){
 document.addEventListener('visibilitychange', ()=>{ if(document.visibilityState === 'visible') acquireWake(); });
 ['pointerdown','keydown','touchstart'].forEach(ev=>window.addEventListener(ev, ()=>{ if(!wakeLock) acquireWake(); }, {passive:true}));
 acquireWake();
+</script>
+<script>
+// ===== Round 3 features: accounts, library, moderation, progress, homework =====
+let CFG = {};
+function getToken(){ return localStorage.getItem('brainrush_token') || ''; }
+function getUser(){ return localStorage.getItem('brainrush_user') || ''; }
+function nameHtml(x){
+ const c = x.color && /^#[0-9a-f]{3,8}$/i.test(x.color);
+ return `<span${c?` style="color:${x.color}"`:''}>${esc(x.name)}</span>${x.ctag?`<em class="ctag">${esc(x.ctag)}</em>`:''}`;
+}
+function pendingHtml(){
+ const pl = S.pending_list || [];
+ if(!pl.length) return '';
+ return `<div class="pend-box"><b>🛡️ Waiting for approval:</b> ${pl.map(p=>`<span class="pend">${esc((p.avatar||'')+' '+p.name)} <button data-n="${esc(p.name)}" onclick="approveName(this.dataset.n,true)">✓</button><button style="background:#e21b3c" data-n="${esc(p.name)}" onclick="approveName(this.dataset.n,false)">✕</button></span>`).join('')}</div>`;
+}
+async function approveName(name, ok){ await post('/api/approve', {pin, host, name, approve: ok}); await poll(); if(document.getElementById('modModal').classList.contains('open')) refreshMod(); }
+function topicPanel(){
+ const t = (S.stats && S.stats.topics) || [];
+ if(!t.length) return '';
+ return `<div class="tough-box"><h3>📊 Accuracy by topic</h3>${t.map(x=>`<div class="tough-item"><b>${x.pct}%</b> — ${esc(x.topic)}<div class="tbar"><i style="width:${x.pct}%;background:${x.pct<60?'#ff5252':x.pct<80?'#ffb300':'#69f0ae'}"></i></div></div>`).join('')}</div>`;
+}
+
+// --- teacher note / topic / approval badge (kept off the projected question area) ---
+let noteOpen = false, noteQ = -2;
+function toggleNote(){ noteOpen = !noteOpen; updateMeta(); }
+function updateMeta(){
+ let bar = document.getElementById('metaBar');
+ if(!bar){ bar = document.createElement('div'); bar.id = 'metaBar'; document.body.appendChild(bar); }
+ if(S.index !== noteQ){ noteQ = S.index; noteOpen = false; }
+ const inQ = S.phase === 'question' || S.phase === 'results';
+ let h = '';
+ if(inQ && S.topic) h += `<span class="topic-chip">🏷️ ${esc(S.topic)}</span>`;
+ if(inQ && S.note) h += `<button class="note-btn" onclick="toggleNote()">📝 ${noteOpen?'Hide':'Show'} teacher note (N)</button>${noteOpen?`<div class="note-box">${esc(S.note)}</div>`:''}`;
+ if((S.pending_list||[]).length) h += `<button class="mod-btn" onclick="openModeration()">🛡️ ${S.pending_list.length} waiting for approval</button>`;
+ if(bar.dataset.k !== h){ bar.dataset.k = h; bar.innerHTML = h; }
+ bar.style.display = h ? 'flex' : 'none';
+}
+window.addEventListener('keydown', e=>{
+ if(['INPUT','TEXTAREA','SELECT'].includes((e.target||{}).tagName)) return;
+ if((e.key==='n'||e.key==='N') && S.note) toggleNote();
+});
+
+// --- auth-aware requests ---
+function useAccounts(){ return CFG.accounts || (CFG.login_required && !CFG.pw); }
+async function postPw(u, b){
+ b.password = sessionStorage.getItem('brainrush_pw') || '';
+ b.token = getToken();
+ let r = await post(u, b);
+ if(r && r.need_pw){
+  if(useAccounts()){ openAccount('Please sign in to continue, then try again.'); return r; }
+  const pw = window.prompt('🔒 Host password required:');
+  if(pw === null) return r;
+  sessionStorage.setItem('brainrush_pw', pw);
+  b.password = pw;
+  r = await post(u, b);
+  if(r && r.need_pw){ sessionStorage.removeItem('brainrush_pw'); alert('Wrong password'); }
+ }
+ return r;
+}
+async function authGet(path){
+ const mk = () => path + (path.includes('?')?'&':'?') + 'token=' + encodeURIComponent(getToken()) + '&pw=' + encodeURIComponent(sessionStorage.getItem('brainrush_pw')||'');
+ let r = await fetch(mk());
+ if(r.status === 403){
+  if(useAccounts()){ openAccount('Please sign in to view this.'); return null; }
+  const pw = window.prompt('🔒 Host password required:');
+  if(pw === null) return null;
+  sessionStorage.setItem('brainrush_pw', pw);
+  r = await fetch(mk());
+  if(r.status === 403){ sessionStorage.removeItem('brainrush_pw'); alert('Wrong password'); return null; }
+ }
+ return r.json();
+}
+async function refreshQuizzes(sel){
+ try{ const r = await (await fetch('/api/quizzes?token=' + encodeURIComponent(getToken()))).json(); quizList = mergeQuizLists(r.quizzes || []); renderQuizSelect(sel); }catch(e){}
+}
+async function loadConfig(){
+ try{
+  CFG = await (await fetch('/api/config?token=' + encodeURIComponent(getToken()))).json();
+  if(CFG.user) localStorage.setItem('brainrush_user', CFG.user);
+  else if(getToken()){ localStorage.removeItem('brainrush_token'); localStorage.removeItem('brainrush_user'); refreshQuizzes(); }
+ }catch(e){}
+ updateAcctLabels();
+}
+function updateAcctLabels(){
+ const a = document.getElementById('acctState'); if(a) a.textContent = getUser() || 'Guest';
+ const s = document.getElementById('storState');
+ if(s && CFG.storage) s.textContent = CFG.storage.persistent ? (CFG.storage.ok ? 'Cloud ✓' : 'Cloud ⚠') : 'Local only';
+ const h = document.getElementById('aiHint'); if(h) h.textContent = CFG.ai ? '(AI is enabled on this server.)' : '(No AI key on the server: you will get an offline fill-in-the-blank draft from your text.)';
+}
+
+// --- Account modal ---
+function openAccount(msg){
+ const b = document.getElementById('acctBody');
+ const u = getUser();
+ b.innerHTML = u ? `<p>Signed in as <b>${esc(u)}</b>.</p><p style="opacity:.85;font-size:.92em">Your quizzes, game history, student progress and homework are saved under this account.</p><button class="btn-sec" style="margin:0" onclick="signOut()">Sign out</button>`
+  : `<p style="opacity:.85;font-size:.92em">Sign in to keep your own quizzes, history, student progress and homework separate from other teachers.${CFG.login_required?' <b>Login is required on this server.</b>':''}</p>
+   <input id="acUser" placeholder="Username" autocomplete="username"><input id="acPass" type="password" placeholder="Password (6+ characters)" autocomplete="current-password">
+   <input id="acCode" placeholder="Teacher signup code (only when creating an account)">
+   <div style="display:flex;gap:8px"><button style="margin:0;flex:1" onclick="acctDo('login')">Sign in</button><button class="btn-sec" style="margin:0;flex:1" onclick="acctDo('register')">Create account</button></div>
+   <div id="acMsg" style="margin-top:8px;font-weight:700;color:#ffb3b3">${esc(msg||'')}</div>`;
+ document.getElementById('acctModal').classList.add('open');
+}
+async function acctDo(kind){
+ const r = await post('/api/' + kind, {username: document.getElementById('acUser').value, password: document.getElementById('acPass').value, code: document.getElementById('acCode').value});
+ if(r.error){ document.getElementById('acMsg').textContent = r.error; return; }
+ localStorage.setItem('brainrush_token', r.token); localStorage.setItem('brainrush_user', r.user);
+ await loadConfig(); await refreshQuizzes(); openAccount();
+}
+function signOut(){ localStorage.removeItem('brainrush_token'); localStorage.removeItem('brainrush_user'); loadConfig(); refreshQuizzes(); openAccount(); }
+
+// --- Storage modal ---
+function openStorage(){
+ const s = CFG.storage || {};
+ document.getElementById('storBody').innerHTML = `<p style="font-size:1.1em">${s.persistent ? (s.ok ? '✅ <b>Cloud storage is on.</b> Quizzes, history, progress, homework and live games survive server restarts and deploys.' : '⚠️ <b>Cloud storage is configured but not responding.</b> ' + esc(s.error||'') + ' Data is still saved on the server disk.') : '⚠️ <b>Local disk only.</b> Everything is saved on the server\'s disk, which Render\'s free tier can erase when it restarts or redeploys. Export anything you need to keep.'}</p>
+ <div class="tough-box" style="max-width:none"><h3>How to turn on permanent cloud storage (free)</h3>
+ <div class="tough-item">1. Create a free account at <b>upstash.com</b> and make a <b>Redis</b> database (any region).</div>
+ <div class="tough-item">2. On the database page, copy the <b>REST URL</b> and <b>REST Token</b>.</div>
+ <div class="tough-item">3. In your Render dashboard open this service → <b>Environment</b> and add <code>UPSTASH_REDIS_REST_URL</code> and <code>UPSTASH_REDIS_REST_TOKEN</code>. Save, and Render redeploys.</div>
+ <div class="tough-item">4. Reopen this screen. It should say "Cloud storage is on".</div></div>
+ <p style="opacity:.8;font-size:.9em">Optional server settings: <code>GEMINI_API_KEY</code> (AI question drafts), <code>HOST_PASSWORD</code> or <code>REQUIRE_LOGIN=1</code> and <code>SIGNUP_CODE</code> (protect teacher features).</p>`;
+ document.getElementById('storModal').classList.add('open');
+}
+
+// --- Moderation ---
+let modTimer = null;
+function openModeration(){
+ if(!pin){ alert('Start a game first, then use Moderation to approve or remove players.'); return; }
+ document.getElementById('modModal').classList.add('open');
+ refreshMod(); clearInterval(modTimer); modTimer = setInterval(refreshMod, 2000);
+}
+function closeModeration(){ document.getElementById('modModal').classList.remove('open'); clearInterval(modTimer); }
+async function refreshMod(){
+ try{
+  const m = await (await fetch('/api/moderation?pin=' + pin + '&host=' + encodeURIComponent(host))).json();
+  if(m.error) return;
+  const when = ts => new Date(ts*1000).toLocaleTimeString([], {hour:'numeric', minute:'2-digit', second:'2-digit'});
+  document.getElementById('modBody').innerHTML =
+   (m.pending.length ? `<div class="pend-box"><b>Waiting for approval</b><br>${m.pending.map(p=>`<span class="pend">${esc((p.avatar||'')+' '+p.name)}${p.ctag?' <small>('+esc(p.ctag)+')</small>':''} <button data-n="${esc(p.name)}" onclick="approveName(this.dataset.n,true)">✓ Approve</button><button style="background:#e21b3c" data-n="${esc(p.name)}" onclick="approveName(this.dataset.n,false)">✕ Reject</button></span>`).join('')}</div>` : `<p style="opacity:.8">${m.moderate?'No names waiting for approval.':'Tip: turn on <b>🛡️ Approve Names First</b> in Options to review each name before a student joins.'}</p>`) +
+   `<h3>Players (${m.players.length})</h3><div>${m.players.map(p=>`<span class="pend" style="background:#fff3;color:#fff">${esc((p.avatar||'')+' '+p.name)}${p.bot?' 🤖':''} <button style="background:#e21b3c" data-n="${esc(p.name)}" onclick="kickPlayer(this.dataset.n).then(refreshMod)">Remove</button></span>`).join('') || '<i>No players yet</i>'}</div>` +
+   `<h3>Blocked / activity log</h3>${m.log.length ? m.log.map(l=>`<div class="hist-q"><span>${when(l.ts)} · <b>${esc(l.kind)}</b></span><span>${esc(l.text)}</span></div>`).join('') : '<p style="opacity:.8">Nothing has been blocked yet.</p>'}`;
+ }catch(e){}
+}
+
+// --- Student progress ---
+let progData = null;
+async function openProgress(){
+ document.getElementById('progModal').classList.add('open');
+ const b = document.getElementById('progBody'); b.textContent = 'Loading…';
+ const r = await authGet('/api/progress');
+ if(!r){ b.textContent = 'Sign in to view student progress.'; return; }
+ progData = r.students || [];
+ if(!progData.length){ b.innerHTML = '<p>No data yet. Progress is recorded for <b>roster-mode games</b> (add names under Options → Class Roster) and for finished homework with a roster. Each student\'s accuracy is tracked across games.</p>'; return; }
+ const arrow = t => t >= 12 ? '▲' : t <= -12 ? '▼' : '•';
+ b.innerHTML = `<table class="mt"><tr><th>Student</th><th>Games</th><th>Avg</th><th>Recent</th><th>Trend</th><th>Status</th></tr>${progData.map((s,i)=>`<tr style="cursor:pointer" onclick="document.getElementById('pg${i}').style.display=document.getElementById('pg${i}').style.display==='none'?'table-row':'none'"><td><b>${esc(s.name)}</b></td><td>${s.games}</td><td>${s.avg}%</td><td>${s.recent}%</td><td>${arrow(s.trend)} ${s.trend>0?'+':''}${s.trend}</td><td><span class="chip ${s.status}">${s.status}</span></td></tr>
+  <tr id="pg${i}" style="display:none"><td colspan="6"><small>${s.history.map(h=>esc(h.quiz)+': <b>'+h.pct+'%</b>').join(' · ')}</small>${s.weak.length?`<br><small>Weakest topics: ${s.weak.map(w=>esc(w[0])+' ('+w[1]+'%)').join(', ')}</small>`:''}</td></tr>`).join('')}</table>
+  <p style="opacity:.75;font-size:.85em">Struggling = recent average under 55% or overall under 60%. Click a row for details.</p>`;
+}
+function exportProgress(){
+ if(!progData) return;
+ const rows = [['Student','Games','Average %','Recent %','Trend','Status','Weakest topics']];
+ progData.forEach(s=>rows.push([s.name, s.games, s.avg, s.recent, s.trend, s.status, s.weak.map(w=>w[0]+' '+w[1]+'%').join('; ')]));
+ const csv = rows.map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(',')).join('\n');
+ const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([csv], {type:'text/csv'})); a.download = 'brainrush_student_progress.csv'; a.click();
+}
+
+// --- History (with topics) ---
+async function openHistory(){
+ document.getElementById('histModal').classList.add('open');
+ const body = document.getElementById('histBody'); body.textContent = 'Loading…';
+ histData = await authGet('/api/history');
+ if(!histData){ body.textContent = 'Sign in to view history.'; return; }
+ const g = histData.games||[], rt = histData.reteach||[], tp = histData.topics||[];
+ const fmt = ts => new Date(ts*1000).toLocaleString([], {dateStyle:'medium', timeStyle:'short'});
+ body.innerHTML = (tp.length ? `<div class="tough-box" style="max-width:none"><h3>📊 Accuracy by topic (all games)</h3>${tp.map(x=>`<div class="tough-item"><b>${x.avg}%</b> — ${esc(x.topic)} <small>(${x.n} answers)</small><div class="tbar"><i style="width:${x.avg}%;background:${x.avg<60?'#ff5252':x.avg<80?'#ffb300':'#69f0ae'}"></i></div></div>`).join('')}</div>` : '')
+  + (rt.length ? `<div class="tough-box" style="max-width:none"><h3>🎯 Questions to reteach (lowest average across all games)</h3>${rt.map(x=>`<div class="tough-item"><b>${x.avg}% correct</b> <small>(${x.games} game${x.games>1?'s':''})</small> — ${esc(x.q)}<br><span style="color:#7dff6b">✅ ${esc(x.ans)}</span></div>`).join('')}</div>` : '')
+  + (g.length ? g.map((e,i)=>`<div class="hist-game" onclick="document.getElementById('hq${i}').style.display=document.getElementById('hq${i}').style.display==='none'?'block':'none'">
+    <b>${esc(e.quiz)}</b> <small>· ${fmt(e.ts)}</small><br>
+    <small>👥 ${e.humans} students (${e.players} total) · 🎯 ${e.accuracy}% accuracy · 🏆 ${(e.top||[]).map(t=>esc(t.name)+' '+t.score).join(' / ')}</small>
+    <div id="hq${i}" style="display:none;margin-top:8px">${(e.qs||[]).slice().sort((a,b)=>a.pct-b.pct).map(q=>`<div class="hist-q"><span>${q.topic?'<em class="ctag" style="margin:0 6px 0 0">'+esc(q.topic)+'</em>':''}${esc(q.q)}</span><b>${q.pct}%</b></div>`).join('')}</div></div>`).join('') : '<p>No finished games yet. Results are saved here automatically when a game ends.</p>');
+}
+
+// --- Quiz editor tools ---
+function toggleTool(which){
+ const i = document.getElementById('toolImport'), a = document.getElementById('toolAi');
+ if(which==='import'){ i.style.display = i.style.display==='none' ? 'block' : 'none'; a.style.display = 'none'; }
+ else { a.style.display = a.style.display==='none' ? 'block' : 'none'; i.style.display = 'none'; updateAcctLabels(); }
+}
+function appendQuestions(qs){
+ const t = document.getElementById('customText');
+ t.value = (t.value.trim() ? t.value.trim() + '\n\n' : '') + formatQuestionsBlock(qs);
+ t.scrollIntoView({behavior:'smooth', block:'nearest'});
+}
+function parseDelimited(text){
+ const delim = text.includes('\t') ? '\t' : ',';
+ const rows = []; let row = [], cell = '', inq = false;
+ for(let i=0;i<text.length;i++){
+  const ch = text[i];
+  if(inq){ if(ch==='"'){ if(text[i+1]==='"'){ cell+='"'; i++; } else inq=false; } else cell+=ch; }
+  else if(ch==='"') inq = true;
+  else if(ch===delim){ row.push(cell); cell=''; }
+  else if(ch==='\n' || ch==='\r'){ if(ch==='\r' && text[i+1]==='\n') i++; row.push(cell); cell=''; rows.push(row); row=[]; }
+  else cell += ch;
+ }
+ row.push(cell); rows.push(row);
+ return rows.map(r=>r.map(c=>c.trim()));
+}
+function tableToQuestions(text){
+ const rows = parseDelimited(text.trim()).filter(r=>r.some(c=>c));
+ if(!rows.length) return [];
+ const norm = s => s.toLowerCase().replace(/[^a-z0-9]/g,'');
+ const first = rows[0].map(norm);
+ const hasHeader = first.some(h=>['question','q','prompt','questiontext'].includes(h));
+ let col = {q:0, a:[1,2,3,4], correct:5, type:-1, topic:-1, quote:-1, note:-1, img:-1};
+ let body = rows;
+ if(hasHeader){
+  body = rows.slice(1);
+  const idx = names => first.findIndex(h=>names.includes(h));
+  col.q = idx(['question','q','prompt','questiontext']);
+  col.a = [];
+  [['a','answera','optiona','choicea','answer1','option1','choice1','a1'],['b','answerb','optionb','choiceb','answer2','option2','choice2','b1'],['c','answerc','optionc','choicec','answer3','option3','choice3','c1'],['d','answerd','optiond','choiced','answer4','option4','choice4','d1']].forEach(n=>{ const k = idx(n); if(k>=0) col.a.push(k); });
+  col.correct = idx(['correct','correctanswer','right','key','correctoption','answer']);
+  col.type = idx(['type','questiontype']); col.topic = idx(['topic','tag','standard','skill','chapter','category']);
+  col.quote = idx(['quote','fact','funfact','explanation','feedback']); col.note = idx(['note','notes','teachernote','teachernotes']); col.img = idx(['image','img','picture','imageurl']);
+ }
+ const out = [];
+ body.forEach(r=>{
+  const get = k => (k>=0 && k<r.length) ? r[k] : '';
+  const q = get(col.q); if(!q) return;
+  const a = col.a.map(k=>get(k)).filter(Boolean);
+  const cv = get(col.correct); let c = 0;
+  if(/^[a-d]$/i.test(cv)) c = cv.toUpperCase().charCodeAt(0) - 65;
+  else if(/^[1-4]$/.test(cv)) c = parseInt(cv,10) - 1;
+  else { const k = a.findIndex(x=>x.toLowerCase()===cv.toLowerCase()); if(k>=0) c = k; }
+  const item = {q, a, c, topic:get(col.topic), quote:get(col.quote), note:get(col.note), img:get(col.img)};
+  const ty = get(col.type).toLowerCase();
+  if(['tf','truefalse','true/false'].includes(ty.replace(/[^a-z/]/g,'')) || (a.length===2 && /^(true|false)$/i.test(a[0]))){ item.type='tf'; item.a=['True','False']; item.c = /^(f|false|2)/i.test(cv) ? 1 : 0; }
+  else if(ty==='text'){ item.type='text'; item.c=0; }
+  else if(ty==='order'){ item.type='order'; item.c=0; }
+  else if(ty==='zoom' && item.img){ item.type='zoom'; }
+  if(item.a.length >= 1) out.push(item);
+ });
+ return out;
+}
+function importTable(){
+ const qs = tableToQuestions(document.getElementById('tableText').value);
+ if(!qs.length){ document.getElementById('customErr').textContent = 'Could not find any questions in that table. Check the header row.'; return; }
+ document.getElementById('customErr').textContent = '';
+ appendQuestions(qs);
+ if(!document.getElementById('customTitle').value) document.getElementById('customTitle').value = 'Imported quiz';
+}
+async function importSheet(){
+ const url = document.getElementById('sheetUrl').value.trim();
+ if(!url) return;
+ const r = await postPw('/api/import_sheet', {url});
+ if(r.error){ document.getElementById('customErr').textContent = r.error; return; }
+ document.getElementById('tableText').value = r.csv;
+ importTable();
+}
+async function aiGenerate(){
+ const msg = document.getElementById('aiMsg'); msg.textContent = 'Working…';
+ const r = await postPw('/api/ai_quiz', {text: document.getElementById('aiText').value, topic: document.getElementById('aiTopic').value, count: parseInt(document.getElementById('aiCount').value,10)||8});
+ if(r.error){ msg.textContent = ''; document.getElementById('customErr').textContent = r.error; return; }
+ document.getElementById('customErr').textContent = '';
+ msg.textContent = r.message || 'Draft ready.';
+ appendQuestions(r.questions);
+ if(!document.getElementById('customTitle').value) document.getElementById('customTitle').value = document.getElementById('aiTopic').value || 'AI draft quiz';
+}
+async function duplicateSelectedQuiz(){
+ const es = document.getElementById('editQuizSel'); if(!es || !es.value) return;
+ const r = await postPw('/api/dup_quiz', {file: es.value});
+ if(r.error){ document.getElementById('customErr').textContent = r.error; return; }
+ quizList = mergeQuizLists(r.quizzes || quizList); renderQuizSelect(); openQuizModal();
+}
+const _openQuizModal0 = openQuizModal;
+openQuizModal = function(){
+ _openQuizModal0();
+ const fl = document.getElementById('folderList');
+ if(fl) fl.innerHTML = [...new Set(quizList.map(q=>q.folder).filter(f=>f && f!=='Built-in'))].map(f=>`<option value="${esc(f)}">`).join('');
+ updateAcctLabels();
+};
+
+// --- Homework ---
+let hwView = null;
+async function openHomework(){
+ document.getElementById('hwModal').classList.add('open');
+ const b = document.getElementById('hwBody'); b.textContent = 'Loading…';
+ const r = await authGet('/api/hw_list');
+ if(!r){ b.textContent = 'Sign in to manage homework.'; return; }
+ const fmt = ts => ts ? new Date(ts*1000).toLocaleString([], {dateStyle:'medium', timeStyle:'short'}) : 'no deadline';
+ const dl = new Date(Date.now() + 86400000); dl.setHours(23,59,0,0);
+ const dlv = new Date(dl.getTime() - dl.getTimezoneOffset()*60000).toISOString().slice(0,16);
+ const opts = document.getElementById('quizSel').innerHTML;
+ b.innerHTML = `<div class="toolbox"><b>Create an assignment</b><p>Students open a link on their own phones or computers and answer on their own time. Answers are graded on the server, so they can't be peeked at.</p>
+  <div class="row2"><input id="hwTitle" placeholder="Title (e.g. Chapter 8 Review)" style="margin:6px 0"><input id="hwCount" type="number" min="1" placeholder="# of questions" style="margin:6px 0"></div>
+  <select id="hwQuiz" style="width:100%;margin:0 0 6px;padding:10px;border-radius:8px;border:0;font-weight:700;color:#2b0d57">${opts}</select>
+  <div class="row2"><div><label style="font-size:.85em">Deadline</label><input id="hwDeadline" type="datetime-local" value="${dlv}" style="margin:2px 0"></div>
+  <label style="display:flex;align-items:center;gap:6px;margin-top:20px"><input id="hwRoster" type="checkbox" style="width:auto;margin:0"> Use my class roster (names from Options)</label></div>
+  <button class="btn-sm" style="margin:6px 0 0" onclick="createHomework()">📚 Create homework link</button> <span id="hwMsg" style="font-weight:700"></span></div>
+  <h3>Your assignments</h3>${r.assignments.length ? r.assignments.map(a=>`<div class="hist-game" style="cursor:default"><b>${esc(a.title)}</b> <small>· ${a.questions} Qs · due ${fmt(a.deadline)}</small><br><small>${a.done} finished / ${a.started} started${a.roster?` of ${a.roster}`:''}</small><br>
+   <button class="btn-sm" style="margin:6px 4px 0 0" onclick="navigator.clipboard.writeText(location.origin+'/hw?id=${a.id}')">📋 Copy link</button><button class="btn-sm" style="margin:6px 4px 0 0" onclick="hwResults('${a.id}')">📊 Results</button></div>`).join('') : '<p style="opacity:.8">No assignments yet.</p>'}
+  <div id="hwResults"></div>`;
+}
+async function createHomework(){
+ const file = document.getElementById('hwQuiz').value;
+ const picked = quizList.find(x=>x.file===file);
+ const roster = document.getElementById('hwRoster').checked ? (document.getElementById('qRoster').value||'').split('\n').map(x=>x.trim()).filter(Boolean) : [];
+ const dv = document.getElementById('hwDeadline').value;
+ const r = await postPw('/api/hw_create', {quiz:file, custom_questions: picked && picked.questions ? picked.questions : null,
+  title: document.getElementById('hwTitle').value || 'Homework', count: parseInt(document.getElementById('hwCount').value,10)||null,
+  deadline: dv ? Math.floor(new Date(dv).getTime()/1000) : 0, roster, shuffle:true});
+ const m = document.getElementById('hwMsg');
+ if(r.error){ m.textContent = r.error; return; }
+ const link = location.origin + '/hw?id=' + r.id;
+ try{ navigator.clipboard.writeText(link); }catch(e){}
+ await openHomework();
+ document.getElementById('hwMsg').innerHTML = `Link copied: <b>${esc(link)}</b>`;
+}
+async function hwResults(id){
+ const r = await authGet('/api/hw_results?id=' + id);
+ const box = document.getElementById('hwResults'); if(!r){ return; }
+ hwView = r;
+ box.innerHTML = `<h3>📊 ${esc(r.title)}</h3><table class="mt"><tr><th>Student</th><th>Status</th><th>Score</th><th>Correct</th></tr>${r.rows.map(x=>`<tr><td>${esc(x.name)}</td><td>${x.done?'✅ finished':'⏳ '+x.answered+'/'+r.questions}</td><td>${x.score}</td><td>${x.correct}/${r.questions} (${x.pct}%)</td></tr>`).join('')}${r.missing.map(n=>`<tr><td>${esc(n)}</td><td colspan="3" style="color:#ff9b9b">not started</td></tr>`).join('')}</table>
+  ${r.hardest.length?`<h4>Hardest questions</h4>${r.hardest.map(h=>`<div class="hist-q"><span>${esc(h.q)}</span><b>${h.pct}%</b></div>`).join('')}`:''}
+  <button class="btn-sm" style="margin:8px 0 0" onclick="exportHw()">📥 Export CSV</button> <button class="btn-sm" style="margin:8px 0 0" onclick="hwResults('${id}')">🔄 Refresh</button>`;
+ box.scrollIntoView({behavior:'smooth'});
+}
+function exportHw(){
+ if(!hwView) return;
+ const rows = [['Student','Status','Score','Correct','Percent']];
+ hwView.rows.forEach(x=>rows.push([x.name, x.done?'finished':'in progress', x.score, x.correct, x.pct]));
+ hwView.missing.forEach(n=>rows.push([n,'not started','','','']));
+ const csv = rows.map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(',')).join('\n');
+ const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([csv], {type:'text/csv'})); a.download = 'homework_results.csv'; a.click();
+}
+
+// --- Guide additions ---
+(function(){
+ const sec = id => GUIDE.find(g=>g.id===id);
+ sec('setup').items.push(
+  ['⚡ Speed Round (off by default)', 'In quizzes of 12+ questions, five questions in the middle run as a rapid round: 5-second timer, no reading preview, and the leaderboard is skipped between them. It opens with a ⚡ SPEED ROUND announcement.'],
+  ['💥 Double or Nothing Question (off by default)', 'One question around the halfway point lets players opt in on their phones: a correct answer earns double points, a wrong answer loses 400 (a Shield protects them).'],
+  ['🕵️ Steal / Swap Power-Up (off by default)', 'Once per game, on a results screen (not the last question), a player can steal up to 150 points from the player ranked just above them, or swap scores with them if the gap is 1,500 or less.'],
+  ['🛡️ Approve Names First (off by default)', 'New students wait on a "waiting for approval" screen until you approve their name (✓/✕ in the lobby or the Moderation window). Rejected names are blocked.']
+ );
+ GUIDE.push({id:'library', title:'📚 Quiz Library & Content Tools', items:[
+  ['Folders and tags', 'In ➕ Create / Upload Quiz, give a quiz a Folder and Tags. The quiz picker groups quizzes by folder.'],
+  ['⧉ Duplicate', 'Copies any quiz (including built-in ones) to your library so you can edit the copy.'],
+  ['📋 Import table / Google Sheet', 'Paste rows copied from Excel or Sheets, or a public Google Sheet link. Use a header row like Question, A, B, C, D, Correct, Topic, Quote, Note. Correct can be A–D, 1–4 or the answer text.'],
+  ['✨ AI draft', 'Paste a passage (and optionally a topic) to get a draft quiz to review and edit. Add a GEMINI_API_KEY on the server for full AI questions; without it you get fill-in-the-blank questions built from your text.'],
+  ['🏷️ Topic: tags', 'Add "Topic: Fractions" to a question. After each game you see accuracy per topic, and Results History shows topics across all games.'],
+  ['📝 Teacher notes', 'Add "Note: explain why B is wrong" to a question. It never shows on student screens. On the host page use the "Show teacher note (N)" button at the bottom left; on the phone remote it shows automatically.'],
+  ['🔍 Picture-guess (zoom reveal)', 'Add "Type: zoom" and "Image: url". The picture starts blurred and sharpens as the timer runs, so faster answers earn more.']
+ ]});
+ GUIDE.push({id:'teach', title:'🎓 Teaching Tools', items:[
+  ['👥 Student Progress', 'For roster-mode games and homework, tracks each student\'s accuracy across games, flags Struggling / Declining / Improving, and lists their weakest topics. Export as CSV.'],
+  ['📚 Homework', 'Create an assignment from any quiz with a deadline. Students open the /hw link on their own devices; answers are graded on the server. See who finished, scores, who has not started, and the hardest questions.'],
+  ['🛡️ Moderation', 'Live list of players with Remove buttons, names waiting for approval, and a log of blocked names, words and rejoins.'],
+  ['👤 Teacher Account', 'Create accounts so each teacher keeps separate quizzes, history, progress and homework. Admins can require login with REQUIRE_LOGIN=1 or HOST_PASSWORD.'],
+  ['💾 Saved Storage', 'Shows whether data is saved to the permanent cloud database or only the server disk, with setup steps for a free Upstash Redis database.']
+ ]});
+ GUIDE.push({id:'players2', title:'📱 Player Phone Extras', items:[
+  ['Customize', 'Players pick from many avatars, a name color, and a short title. Offensive titles are blocked.'],
+  ['🔊 Sounds', 'Short tones for correct and wrong answers with a mute button.'],
+  ['🎉 Milestones', 'Popups with confetti for a first correct answer, a personal-best streak, taking the lead, or jumping up the leaderboard.'],
+  ['Rejoin', 'If a phone loses its place, the student can type their name and the PIN and tap "Rejoin as this name" (works if the old device is no longer connected).'],
+  ['🤝 Team prompts', 'During Team Battle rounds each team\'s phones show a short discussion prompt.']
+ ]});
+})();
+
+loadConfig();
 </script></body></html>
