@@ -308,7 +308,7 @@ Quote: Paris has been the capital since 987 CE."></textarea>
   <div class="quick-bar">
    <label>📝 Questions: <input id="qCount" type="number" min="1" max="200" value="15"> <span id="qMax" style="opacity:.8">/ 15</span></label>
    <label>⏱️ Timer: <input id="qTime" type="number" min="5" max="120" value="15"><span style="opacity:.8">s</span></label>
-   <button type="button" class="drawer-toggle" id="advBtn" onclick="toggleAdvPanel()">⚙️ Options <span id="optSummary" style="background:#26890c;padding:2px 8px;border-radius:99px;font-size:.85em">8 active</span> <span id="advCaret">▾</span></button>
+   <button type="button" class="drawer-toggle" id="advBtn" onclick="toggleAdvPanel()">⚙️ Options <span id="optSummary" style="background:#26890c;padding:2px 8px;border-radius:99px;font-size:.85em">7 active</span> <span id="advCaret">▾</span></button>
   </div>
   <div class="adv-panel" id="advPanel" onchange="updateOptSummary()">
    <div class="adv-sec-title"><a href="#" onclick="openGuide('setup');return false" style="float:right;color:#ffdf5d;text-transform:none;letter-spacing:0;font-weight:700">📖 What do these do?</a>Game Modes & Power-Ups</div>
@@ -318,11 +318,11 @@ Quote: Paris has been the capital since 987 CE."></textarea>
     <label class="mode-pill"><input id="qRedemp" type="checkbox" checked> 🔄 Redemption Round</label>
     <label class="mode-pill"><input id="qSabotage" type="checkbox"> ⛄ Snowballs</label>
     <label class="mode-pill"><input id="qWheel" type="checkbox" checked> 🎡 Mystery Wheel</label>
-    <label class="mode-pill"><input id="qTeams" type="checkbox"> 🛡️ Team Mode</label>
+    <label class="mode-pill"><input id="qTeams" type="checkbox" onchange="if(!this.checked){document.getElementById('qBattle').checked=false}"> 🛡️ Team Mode</label>
     <label class="mode-pill"><input id="qIce" type="checkbox" checked onchange="document.getElementById('icePromptRow').style.display=this.checked?'block':'none'"> 💭 Word Cloud Warm-Up</label>
     <label class="mode-pill"><input id="qAuto" type="checkbox"> ⏭️ Auto-Advance</label>
     <label class="mode-pill"><input id="qHot" type="checkbox" checked> 🔥 Hot Seat Rounds</label>
-    <label class="mode-pill"><input id="qBattle" type="checkbox" checked> 🤝 Team Battle Rounds</label>
+    <label class="mode-pill"><input id="qBattle" type="checkbox" onchange="if(this.checked){document.getElementById('qTeams').checked=true}updateOptSummary()"> 🤝 Team Battle (every 5th Q)</label>
     <label class="mode-pill"><input id="qTie" type="checkbox" checked> ⚔️ Sudden-Death Tiebreaker</label>
    </div>
    <div id="icePromptRow" style="display:block;margin-bottom:12px">
@@ -1357,7 +1357,7 @@ const GUIDE = [
   ['💭 Word Cloud Warm-Up', 'Before Question 1, players type a one-or-two word answer to your warm-up question and a live word cloud builds on screen. Edit the warm-up question here or live with the ✏️ Edit button.'],
   ['⏭️ Auto-Advance', 'Moves from results to leaderboard to next question automatically. Can also be toggled live from the menu.'],
   ['🔥 Hot Seat Rounds', 'Every 6th question (3+ players) puts one random player in the Hot Seat. Everyone else predicts if they will get it right.'],
-  ['🤝 Team Battle Rounds', 'With Team Mode on, every 5th question gives teams a longer 12-second discussion before answers open.'],
+  ['🤝 Team Battle Rounds', 'Needs Team Mode (turning this on switches Team Mode on for you). Questions 5, 10, 15… give teams a longer 12-second discussion before answers open, with a blue TEAM BATTLE banner. Afterward the screen shows which teams got it right (+300 each). It does not happen on the Final Boss, Mystery Wheel or Redemption questions, and quizzes shorter than 5 questions never reach one.'],
   ['⚔️ Sudden-Death Tiebreaker', 'If the top players tie at the end, an extra question is played only by the tied players; fastest correct answer wins by 1 point.'],
   ['🤖 Phantom Bot Players', 'Computer players that answer, use power-ups, wager and send reactions. Good for testing or making a small class feel full. You can also add 5 more from the lobby.'],
   ['👥 Class Roster', 'Paste student names (one per line). Players then pick their name from a dropdown instead of typing a nickname, and a student who loses connection can rejoin under the same name. Saved on this computer.'],
