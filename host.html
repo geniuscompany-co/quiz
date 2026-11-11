@@ -259,7 +259,51 @@ body.sec-case .quiz-only{display:none!important}
 body:not(.sec-case) .case-only{display:none!important}
 #quizModal.only-case .quiz-modal-only{display:none!important}
 #quizModal:not(.only-case) .case-modal-only{display:none!important}
+.aud-only{display:none}
+#fsBtn{display:none;position:fixed;top:14px;right:16px;z-index:45;margin:0;padding:8px 16px;font-size:.92em;border-radius:99px;background:#0008;border:1px solid #fff4;backdrop-filter:blur(8px);box-shadow:0 4px 14px #0006}
+body.is-audience #fsBtn{display:inline-flex;align-items:center;gap:6px}
+body.is-audience.is-fs #fsBtn{display:none!important}
+body.is-audience #topNav,body.is-audience #metaBar,body.is-audience .kb-hint,body.is-audience .kick,body.is-audience .pend-box,body.is-audience #replayBox,body.is-audience .final-bar,body.is-audience .aud-hide{display:none!important}
+body.is-audience .aud-only{display:block}
+.standby-card{max-width:740px;margin:7vh auto 0;background:#0005;border:2px solid #fff3;border-radius:24px;padding:38px 32px;box-shadow:0 16px 48px #0007}
+.standby-card h1{font-size:2.7em;margin:.2em 0 .15em}
+.standby-pill{display:inline-block;background:#ffdf5d;color:#2b0d57;font-weight:900;padding:6px 18px;border-radius:99px;font-size:.95em;letter-spacing:.4px}
+.pres-bar{margin-top:14px;padding:11px 14px;border-radius:12px;background:#0005;border:1px solid #fff3;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;text-align:left}
+.pres-bar.active{background:#0d3b26aa;border-color:#7dff6b99}
+.pres-bar button{margin:0;padding:8px 15px;font-size:.92em;border-radius:99px}
+body.is-presenter-console #app{max-width:1240px;text-align:left;padding:16px 20px 34px}
+body.is-presenter-console #metaBar,body.is-presenter-console #lateJoin{display:none!important}
+.pcon-top{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;background:#0007;border:1px solid #fff3;border-radius:14px;padding:10px 16px;margin-bottom:14px;padding-right:108px}
+.pcon-top button{margin:0}
+.pcon-live{display:inline-flex;align-items:center;gap:6px;padding:6px 13px;border-radius:99px;font-weight:800;font-size:.88em}
+.pcon-live.on{background:#1b5e20cc;border:1px solid #7dff6b;color:#fff}
+.pcon-live.off{background:#ff9800;color:#2b0d57;cursor:pointer;border:0}
+.pcon-chip{background:#fff2;padding:5px 12px;border-radius:99px;font-weight:800;font-size:.9em}
+.pcon-chip b{color:#ffdf5d}
+.pcon-grid{display:grid;grid-template-columns:minmax(0,1.38fr) minmax(320px,.95fr);gap:16px;align-items:start}
+@media (max-width:900px){.pcon-grid{grid-template-columns:1fr}.pcon-top{padding-right:16px}}
+.pcon-col{display:flex;flex-direction:column;gap:14px}
+.pcon-card{background:#0006;border:1px solid #fff3;border-radius:16px;padding:16px 18px;box-shadow:0 8px 24px #0005}
+.pcon-lbl{font-size:.76em;text-transform:uppercase;letter-spacing:1.1px;opacity:.72;font-weight:900;margin:0 0 8px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.pcon-next{width:100%;margin:0;padding:15px 20px;font-size:1.3em;border-radius:12px;display:flex;align-items:center;justify-content:space-between;gap:10px;box-shadow:0 6px 20px #0006}
+.pcon-next small{font-size:.66em;font-weight:700;opacity:.85;background:#0004;padding:4px 10px;border-radius:99px}
+.pcon-ctrl{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px;padding-top:12px;border-top:1px solid #fff2}
+.pcon-ctrl button{margin:0}
+.pcon-ctrl .timer{font-size:2.2em;min-width:56px;text-align:center}
+.pcon-opts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+@media (max-width:640px){.pcon-opts{grid-template-columns:1fr}}
+.pcon-opt{padding:11px 14px;border-radius:10px;font-weight:700;font-size:.98em;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.pcon-opt.key{outline:3px solid #7dff6b;box-shadow:0 0 16px #7dff6b55}
+.pcon-key{background:#7dff6b;color:#113308;font-weight:900;font-size:.76em;padding:2px 8px;border-radius:99px;white-space:nowrap}
+.pcon-body-scroll{max-height:260px;overflow-y:auto;background:#0004;border-radius:10px;padding:12px 14px;font-size:.98em;line-height:1.48;margin-top:8px}
+.pcon-body-scroll p{margin:.45em 0}
+.pcon-note{background:#fffbe6;color:#2b0d57;border-radius:12px;padding:13px 15px;font-size:1.03em;line-height:1.46;font-weight:650}
+.pcon-quote{margin-top:10px;background:#fff2;border-left:4px solid #ffdf5d;border-radius:8px;padding:9px 12px;font-size:.92em;line-height:1.4}
+.pcon-roster{max-height:240px;overflow-y:auto;display:flex;flex-direction:column;gap:5px;margin-top:8px}
+.pcon-p{display:flex;align-items:center;justify-content:space-between;gap:8px;background:#fff1;padding:6px 10px;border-radius:8px;font-size:.92em;font-weight:700}
+.pcon-p button{margin:0;padding:2px 8px;font-size:.8em;border-radius:99px;background:#e21b3cbb}
 </style></head><body>
+<button id="fsBtn" onclick="toggleFullscreen()">⛶ Fullscreen (F)</button>
 <div class="late-join" id="lateJoin">
  <button class="late-btn" onclick="toggleLateQr(event)" title="Click to toggle QR code for late joiners">
   <span>📱 Join: <u>plw.me/play</u> &middot; PIN <b id="latePin">------</b></span>
@@ -296,6 +340,7 @@ body:not(.sec-case) .case-only{display:none!important}
    <button id="cbBtn" onclick="toggleCb()"><span>👁️ Colorblind-safe Colors</span><span class="state" id="cbState">Off</span></button>
    <button id="hcBtn" onclick="toggleHc()"><span>◐ High Contrast</span><span class="state" id="hcState">Off</span></button>
   <div class="menu-sep"></div>
+  <button id="presMenuBtn" onclick="closeNavMenu();openPresentationMode()"><span>📽️ Presentation Mode</span><span class="state" id="presMenuState">2nd Screen</span></button>
   <button id="remoteBtn" style="display:none" onclick="closeNavMenu();openRemoteModal()"><span>📱 Phone Host Remote</span><span class="state">Open ↗</span></button>
   <button onclick="closeNavMenu();openAccount()"><span>👤 Teacher Account</span><span class="state" id="acctState">Guest</span></button>
    <button class="quiz-only" onclick="closeNavMenu();openProgress()"><span>👥 Student Progress</span><span class="state">View</span></button>
@@ -491,10 +536,13 @@ Quote: Paris has been the capital since 987 CE."></textarea>
     <span class="case-only" style="opacity:.68;font-size:.88em">Bots vote in polls, rank priorities &amp; submit sample arguments</span>
    </div>
   </div>
-  <button id="launchBtn" style="width:100%;margin-top:18px;padding:14px;font-size:1.35em;border-radius:12px" onclick="create()"><span class="quiz-only">🚀 Create Game</span><span class="case-only">📖 Launch Case Study</span></button>
+  <div id="presSetupBar" class="pres-bar"></div>
+  <button id="launchBtn" style="width:100%;margin-top:14px;padding:14px;font-size:1.35em;border-radius:12px" onclick="create()"><span class="quiz-only">🚀 Create Game</span><span class="case-only">📖 Launch Case Study</span></button>
  </div>
 </div>
 <script>
+const IS_AUDIENCE = location.pathname === '/present' || new URLSearchParams(location.search).get('present') === '1';
+if(IS_AUDIENCE){ document.body.classList.add('is-audience'); document.title = 'Brainrush! — Presentation Screen'; }
 let pin, host, S = {};
 const $ = document.getElementById('app'), sh = ["▲ ","◆ ","● ","■ "];
 
@@ -588,7 +636,7 @@ function onVoiceChange(){
  else speak("Voice updated! Let's play Brainrush!");
 }
 function speak(txt){
- if(!ttsOn || !window.speechSynthesis || !txt) return;
+ if(IS_AUDIENCE || !ttsOn || !window.speechSynthesis || !txt) return;
  try{
   window.speechSynthesis.cancel();
   const u = new SpeechSynthesisUtterance(txt);
@@ -608,6 +656,7 @@ function speak(txt){
 // --- Keyboard Shortcuts ---
 window.addEventListener('keydown', e=>{
  if(['INPUT','TEXTAREA','SELECT'].includes((e.target||{}).tagName)) return;
+ if(IS_AUDIENCE){ if(e.key==='f' || e.key==='F'){ e.preventDefault(); toggleFullscreen(); } return; }
  if(e.code==='Space' || e.code==='ArrowRight'){ if(pin && S.phase!=='final'){ e.preventDefault(); next(); } }
  else if(e.key==='p' || e.key==='P'){ if(pin && S.phase==='question') hostCtl('pause'); }
  else if(e.key==='+' || e.key==='='){ if(pin && S.phase==='question') hostCtl('add_time', 10); }
@@ -616,10 +665,11 @@ window.addEventListener('keydown', e=>{
 });
 
 // --- Web Audio API Synthesizer & Game Show Music ---
-let actx = null, muted = false, lastPlayers = 0, lastPhase = '', lastTickSec = -1, lastQIdx = -1;
+let actx = null, muted = IS_AUDIENCE, lastPlayers = 0, lastPhase = '', lastTickSec = -1, lastQIdx = -1;
 let bgmTimer = null, bgmStep = 0;
 
 function ensureAudio(){
+ if(IS_AUDIENCE) return null;
  if(!actx){const C = window.AudioContext || window.webkitAudioContext; if(C) actx = new C();}
  if(actx && actx.state === 'suspended') actx.resume();
  return actx;
@@ -1202,8 +1252,8 @@ function render(){
  if(lp && pin) lp.textContent = pin;
  const inPrev = S.phase==='question' && (S.preview_left||0) > 0;
  const k = S.phase==='question'
-  ? `q:${S.index}:${inPrev?1:0}`
-  : JSON.stringify({...S,left:0,qtime:0,answered:0,preview_left:0,auto_left:0,intro_left:0,reactions:null});
+  ? `q:${S.index}:${inPrev?1:0}:${window.presenterMode?1:0}:${(S.pending_list||[]).length}:${S.n||0}`
+  : JSON.stringify({...S,left:0,qtime:0,answered:0,preview_left:0,auto_left:0,intro_left:0,discuss_left:0,reactions:null, _pm:!!window.presenterMode});
  if(k==last){
   const t=document.getElementById('t');
   if(t){
@@ -1219,12 +1269,19 @@ function render(){
   const pf=document.getElementById('pf');
   if(pf) pf.style.width = Math.min(100, ((S.preview_left||0)/(S.preview_total||5))*100)+'%';
   const ib=document.getElementById('ib');
-   if(ib) ib.style.width = Math.max(0, Math.min(100, ((S.intro_left||0)/(S.intro_total||5))*100))+'%';
-   const ab=document.getElementById('autoNextLbl');
+  if(ib) ib.style.width = Math.max(0, Math.min(100, ((S.intro_left||0)/(S.intro_total||5))*100))+'%';
+  const ab=document.getElementById('autoNextLbl');
   if(ab && S.auto_left != null) ab.textContent = ` (${S.auto_left}s)`;
+  const dt=document.getElementById('dtimer');
+  if(dt && window.discussText) dt.textContent = window.discussText();
+  if(window.updatePresBadge) window.updatePresBadge();
   return;
  }
  last=k;
+ if(!IS_AUDIENCE && window.presenterMode && pin && window.renderPresenter){
+  window.renderPresenter();
+  return;
+ }
  const autoSuffix = S.auto && S.auto_left != null ? `<span id="autoNextLbl"> (${S.auto_left}s)</span>` : '';
  const zm = S.qtype==='zoom' && S.phase==='question';
  const imgHtml = S.img ? `<img class="q-img${zm?(inPrev?' zoom-hold':' zoom-go'):''}"${zm&&!inPrev?` style="animation-duration:${S.qtime||15}s"`:''} src="${esc(S.img)}" alt="">` : '';
@@ -1235,7 +1292,8 @@ function render(){
   const nm = (S.lobby||[]).map(p=>`<span${p.color?` style="color:${p.color}"`:''}>${esc(p.tag)}${p.ctag?`<em class="ctag">${esc(p.ctag)}</em>`:''}<button class="kick" title="Remove ${esc(p.name)}" data-n="${esc(p.name)}" onclick="kickPlayer(this.dataset.n)">✖</button></span>`).join('');
   $.innerHTML=`<h1>Join at <a class="join-link" href="/play?pin=${pin}" target="_blank">plw.me/play</a> with PIN</h1><div class="lobby-box"><div class="pin">${pin}</div>${QR}</div>
   <p>${S.n} player(s)</p>${teamStandingsHtml()}${pendingHtml()}<div class="names">${nm}</div>
-  <div><button class="btn-sec" onclick="addBots(5)">🤖 +5 Phantom players</button>${S.n?'<button onclick="next()">Start</button>':''}</div>`;
+  <div class="aud-hide"><button class="btn-sec" onclick="addBots(5)">🤖 +5 Phantom players</button>${S.n?'<button onclick="next()">Start</button>':''}</div>
+  <p class="aud-only" style="opacity:.82;font-size:1.2em;font-weight:700">⏳ Waiting for host to start…</p>`;
  } else if(S.phase=='icebreaker'){
   const cols = ['#e21b3c','#1368ce','#d89e00','#26890c','#9c27b0','#00897b'];
   const words = S.words || [];
@@ -1245,10 +1303,10 @@ function render(){
    return `<span class="word-tag${prevSeen.has(w.text)?'':' new'}" style="font-size:${sz}em;background:${cols[i%cols.length]}">${esc(w.text)}${w.count>1?` <small>(${w.count})</small>`:''}</span>`;
   }).join('') : `<p style="opacity:.7;font-size:1.3em">Waiting for players to type a word on their phones…</p>`;
   $.innerHTML=`<div class="double-banner">💭 LIVE WORD CLOUD WARM-UP</div>
-  <h1>${esc(S.prompt)} <button class="btn-sm" style="font-size:.42em;vertical-align:middle" onclick="editIcePrompt()">✏️ Edit</button></h1>
+  <h1>${esc(S.prompt)} <button class="btn-sm aud-hide" style="font-size:.42em;vertical-align:middle" onclick="editIcePrompt()">✏️ Edit</button></h1>
   <p>${S.word_total||0} response(s)</p>
   <div class="word-cloud">${cloud}</div>
-  <button onclick="next()">Start Question 1 ➔</button>`;
+  <button class="aud-hide" onclick="next()">Start Question 1 ➔</button>`;
  } else if(S.phase=='intro'){
   const ipct = Math.max(0, Math.min(100, ((S.intro_left||0)/(S.intro_total||5))*100));
   if(S.speed && !S.redemption){
@@ -1298,12 +1356,12 @@ function render(){
    ${imgHtml}${exH}
    <div class="ans-reveal">
     <div class="timer-row">
-     <button class="btn-sm" id="pauseBtn" onclick="hostCtl('pause')">${S.paused?'▶️ Resume':'⏸️ Pause'}</button>
+     <button class="btn-sm aud-hide" id="pauseBtn" onclick="hostCtl('pause')">${S.paused?'▶️ Resume':'⏸️ Pause'}</button>
      <div class="timer ${!S.paused&&sec<=5?'urgent':''} ${S.paused?'paused':''}" id="t">${S.paused?'⏸️ '+sec:sec}</div>
-     <button class="btn-sm" onclick="hostCtl('add_time',10)">+10s</button>
+     <button class="btn-sm aud-hide" onclick="hostCtl('add_time',10)">+10s</button>
     </div>
     ${answerArea()}
-    <button onclick="next()">Skip</button>
+    <button class="aud-hide" onclick="next()">Skip</button>
    </div>`;
   }
  } else if(S.phase=='results'){
@@ -1313,12 +1371,12 @@ function render(){
    ${resultArea()}
    ${resultExtras()}
    ${S.quote?quoteBox():''}
-   <div><button style="margin-top:14px" onclick="next()">${S.is_last?'🏆 Final Podium':(S.case?'Continue ➔':'Top players')}${autoSuffix}</button></div>
+   <div class="aud-hide"><button style="margin-top:14px" onclick="next()">${S.is_last?'🏆 Final Podium':(S.case?'Continue ➔':'Top players')}${autoSuffix}</button></div>
   </div>`;
  } else if(S.phase=='board'){
   const shHtml = (S.shoutouts&&S.shoutouts.length)?`<div class="shouts">${S.shoutouts.map(s=>`<span class="shout">${esc(s)}</span>`).join('')}</div>`:'';
   $.innerHTML=`<p style="margin:0;opacity:.85">After question ${S.index+1}/${S.total}</p><h1 style="margin:.12em 0 .2em">🏆 Top players</h1>${teamStandingsHtml()}${shHtml}${animBoard(S.board,S.index)}
-  <button style="margin-top:12px" onclick="next()">${S.index+1>=S.total?'Final results':'Next question'}${autoSuffix}</button>`;
+  <button class="aud-hide" style="margin-top:12px" onclick="next()">${S.index+1>=S.total?'Final results':'Next question'}${autoSuffix}</button>`;
  } else $.innerHTML=renderFinal(S.board);
 }
 </script>
@@ -1513,6 +1571,7 @@ async function clearHistory(){
 function openLinks(){
  const o = location.origin, inCase = document.body.classList.contains('sec-case');
  const rows = [
+  ['📽️ Extended Screen / Projector Display (clean audience view)', o + '/present' + (pin ? '?pin='+pin : '')],
   ['🖥️ Spectator screen (leaderboard + word cloud)', o + '/spectator' + (pin ? '?pin='+pin : '')],
   ['🏆 Leaderboard only', o + '/spectator?mode=board' + (pin ? '&pin='+pin : '')],
   ['💭 Word cloud only', o + '/spectator?mode=cloud' + (pin ? '&pin='+pin : '')]
@@ -1531,6 +1590,7 @@ function enterGame(){
 }
 (async()=>{
  applyA11y(); updateMusicLabel(); loadSetup(); updateOptSummary();
+ if(IS_AUDIENCE) return;
  try{
   const sv = JSON.parse(localStorage.getItem('brainrush_host') || 'null');
   if(!sv) return;
@@ -2325,7 +2385,7 @@ function infoScreen(){
  return `<div class="qnum">📖 Case slide ${S.index+1} <small>of ${S.total}</small></div>
  <div class="case-card"><h1 style="margin-top:.1em">${esc(S.question)}</h1><div class="case-body">${paras}</div>${exhibitsHtml(S.exhibits, true)}</div>
  <div class="speed-banner" style="background:linear-gradient(90deg,#6a1b9a,#4527a0);animation:none">📱 The full case is on every phone under "📁 Case file"</div>
- <div><button onclick="next()">Continue ➔</button></div>`;
+ <div class="aud-hide"><button onclick="next()">Continue ➔</button></div>`;
 }
 const _answerArea0 = answerArea;
 answerArea = function(){
@@ -2354,22 +2414,25 @@ resultArea = function(){
  }
  return '';
 };
+function discussText(){
+ if(S.discuss_left == null) return '';
+ return S.discuss_left > 0 ? ('⏱️ ' + S.discuss_left + 's') : '⏰ Time!';
+}
+window.discussText = discussText;
 const _resultExtras0 = resultExtras;
 resultExtras = function(){
  if(!S.case) return _resultExtras0();
  let h = '';
- if(S.qtype==='poll' && (S.defenders||[]).length){
-  h += `<div class="defend">🎤 <b>Defend your side!</b><br>${S.defenders.map(d=>`${esc(d.name)} speaks for <b>${sh[d.side]}${esc(S.answers[d.side])}</b>`).join('<br>')}<br><button class="btn-sm" style="margin-top:8px" onclick="startDiscuss(60)">⏱️ Start 60-second discussion</button> <span id="dtimer" style="font-weight:900;font-size:1.3em"></span></div>`;
+ if(S.qtype==='poll'){
+  const defs = (S.defenders||[]).length ? `🎤 <b>Defend your side!</b><br>${S.defenders.map(d=>`${esc(d.name)} speaks for <b>${sh[d.side]}${esc(S.answers[d.side])}</b>`).join('<br>')}<br>` : '';
+  if(defs || !IS_AUDIENCE || S.discuss_left != null){
+   h += `<div class="defend">${defs}<button class="btn-sm aud-hide" style="margin-top:8px" onclick="startDiscuss(60)">⏱️ Start 60-second discussion</button>${S.discuss_left!=null?` <button class="btn-sm aud-hide" style="margin-top:8px" onclick="startDiscuss(0)">⏹️ Clear</button>`:''} <span id="dtimer" style="font-weight:900;font-size:1.3em;color:#ffdf5d">${discussText()}</span></div>`;
+  }
  }
  return h;
 };
-let discussT = null;
-function startDiscuss(sec){
- clearInterval(discussT);
- let left = sec;
- const el = () => document.getElementById('dtimer');
- const tick = () => { const e = el(); if(!e){ clearInterval(discussT); return; } e.textContent = left > 0 ? left + 's' : '⏰ Time!'; if(left-- <= 0){ clearInterval(discussT); sfxReveal(); } };
- tick(); discussT = setInterval(tick, 1000);
+async function startDiscuss(sec){
+ if(pin && host) await hostCtl('discuss', sec);
 }
 (function(){
  GUIDE.push({id:'case', title:'📖 Case Study Section (Ethical Leadership and more)', items:[
@@ -2386,5 +2449,516 @@ function startDiscuss(sec){
  const qp = new URLSearchParams(location.search);
  const savedSec = (qp.get('section')==='case' || qp.get('mode')==='case') ? 'case' : (localStorage.getItem('brainrush_section') || 'quiz');
  setHostSection(savedSec);
+})();
+</script>
+<script>
+// ===== PowerPoint-Style Extended Screen Presentation Mode & Presenter Console =====
+window.presenterMode = !IS_AUDIENCE && sessionStorage.getItem('brainrush_pres_mode') === '1';
+let projWin = null, projLastPong = 0, audPollTimer = null, lastDiscussLeft = -1;
+const presChan = ('BroadcastChannel' in window) ? new BroadcastChannel('brainrush_pres') : null;
+
+function toggleFullscreen(){
+ if(!document.fullscreenElement){
+  (document.documentElement.requestFullscreen && document.documentElement.requestFullscreen().catch(()=>{}));
+ } else if(document.exitFullscreen){
+  document.exitFullscreen().catch(()=>{});
+ }
+}
+document.addEventListener('fullscreenchange', ()=>{
+ document.body.classList.toggle('is-fs', !!document.fullscreenElement);
+});
+
+function isProjectorLive(){
+ return !!((projWin && !projWin.closed) || (Date.now() - projLastPong < 3800));
+}
+
+function sendPresMsg(msg){
+ try{ if(presChan) presChan.postMessage(msg); }catch(e){}
+ try{ if(msg && msg.type === 'sync') localStorage.setItem('brainrush_pres_sync', JSON.stringify({...msg, _ts: Date.now()})); }catch(e){}
+}
+
+function broadcastPresSync(){
+ if(IS_AUDIENCE) return;
+ sendPresMsg({
+  type: 'sync',
+  pin: pin || '',
+  themeIdx: themeIdx || 0,
+  cb: localStorage.getItem('brainrush_cb') === '1',
+  hc: localStorage.getItem('brainrush_hc') === '1',
+  bg: ((document.getElementById('qBg')||{}).value || localStorage.getItem('brainrush_bg') || '').trim(),
+  logo: ((document.getElementById('qLogo')||{}).value || localStorage.getItem('brainrush_logo') || '').trim()
+ });
+}
+
+function applyPresSync(msg){
+ if(!msg) return;
+ if(typeof msg.themeIdx === 'number'){
+  themeIdx = msg.themeIdx % THEMES.length;
+  THEMES.forEach(t=>{ if(t) document.body.classList.remove(t); });
+  if(THEMES[themeIdx]) document.body.classList.add(THEMES[themeIdx]);
+ }
+ if(typeof msg.cb === 'boolean') document.body.classList.toggle('cb', msg.cb);
+ if(typeof msg.hc === 'boolean') document.body.classList.toggle('hc', msg.hc);
+ if(typeof msg.bg === 'string'){
+  if(/^(https?:\/\/|\/)/.test(msg.bg)){ document.body.style.backgroundImage = `url("${msg.bg.replace(/"/g,'')}")`; document.body.style.backgroundSize='cover'; document.body.style.backgroundAttachment='fixed'; }
+  else document.body.style.backgroundImage = '';
+ }
+ window._presLogo = msg.logo || '';
+ if(typeof msg.pin === 'string' && msg.pin !== (pin || '')){
+  pin = msg.pin || '';
+  S = {}; last = ''; podiumShown = false; animDone = -1;
+  try{ history.replaceState(null, '', '/present' + (pin ? '?pin=' + encodeURIComponent(pin) : '')); }catch(e){}
+  if(pin) ensureAudiencePoll();
+  else renderAudienceStandby();
+ } else if(!pin){
+  renderAudienceStandby();
+ }
+}
+
+function renderAudienceStandby(){
+ if(!IS_AUDIENCE || pin) return;
+ if(audPollTimer){ clearInterval(audPollTimer); audPollTimer = null; }
+ const lg = (window._presLogo && /^(https?:\/\/|\/)/.test(window._presLogo)) ? window._presLogo : '/logo.jpg';
+ const fsBtn = document.fullscreenElement ? '' : `<div style="margin-top:22px"><button onclick="toggleFullscreen()" style="margin:0;padding:14px 28px;font-size:1.15em;border-radius:99px">⛶ Enter Fullscreen (F)</button></div>`;
+ $.innerHTML = `<div class="standby-card">
+  <img class="logo" src="${esc(lg)}" alt="Brainrush!" style="max-width:260px;margin-top:0">
+  <span class="standby-pill">📽️ EXTENDED DISPLAY READY</span>
+  <h1>Get Ready to Play!</h1>
+  <p style="font-size:1.3em;opacity:.88;max-width:560px;margin:8px auto 0;line-height:1.45">Choose a Quiz or Case Study on your laptop to launch — the Lobby PIN &amp; QR code will appear here automatically.</p>
+  ${fsBtn}
+ </div>`;
+}
+
+async function pollAudience(){
+ if(!pin){ renderAudienceStandby(); return; }
+ try{
+  const r = await fetch('/api/state?pin=' + encodeURIComponent(pin));
+  if(!r.ok){
+   if(r.status === 404){ pin = ''; S = {}; last = ''; renderAudienceStandby(); }
+   return;
+  }
+  S = await r.json();
+  if(S.case_game) document.body.classList.add('sec-case');
+  else document.body.classList.remove('sec-case');
+  showReactions(S.reactions);
+  if(S.phase === 'final' && lastPhase !== 'final') startConfetti();
+  lastPhase = S.phase;
+  render();
+ }catch(e){}
+}
+
+function ensureAudiencePoll(){
+ if(audPollTimer) clearInterval(audPollTimer);
+ pollAudience();
+ audPollTimer = setInterval(pollAudience, 600);
+}
+
+function renderPresSetupBar(){
+ const bar = document.getElementById('presSetupBar');
+ const mst = document.getElementById('presMenuState'), mb = document.getElementById('presMenuBtn');
+ const live = isProjectorLive();
+ if(mst) mst.textContent = window.presenterMode ? (live ? 'Live 🟢' : 'Active') : '2nd Screen';
+ if(mb) mb.classList.toggle('on', !!window.presenterMode);
+ if(!bar) return;
+ bar.classList.toggle('active', !!window.presenterMode);
+ if(window.presenterMode){
+  bar.innerHTML = `<div style="flex:1;min-width:220px">
+    <b style="color:#7dff6b">${live ? '🟢 Extended Screen Connected' : '📽️ Presenter View Enabled'}</b>
+    <div style="font-size:.85em;opacity:.88;margin-top:2px">${live ? 'Audience window is ready on your second screen. Launch below to keep notes &amp; controls privately here.' : 'Click "Open Extended Screen" to place the clean audience window on your second display.'}</div>
+   </div>
+   <div style="display:flex;gap:6px;flex-wrap:wrap">
+    <button type="button" onclick="openPresentationMode()">${live ? '📽️ Focus Screen' : '📽️ Open Extended Screen'}</button>
+    <button type="button" class="btn-sec" onclick="setPresenterMode(false)">✕ Single Screen</button>
+   </div>`;
+ } else {
+  bar.innerHTML = `<div style="flex:1;min-width:220px">
+    <b>📽️ Have an Extended Screen or Projector?</b>
+    <div style="font-size:.85em;opacity:.82;margin-top:2px">Run clean fullscreen slides on Screen 2 while keeping private notes, timers &amp; controls on your laptop.</div>
+   </div>
+   <button type="button" class="btn-sec" style="background:#ffffff2e;border:1px solid #fff5" onclick="openPresentationMode()">📽️ Presentation Mode</button>`;
+ }
+}
+
+function setPresenterMode(on){
+ if(IS_AUDIENCE) return;
+ window.presenterMode = !!on;
+ try{
+  if(window.presenterMode) sessionStorage.setItem('brainrush_pres_mode', '1');
+  else sessionStorage.removeItem('brainrush_pres_mode');
+ }catch(e){}
+ document.body.classList.toggle('is-presenter-console', !!(window.presenterMode && pin));
+ renderPresSetupBar();
+ last = '';
+ if(pin && S && S.phase){ render(); updateMeta(); }
+}
+
+async function openPresentationMode(){
+ if(IS_AUDIENCE) return;
+ setPresenterMode(true);
+ const url = '/present' + (pin ? '?pin=' + encodeURIComponent(pin) : '');
+ if(projWin && !projWin.closed){
+  try{ projWin.focus(); }catch(e){}
+  broadcastPresSync();
+  renderPresSetupBar();
+  return;
+ }
+ let feat = 'popup=yes,width=1280,height=800';
+ if('getScreenDetails' in window){
+  try{
+   const details = await window.getScreenDetails();
+   const ext = details.screens.find(s => s !== details.currentScreen) || details.screens.find(s => !s.isPrimary);
+   if(ext){
+    feat = `popup=yes,left=${ext.availLeft},top=${ext.availTop},width=${ext.availWidth},height=${ext.availHeight}`;
+   }
+  }catch(e){}
+ }
+ projWin = window.open(url, 'brainrush_projector', feat);
+ setTimeout(broadcastPresSync, 250);
+ setTimeout(renderPresSetupBar, 350);
+}
+
+function updatePresBadge(){
+ const el = document.getElementById('pconScreenBadge');
+ if(!el) return;
+ const live = isProjectorLive();
+ if(el.dataset.live === (live ? '1' : '0')) return;
+ el.dataset.live = live ? '1' : '0';
+ if(live){
+  el.outerHTML = `<span id="pconScreenBadge" data-live="1" class="pcon-live on">🟢 Extended Screen Live</span>`;
+ } else {
+  el.outerHTML = `<button id="pconScreenBadge" data-live="0" class="pcon-live off" onclick="openPresentationMode()">🟡 Reopen Extended Screen 📽️</button>`;
+ }
+}
+window.updatePresBadge = updatePresBadge;
+
+function qtypeBadge(qt, isCase){
+ const map = {
+  info: '📖 Case Chapter', poll: '🗳️ Decision Poll', rank: '📊 Priority Ranking', open: '✍️ Open Response',
+  mc: isCase ? '✅ Concept Check' : '✅ Multiple Choice', tf: '✓/✗ True / False',
+  text: '⌨️ Type Answer', order: '🔢 Put in Order', zoom: '🔍 Zoom Picture'
+ };
+ return map[qt] || '❓ Slide';
+}
+
+function renderPresenter(){
+ document.body.classList.toggle('is-presenter-console', true);
+ const ph = S.phase || 'lobby';
+ const nAct = (S.n_active != null ? S.n_active : (S.n || 0));
+ const inPrev = ph === 'question' && (S.preview_left || 0) > 0;
+ const autoSuffix = S.auto && S.auto_left != null ? `<span id="autoNextLbl"> (${S.auto_left}s)</span>` : '';
+ const live = isProjectorLive();
+ const liveHtml = live
+  ? `<span id="pconScreenBadge" data-live="1" class="pcon-live on">🟢 Extended Screen Live</span>`
+  : `<button id="pconScreenBadge" data-live="0" class="pcon-live off" onclick="openPresentationMode()">🟡 Reopen Extended Screen 📽️</button>`;
+
+ const phasePill = ph === 'lobby' ? 'LOBBY'
+  : ph === 'icebreaker' ? 'WARM-UP CLOUD'
+  : ph === 'intro' ? `ROUND INTRO · ${(S.index||0)+1}/${S.total||0}`
+  : ph === 'question' ? `${S.case_game?'SLIDE':'QUESTION'} ${(S.index||0)+1} / ${S.total||0}`
+  : ph === 'results' ? `RESULTS · ${(S.index||0)+1} / ${S.total||0}`
+  : ph === 'board' ? `STANDINGS · AFTER ${(S.index||0)+1}/${S.total||0}`
+  : 'FINAL PODIUM';
+
+ let nextLbl = 'Next ➔', canNext = true;
+ if(ph === 'lobby'){
+  canNext = (S.n || 0) > 0;
+  nextLbl = canNext ? `🚀 Start ${S.case_game ? 'Case Study' : 'Game'}` : '⏳ Waiting for Players to Join (or +5 Bots)';
+ } else if(ph === 'icebreaker'){
+  nextLbl = `▶️ Start ${S.case_game ? 'Slide 1' : 'Question 1'} ➔`;
+ } else if(ph === 'intro'){
+  nextLbl = '⏭️ Skip Intro Animation';
+ } else if(ph === 'question'){
+  nextLbl = S.qtype === 'info' ? '➡️ Continue to Next Slide ➔' : '⏭️ End Timer & Show Results';
+ } else if(ph === 'results'){
+  nextLbl = (S.is_last ? '🏆 Show Final Podium' : (S.case ? '➡️ Next Slide ➔' : '🏆 Show Leaderboard')) + autoSuffix;
+ } else if(ph === 'board'){
+  nextLbl = ((S.index + 1 >= S.total) ? '🏆 Show Final Podium' : '➡️ Next Question ➔') + autoSuffix;
+ }
+
+ let ctrlHtml = '';
+ if(ph === 'question' && S.qtype !== 'info'){
+  if(inPrev){
+   const pct = Math.min(100, ((S.preview_left||0)/(S.preview_total||5))*100);
+   ctrlHtml = `<div class="pcon-ctrl"><div style="flex:1"><div style="font-weight:800;color:#ffdf5d;margin-bottom:6px">👀 Reading preview on projector…</div><div class="preview-bar"><div class="preview-fill" id="pf" style="width:${pct}%"></div></div></div></div>`;
+  } else {
+   const sec = Math.ceil(S.left || 0);
+   ctrlHtml = `<div class="pcon-ctrl">
+    <div class="timer ${!S.paused&&sec<=5?'urgent':''} ${S.paused?'paused':''}" id="t">${S.paused ? '⏸️ ' + sec : sec}</div>
+    <button class="btn-sm" id="pauseBtn" onclick="hostCtl('pause')">${S.paused ? '▶️ Resume' : '⏸️ Pause'}</button>
+    <button class="btn-sm" onclick="hostCtl('add_time',10)">⏱️ +10s</button>
+    <span class="pcon-chip" style="margin-left:auto">📝 <b id="ansCnt">${S.answered||0}/${nAct}</b> responded</span>
+   </div>`;
+  }
+ } else if(ph === 'intro'){
+  const ipct = Math.max(0, Math.min(100, ((S.intro_left||0)/(S.intro_total||5))*100));
+  ctrlHtml = `<div class="pcon-ctrl"><div style="flex:1"><div class="preview-bar"><div class="preview-fill" id="ib" style="width:${ipct}%"></div></div></div></div>`;
+ }
+
+ let slideBody = '';
+ if(ph === 'lobby'){
+  slideBody = `<div class="pcon-lbl"><span>📽️ Showing on Extended Screen · Join Lobby</span><span>PIN ${esc(pin)}</span></div>
+   <div style="display:flex;align-items:center;gap:18px;flex-wrap:wrap">
+    <div style="background:#fff;padding:8px;border-radius:12px;width:110px;height:110px;display:flex;align-items:center;justify-content:center">${QR.replace('width="240" height="240"','width="104" height="104"')}</div>
+    <div style="flex:1;min-width:200px">
+     <div style="font-size:1.1em;opacity:.85">Students join on their phones at <b>${esc(location.host)}/play</b></div>
+     <div style="font-size:2.4em;font-weight:900;color:#ffdf5d;letter-spacing:2px;margin:4px 0">PIN: ${esc(pin)}</div>
+     <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px">
+      <button class="btn-sm" onclick="addBots(5)">🤖 +5 ${S.case_game ? 'Simulated Participants' : 'Phantom Players'}</button>
+      <button class="btn-sm" onclick="navigator.clipboard.writeText(location.origin+'/play?pin='+pin)">📋 Copy Join Link</button>
+     </div>
+    </div>
+   </div>
+   ${teamStandingsHtml()}`;
+ } else if(ph === 'icebreaker'){
+  const words = S.words || [];
+  slideBody = `<div class="pcon-lbl"><span>💭 Live Word Cloud Warm-Up</span><span>${S.word_total||0} responses</span></div>
+   <h2 style="margin:.1em 0 .4em;font-size:1.45em">${esc(S.prompt)} <button class="btn-sm" style="font-size:.62em" onclick="editIcePrompt()">✏️ Edit</button></h2>
+   <div style="display:flex;flex-wrap:wrap;gap:8px;padding:10px;background:#0004;border-radius:12px;min-height:64px">
+    ${words.length ? words.map(w=>`<span class="pcon-chip">${esc(w.text)}${w.count>1?` <b>×${w.count}</b>`:''}</span>`).join('') : '<span style="opacity:.7">Waiting for responses on phones…</span>'}
+   </div>`;
+ } else if(ph === 'intro'){
+  const title = S.redemption ? '🔄 Redemption Round (Double Points)' : S.speed ? '⚡ Speed Round (5 Rapid Questions)' : ('🎡 Mystery Wheel: ' + (S.wheel_mod || 'Spinning…'));
+  slideBody = `<div class="pcon-lbl"><span>🎪 Special Round Announcement</span><span>Slide ${(S.index||0)+1}/${S.total}</span></div>
+   <h2 style="margin:.2em 0">${esc(title)}</h2>`;
+ } else if(ph === 'question'){
+  const badges = [
+   S.wheel_mod ? `🎡 ${S.wheel_mod}` : '',
+   S.speed ? '⚡ Speed Round' : '',
+   S.dbl ? '💥 Double or Nothing' : '',
+   S.team_battle ? '🤝 Team Battle' : '',
+   S.hot ? `🔥 Hot Seat: ${S.hot.name}` : '',
+   S.tiebreak ? '⚔️ Tiebreaker' : '',
+   S.redemption ? '🔄 Redemption' : '',
+   S.boss ? '🎰 Final Boss Wager' : (S.double ? '⚡ 2x Points' : '')
+  ].filter(Boolean).map(b=>`<span class="pcon-chip" style="background:#ffdf5d33;border:1px solid #ffdf5d88">${esc(b)}</span>`).join(' ');
+
+  let detail = '';
+  if(S.qtype === 'info'){
+   const paras = (S.body||'').split(/\n\s*\n/).map(p=>`<p>${esc(p).replace(/\n/g,'<br>')}</p>`).join('');
+   detail = `<div class="pcon-body-scroll">${paras}</div>${exhibitsHtml(S.exhibits, false)}`;
+  } else if(S.qtype === 'text'){
+   detail = `<div class="pcon-note" style="margin-top:10px;background:#0d3b26;color:#fff;border:1px solid #7dff6b">✍️ Players are typing their answers on phones.<br><b style="color:#7dff6b">✅ Answer Key:</b> ${esc(S.host_ans||'')}</div>`;
+  } else if(S.qtype === 'order'){
+   detail = `<div class="pcon-opts">${(S.answers||[]).map((a,i)=>`<div class="pcon-opt c${i%4}"><span>${LET[i]}. ${esc(a)}</span></div>`).join('')}</div>
+    ${S.host_ans?`<div style="margin-top:10px;padding:8px 12px;border-radius:10px;background:#0d3b26;border:1px solid #7dff6b;font-weight:700"><span style="color:#7dff6b">✅ Correct Order:</span> ${esc(S.host_ans)}</div>`:''}`;
+  } else if(S.qtype === 'open'){
+   detail = `<div style="margin-top:10px;padding:14px;border-radius:10px;background:#0004;opacity:.9">✍️ Students have <b>120s</b> to write 1–2 sentence anonymous responses on their phones. Peer voting opens when you advance to Results.</div>`;
+  } else if(S.qtype === 'rank'){
+   detail = `<div class="pcon-opts">${(S.answers||[]).map((a,i)=>`<div class="pcon-opt c${i%4}"><span>${'ABCDEF'[i]}. ${esc(a)}</span></div>`).join('')}</div>`;
+  } else {
+   detail = `<div class="pcon-opts">${(S.answers||[]).map((a,i)=>{
+    const isKey = (S.host_correct === i);
+    return `<div class="pcon-opt c${i%4}${isKey?' key':''}"><span>${sh[i]}${esc(a)}</span>${isKey?'<span class="pcon-key">✅ Correct</span>':''}</div>`;
+   }).join('')}</div>`;
+  }
+  slideBody = `<div class="pcon-lbl"><span>${qtypeBadge(S.qtype, S.case)} · On Extended Screen</span><span>Slide ${(S.index||0)+1} of ${S.total}</span></div>
+   ${badges ? `<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px">${badges}</div>` : ''}
+   <h2 style="margin:.1em 0 .4em;font-size:1.45em;line-height:1.3">${esc(S.question)}</h2>
+   ${S.img ? `<img src="${esc(S.img)}" alt="" style="max-height:120px;border-radius:8px;background:#fff;margin-bottom:6px">` : ''}
+   ${S.qtype !== 'info' ? exhibitsHtml(S.exhibits, false) : ''}
+   ${detail}`;
+ } else if(ph === 'results'){
+  slideBody = `<div class="pcon-lbl"><span>📊 Results Revealed on Extended Screen</span><span>${S.answered||0}/${nAct} responded</span></div>
+   <h2 style="margin:.1em 0 .4em;font-size:1.35em;line-height:1.3">${esc(S.question)}</h2>
+   <div style="text-align:center">${resultArea()}${resultExtras()}</div>`;
+ } else if(ph === 'board'){
+  const shHtml = (S.shoutouts&&S.shoutouts.length) ? `<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">${S.shoutouts.map(s=>`<span class="pcon-chip">${esc(s)}</span>`).join('')}</div>` : '';
+  slideBody = `<div class="pcon-lbl"><span>🏆 Leaderboard on Extended Screen</span><span>Top 10</span></div>
+   ${shHtml}${teamStandingsHtml()}${board(S.board||[])}`;
+ } else {
+  const st = S.stats || {};
+  let lg = window.lastGame; if(!lg){ try{ lg = JSON.parse(localStorage.getItem('brainrush_last')||'null'); }catch(e){} }
+  const pool = quizList.filter(q => S.case_game ? !!q.case : !q.case);
+  const qOpts = (pool.length ? pool : quizList).map(q=>`<option value="${esc(q.file)}" ${lg&&lg.file===q.file?'selected':''}>${esc(q.title)}</option>`).join('');
+  const repCount = (lg && lg.count) ? lg.count : 15;
+  slideBody = `<div class="pcon-lbl"><span>🏆 Final Podium Showing on Extended Screen</span><span>Session Complete</span></div>
+   ${st.possible ? `<div class="acc-pill" style="margin-top:0">🎯 Group Accuracy: ${st.accuracy}% (${st.correct}/${st.possible})</div>` : ''}
+   ${board((S.board||[]).slice(0,10))}
+   ${topicPanel()}
+   <div class="replay-box" style="max-width:none;margin:14px 0 10px">
+    <b>🔁 Next ${S.case_game?'Case':'Round'} (Keep Players):</b>
+    <select id="repQuizSel">${qOpts}</select>
+    ${S.case_game?'':`<label>Qs: <input id="repCount" type="number" min="1" max="200" value="${repCount}"></label>`}
+    <button style="margin:0;padding:9px 18px;font-size:1em" onclick="replayRound()">🔁 ${S.case_game?'Run Case':'Play Again'}</button>
+   </div>
+   <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
+    <button class="btn-sm" style="background:#1368ce;padding:10px 18px" onclick="newGame()">🏠 New ${S.case_game?'Session':'Game'} (New PIN)</button>
+    <a href="/api/study?pin=${pin}" target="_blank"><button class="btn-sm" style="padding:10px 18px">${S.case_game?'📄 Case Debrief Summary':'📄 Study Guide'}</button></a>
+    <a href="/api/export?pin=${pin}" download="brainrush_${pin}_results.csv"><button class="btn-sm" style="padding:10px 18px">📥 Export CSV</button></a>
+   </div>`;
+ }
+
+ const qQuote = S.quote || S.host_quote || '';
+ const notesCard = `<div class="pcon-card">
+  <div class="pcon-lbl"><span>📝 Private Facilitator / Teacher Notes</span>${S.topic ? `<span class="pcon-chip" style="font-size:.95em;text-transform:none;letter-spacing:0">🏷️ ${esc(S.topic)}</span>` : '<span>Laptop Only</span>'}</div>
+  ${S.note
+   ? `<div class="pcon-note">${esc(S.note)}</div>`
+   : `<div style="opacity:.72;font-size:.92em;line-height:1.45">No private <code>Note:</code> on this slide. Add <code>Note: your talking points</code> to any question or case chapter in the editor to keep facilitation prompts here off the projector.</div>`}
+  ${qQuote ? `<div class="pcon-quote"><b style="color:#ffdf5d">💡 Takeaway Quote${ph==='question'?' (shown on Results)':''}:</b><br>“${esc(qQuote)}”</div>` : ''}
+ </div>`;
+
+ const un = S.up_next;
+ const upNextCard = `<div class="pcon-card">
+  <div class="pcon-lbl"><span>⏭️ Up Next</span><span>${un ? `Slide ${un.num} of ${un.total}` : (ph==='final' ? 'Done' : 'End of Deck')}</span></div>
+  ${un
+   ? `<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px">
+       <span class="pcon-chip" style="font-size:.82em">${qtypeBadge(un.qtype, un.case)}</span>
+       ${un.topic ? `<span class="pcon-chip" style="font-size:.82em">🏷️ ${esc(un.topic)}</span>` : ''}
+      </div>
+      <div style="font-size:1.08em;font-weight:800;line-height:1.35">${esc(un.q)}</div>`
+   : `<div style="font-weight:800;color:#ffdf5d">${ph === 'final' ? '🏁 Session complete — start another round or export results.' : '🏆 Final Podium &amp; Debrief Summary is next!'}</div>`}
+ </div>`;
+
+ const hPlayers = S.host_players || [];
+ const rosterCard = `<div class="pcon-card">
+  <div class="pcon-lbl">
+   <span>👥 Live Players (${S.n||0})</span>
+   <span>
+    <button class="btn-sm" style="padding:4px 10px;font-size:.88em" onclick="addBots(5)">🤖 +5</button>
+    <button class="btn-sm" style="padding:4px 10px;font-size:.88em" onclick="openModeration()">🛡️ Mod</button>
+   </span>
+  </div>
+  ${pendingHtml()}
+  <div class="pcon-roster">
+   ${hPlayers.length ? hPlayers.map((p,i)=>`<div class="pcon-p">
+     <span>${i+1}. ${esc((p.avatar?p.avatar+' ':'')+p.name)}${p.bot?' <small style="opacity:.65">🤖</small>':''}</span>
+     <span><b style="color:#ffdf5d;margin-right:6px">${p.score}</b><button title="Remove ${esc(p.name)}" data-n="${esc(p.name)}" onclick="kickPlayer(this.dataset.n)">✖</button></span>
+    </div>`).join('') : '<div style="opacity:.68;font-size:.9em">No players joined yet.</div>'}
+  </div>
+ </div>`;
+
+ $.innerHTML = `<div class="pcon-top">
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+   ${liveHtml}
+   <button class="btn-sm" onclick="openPresentationMode()" title="Open or focus the audience window">📽️ Audience Window</button>
+   <span class="pcon-chip">PIN <b>${esc(pin)}</b></span>
+   <span class="pcon-chip">👥 <b>${S.n||0}</b></span>
+   <span class="pcon-chip">${esc(phasePill)}</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+   <button class="btn-sm" onclick="toggleMute()">${muted ? '🔇 Muted' : '🔊 Sound'}</button>
+   <button class="btn-sm" onclick="toggleTts()">${ttsOn ? '🗣️ Voice ON' : '🗣️ Voice'}</button>
+   <button class="btn-sm" onclick="setPresenterMode(false)" title="Switch laptop back to standard single-screen view">🖥️ Single Screen</button>
+  </div>
+ </div>
+ <div class="pcon-grid">
+  <div class="pcon-col">
+   ${ph !== 'final' ? `<div class="pcon-card">
+    <button class="pcon-next" ${canNext ? 'onclick="next()"' : 'disabled style="opacity:.55;cursor:not-allowed"'}>
+     <span>${nextLbl}</span>
+     ${canNext ? '<small>Space / →</small>' : ''}
+    </button>
+    ${ctrlHtml}
+   </div>` : ''}
+   <div class="pcon-card">${slideBody}</div>
+  </div>
+  <div class="pcon-col">
+   ${notesCard}
+   ${upNextCard}
+   ${rosterCard}
+  </div>
+ </div>`;
+}
+window.renderPresenter = renderPresenter;
+
+// Wire host lifecycle & appearance changes to sync with Extended Screen
+const _createPres = create;
+create = async function(){
+ await _createPres();
+ if(pin){
+  if(window.presenterMode) document.body.classList.add('is-presenter-console');
+  broadcastPresSync();
+ }
+};
+const _enterGamePres = enterGame;
+enterGame = function(){
+ if(window.presenterMode && pin) document.body.classList.add('is-presenter-console');
+ _enterGamePres();
+ broadcastPresSync();
+};
+const _replayPres = replayRound;
+replayRound = async function(){
+ await _replayPres();
+ broadcastPresSync();
+};
+const _newGamePres = newGame;
+newGame = function(){
+ pin = '';
+ broadcastPresSync();
+ _newGamePres();
+};
+const _cycleThemePres = cycleTheme;
+cycleTheme = function(){ _cycleThemePres(); broadcastPresSync(); };
+const _toggleCbPres = toggleCb;
+toggleCb = function(){ _toggleCbPres(); broadcastPresSync(); };
+const _toggleHcPres = toggleHc;
+toggleHc = function(){ _toggleHcPres(); broadcastPresSync(); };
+const _saveSetupPres = saveSetup;
+saveSetup = function(){ _saveSetupPres(); broadcastPresSync(); };
+
+const _pollPres = poll;
+poll = async function(){
+ await _pollPres();
+ if(!IS_AUDIENCE){
+  const dl = (S && S.discuss_left != null) ? S.discuss_left : -1;
+  if(lastDiscussLeft > 0 && dl === 0) sfxReveal();
+  lastDiscussLeft = dl;
+ }
+};
+
+if(presChan){
+ presChan.onmessage = ev => {
+  const m = ev.data || {};
+  if(IS_AUDIENCE){
+   if(m.type === 'sync') applyPresSync(m);
+   if(m.type === 'ping' || m.type === 'sync') sendPresMsg({type: 'pong', ts: Date.now()});
+  } else {
+   if(m.type === 'hello'){
+    projLastPong = Date.now();
+    broadcastPresSync();
+    renderPresSetupBar();
+    updatePresBadge();
+   } else if(m.type === 'pong'){
+    projLastPong = Date.now();
+    renderPresSetupBar();
+    updatePresBadge();
+   }
+  }
+ };
+}
+window.addEventListener('storage', ev => {
+ if(IS_AUDIENCE && ev.key === 'brainrush_pres_sync' && ev.newValue){
+  try{ applyPresSync(JSON.parse(ev.newValue)); }catch(e){}
+ }
+});
+
+(function(){
+ const hostSec = GUIDE.find(g => g.id === 'host');
+ if(hostSec){
+  hostSec.items.unshift(['📽️ Presentation Mode (Extended Screen)', 'Like PowerPoint Presenter View: opens a clean, button-free Audience window (/present) for your extended monitor or projector while turning your laptop into a private Presenter Console with Teacher Notes, Answer Key, Up-Next preview, timers, and live player moderation.']);
+ }
+ const scrSec = GUIDE.find(g => g.id === 'screens');
+ if(scrSec){
+  scrSec.items.unshift(['/present', 'Clean fullscreen projector / extended-screen display with zero host buttons or teacher notes. Syncs automatically when launched from Presentation Mode on /host.']);
+ }
+ if(IS_AUDIENCE){
+  applyA11y();
+  try{
+   const savedSync = JSON.parse(localStorage.getItem('brainrush_pres_sync') || 'null');
+   if(savedSync) applyPresSync({...savedSync, pin: ''});
+  }catch(e){}
+  const initPin = new URLSearchParams(location.search).get('pin') || '';
+  if(initPin){
+   pin = initPin;
+   ensureAudiencePoll();
+  } else {
+   renderAudienceStandby();
+  }
+  sendPresMsg({type: 'hello'});
+  setInterval(()=>sendPresMsg({type: 'pong', ts: Date.now()}), 1600);
+ } else {
+  renderPresSetupBar();
+  setInterval(()=>{ renderPresSetupBar(); updatePresBadge(); }, 2000);
+ }
 })();
 </script></body></html>

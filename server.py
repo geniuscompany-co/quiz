@@ -856,6 +856,7 @@ def start_question(g, qi):
     g["phase"] = "question"
     g["paused"] = False
     g["extra_time"] = 0.0
+    g["discuss_until"] = 0.0
     if g.get("wheel", True) and qi > 0 and (qi + 1) % 4 == 0 and not is_boss_q(g, qi) and not g["quiz"][qi].get("redemption") and not is_speed_q(g, qi) and not is_case_type(g["quiz"][qi]):
         g.setdefault("wheel_mods", {})[qi] = random.choice(WHEEL_EVENTS)
     q = g["quiz"][qi]
@@ -1075,6 +1076,7 @@ def advance_game(g):
         if qtype_of(g["quiz"][qi]) == "info":
             advance_game(g)
     elif g["phase"] == "results":
+        g["discuss_until"] = 0.0
         if g["q"] + 1 >= len(g["quiz"]):
             kind = pending_extra(g)
             if kind == "redemption":
@@ -1491,7 +1493,7 @@ def view(g, pid=None, host=False):
     out = {
         "phase": ph, "pin": g["pin"], "n": len(g["players"]), "total": len(g["quiz"]),
         "names": [ptag(p) for p in g["players"].values()] if ph == "lobby" else None,
-        "pending_list": [{"name": r["name"], "avatar": r.get("avatar", "")} for r in g.get("pending", {}).values()] if (host or not pid) else [],
+        "pending_list": [{"name": r["name"], "avatar": r.get("avatar", "")} for r in g.get("pending", {}).values()] if host else [],
         "lobby": [{"name": p["name"], "tag": ptag(p), "bot": bool(p.get("bot")), "color": p.get("color", ""), "ctag": p.get("ctag", "")} for p in g["players"].values()] if ph == "lobby" else None,
         "reactions": g["reactions"][-25:],
         "teams_enabled": bool(g.get("teams")),
@@ -1500,7 +1502,25 @@ def view(g, pid=None, host=False):
         "auto": bool(g.get("auto")),
         "paused": bool(g.get("paused")),
         "case_game": any(is_case_type(x) for x in g["quiz"]),
+        "logo": g.get("logo") or "",
     }
+    du = g.get("discuss_until", 0.0)
+    if du > 0:
+        out["discuss_left"] = max(0, int(-(-(du - now) // 1))) if du > now else 0
+    if host:
+        out["host_players"] = [
+            {"name": p["name"], "avatar": p.get("avatar", ""), "score": p["score"], "bot": bool(p.get("bot"))}
+            for p in sorted(g["players"].values(), key=lambda x: (-x["score"], x["name"].lower()))[:40]
+        ]
+        ni = 0 if ph in ("lobby", "icebreaker") else (len(g["quiz"]) if ph == "final" else g["q"] + 1)
+        if 0 <= ni < len(g["quiz"]):
+            nq = g["quiz"][ni]
+            out["up_next"] = {
+                "num": ni + 1, "total": len(g["quiz"]), "q": nq["q"],
+                "qtype": qtype_of(nq), "case": is_case_type(nq), "topic": nq.get("topic") or "",
+            }
+        else:
+            out["up_next"] = None
     if ph == "icebreaker":
         out["prompt"] = g.get("icebreaker_prompt") or "In one word, how are you feeling about today's quiz?"
         counts = {}
@@ -1541,8 +1561,13 @@ def view(g, pid=None, host=False):
         out["speed"] = is_speed_q(g, g["q"])
         out["dbl"] = is_dbl_q(g, g["q"])
         out["topic"] = q.get("topic")
-        if host and q.get("note"):
-            out["note"] = q["note"]
+        if host:
+            if q.get("note"):
+                out["note"] = q["note"]
+            out["host_correct"] = q["c"] if (not is_case_type(q) and qtp in ("mc", "tf", "zoom")) else -1
+            out["host_ans"] = ans_text(q) if not is_case_type(q) else ""
+            if q.get("quote"):
+                out["host_quote"] = q["quote"]
         el = eligible(g)
         out["answered"] = sum(1 for p in el if g["q"] in p["answers"] and not p["answers"][g["q"]].get("blank"))
         out["n_active"] = len(el)
@@ -1975,7 +2000,7 @@ class H(BaseHTTPRequestHandler):
                     return self.send({"error": "Game not found"}, 404)
                 return self.send(view(g, q.get("pid"), host=(q.get("host") == g["host"])))
         files = {
-            "/": "host.html", "/host": "host.html",
+            "/": "host.html", "/host": "host.html", "/present": "host.html",
             "/play": "play.html", "/remote": "remote.html",
             "/practice": "practice.html", "/spectator": "spectator.html", "/hw": "homework.html",
             "/logo.jpg": "logo.jpg",
@@ -2147,6 +2172,9 @@ class H(BaseHTTPRequestHandler):
                     g["extra_time"] = g.get("extra_time", 0.0) + add_s
                     if g.get("paused"):
                         g["pause_rem"] = g.get("pause_rem", 0.0) + add_s
+                elif act == "discuss":
+                    sec_ = max(0.0, min(600.0, float(body.get("sec", 60))))
+                    g["discuss_until"] = (time.time() + sec_) if sec_ > 0 else 0.0
                 elif act == "set_prompt":
                     pr = str(body.get("prompt") or "").strip()[:120]
                     if pr:
