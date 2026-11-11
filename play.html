@@ -484,7 +484,7 @@ function render(){
    <div class="wager-btns">
     ${[0,50,100].map(pct=>`<button class="wager-btn ${curW===pct?'sel':''}" onclick="setWager(${pct})">${pct}% (${Math.round(stake*pct/100)} pts)</button>`).join('')}
    </div>
-  </div>` : (!S.boss && !S.tiebreak && !S.case && !m.answered) ? `<button class="conf-btn ${m.confident?'on':''}" onclick="toggleConf()">🔥 ${m.confident?'Confidence Bet ON (+250 / -150)':'Bet on Yourself (+250 / -150)'}</button>` : '';
+  </div>` : (!S.boss && !S.tiebreak && !S.case && !S.case_game && !m.answered) ? `<button class="conf-btn ${m.confident?'on':''}" onclick="toggleConf()">🔥 ${m.confident?'Confidence Bet ON (+250 / -150)':'Bet on Yourself (+250 / -150)'}</button>` : '';
   const t = S.qtype || 'mc';
   if(t==='info'){ $.innerHTML = infoPhone(m); return; }
   if(m.spectating){
@@ -508,7 +508,7 @@ function render(){
    else if(t==='text') inputUi = `<input id="txtAns" class="txtans" placeholder="Type your answer…" autocomplete="off" autocapitalize="off" onkeydown="if(event.key==='Enter')sendText()"><button class="go" onclick="sendText()">Submit answer</button>`;
    else if(t==='order' || t==='rank') inputUi = `<div id="ordWrap"></div>`;
    else inputUi = `<div class="grid">${S.answers.map((a,i)=>`<button class="c${i} ${hide.includes(i)?'elim':''}" onclick="ans(${i})">${S.aimg&&S.aimg[i]?`<img src="${esc(S.aimg[i])}" alt="">`:''}<span class="sh">${sh[i]}</span><span>${esc(a)}</span>${pcts?`<span class="aud-badge" id="aud${i}">📊 ${pcts[i]}%</span>`:''}</button>`).join('')}</div>`;
-   $.innerHTML=`${iceHtml}${whl}${dbl}${udog}${hot}${teamP}${donUi}${wagerUi}${S.case?'':puBar}${inputUi}`;
+   $.innerHTML=`${iceHtml}${whl}${dbl}${udog}${hot}${teamP}${donUi}${wagerUi}${(S.case||S.case_game)?'':puBar}${inputUi}`;
    if(t==='order' || t==='rank') drawOrd();
   }
  } else if(S.phase=='results' && S.case && !(m.spectating)){

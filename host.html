@@ -248,6 +248,17 @@ body.hc .a{outline:3px solid #fff}body.hc .row{border:2px solid #fff}
 .resp{background:#fff;color:#2b0d57;border-radius:12px;padding:12px 16px;font-size:1.05em;font-weight:600;line-height:1.35}
 .resp.voted{box-shadow:0 0 0 3px #ffdf5d}.resp .rv{font-weight:900;margin-top:6px;color:#c2185b}
 .defend{background:#0005;border:2px solid #ffab40;border-radius:14px;padding:10px 16px;margin:12px auto;max-width:760px;font-size:1.1em}
+.sec-tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;background:#0005;padding:6px;border-radius:14px;margin-bottom:16px;border:1px solid #fff2}
+.sec-tabs button{margin:0;padding:11px 14px;font-size:1.08em;border-radius:10px;background:transparent;color:#fffb;font-weight:800;transition:background .18s,color .18s}
+.sec-tabs button.active{background:#ffdf5d;color:#2b0d57;box-shadow:0 4px 14px #0006}
+.case-spec{margin-top:12px;background:#0005;border:1px solid #ffdf5d66;border-radius:12px;padding:10px 14px;font-size:.9em;line-height:1.45;text-align:left}
+.case-spec b{color:#ffdf5d}
+.case-tpl-bar{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 8px}
+.case-tpl-bar button{margin:0;padding:6px 12px;font-size:.84em;border-radius:99px;background:#ffffff24;border:1px solid #fff4}
+body.sec-case .quiz-only{display:none!important}
+body:not(.sec-case) .case-only{display:none!important}
+#quizModal.only-case .quiz-modal-only{display:none!important}
+#quizModal:not(.only-case) .case-modal-only{display:none!important}
 </style></head><body>
 <div class="late-join" id="lateJoin">
  <button class="late-btn" onclick="toggleLateQr(event)" title="Click to toggle QR code for late joiners">
@@ -278,7 +289,7 @@ body.hc .a{outline:3px solid #fff}body.hc .row{border:2px solid #fff}
     <option value="0.95,0.45">🤖 Robot</option>
    </select></label>
   </div>
-  <button id="autoBtn" style="display:none" onclick="hostCtl('toggle_auto')"><span>⏭️ Auto-Advance</span><span class="state" id="autoState">Off</span></button>
+  <button id="autoBtn" class="quiz-only" style="display:none" onclick="hostCtl('toggle_auto')"><span>⏭️ Auto-Advance</span><span class="state" id="autoState">Off</span></button>
   <button onclick="cycleTheme()"><span>🎨 Visual Theme</span><span class="state" id="themeState">Purple</span></button>
    <button id="musicBtn" onclick="cycleMusic()"><span>🎵 Background Music</span><span class="state" id="musicState">Classic</span></button>
    <button id="awakeBtn" onclick="toggleAwake()"><span>☀️ Keep Screen Awake</span><span class="state" id="awakeState">ON</span></button>
@@ -287,14 +298,14 @@ body.hc .a{outline:3px solid #fff}body.hc .row{border:2px solid #fff}
   <div class="menu-sep"></div>
   <button id="remoteBtn" style="display:none" onclick="closeNavMenu();openRemoteModal()"><span>📱 Phone Host Remote</span><span class="state">Open ↗</span></button>
   <button onclick="closeNavMenu();openAccount()"><span>👤 Teacher Account</span><span class="state" id="acctState">Guest</span></button>
-   <button onclick="closeNavMenu();openProgress()"><span>👥 Student Progress</span><span class="state">View</span></button>
-   <button onclick="closeNavMenu();openHomework()"><span>📚 Homework</span><span class="state">Assign</span></button>
+   <button class="quiz-only" onclick="closeNavMenu();openProgress()"><span>👥 Student Progress</span><span class="state">View</span></button>
+   <button class="quiz-only" onclick="closeNavMenu();openHomework()"><span>📚 Homework</span><span class="state">Assign</span></button>
    <button onclick="closeNavMenu();openModeration()"><span>🛡️ Moderation</span><span class="state">Live</span></button>
    <button onclick="closeNavMenu();openStorage()"><span>💾 Saved Storage</span><span class="state" id="storState">…</span></button>
    <button onclick="closeNavMenu();openHistory()"><span>📈 Results History</span><span class="state">View</span></button>
-   <button onclick="closeNavMenu();openLinks()"><span>🖥️ Spectator &amp; Practice Links</span><span class="state">Open ↗</span></button>
-   <button onclick="closeNavMenu();openGuide()"><span>📖 Feature Guide</span><span class="state">What's what</span></button>
-   <button id="addQuizMenuBtn" onclick="closeNavMenu();openQuizModal()"><span>➕ Create / Upload Quiz</span><span class="state">New</span></button>
+   <button onclick="closeNavMenu();openLinks()"><span><span class="quiz-only">🖥️ Spectator &amp; Practice Links</span><span class="case-only">🖥️ Live Spectator Links</span></span><span class="state">Open ↗</span></button>
+   <button onclick="closeNavMenu();openGuide(document.body.classList.contains('sec-case')?'case':undefined)"><span>📖 Feature Guide</span><span class="state">What's what</span></button>
+   <button id="addQuizMenuBtn" onclick="closeNavMenu();openQuizModal()"><span><span class="quiz-only">➕ Create / Upload Quiz</span><span class="case-only">📖 Create / Edit Case Study</span></span><span class="state">New</span></button>
   <div class="menu-sep"></div>
   <div class="menu-kb">⌨️ <b>Shortcuts:</b> [Space/→] Next &middot; [P] Pause &middot; [+] +10s &middot; [M] Mute &middot; [V] Voice</div>
  </div>
@@ -304,7 +315,7 @@ body.hc .a{outline:3px solid #fff}body.hc .row{border:2px solid #fff}
 <div class="modal-bg" id="remoteModal">
  <div class="modal" style="max-width:460px;text-align:center">
   <h2>📱 Phone Host Remote</h2>
-  <p>Open this link on your phone to control the quiz from anywhere in the room:</p>
+  <p>Open this link on your phone to control the session from anywhere in the room:</p>
   <input id="remoteUrlInp" readonly onclick="this.select()">
   <div style="display:flex;justify-content:center;gap:10px;margin-top:10px">
    <button class="btn-sec" style="margin:0" onclick="navigator.clipboard.writeText(document.getElementById('remoteUrlInp').value)">📋 Copy Link</button>
@@ -314,40 +325,49 @@ body.hc .a{outline:3px solid #fff}body.hc .row{border:2px solid #fff}
 </div>
 <div class="modal-bg" id="quizModal">
  <div class="modal">
-  <h2>➕ Create, Edit or Export Quiz</h2>
+  <h2><span class="quiz-modal-only">➕ Create, Edit or Export Quiz</span><span class="case-modal-only">📖 Create, Edit or Export Case Study</span></h2>
   <div style="background:#0004;padding:10px 12px;border-radius:10px;margin-bottom:12px;display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-   <span style="font-size:.88em;font-weight:700;opacity:.85">📂 Existing Quiz:</span>
+   <span style="font-size:.88em;font-weight:700;opacity:.85"><span class="quiz-modal-only">📂 Existing Quiz:</span><span class="case-modal-only">📂 Existing Case:</span></span>
    <select id="editQuizSel" style="flex:1;min-width:160px;padding:7px 10px;border-radius:6px;border:0;font-weight:700;color:#2b0d57"></select>
    <button class="btn-sm" style="margin:0" onclick="loadExistingQuiz()">✏️ Load</button>
    <button class="btn-sm" style="margin:0" onclick="duplicateSelectedQuiz()">⧉ Duplicate</button>
    <button class="btn-sm" style="margin:0" onclick="exportSelectedQuiz()">📥 Export .json</button>
    <button class="btn-sm" style="margin:0;background:#e21b3c88" onclick="deleteSelectedQuiz()">🗑️ Delete</button>
   </div>
-  <label><b>Quiz Title:</b></label>
+  <label><b><span class="quiz-modal-only">Quiz Title:</span><span class="case-modal-only">Case Study Title:</span></b></label>
   <input id="customTitle" placeholder="e.g. Chapter 9 Review">
   <div class="row2"><div><label><b>Folder (optional):</b></label><input id="customFolder" list="folderList" placeholder="e.g. Math"><datalist id="folderList"></datalist></div>
   <div><label><b>Tags (comma separated):</b></label><input id="customTags" placeholder="unit 3, fractions"></div></div>
-  <label><b>Upload .json or .csv file (optional):</b></label>
+  <label><b><span class="quiz-modal-only">Upload .json or .csv file (optional):</span><span class="case-modal-only">Upload .json case file (optional):</span></b></label>
   <input type="file" id="customFile" accept=".json,.csv" onchange="loadCustomFile(event)">
   <div class="qtools">
-   <button class="btn-sm" style="margin:0" onclick="toggleTool('import')">📋 Import table / Google Sheet</button>
-   <button class="btn-sm" style="margin:0" onclick="toggleTool('ai')">✨ AI draft</button>
+   <button class="btn-sm quiz-modal-only" style="margin:0" onclick="toggleTool('import')">📋 Import table / Google Sheet</button>
+   <button class="btn-sm" style="margin:0" onclick="toggleTool('ai')"><span class="quiz-modal-only">✨ AI draft</span><span class="case-modal-only">✨ Draft Case from Scenario / Topic</span></button>
   </div>
-  <div class="toolbox" id="toolImport" style="display:none">
+  <div class="case-tpl-bar case-modal-only">
+   <span style="font-size:.82em;font-weight:800;opacity:.85;align-self:center">Insert slide:</span>
+   <button type="button" onclick="insertCaseTpl('info')">+ 📖 Chapter / Debrief</button>
+   <button type="button" onclick="insertCaseTpl('poll')">+ 🗳️ Decision Poll</button>
+   <button type="button" onclick="insertCaseTpl('rank')">+ 📊 Priority Ranking</button>
+   <button type="button" onclick="insertCaseTpl('open')">+ ✍️ Open Response</button>
+   <button type="button" onclick="insertCaseTpl('mc')">+ ✅ Concept Check</button>
+  </div>
+  <div class="toolbox quiz-modal-only" id="toolImport" style="display:none">
    <p>Copy rows from Excel or Google Sheets (or a CSV) and paste below. Use a header row such as <code>Question, A, B, C, D, Correct, Topic, Quote, Note</code> (Correct can be A–D, 1–4 or the answer text). Or paste a Google Sheet link that is shared as "Anyone with the link can view".</p>
    <div style="display:flex;gap:6px"><input id="sheetUrl" placeholder="https://docs.google.com/spreadsheets/d/…" style="margin:0"><button class="btn-sm" style="margin:0;white-space:nowrap" onclick="importSheet()">Fetch sheet</button></div>
    <textarea id="tableText" placeholder="Paste table here (tab or comma separated)"></textarea>
    <button class="btn-sm" style="margin:0" onclick="importTable()">Convert to questions ↓</button>
   </div>
   <div class="toolbox" id="toolAi" style="display:none">
-   <p>Paste a paragraph, article, or case scenario and get a draft to review and edit. <span id="aiHint"></span></p>
+   <p><span class="quiz-modal-only">Paste a paragraph or article and get a draft quiz to review and edit.</span><span class="case-modal-only">Enter a topic or paste case notes to generate chapters, stakeholder roles, ethical-lens decision polls, a priority ranking, and a peer-voted open prompt.</span> <span id="aiHint"></span></p>
    <div class="row2"><input id="aiTopic" placeholder="Topic (e.g. Whistleblowing &amp; Safety)" style="margin:0"><input id="aiCount" type="number" min="1" max="25" value="8" style="margin:0"></div>
-   <label style="display:flex;align-items:center;gap:6px;margin:4px 0 8px;font-size:.9em;font-weight:700"><input id="aiCase" type="checkbox" style="width:auto;margin:0"> 📖 Build as a Case Study (chapters, stakeholder roles, ethical-lens polls, ranking &amp; open response)</label>
+   <label class="quiz-modal-only" style="display:flex;align-items:center;gap:6px;margin:4px 0 8px;font-size:.9em;font-weight:700"><input id="aiCase" type="checkbox" style="width:auto;margin:0"> 📖 Build as a Case Study</label>
    <textarea id="aiText" placeholder="Paste text or case notes here…"></textarea>
    <button class="btn-sm" style="margin:0" onclick="aiGenerate()">✨ Generate draft ↓</button> <span id="aiMsg" style="font-weight:700"></span>
   </div>
-  <label><b>Or type/paste questions (one per block, mark correct answer with *, optional Image: or Quote:):</b></label>
-  <div style="font-size:.8em;opacity:.75;margin:2px 0 6px">Extras: <code>Type: tf</code> (<code>*True</code>/<code>*False</code>), <code>Type: text</code>, <code>Type: order</code>, <code>Type: zoom</code> + <code>Image:</code>. Case Study: <code>Type: info</code> (<code>Body:</code>, <code>Role: Name | Text</code>), <code>Type: poll</code> (<code>Option :: Ethical lens</code>), <code>Type: rank</code>, <code>Type: open</code>, <code>Exhibit: url | caption</code>, <code>Note:</code></div>
+  <label><b><span class="quiz-modal-only">Or type/paste questions (one per block, mark correct answer with *, optional Image: or Quote:):</span><span class="case-modal-only">Case slides (one slide per blank-line block):</span></b></label>
+  <div class="quiz-modal-only" style="font-size:.8em;opacity:.75;margin:2px 0 6px">Extras: <code>Type: tf</code> (<code>*True</code>/<code>*False</code>), <code>Type: text</code>, <code>Type: order</code>, <code>Type: zoom</code> + <code>Image:</code>. Answer pictures: <code>Paris | https://…/paris.jpg</code></div>
+  <div class="case-modal-only" style="font-size:.8em;opacity:.82;margin:2px 0 6px">Supported slide types: <code>Type: info</code> (<code>Body:</code> paragraphs, <code>Role: Title | Private brief</code>), <code>Type: poll</code> (<code>Option :: Ethical lens</code>), <code>Type: rank</code> (2–6 priorities), <code>Type: open</code> (1–2 sentence peer-voted response), optional MCQ (mark right answer with <code>*</code>). Add <code>Exhibit: url | caption</code>, <code>Topic:</code>, or private host <code>Note:</code> on any slide.</div>
   <textarea id="customText" placeholder="What is the capital of France?
 Berlin
 *Paris
@@ -358,7 +378,7 @@ Quote: Paris has been the capital since 987 CE."></textarea>
   <div id="customErr" style="color:#ff9b9b;font-weight:700"></div>
   <div style="display:flex;justify-content:flex-end;gap:10px">
    <button class="btn-sec" style="margin:0" onclick="closeQuizModal()">Cancel</button>
-   <button style="margin:0;font-size:1.05em;padding:10px 24px" onclick="saveCustomQuiz()">Save Quiz</button>
+   <button style="margin:0;font-size:1.05em;padding:10px 24px" onclick="saveCustomQuiz()"><span class="quiz-modal-only">Save Quiz</span><span class="case-modal-only">Save Case Study</span></button>
   </div>
  </div>
 </div>
@@ -413,33 +433,44 @@ Quote: Paris has been the capital since 987 CE."></textarea>
 <div id="app">
  <img class="logo" src="/logo.jpg" alt="Brainrush!">
  <div class="setup-card">
-  <div class="quiz-row">
-   <select id="quizSel" onchange="syncQuizCount()"><option value="quiz.json">Loading quizzes…</option></select>
-   <button class="btn-sec" style="margin:0;padding:11px 16px;font-size:.98em;border-radius:10px" onclick="openQuizModal()">➕ Add Quiz</button>
+  <div class="sec-tabs" id="secTabs">
+   <button type="button" id="tabQuiz" class="active" onclick="setHostSection('quiz')">🎮 Quizzes</button>
+   <button type="button" id="tabCase" onclick="setHostSection('case')">📖 Case Studies</button>
   </div>
-  <div id="caseHint" style="display:none;margin-top:12px;background:#ffdf5d;color:#2b0d57;border-radius:10px;padding:8px 12px;font-weight:700;font-size:.9em"></div>
+  <div class="quiz-row">
+   <select id="quizSel" onchange="syncQuizCount()"><option value="quiz.json">Loading…</option></select>
+   <button class="btn-sec quiz-only" style="margin:0;padding:11px 16px;font-size:.98em;border-radius:10px" onclick="openQuizModal('quiz')">➕ Add Quiz</button>
+   <button class="btn-sec case-only" style="margin:0;padding:11px 16px;font-size:.98em;border-radius:10px" onclick="openQuizModal('case')">📖 + New / Edit Case</button>
+  </div>
+  <div id="caseHint" style="display:none"></div>
+  <div class="case-spec case-only">
+   <b>📖 Case Study Session (<span id="cSlideCnt">10</span> slides in chapter order)</b><br>
+   Uses only Case Study tools: untimed <b>Chapters</b> &amp; phone <b>Case File</b>, private <b>Stakeholder Roles</b>, <b>Ethical-Lens Polls</b> (45s + 60s debate timer), <b>Priority Rankings</b> (60s), <b>Anonymous Open Responses</b> with peer voting (120s), and optional <b>Concept Checks</b>.
+  </div>
    <div class="quick-bar">
-   <label>📝 Questions: <input id="qCount" type="number" min="1" max="200" value="15"> <span id="qMax" style="opacity:.8">/ 15</span></label>
-   <label>⏱️ Timer: <input id="qTime" type="number" min="5" max="120" value="15"><span style="opacity:.8">s</span></label>
+   <label class="quiz-only">📝 Questions: <input id="qCount" type="number" min="1" max="200" value="15"> <span id="qMax" style="opacity:.8">/ 15</span></label>
+   <label class="quiz-only">⏱️ Timer: <input id="qTime" type="number" min="5" max="120" value="15"><span style="opacity:.8">s</span></label>
+   <label class="case-only" title="Applies only to scored Concept-Check MCQs inside a case; Polls use 45s, Rankings 60s, Open Writing 120s, Chapters untimed">⏱️ Concept-check timer: <input id="cTime" type="number" min="5" max="120" value="20"><span style="opacity:.8">s</span></label>
    <button type="button" class="drawer-toggle" id="advBtn" onclick="toggleAdvPanel()">⚙️ Options <span id="optSummary" style="background:#26890c;padding:2px 8px;border-radius:99px;font-size:.85em">7 active</span> <span id="advCaret">▾</span></button>
   </div>
   <div class="adv-panel" id="advPanel" onchange="updateOptSummary()">
-   <div class="adv-sec-title"><a href="#" onclick="openGuide('setup');return false" style="float:right;color:#ffdf5d;text-transform:none;letter-spacing:0;font-weight:700">📖 What do these do?</a>Game Modes & Power-Ups</div>
+   <div class="adv-sec-title quiz-only"><a href="#" onclick="openGuide('setup');return false" style="float:right;color:#ffdf5d;text-transform:none;letter-spacing:0;font-weight:700">📖 What do these do?</a>Game Modes &amp; Power-Ups</div>
+   <div class="adv-sec-title case-only"><a href="#" onclick="openGuide('case');return false" style="float:right;color:#ffdf5d;text-transform:none;letter-spacing:0;font-weight:700">📖 How Case Studies work</a>Case Study Facilitation Tools</div>
    <div class="mode-grid">
-    <label class="mode-pill"><input id="qShuffle" type="checkbox" checked> 🎲 Randomize Order</label>
-    <label class="mode-pill"><input id="qWager" type="checkbox" checked> 🎰 Final Boss Wager</label>
-    <label class="mode-pill"><input id="qRedemp" type="checkbox" checked> 🔄 Redemption Round</label>
-    <label class="mode-pill"><input id="qSabotage" type="checkbox"> ⛄ Snowballs</label>
-    <label class="mode-pill"><input id="qWheel" type="checkbox" checked> 🎡 Mystery Wheel</label>
-    <label class="mode-pill"><input id="qTeams" type="checkbox" onchange="if(!this.checked){document.getElementById('qBattle').checked=false}"> 🛡️ Team Mode</label>
+    <label class="mode-pill quiz-only"><input id="qShuffle" type="checkbox" checked> 🎲 Randomize Order</label>
+    <label class="mode-pill quiz-only"><input id="qWager" type="checkbox" checked> 🎰 Final Boss Wager</label>
+    <label class="mode-pill quiz-only"><input id="qRedemp" type="checkbox" checked> 🔄 Redemption Round</label>
+    <label class="mode-pill quiz-only"><input id="qSabotage" type="checkbox"> ⛄ Snowballs</label>
+    <label class="mode-pill quiz-only"><input id="qWheel" type="checkbox" checked> 🎡 Mystery Wheel</label>
+    <label class="mode-pill"><input id="qTeams" type="checkbox" onchange="if(!this.checked){document.getElementById('qBattle').checked=false}"> <span class="quiz-only">🛡️ Team Mode</span><span class="case-only">🛡️ Discussion Teams</span></label>
     <label class="mode-pill"><input id="qIce" type="checkbox" checked onchange="document.getElementById('icePromptRow').style.display=this.checked?'block':'none'"> 💭 Word Cloud Warm-Up</label>
-    <label class="mode-pill"><input id="qAuto" type="checkbox"> ⏭️ Auto-Advance</label>
-    <label class="mode-pill"><input id="qHot" type="checkbox" checked> 🔥 Hot Seat Rounds</label>
-    <label class="mode-pill"><input id="qBattle" type="checkbox" onchange="if(this.checked){document.getElementById('qTeams').checked=true}updateOptSummary()"> 🤝 Team Battle (every 5th Q)</label>
-    <label class="mode-pill"><input id="qTie" type="checkbox" checked> ⚔️ Sudden-Death Tiebreaker</label>
-    <label class="mode-pill"><input id="qSpeed" type="checkbox"> ⚡ Speed Round (5 rapid Qs)</label>
-    <label class="mode-pill"><input id="qDbl" type="checkbox"> 💥 Double or Nothing Question</label>
-    <label class="mode-pill"><input id="qSteal" type="checkbox"> 🕵️ Steal / Swap Power-Up</label>
+    <label class="mode-pill quiz-only"><input id="qAuto" type="checkbox"> ⏭️ Auto-Advance</label>
+    <label class="mode-pill quiz-only"><input id="qHot" type="checkbox" checked> 🔥 Hot Seat Rounds</label>
+    <label class="mode-pill quiz-only"><input id="qBattle" type="checkbox" onchange="if(this.checked){document.getElementById('qTeams').checked=true}updateOptSummary()"> 🤝 Team Battle (every 5th Q)</label>
+    <label class="mode-pill quiz-only"><input id="qTie" type="checkbox" checked> ⚔️ Sudden-Death Tiebreaker</label>
+    <label class="mode-pill quiz-only"><input id="qSpeed" type="checkbox"> ⚡ Speed Round (5 rapid Qs)</label>
+    <label class="mode-pill quiz-only"><input id="qDbl" type="checkbox"> 💥 Double or Nothing Question</label>
+    <label class="mode-pill quiz-only"><input id="qSteal" type="checkbox"> 🕵️ Steal / Swap Power-Up</label>
     <label class="mode-pill"><input id="qMod" type="checkbox"> 🛡️ Approve Names First</label>
    </div>
    <div id="icePromptRow" style="display:block;margin-bottom:12px">
@@ -455,11 +486,12 @@ Quote: Paris has been the capital since 987 CE."></textarea>
      <div><label style="display:block;font-size:.8em;font-weight:700;opacity:.85">🌄 Host background image URL</label><input id="qBg" oninput="saveSetup()" placeholder="https://…/bg.jpg" style="width:100%;box-sizing:border-box;padding:8px 10px;border-radius:8px;border:0;color:#2b0d57"></div>
     </div>
     <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;padding-top:8px;border-top:1px solid #fff2;font-weight:700;font-size:.95em">
-    <label style="display:inline-flex;align-items:center;gap:8px">🤖 Phantom Bot Players: <input id="qBots" type="number" min="0" max="30" value="0"></label>
-    <span style="opacity:.68;font-size:.88em">Bots answer &amp; compete alongside live players</span>
+    <label style="display:inline-flex;align-items:center;gap:8px"><span class="quiz-only">🤖 Phantom Bot Players:</span><span class="case-only">🤖 Simulated Participants:</span> <input id="qBots" type="number" min="0" max="30" value="0"></label>
+    <span class="quiz-only" style="opacity:.68;font-size:.88em">Bots answer &amp; compete alongside live players</span>
+    <span class="case-only" style="opacity:.68;font-size:.88em">Bots vote in polls, rank priorities &amp; submit sample arguments</span>
    </div>
   </div>
-  <button style="width:100%;margin-top:18px;padding:14px;font-size:1.35em;border-radius:12px" onclick="create()">🚀 Create Game</button>
+  <button id="launchBtn" style="width:100%;margin-top:18px;padding:14px;font-size:1.35em;border-radius:12px" onclick="create()"><span class="quiz-only">🚀 Create Game</span><span class="case-only">📖 Launch Case Study</span></button>
  </div>
 </div>
 <script>
@@ -1001,8 +1033,14 @@ function handleAudio(){
    else if(S.phase === 'question'){ sfxQuestion(); lastTickSec = -1; speak(S.question); }
   else if(S.phase === 'results'){
    sfxReveal();
-   const winAns = S.qtype==='text' ? (S.answers_correct||[''])[0] : S.qtype==='order' ? (S.answers_correct||[]).join(', then ') : ((S.answers||[])[S.correct] || '');
-   speak('Correct answer: ' + winAns);
+   if(S.case){
+    if(S.qtype==='poll') speak('Votes are in! Let us hear from each side.');
+    else if(S.qtype==='rank') speak('The class priority ranking is in!');
+    else if(S.qtype==='open') speak('Responses are on screen! Vote for the two most persuasive on your phone.');
+   } else {
+    const winAns = S.qtype==='text' ? (S.answers_correct||[''])[0] : S.qtype==='order' ? (S.answers_correct||[]).join(', then ') : ((S.answers||[])[S.correct] || '');
+    speak('Correct answer: ' + winAns);
+   }
   }
   else if(S.phase === 'board'){
    sfxBoard();
@@ -1080,12 +1118,13 @@ async function replayRound(){
  const sel = document.getElementById('repQuizSel'), inp = document.getElementById('repCount');
  const qf = sel ? sel.value : 'quiz.json';
  const picked = quizList.find(x=>x.file===qf);
- const cnt = inp ? parseInt(inp.value,10) || 15 : 15;
+ const isCase = !!(S.case_game || (picked && picked.case));
+ const cnt = isCase ? null : (inp ? parseInt(inp.value,10) || 15 : 15);
  podiumShown = false;
  animDone = -1;
  await post('/api/replay',{
   pin, host, quiz: qf,
-  count: cnt, shuffle: true,
+  count: cnt, shuffle: !isCase,
   custom_questions: picked && picked.questions ? picked.questions : null
  });
  await poll();
@@ -1113,20 +1152,21 @@ function renderFinal(b){
  const awHtml = (st.awards && st.awards.length) ? `<div class="awards">${st.awards.map(a=>`<div class="award"><b>${esc(a.title)}</b>${esc(a.winner)} <small>(${esc(a.detail)})</small></div>`).join('')}</div>` : '';
  const toughHtml = (st.tough && st.tough.length) ? `<div class="tough-box"><h3>🧠 Tough Ones Recap (Most Missed)</h3>${st.tough.map(t=>`<div class="tough-item"><b>Q${t.index}${t.redemption?' (Redemption)':''} (${t.pct}% correct):</b> ${esc(t.q)}<br><span style="color:#7dff6b">✅ ${esc(t.ans)}</span></div>`).join('')}</div>` : '';
  let lg = window.lastGame; if(!lg){ try{ lg = JSON.parse(localStorage.getItem('brainrush_last')||'null'); }catch(e){} }
- const qOpts = quizList.map(q=>`<option value="${esc(q.file)}" ${lg&&lg.file===q.file?'selected':''}>${esc(q.title)}</option>`).join('');
+ const pool = quizList.filter(q => S.case_game ? !!q.case : !q.case);
+ const qOpts = (pool.length ? pool : quizList).map(q=>`<option value="${esc(q.file)}" ${lg&&lg.file===q.file?'selected':''}>${esc(q.title)}</option>`).join('');
  const repCount = (lg && lg.count) ? lg.count : 15;
- return `<h1 class="final-title">🏆 FINAL PODIUM 🏆</h1>${accHtml}${teamStandingsHtml()}${podiumHtml}${awHtml}${topicPanel()}${toughHtml}${rest.length?'<h2>Runners-up</h2>'+board(rest,3):''}
+ return `<h1 class="final-title">${S.case_game?'📖 CASE COMPLETE 🏆':'🏆 FINAL PODIUM 🏆'}</h1>${accHtml}${teamStandingsHtml()}${podiumHtml}${awHtml}${topicPanel()}${toughHtml}${rest.length?'<h2>Runners-up</h2>'+board(rest,3):''}
  <div class="replay-box" id="replayBox">
-  <b>🔁 Next Round (Keep Players):</b>
+  <b>🔁 Next ${S.case_game?'Case':'Round'} (Keep Players):</b>
   <select id="repQuizSel">${qOpts}</select>
-  <label>Qs: <input id="repCount" type="number" min="1" max="200" value="${repCount}"></label>
-  <button style="margin:0;padding:10px 20px;font-size:1.05em" onclick="replayRound()">🔁 Play Again</button>
+  ${S.case_game?'':`<label>Qs: <input id="repCount" type="number" min="1" max="200" value="${repCount}"></label>`}
+  <button style="margin:0;padding:10px 20px;font-size:1.05em" onclick="replayRound()">🔁 ${S.case_game?'Run Case':'Play Again'}</button>
  </div>
  <div style="height:90px"></div>
  <div class="final-bar">
-  <button onclick="replayRound()">🔁 Play Again <small>(same players)</small></button>
-  <button class="fb-new" onclick="newGame()">🏠 New Game <small>(new PIN)</small></button>
-  <a href="/api/study?pin=${pin}" target="_blank"><button class="fb-sec">📄 Study Guide</button></a>
+  <button onclick="replayRound()">🔁 ${S.case_game?'Run Again':'Play Again'} <small>(same players)</small></button>
+  <button class="fb-new" onclick="newGame()">🏠 New ${S.case_game?'Session':'Game'} <small>(new PIN)</small></button>
+  <a href="/api/study?pin=${pin}" target="_blank"><button class="fb-sec">${S.case_game?'📄 Case Debrief Summary':'📄 Study Guide'}</button></a>
   <a href="/api/export?pin=${pin}" download="brainrush_${pin}_results.csv"><button class="fb-sec">📥 CSV</button></a>
  </div>`;
 }
@@ -1389,12 +1429,12 @@ function startLobbyBgm(){
 }
 function startQuestionBgm(){
  stopBgm();
- if(musicStyle==='off') return;
+ if(musicStyle==='off' || S.qtype==='info') return;
  const bass = [220,220,261.63,293.66,329.63,329.63,293.66,261.63], lead = [440,523.25,659.25,587.33,659.25,783.99,659.25,587.33];
  const st = {classic:{ms:320,b:'sawtooth',l:'triangle',bv:.14,lv:.22}, chill:{ms:440,b:'sine',l:'sine',bv:.14,lv:.14}, upbeat:{ms:210,b:'square',l:'square',bv:.06,lv:.08}}[musicStyle];
  bgmStep = 0;
  bgmTimer = setInterval(()=>{
-  if(muted || S.phase !== 'question' || S.paused) return;
+  if(muted || S.phase !== 'question' || S.paused || S.qtype === 'info') return;
   const i = bgmStep++ % bass.length;
   const urgent = (S.preview_left||0) <= 0 && S.left <= 5;
   const mult = urgent ? 1.122 : 1;
@@ -1471,13 +1511,13 @@ async function clearHistory(){
 
 // --- Links modal ---
 function openLinks(){
- const o = location.origin;
+ const o = location.origin, inCase = document.body.classList.contains('sec-case');
  const rows = [
   ['🖥️ Spectator screen (leaderboard + word cloud)', o + '/spectator' + (pin ? '?pin='+pin : '')],
   ['🏆 Leaderboard only', o + '/spectator?mode=board' + (pin ? '&pin='+pin : '')],
-  ['💭 Word cloud only', o + '/spectator?mode=cloud' + (pin ? '&pin='+pin : '')],
-  ['🧑‍🎓 Student practice mode (no live game needed)', o + '/practice']
+  ['💭 Word cloud only', o + '/spectator?mode=cloud' + (pin ? '&pin='+pin : '')]
  ];
+ if(!inCase) rows.push(['🧑‍🎓 Student practice mode (no live game needed)', o + '/practice']);
  document.getElementById('linksBody').innerHTML = '<p style="opacity:.8">Open on a second screen or share with students:</p>' + rows.map(r=>`<div><b style="font-size:.9em">${r[0]}</b><div class="link-row"><input readonly value="${esc(r[1])}" onclick="this.select()"><button class="btn-sm" style="margin:0" onclick="navigator.clipboard.writeText(this.previousElementSibling.value)">📋</button><a href="${esc(r[1])}" target="_blank"><button class="btn-sm" style="margin:0">↗</button></a></div></div>`).join('');
  document.getElementById('linksModal').classList.add('open');
 }
@@ -2016,14 +2056,272 @@ function exportHw(){
 loadConfig();
 </script>
 <script>
-// ===== Case Study Mode =====
+// ===== Case Study Mode & Dedicated Host Section =====
+const QUIZ_ICE_DEFAULT = "In one word, how are you feeling about today's quiz?";
+const CASE_ICE_DEFAULT = "In one word, what matters most in ethical leadership?";
+let hostSection = 'quiz', quizModalMode = 'quiz';
+
+const _mergeQuizLists0 = mergeQuizLists;
+mergeQuizLists = function(serverList){
+ const out = _mergeQuizLists0(serverList);
+ out.forEach(q=>{
+  if(q.case == null && Array.isArray(q.questions)){
+   q.case = q.questions.some(x=>['poll','open','rank','info'].includes(x && x.type));
+  }
+ });
+ return out;
+};
+
+function setHostSection(sec){
+ hostSection = (sec === 'case') ? 'case' : 'quiz';
+ try{ localStorage.setItem('brainrush_section', hostSection); }catch(e){}
+ document.body.classList.toggle('sec-case', hostSection === 'case');
+ const tq = document.getElementById('tabQuiz'), tc = document.getElementById('tabCase');
+ if(tq) tq.classList.toggle('active', hostSection === 'quiz');
+ if(tc) tc.classList.toggle('active', hostSection === 'case');
+ const ip = document.getElementById('qIcePrompt');
+ if(ip){
+  if(hostSection === 'case' && ip.value.trim() === QUIZ_ICE_DEFAULT) ip.value = CASE_ICE_DEFAULT;
+  else if(hostSection === 'quiz' && ip.value.trim() === CASE_ICE_DEFAULT) ip.value = QUIZ_ICE_DEFAULT;
+ }
+ renderQuizSelect();
+ updateOptSummary();
+}
+
+renderQuizSelect = function(selectedFile){
+ const sel = document.getElementById('quizSel');
+ if(!sel) return;
+ const wantCase = (hostSection === 'case');
+ const filtered = quizList.filter(q => wantCase ? !!q.case : !q.case);
+ if(!filtered.length){
+  sel.innerHTML = `<option value="">${wantCase ? 'No case studies yet — click "+ New / Edit Case"' : 'No quizzes found'}</option>`;
+  syncQuizCount();
+  return;
+ }
+ const groups = {};
+ filtered.forEach(q=>{
+  const f = q.folder || (q.questions ? 'Saved on this device' : (wantCase ? 'Case Studies' : 'My Quizzes'));
+  (groups[f] = groups[f] || []).push(q);
+ });
+ const order = Object.keys(groups).sort((a,b)=> (a==='Built-in')-(b==='Built-in') || a.localeCompare(b));
+ sel.innerHTML = order.map(f=>`<optgroup label="${esc(f)}">${groups[f].map(q=>`<option value="${esc(q.file)}">${q.case?'📖 ':''}${esc(q.title)}${(q.tags&&q.tags.length)?' — #'+esc(q.tags.join(' #')):''}</option>`).join('')}</optgroup>`).join('');
+ if(selectedFile && filtered.some(q=>q.file===selectedFile)) sel.value = selectedFile;
+ syncQuizCount();
+};
+
+syncQuizCount = function(){
+ const sel = document.getElementById('quizSel');
+ const q = quizList.find(x=>x.file===(sel&&sel.value));
+ if(q){
+  const inp = document.getElementById('qCount'), mx = document.getElementById('qMax'), cs = document.getElementById('cSlideCnt');
+  if(inp){ inp.max = q.count; inp.value = q.count; }
+  if(mx) mx.textContent = '/ ' + q.count;
+  if(cs) cs.textContent = q.count;
+ }
+};
+
+updateOptSummary = function(){
+ const ids = (hostSection === 'case')
+  ? ['qTeams','qIce','qMod']
+  : ['qShuffle','qWager','qRedemp','qSabotage','qWheel','qTeams','qIce','qAuto','qHot','qBattle','qTie','qSpeed','qDbl','qSteal','qMod'];
+ let n = ids.filter(id=>{ const el = document.getElementById(id); return el && el.checked; }).length;
+ const bots = document.getElementById('qBots');
+ if(bots && parseInt(bots.value,10) > 0) n++;
+ const s = document.getElementById('optSummary');
+ if(s) s.textContent = `${n} active`;
+};
+
+const CASE_PLACEHOLDER = `Chapter 1: The Dilemma
+Type: info
+Body: Describe the situation and competing pressures here.
+Body: Add a second paragraph with key facts or data.
+Role: Team Lead | You own the final call and the team's credibility.
+Role: Quality Lead | You found the risk and must decide how hard to push.
+Note: Give students 60 seconds to read and check their role card.
+
+Decision Point 1: What should leadership do right now?
+Type: poll
+Proceed on schedule while monitoring :: Utilitarian lens
+Pause and disclose the issue transparently :: Virtue & candor lens
+Hold until safety is independently verified :: Duty / rights lens
+Bring affected stakeholders into the decision :: Care / stakeholder lens`;
+
+const QUIZ_PLACEHOLDER = `What is the capital of France?
+Berlin
+*Paris
+Madrid
+Rome
+Image: https://example.com/paris.jpg
+Quote: Paris has been the capital since 987 CE.`;
+
+const _updateAcctLabels0 = updateAcctLabels;
+updateAcctLabels = function(){
+ _updateAcctLabels0();
+ const h = document.getElementById('aiHint');
+ if(h && quizModalMode === 'case'){
+  h.textContent = CFG.ai
+   ? '(AI is enabled on this server.)'
+   : '(Offline mode: builds a structured Case Study draft with chapters, roles, ethical lenses, ranking & open prompt.)';
+ }
+};
+
+openQuizModal = function(mode){
+ if(mode === 'case' || mode === 'quiz') quizModalMode = mode;
+ else quizModalMode = (hostSection === 'case') ? 'case' : 'quiz';
+ const m = document.getElementById('quizModal');
+ const isC = (quizModalMode === 'case');
+ if(m) m.classList.toggle('only-case', isC);
+ const es = document.getElementById('editQuizSel');
+ const list = quizList.filter(q => isC ? !!q.case : !q.case);
+ if(es) es.innerHTML = list.length
+  ? list.map(q=>`<option value="${esc(q.file)}">${esc(q.title)}</option>`).join('')
+  : `<option value="">${isC ? '(No saved cases yet)' : '(No saved quizzes yet)'}</option>`;
+ const cf = document.getElementById('customFile');
+ if(cf) cf.accept = isC ? '.json' : '.json,.csv';
+ const ti = document.getElementById('toolImport');
+ if(isC && ti) ti.style.display = 'none';
+ const ct = document.getElementById('customTitle'), fd = document.getElementById('customFolder'), tg = document.getElementById('customTags'), tx = document.getElementById('customText');
+ if(ct) ct.placeholder = isC ? 'e.g. Case Study: The CardioWatch Launch' : 'e.g. Chapter 9 Review';
+ if(fd) fd.placeholder = isC ? 'Case Studies' : 'e.g. Math';
+ if(tg) tg.placeholder = isC ? 'ethical leadership, whistleblowing' : 'unit 3, fractions';
+ if(tx) tx.placeholder = isC ? CASE_PLACEHOLDER : QUIZ_PLACEHOLDER;
+ const fl = document.getElementById('folderList');
+ if(fl) fl.innerHTML = [...new Set(quizList.map(q=>q.folder).filter(f=>f && f!=='Built-in'))].map(f=>`<option value="${esc(f)}">`).join('');
+ updateAcctLabels();
+ if(m) m.classList.add('open');
+};
+
+function insertCaseTpl(kind){
+ const tpls = {
+  info: `Chapter Title\nType: info\nBody: Write the narrative context or new developments here.\nRole: Stakeholder 1 | Your private perspective and incentives.\nRole: Stakeholder 2 | Your competing constraints and concerns.\nTopic: Ethical Leadership\nNote: Private facilitation prompt for you on the host screen.`,
+  poll: `Decision Point: What action do you take?\nType: poll\nOption A :: Utilitarian (outcomes) lens\nOption B :: Duty & rights lens\nOption C :: Virtue & integrity lens\nOption D :: Care & stakeholder lens\nTopic: Ethical Lenses\nNote: Cold-call one speaker from two different sides.`,
+  rank: `Rank these competing priorities from MOST important (#1) to LEAST:\nType: rank\nPreventing harm to stakeholders\nTransparency and honesty\nPsychological safety for truth-tellers\nMeeting external commitments\nShort-term financial targets\nTopic: Competing Values`,
+  open: `In 1–2 sentences, write what you will say to your team or board — and why.\nType: open\nTopic: Moral Courage\nNote: Have students vote on the two most persuasive arguments on their phones.`,
+  mc: `Concept Check: Which principle is illustrated here?\nOption A\n*Correct Option B\nOption C\nOption D\nQuote: Brief takeaway shown after answers lock in.\nTopic: Ethical Leadership`
+ };
+ const box = document.getElementById('customText');
+ if(!box || !tpls[kind]) return;
+ box.value = (box.value.trim() ? box.value.trim() + '\n\n' : '') + tpls[kind];
+ box.focus();
+ box.scrollTop = box.scrollHeight;
+}
+
+aiGenerate = async function(){
+ const msg = document.getElementById('aiMsg'); msg.textContent = 'Working…';
+ const forceCase = (quizModalMode === 'case');
+ const isCase = forceCase || !!(document.getElementById('aiCase') && document.getElementById('aiCase').checked);
+ const r = await postPw('/api/ai_quiz', {
+  text: document.getElementById('aiText').value,
+  topic: document.getElementById('aiTopic').value,
+  count: parseInt(document.getElementById('aiCount').value,10) || 8,
+  mode: isCase ? 'case' : 'quiz'
+ });
+ if(r.error){ msg.textContent = ''; document.getElementById('customErr').textContent = r.error; return; }
+ document.getElementById('customErr').textContent = '';
+ msg.textContent = r.message || 'Draft ready.';
+ appendQuestions(r.questions);
+ if(!document.getElementById('customTitle').value){
+  document.getElementById('customTitle').value = (isCase ? 'Case Study: ' : '') + (document.getElementById('aiTopic').value || (isCase ? 'Ethical Leadership Dilemma' : 'AI draft quiz'));
+ }
+};
+
+saveCustomQuiz = async function(){
+ const isC = (quizModalMode === 'case');
+ const title = document.getElementById('customTitle').value.trim() || (isC ? 'Custom Case Study' : 'Custom Quiz');
+ const raw = document.getElementById('customText').value;
+ try{
+  const qs = parseCustomQuestions(raw);
+  const hasCaseSlide = qs.some(x=>['info','poll','rank','open'].includes(x && x.type));
+  if(isC && !hasCaseSlide){
+   document.getElementById('customErr').textContent = 'Add at least one Case Study slide (Type: info, poll, rank, or open) — use the "+ Insert slide" buttons above.';
+   return;
+  }
+  const folderVal = ((document.getElementById('customFolder')||{}).value||'').trim() || (isC ? 'Case Studies' : '');
+  const tagsVal = ((document.getElementById('customTags')||{}).value||'').split(',').map(x=>x.trim()).filter(Boolean);
+  const r = await postPw('/api/upload_quiz', {title, questions: qs, folder: folderVal, tags: tagsVal});
+  if(r.error){ document.getElementById('customErr').textContent = r.error; return; }
+  const savedQuestions = r.questions || qs;
+  const savedIsCase = savedQuestions.some(x=>['info','poll','rank','open'].includes(x && x.type));
+  storeCustomQuizLocal({
+   file: r.file,
+   title: `${title} (${r.count} Qs)`,
+   count: r.count,
+   folder: folderVal || (savedIsCase ? 'Case Studies' : 'My Quizzes'),
+   tags: tagsVal,
+   case: savedIsCase,
+   questions: savedQuestions
+  });
+  quizList = mergeQuizLists(r.quizzes || quizList);
+  setHostSection(savedIsCase ? 'case' : 'quiz');
+  renderQuizSelect(r.file);
+  closeQuizModal();
+ }catch(e){
+  document.getElementById('customErr').textContent = 'Could not parse slides: ' + e.message;
+ }
+};
+
+duplicateSelectedQuiz = async function(){
+ const es = document.getElementById('editQuizSel'); if(!es || !es.value) return;
+ const r = await postPw('/api/dup_quiz', {file: es.value});
+ if(r.error){ document.getElementById('customErr').textContent = r.error; return; }
+ quizList = mergeQuizLists(r.quizzes || quizList);
+ renderQuizSelect(r.file);
+ openQuizModal(quizModalMode);
+ const es2 = document.getElementById('editQuizSel');
+ if(es2 && r.file) es2.value = r.file;
+};
+
+const _create0 = create;
+create = async function(){
+ if(hostSection !== 'case') return _create0();
+ ensureAudio(); sfxJoin();
+ const sel = document.getElementById('quizSel');
+ const qf = sel ? sel.value : '';
+ if(!qf){ alert('Select or create a Case Study first.'); return; }
+ const picked = quizList.find(x=>x.file===qf);
+ const ctm = parseInt((document.getElementById('cTime')||{}).value, 10) || 20;
+ const bcnt = parseInt((document.getElementById('qBots')||{}).value, 10) || 0;
+ const teams = !!(document.getElementById('qTeams') && document.getElementById('qTeams').checked);
+ const ice = !!(document.getElementById('qIce') && document.getElementById('qIce').checked);
+ const icePrompt = ((document.getElementById('qIcePrompt')||{}).value || '').trim();
+ const mod = !!(document.getElementById('qMod') && document.getElementById('qMod').checked);
+ window.lastGame = {file: qf, count: null, case: true};
+ try{ localStorage.setItem('brainrush_last', JSON.stringify(window.lastGame)); }catch(e){}
+ const r = await postPw('/api/create', {
+  quiz: qf,
+  custom_questions: picked && picked.questions ? picked.questions : null,
+  count: null, shuffle: false, qtime: ctm, bots: bcnt,
+  teams: teams,
+  wager: false, redemption: false, sabotage: false, wheel: false,
+  hotseat: false, team_battle: false, tiebreak: false,
+  speed: false, dbl: false, steal: false, auto: false,
+  moderate: mod,
+  roster: (document.getElementById('qRoster').value||'').split('\n').map(x=>x.trim()).filter(Boolean),
+  logo: (document.getElementById('qLogo').value||'').trim(),
+  icebreaker: ice,
+  icebreaker_prompt: icePrompt
+ });
+ if(!r || !r.pin) return;
+ pin = r.pin; host = r.host;
+ try{ localStorage.setItem('brainrush_host', JSON.stringify({pin, host})); }catch(e){}
+ document.getElementById('remoteBtn').style.display = 'flex';
+ const aq = document.getElementById('addQuizMenuBtn');
+ if(aq) aq.style.display = 'none';
+ poll(); setInterval(poll, 600);
+};
+
+const _poll0 = poll;
+poll = async function(){
+ await _poll0();
+ if(S && S.case_game) document.body.classList.add('sec-case');
+};
+
 function exhibitsHtml(list, big){
  if(!list || !list.length) return '';
  return `<div class="exh ${big?'big':''}">${list.map(e=>`<figure><img src="${esc(e.url)}" alt="${esc(e.caption||'')}">${e.caption?`<figcaption>${esc(e.caption)}</figcaption>`:''}</figure>`).join('')}</div>`;
 }
 function infoScreen(){
  const paras = (S.body||'').split(/\n\s*\n/).map(p=>`<p>${esc(p).replace(/\n/g,'<br>')}</p>`).join('');
- const hasRoles = true;
  return `<div class="qnum">📖 Case slide ${S.index+1} <small>of ${S.total}</small></div>
  <div class="case-card"><h1 style="margin-top:.1em">${esc(S.question)}</h1><div class="case-body">${paras}</div>${exhibitsHtml(S.exhibits, true)}</div>
  <div class="speed-banner" style="background:linear-gradient(90deg,#6a1b9a,#4527a0);animation:none">📱 The full case is on every phone under "📁 Case file"</div>
@@ -2073,29 +2371,20 @@ function startDiscuss(sec){
  const tick = () => { const e = el(); if(!e){ clearInterval(discussT); return; } e.textContent = left > 0 ? left + 's' : '⏰ Time!'; if(left-- <= 0){ clearInterval(discussT); sfxReveal(); } };
  tick(); discussT = setInterval(tick, 1000);
 }
-const _syncQuizCount0 = syncQuizCount;
-syncQuizCount = function(){
- _syncQuizCount0();
- const sel = document.getElementById('quizSel'), hint = document.getElementById('caseHint');
- const q = quizList.find(x=>x.file===(sel&&sel.value));
- if(hint){
-  if(q && q.case){ hint.style.display = 'block'; hint.innerHTML = '📖 Case-study quiz: plays in the order it was written (Randomize is ignored). Polls, rankings and open responses earn participation points; roles and the case file appear on student phones. Tip: leave Team Mode on for group discussion.'; }
-  else hint.style.display = 'none';
- }
-};
 (function(){
- GUIDE.push({id:'case', title:'📖 Case Study Mode (Ethical Leadership and more)', items:[
-  ['Try the sample case', 'Pick "📖 Case Study: The CardioWatch Launch (Ethical Leadership)" in the quiz picker. It is a fictional case with chapters, decision polls, a ranking, an open response with peer voting, a debrief and two concept checks.'],
-  ['📖 Case slides (Type: info)', 'A reading slide with the case text and exhibits on the big screen. Every student also gets it on their phone in the "📁 Case file" button, which grows as you reveal new chapters. Click Continue when ready. There is no timer.'],
-  ['🗳️ Decision polls (Type: poll)', 'Students pick a course of action; there is no right answer. Everyone earns 200 participation points. The screen shows the class split, picks a student on each side to defend their choice, and has a 60-second discussion timer.'],
-  ['🔎 Ethical lenses', 'Add a lens to each poll option with "Option text :: Utilitarian lens". After voting, each option shows its lens, and students see which lens their own choice reflects.'],
-  ['📊 Rankings (Type: rank)', 'Students rank 2–6 priorities. The screen shows the class\'s average ranking. Great for comparing values like safety, honesty, jobs and loyalty.'],
-  ['✍️ Open responses (Type: open)', 'Students write 1–2 sentences. Responses appear anonymously, then each student gets 2 votes for the most persuasive ones on their phone. Authors earn 150 points per vote (up to 4).'],
-  ['🎭 Roles', 'On an info slide add lines like "Role: CFO | You promised investors this quarter…". Each student gets a private role card on their phone and in their case file.'],
-  ['📎 Exhibits', 'On any slide or question add "Exhibit: https://…/chart.png | Caption". Exhibits show on the big screen and tap-to-enlarge on phones.'],
-  ['📝 Teacher notes', 'Use "Note:" for discussion prompts. Show them with the "📝 Show teacher note" button (N) at the bottom left of the host page, or read them on your phone remote.'],
-  ['Editor syntax', 'Example: question line, then "Type: poll", then option lines (add " :: lens"), then "Topic:", "Note:". For info slides use one "Body:" line per paragraph. Blank lines separate questions.'],
-  ['Scoring and stats', 'Case slides never break streaks and are left out of accuracy, the Tough Ones list, the redemption round and homework/practice. Scored questions (multiple choice and so on) mixed into a case still count normally.']
+ GUIDE.push({id:'case', title:'📖 Case Study Section (Ethical Leadership and more)', items:[
+  ['Dedicated 📖 Case Studies tab', 'Switch to "📖 Case Studies" at the top of the host screen. It filters to Case Studies, hides quiz-only mechanics (Randomize, Snowballs, Wheel, Wagers, Speed Round, Homework, Practice), and launches every case in full narrative order.'],
+  ['Try the built-in case', 'Pick "📖 Case Study: The CardioWatch Launch (Ethical Leadership)" and click "📖 Launch Case Study".'],
+  ['📖 Case slides (Type: info)', 'Untimed reading/debrief slides with narrative text and exhibits on the big screen. Every student also gets revealed chapters in the floating "📁 Case file" button on their phone.'],
+  ['🎭 Private Stakeholder Roles', 'On an info slide add "Role: CFO | You promised investors this quarter…". Human players are assigned distinct role cards on their phone and inside their case file.'],
+  ['🗳️ Decision polls & 🔎 Ethical lenses (Type: poll)', '45-second timer, no wrong answer (+200 participation pts). Add " :: Utilitarian lens" to each option to reveal the ethical lens after voting, cold-call "🎤 Defend your side!" speakers, and run a 60-second discussion timer.'],
+  ['📊 Priority Rankings (Type: rank)', '60-second timer for ranking 2–6 competing values. Reveals the class\'s average priority order.'],
+  ['✍️ Open Responses + Peer Voting (Type: open)', '120-second timer for 1–2 sentence justifications. Responses display anonymously, then students get 2 votes on their phones for the most persuasive arguments (+150 pts per vote, up to 4).'],
+  ['📖 + New / Edit Case builder', 'Includes 1-click "+ Insert slide" templates (Chapter, Poll, Ranking, Open Response, Concept Check) and "✨ Draft Case from Scenario / Topic" (works offline or with Gemini).'],
+  ['📄 Case Debrief Summary', 'At the end of a session, click "📄 Case Debrief Summary" for a printable recap of poll splits, ethical lenses, class priority rankings, top peer-voted student arguments, and concept checks.']
  ]});
+ const qp = new URLSearchParams(location.search);
+ const savedSec = (qp.get('section')==='case' || qp.get('mode')==='case') ? 'case' : (localStorage.getItem('brainrush_section') || 'quiz');
+ setHostSection(savedSec);
 })();
 </script></body></html>

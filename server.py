@@ -1291,8 +1291,8 @@ def final_stats(g):
         ms = calc_max_streak(p, n_all)
         if ms >= 2 and (streak_best is None or ms > streak_best[0]):
             streak_best = (ms, p)
-    denom = max(1, len(g["players"]) * total_q)
-    accuracy = round(100.0 * total_cor / denom)
+    possible = len(g["players"]) * total_q
+    accuracy = round(100.0 * total_cor / max(1, possible))
     awards = []
     if speed_best:
         awards.append({"title": "⚡ Speed Demon", "winner": ptag(speed_best[1]), "detail": "%.1fs avg" % speed_best[0]})
@@ -1313,7 +1313,7 @@ def final_stats(g):
             })
     q_stats.sort(key=lambda x: x["pct"])
     return {
-        "accuracy": accuracy, "correct": total_cor, "possible": denom,
+        "accuracy": accuracy, "correct": total_cor, "possible": possible,
         "awards": awards, "tough": q_stats[:3], "topics": topic_stats(g),
     }
 
@@ -1373,9 +1373,15 @@ def export_csv(g):
             rep.get("fastest") if rep.get("fastest") is not None else "-",
         ]
         for qi, q in enumerate(g["quiz"]):
+            if qtype_of(q) == "info":
+                row.append("Read")
+                continue
             a = p.get("answers", {}).get(qi)
-            if not a:
+            if not a or a.get("blank"):
                 row.append("No answer")
+            elif is_case_type(q):
+                ch_txt = a.get("given") or (q["a"][a["choice"]] if 0 <= a["choice"] < len(q["a"]) else "?")
+                row.append("%s (%.1fs)" % (ch_txt, a.get("time", 0)))
             else:
                 mark = "✓" if a.get("correct") else "✗"
                 ch_txt = a.get("given") or (q["a"][a["choice"]] if 0 <= a["choice"] < len(q["a"]) else "?")
@@ -1386,34 +1392,68 @@ def export_csv(g):
 
 def study_html(g):
     n_p = max(1, len(g["players"]))
+    e = html.escape
+    is_cg = any(is_case_type(x) for x in g["quiz"])
+    body = []
+    if is_cg:
+        for qi, q in enumerate(g["quiz"]):
+            qt = qtype_of(q)
+            if qt == "poll":
+                counts = [0] * len(q["a"])
+                for p in g["players"].values():
+                    a = p["answers"].get(qi)
+                    if a and not a.get("blank") and 0 <= a["choice"] < len(counts):
+                        counts[a["choice"]] += 1
+                tot = max(1, sum(counts))
+                lns = q.get("lenses") or []
+                opts = "".join("<li><b>%d%% (%d)</b> — %s%s</li>" % (
+                    round(100.0 * counts[i] / tot), counts[i], e(ans),
+                    (" <i>[%s]</i>" % e(lns[i])) if i < len(lns) and lns[i] else "")
+                    for i, ans in enumerate(q["a"]))
+                body.append("<div class='item'><div class='pct'>🗳️ Decision Poll</div><h3>%s</h3><ul>%s</ul></div>" % (e(q["q"]), opts))
+            elif qt == "rank":
+                n_it = len(q["a"])
+                tot_, cnt_ = [0] * n_it, 0
+                for p in g["players"].values():
+                    a = p["answers"].get(qi)
+                    if a and a.get("rank") and len(a["rank"]) == n_it:
+                        cnt_ += 1
+                        for pos, item in enumerate(a["rank"]):
+                            tot_[item] += pos + 1
+                avg = sorted(({"item": q["a"][i], "avg": round(tot_[i] / cnt_, 2) if cnt_ else 0, "i": i} for i in range(n_it)), key=lambda r: (r["avg"] if cnt_ else r["i"]))
+                ol = "".join("<li><b>%s</b> <small>(avg #%s)</small></li>" % (e(r["item"]), r["avg"]) for r in avg)
+                body.append("<div class='item'><div class='pct'>📊 Class Priority Ranking (%d ranked)</div><h3>%s</h3><ol>%s</ol></div>" % (cnt_, e(q["q"]), ol))
+            elif qt == "open":
+                rs_ = sorted(g.get("responses", {}).get(qi, []), key=lambda r: (-len(r["voters"]), r["id"]))
+                quotes = "".join("<li>“%s” %s</li>" % (e(r["text"]), ("<b>(👍 %d)</b>" % len(r["voters"])) if r["voters"] else "") for r in rs_[:8]) or "<li><i>No responses submitted</i></li>"
+                body.append("<div class='item'><div class='pct'>✍️ Open Responses &amp; Peer Votes</div><h3>%s</h3><ul>%s</ul></div>" % (e(q["q"]), quotes))
     rows = []
     for qi, q in enumerate(g["quiz"]):
         if q.get("tiebreak") or is_case_type(q):
             continue
         cor = sum(1 for p in g["players"].values() if p["answers"].get(qi, {}).get("correct"))
         pct = round(100.0 * cor / n_p)
-        if pct < 100:
+        if pct < 100 or is_cg:
             rows.append((pct, qi, q))
     rows.sort(key=lambda r: (r[0], r[1]))
-    e = html.escape
-    body = []
     for pct, qi, q in rows:
         extra = ""
         if q.get("quote"):
             extra = "<div class='fact'>%s</div>" % e(q["quote"])
-        body.append("<div class='item'><div class='pct'>%d%% got this right</div><h3>%s</h3><div class='ans'>Answer: <b>%s</b></div>%s</div>"
-                    % (pct, e(q["q"]), e(ans_text(q)), extra))
+        body.append("<div class='item'><div class='pct'>%s%d%% got this right</div><h3>%s</h3><div class='ans'>Answer: <b>%s</b></div>%s</div>"
+                    % ("✅ Concept Check · " if is_cg else "", pct, e(q["q"]), e(ans_text(q)), extra))
     if not body:
         body = ["<p><b>Perfect game!</b> Every question was answered correctly by everyone.</p>"]
-    return ("<!doctype html><html><head><meta charset='utf-8'><title>Study Guide</title><style>"
+    hdr = "\U0001F4D6 Case Debrief Summary" if is_cg else "\U0001F4DA Study Guide"
+    sub = "Class decisions, priority rankings, peer-voted arguments, and concept checks." if is_cg else "Questions the class missed most (lowest score first)."
+    return ("<!doctype html><html><head><meta charset='utf-8'><title>%s</title><style>"
             "body{font-family:system-ui,sans-serif;max-width:760px;margin:24px auto;padding:0 16px;color:#222}"
             "h1{color:#46178f}.item{border:1px solid #ddd;border-left:6px solid #46178f;border-radius:8px;padding:10px 16px;margin:12px 0;page-break-inside:avoid}"
             ".pct{font-size:.8em;color:#c2185b;font-weight:700}h3{margin:.3em 0}.ans{color:#1b5e20}.fact{font-style:italic;color:#555;margin-top:6px}"
             "button{padding:10px 20px;font-size:1em;border-radius:8px;border:0;background:#26890c;color:#fff;font-weight:700;cursor:pointer}"
             "@media print{button{display:none}}</style></head><body>"
-            "<h1>\U0001F4DA Study Guide \u2014 %s</h1><p>Questions the class missed most (lowest score first). "
-            "%d players.</p><button onclick='window.print()'>\U0001F5A8\ufe0f Print / Save as PDF</button>%s</body></html>"
-            % (e(quiz_title(g)), len(g["players"]), "".join(body))).encode("utf-8")
+            "<h1>%s \u2014 %s</h1><p>%s %d participants.</p><button onclick='window.print()'>\U0001F5A8\ufe0f Print / Save as PDF</button>%s</body></html>"
+            % (e(hdr), hdr, e(quiz_title(g)), sub, len(g["players"]), "".join(body))).encode("utf-8")
 
 
 def spectator_view(g):
@@ -1459,6 +1499,7 @@ def view(g, pid=None, host=False):
         "team_board": team_leaderboard(g) if g.get("teams") else [],
         "auto": bool(g.get("auto")),
         "paused": bool(g.get("paused")),
+        "case_game": any(is_case_type(x) for x in g["quiz"]),
     }
     if ph == "icebreaker":
         out["prompt"] = g.get("icebreaker_prompt") or "In one word, how are you feeling about today's quiz?"
