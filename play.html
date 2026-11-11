@@ -71,11 +71,27 @@ body.hc{background:#000}body.hc .grid button{border:4px solid #fff}body.hc .pu-b
 .grid button img{max-height:80px;max-width:100%;border-radius:8px;background:#fff}
 .rosterSel{display:block;width:100%;box-sizing:border-box;font-size:1.3em;padding:14px;margin:10px 0;border-radius:6px;border:0;text-align:center;color:#2b0d57;background:#fff}
 .plink{display:inline-block;margin-top:10px;color:#fff;font-size:.95em}
-</style></head><body><button id="a11y" onclick="cycleA11y()" title="Accessibility">👁️</button><div id="app"></div>
+
+.avatars{max-height:150px;overflow-y:auto;padding:4px}
+.cust{margin:8px 0}.swatches{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:6px 0}
+.sw{width:30px;height:30px;border-radius:50%;border:3px solid transparent;cursor:pointer}.sw.sel{border-color:#ffdf5d;transform:scale(1.15)}
+.tagsel{display:block;width:100%;box-sizing:border-box;font-size:1.05em;padding:10px;margin:6px 0;border-radius:6px;border:0;color:#2b0d57;background:#fff;text-align:center}
+.cust input{font-size:1.05em;padding:10px}
+.don-btn{width:100%;padding:10px 14px;margin-bottom:8px;border-radius:99px;border:2px solid #ff4081aa;background:#0004;color:#ff80ab;font-weight:800;font-size:.92em;cursor:pointer}
+.don-btn.on{background:linear-gradient(90deg,#d500f9,#ff1744);color:#fff;border-color:#fff;box-shadow:0 0 12px #ff174488}
+.team-prompt{background:#1368ce55;border:2px solid #1368ce;border-radius:12px;padding:8px 12px;margin:8px 0;font-size:.92em;text-align:left}
+.speed-pill{display:inline-block;background:linear-gradient(90deg,#00b8d4,#2979ff);color:#fff;font-weight:900;padding:5px 14px;border-radius:99px;font-size:.86em;margin-bottom:6px;border:1px solid #fff8}
+.steal-box{background:#0004;border:2px solid #ffab40;border-radius:12px;padding:10px;margin:10px 0;font-size:.95em}
+#toast{position:fixed;left:50%;top:14%;transform:translateX(-50%) scale(.6);z-index:80;background:linear-gradient(90deg,#ffd600,#ff9100);color:#2b0d57;font-weight:900;font-size:1.3em;padding:14px 22px;border-radius:16px;box-shadow:0 10px 30px #000a;opacity:0;pointer-events:none;text-align:center;max-width:86vw}
+#toast.show{animation:toastin 2.4s ease forwards}
+@keyframes toastin{0%{opacity:0;transform:translateX(-50%) scale(.6)}12%{opacity:1;transform:translateX(-50%) scale(1.08)}20%{transform:translateX(-50%) scale(1)}85%{opacity:1}100%{opacity:0;transform:translateX(-50%) scale(1)}}
+#fx{position:fixed;inset:0;pointer-events:none;z-index:70}
+#sfxBtn{position:fixed;top:8px;left:8px;z-index:60;width:auto;font-size:.8em;padding:4px 10px;border-radius:99px;border:1px solid #fff5;background:#0006;color:#fff;cursor:pointer}
+</style></head><body><button id="sfxBtn" onclick="toggleSfx()">🔊</button><canvas id="fx"></canvas><div id="toast"></div><button id="a11y" onclick="cycleA11y()" title="Accessibility">👁️</button><div id="app"></div>
 <script>
 let pin, pid, S = {}, avatar = '🦊', team = '';
 let iceBrokenQ = -1, iceTaps = 0;
-const AVS = ['🦊','🐼','🦁','🐸','🦄','🐙','🦖','🐝','🦋','🐧','🚀','⚡'];
+const AVS = ['🦊','🐼','🦁','🐸','🦄','🐙','🦖','🐝','🦋','🐧','🚀','⚡','🐶','🐱','🐯','🐵','🐨','🐰','🐻','🐮','🐷','🐔','🦉','🦅','🐺','🐴','🦓','🦒','🐘','🦏','🐢','🐍','🐊','🐬','🐳','🦈','🐠','🦀','🦞','🐌','🦜','🦩','🦥','🦦','🦔','🐲','👽','🤖','👾','🎃','🌟','🍕','🍩','⚽','🏀','🎮'];
 const TEAMS = [
  {id:'', label:'🎲 Auto Team'},
  {id:'red', label:'🔴 Red Dragons'},
@@ -113,25 +129,40 @@ async function checkPinConfig(pinVal){
   }catch(e){}
 }
 
-function form(err){
+let lastName = '', nameColor = '', ctag = '';
+function form(err, canReclaim){
  const savedPin = urlPin || pin || '';
  $.innerHTML=`<img class="logo" src="/logo.jpg?v=2" alt="Brainrush!" onerror="this.outerHTML='<h1 style=&quot;font-size:2.4em;margin:.3em 0&quot;>🧠 Brainrush!</h1>'"><h1>Join game</h1>
  <input id="p" placeholder="Game PIN" inputmode="numeric" value="${esc(savedPin)}" oninput="if(this.value.length===6)checkPinConfig(this.value)">
- <div id="nameBox" data-sig="T"><input id="n" placeholder="Nickname" maxlength="16"></div>
+ <div id="nameBox" data-sig="T"><input id="n" placeholder="Nickname" maxlength="16" value="${esc(lastName)}"></div>
  <div class="avatars">${AVS.map(a=>`<span class="av ${a===avatar?'sel':''}" data-av="${a}" onclick="pickAv('${a}')">${a}</span>`).join('')}</div>
- <div class="teams" id="teamBox" style="display:none">${TEAMS.slice(1).map(t=>`<div class="tm ${t.id===team?'sel':''}" data-tm="${t.id}" onclick="pickTm('${t.id}')">${t.label}</div>`).join('')}</div>
- <button class="go" onclick="join()">Enter</button><p class="err">${err||''}</p>
-  <a class="plink" href="/practice">🧑‍🎓 Practice on your own →</a>`;
+ ${custHtml()}<div class="teams" id="teamBox" style="display:none">${TEAMS.slice(1).map(t=>`<div class="tm ${t.id===team?'sel':''}" data-tm="${t.id}" onclick="pickTm('${t.id}')">${t.label}</div>`).join('')}</div>
+ <button class="go" onclick="join()">Enter</button>${canReclaim?'<button class="go" style="background:#1368ce;margin-top:8px" onclick="join(true)">🔁 Rejoin as this name</button>':''}<p class="err">${err||''}</p>
+  <a class="plink" href="#" onclick="join(true);return false" style="margin-right:14px">Lost your place? Rejoin →</a><a class="plink" href="/practice">🧑‍🎓 Practice on your own →</a>`;
  checkPinConfig(savedPin);
 }
 
-async function join(){
- pin=p.value.trim();
- const r=await post('/api/join',{pin,name:n.value,avatar,team});
- if(!r.ok)return form(r.error);
- pid=r.pid;
- try{ localStorage.setItem('brainrush_session', JSON.stringify({pin, pid})); }catch(e){}
- poll();setInterval(poll,600);
+const COLORS = ['#ffffff','#ff6b6b','#ffd166','#7bed9f','#70a1ff','#ff9ff3','#a29bfe','#ffa502','#2ed573','#1e90ff'];
+const TITLES = ['','The Brain','Quiz Wizard','Speed Demon','Chaos Agent','Snack Lord','Night Owl','Hot Streak','Underdog','Big Mood','Mr Cool','Dino Fan'];
+function custHtml(){
+ return `<div class="cust"><div class="swatches">${COLORS.map(c=>`<span class="sw ${c===nameColor?'sel':''}" style="background:${c}" onclick="pickColor('${c}')"></span>`).join('')}</div>
+ <select id="ctagSel" class="tagsel" onchange="ctag=this.value;document.getElementById('ctagCustom').value=''">${TITLES.map(t=>`<option value="${t}" ${t===ctag?'selected':''}>${t||'— Pick a title (optional) —'}</option>`).join('')}</select>
+ <input id="ctagCustom" placeholder="…or type your own title (max 14)" maxlength="14" oninput="ctag=this.value;document.getElementById('ctagSel').value=''"></div>`;
+}
+function pickColor(c){ nameColor = c; document.querySelectorAll('.sw').forEach(el=>el.classList.toggle('sel', el.style.background.replace(/\s/g,'')===hexToRgb(c))); }
+function hexToRgb(h){ const n=parseInt(h.slice(1),16); return `rgb(${n>>16},${(n>>8)&255},${n&255})`; }
+try{ const sv = JSON.parse(localStorage.getItem('brainrush_cust')||'null'); if(sv){ if(sv.avatar) avatar = sv.avatar; nameColor = sv.color||''; ctag = sv.ctag||''; } }catch(e){}
+
+async function join(reclaim){
+  pin = p.value.trim();
+  lastName = (document.getElementById('n')||{}).value || '';
+  const ct = ((document.getElementById('ctagCustom')||{}).value || ctag || '').slice(0,14);
+  const r = await post('/api/join', {pin, name:lastName, avatar, team, color:nameColor, ctag:ct, reclaim:!!reclaim});
+  if(!r.ok) return form(r.error, r.can_reclaim);
+  pid = r.pid;
+  try{ localStorage.setItem('brainrush_session', JSON.stringify({pin, pid})); localStorage.setItem('brainrush_cust', JSON.stringify({avatar, color:nameColor, ctag:ct})); }catch(e){}
+  unlockAudio();
+  poll(); setInterval(poll,600);
 }
 
 async function tryReconnect(){
@@ -144,7 +175,7 @@ async function tryReconnect(){
   const r = await fetch(`/api/state?pin=${s.pin}&pid=${s.pid}`);
   if(!r.ok) return form();
   const st = await r.json();
-  if(st && st.me && st.phase !== 'final'){
+  if(st && (st.me || st.pending) && st.phase !== 'final'){
    pin = s.pin; pid = s.pid; S = st;
    render(); setInterval(poll, 600);
    return;
@@ -245,6 +276,58 @@ function saveCert(name, rank, score, acc){
  a.click();
 }
 function reactBar(){return `<div class="react-bar">${REACTS.map(e=>`<button onclick="react('${e}')">${e}</button>`).join('')}</div>`}
+let ac = null, sfxOn = localStorage.getItem('brainrush_sfx') !== '0';
+function unlockAudio(){ try{ if(!ac){ const C = window.AudioContext || window.webkitAudioContext; if(C) ac = new C(); } if(ac && ac.state === 'suspended') ac.resume(); }catch(e){} }
+window.addEventListener('pointerdown', unlockAudio, {passive:true});
+function beep(f, d, type, v, delay){
+ if(!sfxOn || !ac) return;
+ const t = ac.currentTime + (delay||0), o = ac.createOscillator(), g = ac.createGain();
+ o.type = type || 'triangle'; o.frequency.setValueAtTime(f, t);
+ g.gain.setValueAtTime(0.001, t); g.gain.linearRampToValueAtTime(v || .25, t + .015); g.gain.exponentialRampToValueAtTime(0.001, t + d);
+ o.connect(g); g.connect(ac.destination); o.start(t); o.stop(t + d + .02);
+}
+function sfxCorrect(){ [523.25,659.25,783.99].forEach((f,i)=>beep(f,.16,'triangle',.28,i*.09)); }
+function sfxWrong(){ beep(196,.28,'sawtooth',.18,0); beep(147,.35,'sawtooth',.18,.12); }
+function sfxMile(){ [659.25,783.99,1046.5,1318.5].forEach((f,i)=>beep(f,.2,'triangle',.28,.25+i*.08)); }
+function toggleSfx(){ sfxOn = !sfxOn; localStorage.setItem('brainrush_sfx', sfxOn?'1':'0'); updSfx(); if(sfxOn){ unlockAudio(); sfxCorrect(); } }
+function updSfx(){ const b = document.getElementById('sfxBtn'); if(b) b.textContent = sfxOn ? '🔊' : '🔇'; }
+updSfx();
+function toast(msg){ const t = document.getElementById('toast'); t.textContent = msg; t.classList.remove('show'); void t.offsetWidth; t.classList.add('show'); }
+function confettiBurst(){
+ const c = document.getElementById('fx'); c.width = innerWidth; c.height = innerHeight;
+ const ctx = c.getContext('2d'), cols = ['#ff2e63','#08d9d6','#ffde7d','#7dff6b','#fff','#ff9800'];
+ const ps = Array.from({length:90}, ()=>({x:innerWidth/2, y:innerHeight*.3, vx:(Math.random()-.5)*12, vy:-4-Math.random()*9, s:5+Math.random()*7, col:cols[Math.floor(Math.random()*cols.length)], a:Math.random()*6, va:(Math.random()-.5)*.3}));
+ const t0 = performance.now();
+ (function loop(now){
+  ctx.clearRect(0,0,c.width,c.height);
+  ps.forEach(p=>{ p.vy += .35; p.x += p.vx; p.y += p.vy; p.a += p.va; ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.a); ctx.fillStyle = p.col; ctx.fillRect(-p.s/2,-p.s/2,p.s,p.s*.6); ctx.restore(); });
+  if(now - t0 < 1900) requestAnimationFrame(loop); else ctx.clearRect(0,0,c.width,c.height);
+ })(t0);
+}
+let fxQ = -1, bestStreak = 0, everCorrect = false, lastRank = 0;
+function maybeResultFX(){
+ const m = S.me;
+ if(S.phase !== 'results' || !m || fxQ === S.index || m.spectating) return;
+ fxQ = S.index;
+ if(m.correct) sfxCorrect(); else sfxWrong();
+ const msgs = [];
+ if(m.correct && !everCorrect) msgs.push('🎉 First correct answer!');
+ if(m.correct) everCorrect = true;
+ if(m.streak >= 3 && m.streak > bestStreak) msgs.push('🔥 New personal best streak: ' + m.streak + '!');
+ bestStreak = Math.max(bestStreak, m.streak || 0);
+ if(m.rank === 1 && lastRank > 1) msgs.push('🥇 You took the lead!');
+ else if(lastRank && m.rank < lastRank - 1) msgs.push('🚀 Up ' + (lastRank - m.rank) + ' places!');
+ lastRank = m.rank;
+ if((m.gained||0) >= 1500) msgs.push('💰 Huge round: +' + m.gained + '!');
+ if(msgs.length){ toast(msgs[0]); confettiBurst(); sfxMile(); }
+}
+function stealUi(m){
+ if(!m.pu_steal || S.is_last || !m.steal_target) return '';
+ const ok = m.steal_gap <= 1500;
+ return `<div class="steal-box"><div>🕵️ <b>Power-up:</b> target <b>${esc(m.steal_target)}</b> (${m.steal_gap} pts ahead)</div><button class="sab-btn" onclick="steal('steal')">🕵️ Steal up to 150</button> <button class="sab-btn" ${ok?'':'disabled'} onclick="steal('swap')">🔀 Swap scores${ok?'':' (too far)'}</button></div>`;
+}
+async function steal(mode){ const r = await post('/api/steal', {pin, pid, mode}); if(!r.ok) alert(r.error || 'Not available'); poll(); }
+async function toggleDon(){ await post('/api/don', {pin, pid}); poll(); }
 let dead=false;
 async function poll(){
   if(dead) return;
@@ -265,10 +348,12 @@ async function poll(){
  }
 let last='';
 function render(){
+  if(S.pending){ $.innerHTML = `<div class="big">⏳ Waiting for your teacher…<br><small>Your name has been sent for approval.</small></div>`; return; }
+  maybeResultFX();
  const inPrev = S.phase==='question' && (S.preview_left||0) > 0;
  const m=S.me||{};
  const k = S.phase==='question'
-  ? `q:${S.index}:${inPrev?1:0}:${m.answered?1:0}:${m.active_2x?1:0}:${m.active_shield?1:0}:${m.active_audience?1:0}:${m.confident?1:0}:${(m.hide||[]).join(',')}:${m.wager_pct??''}:${m.frozen?1:0}:${m.hot?(m.hot.pred===null||m.hot.pred===undefined?'n':m.hot.pred?'y':'x'):''}:${m.spectating?1:0}`
+  ? `q:${S.index}:${inPrev?1:0}:${m.answered?1:0}:${m.active_2x?1:0}:${m.active_shield?1:0}:${m.active_audience?1:0}:${m.confident?1:0}:${(m.hide||[]).join(',')}:${m.wager_pct??''}:${m.frozen?1:0}:${m.hot?(m.hot.pred===null||m.hot.pred===undefined?'n':m.hot.pred?'y':'x'):''}:${m.spectating?1:0}:${m.don?1:0}`
   : S.phase==='icebreaker' ? `ice:${S.prompt}:${m.word_sent?1:0}`
   : S.phase==='lobby' ? `lobby:${m.name}:${m.team_name}`
   : JSON.stringify({...S,left:0,qtime:0,answered:0,team_board:null,preview_left:0,auto_left:0,intro_left:0,reactions:null,n:0,names:null,lobby:null,words:null,word_total:0});
@@ -309,12 +394,14 @@ function render(){
    <p style="font-size:1.4em;font-weight:900;color:#ffdf5d">Tap <span id="iceRem">5</span> times to shake off the snow!</p>
   </div>` : '';
   const qn = `<div><span class="qnum">Question ${S.index+1} of ${S.total}</span></div>`;
-  const whl = qn + (S.wheel_mod ? `<div><span class="wheel-pill">🎡 ${esc(S.wheel_mod)}</span></div>` : '')
+  const whl = qn + (S.speed ? '<div><span class="speed-pill">⚡ SPEED ROUND — 5 seconds!</span></div>' : '') + (S.qtype==='zoom' ? '<div><span class="wheel-pill">🔍 Picture guess — watch the big screen!</span></div>' : '') + (S.wheel_mod ? `<div><span class="wheel-pill">🎡 ${esc(S.wheel_mod)}</span></div>` : '')
    + (S.team_battle ? `<div><span class="team-pill">🤝 TEAM BATTLE — ${inPrev?'discuss with your team now!':'majority answer earns +300 each'}</span></div>` : '')
    + (S.tiebreak ? `<div><span class="hot-pill">⚔️ SUDDEN DEATH TIEBREAKER</span></div>` : '');
   const dbl = S.redemption ? `<div class="double-pill">🔄 REDEMPTION BONUS (2x)! 🔄</div>` : S.boss ? `<div class="double-pill">🎰 FINAL BOSS WAGER! 🎰</div>` : (S.double || m.active_2x) ? `<div class="double-pill">⚡ ${S.double && m.active_2x ? '4x' : 'DOUBLE'} POINTS ACTIVE! ⚡</div>` : '';
   const udog = m.underdog ? `<div><span class="underdog-pill">🎯 UNDERDOG 1.5x CATCH-UP BOOST!</span></div>` : '';
   const hot = hotHtml(m);
+  const teamP = m.team_prompt ? `<div class="team-prompt">💬 <b>Team talk:</b> ${esc(m.team_prompt)}</div>` : '';
+  const donUi = (S.dbl && !m.answered) ? `<button class="don-btn ${m.don?'on':''}" onclick="toggleDon()">💥 ${m.don?'Double or Nothing ON (2x / −400)':'Go Double or Nothing? (2x / −400)'}</button>` : '';
   const curW = m.wager_pct ?? 0;
   const stake = Math.max(500, m.score || 0);
   const wagerUi = (S.boss && !m.answered) ? `<div class="wager-box">
@@ -329,11 +416,11 @@ function render(){
   } else if(m.answered){
    $.innerHTML=`<div class="big">${whl}${dbl}${udog}<br>Answer sent!<br><small>Waiting for others…</small></div>${hot}`;
   } else if(inPrev){
-   $.innerHTML=`<div class="big" style="margin-top:6vh">${whl}${dbl}${udog}<br>👀 Get ready!<br><small>Read the question on the host screen…</small></div>${hot}${wagerUi}${rivalHtml(m)}`;
+   $.innerHTML=`<div class="big" style="margin-top:6vh">${whl}${dbl}${udog}<br>👀 Get ready!<br><small>Read the question on the host screen…</small></div>${hot}${teamP}${donUi}${wagerUi}${rivalHtml(m)}`;
   } else {
    const hide = m.hide || [];
    const pcts = m.audience_pcts || null;
-   const choiceQ = (t==='mc' || t==='tf');
+   const choiceQ = (t==='mc' || t==='tf' || t==='zoom');
    const puBar = `<div class="pu-bar">
     ${choiceQ?`<button class="pu-btn" ${m.pu_5050?'':'disabled'} onclick="usePu('5050')">✂️ 50/50</button>`:''}
     <button class="pu-btn ${m.active_2x?'active':''}" ${m.pu_2x||m.active_2x?'':'disabled'} onclick="usePu('2x')">⚡ ${m.active_2x?'2x ON':'2x'}</button>
@@ -344,7 +431,7 @@ function render(){
    if(t==='text') inputUi = `<input id="txtAns" class="txtans" placeholder="Type your answer…" autocomplete="off" autocapitalize="off" onkeydown="if(event.key==='Enter')sendText()"><button class="go" onclick="sendText()">Submit answer</button>`;
    else if(t==='order') inputUi = `<div id="ordWrap"></div>`;
    else inputUi = `<div class="grid">${S.answers.map((a,i)=>`<button class="c${i} ${hide.includes(i)?'elim':''}" onclick="ans(${i})">${S.aimg&&S.aimg[i]?`<img src="${esc(S.aimg[i])}" alt="">`:''}<span class="sh">${sh[i]}</span><span>${esc(a)}</span>${pcts?`<span class="aud-badge" id="aud${i}">📊 ${pcts[i]}%</span>`:''}</button>`).join('')}</div>`;
-   $.innerHTML=`${iceHtml}${whl}${dbl}${udog}${hot}${wagerUi}${puBar}${inputUi}`;
+   $.innerHTML=`${iceHtml}${whl}${dbl}${udog}${hot}${teamP}${donUi}${wagerUi}${puBar}${inputUi}`;
    if(t==='order') drawOrd();
   }
  } else if(S.phase=='results'){
@@ -366,7 +453,7 @@ function render(){
   const gTxt = m.gained >= 0 ? '+'+m.gained : m.gained;
   const canSab = S.sabotage_enabled && !S.is_last && m.pu_freeze && m.score >= 200 && S.n > 1;
   const sabBtn = canSab ? `<div><button class="sab-btn" onclick="sabotage()">⛄ Throw Snowball at Leader (-200 pts)</button></div>` : m.ice_sent ? `<div><small style="color:#80deea">⛄ Snowball thrown at the leader for next round!</small></div>` : '';
-  $.innerHTML=`<div><span class="qnum">Question ${S.index+1} of ${S.total}</span></div><div class="big" style="margin-top:4vh">${!m.answered?"⏰ Time's up":m.correct?'✅ Correct! '+gTxt:'❌ Incorrect'+(m.gained<0?' ('+m.gained+')':'')}${st}${whMsg}${cfMsg}${tbMsg}${hotMsg}${shMsg}${reveal}<br><small>Score ${m.score}</small></div>${rivalHtml(m)}${sabBtn}${S.quote?`<blockquote>&ldquo;${esc(S.quote)}&rdquo;${S.source?`<cite>&mdash; ${esc(S.source)}</cite>`:''}</blockquote>`:''}${reactBar()}`;
+  $.innerHTML=`<div><span class="qnum">Question ${S.index+1} of ${S.total}</span></div><div class="big" style="margin-top:4vh">${!m.answered?"⏰ Time's up":m.correct?'✅ Correct! '+gTxt:'❌ Incorrect'+(m.gained<0?' ('+m.gained+')':'')}${st}${whMsg}${cfMsg}${tbMsg}${hotMsg}${shMsg}${reveal}<br><small>Score ${m.score}</small></div>${rivalHtml(m)}${sabBtn}${stealUi(m)}${S.quote?`<blockquote>&ldquo;${esc(S.quote)}&rdquo;${S.source?`<cite>&mdash; ${esc(S.source)}</cite>`:''}</blockquote>`:''}${reactBar()}`;
   }
  } else if(S.phase=='board'){
   const canSab = S.sabotage_enabled && m.pu_freeze && m.score >= 200 && S.n > 1;
