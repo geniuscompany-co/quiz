@@ -1,115 +1,825 @@
 <!doctype html>
-<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Join Quiz</title>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Brainrush! — Play</title>
 <style>
-body{margin:0;font-family:system-ui,sans-serif;background:#46178f;color:#fff;text-align:center;min-height:100vh}
-#app{padding:16px;max-width:500px;margin:auto}
-input{display:block;width:100%;box-sizing:border-box;font-size:1.4em;padding:14px;margin:10px 0;border-radius:6px;border:0;text-align:center}
-button.go{width:100%;font-size:1.4em;padding:14px;border:0;border-radius:6px;background:#26890c;color:#fff;font-weight:700;cursor:pointer}
-.avatars{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin:12px 0}
-.av{font-size:1.7em;padding:6px 10px;border-radius:10px;background:#fff2;border:2px solid transparent;cursor:pointer;user-select:none}
-.av.sel{background:#fff4;border-color:#ffdf5d;transform:scale(1.12)}
-.teams{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0}
-.tm{padding:10px;border-radius:8px;background:#fff2;border:2px solid transparent;cursor:pointer;font-weight:700;font-size:.95em;user-select:none}
-.tm.sel{border-color:#ffdf5d;background:#fff4;transform:scale(1.03)}
-.pu-bar{display:flex;justify-content:center;gap:6px;margin-bottom:8px;flex-wrap:wrap}
-.pu-btn{flex:1;min-width:74px;padding:9px 6px;border:2px solid #fff6;border-radius:99px;background:#fff2;color:#fff;font-size:.86em;font-weight:800;cursor:pointer}
-.pu-btn.active{background:linear-gradient(90deg,#ff9800,#ffd600);color:#2b0d57;border-color:#fff}
-.pu-btn:disabled{opacity:.35;cursor:default;text-decoration:line-through}
-.conf-btn{width:100%;padding:9px 14px;margin-bottom:8px;border-radius:99px;border:2px solid #ffdf5d88;background:#0004;color:#ffdf5d;font-weight:800;font-size:.92em;cursor:pointer}
-.conf-btn.on{background:linear-gradient(90deg,#ff6d00,#ffd600);color:#2b0d57;border-color:#fff;box-shadow:0 0 12px #ff980088}
-.qnum{display:inline-block;background:#fff;color:#46178f;font-weight:900;font-size:.95em;padding:4px 16px;border-radius:99px;margin-bottom:8px}
-.wheel-pill{display:inline-block;background:linear-gradient(90deg,#00c853,#00b0ff,#aa00ff);color:#fff;font-weight:900;padding:5px 14px;border-radius:99px;font-size:.86em;margin-bottom:6px;border:1px solid #fff8}
-.rival-pill{display:inline-block;background:#0005;border:1px solid #fff4;color:#ffdf5d;font-size:.85em;padding:5px 14px;border-radius:99px;margin:6px 4px;font-weight:700}
-.overtook-pill{display:inline-block;background:linear-gradient(90deg,#00c853,#64dd17);color:#0b3d0b;font-size:.9em;padding:5px 14px;border-radius:99px;margin:6px 4px;font-weight:900}
-.title-badge{display:inline-block;background:#ffffff28;border:1px solid #fff6;color:#ffdf5d;font-size:.55em;padding:3px 12px;border-radius:99px;margin-top:6px;font-weight:800}
-.aud-badge{background:#0006;padding:2px 10px;border-radius:99px;font-size:.85em;color:#ffdf5d;font-weight:900}
-.sab-btn{margin-top:12px;padding:10px 18px;border-radius:99px;border:2px solid #80deea;background:#00acc155;color:#fff;font-weight:800;font-size:.95em;cursor:pointer}
-.sab-btn:disabled{opacity:.4;cursor:default}
-.ice-overlay{position:fixed;inset:0;background:linear-gradient(135deg,#00b4dbdd,#0083b0ee);z-index:40;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;user-select:none;cursor:pointer}
-.ice-overlay h1{font-size:2.4em;margin:.2em 0}
-.ice-cube{font-size:5em;transition:transform .1s}
-.ice-cube:active{transform:scale(.85)}
-.wager-box{background:#0004;border:2px solid #ffdf5d;border-radius:12px;padding:12px;margin:10px 0}
-.wager-btns{display:flex;gap:8px;margin-top:8px}
-.wager-btn{flex:1;padding:10px;border-radius:8px;border:2px solid #fff5;background:#fff2;color:#fff;font-weight:800;font-size:1.05em;cursor:pointer}
-.wager-btn.sel{background:#ffdf5d;color:#2b0d57;border-color:#fff}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.grid button{min-height:28vh;padding:12px 10px;border:0;border-radius:10px;color:#fff;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;font-weight:700;font-size:1.15em;line-height:1.25;word-break:break-word}
-.grid button .sh{font-size:2em;line-height:1}
-.grid button.elim{opacity:.18;pointer-events:none;filter:grayscale(1)}
+:root{
+  --bg1:#6827d6;
+  --bg2:#46178f;
+  --bg3:#23094d;
+  --surface:rgba(255,255,255,.11);
+  --surface-strong:rgba(20,6,46,.52);
+  --border:rgba(255,255,255,.20);
+  --gold:#ffdf5d;
+  --green:#26890c;
+  --green-bright:#69f0ae;
+  --ink:#2b0d57;
+  --radius:16px;
+  --radius-sm:11px;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;min-height:100vh;min-height:100dvh}
+body{
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  background:radial-gradient(circle at 50% -12%,var(--bg1) 0%,var(--bg2) 52%,var(--bg3) 100%) fixed;
+  color:#fff;
+  text-align:center;
+  display:flex;
+  flex-direction:column;
+  font-variant-numeric:tabular-nums;
+  overflow-x:hidden;
+}
+
+/* --- Top Mobile HUD --- */
+#topHud{
+  position:sticky;
+  top:0;
+  z-index:55;
+  width:100%;
+  background:rgba(22,7,50,.78);
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+  border-bottom:1px solid rgba(255,255,255,.14);
+}
+.hud-inner{
+  max-width:540px;
+  margin:0 auto;
+  padding:7px 12px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  min-height:46px;
+}
+.hud-left,.hud-right{display:flex;align-items:center;gap:6px;flex-shrink:0}
+.hud-btn{
+  width:auto;
+  margin:0;
+  padding:5px 10px;
+  font-size:.82em;
+  font-weight:800;
+  border-radius:99px;
+  border:1px solid rgba(255,255,255,.26);
+  background:rgba(255,255,255,.12);
+  color:#fff;
+  cursor:pointer;
+  line-height:1.2;
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+}
+.hud-btn:active{transform:scale(.95)}
+#caseBtn{
+  display:none;
+  background:linear-gradient(135deg,#8e24aa,#5e35b1);
+  border-color:rgba(255,255,255,.55);
+  box-shadow:0 2px 10px rgba(0,0,0,.35);
+}
+.hud-me{
+  display:none;
+  align-items:center;
+  gap:6px;
+  background:rgba(0,0,0,.32);
+  border:1px solid rgba(255,255,255,.16);
+  border-radius:99px;
+  padding:3px 10px;
+  font-size:.82em;
+  font-weight:800;
+  min-width:0;
+  max-width:210px;
+}
+.hud-me .hm-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hud-me .hm-score{color:var(--gold);white-space:nowrap}
+.hud-me .hm-rank{background:rgba(255,255,255,.18);padding:1px 6px;border-radius:99px;font-size:.88em}
+
+/* --- Smooth Live Timer Bar --- */
+#timerStrip{
+  display:none;
+  max-width:540px;
+  width:100%;
+  margin:0 auto;
+  padding:0 12px 7px;
+  align-items:center;
+  gap:8px;
+}
+.ts-track{
+  flex:1;
+  height:8px;
+  background:rgba(255,255,255,.18);
+  border-radius:99px;
+  overflow:hidden;
+}
+.ts-fill{
+  height:100%;
+  width:100%;
+  background:linear-gradient(90deg,#69f0ae,#ffdf5d);
+  border-radius:99px;
+  transition:width .12s linear,background .25s ease;
+}
+.ts-fill.urgent{background:linear-gradient(90deg,#ff1744,#ff9100)}
+.ts-fill.preview{background:linear-gradient(90deg,#00e5ff,#ffdf5d)}
+.ts-lbl{
+  font-size:.78em;
+  font-weight:900;
+  min-width:62px;
+  text-align:right;
+  color:var(--gold);
+  white-space:nowrap;
+}
+.ts-lbl.urgent{color:#ff8a80}
+
+/* --- App Container --- */
+#app{
+  flex:1;
+  width:100%;
+  max-width:540px;
+  margin:0 auto;
+  padding:12px 14px calc(14px + env(safe-area-inset-bottom,0px));
+  display:flex;
+  flex-direction:column;
+}
+
+/* --- Cards & Surfaces --- */
+.card-panel{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:16px;
+  box-shadow:0 10px 28px rgba(0,0,0,.24);
+  backdrop-filter:blur(6px);
+}
+.brand-head{margin:2px 0 10px}
+.logo{
+  max-width:190px;
+  max-height:84px;
+  width:auto;
+  border-radius:14px;
+  margin:0 auto 6px;
+  display:block;
+  box-shadow:0 6px 18px rgba(0,0,0,.32);
+  object-fit:contain;
+}
+.join-title{font-size:1.45em;font-weight:900;margin:0;letter-spacing:-.01em}
+.join-sub{font-size:.88em;opacity:.82;margin:3px 0 0}
+
+/* --- Inputs & Primary Buttons --- */
+.field-lbl{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  font-size:.78em;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.06em;
+  opacity:.85;
+  margin:8px 2px 4px;
+}
+.pin-ok{color:var(--green-bright);text-transform:none;letter-spacing:0}
+input,select.rosterSel,select.tagsel{
+  display:block;
+  width:100%;
+  font-size:1.22em;
+  font-weight:800;
+  padding:12px 14px;
+  margin:0 0 8px;
+  border-radius:var(--radius-sm);
+  border:2px solid transparent;
+  text-align:center;
+  color:var(--ink);
+  background:#fff;
+  box-shadow:0 3px 10px rgba(0,0,0,.16);
+  font-family:inherit;
+}
+input:focus,select:focus,textarea:focus{
+  outline:none;
+  border-color:var(--gold);
+  box-shadow:0 0 0 3px rgba(255,223,93,.35);
+}
+#p{letter-spacing:3px;font-size:1.35em}
+#p::placeholder{letter-spacing:normal;font-weight:700;opacity:.5}
+input::placeholder{font-weight:650;opacity:.52}
+
+button.go{
+  width:100%;
+  font-size:1.25em;
+  padding:14px 18px;
+  border:0;
+  border-radius:13px;
+  background:linear-gradient(180deg,#2fa80f,#217a0a);
+  color:#fff;
+  font-weight:900;
+  cursor:pointer;
+  box-shadow:0 5px 0 #145205,0 8px 20px rgba(0,0,0,.28);
+  transition:transform .08s,filter .15s;
+  letter-spacing:.01em;
+}
+button.go:hover{filter:brightness(1.05)}
+button.go:active{transform:translateY(3px);box-shadow:0 2px 0 #145205,0 4px 10px rgba(0,0,0,.25)}
+button.go.blue{
+  background:linear-gradient(180deg,#1e7ae8,#1158b0);
+  box-shadow:0 5px 0 #0a3975,0 8px 18px rgba(0,0,0,.26);
+}
+
+/* --- Progressive Customization Accordion on Join --- */
+.cust-toggle{
+  width:100%;
+  margin:4px 0 10px;
+  padding:9px 12px;
+  border-radius:var(--radius-sm);
+  border:1px solid rgba(255,255,255,.24);
+  background:rgba(0,0,0,.24);
+  color:#fff;
+  font-size:.92em;
+  font-weight:800;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+}
+.cust-preview{display:inline-flex;align-items:center;gap:6px;min-width:0;overflow:hidden}
+.cust-drawer{
+  display:none;
+  background:rgba(0,0,0,.26);
+  border:1px solid rgba(255,255,255,.16);
+  border-radius:12px;
+  padding:10px;
+  margin:-2px 0 10px;
+}
+.cust-drawer.open{display:block}
+.avatars{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:6px;
+  max-height:124px;
+  overflow-y:auto;
+  padding:4px;
+  margin-bottom:8px;
+}
+.av{
+  font-size:1.5em;
+  padding:5px 8px;
+  border-radius:10px;
+  background:rgba(255,255,255,.12);
+  border:2px solid transparent;
+  cursor:pointer;
+  user-select:none;
+  transition:transform .12s,background .12s;
+}
+.av.sel{background:rgba(255,255,255,.28);border-color:var(--gold);transform:scale(1.1)}
+.swatches{display:flex;gap:7px;justify-content:center;flex-wrap:wrap;margin:6px 0 8px}
+.sw{width:27px;height:27px;border-radius:50%;border:3px solid rgba(255,255,255,.25);cursor:pointer;transition:transform .12s}
+.sw.sel{border-color:var(--gold);transform:scale(1.16);box-shadow:0 0 10px rgba(255,223,93,.6)}
+.tagsel{font-size:.98em;padding:9px 10px;margin:4px 0 6px}
+.cust-drawer input{font-size:.98em;padding:9px 10px;margin:0}
+
+.teams{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:4px 0 10px}
+.tm{
+  padding:10px 8px;
+  border-radius:10px;
+  background:rgba(255,255,255,.13);
+  border:2px solid rgba(255,255,255,.18);
+  cursor:pointer;
+  font-weight:800;
+  font-size:.92em;
+  user-select:none;
+}
+.tm.sel{border-color:var(--gold);background:rgba(255,255,255,.26);transform:scale(1.02)}
+
+.join-links{
+  display:flex;
+  justify-content:center;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-top:12px;
+}
+.plink{
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  padding:7px 13px;
+  border-radius:99px;
+  background:rgba(255,255,255,.11);
+  border:1px solid rgba(255,255,255,.18);
+  color:#fff;
+  text-decoration:none;
+  font-size:.86em;
+  font-weight:750;
+}
+.err{color:#ff9e9e;font-weight:800;font-size:.92em;margin:8px 0 0}
+.err:empty{display:none}
+
+/* --- Question Stage: Zero-Scroll Flex Budget --- */
+.q-screen{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  min-height:0;
+}
+.chip-row{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  align-items:center;
+  gap:5px;
+}
+.qnum{
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  background:#fff;
+  color:var(--bg2);
+  font-weight:900;
+  font-size:.84em;
+  padding:4px 12px;
+  border-radius:99px;
+  box-shadow:0 2px 8px rgba(0,0,0,.22);
+}
+.wheel-pill,.double-pill,.underdog-pill,.hot-pill,.team-pill,.speed-pill,.streak-pill,.rival-pill,.overtook-pill,.lens-pill,.title-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  border-radius:99px;
+  padding:4px 11px;
+  font-size:.8em;
+  font-weight:900;
+  line-height:1.2;
+}
+.wheel-pill{background:linear-gradient(90deg,#00c853,#00b0ff,#aa00ff);color:#fff;border:1px solid rgba(255,255,255,.5)}
+.double-pill{background:linear-gradient(90deg,#ff9800,#ffd600);color:var(--ink)}
+.underdog-pill{background:linear-gradient(90deg,#00c853,#b2ff59);color:#0f3d13}
+.hot-pill{background:linear-gradient(90deg,#ff6d00,#ff1744);color:#fff;border:1px solid rgba(255,255,255,.5)}
+.team-pill{background:linear-gradient(90deg,#1368ce,#00b0ff);color:#fff;border:1px solid rgba(255,255,255,.5)}
+.speed-pill{background:linear-gradient(90deg,#00b8d4,#2979ff);color:#fff;border:1px solid rgba(255,255,255,.5)}
+.streak-pill{background:linear-gradient(90deg,#ff6d00,#ff3d00);color:#fff;font-size:.85em;padding:5px 13px}
+.rival-pill{background:rgba(0,0,0,.38);border:1px solid rgba(255,255,255,.24);color:var(--gold);font-weight:800}
+.overtook-pill{background:linear-gradient(90deg,#00c853,#64dd17);color:#0b3d0b}
+.lens-pill{background:rgba(0,191,165,.35);border:1px solid #1de9b6;color:#fff;font-size:.82em}
+.title-badge{background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.4);color:var(--gold);font-size:.84em}
+
+/* --- Question Stem & Media Card on Phone --- */
+.q-card{
+  background:var(--surface-strong);
+  border:1px solid rgba(255,255,255,.2);
+  border-radius:14px;
+  padding:11px 13px;
+  box-shadow:0 6px 18px rgba(0,0,0,.22);
+}
+.q-stem{
+  font-size:clamp(1.02rem,3.8vw,1.24rem);
+  font-weight:850;
+  line-height:1.3;
+  margin:0;
+  word-break:break-word;
+}
+.q-media{
+  max-height:128px;
+  max-width:100%;
+  border-radius:10px;
+  margin:8px auto 2px;
+  display:block;
+  background:#fff;
+  object-fit:contain;
+  cursor:zoom-in;
+}
+.q-media.zoom-hold{filter:blur(26px);cursor:default;pointer-events:none}
+.q-media.zoom-go{animation:zoomrev 15s linear forwards;cursor:default;pointer-events:none}
+@keyframes zoomrev{from{filter:blur(26px)}to{filter:blur(0)}}
+
+.exh-ph{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:8px 0 2px}
+.exh-ph figure{margin:0;max-width:47%;text-align:center}
+.exh-ph img{max-width:100%;max-height:96px;border-radius:8px;background:#fff;object-fit:contain;cursor:zoom-in}
+.exh-ph figcaption{font-size:.72em;opacity:.86;margin-top:2px}
+
+/* --- Contextual Round Prompts (Hot Seat, Team Talk, Wager) --- */
+.hot-box,.wager-box,.team-prompt,.steal-box{
+  background:rgba(0,0,0,.34);
+  border-radius:12px;
+  padding:9px 11px;
+  font-size:.9em;
+}
+.hot-box{border:1.5px solid #ff6d00;display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;text-align:left}
+.hot-box .wager-btns{margin:0;flex:0 0 auto}
+.wager-box{border:1.5px solid var(--gold)}
+.team-prompt{background:rgba(19,104,206,.34);border:1.5px solid #4fc3f7;text-align:left}
+.steal-box{border:1.5px solid #ffab40;margin:10px 0}
+.wager-btns{display:flex;gap:6px;margin-top:6px}
+.wager-btn{
+  flex:1;
+  padding:8px 10px;
+  border-radius:9px;
+  border:1.5px solid rgba(255,255,255,.32);
+  background:rgba(255,255,255,.14);
+  color:#fff;
+  font-weight:850;
+  font-size:.92em;
+  cursor:pointer;
+}
+.wager-btn.sel{background:linear-gradient(180deg,#ffe57f,#ffb300);color:var(--ink);border-color:#fff;box-shadow:0 2px 8px rgba(0,0,0,.3);text-shadow:0 1px 0 rgba(255,255,255,.4)}
+
+/* --- 2x2 Ergonomic Answer Grid --- */
+.ans-zone{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  min-height:0;
+}
+.grid{
+  flex:1;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  min-height:210px;
+}
+.grid.tf-grid{min-height:170px}
+.grid button{
+  min-height:104px;
+  padding:12px 10px;
+  border:0;
+  border-radius:14px;
+  color:#fff;
+  cursor:pointer;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  font-weight:850;
+  font-size:1.06em;
+  line-height:1.22;
+  word-break:break-word;
+  box-shadow:0 5px 0 rgba(0,0,0,.30),0 8px 16px rgba(0,0,0,.22),inset 0 1px 0 rgba(255,255,255,.28);
+  transition:transform .08s,filter .12s,opacity .2s;
+  position:relative;
+}
+.grid button:active{transform:translateY(3px);box-shadow:0 2px 0 rgba(0,0,0,.30),0 4px 8px rgba(0,0,0,.2)}
+.grid button .sh{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:32px;
+  height:32px;
+  border-radius:9px;
+  background:rgba(0,0,0,.22);
+  font-size:1.2em;
+  line-height:1;
+  flex-shrink:0;
+}
+.grid button img{max-height:68px;max-width:100%;border-radius:8px;background:#fff;object-fit:contain}
+.grid button.elim{opacity:.16;pointer-events:none;filter:grayscale(1)}
 .c0{background:#e21b3c}.c1{background:#1368ce}.c2{background:#d89e00}.c3{background:#26890c}
-.big{font-size:1.85em;margin-top:10vh}
-.big:has(+blockquote){margin-top:4vh}
-.streak-pill{display:inline-block;background:#ff6d00;color:#fff;font-size:.65em;padding:4px 14px;border-radius:99px;margin-top:8px;font-weight:800}
-.double-pill{display:inline-block;background:linear-gradient(90deg,#ff9800,#ffd600);color:#2b0d57;font-weight:900;padding:4px 14px;border-radius:99px;font-size:.95em;margin-bottom:6px}
-.underdog-pill{display:inline-block;background:linear-gradient(90deg,#00c853,#b2ff59);color:#1b5e20;font-weight:900;padding:4px 14px;border-radius:99px;font-size:.88em;margin-bottom:6px}
-.react-bar{display:flex;justify-content:center;gap:10px;margin-top:22px;flex-wrap:wrap}
-.react-bar button{font-size:1.7em;background:#fff2;border:0;border-radius:99px;padding:8px 14px;cursor:pointer;transition:transform .12s}
-.react-bar button:active{transform:scale(1.3)}
-blockquote{background:#fff;color:#2b0d57;border-radius:10px;padding:14px 18px;margin:16px 0 0;font-style:italic;line-height:1.4;text-align:left}
-blockquote cite{display:block;font-style:normal;font-size:.8em;margin-top:8px;opacity:.7}.err{color:#ffb3b3}
-.trophy-card{background:linear-gradient(135deg,#ffd700,#ff9800);color:#2b0d57;border-radius:16px;padding:16px;margin:14px auto;max-width:360px;box-shadow:0 8px 24px #0006;font-weight:800}
+.aud-badge{background:rgba(0,0,0,.48);padding:2px 9px;border-radius:99px;font-size:.78em;color:var(--gold);font-weight:900}
+
+/* --- Bottom Tactical Tray (Power-Ups + Confidence / DoN Bet) --- */
+.tac-dock{
+  background:rgba(16,4,38,.58);
+  border:1px solid rgba(255,255,255,.16);
+  border-radius:14px;
+  padding:7px;
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+.pu-bar{display:flex;gap:5px}
+.pu-btn{
+  flex:1;
+  min-width:0;
+  padding:8px 4px;
+  border:1.5px solid rgba(255,255,255,.28);
+  border-radius:10px;
+  background:rgba(255,255,255,.11);
+  color:#fff;
+  font-size:.78em;
+  font-weight:850;
+  cursor:pointer;
+  white-space:nowrap;
+}
+.pu-btn.active{background:linear-gradient(90deg,#ff9800,#ffd600);color:var(--ink);border-color:#fff}
+.pu-btn:disabled{opacity:.32;cursor:default;text-decoration:line-through}
+.conf-btn,.don-btn{
+  width:100%;
+  margin:0;
+  padding:8px 12px;
+  border-radius:10px;
+  font-weight:850;
+  font-size:.84em;
+  cursor:pointer;
+}
+.conf-btn{border:1.5px solid rgba(255,223,93,.55);background:rgba(0,0,0,.28);color:var(--gold)}
+.conf-btn.on{background:linear-gradient(90deg,#ff6d00,#ffd600);color:var(--ink);border-color:#fff;box-shadow:0 0 12px rgba(255,152,0,.5)}
+.don-btn{border:1.5px solid rgba(255,64,129,.65);background:rgba(0,0,0,.28);color:#ff80ab}
+.don-btn.on{background:linear-gradient(90deg,#d500f9,#ff1744);color:#fff;border-color:#fff;box-shadow:0 0 12px rgba(255,23,68,.5)}
+
+/* --- Order / Ranking & Text Inputs --- */
+.ord-slots{display:flex;flex-direction:column;gap:5px;margin-bottom:8px}
+.slot{
+  background:rgba(255,255,255,.2);
+  border:1px solid rgba(255,255,255,.28);
+  border-radius:10px;
+  padding:9px 12px;
+  font-weight:800;
+  text-align:left;
+  font-size:.98em;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  cursor:pointer;
+}
+.slot small{opacity:.72;font-size:.8em}
+.txtans{font-size:1.25em}
+textarea.txtans{
+  display:block;
+  width:100%;
+  font-size:1.04em;
+  font-weight:650;
+  padding:12px;
+  border-radius:12px;
+  border:2px solid transparent;
+  color:var(--ink);
+  background:#fff;
+  font-family:inherit;
+  text-align:left;
+  resize:vertical;
+  margin-bottom:4px;
+}
+.char-cnt{text-align:right;font-size:.78em;opacity:.78;margin-bottom:8px;font-weight:700}
+
+/* --- Status, Results, Lobby & Podium Cards --- */
+.state-card{
+  margin:auto 0;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:20px;
+  padding:22px 16px;
+  box-shadow:0 12px 32px rgba(0,0,0,.26);
+}
+.state-card.ok{background:linear-gradient(160deg,rgba(38,137,12,.52),rgba(20,82,5,.58));border-color:rgba(125,255,107,.55)}
+.state-card.no{background:linear-gradient(160deg,rgba(198,40,40,.48),rgba(110,16,30,.55));border-color:rgba(255,138,128,.45)}
+.state-icon{font-size:2.7em;line-height:1;margin-bottom:6px}
+.state-title{font-size:1.65em;font-weight:900;margin:4px 0;line-height:1.2}
+.state-sub{font-size:.98em;opacity:.9;line-height:1.4;margin:6px 0}
+.ans-reveal-pill{
+  display:inline-block;
+  margin-top:8px;
+  padding:7px 14px;
+  border-radius:10px;
+  background:rgba(0,0,0,.34);
+  border:1px solid rgba(125,255,107,.45);
+  font-size:.92em;
+  font-weight:800;
+}
+
+.sab-btn{
+  margin:6px 4px 0;
+  padding:10px 16px;
+  border-radius:99px;
+  border:2px solid #80deea;
+  background:rgba(0,172,193,.35);
+  color:#fff;
+  font-weight:850;
+  font-size:.9em;
+  cursor:pointer;
+}
+.sab-btn:disabled{opacity:.4;cursor:default}
+
+blockquote{
+  background:#fff;
+  color:var(--ink);
+  border-radius:13px;
+  padding:13px 16px;
+  margin:12px 0 0;
+  font-style:italic;
+  line-height:1.42;
+  text-align:left;
+  box-shadow:0 6px 18px rgba(0,0,0,.22);
+  font-size:.95em;
+}
+blockquote cite{display:block;font-style:normal;font-size:.82em;margin-top:6px;opacity:.72;font-weight:700}
+
+/* --- Reactions Bar --- */
+.react-bar{
+  display:flex;
+  justify-content:center;
+  gap:7px;
+  margin-top:auto;
+  padding-top:12px;
+  flex-wrap:wrap;
+}
+.react-bar button{
+  font-size:1.45em;
+  background:rgba(255,255,255,.13);
+  border:1px solid rgba(255,255,255,.2);
+  border-radius:99px;
+  padding:7px 12px;
+  cursor:pointer;
+  transition:transform .12s,background .12s;
+}
+.react-bar button:active{transform:scale(1.28);background:rgba(255,255,255,.28)}
+
+/* --- Case Study Reader, Polls & Peer Voting --- */
+.case-ph{
+  text-align:left;
+  background:var(--surface-strong);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:15px 16px;
+  box-shadow:0 8px 24px rgba(0,0,0,.25);
+}
+.case-ph h2{margin:6px 0 8px;font-size:1.28em;line-height:1.28}
+.case-body-ph p{font-size:1em;line-height:1.56;margin:.65em 0;color:rgba(255,255,255,.95)}
+.role-card{
+  background:linear-gradient(135deg,rgba(123,31,162,.62),rgba(74,20,140,.68));
+  border:1.5px solid #ce93d8;
+  border-radius:12px;
+  padding:11px 14px;
+  margin:12px 0 8px;
+  font-size:.94em;
+  line-height:1.42;
+}
+.rk-list{
+  background:rgba(0,0,0,.32);
+  border:1px solid rgba(255,255,255,.16);
+  border-radius:13px;
+  padding:8px 12px;
+  text-align:left;
+  font-size:.94em;
+  margin:10px 0;
+}
+.rk-row{
+  position:relative;
+  overflow:hidden;
+  border-radius:9px;
+  padding:8px 10px;
+  margin:5px 0;
+  background:rgba(255,255,255,.09);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+}
+.rk-fill{position:absolute;left:0;top:0;bottom:0;background:rgba(255,255,255,.18);pointer-events:none}
+.rk-txt{position:relative;z-index:1;font-weight:750}
+.rk-pct{position:relative;z-index:1;font-weight:900;color:var(--gold);white-space:nowrap}
+.resp-ph{
+  background:#fff;
+  color:var(--ink);
+  border-radius:12px;
+  padding:11px 13px;
+  margin:8px 0;
+  text-align:left;
+  font-weight:650;
+  font-size:.95em;
+  line-height:1.38;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  box-shadow:0 4px 12px rgba(0,0,0,.2);
+}
+.resp-ph button{
+  flex-shrink:0;
+  padding:7px 14px;
+  border-radius:99px;
+  border:0;
+  background:var(--green);
+  color:#fff;
+  font-weight:850;
+  cursor:pointer;
+}
+.resp-ph button:disabled{opacity:.42;cursor:default}
+
+/* --- Final Trophy & Report Card --- */
+.trophy-card{
+  background:linear-gradient(135deg,#ffd700,#ff9800);
+  color:var(--ink);
+  border-radius:16px;
+  padding:16px;
+  margin:10px auto;
+  width:100%;
+  box-shadow:0 8px 24px rgba(0,0,0,.35);
+  font-weight:850;
+}
 .trophy-card.silver{background:linear-gradient(135deg,#f5f7fa,#b8c6db)}
 .trophy-card.bronze{background:linear-gradient(135deg,#f3a683,#c47135);color:#fff}
-.trophy-card button{margin-top:10px;padding:8px 16px;border-radius:99px;border:0;background:#2b0d57;color:#fff;font-weight:800;cursor:pointer}
-.report-card{background:#fff2;border-radius:12px;padding:14px 16px;margin-top:16px;text-align:left;font-size:.95em}
+.trophy-card button{
+  margin-top:10px;
+  padding:9px 18px;
+  border-radius:99px;
+  border:0;
+  background:var(--ink);
+  color:#fff;
+  font-weight:850;
+  cursor:pointer;
+}
+.report-card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:15px;
+  padding:14px 15px;
+  margin-top:10px;
+  text-align:left;
+  font-size:.94em;
+}
 .report-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;text-align:center;margin-bottom:12px}
-.stat-pill{background:#0004;padding:8px;border-radius:8px;font-weight:700}
-.stat-pill b{display:block;font-size:1.25em;color:#ffdf5d}
-.missed-item{border-top:1px solid #fff3;padding:8px 0;font-size:.92em}
-.logo{max-width:260px;width:75%;border-radius:16px;margin:4px auto 12px;display:block;box-shadow:0 4px 16px #0004}
+.stat-pill{background:rgba(0,0,0,.32);padding:9px 6px;border-radius:10px;font-weight:750;font-size:.86em}
+.stat-pill b{display:block;font-size:1.28em;color:var(--gold);margin-bottom:2px}
+.missed-item{border-top:1px solid rgba(255,255,255,.16);padding:8px 0;font-size:.92em;line-height:1.38}
 
-body.cb .c0{background:#D55E00}body.cb .c1{background:#0072B2}body.cb .c2{background:#F0E442;color:#222}body.cb .c3{background:#009E73}
-body.hc{background:#000}body.hc .grid button{border:4px solid #fff}body.hc .pu-btn,body.hc .wager-btn{border-color:#fff}
-#a11y{position:fixed;top:8px;right:8px;z-index:60;width:auto;font-size:.8em;padding:4px 10px;border-radius:99px;border:1px solid #fff5;background:#0006;color:#fff;cursor:pointer}
-.hot-pill{display:inline-block;background:linear-gradient(90deg,#ff6d00,#ff1744);color:#fff;font-weight:900;padding:5px 14px;border-radius:99px;font-size:.85em;margin-bottom:6px;border:1px solid #fff8}
-.hot-box{background:#0004;border:2px solid #ff6d00;border-radius:12px;padding:10px;margin:8px 0;font-size:.95em}
-.team-pill{display:inline-block;background:linear-gradient(90deg,#1368ce,#00b0ff);color:#fff;font-weight:900;padding:5px 14px;border-radius:99px;font-size:.85em;margin-bottom:6px;border:1px solid #fff8}
-.txtans{font-size:1.5em}
-.slot{background:#fff3;border-radius:8px;padding:10px 14px;margin:5px 0;font-weight:800;text-align:left;font-size:1.05em}
-.grid button img{max-height:80px;max-width:100%;border-radius:8px;background:#fff}
-.rosterSel{display:block;width:100%;box-sizing:border-box;font-size:1.3em;padding:14px;margin:10px 0;border-radius:6px;border:0;text-align:center;color:#2b0d57;background:#fff}
-.plink{display:inline-block;margin-top:10px;color:#fff;font-size:.95em}
+/* --- Overlays, Ice, Toast, Confetti & Accessibility --- */
+.ice-overlay{
+  position:fixed;
+  inset:0;
+  background:linear-gradient(135deg,rgba(0,180,219,.92),rgba(0,131,176,.95));
+  z-index:85;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  padding:24px;
+  user-select:none;
+  cursor:pointer;
+}
+.ice-overlay h1{font-size:2.3em;margin:.2em 0}
+.ice-cube{font-size:5em;transition:transform .1s}
+.ice-cube:active{transform:scale(.84)}
 
-.avatars{max-height:150px;overflow-y:auto;padding:4px}
-.cust{margin:8px 0}.swatches{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:6px 0}
-.sw{width:30px;height:30px;border-radius:50%;border:3px solid transparent;cursor:pointer}.sw.sel{border-color:#ffdf5d;transform:scale(1.15)}
-.tagsel{display:block;width:100%;box-sizing:border-box;font-size:1.05em;padding:10px;margin:6px 0;border-radius:6px;border:0;color:#2b0d57;background:#fff;text-align:center}
-.cust input{font-size:1.05em;padding:10px}
-.don-btn{width:100%;padding:10px 14px;margin-bottom:8px;border-radius:99px;border:2px solid #ff4081aa;background:#0004;color:#ff80ab;font-weight:800;font-size:.92em;cursor:pointer}
-.don-btn.on{background:linear-gradient(90deg,#d500f9,#ff1744);color:#fff;border-color:#fff;box-shadow:0 0 12px #ff174488}
-.team-prompt{background:#1368ce55;border:2px solid #1368ce;border-radius:12px;padding:8px 12px;margin:8px 0;font-size:.92em;text-align:left}
-.speed-pill{display:inline-block;background:linear-gradient(90deg,#00b8d4,#2979ff);color:#fff;font-weight:900;padding:5px 14px;border-radius:99px;font-size:.86em;margin-bottom:6px;border:1px solid #fff8}
-.steal-box{background:#0004;border:2px solid #ffab40;border-radius:12px;padding:10px;margin:10px 0;font-size:.95em}
-#toast{position:fixed;left:50%;top:14%;transform:translateX(-50%) scale(.6);z-index:80;background:linear-gradient(90deg,#ffd600,#ff9100);color:#2b0d57;font-weight:900;font-size:1.3em;padding:14px 22px;border-radius:16px;box-shadow:0 10px 30px #000a;opacity:0;pointer-events:none;text-align:center;max-width:86vw}
+#caseOv{position:fixed;inset:0;background:rgba(10,3,24,.88);z-index:90;display:none;overflow-y:auto;padding:14px}
+#caseOv .card{max-width:520px;margin:0 auto;background:var(--ink);border:1.5px solid rgba(255,255,255,.26);border-radius:16px;padding:15px 16px;text-align:left}
+#caseOv .xbtn{float:right;width:auto;margin:0;padding:6px 14px;border-radius:99px;border:0;background:#e21b3c;color:#fff;font-weight:850;cursor:pointer}
+#imgOv{position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:95;display:none;align-items:center;justify-content:center;padding:12px;cursor:zoom-out}
+#imgOv img{max-width:100%;max-height:100%;border-radius:10px;background:#fff}
+
+#toast{
+  position:fixed;
+  left:50%;
+  top:58px;
+  transform:translateX(-50%) scale(.6);
+  z-index:80;
+  background:linear-gradient(90deg,#ffd600,#ff9100);
+  color:var(--ink);
+  font-weight:900;
+  font-size:1.15em;
+  padding:11px 20px;
+  border-radius:99px;
+  box-shadow:0 10px 28px rgba(0,0,0,.55);
+  opacity:0;
+  pointer-events:none;
+  text-align:center;
+  max-width:88vw;
+}
 #toast.show{animation:toastin 2.4s ease forwards}
-@keyframes toastin{0%{opacity:0;transform:translateX(-50%) scale(.6)}12%{opacity:1;transform:translateX(-50%) scale(1.08)}20%{transform:translateX(-50%) scale(1)}85%{opacity:1}100%{opacity:0;transform:translateX(-50%) scale(1)}}
+@keyframes toastin{0%{opacity:0;transform:translateX(-50%) scale(.6)}12%{opacity:1;transform:translateX(-50%) scale(1.06)}20%{transform:translateX(-50%) scale(1)}85%{opacity:1}100%{opacity:0;transform:translateX(-50%) scale(1)}}
 #fx{position:fixed;inset:0;pointer-events:none;z-index:70}
-#sfxBtn{position:fixed;top:8px;left:8px;z-index:60;width:auto;font-size:.8em;padding:4px 10px;border-radius:99px;border:1px solid #fff5;background:#0006;color:#fff;cursor:pointer}
 
-.case-ph{text-align:left}
-.case-body-ph p{font-size:1.02em;line-height:1.5;margin:.7em 0}
-.role-card{background:#6a1b9a88;border:2px solid #ce93d8;border-radius:12px;padding:10px 14px;margin:12px 0;font-size:.95em}
-.exh-ph{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:8px 0}
-.exh-ph figure{margin:0;max-width:46%;text-align:center}.exh-ph img{max-width:100%;max-height:110px;border-radius:8px;background:#fff;object-fit:contain;cursor:zoom-in}
-.exh-ph figcaption{font-size:.72em;opacity:.85}
-.lens-pill{display:inline-block;background:#00bfa588;border:1px solid #1de9b6;border-radius:99px;padding:4px 14px;font-size:.55em;margin-top:8px;font-weight:800}
-.resp-ph{background:#fff;color:#2b0d57;border-radius:10px;padding:10px 12px;margin:8px 0;text-align:left;font-weight:600;font-size:.95em}
-.resp-ph button{margin-top:6px;padding:6px 14px;border-radius:99px;border:0;background:#26890c;color:#fff;font-weight:800;cursor:pointer}
-.resp-ph button:disabled{opacity:.4}
-.rk-list{background:#0004;border-radius:12px;padding:8px 14px;text-align:left;font-size:.95em;margin:10px 0}
-.rk-list div{padding:4px 0;border-top:1px solid #fff2}.rk-list div:first-child{border-top:0}
-#caseBtn{position:fixed;right:10px;bottom:10px;z-index:55;display:none;width:auto;margin:0;padding:10px 16px;border-radius:99px;border:2px solid #fff;background:#6a1b9a;color:#fff;font-weight:800;font-size:.95em;box-shadow:0 6px 18px #000a;cursor:pointer}
-#caseOv{position:fixed;inset:0;background:#000d;z-index:90;display:none;overflow-y:auto;padding:14px}
-#caseOv .card{max-width:520px;margin:0 auto;background:#2b0d57;border:2px solid #fff4;border-radius:14px;padding:14px 16px;text-align:left}
-#caseOv .xbtn{float:right;width:auto;margin:0;padding:6px 14px;border-radius:99px;border:0;background:#e21b3c;color:#fff;font-weight:800}
-#imgOv{position:fixed;inset:0;background:#000e;z-index:95;display:none;align-items:center;justify-content:center;padding:10px}
-#imgOv img{max-width:100%;max-height:100%;border-radius:8px;background:#fff}
-</style></head><body><button id="caseBtn" onclick="openCaseFile()">📁 Case file</button><div id="caseOv"></div><div id="imgOv" onclick="this.style.display='none'"><img id="imgBig" alt=""></div><button id="sfxBtn" onclick="toggleSfx()">🔊</button><canvas id="fx"></canvas><div id="toast"></div><button id="a11y" onclick="cycleA11y()" title="Accessibility">👁️</button><div id="app"></div>
+/* Colorblind & High-Contrast Modes */
+body.cb .c0{background:#D55E00}
+body.cb .c1{background:#0072B2}
+body.cb .c2{background:#F0E442;color:#1b1b1b}
+body.cb .c2 .sh{color:#fff;background:rgba(0,0,0,.55)}
+body.cb .c3{background:#009E73}
+body.hc{background:#000!important}
+body.hc #topHud{background:#000;border-bottom:2px solid #fff}
+body.hc .card-panel,body.hc .q-card,body.hc .state-card,body.hc .tac-dock,body.hc .case-ph{background:#000;border:2px solid #fff}
+body.hc .grid button{border:3px solid #fff;box-shadow:none}
+body.hc .pu-btn,body.hc .wager-btn,body.hc .conf-btn,body.hc .don-btn{border-color:#fff}
+
+@media (max-height:700px){
+  .logo{max-height:60px}
+  .q-card{padding:8px 11px}
+  .q-media{max-height:88px}
+  .grid{min-height:175px;gap:8px}
+  .grid button{min-height:84px;padding:8px;font-size:.98em}
+  .grid button .sh{width:26px;height:26px;font-size:1.05em}
+}
+</style></head><body>
+<header id="topHud">
+  <div class="hud-inner">
+    <div class="hud-left">
+      <button id="sfxBtn" class="hud-btn" onclick="toggleSfx()" title="Sound Effects">🔊</button>
+      <button id="a11y" class="hud-btn" onclick="cycleA11y()" title="Accessibility Display Mode">👁️</button>
+    </div>
+    <div id="hudMe" class="hud-me"></div>
+    <div class="hud-right">
+      <button id="caseBtn" class="hud-btn" onclick="openCaseFile()">📁 Case</button>
+    </div>
+  </div>
+  <div id="timerStrip">
+    <div class="ts-track"><div id="tsFill" class="ts-fill"></div></div>
+    <div id="tsLbl" class="ts-lbl"></div>
+  </div>
+</header>
+<div id="caseOv"></div>
+<div id="imgOv" onclick="this.style.display='none'"><img id="imgBig" alt=""></div>
+<canvas id="fx"></canvas>
+<div id="toast"></div>
+<main id="app"></main>
 <script>
-let pin, pid, S = {}, avatar = '🦊', team = '';
+let pin, pid, S = {}, avatar = '🦊', team = '', custOpen = false;
 let iceBrokenQ = -1, iceTaps = 0;
+let pollStamp = 0;
 const AVS = ['🦊','🐼','🦁','🐸','🦄','🐙','🦖','🐝','🦋','🐧','🚀','⚡','🐶','🐱','🐯','🐵','🐨','🐰','🐻','🐮','🐷','🐔','🦉','🦅','🐺','🐴','🦓','🦒','🐘','🦏','🐢','🐍','🐊','🐬','🐳','🦈','🐠','🦀','🦞','🐌','🦜','🦩','🦥','🦦','🦔','🐲','👽','🤖','👾','🎃','🌟','🍕','🍩','⚽','🏀','🎮'];
 const TEAMS = [
  {id:'', label:'🎲 Auto Team'},
@@ -122,7 +832,22 @@ const REACTS = ['🔥','😂','😮','🎉','👏','❤️'];
 const $ = document.getElementById('app'), sh = ["▲","◆","●","■"];
 async function post(u,b){const r=await fetch(u,{method:'POST',body:JSON.stringify(b)});return {ok:r.ok,...await r.json()}}
 function esc(s){return String(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
-function pickAv(a){avatar=a;document.querySelectorAll('.av').forEach(el=>el.classList.toggle('sel',el.dataset.av===a))}
+
+function updateCustPreview(){
+ const pv = document.getElementById('custPrev');
+ if(!pv) return;
+ const nm = ((document.getElementById('n')||{}).value || lastName || 'Player').trim();
+ const ct = ((document.getElementById('ctagCustom')||{}).value || ctag || '').trim();
+ const colStyle = nameColor ? `style="color:${esc(nameColor)}"` : '';
+ pv.innerHTML = `<span>${esc(avatar)}</span> <span ${colStyle}>${esc(nm)}</span>${ct?` <span class="title-badge" style="font-size:.75em;padding:1px 7px">${esc(ct)}</span>`:''}`;
+}
+function toggleCust(){
+ custOpen = !custOpen;
+ const d = document.getElementById('custDrawer'), cr = document.getElementById('custCaret');
+ if(d) d.classList.toggle('open', custOpen);
+ if(cr) cr.textContent = custOpen ? '▴' : '▾';
+}
+function pickAv(a){avatar=a;document.querySelectorAll('.av').forEach(el=>el.classList.toggle('sel',el.dataset.av===a));updateCustPreview()}
 function pickTm(t){team=t;document.querySelectorAll('.tm').forEach(el=>el.classList.toggle('sel',el.dataset.tm===t))}
 
 const urlPin = new URLSearchParams(location.search).get('pin') || '';
@@ -132,48 +857,74 @@ async function checkPinConfig(pinVal){
   const r = await (await fetch('/api/active' + (pinVal ? '?pin='+encodeURIComponent(pinVal) : ''))).json();
   const inp = document.getElementById('p');
   if(inp && !inp.value && r && r.pin) inp.value = r.pin;
+  const pk = document.getElementById('pinOk');
+  if(pk) pk.textContent = (r && r.pin && (!inp || inp.value === r.pin)) ? '✓ Live game ready' : '';
   const tmBox = document.getElementById('teamBox');
-   if(tmBox) tmBox.style.display = (r && r.teams) ? 'grid' : 'none';
-   const nb = document.getElementById('nameBox');
-   if(nb){
-    const sig = (r && r.has_roster) ? 'R:' + JSON.stringify(r.roster) : 'T';
-    if(nb.dataset.sig !== sig){
-     nb.dataset.sig = sig;
-     nb.innerHTML = (r && r.has_roster)
-      ? `<select id="n" class="rosterSel"><option value="">— Pick your name —</option>${(r.roster||[]).map(x=>`<option>${esc(x)}</option>`).join('')}</select>`
-      : `<input id="n" placeholder="Nickname" maxlength="16">`;
-    }
+  if(tmBox) tmBox.style.display = (r && r.teams) ? 'grid' : 'none';
+  const nb = document.getElementById('nameBox');
+  if(nb){
+   const sig = (r && r.has_roster) ? 'R:' + JSON.stringify(r.roster) : 'T';
+   if(nb.dataset.sig !== sig){
+    nb.dataset.sig = sig;
+    nb.innerHTML = (r && r.has_roster)
+     ? `<select id="n" class="rosterSel" onchange="updateCustPreview()"><option value="">— Pick your name —</option>${(r.roster||[]).map(x=>`<option>${esc(x)}</option>`).join('')}</select>`
+     : `<input id="n" placeholder="Your nickname" maxlength="16" value="${esc(lastName)}" oninput="updateCustPreview()" onkeydown="if(event.key==='Enter')join()">`;
    }
-   if(r && r.logo){ const lg = document.querySelector('img.logo'); if(lg && lg.dataset.cl !== r.logo){ lg.dataset.cl = r.logo; lg.src = r.logo; } }
-  }catch(e){}
+  }
+  if(r && r.logo){ const lg = document.querySelector('img.logo'); if(lg && lg.dataset.cl !== r.logo){ lg.dataset.cl = r.logo; lg.src = r.logo; } }
+ }catch(e){}
 }
 
 let lastName = '', nameColor = '', ctag = '';
 function form(err, canReclaim){
+ updHud();
  const savedPin = urlPin || pin || '';
- $.innerHTML=`<img class="logo" src="/logo.jpg?v=2" alt="Brainrush!" onerror="this.outerHTML='<h1 style=&quot;font-size:2.4em;margin:.3em 0&quot;>🧠 Brainrush!</h1>'"><h1>Join game</h1>
- <input id="p" placeholder="Game PIN" inputmode="numeric" value="${esc(savedPin)}" oninput="if(this.value.length===6)checkPinConfig(this.value)">
- <div id="nameBox" data-sig="T"><input id="n" placeholder="Nickname" maxlength="16" value="${esc(lastName)}"></div>
- <div class="avatars">${AVS.map(a=>`<span class="av ${a===avatar?'sel':''}" data-av="${a}" onclick="pickAv('${a}')">${a}</span>`).join('')}</div>
- ${custHtml()}<div class="teams" id="teamBox" style="display:none">${TEAMS.slice(1).map(t=>`<div class="tm ${t.id===team?'sel':''}" data-tm="${t.id}" onclick="pickTm('${t.id}')">${t.label}</div>`).join('')}</div>
- <button class="go" onclick="join()">Enter</button>${canReclaim?'<button class="go" style="background:#1368ce;margin-top:8px" onclick="join(true)">🔁 Rejoin as this name</button>':''}<p class="err">${err||''}</p>
-  <a class="plink" href="#" onclick="join(true);return false" style="margin-right:14px">Lost your place? Rejoin →</a><a class="plink" href="/practice">🧑‍🎓 Practice on your own →</a>`;
+ $.innerHTML=`<div class="brand-head">
+   <img class="logo" src="/logo.jpg?v=2" alt="Brainrush!" onerror="this.outerHTML='<div style=&quot;font-size:2em;font-weight:900;margin:2px 0&quot;>🧠 Brainrush!</div>'">
+   <h1 class="join-title">Join Live Game</h1>
+  </div>
+  <div class="card-panel">
+   <div class="field-lbl"><span>Game PIN</span><span id="pinOk" class="pin-ok">${savedPin.length===6?'✓ PIN filled':''}</span></div>
+   <input id="p" placeholder="6-digit PIN" inputmode="numeric" maxlength="8" value="${esc(savedPin)}" oninput="if(this.value.trim().length===6)checkPinConfig(this.value.trim())" onkeydown="if(event.key==='Enter'){const n=document.getElementById('n');if(n&&!n.value)n.focus();else join();}">
+   <div class="field-lbl"><span>Your Name</span></div>
+   <div id="nameBox" data-sig="T"><input id="n" placeholder="Your nickname" maxlength="16" value="${esc(lastName)}" oninput="updateCustPreview()" onkeydown="if(event.key==='Enter')join()"></div>
+   <div class="teams" id="teamBox" style="display:none">${TEAMS.slice(1).map(t=>`<div class="tm ${t.id===team?'sel':''}" data-tm="${t.id}" onclick="pickTm('${t.id}')">${t.label}</div>`).join('')}</div>
+   <button type="button" class="cust-toggle" onclick="toggleCust()">
+    <span class="cust-preview">🎨 <span id="custPrev"></span></span>
+    <span style="opacity:.8;font-size:.86em">Customize <span id="custCaret">${custOpen?'▴':'▾'}</span></span>
+   </button>
+   <div id="custDrawer" class="cust-drawer ${custOpen?'open':''}">${custHtml()}</div>
+   <button class="go" onclick="join()">🚀 Join Game</button>
+   ${canReclaim?'<button class="go blue" style="margin-top:8px" onclick="join(true)">🔁 Rejoin as this name</button>':''}
+   <p class="err">${esc(err||'')}</p>
+  </div>
+  <div class="join-links">
+   <a class="plink" href="#" onclick="join(true);return false">🔁 Lost place? Rejoin</a>
+   <a class="plink" href="/practice">🧑‍🎓 Solo Practice</a>
+  </div>`;
+ updateCustPreview();
  checkPinConfig(savedPin);
 }
 
 const COLORS = ['#ffffff','#ff6b6b','#ffd166','#7bed9f','#70a1ff','#ff9ff3','#a29bfe','#ffa502','#2ed573','#1e90ff'];
 const TITLES = ['','The Brain','Quiz Wizard','Speed Demon','Chaos Agent','Snack Lord','Night Owl','Hot Streak','Underdog','Big Mood','Mr Cool','Dino Fan'];
 function custHtml(){
- return `<div class="cust"><div class="swatches">${COLORS.map(c=>`<span class="sw ${c===nameColor?'sel':''}" style="background:${c}" onclick="pickColor('${c}')"></span>`).join('')}</div>
- <select id="ctagSel" class="tagsel" onchange="ctag=this.value;document.getElementById('ctagCustom').value=''">${TITLES.map(t=>`<option value="${t}" ${t===ctag?'selected':''}>${t||'— Pick a title (optional) —'}</option>`).join('')}</select>
- <input id="ctagCustom" placeholder="…or type your own title (max 14)" maxlength="14" oninput="ctag=this.value;document.getElementById('ctagSel').value=''"></div>`;
+ return `<div class="avatars">${AVS.map(a=>`<span class="av ${a===avatar?'sel':''}" data-av="${a}" onclick="pickAv('${a}')">${a}</span>`).join('')}</div>
+  <div class="swatches">${COLORS.map(c=>`<span class="sw ${c===nameColor?'sel':''}" style="background:${c}" onclick="pickColor('${c}')"></span>`).join('')}</div>
+  <select id="ctagSel" class="tagsel" onchange="ctag=this.value;document.getElementById('ctagCustom').value='';updateCustPreview()">${TITLES.map(t=>`<option value="${t}" ${t===ctag?'selected':''}>${t||'— Pick a player title (optional) —'}</option>`).join('')}</select>
+  <input id="ctagCustom" placeholder="…or type custom title (max 14)" maxlength="14" value="${TITLES.includes(ctag)?'':esc(ctag)}" oninput="ctag=this.value;document.getElementById('ctagSel').value='';updateCustPreview()">`;
 }
-function pickColor(c){ nameColor = c; document.querySelectorAll('.sw').forEach(el=>el.classList.toggle('sel', el.style.background.replace(/\s/g,'')===hexToRgb(c))); }
+function pickColor(c){
+ nameColor = c;
+ document.querySelectorAll('.sw').forEach(el=>el.classList.toggle('sel', el.style.background.replace(/\s/g,'')===hexToRgb(c)));
+ updateCustPreview();
+}
 function hexToRgb(h){ const n=parseInt(h.slice(1),16); return `rgb(${n>>16},${(n>>8)&255},${n&255})`; }
 try{ const sv = JSON.parse(localStorage.getItem('brainrush_cust')||'null'); if(sv){ if(sv.avatar) avatar = sv.avatar; nameColor = sv.color||''; ctag = sv.ctag||''; } }catch(e){}
 
 async function join(reclaim){
-  pin = p.value.trim();
+  const pEl = document.getElementById('p');
+  pin = pEl ? pEl.value.trim() : (pin || '');
   lastName = (document.getElementById('n')||{}).value || '';
   const ct = ((document.getElementById('ctagCustom')||{}).value || ctag || '').slice(0,14);
   const r = await post('/api/join', {pin, name:lastName, avatar, team, color:nameColor, ctag:ct, reclaim:!!reclaim});
@@ -195,7 +946,7 @@ async function tryReconnect(){
   if(!r.ok) return form();
   const st = await r.json();
   if(st && (st.me || st.pending) && st.phase !== 'final'){
-   pin = s.pin; pid = s.pid; S = st;
+   pin = s.pin; pid = s.pid; S = st; pollStamp = performance.now();
    render(); setInterval(poll, 600);
    return;
   }
@@ -219,30 +970,34 @@ async function sendText(){
  const e=document.getElementById('txtAns'); if(!e||!e.value.trim()) return;
  await post('/api/answer',{pin,pid,text:e.value.trim()}); poll();
 }
+
 let ordSel=[], ordIdx=-1;
 function drawOrd(){
  const el=document.getElementById('ordWrap'); if(!el) return;
  const d=S.answers||[];
- el.innerHTML=`<p style="margin:6px 0">${S.qtype==='rank'?'Tap in <b>your order</b>, most important first:':'Tap the items in the <b>correct order</b>:'}</p>`+
-  ordSel.map((j,n)=>`<div class="slot">${n+1}. ${esc(d[j])}</div>`).join('')+
-  `<div class="grid">${d.map((a,j)=>ordSel.includes(j)?'':`<button class="c${j}" style="min-height:11vh" onclick="tapOrd(${j})"><span>${esc(a)}</span></button>`).join('')}</div>`+
-  `<div style="margin-top:8px">${ordSel.length?`<button class="pu-btn" style="width:auto;padding:8px 18px" onclick="ordSel.pop();drawOrd()">↩ Undo</button>`:''}</div>`+
-  (ordSel.length===d.length?`<button class="go" style="margin-top:8px" onclick="submitOrd()">Submit order</button>`:'');
+ el.innerHTML=`<p style="margin:2px 0 6px;font-size:.92em;opacity:.92">${S.qtype==='rank'?'Tap items in <b>your priority order</b> (#1 first):':'Tap items in the <b>correct sequence</b>:'}</p>`+
+  (ordSel.length ? `<div class="ord-slots">${ordSel.map((j,n)=>`<div class="slot" onclick="removeOrd(${n})"><span><b>${n+1}.</b> ${esc(d[j])}</span><small>✕</small></div>`).join('')}</div>` : '')+
+  `<div class="grid" style="min-height:auto">${d.map((a,j)=>ordSel.includes(j)?'':`<button class="c${j%4}" style="min-height:68px;padding:10px" onclick="tapOrd(${j})"><span>${esc(a)}</span></button>`).join('')}</div>`+
+  `<div style="display:flex;gap:8px;margin-top:8px">${ordSel.length?`<button class="pu-btn" style="flex:0 0 auto;padding:10px 16px" onclick="ordSel.pop();drawOrd()">↩ Undo</button>`:''}${ordSel.length===d.length?`<button class="go" style="flex:1" onclick="submitOrd()">✅ Submit Order</button>`:''}</div>`;
 }
 function tapOrd(j){ ordSel.push(j); drawOrd(); }
+function removeOrd(pos){ ordSel.splice(pos,1); drawOrd(); }
 async function submitOrd(){ await post('/api/answer',{pin,pid,seq:ordSel}); poll(); }
+
 function hotHtml(m){
  const h=m.hot; if(!h) return '';
- if(h.you) return `<div><span class="hot-pill">🔥 YOU'RE IN THE HOT SEAT! Nail it for +400</span></div>`;
- return `<div class="hot-box"><div>🔥 <b>HOT SEAT:</b> ${esc((h.avatar?h.avatar+' ':'')+h.name)}</div><div style="opacity:.9">Will they get it right? Guess right for +200!</div><div class="wager-btns"><button class="wager-btn ${h.pred===true?'sel':''}" onclick="predict(true)">👍 Yes</button><button class="wager-btn ${h.pred===false?'sel':''}" onclick="predict(false)">👎 No</button></div></div>`;
+ if(h.you) return `<div class="chip-row"><span class="hot-pill">🔥 YOU'RE IN THE HOT SEAT! Nail it for +400</span></div>`;
+ return `<div class="hot-box"><div><div>🔥 <b>Hot Seat:</b> ${esc((h.avatar?h.avatar+' ':'')+h.name)}</div><div style="opacity:.86;font-size:.86em">Will they get it right? (+200)</div></div><div class="wager-btns"><button class="wager-btn ${h.pred===true?'sel':''}" onclick="predict(true)">👍 Yes</button><button class="wager-btn ${h.pred===false?'sel':''}" onclick="predict(false)">👎 No</button></div></div>`;
 }
+
 function applyA11y(){
  const a=localStorage.getItem('brainrush_a11y')||'off';
  document.body.classList.toggle('cb',a==='cb'); document.body.classList.toggle('hc',a==='hc');
- const b=document.getElementById('a11y'); if(b) b.textContent = a==='cb' ? '👁️ Colorblind' : a==='hc' ? '👁️ High contrast' : '👁️';
+ const b=document.getElementById('a11y'); if(b) b.textContent = a==='cb' ? '👁️ CB' : a==='hc' ? '👁️ HC' : '👁️';
 }
 function cycleA11y(){ const o=['off','cb','hc']; const a=localStorage.getItem('brainrush_a11y')||'off'; localStorage.setItem('brainrush_a11y', o[(o.indexOf(a)+1)%3]); applyA11y(); }
 applyA11y();
+
 let lastReact=0;
 async function react(emoji){
  const now=Date.now(); if(now-lastReact<700) return; lastReact=now;
@@ -251,13 +1006,13 @@ async function react(emoji){
 }
 function rivalHtml(m){
  let h = '';
- if(m.overtook) h += `<div><span class="overtook-pill">🚀 You overtook ${esc(m.overtook)}!</span></div>`;
+ if(m.overtook) h += `<span class="overtook-pill">🚀 Overtook ${esc(m.overtook)}!</span>`;
  if(m.rival){
   const rv = m.rival, rName = esc((rv.avatar?rv.avatar+' ':'')+rv.name);
-  if(rv.type === 'ahead') h += `<div><span class="rival-pill">🎯 ${rv.gap} pts behind ${rName}</span></div>`;
-  else h += `<div><span class="rival-pill">👑 Leading ${rName} by ${rv.gap} pts</span></div>`;
+  if(rv.type === 'ahead') h += `<span class="rival-pill">🎯 ${rv.gap} pts behind ${rName}</span>`;
+  else h += `<span class="rival-pill">👑 +${rv.gap} pts ahead of ${rName}</span>`;
  }
- return h;
+ return h ? `<div class="chip-row" style="margin-top:6px">${h}</div>` : '';
 }
 function tapIce(){
  iceTaps++;
@@ -295,6 +1050,7 @@ function saveCert(name, rank, score, acc){
  a.click();
 }
 function reactBar(){return `<div class="react-bar">${REACTS.map(e=>`<button onclick="react('${e}')">${e}</button>`).join('')}</div>`}
+
 let ac = null, sfxOn = localStorage.getItem('brainrush_sfx') !== '0';
 function unlockAudio(){ try{ if(!ac){ const C = window.AudioContext || window.webkitAudioContext; if(C) ac = new C(); } if(ac && ac.state === 'suspended') ac.resume(); }catch(e){} }
 window.addEventListener('pointerdown', unlockAudio, {passive:true});
@@ -311,6 +1067,7 @@ function sfxMile(){ [659.25,783.99,1046.5,1318.5].forEach((f,i)=>beep(f,.2,'tria
 function toggleSfx(){ sfxOn = !sfxOn; localStorage.setItem('brainrush_sfx', sfxOn?'1':'0'); updSfx(); if(sfxOn){ unlockAudio(); sfxCorrect(); } }
 function updSfx(){ const b = document.getElementById('sfxBtn'); if(b) b.textContent = sfxOn ? '🔊' : '🔇'; }
 updSfx();
+
 function toast(msg){ const t = document.getElementById('toast'); t.textContent = msg; t.classList.remove('show'); void t.offsetWidth; t.classList.add('show'); }
 function confettiBurst(){
  const c = document.getElementById('fx'); c.width = innerWidth; c.height = innerHeight;
@@ -341,37 +1098,116 @@ function maybeResultFX(){
  if((m.gained||0) >= 1500) msgs.push('💰 Huge round: +' + m.gained + '!');
  if(msgs.length){ toast(msgs[0]); confettiBurst(); sfxMile(); }
 }
+
 function stealUi(m){
  if(!m.pu_steal || S.is_last || !m.steal_target) return '';
  const ok = m.steal_gap <= 1500;
- return `<div class="steal-box"><div>🕵️ <b>Power-up:</b> target <b>${esc(m.steal_target)}</b> (${m.steal_gap} pts ahead)</div><button class="sab-btn" onclick="steal('steal')">🕵️ Steal up to 150</button> <button class="sab-btn" ${ok?'':'disabled'} onclick="steal('swap')">🔀 Swap scores${ok?'':' (too far)'}</button></div>`;
+ return `<div class="steal-box"><div>🕵️ <b>Power-Up:</b> Target <b>${esc(m.steal_target)}</b> (${m.steal_gap} pts ahead)</div><div style="margin-top:4px"><button class="sab-btn" onclick="steal('steal')">🕵️ Steal up to 150</button><button class="sab-btn" ${ok?'':'disabled'} onclick="steal('swap')">🔀 Swap${ok?'':' (too far)'}</button></div></div>`;
 }
 async function steal(mode){ const r = await post('/api/steal', {pin, pid, mode}); if(!r.ok) alert(r.error || 'Not available'); poll(); }
 async function toggleDon(){ await post('/api/don', {pin, pid}); poll(); }
+
 function exhibitsPhone(list){
  if(!list || !list.length) return '';
  return `<div class="exh-ph">${list.map(e=>`<figure><img src="${esc(e.url)}" alt="${esc(e.caption||'')}" onclick="zoomImg(this.src)">${e.caption?`<figcaption>${esc(e.caption)}</figcaption>`:''}</figure>`).join('')}</div>`;
 }
+function questionMediaHtml(inPrev){
+ let h = '';
+ if(S.img){
+  const zm = S.qtype === 'zoom' && S.phase === 'question';
+  const cls = zm ? (inPrev ? 'q-media zoom-hold' : 'q-media zoom-go') : 'q-media';
+  const dur = (zm && !inPrev) ? ` style="animation-duration:${S.qtime||15}s"` : '';
+  const clk = zm ? '' : ` onclick="zoomImg(this.src)"`;
+  h += `<img class="${cls}"${dur} src="${esc(S.img)}" alt=""${clk}>`;
+ }
+ h += exhibitsPhone(S.exhibits);
+ return h;
+}
+function questionCardHtml(inPrev){
+ if(!S.question && !S.img && !(S.exhibits && S.exhibits.length)) return '';
+ return `<div class="q-card">${S.question?`<p class="q-stem">${esc(S.question)}</p>`:''}${questionMediaHtml(inPrev)}</div>`;
+}
+
 function zoomImg(src){ document.getElementById('imgBig').src = src; document.getElementById('imgOv').style.display = 'flex'; }
 function paras(t){ return (t||'').split(/\n\s*\n/).map(p=>`<p>${esc(p).replace(/\n/g,'<br>')}</p>`).join(''); }
 function infoPhone(m){
  const role = (m.roles||[]).filter(r=>r.chapter===S.question).slice(-1)[0];
- return `<div class="case-ph"><div><span class="qnum">📖 ${esc(S.question)}</span></div>
+ return `<div class="case-ph">
+  <div class="chip-row" style="justify-content:flex-start"><span class="qnum">📖 Slide ${S.index+1} of ${S.total}</span></div>
+  <h2>${esc(S.question)}</h2>
   <div class="case-body-ph">${paras(S.body)}</div>${exhibitsPhone(S.exhibits)}
-  ${role?`<div class="role-card">🎭 <b>Your role: ${esc(role.name)}</b><br>${esc(role.text)}</div>`:''}
-  <p style="opacity:.8;text-align:center"><small>Read carefully, then wait for your teacher to continue…<br>You can reopen this anytime with 📁 Case file.</small></p></div>${reactBar()}`;
+  ${role?`<div class="role-card">🎭 <b>Your Stakeholder Role: ${esc(role.name)}</b><br>${esc(role.text)}</div>`:''}
+  <p style="opacity:.82;text-align:center;font-size:.86em;margin:10px 0 0">Read carefully and wait for your instructor. Reopen anytime via <b>📁 Case</b> above.</p>
+ </div>${reactBar()}`;
 }
-function updCaseBtn(){
- const b = document.getElementById('caseBtn'); if(!b) return;
- const has = S.me && S.me.casefile && S.me.casefile.length;
- b.style.display = has ? 'block' : 'none';
+
+function updHud(){
+ const b = document.getElementById('caseBtn');
+ const cf = S.me && S.me.casefile;
+ if(b){
+  const has = cf && cf.length;
+  b.style.display = has ? 'inline-flex' : 'none';
+  if(has) b.textContent = `📁 Case (${cf.length})`;
+ }
+ const hm = document.getElementById('hudMe');
+ if(hm){
+  const m = S && S.me;
+  if(m && m.name && S.phase && S.phase !== 'final'){
+   hm.style.display = 'inline-flex';
+   const col = m.color ? ` style="color:${esc(m.color)}"` : '';
+   hm.innerHTML = `<span>${esc(m.avatar||'')}</span><span class="hm-name"${col}>${esc(m.name)}</span>${m.score!=null?`<span class="hm-score">⭐${m.score}</span>`:''}${m.rank?`<span class="hm-rank">#${m.rank}</span>`:''}`;
+  } else {
+   hm.style.display = 'none';
+  }
+ }
+ updTimerBar();
 }
+
+function updTimerBar(){
+ const wrap = document.getElementById('timerStrip');
+ const fill = document.getElementById('tsFill');
+ const lbl = document.getElementById('tsLbl');
+ if(!wrap || !fill || !lbl) return;
+ const elapsed = pollStamp ? Math.max(0, (performance.now() - pollStamp) / 1000) : 0;
+ if(S && S.phase === 'question' && S.qtype !== 'info'){
+  wrap.style.display = 'flex';
+  if((S.preview_left || 0) > 0){
+   const tot = Math.max(1, S.preview_total || 5);
+   const rem = Math.max(0, S.preview_left - (S.paused ? 0 : elapsed));
+   fill.style.width = Math.min(100, (rem / tot) * 100) + '%';
+   fill.className = 'ts-fill preview';
+   lbl.className = 'ts-lbl';
+   lbl.textContent = `👀 ${Math.ceil(rem)}s`;
+  } else if(S.qtime > 0){
+   const tot = Math.max(1, S.qtime || 15);
+   const rem = Math.max(0, (S.left || 0) - (S.paused ? 0 : elapsed));
+   const urg = !S.paused && rem <= 5;
+   fill.style.width = Math.min(100, (rem / tot) * 100) + '%';
+   fill.className = 'ts-fill' + (urg ? ' urgent' : '');
+   lbl.className = 'ts-lbl' + (urg ? ' urgent' : '');
+   lbl.textContent = S.paused ? `⏸️ ${Math.ceil(rem)}s` : `⏱️ ${Math.ceil(rem)}s`;
+  } else {
+   wrap.style.display = 'none';
+  }
+ } else if(S && S.phase === 'intro' && (S.intro_total || 0) > 0){
+  wrap.style.display = 'flex';
+  const rem = Math.max(0, (S.intro_left || 0) - elapsed);
+  fill.style.width = Math.min(100, (rem / Math.max(1, S.intro_total)) * 100) + '%';
+  fill.className = 'ts-fill preview';
+  lbl.className = 'ts-lbl';
+  lbl.textContent = `🎬 ${Math.ceil(rem)}s`;
+ } else {
+  wrap.style.display = 'none';
+ }
+}
+setInterval(updTimerBar, 120);
+
 function openCaseFile(){
  const cf = (S.me && S.me.casefile) || [], roles = (S.me && S.me.roles) || [];
  const ov = document.getElementById('caseOv');
- ov.innerHTML = `<div class="card"><button class="xbtn" onclick="document.getElementById('caseOv').style.display='none'">✕ Close</button><h2 style="margin:.2em 0">📁 Case file</h2>
-  ${roles.length?roles.map(r=>`<div class="role-card">🎭 <b>Your role: ${esc(r.name)}</b><br>${esc(r.text)}</div>`).join(''):''}
-  ${cf.map(c=>`<h3 style="color:#ffdf5d;margin-bottom:0">${esc(c.title)}</h3>${paras(c.body)}${exhibitsPhone(c.exhibits)}`).join('<hr style="border-color:#fff3">')}</div>`;
+ ov.innerHTML = `<div class="card"><button class="xbtn" onclick="document.getElementById('caseOv').style.display='none'">✕ Close</button><h2 style="margin:.2em 0">📁 Case File</h2>
+  ${roles.length?roles.map(r=>`<div class="role-card">🎭 <b>Your Role: ${esc(r.name)}</b><br>${esc(r.text)}</div>`).join(''):''}
+  ${cf.map(c=>`<h3 style="color:#ffdf5d;margin-bottom:4px">${esc(c.title)}</h3><div class="case-body-ph">${paras(c.body)}</div>${exhibitsPhone(c.exhibits)}`).join('<hr style="border-color:#fff3">')}</div>`;
  ov.style.display = 'block';
 }
 async function sendOpen(){
@@ -392,172 +1228,257 @@ function caseResultPhone(m){
   const tot = Math.max(1, (S.counts||[]).reduce((a,b)=>a+b,0));
   const mine = (m.choice != null && S.answers[m.choice]) ? esc(S.answers[m.choice]) : null;
   const def = (S.defenders||[]).some(d=>d.name===m.name);
-  body = `<div class="big">${m.answered?'🗳️ Vote recorded':'⏰ Time\'s up'}${mine?`<br><small>You chose: ${mine}</small>`:''}${m.lens?`<br><span class="lens-pill">🔎 ${esc(m.lens)}</span>`:''}${def?'<br><span class="hot-pill" style="font-size:.5em">🎤 You were picked to defend your side!</span>':''}</div>
-   <div class="rk-list">${S.answers.map((a,i)=>`<div>${sh[i]} ${esc(a)} — <b>${Math.round(((S.counts||[])[i]||0)/tot*100)}%</b>${(S.lenses&&S.lenses[i])?` <small style="opacity:.75">(${esc(S.lenses[i])})</small>`:''}</div>`).join('')}</div>`;
+  body = `<div class="state-card" style="padding:16px">
+    <div class="state-title" style="font-size:1.35em">${m.answered?'🗳️ Vote Recorded':'⏰ Time\'s Up'}</div>
+    ${mine?`<div class="state-sub">You chose: <b>${mine}</b></div>`:''}
+    <div class="chip-row">${m.lens?`<span class="lens-pill">🔎 ${esc(m.lens)}</span>`:''}${def?'<span class="hot-pill">🎤 Picked to defend your side!</span>':''}</div>
+    <div class="rk-list">${S.answers.map((a,i)=>{
+     const pct = Math.round(((S.counts||[])[i]||0)/tot*100);
+     return `<div class="rk-row"><div class="rk-fill" style="width:${pct}%"></div><span class="rk-txt">${sh[i]} ${esc(a)}${(S.lenses&&S.lenses[i])?` <small style="opacity:.78">(${esc(S.lenses[i])})</small>`:''}</span><span class="rk-pct">${pct}%</span></div>`;
+    }).join('')}</div>
+   </div>`;
  } else if(t==='rank'){
-  body = `<div class="big">📊 Class ranking<br><small>${S.rank_n||0} students ranked</small></div><div class="rk-list">${(S.rank_avg||[]).map((r,i)=>`<div><b>${i+1}.</b> ${esc(r.item)} <small style="opacity:.75">(avg ${r.avg})</small></div>`).join('')}</div>`;
+  body = `<div class="state-card" style="padding:16px"><div class="state-title" style="font-size:1.35em">📊 Class Priority Ranking</div><div class="state-sub">${S.rank_n||0} students ranked</div><div class="rk-list">${(S.rank_avg||[]).map((r,i)=>`<div class="rk-row"><span class="rk-txt"><b>#${i+1}</b> ${esc(r.item)}</span><span class="rk-pct">avg ${r.avg}</span></div>`).join('')}</div></div>`;
  } else {
   const rs = m.responses || [], left = 2 - (m.votes_used || 0);
-  body = `<div class="big">✍️ Vote for the most persuasive<br><small>${left>0?left+' vote'+(left>1?'s':'')+' left':'Votes used. Thanks!'}</small></div>${rs.map(r=>`<div class="resp-ph">“${esc(r.text)}”<br><button ${(r.voted||left<=0)?'disabled':''} onclick="vote(${r.id})">👍 ${r.voted?'Voted':'Vote'}</button></div>`).join('') || '<p>No other responses yet.</p>'}`;
+  body = `<div class="q-card" style="margin-bottom:8px"><div style="font-weight:900;font-size:1.12em">✍️ Vote for the Most Persuasive</div><div style="font-size:.88em;color:var(--gold);font-weight:800;margin-top:2px">${left>0?left+' vote'+(left>1?'s':'')+' remaining':'All votes used — thanks!'}</div></div>${rs.map(r=>`<div class="resp-ph"><span>“${esc(r.text)}”</span><button ${(r.voted||left<=0)?'disabled':''} onclick="vote(${r.id})">👍 ${r.voted?'Voted':'Vote'}</button></div>`).join('') || '<p style="opacity:.8">No other responses submitted yet.</p>'}`;
  }
- return `<div><span class="qnum">Question ${S.index+1} of ${S.total}</span></div>${body}<div style="opacity:.85"><small>Score ${m.score} (+${m.gained||0} for taking part)</small></div>${reactBar()}`;
+ return `<div class="chip-row"><span class="qnum">Slide ${S.index+1} of ${S.total}</span></div>${S.question?`<div class="q-card" style="margin:6px 0"><p class="q-stem" style="font-size:1rem">${esc(S.question)}</p></div>`:''}${body}<div style="opacity:.85;margin-top:6px"><small>Score ${m.score} (+${m.gained||0} participation)</small></div>${reactBar()}`;
 }
+
 let dead=false;
 async function poll(){
   if(dead) return;
   const r=await fetch(`/api/state?pin=${pin}&pid=${pid}`);
   if(r.status===404){
    dead=true; try{localStorage.removeItem('brainrush_session')}catch(e){}
-   $.innerHTML=`<div class="big">😴 This game ended or the server restarted.</div><button class="go" onclick="location.reload()">Join a new game</button>`;
+   S={}; updHud();
+   $.innerHTML=`<div class="state-card"><div class="state-icon">😴</div><div class="state-title">Session Ended</div><p class="state-sub">This game finished or the host started a new session.</p><button class="go" style="margin-top:10px" onclick="location.reload()">Join a New Game</button></div>`;
    return;
   }
   if(!r.ok) return;
   S=await r.json();
+  pollStamp = performance.now();
   if(S.kicked){
    dead=true; try{localStorage.removeItem('brainrush_session')}catch(e){}
-   $.innerHTML=`<div class="big">🚪 You were removed from this game.</div><button class="go" onclick="location.reload()">OK</button>`;
+   S={}; updHud();
+   $.innerHTML=`<div class="state-card no"><div class="state-icon">🚪</div><div class="state-title">Removed from Game</div><button class="go" style="margin-top:12px" onclick="location.reload()">Back to Join</button></div>`;
    return;
   }
   render();
- }
+}
+
 let last='';
 function render(){
-  updCaseBtn();
-  if(S.pending){ $.innerHTML = `<div class="big">⏳ Waiting for your teacher…<br><small>Your name has been sent for approval.</small></div>`; return; }
+  updHud();
+  if(S.pending){
+   $.innerHTML = `<div class="state-card"><div class="state-icon">⏳</div><div class="state-title">Waiting for Approval</div><p class="state-sub">Your nickname was sent to the host for quick review.</p></div>`;
+   return;
+  }
   maybeResultFX();
- const inPrev = S.phase==='question' && (S.preview_left||0) > 0;
- const m=S.me||{};
- const k = S.phase==='question'
-  ? `q:${S.index}:${inPrev?1:0}:${m.answered?1:0}:${m.active_2x?1:0}:${m.active_shield?1:0}:${m.active_audience?1:0}:${m.confident?1:0}:${(m.hide||[]).join(',')}:${m.wager_pct??''}:${m.frozen?1:0}:${m.hot?(m.hot.pred===null||m.hot.pred===undefined?'n':m.hot.pred?'y':'x'):''}:${m.spectating?1:0}:${m.don?1:0}`
-  : S.phase==='icebreaker' ? `ice:${S.prompt}:${m.word_sent?1:0}`
-  : S.phase==='lobby' ? `lobby:${m.name}:${m.team_name}`
-  : JSON.stringify({...S,left:0,qtime:0,answered:0,team_board:null,preview_left:0,auto_left:0,intro_left:0,reactions:null,n:0,names:null,lobby:null,words:null,word_total:0});
- if(k==last){
-  if(S.phase==='question' && m.active_audience && m.audience_pcts){
-   m.audience_pcts.forEach((p,i)=>{const el=document.getElementById('aud'+i);if(el)el.textContent=`📊 ${p}%`;});
+  const inPrev = S.phase==='question' && (S.preview_left||0) > 0;
+  const m=S.me||{};
+  const k = S.phase==='question'
+   ? `q:${S.index}:${inPrev?1:0}:${m.answered?1:0}:${m.active_2x?1:0}:${m.active_shield?1:0}:${m.active_audience?1:0}:${m.confident?1:0}:${(m.hide||[]).join(',')}:${m.wager_pct??''}:${m.frozen?1:0}:${m.hot?(m.hot.pred===null||m.hot.pred===undefined?'n':m.hot.pred?'y':'x'):''}:${m.spectating?1:0}:${m.don?1:0}`
+   : S.phase==='icebreaker' ? `ice:${S.prompt}:${m.word_sent?1:0}`
+   : S.phase==='lobby' ? `lobby:${m.name}:${m.team_name}`
+   : JSON.stringify({...S,left:0,qtime:0,answered:0,team_board:null,preview_left:0,auto_left:0,intro_left:0,reactions:null,n:0,names:null,lobby:null,words:null,word_total:0});
+
+  if(k==last){
+   if(S.phase==='lobby'){
+    const lc = document.getElementById('lobbyCnt');
+    if(lc && S.n != null) lc.textContent = `${S.n} player${S.n===1?'':'s'} in lobby`;
+   }
+   if(S.phase==='question'){
+    const wc = document.getElementById('waitCnt');
+    const denom = S.n_active != null ? S.n_active : (S.n || 0);
+    if(wc && denom) wc.textContent = `${S.answered||0} of ${denom} answered`;
+    if(m.active_audience && m.audience_pcts){
+     m.audience_pcts.forEach((p,i)=>{const el=document.getElementById('aud'+i);if(el)el.textContent=`📊 ${p}%`;});
+    }
+   }
+   return;
   }
-  return;
- }
- last=k;
- const tag = esc((m.team_emoji?m.team_emoji+' ':'')+(m.avatar?m.avatar+' ':'')+(m.name||''));
- if(S.phase=='lobby'){
-  const tmBadge = m.team_name ? `<br><small>Team: ${m.team_emoji} ${esc(m.team_name)}</small>` : '';
-  $.innerHTML=`<div class="big">You're in, ${tag}!${tmBadge}<br><small>Waiting for host to start…</small></div>${reactBar()}`;
- } else if(S.phase=='icebreaker'){
-  if(m.word_sent){
-   $.innerHTML=`<div class="big">💭 Word sent!<br><small>Look at the live Word Cloud on the big screen…</small></div>${reactBar()}`;
+  last=k;
+  const tag = esc((m.team_emoji?m.team_emoji+' ':'')+(m.avatar?m.avatar+' ':'')+(m.name||''));
+
+  if(S.phase=='lobby'){
+   const colStyle = m.color ? `style="color:${esc(m.color)}"` : '';
+   const tmBadge = m.team_name ? `<div style="margin-top:8px"><span class="team-pill">${esc(m.team_emoji||'')} ${esc(m.team_name)}</span></div>` : '';
+   const ctBadge = m.ctag ? `<div style="margin-top:6px"><span class="title-badge">${esc(m.ctag)}</span></div>` : '';
+   $.innerHTML=`<div class="state-card">
+     <div style="font-size:3.4em;line-height:1.1">${esc(m.avatar||'🎮')}</div>
+     <div class="state-title" ${colStyle}>${esc(m.name||'Player')}</div>
+     ${ctBadge}${tmBadge}
+     <p class="state-sub" style="margin-top:12px">🟢 You're in! Eyes on the host — starting soon…</p>
+     <div class="chip-row"><span class="rival-pill" id="lobbyCnt">${S.n||1} player${(S.n||1)===1?'':'s'} in lobby</span></div>
+    </div>${reactBar()}`;
+  } else if(S.phase=='icebreaker'){
+   if(m.word_sent){
+    $.innerHTML=`<div class="state-card ok"><div class="state-icon">💭</div><div class="state-title">Sent to Word Cloud!</div><p class="state-sub">Watch the live cloud grow on the main screen.</p></div>${reactBar()}`;
+   } else {
+    $.innerHTML=`<div class="card-panel" style="margin:auto 0">
+     <div class="chip-row" style="margin-bottom:8px"><span class="wheel-pill">💭 Warm-Up Word Cloud</span></div>
+     <p class="q-stem" style="margin-bottom:12px">${esc(S.prompt)}</p>
+     <input id="iceInp" placeholder="Type 1–2 words…" maxlength="28" onkeydown="if(event.key==='Enter')sendWord()">
+     <button class="go" onclick="sendWord()">Send to Word Cloud</button>
+    </div>${reactBar()}`;
+   }
+  } else if(S.phase=='intro'){
+   const qn0 = `<div class="chip-row" style="margin-bottom:8px"><span class="qnum">Question ${(S.index||0)+1} of ${S.total}</span></div>`;
+   if(S.redemption){
+    $.innerHTML = `<div class="state-card">${qn0}<div class="state-icon">🔄</div><div class="state-title">Redemption Round!</div><p class="state-sub">The most-missed question is back for a second shot — worth <b>DOUBLE POINTS</b>!</p></div>${reactBar()}`;
+   } else if(S.speed){
+    $.innerHTML = `<div class="state-card">${qn0}<div class="state-icon">⚡</div><div class="state-title">Speed Round!</div><p class="state-sub">5 rapid-fire questions — <b>5 seconds</b> each, zero reading delay. Fast fingers win!</p></div>${reactBar()}`;
+   } else {
+    $.innerHTML = `<div class="state-card">${qn0}<div class="state-icon">🎡</div><div class="state-title">Mystery Wheel!</div><p class="state-sub">${S.wheel_mod?`Spinning up: <b>${esc(S.wheel_mod)}</b>`:'Watch to see which modifier lands for this round…'}</p></div>${reactBar()}`;
+   }
+  } else if(S.phase=='question'){
+   const t = S.qtype || 'mc';
+   if(t==='info'){ $.innerHTML = infoPhone(m); return; }
+
+   if(S.index !== iceBrokenQ && m.frozen && !inPrev && !m.answered){ iceTaps = 0; }
+   if(ordIdx !== S.index){ ordIdx = S.index; ordSel = []; }
+   const showIce = m.frozen && iceBrokenQ !== S.index && !inPrev && !m.answered;
+   const iceHtml = showIce ? `<div class="ice-overlay" id="iceOv" onclick="tapIce()">
+    <div class="ice-cube">⛄</div>
+    <h1>YOU'RE FROZEN!</h1>
+    <p style="font-size:1.2em"><b>${esc(m.frozen_by)}</b> hit you with a Snowball!</p>
+    <p style="font-size:1.35em;font-weight:900;color:#ffdf5d">Tap <span id="iceRem">5</span> times to break free!</p>
+   </div>` : '';
+
+   const chips = [
+    `<span class="qnum">${S.case?'Slide':'Q'} ${S.index+1}/${S.total}</span>`,
+    S.case ? `<span class="wheel-pill">🗳️ ${t==='poll'?'Decision Poll':t==='rank'?'Priority Rank':'Open Prompt'}</span>` : '',
+    S.speed ? `<span class="speed-pill">⚡ 5s Speed</span>` : '',
+    t==='zoom' ? `<span class="wheel-pill">🔍 Zoom Reveal</span>` : '',
+    S.wheel_mod ? `<span class="wheel-pill">🎡 ${esc(S.wheel_mod)}</span>` : '',
+    S.team_battle ? `<span class="team-pill">🤝 Team Battle</span>` : '',
+    S.tiebreak ? `<span class="hot-pill">⚔️ Sudden Death</span>` : '',
+    S.redemption ? `<span class="double-pill">🔄 2x Redemption</span>` : (S.boss ? `<span class="double-pill">🎰 Final Boss</span>` : ((S.double || m.active_2x) ? `<span class="double-pill">⚡ ${S.double && m.active_2x ? '4x' : '2x'} Points</span>` : '')),
+    m.underdog ? `<span class="underdog-pill">🎯 1.5x Underdog</span>` : ''
+   ].filter(Boolean).join('');
+   const chipRow = `<div class="chip-row">${chips}</div>`;
+   const qCard = questionCardHtml(inPrev);
+   const hot = hotHtml(m);
+   const teamP = m.team_prompt ? `<div class="team-prompt">💬 <b>Team talk:</b> ${esc(m.team_prompt)}</div>` : '';
+   const donUi = (S.dbl && !m.answered) ? `<button class="don-btn ${m.don?'on':''}" onclick="toggleDon()">💥 ${m.don?'Double or Nothing ON (2x / −400)':'Double or Nothing? (2x / −400)'}</button>` : '';
+   const curW = m.wager_pct ?? 0;
+   const stake = Math.max(500, m.score || 0);
+   const wagerBox = (S.boss && !m.answered) ? `<div class="wager-box">
+    <div style="font-weight:850">🎰 Final Boss Wager — Risk how much?</div>
+    <div class="wager-btns">
+     ${[0,50,100].map(pct=>`<button class="wager-btn ${curW===pct?'sel':''}" onclick="setWager(${pct})">${pct}% (${Math.round(stake*pct/100)})</button>`).join('')}
+    </div>
+   </div>` : '';
+   const confBtn = (!S.boss && !S.tiebreak && !S.case && !S.case_game && !m.answered) ? `<button class="conf-btn ${m.confident?'on':''}" onclick="toggleConf()">🔥 ${m.confident?'Confidence Bet ON (+250 / −150)':'Bet on Yourself (+250 / −150)'}</button>` : '';
+
+   if(m.spectating){
+    $.innerHTML=`<div class="q-screen">${chipRow}${qCard}<div class="state-card"><div class="state-icon">⚔️</div><div class="state-title">Sudden Death Tiebreaker</div><p class="state-sub">Only the tied leaders answer this round.</p></div>${reactBar()}</div>`;
+   } else if(m.answered){
+    const denom = S.n_active != null ? S.n_active : (S.n || 0);
+    const picked = (m.choice != null && S.answers && S.answers[m.choice]) ? `<div class="ans-reveal-pill">${sh[m.choice]||''} ${esc(S.answers[m.choice])}</div>` : '';
+    $.innerHTML=`<div class="q-screen">${chipRow}${qCard}<div class="state-card"><div class="state-icon">✅</div><div class="state-title">Answer Locked In!</div>${picked}<p class="state-sub" id="waitCnt">${denom?`${S.answered||1} of ${denom} answered`:'Waiting for everyone else…'}</p></div>${hot}${reactBar()}</div>`;
+   } else if(inPrev){
+    $.innerHTML=`<div class="q-screen">${chipRow}${qCard}<div class="state-card" style="padding:16px"><div class="state-icon" style="font-size:2em">👀</div><div class="state-title" style="font-size:1.3em">Read the Question</div><p class="state-sub">Answer tiles unlock when the reading bar finishes…</p></div>${hot}${teamP}${wagerBox}${donUi||confBtn?`<div class="tac-dock">${donUi}${confBtn}</div>`:''}${rivalHtml(m)}</div>`;
+   } else {
+    const hide = m.hide || [];
+    const pcts = m.audience_pcts || null;
+    const choiceQ = (t==='mc' || t==='tf' || t==='zoom');
+    const puRow = (S.case || S.case_game) ? '' : `<div class="pu-bar">
+     ${choiceQ?`<button class="pu-btn" ${m.pu_5050?'':'disabled'} onclick="usePu('5050')">✂️ 50/50</button>`:''}
+     <button class="pu-btn ${m.active_2x?'active':''}" ${m.pu_2x||m.active_2x?'':'disabled'} onclick="usePu('2x')">⚡ ${m.active_2x?'2x ON':'2x'}</button>
+     <button class="pu-btn ${m.active_shield?'active':''}" ${m.pu_shield||m.active_shield?'':'disabled'} onclick="usePu('shield')">🛡️ ${m.active_shield?'Saved':'Shield'}</button>
+     ${choiceQ?`<button class="pu-btn ${m.active_audience?'active':''}" ${m.pu_audience||m.active_audience?'':'disabled'} onclick="usePu('audience')">📊 ${m.active_audience?'Live':'Poll'}</button>`:''}
+    </div>`;
+    const dock = (puRow || donUi || confBtn) ? `<div class="tac-dock">${puRow}${donUi}${confBtn}</div>` : '';
+
+    let inputUi;
+    if(t==='open'){
+     inputUi = `<div class="ans-zone"><textarea id="openTxt" class="txtans" rows="4" maxlength="240" placeholder="Write 1–2 persuasive sentences (anonymous)…" oninput="const c=document.getElementById('openCnt');if(c)c.textContent=this.value.length+' / 240'"></textarea><div class="char-cnt" id="openCnt">0 / 240</div><button class="go" onclick="sendOpen()">✍️ Submit Response</button></div>`;
+    } else if(t==='text'){
+     inputUi = `<div class="ans-zone"><input id="txtAns" class="txtans" placeholder="Type your answer…" autocomplete="off" autocapitalize="off" onkeydown="if(event.key==='Enter')sendText()"><button class="go" onclick="sendText()">✅ Submit Answer</button></div>`;
+    } else if(t==='order' || t==='rank'){
+     inputUi = `<div class="ans-zone"><div id="ordWrap"></div></div>`;
+    } else {
+     const tfCls = (S.answers && S.answers.length === 2) ? ' tf-grid' : '';
+     inputUi = `<div class="ans-zone"><div class="grid${tfCls}">${S.answers.map((a,i)=>`<button class="c${i%4} ${hide.includes(i)?'elim':''}" onclick="ans(${i})">${S.aimg&&S.aimg[i]?`<img src="${esc(S.aimg[i])}" alt="">`:''}<span class="sh">${sh[i]||''}</span><span>${esc(a)}</span>${pcts?`<span class="aud-badge" id="aud${i}">📊 ${pcts[i]}%</span>`:''}</button>`).join('')}</div></div>`;
+    }
+    $.innerHTML=`${iceHtml}<div class="q-screen">${chipRow}${qCard}${hot}${teamP}${wagerBox}${inputUi}${dock}</div>`;
+    if(t==='order' || t==='rank') drawOrd();
+    if(t==='text'){ const e=document.getElementById('txtAns'); if(e) e.focus(); }
+   }
+  } else if(S.phase=='results' && S.case && !(m.spectating)){
+   $.innerHTML = caseResultPhone(m);
+  } else if(S.phase=='results'){
+   if(m.spectating){
+    $.innerHTML=`<div class="state-card"><div class="state-icon">⚔️</div><div class="state-title">Tiebreaker Complete</div><p class="state-sub">Check the final result!</p></div>${reactBar()}`;
+   } else {
+    const st = m.streak >= 5 ? `<span class="streak-pill">🔥🔥 ${m.streak} Streak! ${m.bonus?`(+${m.bonus})`:''}</span>` : m.streak >= 2 ? `<span class="streak-pill">🔥 ${m.streak} Streak ${m.bonus?`(+${m.bonus})`:''}</span>` : '';
+    const whMsg = m.wheel_bonus ? `<span class="underdog-pill">🎡 Wheel +${m.wheel_bonus}</span>` : '';
+    const cfMsg = m.conf_delta ? `<span class="${m.conf_delta>0?'double-pill':'hot-pill'}">🔥 Bet ${m.conf_delta>0?'+'+m.conf_delta:m.conf_delta}</span>` : '';
+    const tbMsg = m.team_bonus ? `<span class="team-pill">🤝 Team +${m.team_bonus}</span>` : '';
+    const shMsg = (!m.correct && m.shielded) ? `<span class="speed-pill">🛡️ Shield Saved Streak!</span>` : '';
+    let hotMsg = '';
+    if(m.hot){
+     if(m.hot.you) hotMsg = `<div class="state-sub" style="color:#ffd180">🔥 Hot Seat: ${m.hot.ok?'You nailed it! (+400)':'Missed this one'}</div>`;
+     else if(m.hot.pred!==null && m.hot.pred!==undefined) hotMsg = `<div class="state-sub" style="color:#ffd180">🔥 Hot Seat call: ${m.hot.pred===m.hot.ok?'🎯 Spot on! (+200)':'Missed prediction'}</div>`;
+    }
+    let rightTxt = '';
+    if(S.qtype==='text') rightTxt = (S.answers_correct||[''])[0] || '';
+    else if(S.qtype==='order') rightTxt = (S.answers_correct||[]).join(' → ');
+    else if(S.correct != null && S.correct >= 0 && S.answers && S.answers[S.correct]) rightTxt = (sh[S.correct]||'') + ' ' + S.answers[S.correct];
+    const reveal = (!m.correct && rightTxt) ? `<div class="ans-reveal-pill">✅ Answer: ${esc(rightTxt)}</div>` : '';
+    const gTxt = m.gained >= 0 ? '+'+m.gained : m.gained;
+    const canSab = S.sabotage_enabled && !S.is_last && m.pu_freeze && m.score >= 200 && S.n > 1;
+    const sabBtn = canSab ? `<div style="margin-top:8px"><button class="sab-btn" onclick="sabotage()">⛄ Snowball Leader (−200 pts)</button></div>` : m.ice_sent ? `<div style="margin-top:6px"><small style="color:#80deea;font-weight:800">⛄ Snowball queued for the leader!</small></div>` : '';
+    const bonusChips = [st, whMsg, cfMsg, tbMsg, shMsg].filter(Boolean).join('');
+
+    $.innerHTML=`<div class="chip-row" style="margin-bottom:6px"><span class="qnum">Question ${S.index+1} of ${S.total}</span></div>
+     ${S.question?`<div class="q-card" style="margin-bottom:8px"><p class="q-stem" style="font-size:.98rem">${esc(S.question)}</p></div>`:''}
+     <div class="state-card ${m.correct?'ok':'no'}" style="margin:0">
+      <div class="state-icon">${!m.answered?'⏰':m.correct?'✅':'❌'}</div>
+      <div class="state-title">${!m.answered?"Time's Up":m.correct?'Correct! '+gTxt:'Incorrect'+(m.gained<0?' ('+m.gained+')':'')}</div>
+      ${bonusChips?`<div class="chip-row" style="margin-top:8px">${bonusChips}</div>`:''}
+      ${hotMsg}${reveal}
+      <div class="state-sub" style="margin-top:8px;font-weight:800">Total Score: <span style="color:var(--gold)">${m.score}</span>${m.rank?` &middot; Rank #${m.rank}`:''}</div>
+     </div>
+     ${rivalHtml(m)}${sabBtn}${stealUi(m)}
+     ${S.quote?`<blockquote>&ldquo;${esc(S.quote)}&rdquo;${S.source?`<cite>&mdash; ${esc(S.source)}</cite>`:''}</blockquote>`:''}
+     ${reactBar()}`;
+   }
+  } else if(S.phase=='board'){
+   const canSab = S.sabotage_enabled && m.pu_freeze && m.score >= 200 && S.n > 1;
+   const sabBtn = canSab ? `<div style="margin-top:10px"><button class="sab-btn" onclick="sabotage()">⛄ Throw Snowball at Leader (−200 pts)</button></div>` : m.ice_sent ? `<div style="margin-top:8px"><small style="color:#80deea;font-weight:800">⛄ Snowball thrown at the leader for next round!</small></div>` : '';
+   $.innerHTML=`<div class="state-card">
+     <div class="state-icon">🏆</div>
+     <div class="state-title" style="font-size:2em">Rank #${m.rank}</div>
+     <div class="state-sub" style="font-size:1.15em;font-weight:850;color:var(--gold)">${m.score} points</div>
+     <div class="chip-row" style="margin-top:8px">
+      ${m.title?`<span class="title-badge">${esc(m.title)}</span>`:''}
+      ${m.streak>=2?`<span class="streak-pill">🔥 ${m.streak} Streak</span>`:''}
+     </div>
+     ${rivalHtml(m)}${sabBtn}
+    </div>${reactBar()}`;
   } else {
-   $.innerHTML=`<h2>💭 Warm-Up Question</h2><p style="font-size:1.2em">${esc(S.prompt)}</p>
-   <input id="iceInp" placeholder="Type 1-2 words…" maxlength="28">
-   <button class="go" onclick="sendWord()">Send to Word Cloud</button>${reactBar()}`;
+   const rep = m.report || {};
+   const tClass = m.rank===1?'':m.rank===2?'silver':m.rank===3?'bronze':'';
+   const trophyHtml = m.rank <= 3 ? `<div class="trophy-card ${tClass}">
+    <div style="font-size:1.7em">${m.rank===1?'🥇 1st Place Champion!':m.rank===2?'🥈 2nd Place Podium!':'🥉 3rd Place Podium!'}</div>
+    <div style="margin-top:4px">${tag} &middot; ${m.score} pts</div>
+    <button onclick="saveCert('${esc(m.name)}',${m.rank},${m.score},${rep.accuracy||0})">🏅 Save Winner Certificate</button>
+   </div>` : `<div class="state-card" style="margin:6px 0;padding:16px"><div class="state-title">🎉 Game Complete!</div><div class="state-sub" style="font-weight:850">Placed <b>#${m.rank}</b> &middot; <span style="color:var(--gold)">${m.score} pts</span></div></div>`;
+   const missedHtml = (rep.missed && rep.missed.length) ? `<div style="margin-top:6px"><b>📝 Questions to Review:</b>${rep.missed.map(x=>`<div class="missed-item"><b>Q${x.num}:</b> ${esc(x.q)}<br><span style="color:#ff9b9b">You: ${esc(x.your_ans)}</span> &middot; <span style="color:#7dff6b">✅ ${esc(x.correct_ans)}</span></div>`).join('')}</div>` : `<div style="text-align:center;color:#7dff6b;font-weight:850;padding:4px 0">🌟 Perfect Score! Every question right!</div>`;
+   const repHtml = rep.total ? `<div class="report-card">
+    <div class="report-stats">
+     <div class="stat-pill"><b>${rep.accuracy}%</b>${rep.correct}/${rep.total} Right</div>
+     <div class="stat-pill"><b>🔥 ${rep.max_streak||0}</b>Best Streak</div>
+     <div class="stat-pill"><b>${rep.fastest!=null?rep.fastest+'s':'—'}</b>Fastest</div>
+    </div>
+    ${missedHtml}
+   </div>` : '';
+   $.innerHTML=`${trophyHtml}${repHtml}<div class="join-links"><a class="plink" href="/play" onclick="try{localStorage.removeItem('brainrush_session')}catch(e){}">🔁 Join New Game</a><a class="plink" href="/practice">🧑‍🎓 Solo Practice</a></div>${reactBar()}`;
   }
- } else if(S.phase=='intro'){
-  const qn0 = `<div><span class="qnum">Question ${S.index+1} of ${S.total}</span></div>`;
-  $.innerHTML = S.redemption
-   ? `<div class="big">${qn0}🔄 REDEMPTION!<br><small>The question the class missed most is back for a second chance — worth DOUBLE points!</small></div>${reactBar()}`
-   : `<div class="big">${qn0}🎡 Mystery Wheel!<br><small>Watch the big screen to see what's in play…</small></div>${reactBar()}`;
- } else if(S.phase=='question'){
-  if(S.index !== iceBrokenQ && m.frozen && !inPrev && !m.answered){
-   iceTaps = 0;
-  }
-  if(ordIdx !== S.index){ ordIdx = S.index; ordSel = []; }
-  const showIce = m.frozen && iceBrokenQ !== S.index && !inPrev && !m.answered;
-  const iceHtml = showIce ? `<div class="ice-overlay" id="iceOv" onclick="tapIce()">
-   <div class="ice-cube">⛄</div>
-   <h1>YOU'RE FROZEN!</h1>
-   <p style="font-size:1.25em"><b>${esc(m.frozen_by)}</b> threw a Snowball at you!</p>
-   <p style="font-size:1.4em;font-weight:900;color:#ffdf5d">Tap <span id="iceRem">5</span> times to shake off the snow!</p>
-  </div>` : '';
-  const qn = `<div><span class="qnum">Question ${S.index+1} of ${S.total}</span></div>` + exhibitsPhone(S.exhibits);
-  const whl = qn + (S.case ? '<div><span class="wheel-pill">🗳️ Case study — no single right answer</span></div>' : '') + (S.speed ? '<div><span class="speed-pill">⚡ SPEED ROUND — 5 seconds!</span></div>' : '') + (S.qtype==='zoom' ? '<div><span class="wheel-pill">🔍 Picture guess — watch the big screen!</span></div>' : '') + (S.wheel_mod ? `<div><span class="wheel-pill">🎡 ${esc(S.wheel_mod)}</span></div>` : '')
-   + (S.team_battle ? `<div><span class="team-pill">🤝 TEAM BATTLE — ${inPrev?'discuss with your team now!':'majority answer earns +300 each'}</span></div>` : '')
-   + (S.tiebreak ? `<div><span class="hot-pill">⚔️ SUDDEN DEATH TIEBREAKER</span></div>` : '');
-  const dbl = S.redemption ? `<div class="double-pill">🔄 REDEMPTION BONUS (2x)! 🔄</div>` : S.boss ? `<div class="double-pill">🎰 FINAL BOSS WAGER! 🎰</div>` : (S.double || m.active_2x) ? `<div class="double-pill">⚡ ${S.double && m.active_2x ? '4x' : 'DOUBLE'} POINTS ACTIVE! ⚡</div>` : '';
-  const udog = m.underdog ? `<div><span class="underdog-pill">🎯 UNDERDOG 1.5x CATCH-UP BOOST!</span></div>` : '';
-  const hot = hotHtml(m);
-  const teamP = m.team_prompt ? `<div class="team-prompt">💬 <b>Team talk:</b> ${esc(m.team_prompt)}</div>` : '';
-  const donUi = (S.dbl && !m.answered) ? `<button class="don-btn ${m.don?'on':''}" onclick="toggleDon()">💥 ${m.don?'Double or Nothing ON (2x / −400)':'Go Double or Nothing? (2x / −400)'}</button>` : '';
-  const curW = m.wager_pct ?? 0;
-  const stake = Math.max(500, m.score || 0);
-  const wagerUi = (S.boss && !m.answered) ? `<div class="wager-box">
-   <div>🎰 <b>Final Boss Wager!</b> Tap how much to risk:</div>
-   <div class="wager-btns">
-    ${[0,50,100].map(pct=>`<button class="wager-btn ${curW===pct?'sel':''}" onclick="setWager(${pct})">${pct}% (${Math.round(stake*pct/100)} pts)</button>`).join('')}
-   </div>
-  </div>` : (!S.boss && !S.tiebreak && !S.case && !S.case_game && !m.answered) ? `<button class="conf-btn ${m.confident?'on':''}" onclick="toggleConf()">🔥 ${m.confident?'Confidence Bet ON (+250 / -150)':'Bet on Yourself (+250 / -150)'}</button>` : '';
-  const t = S.qtype || 'mc';
-  if(t==='info'){ $.innerHTML = infoPhone(m); return; }
-  if(m.spectating){
-   $.innerHTML=`<div class="big">${whl}<br>⚔️ Sudden death!<br><small>Only the tied leaders play this one.<br>Watch the big screen!</small></div>${reactBar()}`;
-  } else if(m.answered){
-   $.innerHTML=`<div class="big">${whl}${dbl}${udog}<br>Answer sent!<br><small>Waiting for others…</small></div>${hot}`;
-  } else if(inPrev){
-   $.innerHTML=`<div class="big" style="margin-top:6vh">${whl}${dbl}${udog}<br>👀 Get ready!<br><small>Read the question on the host screen…</small></div>${hot}${teamP}${donUi}${wagerUi}${rivalHtml(m)}`;
-  } else {
-   const hide = m.hide || [];
-   const pcts = m.audience_pcts || null;
-   const choiceQ = (t==='mc' || t==='tf' || t==='zoom');
-   const puBar = `<div class="pu-bar">
-    ${choiceQ?`<button class="pu-btn" ${m.pu_5050?'':'disabled'} onclick="usePu('5050')">✂️ 50/50</button>`:''}
-    <button class="pu-btn ${m.active_2x?'active':''}" ${m.pu_2x||m.active_2x?'':'disabled'} onclick="usePu('2x')">⚡ ${m.active_2x?'2x ON':'2x'}</button>
-    <button class="pu-btn ${m.active_shield?'active':''}" ${m.pu_shield||m.active_shield?'':'disabled'} onclick="usePu('shield')">🛡️ Shield</button>
-    ${choiceQ?`<button class="pu-btn ${m.active_audience?'active':''}" ${m.pu_audience||m.active_audience?'':'disabled'} onclick="usePu('audience')">📊 ${m.active_audience?'Poll ON':'Audience'}</button>`:''}
-   </div>`;
-   let inputUi;
-   if(t==='open') inputUi = `<textarea id="openTxt" class="txtans" rows="4" maxlength="240" placeholder="Write 1–2 sentences…" style="display:block;width:100%;box-sizing:border-box;font-size:1.05em;padding:12px;border-radius:8px;border:0;color:#2b0d57;font-family:inherit"></textarea><button class="go" onclick="sendOpen()">Send my response</button>`;
-   else if(t==='text') inputUi = `<input id="txtAns" class="txtans" placeholder="Type your answer…" autocomplete="off" autocapitalize="off" onkeydown="if(event.key==='Enter')sendText()"><button class="go" onclick="sendText()">Submit answer</button>`;
-   else if(t==='order' || t==='rank') inputUi = `<div id="ordWrap"></div>`;
-   else inputUi = `<div class="grid">${S.answers.map((a,i)=>`<button class="c${i} ${hide.includes(i)?'elim':''}" onclick="ans(${i})">${S.aimg&&S.aimg[i]?`<img src="${esc(S.aimg[i])}" alt="">`:''}<span class="sh">${sh[i]}</span><span>${esc(a)}</span>${pcts?`<span class="aud-badge" id="aud${i}">📊 ${pcts[i]}%</span>`:''}</button>`).join('')}</div>`;
-   $.innerHTML=`${iceHtml}${whl}${dbl}${udog}${hot}${teamP}${donUi}${wagerUi}${(S.case||S.case_game)?'':puBar}${inputUi}`;
-   if(t==='order' || t==='rank') drawOrd();
-  }
- } else if(S.phase=='results' && S.case && !(m.spectating)){
-  $.innerHTML = caseResultPhone(m);
- } else if(S.phase=='results'){
-  if(m.spectating){
-   $.innerHTML=`<div class="big">⚔️ Tiebreaker results<br><small>See the big screen!</small></div>${reactBar()}`;
-  } else {
-  const st = m.streak >= 5 ? `<br><span class="streak-pill">🔥🔥 ${m.streak} in a row! ON FIRE ${m.bonus?`(+${m.bonus} bonus)`:''}</span>` : m.streak >= 2 ? `<br><span class="streak-pill">🔥 ${m.streak} in a row! ${m.bonus?`(+${m.bonus} bonus)`:''}</span>` : '';
-  const whMsg = m.wheel_bonus ? `<br><small style="color:#b2ff59">🎡 Mystery Wheel Bonus: +${m.wheel_bonus} pts!</small>` : '';
-  const cfMsg = m.conf_delta ? `<br><small style="color:${m.conf_delta>0?'#ffdf5d':'#ff9b9b'}">🔥 Confidence Bet: ${m.conf_delta>0?'+'+m.conf_delta:m.conf_delta} pts</small>` : '';
-  const tbMsg = m.team_bonus ? `<br><small style="color:#7dd3ff">🤝 Team Battle bonus: +${m.team_bonus}</small>` : '';
-  let hotMsg = '';
-  if(m.hot){
-   if(m.hot.you) hotMsg = `<br><small style="color:#ffab40">🔥 Hot Seat: ${m.hot.ok?'You nailed it! +400':'you missed it'}</small>`;
-   else if(m.hot.pred===null||m.hot.pred===undefined) hotMsg = `<br><small style="opacity:.8">🔥 You skipped the Hot Seat prediction</small>`;
-   else hotMsg = `<br><small style="color:#ffab40">🔥 Hot Seat prediction: ${m.hot.pred===m.hot.ok?'🎯 great read! +200':'not this time'}</small>`;
-  }
-  const reveal = (S.qtype==='text'||S.qtype==='order') ? `<br><small style="opacity:.9">✅ Answer: ${esc(S.qtype==='order'?(S.answers_correct||[]).join(' → '):(S.answers_correct||[''])[0])}</small>` : '';
-  const shMsg = (!m.correct && m.shielded) ? `<br><small style="color:#80deea">🛡️ Streak Shield protected your streak &amp; bets!</small>` : '';
-  const gTxt = m.gained >= 0 ? '+'+m.gained : m.gained;
-  const canSab = S.sabotage_enabled && !S.is_last && m.pu_freeze && m.score >= 200 && S.n > 1;
-  const sabBtn = canSab ? `<div><button class="sab-btn" onclick="sabotage()">⛄ Throw Snowball at Leader (-200 pts)</button></div>` : m.ice_sent ? `<div><small style="color:#80deea">⛄ Snowball thrown at the leader for next round!</small></div>` : '';
-  $.innerHTML=`<div><span class="qnum">Question ${S.index+1} of ${S.total}</span></div><div class="big" style="margin-top:4vh">${!m.answered?"⏰ Time's up":m.correct?'✅ Correct! '+gTxt:'❌ Incorrect'+(m.gained<0?' ('+m.gained+')':'')}${st}${whMsg}${cfMsg}${tbMsg}${hotMsg}${shMsg}${reveal}<br><small>Score ${m.score}</small></div>${rivalHtml(m)}${sabBtn}${stealUi(m)}${S.quote?`<blockquote>&ldquo;${esc(S.quote)}&rdquo;${S.source?`<cite>&mdash; ${esc(S.source)}</cite>`:''}</blockquote>`:''}${reactBar()}`;
-  }
- } else if(S.phase=='board'){
-  const canSab = S.sabotage_enabled && m.pu_freeze && m.score >= 200 && S.n > 1;
-  const sabBtn = canSab ? `<div><button class="sab-btn" onclick="sabotage()">⛄ Throw Snowball at Leader (-200 pts)</button></div>` : m.ice_sent ? `<div><small style="color:#80deea">⛄ Snowball thrown at the leader for next round!</small></div>` : '';
-  const ttlBadge = m.title ? `<br><span class="title-badge">${esc(m.title)}</span>` : '';
-  $.innerHTML=`<div class="big">🏆 You're #${m.rank}<br><small>${m.score} points</small>${ttlBadge}${m.streak>=2?`<br><span class="streak-pill">🔥 ${m.streak} Streak</span>`:''}</div>${rivalHtml(m)}${sabBtn}${reactBar()}`;
- } else {
-  const rep = m.report || {};
-  const tClass = m.rank===1?'':m.rank===2?'silver':m.rank===3?'bronze':'';
-  const trophyHtml = m.rank <= 3 ? `<div class="trophy-card ${tClass}">
-   <div style="font-size:2em">${m.rank===1?'🥇 1st Place Champion!':m.rank===2?'🥈 2nd Place Podium!':'🥉 3rd Place Podium!'}</div>
-   <div>${tag} &middot; ${m.score} pts</div>
-   <button onclick="saveCert('${esc(m.name)}',${m.rank},${m.score},${rep.accuracy||0})">🏅 Save Winner Certificate</button>
-  </div>` : '';
-  const missedHtml = (rep.missed && rep.missed.length) ? `<div style="margin-top:8px"><b>📝 Questions to Review:</b>${rep.missed.map(x=>`<div class="missed-item"><b>Q${x.num}:</b> ${esc(x.q)}<br><span style="color:#ff9b9b">You: ${esc(x.your_ans)}</span> &middot; <span style="color:#7dff6b">✅ ${esc(x.correct_ans)}</span></div>`).join('')}</div>` : `<div style="text-align:center;color:#7dff6b;font-weight:800">🌟 Perfect Score! You got every question right!</div>`;
-  const repHtml = rep.total ? `<div class="report-card">
-   <div class="report-stats">
-    <div class="stat-pill"><b>${rep.accuracy}%</b>${rep.correct}/${rep.total} Correct</div>
-    <div class="stat-pill"><b>🔥 ${rep.max_streak||0}</b>Best Streak</div>
-    <div class="stat-pill"><b>${rep.fastest!=null?rep.fastest+'s':'-'}</b>Fastest</div>
-   </div>
-   ${missedHtml}
-  </div>` : '';
-  $.innerHTML=`<div class="big" style="margin-top:3vh">🎉 Game over!<br>You placed #${m.rank}<br><small>${m.score} points</small></div>${trophyHtml}${repHtml}${reactBar()}`;
- }
 }
 tryReconnect();
 </script></body></html>
