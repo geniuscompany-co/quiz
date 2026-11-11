@@ -371,7 +371,7 @@ function cloud(S){
 function render(S){
   const joinUrl = `${location.host || 'plw.me'}/play`;
   const joinFull = `${location.origin && location.origin !== 'null' ? location.origin : 'https://plw.me'}/play?pin=${encodeURIComponent(S.pin)}`;
-  const qrSrc = `/api/qr?data=${encodeURIComponent(joinFull)}`;
+  const qrSrc = `/api/qr?text=${encodeURIComponent(joinFull)}`;
 
   const pb = document.getElementById('phaseBadge');
   if(pb){
