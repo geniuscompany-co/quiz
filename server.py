@@ -25,8 +25,8 @@ DATA_DIR = os.environ.get("DATA_DIR") or os.path.join(ROOT, ".data")
 TEAM_BONUS = 300
 HOT_BONUS = 400
 PRED_BONUS = 200
-INT_KEY_G = ("wheel_mods", "robin_stolen", "shuf", "hot", "team_results", "team_prompts")
-INT_KEY_P = ("answers", "wagers", "confident", "plan", "don")
+INT_KEY_G = ("wheel_mods", "robin_stolen", "shuf", "hot", "team_results", "team_prompts", "responses", "defenders")
+INT_KEY_P = ("answers", "wagers", "confident", "plan", "don", "roles")
 
 
 def pw_ok(val):
@@ -54,6 +54,29 @@ def is_profane(text):
 
 def qtype_of(q):
     return q.get("type") or "mc"
+
+
+CASE_TYPES = ("poll", "open", "rank", "info")
+CASE_TIMES = {"poll": 45, "rank": 60, "open": 120}
+CASE_PTS = 200
+VOTE_PTS = 150
+BOT_OPINIONS = [
+    "I would report it right away, even if it costs us the launch. People's safety comes first.",
+    "I'd talk to the team privately first, then escalate if nothing changes.",
+    "The short-term loss is worth protecting our reputation and trust over time.",
+    "Leaders set the culture. If I look away once, everyone learns that shortcuts are fine.",
+    "I need more facts, but I wouldn't let pressure from investors decide this.",
+    "I'd protect the employee who spoke up and make sure there is no retaliation.",
+    "Transparency with customers matters more than this quarter's numbers.",
+]
+
+
+def is_case_type(q):
+    return qtype_of(q) in CASE_TYPES
+
+
+def is_case_q(g, idx):
+    return 0 <= idx < len(g["quiz"]) and is_case_type(g["quiz"][idx])
 
 
 def norm_text(x):
@@ -131,7 +154,7 @@ def is_speed_q(g, idx):
     if ss is None or not (0 <= idx < len(g["quiz"])):
         return False
     q = g["quiz"][idx]
-    return ss <= idx < ss + 5 and not q.get("redemption") and not q.get("tiebreak")
+    return ss <= idx < ss + 5 and not q.get("redemption") and not q.get("tiebreak") and not is_case_type(q)
 
 
 def dbl_index(g):
@@ -149,7 +172,7 @@ def is_dbl_q(g, idx):
     if not g.get("dbl") or not (0 <= idx < len(g["quiz"])) or idx != dbl_index(g):
         return False
     q = g["quiz"][idx]
-    return not q.get("redemption") and not q.get("tiebreak")
+    return not q.get("redemption") and not q.get("tiebreak") and not is_case_type(q)
 
 
 def modlog(g, kind, text):
@@ -171,6 +194,8 @@ def qtime(g, i=None):
     idx = g["q"] if i is None else i
     if is_speed_q(g, idx):
         return 5
+    if 0 <= idx < len(g["quiz"]) and qtype_of(g["quiz"][idx]) in CASE_TIMES:
+        return g["quiz"][idx].get("t") or CASE_TIMES[qtype_of(g["quiz"][idx])]
     if g.get("qtime"):
         return g["qtime"]
     return g["quiz"][idx].get("t", DEFAULT_TIME)
@@ -179,6 +204,8 @@ def qtime(g, i=None):
 def qmult(g, i=None):
     idx = g["q"] if i is None else i
     q = g["quiz"][idx]
+    if is_case_type(q):
+        return 1
     if "double" in q:
         return 2 if q["double"] else 1
     if is_boss_q(g, idx):
@@ -189,7 +216,7 @@ def qmult(g, i=None):
 def is_boss_q(g, i=None):
     idx = g["q"] if i is None else i
     q = g["quiz"][idx]
-    if q.get("redemption") or q.get("tiebreak"):
+    if q.get("redemption") or q.get("tiebreak") or is_case_type(q):
         return False
     return bool(g.get("wager") and idx == len(g["quiz"]) - 1)
 
@@ -240,7 +267,8 @@ def load_quiz(fname="quiz.json"):
     if os.path.exists(p):
         with open(p) as f:
             data = json.load(f)
-            return data.get("questions", []) if isinstance(data, dict) else data
+            qs = data.get("questions", []) if isinstance(data, dict) else data
+            return [dict(x, a=x.get("a", []), c=x.get("c", 0)) for x in qs if isinstance(x, dict)]
     return QUIZ
 
 
@@ -252,14 +280,15 @@ def clean_url(u):
 def clean_questions(questions):
     cleaned = []
     for q in questions or []:
-        if not isinstance(q, dict) or not q.get("q") or not isinstance(q.get("a"), list):
+        if not isinstance(q, dict) or not q.get("q"):
             continue
+        alist = q["a"] if isinstance(q.get("a"), list) else []
         qtype = str(q.get("type") or "mc").lower()
-        if qtype not in ("mc", "tf", "text", "order", "zoom"):
+        if qtype not in ("mc", "tf", "text", "order", "zoom") + CASE_TYPES:
             qtype = "mc"
         if qtype == "zoom" and not clean_url(q.get("img")):
             qtype = "mc"
-        raw = [str(x).strip() for x in q["a"] if str(x).strip()]
+        raw = [str(x).strip() for x in alist if str(x).strip()]
         try:
             c = int(q.get("c", 0))
         except Exception:
@@ -274,6 +303,16 @@ def clean_questions(questions):
             if len(raw) < 2:
                 continue
             ans, c = raw[:4], 0
+        elif qtype == "poll":
+            if len(raw) < 2:
+                continue
+            ans, c = raw[:4], 0
+        elif qtype == "rank":
+            if len(raw) < 2:
+                continue
+            ans, c = raw[:6], 0
+        elif qtype in ("open", "info"):
+            ans, c = [], 0
         else:
             if len(raw) < 2:
                 continue
@@ -289,6 +328,27 @@ def clean_questions(questions):
             ai += [""] * (len(ans) - len(ai))
             if any(ai):
                 item["aimg"] = ai
+        if qtype == "info" or q.get("body"):
+            item["body"] = str(q.get("body") or "").strip()[:3000]
+        if isinstance(q.get("lenses"), list) and qtype in ("poll", "rank"):
+            ln = [str(x).strip()[:40] for x in q["lenses"][:len(ans)]]
+            ln += [""] * (len(ans) - len(ln))
+            if any(ln):
+                item["lenses"] = ln
+        if isinstance(q.get("exhibits"), list):
+            ex = []
+            for e_ in q["exhibits"][:6]:
+                if isinstance(e_, dict) and clean_url(e_.get("url")):
+                    ex.append({"url": clean_url(e_["url"]), "caption": str(e_.get("caption") or "").strip()[:140]})
+            if ex:
+                item["exhibits"] = ex
+        if isinstance(q.get("roles"), list) and qtype == "info":
+            rl = []
+            for r_ in q["roles"][:8]:
+                if isinstance(r_, dict) and str(r_.get("name") or "").strip():
+                    rl.append({"name": str(r_["name"]).strip()[:30], "text": str(r_.get("text") or "").strip()[:600]})
+            if rl:
+                item["roles"] = rl
         if q.get("topic"):
             item["topic"] = str(q["topic"]).strip()[:40]
         if q.get("note"):
@@ -325,7 +385,9 @@ def new_game(quiz_file="quiz.json", count=None, shuffle=False, custom_questions=
             k = len(bank)
     else:
         k = len(bank)
-    if k < len(bank) or shuffle:
+    if any(is_case_type(x) for x in bank):
+        quiz = [dict(x) for x in bank[:k]]
+    elif k < len(bank) or shuffle:
         quiz = [dict(x) for x in random.sample(bank, k)]
     else:
         quiz = bank
@@ -358,7 +420,9 @@ def replay_game(g, quiz_file="quiz.json", count=None, shuffle=True, custom_quest
             k = len(bank)
     else:
         k = len(bank)
-    if k < len(bank) or shuffle:
+    if any(is_case_type(x) for x in bank):
+        g["quiz"] = [dict(x) for x in bank[:k]]
+    elif k < len(bank) or shuffle:
         g["quiz"] = [dict(x) for x in random.sample(bank, k)]
     else:
         g["quiz"] = bank
@@ -438,7 +502,7 @@ def calc_streak(p, up_to_q):
         a = p["answers"].get(qi)
         if a and a.get("correct"):
             s += 1
-        elif a and a.get("shielded"):
+        elif a and (a.get("shielded") or a.get("neutral")):
             pass
         else:
             s = 0
@@ -453,7 +517,7 @@ def calc_max_streak(p, total_q):
             cur += 1
             if cur > best:
                 best = cur
-        elif a and a.get("shielded"):
+        elif a and (a.get("shielded") or a.get("neutral")):
             pass
         else:
             cur = 0
@@ -527,7 +591,7 @@ def is_team_battle(g, qi):
     if qi < 4 or (qi + 1) % 5 != 0 or is_speed_q(g, qi):
         return False
     q = g["quiz"][qi]
-    if q.get("redemption") or q.get("tiebreak") or is_boss_q(g, qi):
+    if q.get("redemption") or q.get("tiebreak") or is_boss_q(g, qi) or is_case_type(q):
         return False
     return qi not in g.get("wheel_mods", {})
 
@@ -536,6 +600,8 @@ def prev_time(g, qi=None):
     idx = g["q"] if qi is None else qi
     base = g.get("preview", PREVIEW_TIME)
     if idx is not None and is_speed_q(g, idx):
+        return 0.0
+    if idx is not None and 0 <= idx < len(g["quiz"]) and qtype_of(g["quiz"][idx]) == "info":
         return 0.0
     if idx is not None and 0 <= idx < len(g["quiz"]) and is_team_battle(g, idx):
         return max(base, 12.0)
@@ -651,6 +717,57 @@ def record_answer(g, p, choice, t, given=None):
     }
 
 
+def record_case_answer(g, p, choice, t, given=None, rank=None):
+    qi = g["q"]
+    p["answers"][qi] = {
+        "choice": choice, "gained": CASE_PTS, "bonus": 0, "wager": 0, "correct": False, "neutral": True,
+        "time": round(t, 2), "shielded": False, "underdog": False, "given": given, "case": True,
+    }
+    if rank is not None:
+        p["answers"][qi]["rank"] = list(rank)
+    p["score"] += CASE_PTS
+
+
+def bot_case(g, p, t):
+    q = g["quiz"][g["q"]]
+    ty = qtype_of(q)
+    if ty == "poll":
+        ch = random.randrange(len(q["a"]))
+        record_case_answer(g, p, ch, t, q["a"][ch])
+    elif ty == "rank":
+        seq = list(range(len(q["a"])))
+        random.shuffle(seq)
+        record_case_answer(g, p, 0, t, " > ".join(q["a"][k] for k in seq), rank=seq)
+    elif ty == "open":
+        record_case_answer(g, p, 0, t, random.choice(BOT_OPINIONS))
+
+
+def settle_case(g, qi):
+    q = g["quiz"][qi]
+    t = qtype_of(q)
+    if t == "poll":
+        humans, anyone = {}, {}
+        for pid, p in g["players"].items():
+            a = p["answers"].get(qi)
+            if a and not a.get("blank") and 0 <= a["choice"] < len(q["a"]):
+                anyone.setdefault(a["choice"], []).append(p["name"])
+                if not p.get("bot"):
+                    humans.setdefault(a["choice"], []).append(p["name"])
+        g.setdefault("defenders", {})[qi] = [
+            {"side": side, "name": random.choice(humans.get(side) or names)} for side, names in sorted(anyone.items())
+        ]
+    elif t == "open":
+        res = []
+        for pid, p in g["players"].items():
+            a = p["answers"].get(qi)
+            if a and a.get("given"):
+                res.append({"id": len(res), "pid": pid, "text": a["given"], "voters": []})
+        random.shuffle(res)
+        for i, r in enumerate(res):
+            r["id"] = i
+        g.setdefault("responses", {})[qi] = res
+
+
 def add_bonus(p, qi, amt, key):
     a = p["answers"].get(qi)
     if a is None:
@@ -687,6 +804,9 @@ def settle_question(g):
             best[1]["score"] += 1
             best[1]["answers"][qi]["gained"] = 1
             g["tb_winner"] = best[1]["name"]
+        return
+    if is_case_type(q):
+        settle_case(g, qi)
         return
     qt = qtype_of(q)
     if is_team_battle(g, qi):
@@ -735,7 +855,7 @@ def start_question(g, qi):
     g["phase"] = "question"
     g["paused"] = False
     g["extra_time"] = 0.0
-    if g.get("wheel", True) and qi > 0 and (qi + 1) % 4 == 0 and not is_boss_q(g, qi) and not g["quiz"][qi].get("redemption") and not is_speed_q(g, qi):
+    if g.get("wheel", True) and qi > 0 and (qi + 1) % 4 == 0 and not is_boss_q(g, qi) and not g["quiz"][qi].get("redemption") and not is_speed_q(g, qi) and not is_case_type(g["quiz"][qi]):
         g.setdefault("wheel_mods", {})[qi] = random.choice(WHEEL_EVENTS)
     q = g["quiz"][qi]
     if qtype_of(q) == "order":
@@ -749,7 +869,14 @@ def start_question(g, qi):
     if is_team_battle(g, qi):
         used = random.sample(TEAM_PROMPTS, min(len(TEAM_PROMPTS), len(TEAMS)))
         g.setdefault("team_prompts", {})[qi] = {t["id"]: used[i % len(used)] for i, t in enumerate(TEAMS)}
-    if (g.get("hotseat", True) and qi >= 5 and not is_speed_q(g, qi) and (qi + 1) % 6 == 0 and len(g["players"]) >= 3
+    if qtype_of(q) == "info" and q.get("roles") and g["players"]:
+        hum = [x for x, pl in g["players"].items() if not pl.get("bot")]
+        bots_ = [x for x, pl in g["players"].items() if pl.get("bot")]
+        random.shuffle(hum)
+        random.shuffle(bots_)
+        for i_, pid_ in enumerate(hum + bots_):
+            g["players"][pid_].setdefault("roles", {})[qi] = q["roles"][i_ % len(q["roles"])]
+    if (g.get("hotseat", True) and qi >= 5 and not is_case_type(q) and not is_speed_q(g, qi) and (qi + 1) % 6 == 0 and len(g["players"]) >= 3
             and qi not in g.get("wheel_mods", {}) and not is_team_battle(g, qi)
             and not is_boss_q(g, qi) and not q.get("redemption") and not q.get("tiebreak")):
         humans = [pid for pid, p in g["players"].items() if not p.get("bot")]
@@ -795,7 +922,7 @@ def find_most_missed(g):
         return None
     best = None
     for qi, q in enumerate(g["quiz"]):
-        if q.get("redemption"):
+        if q.get("redemption") or is_case_type(q):
             continue
         ans_count = 0
         wrong_count = 0
@@ -860,7 +987,7 @@ def topic_stats(g):
     agg = {}
     for qi, q in enumerate(g["quiz"]):
         t = q.get("topic")
-        if not t or q.get("tiebreak"):
+        if not t or q.get("tiebreak") or is_case_type(q):
             continue
         cor = sum(1 for p in g["players"].values() if p["answers"].get(qi, {}).get("correct"))
         a = agg.setdefault(t, [0, 0])
@@ -879,7 +1006,7 @@ def finalize_game(g):
         n_p = max(1, len(g["players"]))
         qs = []
         for qi, q in enumerate(g["quiz"]):
-            if q.get("tiebreak"):
+            if q.get("tiebreak") or is_case_type(q):
                 continue
             cor = sum(1 for p in g["players"].values() if p["answers"].get(qi, {}).get("correct"))
             qs.append({"q": q["q"], "pct": round(100.0 * cor / n_p), "ans": ans_text(q), "topic": q.get("topic", "")})
@@ -901,7 +1028,7 @@ def finalize_game(g):
                 topics = {}
                 for qi, q in enumerate(g["quiz"]):
                     t = q.get("topic")
-                    if not t or q.get("tiebreak"):
+                    if not t or q.get("tiebreak") or is_case_type(q):
                         continue
                     c = topics.setdefault(t, [0, 0])
                     c[1] += 1
@@ -928,6 +1055,9 @@ def advance_game(g):
         qi = g["q"]
         for p in eligible(g):
             if p.get("bot") and qi not in p["answers"]:
+                if is_case_type(g["quiz"][qi]):
+                    bot_case(g, p, 3.0)
+                    continue
                 plan = p.get("plan", {})
                 if qi in plan:
                     delay, ch = plan[qi]
@@ -941,6 +1071,8 @@ def advance_game(g):
         g["phase_entered"] = time.time()
         g["paused"] = False
         settle_question(g)
+        if qtype_of(g["quiz"][qi]) == "info":
+            advance_game(g)
     elif g["phase"] == "results":
         if g["q"] + 1 >= len(g["quiz"]):
             kind = pending_extra(g)
@@ -964,6 +1096,8 @@ def advance_game(g):
             g["redemption_added"] = True
             go_final(g)
         elif is_speed_q(g, g["q"]) and is_speed_q(g, g["q"] + 1):
+            start_question(g, g["q"] + 1)
+        elif is_case_q(g, g["q"]):
             start_question(g, g["q"] + 1)
         else:
             g["phase"] = "board"
@@ -999,6 +1133,10 @@ def tick(g):
             for p in eligible(g):
                 if not p.get("bot") or qi in p["answers"]:
                     continue
+                if is_case_type(q):
+                    if q_elapsed >= 2.0 + (sum(map(ord, p["name"])) % 9):
+                        bot_case(g, p, q_elapsed)
+                    continue
                 plan = p.setdefault("plan", {})
                 if qi not in plan:
                     delay = round(random.uniform(1.4, max(2.5, qt * 0.75)), 2)
@@ -1027,7 +1165,7 @@ def tick(g):
                         })
         ps = eligible(g)
         done = ps and all(qi in p["answers"] for p in ps)
-        if (not g.get("paused") and q_left <= 0) or done:
+        if qtype_of(q) != "info" and ((not g.get("paused") and q_left <= 0) or done):
             g["phase"] = "results"
             g["phase_entered"] = now
             g["paused"] = False
@@ -1132,13 +1270,14 @@ def round_shoutouts(g, rows):
 
 
 def final_stats(g):
-    total_q = len(g["quiz"])
+    n_all = len(g["quiz"])
+    total_q = sum(1 for q in g["quiz"] if not is_case_type(q))
     total_cor = 0
     speed_best = None
     streak_best = None
     for p in g["players"].values():
         cor_times = []
-        for qi in range(total_q):
+        for qi in range(n_all):
             a = p["answers"].get(qi)
             if a and a.get("correct"):
                 total_cor += 1
@@ -1148,7 +1287,7 @@ def final_stats(g):
             avg_t = sum(cor_times) / len(cor_times)
             if speed_best is None or avg_t < speed_best[0]:
                 speed_best = (avg_t, p)
-        ms = calc_max_streak(p, total_q)
+        ms = calc_max_streak(p, n_all)
         if ms >= 2 and (streak_best is None or ms > streak_best[0]):
             streak_best = (ms, p)
     denom = max(1, len(g["players"]) * total_q)
@@ -1161,7 +1300,7 @@ def final_stats(g):
     q_stats = []
     n_p = max(1, len(g["players"]))
     for qi, q in enumerate(g["quiz"]):
-        if q.get("tiebreak"):
+        if q.get("tiebreak") or is_case_type(q):
             continue
         cor = sum(1 for p in g["players"].values() if p["answers"].get(qi, {}).get("correct"))
         pct = round(100.0 * cor / n_p)
@@ -1184,7 +1323,7 @@ def player_report(g, p):
     missed = []
     total_q = 0
     for qi, q in enumerate(g["quiz"]):
-        if q.get("tiebreak"):
+        if q.get("tiebreak") or is_case_type(q):
             continue
         total_q += 1
         a = p["answers"].get(qi)
@@ -1248,7 +1387,7 @@ def study_html(g):
     n_p = max(1, len(g["players"]))
     rows = []
     for qi, q in enumerate(g["quiz"]):
-        if q.get("tiebreak"):
+        if q.get("tiebreak") or is_case_type(q):
             continue
         cor = sum(1 for p in g["players"].values() if p["answers"].get(qi, {}).get("correct"))
         pct = round(100.0 * cor / n_p)
@@ -1345,6 +1484,7 @@ def view(g, pid=None, host=False):
             disp = []
         out.update(
             qtype=qtp, aimg=q.get("aimg"), tiebreak=bool(q.get("tiebreak")),
+            case=is_case_type(q), body=q.get("body"), exhibits=q.get("exhibits"),
             team_battle=is_team_battle(g, g["q"]),
             index=g["q"], question=q["q"], answers=disp, img=q.get("img"), qtime=round(qt),
             left=round(q_left, 2),
@@ -1388,6 +1528,27 @@ def view(g, pid=None, host=False):
                 if a and 0 <= a["choice"] < len(counts):
                     counts[a["choice"]] += 1
             out["counts"] = counts
+            if qtp in ("poll", "rank", "open", "info"):
+                out["correct"] = -1
+                out["n_correct"] = 0
+                out["lenses"] = q.get("lenses")
+            if qtp == "poll":
+                out["defenders"] = [{"side": d["side"], "name": d["name"]} for d in g.get("defenders", {}).get(g["q"], [])]
+            elif qtp == "rank":
+                n_it = len(q["a"])
+                tot_, cnt_ = [0] * n_it, 0
+                for p in g["players"].values():
+                    a = p["answers"].get(g["q"])
+                    if a and a.get("rank") and len(a["rank"]) == n_it:
+                        cnt_ += 1
+                        for pos, item in enumerate(a["rank"]):
+                            tot_[item] += pos + 1
+                avg = sorted(({"item": q["a"][i], "avg": round(tot_[i] / cnt_, 2) if cnt_ else 0, "i": i} for i in range(n_it)), key=lambda r: (r["avg"] if cnt_ else r["i"]))
+                out["rank_avg"] = avg
+                out["rank_n"] = cnt_
+            elif qtp == "open":
+                rs_ = sorted(g.get("responses", {}).get(g["q"], []), key=lambda r: (-len(r["voters"]), r["id"]))
+                out["responses"] = [{"id": r["id"], "text": r["text"], "votes": len(r["voters"])} for r in rs_]
     if ph == "intro":
         iq = g["quiz"][g["q"]]
         iw = g.get("wheel_mods", {}).get(g["q"])
@@ -1492,6 +1653,24 @@ def view(g, pid=None, host=False):
         cq = g["quiz"][g["q"]] if 0 <= g["q"] < len(g["quiz"]) else {}
         if cq.get("tiebreak") and pid not in g.get("tb_pids", []):
             me["spectating"] = True
+        cf, rl_ = [], []
+        for ci in range(0, g["q"] + 1):
+            cq2 = g["quiz"][ci]
+            if qtype_of(cq2) == "info":
+                cf.append({"title": cq2["q"], "body": cq2.get("body", ""), "exhibits": cq2.get("exhibits", []), "index": ci + 1})
+                r2 = p.get("roles", {}).get(ci)
+                if r2:
+                    rl_.append({"chapter": cq2["q"], "name": r2["name"], "text": r2["text"]})
+        me["casefile"] = cf
+        me["roles"] = rl_
+        if ph == "results" and cq.get("lenses") and a is not None and 0 <= a.get("choice", -1) < len(cq["lenses"]):
+            me["lens"] = cq["lenses"][a["choice"]]
+        if ph == "results" and qtype_of(cq) == "open":
+            rs2 = g.get("responses", {}).get(g["q"], [])
+            mine = [r for r in rs2 if r["pid"] != pid]
+            random.Random(pid + str(g["q"])).shuffle(mine)
+            me["responses"] = [{"id": r["id"], "text": r["text"], "voted": pid in r["voters"]} for r in mine[:12]]
+            me["votes_used"] = sum(1 for r in rs2 if pid in r["voters"])
         if ph == "final":
             me["report"] = player_report(g, p)
         out["me"] = me
@@ -1687,7 +1866,10 @@ class H(BaseHTTPRequestHandler):
                     self.send({"questions": cl, "message": msg})
         elif path == "/api/hw_create":
             bank = clean_questions(body.get("custom_questions")) if body.get("custom_questions") else [dict(x) for x in load_quiz(body.get("quiz") or "quiz.json")]
-            bank = clean_questions(bank)
+            bank = [x for x in clean_questions(bank) if not is_case_type(x)]
+            if not bank:
+                self.send({"error": "That quiz only has case-study slides. Homework needs scored questions."}, 400)
+                return True
             try:
                 k = max(1, min(len(bank), int(body.get("count") or len(bank))))
             except Exception:
@@ -1862,6 +2044,22 @@ class H(BaseHTTPRequestHandler):
                 d_ = p.setdefault("don", {})
                 d_[g["q"]] = not d_.get(g["q"])
                 return self.send({"ok": True, "don": d_[g["q"]]})
+            if path == "/api/vote":
+                p = g["players"].get(body.get("pid"))
+                qi = g["q"]
+                if not p or g["phase"] != "results" or qi < 0 or qtype_of(g["quiz"][qi]) != "open":
+                    return self.send({"error": "Voting is not open"}, 400)
+                rs_ = g.get("responses", {}).get(qi, [])
+                tgt = next((r for r in rs_ if r["id"] == body.get("rid")), None)
+                if not tgt or tgt["pid"] == body["pid"] or body["pid"] in tgt["voters"]:
+                    return self.send({"error": "Cannot vote for that"}, 400)
+                if sum(1 for r in rs_ if body["pid"] in r["voters"]) >= 2:
+                    return self.send({"error": "You have used both of your votes"}, 400)
+                tgt["voters"].append(body["pid"])
+                author = g["players"].get(tgt["pid"])
+                if author and len(tgt["voters"]) <= 4:
+                    add_bonus(author, qi, VOTE_PTS, "vote_bonus")
+                return self.send({"ok": True})
             if path == "/api/steal":
                 res, err = do_steal(g, body.get("pid"), body.get("mode"))
                 return self.send({"error": err}, 400) if err else self.send({"ok": True, **res})
@@ -2023,7 +2221,7 @@ class H(BaseHTTPRequestHandler):
                 if not p or g["phase"] != "question" or g["q"] in p["answers"]:
                     return self.send({"error": "Cannot use powerup"}, 400)
                 pu = p.setdefault("powerups", {})
-                if kind in ("5050", "audience") and qtype_of(g["quiz"][g["q"]]) in ("text", "order"):
+                if kind in ("5050", "audience") and qtype_of(g["quiz"][g["q"]]) in ("text", "order") + CASE_TYPES:
                     return self.send({"error": "Not available for this question type"}, 400)
                 if kind == "5050" and not pu.get("5050_used"):
                     q = g["quiz"][g["q"]]
@@ -2066,6 +2264,32 @@ class H(BaseHTTPRequestHandler):
                 q = g["quiz"][g["q"]]
                 qtp = qtype_of(q)
                 given = None
+                if qtp in CASE_TYPES:
+                    if qtp == "info":
+                        return self.send({"error": "Nothing to answer here"}, 400)
+                    _, _, q_el, _ = cur_timer_state(g)
+                    if qtp == "poll":
+                        try:
+                            ch_ = int(body.get("choice", -1))
+                        except Exception:
+                            ch_ = -1
+                        if not 0 <= ch_ < len(q["a"]):
+                            return self.send({"error": "Bad choice"}, 400)
+                        record_case_answer(g, p, ch_, q_el, q["a"][ch_])
+                    elif qtp == "rank":
+                        seq_ = body.get("seq")
+                        if not isinstance(seq_, list) or sorted(seq_) != list(range(len(q["a"]))):
+                            return self.send({"error": "Rank every item"}, 400)
+                        record_case_answer(g, p, 0, q_el, " > ".join(q["a"][k] for k in seq_), rank=seq_)
+                    else:
+                        txt_ = str(body.get("text") or "").strip()[:240]
+                        if not txt_:
+                            return self.send({"error": "Write a response first"}, 400)
+                        if is_profane(txt_):
+                            modlog(g, "blocked response", txt_)
+                            return self.send({"error": "Please rephrase that so it's classroom-friendly."}, 400)
+                        record_case_answer(g, p, 0, q_el, txt_)
+                    return self.send({"ok": True})
                 if qtp == "text":
                     given = str(body.get("text") or "").strip()[:80]
                     if not given:

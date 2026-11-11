@@ -1,0 +1,146 @@
+{
+ "title": "Case Study: The CardioWatch Launch (Ethical Leadership)",
+ "questions": [
+  {
+   "q": "Chapter 1: A Launch on the Line",
+   "type": "info",
+   "topic": "Ethical Leadership",
+   "body": "Northwind Medical is three weeks from launching CardioWatch, a wearable heart monitor that its investors have been told will ship this quarter.\n\nPriya Nair, a junior test engineer, emails Daniel Cho, the VP of Operations. In about 2% of lab tests, the device missed irregular heartbeats when the strap was damp. Fixing the hardware would mean a 4 to 6 month delay.\n\nA competitor launches a similar product in 8 weeks. Northwind has hinted at layoffs if revenue targets are missed. The CEO's reply to Daniel: \"The label already warns about moisture. Ship it, and we'll patch the software later.\"\n\nExhibit A: Lab results. 2,000 tests: 1,960 detected every irregular beat; 40 missed at least one event when the strap was damp.\nExhibit B: Timeline. Launch in 3 weeks. Competitor in 8 weeks. Hardware fix: 4 to 6 months.\n\n(This is a fictional case written for classroom discussion.)",
+   "roles": [
+    {
+     "name": "Head of Quality",
+     "text": "You have seen the damp-strap data and believe the failure is real. You have no authority to stop a launch, but you can refuse to sign the quality release."
+    },
+    {
+     "name": "CFO",
+     "text": "You promised investors this quarter's revenue. A 5-month delay could trigger layoffs of about 120 people and a covenant review with your lenders."
+    },
+    {
+     "name": "Regional Sales Lead",
+     "text": "Your biggest hospital customers have pre-ordered. Several said they would switch to the competitor if you slip."
+    },
+    {
+     "name": "Board Member",
+     "text": "You sit on the audit committee. You want to hear bad news early, but nobody has told you anything yet."
+    },
+    {
+     "name": "Test Engineer (Priya's colleague)",
+     "text": "You also saw the failures but assumed someone senior already knew. You are afraid of being labeled difficult."
+    }
+   ],
+   "note": "Let students read silently for 2 minutes. Ask: Who are all the stakeholders? What facts do we have, and what are we assuming? Roles are private. Do not share role cards yet."
+  },
+  {
+   "q": "What should Daniel do first?",
+   "type": "poll",
+   "topic": "Ethical Leadership",
+   "a": [
+    "Ship on schedule, add a moisture warning, and patch later",
+    "Delay the launch and disclose the issue to the board",
+    "Ship a limited release to a few clinics with full disclosure",
+    "Ask Priya for more data before deciding anything"
+   ],
+   "lenses": [
+    "Consequences-first lens (protects jobs now)",
+    "Duty-based lens (safety and honesty)",
+    "Stakeholder-balancing lens",
+    "Prudence lens (information first)"
+   ],
+   "note": "After the split appears, have the defenders explain. Ask the minority side: what would change your mind? Then reveal the lenses: the same facts can lead to different ethical conclusions."
+  },
+  {
+   "q": "Chapter 2: The Pressure Builds",
+   "type": "info",
+   "topic": "Ethical Leadership",
+   "body": "Daniel's manager pulls him aside: \"People who go around the chain of command don't tend to be here next quarter.\"\n\nPriya hears that the CEO told sales to proceed. That night she drafts a message to the regulator's anonymous hotline but has not sent it. She tells a friend: \"I'm not trying to hurt the company. I just can't unsee the data.\"\n\nDaniel is the only senior person who has read her email.\n\nExhibit C: The label. \"Performance may be reduced when the device is wet.\" (No mention of missed heart events.)",
+   "note": "Pause here. Ask: Is the label honest? What is the difference between a warning and a disclosure?"
+  },
+  {
+   "q": "Rank Daniel's priorities, most important first.",
+   "type": "rank",
+   "topic": "Ethical Leadership",
+   "a": [
+    "Patient safety",
+    "Honesty with regulators and customers",
+    "Protecting the 120 jobs",
+    "Meeting investor expectations",
+    "Loyalty to the CEO",
+    "Protecting Priya from retaliation"
+   ],
+   "note": "The class average ranking will appear. Compare it with the ranking Daniel actually acted on in the debrief. Look for items that are hard to rank against each other."
+  },
+  {
+   "q": "In 1 to 2 sentences: what would you say to Priya, and what would you say to the CEO?",
+   "type": "open",
+   "topic": "Ethical Leadership",
+   "note": "Read a few responses aloud (anonymous). Ask which responses show courage, and which show convenience. Students vote for the two most persuasive answers."
+  },
+  {
+   "q": "Priya says she will contact the regulator tomorrow. What do you do as her leader?",
+   "type": "poll",
+   "topic": "Ethical Leadership",
+   "a": [
+    "Encourage her and promise to protect her from retaliation",
+    "Ask her to wait 48 hours while you push the CEO internally",
+    "Tell her to use the chain of command only",
+    "Report it yourself first so the company controls the message"
+   ],
+   "lenses": [
+    "Care and justice lens",
+    "Prudence lens",
+    "Hierarchy and loyalty lens",
+    "Strategic self-interest lens"
+   ],
+   "note": "Probe option 4: is disclosing first the same as doing the right thing? Who benefits? Connect to psychological safety and retaliation."
+  },
+  {
+   "q": "Debrief: What Happened Next (fictional outcome)",
+   "type": "info",
+   "topic": "Ethical Leadership",
+   "body": "Daniel escalated to the board's audit committee that week and recommended a delay. The launch slipped five months while engineers fixed the strap seal. Several customers left for the competitor, but most stayed after a transparent letter explaining why.\n\nA year later the competitor recalled its own device for a similar problem. Northwind rebuilt trust with hospitals, created an anonymous reporting channel, and promoted Priya to lead the new safety review team. The CFO later said the delay was the hardest and best decision the company made.\n\nDiscussion: Which moment was hardest for Daniel? What systems make speaking up safe? What would have happened if Priya had stayed silent?",
+   "note": "Compare class decisions to Daniel's. Stress that doing the right thing carried real costs here. Ask: what would you need in place to make that choice? Not every real case ends this well, so ask students to think about when it doesn't."
+  },
+  {
+   "q": "Which ethical lens judges actions mainly by their results (the greatest good for the most people)?",
+   "a": [
+    "Utilitarian",
+    "Duty-based (deontological)",
+    "Virtue ethics",
+    "Care ethics"
+   ],
+   "c": 0,
+   "topic": "Ethical Leadership",
+   "quote": "Utilitarian thinking weighs outcomes. Duty-based thinking asks which rules or obligations apply regardless of outcome."
+  },
+  {
+   "q": "Daniel's team created an anonymous reporting channel after the case. What does this mostly build?",
+   "a": [
+    "Psychological safety",
+    "Faster production",
+    "Lower costs",
+    "Stronger advertising"
+   ],
+   "c": 0,
+   "topic": "Ethical Leadership",
+   "quote": "People speak up when they believe they won't be punished for it."
+  },
+  {
+   "q": "Looking back, which leadership trait mattered most?",
+   "type": "poll",
+   "topic": "Ethical Leadership",
+   "a": [
+    "Courage",
+    "Integrity",
+    "Empathy",
+    "Judgment"
+   ],
+   "lenses": [
+    "Virtue: courage",
+    "Virtue: integrity",
+    "Virtue: empathy",
+    "Virtue: practical wisdom"
+   ],
+   "note": "Closing reflection. Ask two students from different sides to explain their pick."
+  }
+ ]
+}
