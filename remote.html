@@ -32,6 +32,11 @@ h1{font-size:1.35em;margin:.3em 0}
 .opt-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin:8px 0}
 .opt-pill{display:flex;align-items:center;gap:7px;background:#ffffff12;border:1px solid #ffffff24;padding:8px 9px;border-radius:9px;font-size:.86em;font-weight:600;cursor:pointer;user-select:none}
 .opt-pill input{width:16px;height:16px;margin:0;accent-color:#26890c}
+.timer-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:8px 0}
+.timer-item{display:flex;align-items:center;justify-content:space-between;gap:5px;background:#ffffff12;border:1px solid #ffffff24;padding:6px 9px;border-radius:9px;font-size:.82em;font-weight:700}
+.timer-item input{width:54px;padding:4px 5px;border-radius:6px;border:0;text-align:center;font-weight:800;font-size:.98em;color:#2b0d57;background:#fff}
+.set-row{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:8px;padding:8px 10px;background:#ffffff12;border:1px solid #ffffff24;border-radius:10px;flex-wrap:wrap;font-size:.9em;font-weight:700}
+.set-row input,.disc-bar input{width:62px;padding:7px 6px;border-radius:8px;border:0;text-align:center;font-weight:800;font-size:.98em;color:#2b0d57;background:#fff}
 .bots-row{display:flex;align-items:center;justify-content:space-between;background:#ffffff12;border:1px solid #ffffff24;border-radius:9px;padding:7px 11px;margin-top:8px;font-size:.9em;font-weight:700}
 .bots-row input{width:64px;padding:5px 6px;border-radius:7px;border:0;text-align:center;font-weight:800;font-size:1em;color:#2b0d57;background:#fff}
 .err-msg{color:#ff8a8a;font-weight:700;font-size:.88em;margin:6px 0;text-align:center;display:none}
@@ -109,6 +114,26 @@ function renderOptsHtml(){
  `;
 }
 
+function renderTimersHtml(){
+ if(launchMode === 'case'){
+  return `
+   <div style="font-size:.82em;font-weight:800;color:#ffdf5d;margin:8px 0 4px">⏱️ Case Study Timers (seconds)</div>
+   <div class="timer-grid">
+    <label class="timer-item"><span>🗳️ Poll</span><input type="number" id="mPollTime" min="5" max="900" value="45"></label>
+    <label class="timer-item"><span>🎤 Discuss</span><input type="number" id="mDiscTime" min="5" max="900" value="60"></label>
+    <label class="timer-item"><span>📊 Ranking</span><input type="number" id="mRankTime" min="5" max="900" value="60"></label>
+    <label class="timer-item"><span>✍️ Writing</span><input type="number" id="mOpenTime" min="5" max="900" value="120"></label>
+    <label class="timer-item"><span>✅ Check</span><input type="number" id="mCheckTime" min="5" max="900" value="20"></label>
+    <label class="timer-item"><span>👀 Preview</span><input type="number" id="mCasePrev" min="0" max="120" value="5"></label>
+   </div>`;
+ }
+ return `
+  <div class="timer-grid">
+   <label class="timer-item"><span>⏱️ Timer (s)</span><input type="number" id="mQTime" min="5" max="900" value="15"></label>
+   <label class="timer-item"><span>👀 Preview (s)</span><input type="number" id="mPrevTime" min="0" max="120" value="5"></label>
+  </div>`;
+}
+
 function renderStandby(){
  const sk = 'standby:' + launchMode;
  if(lastKey === sk) return;
@@ -126,6 +151,7 @@ function renderStandby(){
    <select id="mQuizSel" class="sel">
     <option value="">${launchMode==='case'?'— Select a Case Study —':'— Select a Quiz —'}</option>
    </select>
+   ${renderTimersHtml()}
    <div class="opt-grid">${renderOptsHtml()}</div>
    <div class="bots-row">
     <span>🤖 Practice Bots</span>
@@ -144,6 +170,11 @@ function renderStandby(){
 }
 
 function chk(id){ const el = document.getElementById(id); return !!(el && el.checked); }
+function numVal(id, def, lo, hi){
+ const el = document.getElementById(id);
+ const v = el ? parseInt(el.value, 10) : NaN;
+ return isNaN(v) ? def : Math.max(lo, Math.min(hi, v));
+}
 
 async function launchFromPhone(){
  if(launching) return;
@@ -164,6 +195,8 @@ async function launchFromPhone(){
  const payload = {
   quiz: qf,
   pair_key: rkey,
+  qtime: isCase ? numVal('mCheckTime', 20, 5, 900) : numVal('mQTime', 15, 5, 900),
+  preview: isCase ? numVal('mCasePrev', 5, 0, 120) : numVal('mPrevTime', 5, 0, 120),
   shuffle: isCase ? false : chk('mShuf'),
   icebreaker: chk('mIce'),
   teams: teamsOn,
@@ -183,6 +216,14 @@ async function launchFromPhone(){
   token: localStorage.getItem('brainrush_token') || '',
   password: sessionStorage.getItem('brainrush_pw') || ''
  };
+ if(isCase){
+  payload.discuss_time = numVal('mDiscTime', 60, 5, 900);
+  payload.case_times = {
+   poll: numVal('mPollTime', 45, 5, 900),
+   rank: numVal('mRankTime', 60, 5, 900),
+   open: numVal('mOpenTime', 120, 5, 900)
+  };
+ }
  launching = true;
  const btn = document.getElementById('mLaunchBtn');
  if(btn) btn.disabled = true;
@@ -233,6 +274,33 @@ function buildKeyText(){
  return '';
 }
 
+function startRemoteDiscuss(){
+ const el = document.getElementById('rDiscSec');
+ const sec = Math.max(5, Math.min(900, parseInt(el && el.value, 10) || S.discuss_default || 60));
+ ctl('discuss', sec);
+}
+function setRemoteTimer(){
+ const el = document.getElementById('rSetSec');
+ const sec = Math.max(1, Math.min(900, parseInt(el && el.value, 10) || 15));
+ ctl('set_time', sec);
+}
+function setRemoteAuto(){
+ const el = document.getElementById('rAutoSec');
+ const sec = Math.max(2, Math.min(120, parseInt(el && el.value, 10) || 7));
+ ctl('set_auto_time', sec);
+}
+function remoteDiscussBar(lbl){
+ const defSec = S.discuss_default || 60;
+ const running = S.discuss_left != null && S.discuss_left > 0;
+ return `<div class="disc-bar">
+  <div id="rDiscuss" data-lbl="${esc(lbl||'Discussion Timer')}" style="width:100%;font-weight:800;color:#ffdf5d"></div>
+  <input id="rDiscSec" type="number" min="5" max="900" value="${defSec}" onkeydown="if(event.key==='Enter')startRemoteDiscuss()">
+  <span style="font-weight:700;font-size:.88em">s</span>
+  <button class="ctrl-btn" onclick="startRemoteDiscuss()">⏱️ ${running ? 'Restart' : 'Start'}</button>
+  ${running ? `<button class="ctrl-btn" style="flex:0 0 auto" onclick="ctl('discuss_add',-15)">-15s</button><button class="ctrl-btn" style="flex:0 0 auto" onclick="ctl('discuss_add',30)">+30s</button><button class="ctrl-btn" style="flex:0 0 auto" onclick="ctl('discuss',0)">⏹️ Clear</button>` : ''}
+ </div>`;
+}
+
 function buildResultsDetail(denom){
  const qt = S.qtype || 'mc';
  if(qt === 'poll'){
@@ -251,20 +319,16 @@ function buildResultsDetail(denom){
   return `
    <div style="margin-top:8px">${bars}</div>
    ${defs}
-   <div class="disc-bar">
-    <div id="rDiscuss" style="width:100%;font-weight:800;color:#ffdf5d"></div>
-    <button class="ctrl-btn" onclick="ctl('discuss',60)">⏱️ Start 60s Discussion</button>
-    <button class="ctrl-btn" style="flex:0 0 auto" onclick="ctl('discuss',0)">⏹️ Clear</button>
-   </div>`;
+   ${remoteDiscussBar('Discussion Timer')}`;
  }
  if(qt === 'rank'){
   const items = (S.rank_avg || []).map((r, idx) => `<li><b>${esc(r.item)}</b> <small>(avg #${esc(r.avg)})</small></li>`).join('');
-  return `<div style="margin-top:8px">📊 <b>Priority Ranking (${S.rank_n || 0} ranked):</b><ol style="margin:6px 0 2px;padding-left:20px">${items || '<li><i>No rankings submitted</i></li>'}</ol></div>`;
+  return `<div style="margin-top:8px">📊 <b>Priority Ranking (${S.rank_n || 0} ranked):</b><ol style="margin:6px 0 2px;padding-left:20px">${items || '<li><i>No rankings submitted</i></li>'}</ol></div>${remoteDiscussBar('Debrief Timer')}`;
  }
  if(qt === 'open'){
   const rs = S.responses || [];
   const top = rs.slice(0, 5).map(r => `<div class="poll-row">“${esc(r.text)}” ${r.votes ? `<b>(👍 ${r.votes})</b>` : ''}</div>`).join('');
-  return `<div style="margin-top:8px">✍️ <b>${rs.length} response${rs.length === 1 ? '' : 's'} submitted</b>${top ? `<div style="margin-top:6px">${top}</div>` : ''}</div>`;
+  return `<div style="margin-top:8px">✍️ <b>${rs.length} response${rs.length === 1 ? '' : 's'} submitted</b>${top ? `<div style="margin-top:6px">${top}</div>` : ''}</div>${remoteDiscussBar('Debrief Timer')}`;
  }
  if(qt === 'info') return '';
  const kt = buildKeyText();
@@ -289,7 +353,8 @@ function updateLiveText(){
  const dcEl = document.getElementById('rDiscuss');
  if(dcEl){
   const dl = S.discuss_left || 0;
-  dcEl.textContent = dl > 0 ? `🗣️ Discussion Timer: ${dl}s left` : '🗣️ Discussion Timer: Ready';
+  const lbl = dcEl.getAttribute('data-lbl') || 'Discussion Timer';
+  dcEl.textContent = dl > 0 ? `🗣️ ${lbl}: ${dl}s left` : `🗣️ ${lbl}: Ready`;
  }
  const wdEl = document.getElementById('rWords');
  if(wdEl && ph === 'icebreaker'){
@@ -307,6 +372,8 @@ function render(){
  const isCaseSlide = !!(S.case || isCaseGame);
  const denom = S.n_active != null ? S.n_active : (S.n || 0);
  const startDisabled = (ph === 'lobby' && (S.n || 0) === 0);
+ const inPrev = (ph === 'question' && S.qtype !== 'info' && !S.paused && (S.preview_left || 0) > 0);
+ const discOn = (S.discuss_left != null && S.discuss_left > 0);
 
  const resSig = ph === 'results' ? JSON.stringify([
   S.counts, S.defenders, S.rank_avg, S.rank_n,
@@ -317,6 +384,7 @@ function render(){
  const stateKey = [
   pin, ph, S.index, S.total, S.qtype || '', isCaseGame ? 1 : 0, S.case ? 1 : 0,
   S.is_last ? 1 : 0, startDisabled ? 1 : 0, S.paused ? 1 : 0, S.auto ? 1 : 0,
+  S.auto_time || 7, inPrev ? 1 : 0, discOn ? 1 : 0, S.discuss_default || 60,
   rkey ? 1 : 0, S.note || '', S.question || '', S.body || '', S.prompt || '',
   JSON.stringify(S.pending_list || []), resSig
  ].join('|');
@@ -342,6 +410,7 @@ function render(){
     <div class="ans-box">
      <div><b>${itemTag} ${(S.index || 0) + 1}/${S.total || 0}:</b> ${esc(S.question)}</div>
      ${S.qtype === 'info' && S.body ? `<div class="body-prev">${esc(S.body)}</div>` : ''}
+     ${ph === 'question' && S.qtype === 'info' ? remoteDiscussBar('Chapter Timer') : ''}
      ${ph === 'question' && S.qtype !== 'info' ? `<div style="margin-top:6px"><b id="rTimer"></b> &middot; <span id="rAns" style="font-weight:700"></span></div>` : ''}
      ${showKeyInQ ? `<div style="margin-top:6px">🔑 Answer Key: <b>${esc(keyTxt)}</b></div>` : ''}
      ${ph === 'results' ? buildResultsDetail(denom) : ''}
@@ -355,6 +424,22 @@ function render(){
    ? `<div class="ans-box" style="background:#ffdf5d;color:#2b0d57"><b style="color:#2b0d57">🛡️ Waiting for approval:</b><br>${S.pending_list.map(p => `${esc((p.avatar ? p.avatar + ' ' : '') + p.name)} <button class="ctrl-btn" style="padding:4px 10px;background:#26890c" data-n="${esc(p.name)}" onclick="appr(this.dataset.n,true)">✓</button> <button class="ctrl-btn" style="padding:4px 10px;background:#e21b3c" data-n="${esc(p.name)}" onclick="appr(this.dataset.n,false)">✕</button>`).join('<br>')}</div>`
    : '';
   const lobbyHint = startDisabled ? `<div class="sub" style="margin:2px 0 6px;color:#ffdf5d">Waiting for players to join (or tap 🤖 +5 Bots)</div>` : '';
+  const timerSetRow = (ph === 'question' && S.qtype !== 'info')
+   ? `<div class="set-row">
+       <span>⏱️ Set Timer:</span>
+       <input id="rSetSec" type="number" min="1" max="900" value="${Math.max(5, Math.ceil(S.left || S.qtime || 15))}" onkeydown="if(event.key==='Enter')setRemoteTimer()">
+       <span>s</span>
+       <button class="ctrl-btn" style="padding:7px 14px" onclick="setRemoteTimer()">Set</button>
+      </div>`
+   : '';
+  const autoSetRow = (!isCaseGame && S.auto)
+   ? `<div class="set-row">
+       <span>⏭️ Auto Wait:</span>
+       <input id="rAutoSec" type="number" min="2" max="120" value="${S.auto_time || 7}" onkeydown="if(event.key==='Enter')setRemoteAuto()">
+       <span>s</span>
+       <button class="ctrl-btn" style="padding:7px 14px" onclick="setRemoteAuto()">Set</button>
+      </div>`
+   : '';
 
   $.innerHTML = `
    <div class="badge">🕹️ HOST REMOTE &middot; PIN ${esc(pin)}</div>
@@ -365,14 +450,19 @@ function render(){
      : `<p style="font-weight:800;font-size:1.15em;margin:10px 0">🎉 Session Complete!</p>${rkey ? `<button class="big-btn sec" onclick="backToStandby()">🏠 Back to Mobile Standby / Launch New</button>` : ''}`
    }
    <div class="ctrl-grid">
+    ${inPrev ? `<button class="ctrl-btn" style="grid-column:1/-1;background:#ffdf5d;color:#2b0d57" onclick="ctl('skip_preview')">⏭️ Open Answers Now</button>` : ''}
     ${ph === 'question' && S.qtype !== 'info' ? `
      <button class="ctrl-btn" onclick="ctl('pause')">${S.paused ? '▶️ Resume' : '⏸️ Pause'}</button>
-     <button class="ctrl-btn" onclick="ctl('add_time',10)">⏱️ +10 Sec</button>
+     <button class="ctrl-btn" onclick="ctl('add_time',-10)">⏱️ -10s</button>
+     <button class="ctrl-btn" onclick="ctl('add_time',10)">⏱️ +10s</button>
+     <button class="ctrl-btn" onclick="ctl('add_time',30)">⏱️ +30s</button>
     ` : ''}
     ${!isCaseGame ? `<button class="ctrl-btn ${S.auto ? 'on' : ''}" onclick="ctl('toggle_auto')">⏭️ Auto: ${S.auto ? 'ON' : 'Off'}</button>` : ''}
     <button class="ctrl-btn" onclick="addBots(5)">🤖 +5 Bots</button>
     <button id="awakeBtn" class="ctrl-btn" onclick="toggleAwake()">☀️ Awake: <span id="awakeState">ON</span></button>
    </div>
+   ${timerSetRow}
+   ${autoSetRow}
   `;
   setAwakeLabel();
  }

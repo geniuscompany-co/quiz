@@ -441,9 +441,17 @@ def activate_pending(g, pid):
 def qtime(g, i=None):
     idx = g["q"] if i is None else i
     if is_speed_q(g, idx):
-        return 5
-    if 0 <= idx < len(g["quiz"]) and qtype_of(g["quiz"][idx]) in CASE_TIMES:
-        return g["quiz"][idx].get("t") or CASE_TIMES[qtype_of(g["quiz"][idx])]
+        return g.get("speed_time") or 5
+    if 0 <= idx < len(g["quiz"]):
+        q = g["quiz"][idx]
+        qtp = qtype_of(q)
+        if qtp in CASE_TIMES:
+            if q.get("t"):
+                return q["t"]
+            ct = g.get("case_times") or {}
+            return ct.get(qtp) or CASE_TIMES[qtp]
+        if q.get("t_custom") and q.get("t"):
+            return q["t"]
     if g.get("qtime"):
         return g["qtime"]
     return g["quiz"][idx].get("t", DEFAULT_TIME)
@@ -608,6 +616,15 @@ def clean_questions(questions):
             item["src"] = str(q["src"]).strip()
         if q.get("img"):
             item["img"] = str(q["img"]).strip()
+        if q.get("t") is not None and qtype != "info":
+            try:
+                tv = int(q["t"])
+                if tv > 0:
+                    item["t"] = max(5, min(900, tv))
+                    if q.get("t_custom") or qtype in CASE_TYPES:
+                        item["t_custom"] = True
+            except Exception:
+                pass
         cleaned.append(item)
     return cleaned
 
@@ -655,6 +672,7 @@ def new_game(quiz_file="quiz.json", count=None, shuffle=False, custom_questions=
         "pending": {}, "modlog": [],
         "auto": False, "phase_entered": time.time(),
         "paused": False, "pause_rem": 0.0, "pause_prev": 0.0, "extra_time": 0.0,
+        "case_times": {}, "discuss_time": 60,
     }
     return GAMES[pin]
 
@@ -695,6 +713,7 @@ def replay_game(g, quiz_file="quiz.json", count=None, shuffle=True, custom_quest
     g["team_prompts"] = {}
     g["paused"] = False
     g["extra_time"] = 0.0
+    g["discuss_until"] = 0.0
     g["phase_entered"] = time.time()
     for p in g["players"].values():
         p["score"] = 0
@@ -847,13 +866,14 @@ def is_team_battle(g, qi):
 
 def prev_time(g, qi=None):
     idx = g["q"] if qi is None else qi
-    base = g.get("preview", PREVIEW_TIME)
+    base = max(0.0, float(g.get("preview", PREVIEW_TIME)))
     if idx is not None and is_speed_q(g, idx):
         return 0.0
     if idx is not None and 0 <= idx < len(g["quiz"]) and qtype_of(g["quiz"][idx]) == "info":
         return 0.0
     if idx is not None and 0 <= idx < len(g["quiz"]) and is_team_battle(g, idx):
-        return max(base, 12.0)
+        tb_t = g.get("team_preview")
+        return max(0.0, float(tb_t)) if tb_t is not None else max(base, 12.0)
     return base
 
 
@@ -1151,7 +1171,7 @@ def start_question(g, qi):
 
 
 def intro_len(g):
-    base = g.get("preview", PREVIEW_TIME)
+    base = max(4.0, float(g.get("preview", PREVIEW_TIME)))
     if g["quiz"][g["q"]].get("redemption"):
         return base + 2.0
     if g["q"] in g.get("wheel_mods", {}):
@@ -1320,6 +1340,7 @@ def advance_game(g):
         g["phase"] = "results"
         g["phase_entered"] = time.time()
         g["paused"] = False
+        g["discuss_until"] = 0.0
         settle_question(g)
         if qtype_of(g["quiz"][qi]) == "info":
             advance_game(g)
@@ -1420,6 +1441,7 @@ def tick(g):
             g["phase"] = "results"
             g["phase_entered"] = now
             g["paused"] = False
+            g["discuss_until"] = 0.0
             settle_question(g)
     elif g["phase"] == "intro":
         if now - g.get("intro_start", now) >= intro_len(g):
@@ -1428,7 +1450,8 @@ def tick(g):
         if now - g.get("phase_entered", now) >= 3.5:
             advance_game(g)
     elif g["phase"] in ("results", "board") and g.get("auto"):
-        wait_s = 7.0 if g["phase"] == "results" else 6.0
+        at = g.get("auto_time")
+        wait_s = float(at) if at else (7.0 if g["phase"] == "results" else 6.0)
         if now - g.get("phase_entered", now) >= wait_s:
             advance_game(g)
 
@@ -1748,8 +1771,11 @@ def view(g, pid=None, host=False):
         "sabotage_enabled": bool(g.get("sabotage", True)),
         "team_board": team_leaderboard(g) if g.get("teams") else [],
         "auto": bool(g.get("auto")),
+        "auto_time": int(g["auto_time"]) if g.get("auto_time") else 7,
         "paused": bool(g.get("paused")),
         "case_game": any(is_case_type(x) for x in g["quiz"]),
+        "discuss_default": int(g.get("discuss_time", 60)),
+        "speed_time": int(g.get("speed_time", 5)),
         "logo": g.get("logo") or "",
     }
     du = g.get("discuss_until", 0.0)
@@ -1766,6 +1792,7 @@ def view(g, pid=None, host=False):
             out["up_next"] = {
                 "num": ni + 1, "total": len(g["quiz"]), "q": nq["q"],
                 "qtype": qtype_of(nq), "case": is_case_type(nq), "topic": nq.get("topic") or "",
+                "qtime": 0 if qtype_of(nq) == "info" else round(qtime(g, ni)),
             }
         else:
             out["up_next"] = None
@@ -1778,7 +1805,8 @@ def view(g, pid=None, host=False):
         out["words"] = [{"text": k, "count": v} for k, v in counts.items()]
         out["word_total"] = len(g.get("words", []))
     if ph in ("results", "board") and g.get("auto"):
-        wait_s = 7.0 if ph == "results" else 6.0
+        at = g.get("auto_time")
+        wait_s = float(at) if at else (7.0 if ph == "results" else 6.0)
         out["auto_left"] = max(0, round(wait_s - (now - g.get("phase_entered", now))))
     if g["q"] >= 0 and ph in ("question", "results"):
         q = g["quiz"][g["q"]]
@@ -2323,13 +2351,46 @@ class H(BaseHTTPRequestHandler):
                     if k_ in body:
                         g[k_] = bool(body[k_])
                 g["n_base"] = len(g["quiz"])
-                if "preview" in body:
-                    g["preview"] = float(body["preview"])
-                if body.get("qtime"):
+                if "preview" in body and body["preview"] is not None:
                     try:
-                        g["qtime"] = max(5, min(120, int(body["qtime"])))
+                        g["preview"] = max(0.0, min(120.0, float(body["preview"])))
                     except Exception:
                         pass
+                if "team_preview" in body and body["team_preview"] is not None:
+                    try:
+                        g["team_preview"] = max(0.0, min(180.0, float(body["team_preview"])))
+                    except Exception:
+                        pass
+                if body.get("qtime"):
+                    try:
+                        g["qtime"] = max(5, min(900, int(body["qtime"])))
+                    except Exception:
+                        pass
+                if body.get("speed_time"):
+                    try:
+                        g["speed_time"] = max(3, min(120, int(body["speed_time"])))
+                    except Exception:
+                        pass
+                if body.get("auto_time"):
+                    try:
+                        g["auto_time"] = max(2, min(120, int(body["auto_time"])))
+                    except Exception:
+                        pass
+                if body.get("discuss_time"):
+                    try:
+                        g["discuss_time"] = max(5, min(900, int(body["discuss_time"])))
+                    except Exception:
+                        pass
+                if isinstance(body.get("case_times"), dict):
+                    ct_ = {}
+                    for ck in ("poll", "rank", "open"):
+                        if body["case_times"].get(ck):
+                            try:
+                                ct_[ck] = max(5, min(900, int(body["case_times"][ck])))
+                            except Exception:
+                                pass
+                    if ct_:
+                        g["case_times"] = ct_
                 if "teams" in body:
                     g["teams"] = bool(body["teams"])
                 if "wager" in body:
@@ -2477,6 +2538,12 @@ class H(BaseHTTPRequestHandler):
                 if act == "toggle_auto":
                     g["auto"] = not g.get("auto", False)
                     g["phase_entered"] = time.time()
+                elif act == "set_auto_time":
+                    try:
+                        g["auto_time"] = max(2, min(120, int(float(body.get("sec", 7)))))
+                        g["phase_entered"] = time.time()
+                    except Exception:
+                        pass
                 elif act == "pause" and g["phase"] == "question":
                     if not g.get("paused"):
                         prev_l, q_l, _, _ = cur_timer_state(g)
@@ -2491,14 +2558,44 @@ class H(BaseHTTPRequestHandler):
                         else:
                             g["start"] = time.time() - prev_t - (qt - g.get("pause_rem", qt))
                         g["paused"] = False
+                elif act == "skip_preview" and g["phase"] == "question":
+                    if g.get("paused"):
+                        g["pause_prev"] = 0.0
+                    else:
+                        prev_l, _, _, _ = cur_timer_state(g)
+                        if prev_l > 0:
+                            g["start"] = time.time() - prev_time(g)
                 elif act == "add_time" and g["phase"] == "question":
                     add_s = float(body.get("sec", 10))
-                    g["extra_time"] = g.get("extra_time", 0.0) + add_s
+                    _, q_l, _, _ = cur_timer_state(g)
+                    new_rem = max(1.0, min(900.0, q_l + add_s))
+                    delta = new_rem - q_l
+                    g["extra_time"] = g.get("extra_time", 0.0) + delta
                     if g.get("paused"):
-                        g["pause_rem"] = g.get("pause_rem", 0.0) + add_s
+                        g["pause_rem"] = new_rem
+                elif act == "set_time" and g["phase"] == "question":
+                    target_s = max(1.0, min(900.0, float(body.get("sec", 30))))
+                    prev_l, q_l, _, _ = cur_timer_state(g)
+                    delta = target_s - q_l
+                    g["extra_time"] = g.get("extra_time", 0.0) + delta
+                    if g.get("paused"):
+                        g["pause_prev"] = 0.0
+                        g["pause_rem"] = target_s
+                    elif prev_l > 0:
+                        g["start"] = time.time() - prev_time(g)
                 elif act == "discuss":
-                    sec_ = max(0.0, min(600.0, float(body.get("sec", 60))))
-                    g["discuss_until"] = (time.time() + sec_) if sec_ > 0 else 0.0
+                    sec_ = max(0.0, min(900.0, float(body.get("sec", g.get("discuss_time", 60)))))
+                    if sec_ > 0:
+                        g["discuss_time"] = int(round(sec_))
+                        g["discuss_until"] = time.time() + sec_
+                    else:
+                        g["discuss_until"] = 0.0
+                elif act == "discuss_add":
+                    add_s = float(body.get("sec", 30))
+                    now_ = time.time()
+                    cur_left = max(0.0, g.get("discuss_until", 0.0) - now_)
+                    new_left = max(0.0, min(900.0, cur_left + add_s))
+                    g["discuss_until"] = (now_ + new_left) if new_left > 0 else 0.0
                 elif act == "set_prompt":
                     pr = str(body.get("prompt") or "").strip()[:120]
                     if pr:
