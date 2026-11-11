@@ -302,6 +302,16 @@ body.is-presenter-console #metaBar,body.is-presenter-console #lateJoin{display:n
 .pcon-roster{max-height:240px;overflow-y:auto;display:flex;flex-direction:column;gap:5px;margin-top:8px}
 .pcon-p{display:flex;align-items:center;justify-content:space-between;gap:8px;background:#fff1;padding:6px 10px;border-radius:8px;font-size:.92em;font-weight:700}
 .pcon-p button{margin:0;padding:2px 8px;font-size:.8em;border-radius:99px;background:#e21b3cbb}
+.remote-box{background:#0005;border:1px solid #fff3;border-radius:12px;padding:11px 13px;margin-bottom:12px}
+.remote-head{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:8px;font-size:.9em;font-weight:800}
+.remote-status{display:inline-block;padding:3px 10px;border-radius:99px;font-size:.82em;font-weight:800;background:#ffffff1f;color:#fffc}
+.remote-status.wait{background:#ff980044;border:1px solid #ffdf5d88;color:#ffdf5d}
+.remote-status.live{background:#1b5e20cc;border:1px solid #7dff6b;color:#7dff6b}
+.remote-url-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.remote-url-row input{flex:1;min-width:190px;padding:8px 10px;border-radius:8px;border:0;font-size:.88em;font-weight:700;color:#2b0d57;background:#fff;margin:0}
+.remote-url-row button,.remote-url-row a.rbtn{margin:0;padding:7px 12px;font-size:.86em;border-radius:8px;background:#ffffff28;color:#fff;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;gap:4px;border:1px solid #fff3;cursor:pointer;white-space:nowrap}
+.remote-url-row button:hover,.remote-url-row a.rbtn:hover{background:#ffffff3d}
+.remote-qr-box{display:none;align-items:center;gap:14px;margin-top:10px;padding-top:10px;border-top:1px solid #fff2;flex-wrap:wrap}
 </style></head><body>
 <button id="fsBtn" onclick="toggleFullscreen()">⛶ Fullscreen (F)</button>
 <div class="late-join" id="lateJoin">
@@ -341,7 +351,7 @@ body.is-presenter-console #metaBar,body.is-presenter-console #lateJoin{display:n
    <button id="hcBtn" onclick="toggleHc()"><span>◐ High Contrast</span><span class="state" id="hcState">Off</span></button>
   <div class="menu-sep"></div>
   <button id="presMenuBtn" onclick="closeNavMenu();openPresentationMode()"><span>📽️ Presentation Mode</span><span class="state" id="presMenuState">2nd Screen</span></button>
-  <button id="remoteBtn" style="display:none" onclick="closeNavMenu();openRemoteModal()"><span>📱 Phone Host Remote</span><span class="state">Open ↗</span></button>
+  <button id="remoteBtn" onclick="closeNavMenu();openRemoteModal()"><span>📱 Phone Host Remote</span><span class="state" id="remoteMenuState">Open ↗</span></button>
   <button onclick="closeNavMenu();openAccount()"><span>👤 Teacher Account</span><span class="state" id="acctState">Guest</span></button>
    <button class="quiz-only" onclick="closeNavMenu();openProgress()"><span>👥 Student Progress</span><span class="state">View</span></button>
    <button class="quiz-only" onclick="closeNavMenu();openHomework()"><span>📚 Homework</span><span class="state">Assign</span></button>
@@ -358,13 +368,16 @@ body.is-presenter-console #metaBar,body.is-presenter-console #lateJoin{display:n
 <canvas id="confetti"></canvas>
 <div id="reactions"></div>
 <div class="modal-bg" id="remoteModal">
- <div class="modal" style="max-width:460px;text-align:center">
+ <div class="modal" style="max-width:480px;text-align:center">
   <h2>📱 Phone Host Remote</h2>
-  <p>Open this link on your phone to control the session from anywhere in the room:</p>
-  <input id="remoteUrlInp" readonly onclick="this.select()">
-  <div style="display:flex;justify-content:center;gap:10px;margin-top:10px">
-   <button class="btn-sec" style="margin:0" onclick="navigator.clipboard.writeText(document.getElementById('remoteUrlInp').value)">📋 Copy Link</button>
-   <button style="margin:0;padding:10px 22px;font-size:1.05em" onclick="document.getElementById('remoteModal').classList.remove('open')">Done</button>
+  <p style="margin:6px 0 10px;opacity:.9;font-size:.95em">Scan or open on your phone to pick &amp; launch a session pre-game, or control slides, timers &amp; bots from anywhere in the room:</p>
+  <div style="margin:8px 0"><span class="remote-status wait" id="remoteModalStatus">🟡 Waiting for phone…</span></div>
+  <div style="margin:12px auto"><img id="remoteModalQr" style="width:170px;height:170px;border-radius:12px;background:#fff;padding:6px;box-shadow:0 6px 20px #0006" alt="Remote QR"></div>
+  <input id="remoteUrlInp" readonly onclick="this.select()" style="text-align:center;font-weight:700;color:#2b0d57">
+  <div style="display:flex;justify-content:center;gap:10px;margin-top:10px;flex-wrap:wrap">
+   <button type="button" class="btn-sec" id="remoteModalCopyBtn" style="margin:0" onclick="copyRemoteUrl('modal')">📋 Copy Link</button>
+   <a id="remoteModalOpenLink" href="/remote" target="_blank" style="text-decoration:none"><button type="button" class="btn-sec" style="margin:0">↗ Open</button></a>
+   <button type="button" style="margin:0;padding:10px 22px;font-size:1.05em" onclick="closeRemoteModal()">Done</button>
   </div>
  </div>
 </div>
@@ -483,55 +496,75 @@ Quote: Paris has been the capital since 987 CE."></textarea>
    <button type="button" id="tabCase" onclick="setHostSection('case')">📖 Case Studies</button>
   </div>
   <div class="quiz-row">
-   <select id="quizSel" onchange="syncQuizCount()"><option value="quiz.json">Loading…</option></select>
+   <select id="quizSel" onchange="syncQuizCount()"><option value="">— Select a Quiz —</option></select>
    <button class="btn-sec quiz-only" style="margin:0;padding:11px 16px;font-size:.98em;border-radius:10px" onclick="openQuizModal('quiz')">➕ Add Quiz</button>
    <button class="btn-sec case-only" style="margin:0;padding:11px 16px;font-size:.98em;border-radius:10px" onclick="openQuizModal('case')">📖 + New / Edit Case</button>
   </div>
   <div id="caseHint" style="display:none"></div>
   <div class="case-spec case-only">
-   <b>📖 Case Study Session (<span id="cSlideCnt">10</span> slides in chapter order)</b><br>
+   <b>📖 Case Study Session (<span id="cSlideCnt">—</span> slides in chapter order)</b><br>
    Uses only Case Study tools: untimed <b>Chapters</b> &amp; phone <b>Case File</b>, private <b>Stakeholder Roles</b>, <b>Ethical-Lens Polls</b> (45s + 60s debate timer), <b>Priority Rankings</b> (60s), <b>Anonymous Open Responses</b> with peer voting (120s), and optional <b>Concept Checks</b>.
   </div>
    <div class="quick-bar">
-   <label class="quiz-only">📝 Questions: <input id="qCount" type="number" min="1" max="200" value="15"> <span id="qMax" style="opacity:.8">/ 15</span></label>
+   <label class="quiz-only">📝 Questions: <input id="qCount" type="number" min="1" max="200" value="" placeholder="—"> <span id="qMax" style="opacity:.8">/ —</span></label>
    <label class="quiz-only">⏱️ Timer: <input id="qTime" type="number" min="5" max="120" value="15"><span style="opacity:.8">s</span></label>
    <label class="case-only" title="Applies only to scored Concept-Check MCQs inside a case; Polls use 45s, Rankings 60s, Open Writing 120s, Chapters untimed">⏱️ Concept-check timer: <input id="cTime" type="number" min="5" max="120" value="20"><span style="opacity:.8">s</span></label>
-   <button type="button" class="drawer-toggle" id="advBtn" onclick="toggleAdvPanel()">⚙️ Options <span id="optSummary" style="background:#26890c;padding:2px 8px;border-radius:99px;font-size:.85em">7 active</span> <span id="advCaret">▾</span></button>
+   <button type="button" class="drawer-toggle" id="advBtn" onclick="toggleAdvPanel()">⚙️ Options <span id="optSummary" style="background:#26890c;padding:2px 8px;border-radius:99px;font-size:.85em">0 active</span> <span id="advCaret">▾</span></button>
   </div>
   <div class="adv-panel" id="advPanel" onchange="updateOptSummary()">
    <div class="adv-sec-title quiz-only"><a href="#" onclick="openGuide('setup');return false" style="float:right;color:#ffdf5d;text-transform:none;letter-spacing:0;font-weight:700">📖 What do these do?</a>Game Modes &amp; Power-Ups</div>
    <div class="adv-sec-title case-only"><a href="#" onclick="openGuide('case');return false" style="float:right;color:#ffdf5d;text-transform:none;letter-spacing:0;font-weight:700">📖 How Case Studies work</a>Case Study Facilitation Tools</div>
    <div class="mode-grid">
-    <label class="mode-pill quiz-only"><input id="qShuffle" type="checkbox" checked> 🎲 Randomize Order</label>
-    <label class="mode-pill quiz-only"><input id="qWager" type="checkbox" checked> 🎰 Final Boss Wager</label>
-    <label class="mode-pill quiz-only"><input id="qRedemp" type="checkbox" checked> 🔄 Redemption Round</label>
+    <label class="mode-pill quiz-only"><input id="qShuffle" type="checkbox"> 🎲 Randomize Order</label>
+    <label class="mode-pill quiz-only"><input id="qWager" type="checkbox"> 🎰 Final Boss Wager</label>
+    <label class="mode-pill quiz-only"><input id="qRedemp" type="checkbox"> 🔄 Redemption Round</label>
     <label class="mode-pill quiz-only"><input id="qSabotage" type="checkbox"> ⛄ Snowballs</label>
-    <label class="mode-pill quiz-only"><input id="qWheel" type="checkbox" checked> 🎡 Mystery Wheel</label>
+    <label class="mode-pill quiz-only"><input id="qWheel" type="checkbox"> 🎡 Mystery Wheel</label>
     <label class="mode-pill"><input id="qTeams" type="checkbox" onchange="if(!this.checked){document.getElementById('qBattle').checked=false}"> <span class="quiz-only">🛡️ Team Mode</span><span class="case-only">🛡️ Discussion Teams</span></label>
-    <label class="mode-pill"><input id="qIce" type="checkbox" checked onchange="document.getElementById('icePromptRow').style.display=this.checked?'block':'none'"> 💭 Word Cloud Warm-Up</label>
+    <label class="mode-pill"><input id="qIce" type="checkbox" onchange="document.getElementById('icePromptRow').style.display=this.checked?'block':'none';updateOptSummary()"> 💭 Word Cloud Warm-Up</label>
     <label class="mode-pill quiz-only"><input id="qAuto" type="checkbox"> ⏭️ Auto-Advance</label>
-    <label class="mode-pill quiz-only"><input id="qHot" type="checkbox" checked> 🔥 Hot Seat Rounds</label>
+    <label class="mode-pill quiz-only"><input id="qHot" type="checkbox"> 🔥 Hot Seat Rounds</label>
     <label class="mode-pill quiz-only"><input id="qBattle" type="checkbox" onchange="if(this.checked){document.getElementById('qTeams').checked=true}updateOptSummary()"> 🤝 Team Battle (every 5th Q)</label>
-    <label class="mode-pill quiz-only"><input id="qTie" type="checkbox" checked> ⚔️ Sudden-Death Tiebreaker</label>
+    <label class="mode-pill quiz-only"><input id="qTie" type="checkbox"> ⚔️ Sudden-Death Tiebreaker</label>
     <label class="mode-pill quiz-only"><input id="qSpeed" type="checkbox"> ⚡ Speed Round (5 rapid Qs)</label>
     <label class="mode-pill quiz-only"><input id="qDbl" type="checkbox"> 💥 Double or Nothing Question</label>
     <label class="mode-pill quiz-only"><input id="qSteal" type="checkbox"> 🕵️ Steal / Swap Power-Up</label>
     <label class="mode-pill"><input id="qMod" type="checkbox"> 🛡️ Approve Names First</label>
+    <label class="mode-pill"><input id="qRosterOn" type="checkbox" onchange="document.getElementById('rosterRow').style.display=this.checked?'block':'none';updateOptSummary()"> 👥 Class Roster</label>
+    <label class="mode-pill"><input id="qRemote" type="checkbox" onchange="onRemoteOptChange()"> 📱 Phone Host Remote</label>
    </div>
-   <div id="icePromptRow" style="display:block;margin-bottom:12px">
+   <div id="icePromptRow" style="display:none;margin-bottom:12px">
     <label style="display:block;font-size:.86em;font-weight:700;opacity:.85;margin-bottom:4px">💭 Warm-Up Question:</label>
     <input id="qIcePrompt" type="text" maxlength="120" value="In one word, how are you feeling about today's quiz?" placeholder="e.g. In one word, what's your favorite food?" style="width:100%;box-sizing:border-box;padding:9px 12px;border-radius:8px;border:0;font-size:.96em;font-weight:600;color:#2b0d57">
    </div>
-   <div style="margin-bottom:12px">
-     <label style="display:block;font-size:.86em;font-weight:700;opacity:.85;margin-bottom:4px">👥 Class Roster (optional — one name per line; students pick their name from a list instead of typing one. Saved on this computer.)</label>
-     <textarea id="qRoster" oninput="saveSetup()" placeholder="Ava Johnson&#10;Ben Carter&#10;..." style="width:100%;box-sizing:border-box;padding:9px 12px;border-radius:8px;border:0;color:#2b0d57"></textarea>
+   <div id="rosterRow" style="display:none;margin-bottom:12px">
+    <label style="display:block;font-size:.86em;font-weight:700;opacity:.85;margin-bottom:4px">👥 Class Roster (one name per line; students pick their name from a list instead of typing one. Saved on this computer.)</label>
+    <textarea id="qRoster" oninput="saveSetup()" placeholder="Ava Johnson&#10;Ben Carter&#10;..." style="width:100%;box-sizing:border-box;padding:9px 12px;border-radius:8px;border:0;color:#2b0d57"></textarea>
+   </div>
+   <div class="remote-box" id="advRemoteBox">
+    <div class="remote-head">
+     <span>📱 Phone Host Remote</span>
+     <span class="remote-status" id="advRemoteStatus">Off — check 📱 Phone Host Remote or copy link to pair</span>
     </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">
-     <div><label style="display:block;font-size:.8em;font-weight:700;opacity:.85">🖼️ Logo image URL (optional)</label><input id="qLogo" oninput="saveSetup()" placeholder="https://…/logo.png" style="width:100%;box-sizing:border-box;padding:8px 10px;border-radius:8px;border:0;color:#2b0d57"></div>
-     <div><label style="display:block;font-size:.8em;font-weight:700;opacity:.85">🌄 Host background image URL</label><input id="qBg" oninput="saveSetup()" placeholder="https://…/bg.jpg" style="width:100%;box-sizing:border-box;padding:8px 10px;border-radius:8px;border:0;color:#2b0d57"></div>
+    <div class="remote-url-row">
+     <input id="advRemoteUrl" type="text" readonly onclick="this.select()" value="">
+     <button type="button" id="advRemoteCopyBtn" onclick="copyRemoteUrl('adv')">📋 Copy</button>
+     <button type="button" onclick="toggleAdvRemoteQr()">🔳 QR</button>
+     <a id="advRemoteOpenLink" class="rbtn" href="/remote" target="_blank" onclick="activateRemoteForOpen()">↗ Open</a>
     </div>
-    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;padding-top:8px;border-top:1px solid #fff2;font-weight:700;font-size:.95em">
-    <label style="display:inline-flex;align-items:center;gap:8px"><span class="quiz-only">🤖 Phantom Bot Players:</span><span class="case-only">🤖 Simulated Participants:</span> <input id="qBots" type="number" min="0" max="30" value="0"></label>
+    <div class="remote-qr-box" id="advRemoteQrBox">
+     <img id="advRemoteQrImg" style="width:150px;height:150px;border-radius:10px;background:#fff" alt="Remote QR">
+     <div style="flex:1;min-width:180px;font-size:.85em;opacity:.88;line-height:1.45">
+      <b>Scan on your phone</b> to choose &amp; launch a Quiz or Case Study from anywhere in the room, then advance slides, pause timers &amp; manage bots live!
+     </div>
+    </div>
+   </div>
+   <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">
+    <div><label style="display:block;font-size:.8em;font-weight:700;opacity:.85">🖼️ Logo image URL (optional)</label><input id="qLogo" oninput="saveSetup()" placeholder="https://…/logo.png" style="width:100%;box-sizing:border-box;padding:8px 10px;border-radius:8px;border:0;color:#2b0d57"></div>
+    <div><label style="display:block;font-size:.8em;font-weight:700;opacity:.85">🌄 Host background image URL</label><input id="qBg" oninput="saveSetup()" placeholder="https://…/bg.jpg" style="width:100%;box-sizing:border-box;padding:8px 10px;border-radius:8px;border:0;color:#2b0d57"></div>
+   </div>
+   <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;padding-top:8px;border-top:1px solid #fff2;font-weight:700;font-size:.95em">
+    <label style="display:inline-flex;align-items:center;gap:8px"><span class="quiz-only">🤖 Phantom Bot Players:</span><span class="case-only">🤖 Simulated Participants:</span> <input id="qBots" type="number" min="0" max="30" value="0" oninput="updateOptSummary()"></label>
     <span class="quiz-only" style="opacity:.68;font-size:.88em">Bots answer &amp; compete alongside live players</span>
     <span class="case-only" style="opacity:.68;font-size:.88em">Bots vote in polls, rank priorities &amp; submit sample arguments</span>
    </div>
@@ -575,7 +608,7 @@ function toggleAdvPanel(){
  if(c) c.textContent = open ? '▴' : '▾';
 }
 function updateOptSummary(){
- const ids = ['qShuffle','qWager','qRedemp','qSabotage','qWheel','qTeams','qIce','qAuto','qHot','qBattle','qTie','qSpeed','qDbl','qSteal','qMod'];
+ const ids = ['qShuffle','qWager','qRedemp','qSabotage','qWheel','qTeams','qIce','qAuto','qHot','qBattle','qTie','qSpeed','qDbl','qSteal','qMod','qRosterOn','qRemote'];
  let n = ids.filter(id=>{const el=document.getElementById(id); return el && el.checked;}).length;
  const bots = document.getElementById('qBots');
  if(bots && parseInt(bots.value,10) > 0) n++;
@@ -790,16 +823,181 @@ function showReactions(list){
  });
 }
 
-function openRemoteModal(){
- const u = `${location.origin}/remote?pin=${pin}&host=${host}`;
- document.getElementById('remoteUrlInp').value = u;
- document.getElementById('remoteModal').classList.add('open');
+// --- Phone Host Remote (Pre-Game & Live Pairing) ---
+let remoteProbeTimer = null, remoteEntering = false, remoteLastLive = false;
+function getRemoteKey(){
+ let k = '';
+ try{ k = localStorage.getItem('brainrush_rkey') || ''; }catch(e){}
+ if(!/^[A-Za-z0-9]{12,40}$/.test(k)){
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789';
+  const arr = new Uint8Array(20);
+  if(window.crypto && window.crypto.getRandomValues) window.crypto.getRandomValues(arr);
+  else for(let i=0;i<20;i++) arr[i] = Math.floor(Math.random()*256);
+  k = Array.from(arr, b => chars[b % chars.length]).join('');
+  try{ localStorage.setItem('brainrush_rkey', k); }catch(e){}
+ }
+ return k;
 }
+function getRemoteUrl(){
+ return `${location.origin}/remote?key=${encodeURIComponent(getRemoteKey())}`;
+}
+function setRemoteStatusUI(paired, phoneLive){
+ remoteLastLive = !!phoneLive;
+ const advSt = document.getElementById('advRemoteStatus');
+ const modSt = document.getElementById('remoteModalStatus');
+ const menuSt = document.getElementById('remoteMenuState');
+ const menuBtn = document.getElementById('remoteBtn');
+ const txt = !paired
+  ? 'Off — check 📱 Phone Host Remote or copy link to pair'
+  : (phoneLive ? '🟢 Phone Connected!' : '🟡 Waiting for phone…');
+ const cls = !paired ? 'remote-status' : (phoneLive ? 'remote-status live' : 'remote-status wait');
+ if(advSt){ advSt.textContent = txt; advSt.className = cls; }
+ if(modSt){
+  modSt.textContent = phoneLive ? '🟢 Phone Connected!' : '🟡 Waiting for phone…';
+  modSt.className = phoneLive ? 'remote-status live' : 'remote-status wait';
+ }
+ if(menuSt) menuSt.textContent = phoneLive ? 'Live 🟢' : (paired ? 'Ready' : 'Open ↗');
+ if(menuBtn) menuBtn.classList.toggle('on', !!phoneLive);
+}
+async function syncRemotePair(active){
+ if(IS_AUDIENCE) return null;
+ try{
+  const payload = active
+   ? {key: getRemoteKey(), ...(pin && host ? {pin, host} : {})}
+   : {key: getRemoteKey(), clear: true};
+  const r = await post('/api/remote_pair', payload);
+  if(r && active) setRemoteStatusUI(true, !!r.phone_live);
+  return r;
+ }catch(e){ return null; }
+}
+function refreshRemoteQrImgs(){
+ const u = getRemoteUrl();
+ const qrSrc = '/api/qr?text=' + encodeURIComponent(u);
+ const au = document.getElementById('advRemoteUrl'); if(au) au.value = u;
+ const ao = document.getElementById('advRemoteOpenLink'); if(ao) ao.href = u;
+ const aq = document.getElementById('advRemoteQrImg'); if(aq && aq.getAttribute('src') !== qrSrc) aq.src = qrSrc;
+}
+async function probeRemoteOnce(){
+ if(IS_AUDIENCE) return;
+ try{
+  const r = await (await fetch('/api/remote_pair?key=' + encodeURIComponent(getRemoteKey()) + '&probe=1')).json();
+  if(!r) return;
+  const qr = document.getElementById('qRemote');
+  const modalOpen = !!(document.getElementById('remoteModal') && document.getElementById('remoteModal').classList.contains('open'));
+  if((qr && qr.checked) || modalOpen || r.paired){
+   setRemoteStatusUI(!!(r.paired || (qr && qr.checked) || modalOpen), !!r.phone_live);
+  }
+  if(r.paired && r.pin && r.host && !pin && !remoteEntering){
+   remoteEntering = true;
+   pin = r.pin; host = r.host;
+   try{ localStorage.setItem('brainrush_host', JSON.stringify({pin, host})); }catch(e){}
+   document.querySelectorAll('.resume-card').forEach(el=>el.remove());
+   closeRemoteModal();
+   enterGame();
+  }
+ }catch(e){}
+}
+function ensureRemoteProbe(){
+ if(IS_AUDIENCE){ if(remoteProbeTimer){ clearInterval(remoteProbeTimer); remoteProbeTimer = null; } return; }
+ const qr = document.getElementById('qRemote');
+ const modalOpen = !!(document.getElementById('remoteModal') && document.getElementById('remoteModal').classList.contains('open'));
+ const shouldRun = (!pin && qr && qr.checked) || modalOpen;
+ if(shouldRun && !remoteProbeTimer){
+  probeRemoteOnce();
+  remoteProbeTimer = setInterval(()=>{
+   const qrNow = document.getElementById('qRemote');
+   const mNow = !!(document.getElementById('remoteModal') && document.getElementById('remoteModal').classList.contains('open'));
+   if((!pin && qrNow && qrNow.checked) || mNow) probeRemoteOnce();
+   else { clearInterval(remoteProbeTimer); remoteProbeTimer = null; }
+  }, 1500);
+ } else if(!shouldRun && remoteProbeTimer){
+  clearInterval(remoteProbeTimer); remoteProbeTimer = null;
+ }
+}
+function onRemoteOptChange(){
+ updateOptSummary();
+ refreshRemoteQrImgs();
+ const qr = document.getElementById('qRemote');
+ const box = document.getElementById('advRemoteQrBox');
+ if(qr && qr.checked){
+  if(box) box.style.display = 'flex';
+  setRemoteStatusUI(true, remoteLastLive);
+  syncRemotePair(true);
+  ensureRemoteProbe();
+ } else {
+  if(box) box.style.display = 'none';
+  setRemoteStatusUI(false, false);
+  if(!pin) syncRemotePair(false);
+  ensureRemoteProbe();
+ }
+}
+function copyRemoteUrl(where){
+ const u = getRemoteUrl();
+ try{ navigator.clipboard.writeText(u); }catch(e){}
+ const qr = document.getElementById('qRemote');
+ if(qr && !qr.checked){ qr.checked = true; onRemoteOptChange(); }
+ const btn = document.getElementById(where === 'modal' ? 'remoteModalCopyBtn' : 'advRemoteCopyBtn');
+ if(btn){
+  const orig = where === 'modal' ? '📋 Copy Link' : '📋 Copy';
+  btn.textContent = '✅ Copied!';
+  setTimeout(()=>{ btn.textContent = orig; }, 1400);
+ }
+}
+function toggleAdvRemoteQr(){
+ const qr = document.getElementById('qRemote');
+ const box = document.getElementById('advRemoteQrBox');
+ refreshRemoteQrImgs();
+ if(qr && !qr.checked){
+  qr.checked = true;
+  onRemoteOptChange();
+  if(box) box.style.display = 'flex';
+  return;
+ }
+ if(box) box.style.display = (box.style.display === 'flex') ? 'none' : 'flex';
+}
+function activateRemoteForOpen(){
+ refreshRemoteQrImgs();
+ const qr = document.getElementById('qRemote');
+ if(qr && !qr.checked){ qr.checked = true; onRemoteOptChange(); }
+ else syncRemotePair(true);
+}
+function openRemoteModal(){
+ const u = getRemoteUrl();
+ const qrSrc = '/api/qr?text=' + encodeURIComponent(u);
+ const inp = document.getElementById('remoteUrlInp'); if(inp) inp.value = u;
+ const ol = document.getElementById('remoteModalOpenLink'); if(ol) ol.href = u;
+ const mq = document.getElementById('remoteModalQr'); if(mq && mq.getAttribute('src') !== qrSrc) mq.src = qrSrc;
+ const qr = document.getElementById('qRemote');
+ if(qr && !qr.checked){
+  qr.checked = true;
+  refreshRemoteQrImgs();
+  const box = document.getElementById('advRemoteQrBox');
+  if(box) box.style.display = 'flex';
+  updateOptSummary();
+ }
+ setRemoteStatusUI(true, remoteLastLive);
+ document.getElementById('remoteModal').classList.add('open');
+ syncRemotePair(true);
+ ensureRemoteProbe();
+}
+function closeRemoteModal(){
+ const m = document.getElementById('remoteModal');
+ if(m) m.classList.remove('open');
+ ensureRemoteProbe();
+}
+function initRemoteSetupUI(){
+ if(IS_AUDIENCE) return;
+ refreshRemoteQrImgs();
+}
+initRemoteSetupUI();
 
 // --- Custom Quiz Builder / Uploader / Editor ---
 function openQuizModal(){
  const es = document.getElementById('editQuizSel');
- if(es) es.innerHTML = quizList.map(q=>`<option value="${esc(q.file)}">${esc(q.title)}</option>`).join('');
+ if(es){
+  es.innerHTML = `<option value="">— Select existing quiz —</option>` + quizList.map(q=>`<option value="${esc(q.file)}">${esc(q.title)}</option>`).join('');
+  es.value = '';
+ }
  document.getElementById('quizModal').classList.add('open');
 }
 function closeQuizModal(){ document.getElementById('quizModal').classList.remove('open'); document.getElementById('customErr').textContent=''; }
@@ -829,7 +1027,11 @@ async function fetchQuizQuestions(file){
 }
 async function loadExistingQuiz(){
  const es = document.getElementById('editQuizSel');
- if(!es || !es.value) return;
+ if(!es || !es.value){
+  document.getElementById('customErr').textContent = 'Please select an existing ' + ((typeof quizModalMode !== 'undefined' && quizModalMode === 'case') ? 'case' : 'quiz') + ' first.';
+  return;
+ }
+ document.getElementById('customErr').textContent = '';
  const qObj = quizList.find(x=>x.file===es.value);
  const qs = await fetchQuizQuestions(es.value);
  document.getElementById('customTitle').value = qObj ? qObj.title.replace(/\s*\(\d+\s*Qs\)$/i,'') : es.value;
@@ -837,7 +1039,11 @@ async function loadExistingQuiz(){
 }
 async function exportSelectedQuiz(){
  const es = document.getElementById('editQuizSel');
- if(!es || !es.value) return;
+ if(!es || !es.value){
+  document.getElementById('customErr').textContent = 'Please select an existing ' + ((typeof quizModalMode !== 'undefined' && quizModalMode === 'case') ? 'case' : 'quiz') + ' first.';
+  return;
+ }
+ document.getElementById('customErr').textContent = '';
  const qs = await fetchQuizQuestions(es.value);
  const blob = new Blob([JSON.stringify(qs, null, 2)], {type:'application/json'});
  const a = document.createElement('a');
@@ -847,7 +1053,11 @@ async function exportSelectedQuiz(){
 }
 async function deleteSelectedQuiz(){
  const es = document.getElementById('editQuizSel');
- if(!es || !es.value) return;
+ if(!es || !es.value){
+  document.getElementById('customErr').textContent = 'Please select an existing ' + ((typeof quizModalMode !== 'undefined' && quizModalMode === 'case') ? 'case' : 'quiz') + ' first.';
+  return;
+ }
+ document.getElementById('customErr').textContent = '';
  const qObj = quizList.find(x=>x.file===es.value);
  const protectedFiles = ['quiz.json','quiz_chapter8.json','quiz_fun_facts.json','quiz_ultimate_silly_trivia.json','quiz_case_ethical_leadership.json'];
  if((qObj && qObj.builtin) || protectedFiles.includes(es.value)){
@@ -953,11 +1163,18 @@ function mergeQuizLists(serverList){
 function renderQuizSelect(selectedFile){
  const sel = document.getElementById('quizSel');
  if(!sel) return;
+ if(!quizList.length){
+  sel.innerHTML = `<option value="">— Select a Quiz —</option>`;
+  sel.value = '';
+  syncQuizCount();
+  return;
+ }
  const groups = {};
-  quizList.forEach(q=>{ const f = q.folder || (q.questions ? 'Saved on this device' : 'My Quizzes'); (groups[f] = groups[f] || []).push(q); });
-  const order = Object.keys(groups).sort((a,b)=> (a==='Built-in')-(b==='Built-in') || a.localeCompare(b));
-  sel.innerHTML = order.map(f=>`<optgroup label="${esc(f)}">${groups[f].map(q=>`<option value="${esc(q.file)}">${q.case?'📖 ':''}${esc(q.title)}${(q.tags&&q.tags.length)?' — #'+esc(q.tags.join(' #')):''}</option>`).join('')}</optgroup>`).join('');
- if(selectedFile) sel.value = selectedFile;
+ quizList.forEach(q=>{ const f = q.folder || (q.questions ? 'Saved on this device' : 'My Quizzes'); (groups[f] = groups[f] || []).push(q); });
+ const order = Object.keys(groups).sort((a,b)=> (a==='Built-in')-(b==='Built-in') || a.localeCompare(b));
+ sel.innerHTML = `<option value="">— Select a Quiz —</option>` + order.map(f=>`<optgroup label="${esc(f)}">${groups[f].map(q=>`<option value="${esc(q.file)}">${q.case?'📖 ':''}${esc(q.title)}${(q.tags&&q.tags.length)?' — #'+esc(q.tags.join(' #')):''}</option>`).join('')}</optgroup>`).join('');
+ if(selectedFile && quizList.some(q=>q.file===selectedFile)) sel.value = selectedFile;
+ else sel.value = '';
  syncQuizCount();
 }
 
@@ -984,29 +1201,45 @@ async function saveCustomQuiz(){
 }
 
 async function post(u, b){return (await fetch(u,{method:'POST',body:JSON.stringify(b)})).json()}
-let quizList = [];
+let quizList = [], pollTimer = null;
+function startHostPoll(){
+ if(pollTimer) clearInterval(pollTimer);
+ poll();
+ pollTimer = setInterval(poll, 600);
+}
 function syncQuizCount(){
  const sel = document.getElementById('quizSel');
  const q = quizList.find(x=>x.file===(sel&&sel.value));
+ const inp = document.getElementById('qCount'), mx = document.getElementById('qMax'), cs = document.getElementById('cSlideCnt');
  if(q){
-  const inp = document.getElementById('qCount'), mx = document.getElementById('qMax');
   if(inp){ inp.max = q.count; inp.value = q.count; }
   if(mx) mx.textContent = '/ ' + q.count;
+  if(cs) cs.textContent = q.count;
+ } else {
+  if(inp){ inp.value = ''; inp.placeholder = '—'; }
+  if(mx) mx.textContent = '/ —';
+  if(cs) cs.textContent = '—';
  }
 }
 (async()=>{
  try{
   const r = await (await fetch('/api/quizzes?token='+encodeURIComponent(localStorage.getItem('brainrush_token')||''))).json();
   quizList = mergeQuizLists((r && r.quizzes) || []);
-  if(quizList.length) renderQuizSelect();
+  renderQuizSelect();
  }catch(e){
   quizList = mergeQuizLists([]);
-  if(quizList.length) renderQuizSelect();
+  renderQuizSelect();
  }
 })();
 async function create(){
- ensureAudio();sfxJoin();
  const sel = document.getElementById('quizSel');
+ const qf = sel ? sel.value : '';
+ if(!qf){
+  alert((typeof hostSection !== 'undefined' && hostSection === 'case') ? 'Please select a Case Study first.' : 'Please select a Quiz first.');
+  if(sel) sel.focus();
+  return;
+ }
+ ensureAudio();sfxJoin();
  const inp = document.getElementById('qCount');
  const shuf = document.getElementById('qShuffle');
  const tm = document.getElementById('qTime');
@@ -1019,41 +1252,43 @@ async function create(){
  const ice = document.getElementById('qIce');
  const icePrompt = document.getElementById('qIcePrompt');
  const auto = document.getElementById('qAuto');
- const qf = sel ? sel.value : 'quiz.json';
  const picked = quizList.find(x=>x.file===qf);
- const cnt = inp ? parseInt(inp.value, 10) : null;
+ const cnt = inp ? (parseInt(inp.value, 10) || null) : null;
  const qtm = tm ? parseInt(tm.value, 10) || 15 : 15;
  const bcnt = bots ? parseInt(bots.value, 10) || 0 : 0;
+ window._lastShuffle = shuf ? shuf.checked : false;
  window.lastGame={file:qf,count:cnt}; try{ localStorage.setItem('brainrush_last', JSON.stringify(window.lastGame)); }catch(e){}
  const r=await postPw('/api/create',{
   quiz:qf, custom_questions: picked && picked.questions ? picked.questions : null,
   count:cnt, shuffle:shuf ? shuf.checked : false, qtime:qtm, bots:bcnt,
   teams:teams ? teams.checked : false,
-  wager:wager ? wager.checked : true,
-  redemption:redemp ? redemp.checked : true,
-  sabotage:sab ? sab.checked : true,
-  wheel:wheel ? wheel.checked : true,
-  hotseat:(document.getElementById('qHot')||{checked:true}).checked,
-  team_battle:(document.getElementById('qBattle')||{checked:true}).checked,
-  tiebreak:(document.getElementById('qTie')||{checked:true}).checked,
+  wager:wager ? wager.checked : false,
+  redemption:redemp ? redemp.checked : false,
+  sabotage:sab ? sab.checked : false,
+  wheel:wheel ? wheel.checked : false,
+  hotseat:(document.getElementById('qHot')||{}).checked || false,
+  team_battle:(document.getElementById('qBattle')||{}).checked || false,
+  tiebreak:(document.getElementById('qTie')||{}).checked || false,
   speed:(document.getElementById('qSpeed')||{}).checked||false,
   dbl:(document.getElementById('qDbl')||{}).checked||false,
   steal:(document.getElementById('qSteal')||{}).checked||false,
   moderate:(document.getElementById('qMod')||{}).checked||false,
-  roster:(document.getElementById('qRoster').value||'').split('\n').map(x=>x.trim()).filter(Boolean),
+  roster:(document.getElementById('qRosterOn') && document.getElementById('qRosterOn').checked) ? (document.getElementById('qRoster').value||'').split('\n').map(x=>x.trim()).filter(Boolean) : [],
   logo:(document.getElementById('qLogo').value||'').trim(),
   icebreaker:ice ? ice.checked : false,
   icebreaker_prompt:icePrompt ? icePrompt.value.trim() : '',
-  auto:auto ? auto.checked : false
+  auto:auto ? auto.checked : false,
+  pair_key:(document.getElementById('qRemote') && document.getElementById('qRemote').checked) ? getRemoteKey() : ''
  });
  if(!r || !r.pin){ return; }
  pin=r.pin;host=r.host;
  try{ localStorage.setItem('brainrush_host', JSON.stringify({pin,host})); }catch(e){}
+ ensureRemoteProbe();
  document.getElementById('autoBtn').style.display = 'flex';
  document.getElementById('remoteBtn').style.display = 'flex';
  const aq = document.getElementById('addQuizMenuBtn');
  if(aq) aq.style.display = 'none';
- poll();setInterval(poll,600);
+ startHostPoll();
 }
 async function addBots(n=5){ensureAudio();await post('/api/bots',{pin,host,count:n});await poll()}
 async function hostCtl(action, sec=10, prompt=''){ensureAudio();await post('/api/host_ctl',{pin,host,action,sec,prompt});await poll()}
@@ -1164,22 +1399,44 @@ function animBoard(b, qIdx){
 }
 
 let podiumShown = false;
+function syncRepCount(){
+ const sel = document.getElementById('repQuizSel'), inp = document.getElementById('repCount');
+ if(!inp) return;
+ const q = quizList.find(x=>x.file===(sel&&sel.value));
+ if(q){ inp.max = q.count; inp.value = q.count; }
+ else { inp.value = ''; inp.placeholder = '—'; }
+}
 async function replayRound(){
  const sel = document.getElementById('repQuizSel'), inp = document.getElementById('repCount');
- const qf = sel ? sel.value : 'quiz.json';
+ const qf = sel ? sel.value : '';
+ if(!qf){
+  alert('Please select a ' + (S.case_game ? 'Case Study' : 'Quiz') + ' first.');
+  if(sel) sel.focus();
+  return;
+ }
  const picked = quizList.find(x=>x.file===qf);
  const isCase = !!(S.case_game || (picked && picked.case));
- const cnt = isCase ? null : (inp ? parseInt(inp.value,10) || 15 : 15);
+ const cnt = isCase ? null : (inp ? (parseInt(inp.value,10) || null) : null);
+ const shufEl = document.getElementById('qShuffle');
+ const shufOn = shufEl ? shufEl.checked : !!window._lastShuffle;
  podiumShown = false;
  animDone = -1;
  await post('/api/replay',{
   pin, host, quiz: qf,
-  count: cnt, shuffle: !isCase,
+  count: cnt, shuffle: !isCase && shufOn,
   custom_questions: picked && picked.questions ? picked.questions : null
  });
  await poll();
 }
-function newGame(){ try{ localStorage.removeItem('brainrush_host'); }catch(e){} location.href = location.pathname; }
+function newGame(){
+ try{ localStorage.removeItem('brainrush_host'); }catch(e){}
+ try{
+  const payload = JSON.stringify({key: getRemoteKey(), clear: true});
+  if(navigator.sendBeacon) navigator.sendBeacon('/api/remote_pair', new Blob([payload], {type:'application/json'}));
+  else fetch('/api/remote_pair', {method:'POST', body:payload, keepalive:true}).catch(()=>{});
+ }catch(e){}
+ location.href = location.pathname;
+}
 function renderFinal(b){
  const p1 = b[0], p2 = b[1], p3 = b[2];
  const podSlot = (p, place, medal) => p ? `<div class="pod pod-${place} ${podiumShown?'show':''}" id="pod${place}">
@@ -1201,15 +1458,13 @@ function renderFinal(b){
  const accHtml = st.possible ? `<div class="acc-pill">🎯 Group Accuracy: ${st.accuracy}% (${st.correct}/${st.possible} correct)</div>` : '';
  const awHtml = (st.awards && st.awards.length) ? `<div class="awards">${st.awards.map(a=>`<div class="award"><b>${esc(a.title)}</b>${esc(a.winner)} <small>(${esc(a.detail)})</small></div>`).join('')}</div>` : '';
  const toughHtml = (st.tough && st.tough.length) ? `<div class="tough-box"><h3>🧠 Tough Ones Recap (Most Missed)</h3>${st.tough.map(t=>`<div class="tough-item"><b>Q${t.index}${t.redemption?' (Redemption)':''} (${t.pct}% correct):</b> ${esc(t.q)}<br><span style="color:#7dff6b">✅ ${esc(t.ans)}</span></div>`).join('')}</div>` : '';
- let lg = window.lastGame; if(!lg){ try{ lg = JSON.parse(localStorage.getItem('brainrush_last')||'null'); }catch(e){} }
  const pool = quizList.filter(q => S.case_game ? !!q.case : !q.case);
- const qOpts = (pool.length ? pool : quizList).map(q=>`<option value="${esc(q.file)}" ${lg&&lg.file===q.file?'selected':''}>${esc(q.title)}</option>`).join('');
- const repCount = (lg && lg.count) ? lg.count : 15;
+ const qOpts = `<option value="">— Select ${S.case_game ? 'a Case Study' : 'a Quiz'} —</option>` + (pool.length ? pool : quizList).map(q=>`<option value="${esc(q.file)}">${esc(q.title)}</option>`).join('');
  return `<h1 class="final-title">${S.case_game?'📖 CASE COMPLETE 🏆':'🏆 FINAL PODIUM 🏆'}</h1>${accHtml}${teamStandingsHtml()}${podiumHtml}${awHtml}${topicPanel()}${toughHtml}${rest.length?'<h2>Runners-up</h2>'+board(rest,3):''}
  <div class="replay-box" id="replayBox">
   <b>🔁 Next ${S.case_game?'Case':'Round'} (Keep Players):</b>
-  <select id="repQuizSel">${qOpts}</select>
-  ${S.case_game?'':`<label>Qs: <input id="repCount" type="number" min="1" max="200" value="${repCount}"></label>`}
+  <select id="repQuizSel" onchange="syncRepCount()">${qOpts}</select>
+  ${S.case_game?'':`<label>Qs: <input id="repCount" type="number" min="1" max="200" value="" placeholder="—"></label>`}
   <button style="margin:0;padding:10px 20px;font-size:1.05em" onclick="replayRound()">🔁 ${S.case_game?'Run Case':'Play Again'}</button>
  </div>
  <div style="height:90px"></div>
@@ -1583,10 +1838,11 @@ function openLinks(){
 
 // --- Resume a saved game (survives refresh / server restart) ---
 function enterGame(){
+ ensureRemoteProbe();
  document.getElementById('autoBtn').style.display = 'flex';
  document.getElementById('remoteBtn').style.display = 'flex';
  const aq = document.getElementById('addQuizMenuBtn'); if(aq) aq.style.display = 'none';
- poll(); setInterval(poll, 600);
+ startHostPoll();
 }
 (async()=>{
  applyA11y(); updateMusicLabel(); loadSetup(); updateOptSummary();
@@ -1606,19 +1862,27 @@ function enterGame(){
   if(setup) setup.parentNode.insertBefore(card, setup);
  }catch(e){}
 })();
-function resumeGame(){ const sv = window._resumeSaved; pin = sv.pin; host = sv.host; ensureAudio(); enterGame(); }
+function resumeGame(){
+ const sv = window._resumeSaved;
+ pin = sv.pin; host = sv.host;
+ ensureAudio();
+ if(pin && host && document.getElementById('qRemote') && document.getElementById('qRemote').checked){
+  syncRemotePair(true);
+ }
+ enterGame();
+}
 function discardGame(btn){ localStorage.removeItem('brainrush_host'); btn.closest('.resume-card').remove(); }
 </script>
 <script>
 // ===== Feature Guide =====
 const GUIDE = [
- {id:'setup', title:'⚙️ Game Setup Options', items:[
-  ['📝 Questions', 'How many questions to play. Picks a random set from the quiz if you choose fewer than the total.'],
+ {id:'setup', title:'⚙️ Game Setup Options (All Opt-In)', items:[
+  ['📝 Questions', 'How many questions to play (fills automatically once you pick a quiz). Picks a random set from the quiz if you choose fewer than the total.'],
   ['⏱️ Timer', 'Seconds players get to answer each question (default 15). A 5-second reading period comes first, with answers hidden.'],
   ['🎲 Randomize Order', 'Shuffles the question order every game.'],
   ['🎰 Final Boss Wager', 'The last regular question lets players risk 0%, 50% or 100% of their score (minimum stake 500) for a big swing instead of plain double points.'],
   ['🔄 Redemption Round', 'After the last question, the question the class missed most comes back for DOUBLE points, introduced by a full-screen REDEMPTION announcement.'],
-  ['⛄ Snowballs (off by default)', 'Once per game, a player with 200+ points can spend 200 to throw a snowball at the leader. The leader is frozen on the next question and must tap 5 times to shake off the snow before answering.'],
+  ['⛄ Snowballs', 'Once per game, a player with 200+ points can spend 200 to throw a snowball at the leader. The leader is frozen on the next question and must tap 5 times to shake off the snow before answering.'],
   ['🎡 Mystery Wheel', 'Every 4th question (Q4, Q8, Q12…) opens with a spinning wheel that picks a special rule for that question (see Special Rounds).'],
   ['🛡️ Team Mode', 'Players are split into 4 teams (Red Dragons, Blue Sharks, Gold Lions, Green Vipers) with a live team-average scoreboard. Players can pick a team or get auto-balanced.'],
   ['💭 Word Cloud Warm-Up', 'Before Question 1, players type a one-or-two word answer to your warm-up question and a live word cloud builds on screen. Edit the warm-up question here or live with the ✏️ Edit button.'],
@@ -1627,7 +1891,8 @@ const GUIDE = [
   ['🤝 Team Battle Rounds', 'Needs Team Mode (turning this on switches Team Mode on for you). Questions 5, 10, 15… give teams a longer 12-second discussion before answers open, with a blue TEAM BATTLE banner. Afterward the screen shows which teams got it right (+300 each). It does not happen on the Final Boss, Mystery Wheel or Redemption questions, and quizzes shorter than 5 questions never reach one.'],
   ['⚔️ Sudden-Death Tiebreaker', 'If the top players tie at the end, an extra question is played only by the tied players; fastest correct answer wins by 1 point.'],
   ['🤖 Phantom Bot Players', 'Computer players that answer, use power-ups, wager and send reactions. Good for testing or making a small class feel full. You can also add 5 more from the lobby.'],
-  ['👥 Class Roster', 'Paste student names (one per line). Players then pick their name from a dropdown instead of typing a nickname, and a student who loses connection can rejoin under the same name. Saved on this computer.'],
+  ['👥 Class Roster', 'Check 👥 Class Roster in Options to reveal the roster list and paste student names (one per line). Players then pick their name from a dropdown instead of typing a nickname, and a student who loses connection can rejoin under the same name. Names stay saved on this computer while Roster Mode stays off unless checked.'],
+  ['📱 Phone Host Remote', 'Check 📱 Phone Host Remote in Options (or copy/open the always-visible link or QR code) to pair your phone before or during a session. You can pick & launch a Quiz or Case Study right from your phone, then advance slides, pause timers, add +10s, and manage bots from anywhere in the room.'],
   ['🖼️ Logo URL / 🌄 Background URL', 'Use your own logo (shown to you and on players\' join screens) and a custom host-screen background image.']
  ]},
  {id:'scoring', title:'🏆 Scoring Basics', items:[
@@ -1670,7 +1935,7 @@ const GUIDE = [
   ['☰ Menu – Visual Theme', 'Cycles through Purple, Neon, Emerald and Sunset themes.'],
   ['☰ Menu – Background Music', 'Cycles Classic, Chill, Upbeat or Off for background music (sound effects stay on).'],
   ['☰ Menu – Colorblind / High Contrast', 'Switches to a colorblind-safe answer palette, or a high-contrast display.'],
-  ['☰ Menu – Phone Host Remote', 'Gives you a link to run the game from your phone (next, pause, +10s, bots).'],
+  ['☰ Menu – Phone Host Remote', 'Available both before and during a game: shows your paired phone remote link, QR code, and live connection status so you can launch or control the session from your phone (next, pause, +10s, bots).'],
   ['☰ Menu – Results History', 'Saved summaries of past games, a "topics to reteach" list and CSV export. May reset if the server restarts, so export what you need.'],
   ['☰ Menu – Spectator & Practice Links', 'Links for a second-screen leaderboard / word cloud and the student practice page.'],
   ['☰ Menu – Create / Upload Quiz', 'Build a quiz by typing or uploading, or load an existing quiz to edit, export as .json or delete.'],
@@ -1693,7 +1958,7 @@ const GUIDE = [
  {id:'screens', title:'🖥️ Other Screens', items:[
   ['/spectator', 'A second-screen view with the live leaderboard and word cloud. Add ?mode=board or ?mode=cloud for just one. Standings hide the current question\'s results until it ends.'],
   ['/practice', 'Students study alone with any quiz: instant feedback, a score, an optional 20-second timer and a review of missed questions. Nothing is shared with the class.'],
-  ['/remote', 'The phone remote for the host (open it from the menu).'],
+  ['/remote', 'The phone host remote — pair via Options → 📱 Phone Host Remote or ☰ Menu → Phone Host Remote to pick & launch a session pre-game and control slides live.'],
   ['👁️ Phone accessibility button', 'On the join screen and in-game, cycles normal, colorblind and high-contrast colors.']
  ]}
 ];
@@ -2012,10 +2277,13 @@ async function aiGenerate(){
  if(!document.getElementById('customTitle').value) document.getElementById('customTitle').value = (isCase ? 'Case Study: ' : '') + (document.getElementById('aiTopic').value || (isCase ? 'Ethical Leadership Dilemma' : 'AI draft quiz'));
 }
 async function duplicateSelectedQuiz(){
- const es = document.getElementById('editQuizSel'); if(!es || !es.value) return;
+ const es = document.getElementById('editQuizSel');
+ if(!es || !es.value){ document.getElementById('customErr').textContent = 'Please select an existing quiz first.'; return; }
+ document.getElementById('customErr').textContent = '';
  const r = await postPw('/api/dup_quiz', {file: es.value});
  if(r.error){ document.getElementById('customErr').textContent = r.error; return; }
  quizList = mergeQuizLists(r.quizzes || quizList); renderQuizSelect(); openQuizModal();
+ const es2 = document.getElementById('editQuizSel'); if(es2 && r.file) es2.value = r.file;
 }
 const _openQuizModal0 = openQuizModal;
 openQuizModal = function(){
@@ -2035,7 +2303,7 @@ async function openHomework(){
  const fmt = ts => ts ? new Date(ts*1000).toLocaleString([], {dateStyle:'medium', timeStyle:'short'}) : 'no deadline';
  const dl = new Date(Date.now() + 86400000); dl.setHours(23,59,0,0);
  const dlv = new Date(dl.getTime() - dl.getTimezoneOffset()*60000).toISOString().slice(0,16);
- const opts = document.getElementById('quizSel').innerHTML;
+ const opts = `<option value="">— Select a Quiz —</option>` + quizList.filter(q=>!q.case).map(q=>`<option value="${esc(q.file)}">${esc(q.title)}</option>`).join('');
  b.innerHTML = `<div class="toolbox"><b>Create an assignment</b><p>Students open a link on their own phones or computers and answer on their own time. Answers are graded on the server, so they can't be peeked at.</p>
   <div class="row2"><input id="hwTitle" placeholder="Title (e.g. Chapter 8 Review)" style="margin:6px 0"><input id="hwCount" type="number" min="1" placeholder="# of questions" style="margin:6px 0"></div>
   <select id="hwQuiz" style="width:100%;margin:0 0 6px;padding:10px;border-radius:8px;border:0;font-weight:700;color:#2b0d57">${opts}</select>
@@ -2045,11 +2313,15 @@ async function openHomework(){
   <h3>Your assignments</h3>${r.assignments.length ? r.assignments.map(a=>`<div class="hist-game" style="cursor:default"><b>${esc(a.title)}</b> <small>· ${a.questions} Qs · due ${fmt(a.deadline)}</small><br><small>${a.done} finished / ${a.started} started${a.roster?` of ${a.roster}`:''}</small><br>
    <button class="btn-sm" style="margin:6px 4px 0 0" onclick="navigator.clipboard.writeText(location.origin+'/hw?id=${a.id}')">📋 Copy link</button><button class="btn-sm" style="margin:6px 4px 0 0" onclick="hwResults('${a.id}')">📊 Results</button></div>`).join('') : '<p style="opacity:.8">No assignments yet.</p>'}
   <div id="hwResults"></div>`;
+ const hq = document.getElementById('hwQuiz'); if(hq) hq.value = '';
 }
 async function createHomework(){
- const file = document.getElementById('hwQuiz').value;
+ const sel = document.getElementById('hwQuiz');
+ const file = sel ? sel.value : '';
+ if(!file){ document.getElementById('hwMsg').textContent = 'Please select a quiz first.'; if(sel) sel.focus(); return; }
  const picked = quizList.find(x=>x.file===file);
- const roster = document.getElementById('hwRoster').checked ? (document.getElementById('qRoster').value||'').split('\n').map(x=>x.trim()).filter(Boolean) : [];
+ const rosterRaw = document.getElementById('qRoster') ? document.getElementById('qRoster').value : (localStorage.getItem('brainrush_roster') || '');
+ const roster = document.getElementById('hwRoster').checked ? (rosterRaw||'').split('\n').map(x=>x.trim()).filter(Boolean) : [];
  const dv = document.getElementById('hwDeadline').value;
  const r = await postPw('/api/hw_create', {quiz:file, custom_questions: picked && picked.questions ? picked.questions : null,
   title: document.getElementById('hwTitle').value || 'Homework', count: parseInt(document.getElementById('hwCount').value,10)||null,
@@ -2083,10 +2355,10 @@ function exportHw(){
 (function(){
  const sec = id => GUIDE.find(g=>g.id===id);
  sec('setup').items.push(
-  ['⚡ Speed Round (off by default)', 'In quizzes of 12+ questions, five questions in the middle run as a rapid round: 5-second timer, no reading preview, and the leaderboard is skipped between them. It opens with a ⚡ SPEED ROUND announcement.'],
-  ['💥 Double or Nothing Question (off by default)', 'One question around the halfway point lets players opt in on their phones: a correct answer earns double points, a wrong answer loses 400 (a Shield protects them).'],
-  ['🕵️ Steal / Swap Power-Up (off by default)', 'Once per game, on a results screen (not the last question), a player can steal up to 150 points from the player ranked just above them, or swap scores with them if the gap is 1,500 or less.'],
-  ['🛡️ Approve Names First (off by default)', 'New students wait on a "waiting for approval" screen until you approve their name (✓/✕ in the lobby or the Moderation window). Rejected names are blocked.']
+  ['⚡ Speed Round', 'In quizzes of 12+ questions, five questions in the middle run as a rapid round: 5-second timer, no reading preview, and the leaderboard is skipped between them. It opens with a ⚡ SPEED ROUND announcement.'],
+  ['💥 Double or Nothing Question', 'One question around the halfway point lets players opt in on their phones: a correct answer earns double points, a wrong answer loses 400 (a Shield protects them).'],
+  ['🕵️ Steal / Swap Power-Up', 'Once per game, on a results screen (not the last question), a player can steal up to 150 points from the player ranked just above them, or swap scores with them if the gap is 1,500 or less.'],
+  ['🛡️ Approve Names First', 'New students wait on a "waiting for approval" screen until you approve their name (✓/✕ in the lobby or the Moderation window). Rejected names are blocked.']
  );
  GUIDE.push({id:'library', title:'📚 Quiz Library & Content Tools', items:[
   ['Folders and tags', 'In ➕ Create / Upload Quiz, give a quiz a Folder and Tags. The quiz picker groups quizzes by folder.'],
@@ -2155,6 +2427,7 @@ renderQuizSelect = function(selectedFile){
  const filtered = quizList.filter(q => wantCase ? !!q.case : !q.case);
  if(!filtered.length){
   sel.innerHTML = `<option value="">${wantCase ? 'No case studies yet — click "+ New / Edit Case"' : 'No quizzes found'}</option>`;
+  sel.value = '';
   syncQuizCount();
   return;
  }
@@ -2164,26 +2437,31 @@ renderQuizSelect = function(selectedFile){
   (groups[f] = groups[f] || []).push(q);
  });
  const order = Object.keys(groups).sort((a,b)=> (a==='Built-in')-(b==='Built-in') || a.localeCompare(b));
- sel.innerHTML = order.map(f=>`<optgroup label="${esc(f)}">${groups[f].map(q=>`<option value="${esc(q.file)}">${q.case?'📖 ':''}${esc(q.title)}${(q.tags&&q.tags.length)?' — #'+esc(q.tags.join(' #')):''}</option>`).join('')}</optgroup>`).join('');
+ sel.innerHTML = `<option value="">${wantCase ? '— Select a Case Study —' : '— Select a Quiz —'}</option>` + order.map(f=>`<optgroup label="${esc(f)}">${groups[f].map(q=>`<option value="${esc(q.file)}">${q.case?'📖 ':''}${esc(q.title)}${(q.tags&&q.tags.length)?' — #'+esc(q.tags.join(' #')):''}</option>`).join('')}</optgroup>`).join('');
  if(selectedFile && filtered.some(q=>q.file===selectedFile)) sel.value = selectedFile;
+ else sel.value = '';
  syncQuizCount();
 };
 
 syncQuizCount = function(){
  const sel = document.getElementById('quizSel');
  const q = quizList.find(x=>x.file===(sel&&sel.value));
+ const inp = document.getElementById('qCount'), mx = document.getElementById('qMax'), cs = document.getElementById('cSlideCnt');
  if(q){
-  const inp = document.getElementById('qCount'), mx = document.getElementById('qMax'), cs = document.getElementById('cSlideCnt');
   if(inp){ inp.max = q.count; inp.value = q.count; }
   if(mx) mx.textContent = '/ ' + q.count;
   if(cs) cs.textContent = q.count;
+ } else {
+  if(inp){ inp.value = ''; inp.placeholder = '—'; }
+  if(mx) mx.textContent = '/ —';
+  if(cs) cs.textContent = '—';
  }
 };
 
 updateOptSummary = function(){
  const ids = (hostSection === 'case')
-  ? ['qTeams','qIce','qMod']
-  : ['qShuffle','qWager','qRedemp','qSabotage','qWheel','qTeams','qIce','qAuto','qHot','qBattle','qTie','qSpeed','qDbl','qSteal','qMod'];
+  ? ['qTeams','qIce','qMod','qRosterOn','qRemote']
+  : ['qShuffle','qWager','qRedemp','qSabotage','qWheel','qTeams','qIce','qAuto','qHot','qBattle','qTie','qSpeed','qDbl','qSteal','qMod','qRosterOn','qRemote'];
  let n = ids.filter(id=>{ const el = document.getElementById(id); return el && el.checked; }).length;
  const bots = document.getElementById('qBots');
  if(bots && parseInt(bots.value,10) > 0) n++;
@@ -2233,9 +2511,12 @@ openQuizModal = function(mode){
  if(m) m.classList.toggle('only-case', isC);
  const es = document.getElementById('editQuizSel');
  const list = quizList.filter(q => isC ? !!q.case : !q.case);
- if(es) es.innerHTML = list.length
-  ? list.map(q=>`<option value="${esc(q.file)}">${esc(q.title)}</option>`).join('')
-  : `<option value="">${isC ? '(No saved cases yet)' : '(No saved quizzes yet)'}</option>`;
+ if(es){
+  es.innerHTML = list.length
+   ? `<option value="">— Select existing ${isC ? 'case' : 'quiz'} —</option>` + list.map(q=>`<option value="${esc(q.file)}">${esc(q.title)}</option>`).join('')
+   : `<option value="">${isC ? '(No saved cases yet)' : '(No saved quizzes yet)'}</option>`;
+  es.value = '';
+ }
  const cf = document.getElementById('customFile');
  if(cf) cf.accept = isC ? '.json' : '.json,.csv';
  const ti = document.getElementById('toolImport');
@@ -2321,7 +2602,12 @@ saveCustomQuiz = async function(){
 };
 
 duplicateSelectedQuiz = async function(){
- const es = document.getElementById('editQuizSel'); if(!es || !es.value) return;
+ const es = document.getElementById('editQuizSel');
+ if(!es || !es.value){
+  document.getElementById('customErr').textContent = 'Please select an existing ' + (quizModalMode === 'case' ? 'case' : 'quiz') + ' first.';
+  return;
+ }
+ document.getElementById('customErr').textContent = '';
  const r = await postPw('/api/dup_quiz', {file: es.value});
  if(r.error){ document.getElementById('customErr').textContent = r.error; return; }
  quizList = mergeQuizLists(r.quizzes || quizList);
@@ -2334,10 +2620,10 @@ duplicateSelectedQuiz = async function(){
 const _create0 = create;
 create = async function(){
  if(hostSection !== 'case') return _create0();
- ensureAudio(); sfxJoin();
  const sel = document.getElementById('quizSel');
  const qf = sel ? sel.value : '';
- if(!qf){ alert('Select or create a Case Study first.'); return; }
+ if(!qf){ alert('Please select a Case Study first.'); if(sel) sel.focus(); return; }
+ ensureAudio(); sfxJoin();
  const picked = quizList.find(x=>x.file===qf);
  const ctm = parseInt((document.getElementById('cTime')||{}).value, 10) || 20;
  const bcnt = parseInt((document.getElementById('qBots')||{}).value, 10) || 0;
@@ -2345,6 +2631,7 @@ create = async function(){
  const ice = !!(document.getElementById('qIce') && document.getElementById('qIce').checked);
  const icePrompt = ((document.getElementById('qIcePrompt')||{}).value || '').trim();
  const mod = !!(document.getElementById('qMod') && document.getElementById('qMod').checked);
+ window._lastShuffle = false;
  window.lastGame = {file: qf, count: null, case: true};
  try{ localStorage.setItem('brainrush_last', JSON.stringify(window.lastGame)); }catch(e){}
  const r = await postPw('/api/create', {
@@ -2356,18 +2643,20 @@ create = async function(){
   hotseat: false, team_battle: false, tiebreak: false,
   speed: false, dbl: false, steal: false, auto: false,
   moderate: mod,
-  roster: (document.getElementById('qRoster').value||'').split('\n').map(x=>x.trim()).filter(Boolean),
+  roster: (document.getElementById('qRosterOn') && document.getElementById('qRosterOn').checked) ? (document.getElementById('qRoster').value||'').split('\n').map(x=>x.trim()).filter(Boolean) : [],
   logo: (document.getElementById('qLogo').value||'').trim(),
   icebreaker: ice,
-  icebreaker_prompt: icePrompt
+  icebreaker_prompt: icePrompt,
+  pair_key: (document.getElementById('qRemote') && document.getElementById('qRemote').checked) ? getRemoteKey() : ''
  });
  if(!r || !r.pin) return;
  pin = r.pin; host = r.host;
  try{ localStorage.setItem('brainrush_host', JSON.stringify({pin, host})); }catch(e){}
+ ensureRemoteProbe();
  document.getElementById('remoteBtn').style.display = 'flex';
  const aq = document.getElementById('addQuizMenuBtn');
  if(aq) aq.style.display = 'none';
- poll(); setInterval(poll, 600);
+ startHostPoll();
 };
 
 const _poll0 = poll;
@@ -2767,18 +3056,16 @@ function renderPresenter(){
    ${shHtml}${teamStandingsHtml()}${board(S.board||[])}`;
  } else {
   const st = S.stats || {};
-  let lg = window.lastGame; if(!lg){ try{ lg = JSON.parse(localStorage.getItem('brainrush_last')||'null'); }catch(e){} }
   const pool = quizList.filter(q => S.case_game ? !!q.case : !q.case);
-  const qOpts = (pool.length ? pool : quizList).map(q=>`<option value="${esc(q.file)}" ${lg&&lg.file===q.file?'selected':''}>${esc(q.title)}</option>`).join('');
-  const repCount = (lg && lg.count) ? lg.count : 15;
+  const qOpts = `<option value="">— Select ${S.case_game ? 'a Case Study' : 'a Quiz'} —</option>` + (pool.length ? pool : quizList).map(q=>`<option value="${esc(q.file)}">${esc(q.title)}</option>`).join('');
   slideBody = `<div class="pcon-lbl"><span>🏆 Final Podium Showing on Extended Screen</span><span>Session Complete</span></div>
    ${st.possible ? `<div class="acc-pill" style="margin-top:0">🎯 Group Accuracy: ${st.accuracy}% (${st.correct}/${st.possible})</div>` : ''}
    ${board((S.board||[]).slice(0,10))}
    ${topicPanel()}
    <div class="replay-box" style="max-width:none;margin:14px 0 10px">
     <b>🔁 Next ${S.case_game?'Case':'Round'} (Keep Players):</b>
-    <select id="repQuizSel">${qOpts}</select>
-    ${S.case_game?'':`<label>Qs: <input id="repCount" type="number" min="1" max="200" value="${repCount}"></label>`}
+    <select id="repQuizSel" onchange="syncRepCount()">${qOpts}</select>
+    ${S.case_game?'':`<label>Qs: <input id="repCount" type="number" min="1" max="200" value="" placeholder="—"></label>`}
     <button style="margin:0;padding:9px 18px;font-size:1em" onclick="replayRound()">🔁 ${S.case_game?'Run Case':'Play Again'}</button>
    </div>
    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">

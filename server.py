@@ -8,8 +8,256 @@ import kstore as K
 ROOT = os.path.dirname(os.path.abspath(__file__))
 LOCK = threading.Lock()
 GAMES = {}
+REMOTE_PAIRS = {}
 DEFAULT_TIME = 15  # seconds; override per question with "t" in quiz.json
 PREVIEW_TIME = 5.0  # seconds to read question alone before answers appear and timer starts
+
+
+def valid_rkey(k):
+    return isinstance(k, str) and bool(re.match(r"^[A-Za-z0-9_-]{12,64}$", k))
+
+
+def prune_remote_pairs(now=None):
+    now = time.time() if now is None else now
+    for k in [k for k, v in REMOTE_PAIRS.items() if now - v.get("ts", now) > 12 * 3600]:
+        REMOTE_PAIRS.pop(k, None)
+
+
+_QR_VERS = (
+    (1, 21, 19, 7, ()),
+    (2, 25, 34, 10, (6, 18)),
+    (3, 29, 55, 15, (6, 22)),
+    (4, 33, 80, 20, (6, 26)),
+    (5, 37, 108, 26, (6, 30)),
+    (6, 41, 136, 36, (6, 34)),
+)
+_GF_EXP = [0] * 512
+_GF_LOG = [0] * 256
+_gx = 1
+for _gi in range(255):
+    _GF_EXP[_gi] = _gx
+    _GF_LOG[_gx] = _gi
+    _gx <<= 1
+    if _gx & 0x100:
+        _gx ^= 0x11d
+for _gi in range(255, 512):
+    _GF_EXP[_gi] = _GF_EXP[_gi - 255]
+
+
+def _qr_rs_rem(data, nsym):
+    gen = [1]
+    for i in range(nsym):
+        ng = [0] * (len(gen) + 1)
+        for j, c in enumerate(gen):
+            ng[j] ^= c
+            if c:
+                ng[j + 1] ^= _GF_EXP[_GF_LOG[c] + i]
+        gen = ng
+    rem = [0] * nsym
+    for b in data:
+        f = b ^ rem[0]
+        rem = rem[1:] + [0]
+        if f:
+            lf = _GF_LOG[f]
+            for j in range(nsym):
+                if gen[j + 1]:
+                    rem[j] ^= _GF_EXP[_GF_LOG[gen[j + 1]] + lf]
+    return rem
+
+
+def _qr_place_fmt(mat, size, mask):
+    d = (0b01 << 3) | mask  # EC Level L = 0b01
+    rem = d << 10
+    for i in range(4, -1, -1):
+        if rem & (1 << (i + 10)):
+            rem ^= (0x537 << i)
+    fmt = ((d << 10) | rem) ^ 0x5412
+    tl = ((8, 0), (8, 1), (8, 2), (8, 3), (8, 4), (8, 5), (8, 7), (8, 8),
+          (7, 8), (5, 8), (4, 8), (3, 8), (2, 8), (1, 8), (0, 8))
+    for idx, (r, c) in enumerate(tl):
+        mat[r][c] = (fmt >> (14 - idx)) & 1
+    for i in range(7):
+        mat[size - 1 - i][8] = (fmt >> (14 - i)) & 1
+    for i in range(8):
+        mat[8][size - 8 + i] = (fmt >> (7 - i)) & 1
+
+
+def _qr_penalty(mat, size):
+    pen = 0
+    for r in range(size):
+        run = 1
+        for c in range(1, size):
+            if mat[r][c] == mat[r][c - 1]:
+                run += 1
+            else:
+                if run >= 5:
+                    pen += 3 + (run - 5)
+                run = 1
+        if run >= 5:
+            pen += 3 + (run - 5)
+    for c in range(size):
+        run = 1
+        for r in range(1, size):
+            if mat[r][c] == mat[r - 1][c]:
+                run += 1
+            else:
+                if run >= 5:
+                    pen += 3 + (run - 5)
+                run = 1
+        if run >= 5:
+            pen += 3 + (run - 5)
+    for r in range(size - 1):
+        row0, row1 = mat[r], mat[r + 1]
+        for c in range(size - 1):
+            v = row0[c]
+            if v == row0[c + 1] == row1[c] == row1[c + 1]:
+                pen += 3
+    p1 = [1, 0, 1, 1, 1, 0, 1, 0, 0, 0, 0]
+    p2 = [0, 0, 0, 0, 1, 0, 1, 1, 1, 0, 1]
+    for r in range(size):
+        row = mat[r]
+        for c in range(size - 10):
+            seg = row[c:c + 11]
+            if seg == p1 or seg == p2:
+                pen += 40
+    for c in range(size):
+        col = [mat[r][c] for r in range(size)]
+        for r in range(size - 10):
+            seg = col[r:r + 11]
+            if seg == p1 or seg == p2:
+                pen += 40
+    dark = sum(sum(row) for row in mat)
+    pct = (dark * 100) / (size * size)
+    pen += int(abs(pct - 50) // 5) * 10
+    return pen
+
+
+def qr_svg(text):
+    raw = str(text or "").encode("utf-8")
+    if not raw or len(raw) > 134:
+        raise ValueError("QR text must be 1..134 UTF-8 bytes")
+    for ver, size, dcw, ecw, aligns in _QR_VERS:
+        if len(raw) + 2 <= dcw:
+            break
+    bits = [0, 1, 0, 0]
+    for s in range(7, -1, -1):
+        bits.append((len(raw) >> s) & 1)
+    for b in raw:
+        for s in range(7, -1, -1):
+            bits.append((b >> s) & 1)
+    bits.extend([0] * min(4, dcw * 8 - len(bits)))
+    while len(bits) % 8:
+        bits.append(0)
+    cws = []
+    for i in range(0, len(bits), 8):
+        v = 0
+        for bit in bits[i:i + 8]:
+            v = (v << 1) | bit
+        cws.append(v)
+    pads = (0xEC, 0x11)
+    pi = 0
+    while len(cws) < dcw:
+        cws.append(pads[pi & 1])
+        pi += 1
+    if ver == 6:
+        b0, b1 = cws[:68], cws[68:]
+        e0, e1 = _qr_rs_rem(b0, 18), _qr_rs_rem(b1, 18)
+        full = [x for pr in zip(b0, b1) for x in pr] + [x for pr in zip(e0, e1) for x in pr]
+    else:
+        full = cws + _qr_rs_rem(cws, ecw)
+    stream = [(b >> s) & 1 for b in full for s in range(7, -1, -1)]
+    base = [[0] * size for _ in range(size)]
+    func = [[False] * size for _ in range(size)]
+    for fr, fc in ((0, 0), (0, size - 7), (size - 7, 0)):
+        for dr in range(-1, 8):
+            for dc in range(-1, 8):
+                r, c = fr + dr, fc + dc
+                if 0 <= r < size and 0 <= c < size:
+                    dark = (0 <= dr <= 6 and 0 <= dc <= 6 and
+                            (dr in (0, 6) or dc in (0, 6) or (2 <= dr <= 4 and 2 <= dc <= 4)))
+                    base[r][c] = 1 if dark else 0
+                    func[r][c] = True
+    for ar in aligns:
+        for ac in aligns:
+            if any(func[ar + dr][ac + dc] for dr in range(-2, 3) for dc in range(-2, 3)):
+                continue
+            for dr in range(-2, 3):
+                for dc in range(-2, 3):
+                    base[ar + dr][ac + dc] = 1 if max(abs(dr), abs(dc)) in (0, 2) else 0
+                    func[ar + dr][ac + dc] = True
+    for i in range(8, size - 8):
+        if not func[6][i]:
+            base[6][i] = 1 if i % 2 == 0 else 0
+            func[6][i] = True
+        if not func[i][6]:
+            base[i][6] = 1 if i % 2 == 0 else 0
+            func[i][6] = True
+    base[4 * ver + 9][8] = 1
+    func[4 * ver + 9][8] = True
+    for i in range(9):
+        func[8][i] = True
+        func[i][8] = True
+    for i in range(8):
+        func[8][size - 1 - i] = True
+        if i < 7:
+            func[size - 1 - i][8] = True
+    bi = 0
+    col = size - 1
+    up = True
+    while col > 0:
+        if col == 6:
+            col -= 1
+        rows = range(size - 1, -1, -1) if up else range(size)
+        for r in rows:
+            for c in (col, col - 1):
+                if not func[r][c]:
+                    base[r][c] = stream[bi] if bi < len(stream) else 0
+                    bi += 1
+        up = not up
+        col -= 2
+    masks = (
+        lambda r, c: (r + c) % 2 == 0,
+        lambda r, c: r % 2 == 0,
+        lambda r, c: c % 3 == 0,
+        lambda r, c: (r + c) % 3 == 0,
+        lambda r, c: (r // 2 + c // 3) % 2 == 0,
+        lambda r, c: (r * c) % 2 + (r * c) % 3 == 0,
+        lambda r, c: ((r * c) % 2 + (r * c) % 3) % 2 == 0,
+        lambda r, c: ((r + c) % 2 + (r * c) % 3) % 2 == 0,
+    )
+    best_mat = None
+    best_pen = None
+    for m_id, m_fn in enumerate(masks):
+        cand = [row[:] for row in base]
+        for r in range(size):
+            for c in range(size):
+                if not func[r][c] and m_fn(r, c):
+                    cand[r][c] ^= 1
+        _qr_place_fmt(cand, size, m_id)
+        p = _qr_penalty(cand, size)
+        if best_pen is None or p < best_pen:
+            best_pen = p
+            best_mat = cand
+    segs = []
+    for r in range(size):
+        row = best_mat[r]
+        c = 0
+        while c < size:
+            if row[c]:
+                c2 = c + 1
+                while c2 < size and row[c2]:
+                    c2 += 1
+                w = c2 - c
+                segs.append("M%d %dh%dv1h-%dz" % (c + 2, r + 2, w, w))
+                c = c2
+            else:
+                c += 1
+    vb = size + 4
+    return (
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 %d %d" width="200" height="200" '
+        'style="background:#fff;border-radius:12px;display:block"><path d="%s" fill="#2b0d57"/></svg>'
+        % (vb, vb, "".join(segs))
+    )
 
 TEAMS = [
     {"id": "red", "name": "Red Dragons", "emoji": "🔴", "color": "#e21b3c"},
@@ -1992,13 +2240,57 @@ class H(BaseHTTPRequestHandler):
                     csv_bytes, code=200, ctype="text/csv; charset=utf-8",
                     extra_headers={"Content-Disposition": 'attachment; filename="brainrush_%s_results.csv"' % g["pin"]},
                 )
+        if path == "/api/qr":
+            q = self._q(qs)
+            txt = q.get("text", "")
+            raw_len = len(txt.encode("utf-8"))
+            if not raw_len or raw_len > 130:
+                return self.send({"error": "QR text must be 1..130 bytes"}, 400)
+            return self.send(qr_svg(txt).encode("utf-8"), ctype="image/svg+xml")
+        if path == "/api/remote_pair":
+            q = self._q(qs)
+            key = q.get("key")
+            if not valid_rkey(key):
+                return self.send({"error": "Invalid key"}, 400)
+            with LOCK:
+                now = time.time()
+                prune_remote_pairs(now)
+                rec = REMOTE_PAIRS.setdefault(key, {"pin": "", "host": "", "ts": now, "phone_seen": 0.0})
+                rec["ts"] = now
+                if q.get("probe") != "1":
+                    rec["phone_seen"] = now
+                g_ = GAMES.get(rec["pin"]) if rec["pin"] else None
+                if not g_ or g_["host"] != rec["host"]:
+                    rec["pin"] = rec["host"] = ""
+                    g_ = None
+                return self.send({
+                    "paired": bool(g_),
+                    "pin": g_["pin"] if g_ else "",
+                    "host": g_["host"] if g_ else "",
+                    "phase": g_["phase"] if g_ else "standby",
+                    "phone_live": (now - rec["phone_seen"] < 5.0),
+                })
         if path == "/api/state":
-            q = dict(x.split("=", 1) for x in qs.split("&") if "=" in x)
+            q = self._q(qs)
             with LOCK:
                 g = GAMES.get(q.get("pin"))
+                rk = q.get("key")
+                repaired = None
+                if valid_rkey(rk) and rk in REMOTE_PAIRS:
+                    rec = REMOTE_PAIRS[rk]
+                    rec["phone_seen"] = time.time()
+                    rpin = rec.get("pin") or ""
+                    if rpin and rpin in GAMES and (not g or rpin != q.get("pin")):
+                        repaired = {"pin": rpin, "host": rec["host"]}
                 if not g:
-                    return self.send({"error": "Game not found"}, 404)
-                return self.send(view(g, q.get("pid"), host=(q.get("host") == g["host"])))
+                    err = {"error": "Game not found"}
+                    if repaired:
+                        err["repaired"] = repaired
+                    return self.send(err, 404)
+                out = view(g, q.get("pid"), host=(q.get("host") == g["host"]))
+                if repaired:
+                    out["repaired"] = repaired
+                return self.send(out)
         files = {
             "/": "host.html", "/host": "host.html", "/present": "host.html",
             "/play": "play.html", "/remote": "remote.html",
@@ -2068,7 +2360,39 @@ class H(BaseHTTPRequestHandler):
                     g["auto"] = bool(body["auto"])
                 if body.get("bots"):
                     add_bots(g, body.get("bots"))
+                pk = body.get("pair_key")
+                if valid_rkey(pk):
+                    now = time.time()
+                    prune_remote_pairs(now)
+                    prev_seen = REMOTE_PAIRS.get(pk, {}).get("phone_seen", 0.0)
+                    g["pair_key"] = pk
+                    REMOTE_PAIRS[pk] = {"pin": g["pin"], "host": g["host"], "ts": now, "phone_seen": prev_seen}
                 return self.send({"pin": g["pin"], "host": g["host"]})
+            if path == "/api/remote_pair":
+                key = body.get("key")
+                if not valid_rkey(key):
+                    return self.send({"error": "Invalid key"}, 400)
+                now = time.time()
+                prune_remote_pairs(now)
+                rec = REMOTE_PAIRS.setdefault(key, {"pin": "", "host": "", "ts": now, "phone_seen": 0.0})
+                rec["ts"] = now
+                if body.get("clear"):
+                    rec["pin"] = ""
+                    rec["host"] = ""
+                elif body.get("pin") and body.get("host"):
+                    g_ = GAMES.get(body["pin"])
+                    if not g_ or g_["host"] != body["host"]:
+                        return self.send({"error": "Forbidden"}, 403)
+                    rec["pin"] = g_["pin"]
+                    rec["host"] = g_["host"]
+                    g_["pair_key"] = key
+                return self.send({
+                    "ok": True,
+                    "paired": bool(rec["pin"] and rec["pin"] in GAMES),
+                    "pin": rec["pin"],
+                    "host": rec["host"],
+                    "phone_live": (now - rec["phone_seen"] < 5.0),
+                })
             g = GAMES.get(body.get("pin"))
             if not g:
                 return self.send({"error": "Game not found"}, 404)
@@ -2427,6 +2751,8 @@ def restore_games():
                 g["pause_prev"] = prev_time(g)
                 g["pause_rem"] = qtime(g) + g.get("extra_time", 0.0)
             GAMES[pin] = g
+            if valid_rkey(g.get("pair_key")):
+                REMOTE_PAIRS[g["pair_key"]] = {"pin": pin, "host": g["host"], "ts": now, "phone_seen": 0.0}
             n += 1
         except Exception:
             continue

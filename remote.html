@@ -2,77 +2,475 @@
 <html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Brainrush! Host Remote</title>
 <style>
-body{margin:0;font-family:system-ui,sans-serif;background:#1a0938;color:#fff;text-align:center;min-height:100vh;padding:16px;box-sizing:border-box}
-.card{max-width:460px;margin:0 auto;background:#ffffff14;border:1px solid #ffffff28;border-radius:16px;padding:18px;box-shadow:0 8px 28px #0006}
-.badge{display:inline-block;background:#ffdf5d;color:#2b0d57;font-weight:900;padding:4px 14px;border-radius:99px;font-size:.9em;margin-bottom:8px}
-h1{font-size:1.45em;margin:.3em 0}
-.big-btn{width:100%;font-size:1.5em;padding:20px;border:0;border-radius:14px;background:#26890c;color:#fff;font-weight:800;cursor:pointer;margin:12px 0;box-shadow:0 6px 18px #0005}
+body{margin:0;font-family:system-ui,-apple-system,sans-serif;background:#1a0938;color:#fff;text-align:center;min-height:100vh;padding:14px;box-sizing:border-box}
+.card{max-width:480px;margin:0 auto;background:#ffffff14;border:1px solid #ffffff28;border-radius:16px;padding:18px;box-shadow:0 8px 28px #0006}
+.badge{display:inline-block;background:#ffdf5d;color:#2b0d57;font-weight:900;padding:5px 14px;border-radius:99px;font-size:.88em;margin-bottom:8px;letter-spacing:.2px}
+.badge.green{background:#7dff6b;color:#103808}
+h1{font-size:1.35em;margin:.3em 0}
+.sub{font-size:.92em;opacity:.86;line-height:1.4;margin:6px 0 12px}
+.big-btn{width:100%;font-size:1.38em;padding:18px 14px;border:0;border-radius:14px;background:#26890c;color:#fff;font-weight:800;cursor:pointer;margin:10px 0;box-shadow:0 6px 18px #0005;transition:opacity .15s,transform .1s}
 .big-btn:active{transform:scale(.98)}
+.big-btn:disabled{opacity:.42;cursor:not-allowed;transform:none}
+.big-btn.sec{background:#1368ce;font-size:1.12em;padding:14px}
 .ctrl-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
-.ctrl-btn{padding:14px 10px;font-size:1.1em;font-weight:700;border:1px solid #fff4;border-radius:12px;background:#ffffff1f;color:#fff;cursor:pointer}
+.ctrl-btn{padding:13px 10px;font-size:1.02em;font-weight:700;border:1px solid #fff4;border-radius:12px;background:#ffffff1f;color:#fff;cursor:pointer}
+.ctrl-btn:active{transform:scale(.98)}
 .ctrl-btn.on{background:#26890c;border-color:#fff}
-.ans-box{background:#0005;border-radius:10px;padding:10px 14px;margin:10px 0;text-align:left;font-size:.95em}
+.ans-box{background:#0006;border:1px solid #ffffff1c;border-radius:12px;padding:11px 14px;margin:10px 0;text-align:left;font-size:.95em;line-height:1.4}
 .ans-box b{color:#7dff6b}
+.body-prev{max-height:155px;overflow-y:auto;white-space:pre-wrap;background:#ffffff10;border-radius:8px;padding:8px 10px;margin-top:8px;font-size:.9em;line-height:1.42;color:#fffd}
+.poll-row{margin:6px 0;padding:6px 8px;background:#ffffff12;border-radius:8px}
+.lens-tag{display:inline-block;font-size:.8em;background:#ffdf5d2b;color:#ffdf5d;padding:1px 7px;border-radius:99px;margin-left:4px;font-weight:700}
+.disc-bar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:8px;padding-top:8px;border-top:1px solid #fff2}
+.disc-bar .ctrl-btn{flex:1;padding:9px 8px;font-size:.9em}
+.launch-card{background:#0005;border:1px solid #ffffff2b;border-radius:14px;padding:14px;margin-top:12px;text-align:left}
+.launch-card h3{margin:0 0 10px;text-align:center;font-size:1.08em;color:#ffdf5d}
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:#0006;padding:4px;border-radius:10px;margin-bottom:10px}
+.seg button{padding:9px 8px;border:0;border-radius:8px;background:transparent;color:#fffc;font-weight:800;font-size:.95em;cursor:pointer}
+.seg button.active{background:#7b2cbf;color:#fff;box-shadow:0 2px 8px #0006}
+.sel{width:100%;padding:11px 12px;border-radius:10px;border:0;background:#fff;color:#2b0d57;font-weight:800;font-size:.98em;margin-bottom:10px;box-sizing:border-box}
+.opt-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin:8px 0}
+.opt-pill{display:flex;align-items:center;gap:7px;background:#ffffff12;border:1px solid #ffffff24;padding:8px 9px;border-radius:9px;font-size:.86em;font-weight:600;cursor:pointer;user-select:none}
+.opt-pill input{width:16px;height:16px;margin:0;accent-color:#26890c}
+.bots-row{display:flex;align-items:center;justify-content:space-between;background:#ffffff12;border:1px solid #ffffff24;border-radius:9px;padding:7px 11px;margin-top:8px;font-size:.9em;font-weight:700}
+.bots-row input{width:64px;padding:5px 6px;border-radius:7px;border:0;text-align:center;font-weight:800;font-size:1em;color:#2b0d57;background:#fff}
+.err-msg{color:#ff8a8a;font-weight:700;font-size:.88em;margin:6px 0;text-align:center;display:none}
 </style></head><body>
 <div class="card" id="app">Loading remote…</div>
 <script>
 const qs = new URLSearchParams(location.search);
-let pin = qs.get('pin') || '', host = qs.get('host') || '', S = {};
+let rkey = qs.get('key') || '', pin = qs.get('pin') || '', host = qs.get('host') || '', S = {};
+let lastKey = '', launchMode = 'quiz', quizCatalog = [], quizzesLoaded = false, launching = false;
 const $ = document.getElementById('app'), sh = ["▲ ","◆ ","● ","■ "];
-function esc(s){return String(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
-async function post(u,b){return (await fetch(u,{method:'POST',body:JSON.stringify(b)})).json()}
-async function next(){await post('/api/next',{pin,host});poll()}
-async function ctl(action,sec=10){await post('/api/host_ctl',{pin,host,action,sec});poll()}
-async function appr(name,ok){await post('/api/approve',{pin,host,name,approve:ok});poll()}
-async function addBots(n=5){await post('/api/bots',{pin,host,count:n});poll()}
 
-async function poll(){
- if(!pin || !host){
-  $.innerHTML=`<h2>🕹️ Host Remote</h2><p>Open the <b>📱 Remote</b> button on your Host screen to pair this phone with your live game.</p>`;
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+async function post(u,b){
+ const r = await fetch(u,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b)});
+ let d = {};
+ try{ d = await r.json(); }catch(e){}
+ d._status = r.status;
+ return d;
+}
+async function next(){await post('/api/next',{pin,host});pollNow()}
+async function ctl(action,sec=10){await post('/api/host_ctl',{pin,host,action,sec});pollNow()}
+async function appr(name,ok){await post('/api/approve',{pin,host,name,approve:ok});pollNow()}
+async function addBots(n=5){await post('/api/bots',{pin,host,count:n});pollNow()}
+
+async function loadQuizzes(){
+ if(quizzesLoaded) return;
+ quizzesLoaded = true;
+ try{
+  const tok = localStorage.getItem('brainrush_token') || '';
+  const r = await fetch('/api/quizzes?token=' + encodeURIComponent(tok));
+  if(r.ok){
+   const d = await r.json();
+   quizCatalog = d.quizzes || [];
+   populateSelect();
+  }
+ }catch(e){ quizzesLoaded = false; }
+}
+
+function populateSelect(){
+ const sel = document.getElementById('mQuizSel');
+ if(!sel) return;
+ const prev = sel.value;
+ const isCase = launchMode === 'case';
+ const ph = isCase ? '— Select a Case Study —' : '— Select a Quiz —';
+ const list = quizCatalog.filter(q => isCase ? !!q.case : !q.case);
+ sel.innerHTML = `<option value="">${ph}</option>` + list.map(q => `<option value="${esc(q.file)}">${esc(q.title)}</option>`).join('');
+ if(prev && list.some(q => q.file === prev)) sel.value = prev;
+ else sel.value = '';
+}
+
+function setLaunchMode(m){
+ launchMode = m;
+ lastKey = '';
+ renderStandby();
+}
+
+function renderOptsHtml(){
+ if(launchMode === 'case'){
+  return `
+   <label class="opt-pill"><input type="checkbox" id="mIce"> 💭 Word Cloud Warm-Up</label>
+   <label class="opt-pill"><input type="checkbox" id="mTeams"> 🛡️ Discussion Teams</label>
+   <label class="opt-pill"><input type="checkbox" id="mMod"> 🛡️ Approve Names</label>
+  `;
+ }
+ return `
+  <label class="opt-pill"><input type="checkbox" id="mShuf"> 🎲 Randomize Order</label>
+  <label class="opt-pill"><input type="checkbox" id="mIce"> 💭 Word Cloud Warm-Up</label>
+  <label class="opt-pill"><input type="checkbox" id="mTeams"> 🛡️ Team Mode</label>
+  <label class="opt-pill"><input type="checkbox" id="mWager"> 🎰 Final Boss Wager</label>
+  <label class="opt-pill"><input type="checkbox" id="mRedemp"> 🔄 Redemption</label>
+  <label class="opt-pill"><input type="checkbox" id="mWheel"> 🎡 Mystery Wheel</label>
+  <label class="opt-pill"><input type="checkbox" id="mHot"> 🔥 Hot Seat</label>
+  <label class="opt-pill"><input type="checkbox" id="mTie"> ⚔️ Tiebreaker</label>
+  <label class="opt-pill"><input type="checkbox" id="mMod"> 🛡️ Approve Names</label>
+ `;
+}
+
+function renderStandby(){
+ const sk = 'standby:' + launchMode;
+ if(lastKey === sk) return;
+ lastKey = sk;
+ $.innerHTML = `
+  <div class="badge green">🟢 PAIRED WITH HOST &middot; STANDBY</div>
+  <h1>🕹️ Mobile Host Remote</h1>
+  <p class="sub">Live controls will appear automatically as soon as the session launches on your computer — or start one right from your phone below.</p>
+  <div class="launch-card">
+   <h3>📱 Launch Directly from Phone</h3>
+   <div class="seg">
+    <button type="button" class="${launchMode==='quiz'?'active':''}" onclick="setLaunchMode('quiz')">🎮 Quizzes</button>
+    <button type="button" class="${launchMode==='case'?'active':''}" onclick="setLaunchMode('case')">📖 Case Studies</button>
+   </div>
+   <select id="mQuizSel" class="sel">
+    <option value="">${launchMode==='case'?'— Select a Case Study —':'— Select a Quiz —'}</option>
+   </select>
+   <div class="opt-grid">${renderOptsHtml()}</div>
+   <div class="bots-row">
+    <span>🤖 Practice Bots</span>
+    <input type="number" id="mBots" min="0" max="30" value="0">
+   </div>
+   <div id="mErr" class="err-msg"></div>
+   <button type="button" id="mLaunchBtn" class="big-btn" style="margin-bottom:4px" onclick="launchFromPhone()">🚀 Create Session from Phone</button>
+  </div>
+  <div class="ctrl-grid" style="grid-template-columns:1fr;margin-top:12px">
+   <button id="awakeBtn" class="ctrl-btn" onclick="toggleAwake()">☀️ Awake: <span id="awakeState">ON</span></button>
+  </div>
+ `;
+ populateSelect();
+ setAwakeLabel();
+ loadQuizzes();
+}
+
+function chk(id){ const el = document.getElementById(id); return !!(el && el.checked); }
+
+async function launchFromPhone(){
+ if(launching) return;
+ const sel = document.getElementById('mQuizSel');
+ const errEl = document.getElementById('mErr');
+ const qf = sel ? sel.value : '';
+ if(!qf){
+  if(errEl){
+   errEl.textContent = launchMode === 'case' ? 'Please select a Case Study first.' : 'Please select a Quiz first.';
+   errEl.style.display = 'block';
+  }
   return;
  }
- const r = await fetch('/api/state?pin='+pin+'&host='+encodeURIComponent(host));
- if(!r.ok){ $.innerHTML=`<h2>Game ended or not found</h2>`; return; }
- S = await r.json();
- render();
+ if(errEl) errEl.style.display = 'none';
+ const bots = Math.max(0, Math.min(30, parseInt((document.getElementById('mBots')||{}).value, 10) || 0));
+ const isCase = launchMode === 'case';
+ const teamsOn = chk('mTeams');
+ const payload = {
+  quiz: qf,
+  pair_key: rkey,
+  shuffle: isCase ? false : chk('mShuf'),
+  icebreaker: chk('mIce'),
+  teams: teamsOn,
+  team_battle: isCase ? false : teamsOn,
+  wager: isCase ? false : chk('mWager'),
+  redemption: isCase ? false : chk('mRedemp'),
+  wheel: isCase ? false : chk('mWheel'),
+  hotseat: isCase ? false : chk('mHot'),
+  tiebreak: isCase ? false : chk('mTie'),
+  moderate: chk('mMod'),
+  sabotage: false,
+  speed: false,
+  dbl: false,
+  steal: false,
+  auto: false,
+  bots: bots,
+  token: localStorage.getItem('brainrush_token') || '',
+  password: sessionStorage.getItem('brainrush_pw') || ''
+ };
+ launching = true;
+ const btn = document.getElementById('mLaunchBtn');
+ if(btn) btn.disabled = true;
+ try{
+  let r = await post('/api/create', payload);
+  if(r.need_pw){
+   const pw = window.prompt('Host password required:');
+   if(!pw){
+    if(errEl){ errEl.textContent = 'Host password required to create a session.'; errEl.style.display = 'block'; }
+    return;
+   }
+   sessionStorage.setItem('brainrush_pw', pw);
+   payload.password = pw;
+   r = await post('/api/create', payload);
+  }
+  if(!r || !r.pin){
+   if(errEl){ errEl.textContent = r.error || 'Could not create session.'; errEl.style.display = 'block'; }
+   return;
+  }
+  pin = r.pin;
+  host = r.host;
+  lastKey = '';
+  await pollOnce();
+ }finally{
+  launching = false;
+  if(btn) btn.disabled = false;
+ }
+}
+
+async function backToStandby(){
+ if(rkey){
+  try{ await post('/api/remote_pair', {key: rkey, clear: true}); }catch(e){}
+ }
+ pin = '';
+ host = '';
+ S = {};
+ lastKey = '';
+ renderStandby();
+}
+
+function buildKeyText(){
+ if(S.case || S.qtype === 'info') return '';
+ const prefix = (S.host_correct != null && S.host_correct >= 0) ? (sh[S.host_correct] || '') : '';
+ if(S.host_ans) return prefix + S.host_ans;
+ if(S.qtype === 'text') return (S.answers_correct || [''])[0] || '';
+ if(S.qtype === 'order') return (S.answers_correct || []).join(' → ');
+ if(S.correct != null && S.correct >= 0) return (sh[S.correct] || '') + ((S.answers || [])[S.correct] || '');
+ return '';
+}
+
+function buildResultsDetail(denom){
+ const qt = S.qtype || 'mc';
+ if(qt === 'poll'){
+  const cnts = S.counts || [];
+  const tot = Math.max(1, cnts.reduce((a, b) => a + b, 0));
+  const lenses = S.lenses || [];
+  const bars = (S.answers || []).map((a, i) => {
+   const c = cnts[i] || 0;
+   const pct = cnts.reduce((x, y) => x + y, 0) ? Math.round(100 * c / tot) : 0;
+   const lns = lenses[i] ? `<span class="lens-tag">${esc(lenses[i])}</span>` : '';
+   return `<div class="poll-row">${sh[i]||''}${esc(a)} &mdash; <b>${pct}% (${c})</b>${lns}</div>`;
+  }).join('');
+  const defs = (S.defenders || []).length
+   ? `<div style="margin-top:8px">🎤 <b>Defend your side:</b><br>${S.defenders.map(d => `${sh[d.side]||''}<b>${esc(d.name)}</b> <small>(${esc((S.answers||[])[d.side]||'')})</small>`).join('<br>')}</div>`
+   : '';
+  return `
+   <div style="margin-top:8px">${bars}</div>
+   ${defs}
+   <div class="disc-bar">
+    <div id="rDiscuss" style="width:100%;font-weight:800;color:#ffdf5d"></div>
+    <button class="ctrl-btn" onclick="ctl('discuss',60)">⏱️ Start 60s Discussion</button>
+    <button class="ctrl-btn" style="flex:0 0 auto" onclick="ctl('discuss',0)">⏹️ Clear</button>
+   </div>`;
+ }
+ if(qt === 'rank'){
+  const items = (S.rank_avg || []).map((r, idx) => `<li><b>${esc(r.item)}</b> <small>(avg #${esc(r.avg)})</small></li>`).join('');
+  return `<div style="margin-top:8px">📊 <b>Priority Ranking (${S.rank_n || 0} ranked):</b><ol style="margin:6px 0 2px;padding-left:20px">${items || '<li><i>No rankings submitted</i></li>'}</ol></div>`;
+ }
+ if(qt === 'open'){
+  const rs = S.responses || [];
+  const top = rs.slice(0, 5).map(r => `<div class="poll-row">“${esc(r.text)}” ${r.votes ? `<b>(👍 ${r.votes})</b>` : ''}</div>`).join('');
+  return `<div style="margin-top:8px">✍️ <b>${rs.length} response${rs.length === 1 ? '' : 's'} submitted</b>${top ? `<div style="margin-top:6px">${top}</div>` : ''}</div>`;
+ }
+ if(qt === 'info') return '';
+ const kt = buildKeyText();
+ return `<div style="margin-top:6px">✅ Correct: <b>${esc(kt)}</b> <small>(${S.n_correct || 0}/${denom})</small></div>`;
+}
+
+function updateLiveText(){
+ const ph = S.phase;
+ const denom = S.n_active != null ? S.n_active : (S.n || 0);
+ const plEl = document.getElementById('rPlayers');
+ if(plEl) plEl.textContent = `${S.n || 0} player${S.n === 1 ? '' : 's'}`;
+ const tmEl = document.getElementById('rTimer');
+ if(tmEl && ph === 'question' && S.qtype !== 'info'){
+  if(S.paused) tmEl.textContent = `⏸️ Paused (${Math.ceil(S.left || 0)}s)`;
+  else if((S.preview_left || 0) > 0) tmEl.textContent = `👀 Reading (${Math.ceil(S.preview_left)}s)`;
+  else tmEl.textContent = `⏱️ ${Math.ceil(S.left || 0)}s left`;
+ }
+ const anEl = document.getElementById('rAns');
+ if(anEl && ph === 'question' && S.qtype !== 'info'){
+  anEl.textContent = `${S.answered || 0}/${denom} answered`;
+ }
+ const dcEl = document.getElementById('rDiscuss');
+ if(dcEl){
+  const dl = S.discuss_left || 0;
+  dcEl.textContent = dl > 0 ? `🗣️ Discussion Timer: ${dl}s left` : '🗣️ Discussion Timer: Ready';
+ }
+ const wdEl = document.getElementById('rWords');
+ if(wdEl && ph === 'icebreaker'){
+  wdEl.textContent = `💭 ${S.word_total || 0} word${S.word_total === 1 ? '' : 's'} submitted`;
+ }
+ const auEl = document.getElementById('rAutoLeft');
+ if(auEl){
+  auEl.textContent = (S.auto && S.auto_left != null) ? ` (${S.auto_left}s)` : '';
+ }
 }
 
 function render(){
- const ph = S.phase;
- let mainLbl = 'Next Step ➔';
- if(ph==='lobby') mainLbl = '🚀 Start Game';
- else if(ph==='icebreaker') mainLbl = '🚀 Start Question 1';
-  else if(ph==='intro') mainLbl = '⏭️ Skip Intro';
- else if(ph==='question') mainLbl = S.qtype==='info' ? '➡️ Next slide' : '⏭️ Skip Timer / Show Results';
- else if(ph==='results') mainLbl = S.is_last ? '🏆 Show Final Podium' : '🏆 Show Leaderboard';
- else if(ph==='board') mainLbl = S.index+1>=S.total ? '🏆 Final Podium' : '➡️ Next Question';
+ const ph = S.phase || 'lobby';
+ const isCaseGame = !!S.case_game;
+ const isCaseSlide = !!(S.case || isCaseGame);
+ const denom = S.n_active != null ? S.n_active : (S.n || 0);
+ const startDisabled = (ph === 'lobby' && (S.n || 0) === 0);
 
- const qInfo = (ph==='question' || ph==='results') ? `
-  <div class="ans-box">
-   <div><b>Q${S.index+1}/${S.total}:</b> ${esc(S.question)}</div>
-   ${ph==='question'?`<div style="margin-top:6px">⏱️ <b>${Math.ceil(S.left)}s</b> left &middot; <b>${S.answered}/${S.n}</b> answered</div>`:''}
-   ${ph==='results'?`<div style="margin-top:6px">✅ Correct: <b>${S.qtype==='text'?esc((S.answers_correct||[''])[0]):S.qtype==='order'?esc((S.answers_correct||[]).join(' → ')):sh[S.correct]+esc((S.answers||[])[S.correct])}</b></div>`:''}
-  </div>` : '';
+ const resSig = ph === 'results' ? JSON.stringify([
+  S.counts, S.defenders, S.rank_avg, S.rank_n,
+  (S.responses || []).slice(0, 5).map(r => [r.id, r.votes]),
+  S.n_correct, S.tb_winner
+ ]) : '';
 
- const noteHtml = ((ph==='question'||ph==='results') && S.note) ? `<div class="ans-box" style="background:#fffbe6;color:#2b0d57">📝 <b style="color:#2b0d57">Teacher note:</b> ${esc(S.note)}</div>` : '';
-  const pendHtml = (S.pending_list||[]).length ? `<div class="ans-box" style="background:#ffdf5d;color:#2b0d57"><b style="color:#2b0d57">🛡️ Waiting for approval:</b><br>${S.pending_list.map(p=>`${esc((p.avatar||'')+' '+p.name)} <button class="ctrl-btn" style="padding:4px 10px" data-n="${esc(p.name)}" onclick="appr(this.dataset.n,true)">✓</button><button class="ctrl-btn" style="padding:4px 10px" data-n="${esc(p.name)}" onclick="appr(this.dataset.n,false)">✕</button>`).join('<br>')}</div>` : '';
+ const stateKey = [
+  pin, ph, S.index, S.total, S.qtype || '', isCaseGame ? 1 : 0, S.case ? 1 : 0,
+  S.is_last ? 1 : 0, startDisabled ? 1 : 0, S.paused ? 1 : 0, S.auto ? 1 : 0,
+  rkey ? 1 : 0, S.note || '', S.question || '', S.body || '', S.prompt || '',
+  JSON.stringify(S.pending_list || []), resSig
+ ].join('|');
+
+ if(stateKey !== lastKey){
+  lastKey = stateKey;
+  let mainLbl = 'Next Step ➔';
+  if(ph === 'lobby') mainLbl = isCaseGame ? '🚀 Start Case Study' : '🚀 Start Game';
+  else if(ph === 'icebreaker') mainLbl = isCaseGame ? '▶️ Start Slide 1' : '🚀 Start Question 1';
+  else if(ph === 'intro') mainLbl = '⏭️ Skip Intro';
+  else if(ph === 'question') mainLbl = S.qtype === 'info' ? '➡️ Next Slide ➔' : '⏭️ Skip Timer / Show Results';
+  else if(ph === 'results') mainLbl = S.is_last ? '🏆 Show Final Podium' : (isCaseSlide ? '➡️ Next Slide ➔' : '🏆 Show Leaderboard');
+  else if(ph === 'board') mainLbl = (S.index + 1 >= S.total) ? '🏆 Final Podium' : (isCaseGame ? '➡️ Next Slide ➔' : '➡️ Next Question');
+
+  const itemTag = isCaseSlide ? 'Slide' : 'Q';
+  let qInfo = '';
+  if(ph === 'icebreaker'){
+   qInfo = `<div class="ans-box"><div><b>Warm-Up Prompt:</b> ${esc(S.prompt || '')}</div><div id="rWords" style="margin-top:6px;font-weight:700;color:#ffdf5d"></div></div>`;
+  } else if(ph === 'question' || ph === 'results'){
+   const keyTxt = buildKeyText();
+   const showKeyInQ = (ph === 'question' && !S.case && S.qtype !== 'info' && keyTxt);
+   qInfo = `
+    <div class="ans-box">
+     <div><b>${itemTag} ${(S.index || 0) + 1}/${S.total || 0}:</b> ${esc(S.question)}</div>
+     ${S.qtype === 'info' && S.body ? `<div class="body-prev">${esc(S.body)}</div>` : ''}
+     ${ph === 'question' && S.qtype !== 'info' ? `<div style="margin-top:6px"><b id="rTimer"></b> &middot; <span id="rAns" style="font-weight:700"></span></div>` : ''}
+     ${showKeyInQ ? `<div style="margin-top:6px">🔑 Answer Key: <b>${esc(keyTxt)}</b></div>` : ''}
+     ${ph === 'results' ? buildResultsDetail(denom) : ''}
+    </div>`;
+  }
+
+  const noteHtml = ((ph === 'question' || ph === 'results') && S.note)
+   ? `<div class="ans-box" style="background:#fffbe6;color:#2b0d57">📝 <b style="color:#2b0d57">Teacher note:</b> ${esc(S.note)}</div>`
+   : '';
+  const pendHtml = (S.pending_list || []).length
+   ? `<div class="ans-box" style="background:#ffdf5d;color:#2b0d57"><b style="color:#2b0d57">🛡️ Waiting for approval:</b><br>${S.pending_list.map(p => `${esc((p.avatar ? p.avatar + ' ' : '') + p.name)} <button class="ctrl-btn" style="padding:4px 10px;background:#26890c" data-n="${esc(p.name)}" onclick="appr(this.dataset.n,true)">✓</button> <button class="ctrl-btn" style="padding:4px 10px;background:#e21b3c" data-n="${esc(p.name)}" onclick="appr(this.dataset.n,false)">✕</button>`).join('<br>')}</div>`
+   : '';
+  const lobbyHint = startDisabled ? `<div class="sub" style="margin:2px 0 6px;color:#ffdf5d">Waiting for players to join (or tap 🤖 +5 Bots)</div>` : '';
+
   $.innerHTML = `
-  <div class="badge">🕹️ HOST REMOTE &middot; PIN ${esc(pin)}</div>
-  <h1>Phase: ${esc(ph.toUpperCase())} (${S.n} players)</h1>
-  ${pendHtml}${qInfo}${noteHtml}
-  ${ph!=='final' ? `<button class="big-btn" onclick="next()">${mainLbl}</button>` : `<p>🎉 Game Complete!</p>`}
-  <div class="ctrl-grid">
-   ${ph==='question' ? `
-    <button class="ctrl-btn" onclick="ctl('pause')">${S.paused?'▶️ Resume':'⏸️ Pause'}</button>
-    <button class="ctrl-btn" onclick="ctl('add_time',10)">⏱️ +10 Sec</button>
-   ` : ''}
-   <button class="ctrl-btn ${S.auto?'on':''}" onclick="ctl('toggle_auto')">⏭️ Auto: ${S.auto?'ON':'Off'}</button>
-   <button class="ctrl-btn" onclick="addBots(5)">🤖 +5 Bots</button>
-  </div>
- `;
+   <div class="badge">🕹️ HOST REMOTE &middot; PIN ${esc(pin)}</div>
+   <h1>Phase: ${esc(ph.toUpperCase())} (<span id="rPlayers">${S.n || 0} players</span>)</h1>
+   ${pendHtml}${qInfo}${noteHtml}${lobbyHint}
+   ${ph !== 'final'
+     ? `<button class="big-btn" onclick="next()" ${startDisabled ? 'disabled' : ''}>${mainLbl}<span id="rAutoLeft"></span></button>`
+     : `<p style="font-weight:800;font-size:1.15em;margin:10px 0">🎉 Session Complete!</p>${rkey ? `<button class="big-btn sec" onclick="backToStandby()">🏠 Back to Mobile Standby / Launch New</button>` : ''}`
+   }
+   <div class="ctrl-grid">
+    ${ph === 'question' && S.qtype !== 'info' ? `
+     <button class="ctrl-btn" onclick="ctl('pause')">${S.paused ? '▶️ Resume' : '⏸️ Pause'}</button>
+     <button class="ctrl-btn" onclick="ctl('add_time',10)">⏱️ +10 Sec</button>
+    ` : ''}
+    ${!isCaseGame ? `<button class="ctrl-btn ${S.auto ? 'on' : ''}" onclick="ctl('toggle_auto')">⏭️ Auto: ${S.auto ? 'ON' : 'Off'}</button>` : ''}
+    <button class="ctrl-btn" onclick="addBots(5)">🤖 +5 Bots</button>
+    <button id="awakeBtn" class="ctrl-btn" onclick="toggleAwake()">☀️ Awake: <span id="awakeState">ON</span></button>
+   </div>
+  `;
+  setAwakeLabel();
+ }
+ updateLiveText();
 }
-poll();
-setInterval(poll, 700);
+
+let pollTimer = null, polling = false;
+async function pollOnce(){
+ if(polling) return;
+ polling = true;
+ try{
+  if(!pin || !host){
+   if(rkey){
+    renderStandby();
+    const r = await fetch('/api/remote_pair?key=' + encodeURIComponent(rkey));
+    if(r.ok){
+     const d = await r.json();
+     if(d.paired && d.pin && d.host){
+      pin = d.pin;
+      host = d.host;
+      lastKey = '';
+      polling = false;
+      return await pollOnce();
+     }
+    }
+    return;
+   }
+   if(lastKey !== 'unpaired'){
+    lastKey = 'unpaired';
+    $.innerHTML = `<h2>🕹️ Host Remote</h2><p class="sub">Open the <b>📱 Remote</b> button on your Host screen to pair this phone with your live game.</p>`;
+   }
+   return;
+  }
+  const url = '/api/state?pin=' + encodeURIComponent(pin) + '&host=' + encodeURIComponent(host) + (rkey ? '&key=' + encodeURIComponent(rkey) : '');
+  const r = await fetch(url);
+  if(!r.ok){
+   let err = {};
+   try{ err = await r.json(); }catch(e){}
+   if(err.repaired && err.repaired.pin && err.repaired.host){
+    pin = err.repaired.pin;
+    host = err.repaired.host;
+    lastKey = '';
+    polling = false;
+    return await pollOnce();
+   }
+   if(rkey){
+    pin = '';
+    host = '';
+    S = {};
+    lastKey = '';
+    renderStandby();
+    return;
+   }
+   if(lastKey !== 'ended'){
+    lastKey = 'ended';
+    $.innerHTML = `<h2>Game ended or not found</h2>`;
+   }
+   return;
+  }
+  S = await r.json();
+  if(S.repaired && S.repaired.pin && S.repaired.pin !== pin){
+   pin = S.repaired.pin;
+   host = S.repaired.host;
+   lastKey = '';
+   polling = false;
+   return await pollOnce();
+  }
+  if(S.phase === 'final' && rkey){
+   try{
+    const pr = await fetch('/api/remote_pair?key=' + encodeURIComponent(rkey));
+    if(pr.ok){
+     const pd = await pr.json();
+     if(pd.paired && pd.pin && pd.pin !== pin){
+      pin = pd.pin;
+      host = pd.host;
+      lastKey = '';
+      polling = false;
+      return await pollOnce();
+     }
+    }
+   }catch(e){}
+  }
+  render();
+ }catch(e){}
+ finally{ polling = false; }
+}
+
+function scheduleNext(){
+ clearTimeout(pollTimer);
+ const delay = (!pin || !host) ? 900 : 700;
+ pollTimer = setTimeout(async ()=>{ await pollOnce(); scheduleNext(); }, delay);
+}
+async function pollNow(){
+ clearTimeout(pollTimer);
+ await pollOnce();
+ scheduleNext();
+}
+pollNow();
 
 // ===== Keep screen awake (Screen Wake Lock API) =====
 let wakeLock = null;
