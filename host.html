@@ -235,6 +235,19 @@ body.hc .a{outline:3px solid #fff}body.hc .row{border:2px solid #fff}
 .close-x{float:right;margin:0;padding:6px 14px;font-size:.9em;border-radius:99px;background:#e21b3c}
 .q-img.zoom-hold,.q-img.zoom-go{max-height:300px}.zoom-hold{filter:blur(34px)}.zoom-go{animation:zoomrev 15s linear forwards}
 @keyframes zoomrev{from{filter:blur(34px)}to{filter:blur(0)}}
+
+.case-card{max-width:940px;margin:10px auto;background:#0004;border:2px solid #fff3;border-radius:18px;padding:18px 30px;text-align:left}
+.case-card h1{text-align:center}
+.case-body p{font-size:1.4em;line-height:1.5;margin:.6em 0}
+.exh{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin:12px 0}
+.exh figure{margin:0;text-align:center;max-width:260px}.exh.big figure{max-width:420px}
+.exh img{max-width:100%;max-height:170px;border-radius:10px;background:#fff;object-fit:contain}.exh.big img{max-height:300px}
+.exh figcaption{font-size:.8em;opacity:.85;margin-top:4px}
+.lens{display:block;font-size:.62em;font-weight:700;opacity:.92;margin-top:4px;background:#0004;border-radius:99px;padding:2px 10px;width:fit-content}
+.resp-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0;text-align:left}
+.resp{background:#fff;color:#2b0d57;border-radius:12px;padding:12px 16px;font-size:1.05em;font-weight:600;line-height:1.35}
+.resp.voted{box-shadow:0 0 0 3px #ffdf5d}.resp .rv{font-weight:900;margin-top:6px;color:#c2185b}
+.defend{background:#0005;border:2px solid #ffab40;border-radius:14px;padding:10px 16px;margin:12px auto;max-width:760px;font-size:1.1em}
 </style></head><body>
 <div class="late-join" id="lateJoin">
  <button class="late-btn" onclick="toggleLateQr(event)" title="Click to toggle QR code for late joiners">
@@ -327,13 +340,14 @@ body.hc .a{outline:3px solid #fff}body.hc .row{border:2px solid #fff}
    <button class="btn-sm" style="margin:0" onclick="importTable()">Convert to questions ↓</button>
   </div>
   <div class="toolbox" id="toolAi" style="display:none">
-   <p>Paste a paragraph or article and get a draft quiz to review and edit. <span id="aiHint"></span></p>
-   <div class="row2"><input id="aiTopic" placeholder="Topic (e.g. The Water Cycle)" style="margin:0"><input id="aiCount" type="number" min="1" max="25" value="8" style="margin:0"></div>
-   <textarea id="aiText" placeholder="Paste text here…"></textarea>
+   <p>Paste a paragraph, article, or case scenario and get a draft to review and edit. <span id="aiHint"></span></p>
+   <div class="row2"><input id="aiTopic" placeholder="Topic (e.g. Whistleblowing &amp; Safety)" style="margin:0"><input id="aiCount" type="number" min="1" max="25" value="8" style="margin:0"></div>
+   <label style="display:flex;align-items:center;gap:6px;margin:4px 0 8px;font-size:.9em;font-weight:700"><input id="aiCase" type="checkbox" style="width:auto;margin:0"> 📖 Build as a Case Study (chapters, stakeholder roles, ethical-lens polls, ranking &amp; open response)</label>
+   <textarea id="aiText" placeholder="Paste text or case notes here…"></textarea>
    <button class="btn-sm" style="margin:0" onclick="aiGenerate()">✨ Generate draft ↓</button> <span id="aiMsg" style="font-weight:700"></span>
   </div>
   <label><b>Or type/paste questions (one per block, mark correct answer with *, optional Image: or Quote:):</b></label>
-  <div style="font-size:.8em;opacity:.75;margin:2px 0 6px">Extras: <code>Type: tf</code> (True/False — put <code>*True</code> or <code>*False</code>), <code>Type: text</code> (each line is an accepted typed answer), <code>Type: order</code> (list items in the correct order). Answer pictures: <code>Paris | https://…/paris.jpg</code></div>
+  <div style="font-size:.8em;opacity:.75;margin:2px 0 6px">Extras: <code>Type: tf</code> (<code>*True</code>/<code>*False</code>), <code>Type: text</code>, <code>Type: order</code>, <code>Type: zoom</code> + <code>Image:</code>. Case Study: <code>Type: info</code> (<code>Body:</code>, <code>Role: Name | Text</code>), <code>Type: poll</code> (<code>Option :: Ethical lens</code>), <code>Type: rank</code>, <code>Type: open</code>, <code>Exhibit: url | caption</code>, <code>Note:</code></div>
   <textarea id="customText" placeholder="What is the capital of France?
 Berlin
 *Paris
@@ -403,7 +417,8 @@ Quote: Paris has been the capital since 987 CE."></textarea>
    <select id="quizSel" onchange="syncQuizCount()"><option value="quiz.json">Loading quizzes…</option></select>
    <button class="btn-sec" style="margin:0;padding:11px 16px;font-size:.98em;border-radius:10px" onclick="openQuizModal()">➕ Add Quiz</button>
   </div>
-  <div class="quick-bar">
+  <div id="caseHint" style="display:none;margin-top:12px;background:#ffdf5d;color:#2b0d57;border-radius:10px;padding:8px 12px;font-weight:700;font-size:.9em"></div>
+   <div class="quick-bar">
    <label>📝 Questions: <input id="qCount" type="number" min="1" max="200" value="15"> <span id="qMax" style="opacity:.8">/ 15</span></label>
    <label>⏱️ Timer: <input id="qTime" type="number" min="5" max="120" value="15"><span style="opacity:.8">s</span></label>
    <button type="button" class="drawer-toggle" id="advBtn" onclick="toggleAdvPanel()">⚙️ Options <span id="optSummary" style="background:#26890c;padding:2px 8px;border-radius:99px;font-size:.85em">7 active</span> <span id="advCaret">▾</span></button>
@@ -711,8 +726,12 @@ function formatQuestionsBlock(qs){
   const t = q.type || 'mc';
   const lines = [q.q];
   if(t !== 'mc') lines.push('Type: '+t);
-  if(t === 'tf') lines.push('*'+(q.a[q.c]||'True'));
-  else (q.a||[]).forEach((ans,i)=>lines.push((t==='mc'&&i===q.c?'*':'')+ans+((q.aimg&&q.aimg[i])?' | '+q.aimg[i]:'')));
+  if(t === 'info'){
+   (q.body||'').split(/\n\s*\n/).forEach(p=>{ if(p.trim()) lines.push('Body: '+p.replace(/\n/g,' ').trim()); });
+   (q.roles||[]).forEach(r=>lines.push('Role: '+r.name+' | '+r.text));
+  } else if(t === 'tf') lines.push('*'+(q.a[q.c]||'True'));
+  else (q.a||[]).forEach((ans,i)=>lines.push((t==='mc'&&i===q.c?'*':'')+ans+((q.lenses&&q.lenses[i])?' :: '+q.lenses[i]:'')+((q.aimg&&q.aimg[i])?' | '+q.aimg[i]:'')));
+  (q.exhibits||[]).forEach(e=>lines.push('Exhibit: '+e.url+(e.caption?' | '+e.caption:'')));
   if(q.img) lines.push('Image: '+q.img);
   if(q.topic) lines.push('Topic: '+q.topic);
   if(q.note) lines.push('Note: '+q.note);
@@ -747,8 +766,9 @@ async function exportSelectedQuiz(){
 async function deleteSelectedQuiz(){
  const es = document.getElementById('editQuizSel');
  if(!es || !es.value) return;
- const protectedFiles = ['quiz.json','quiz_chapter8.json','quiz_fun_facts.json','quiz_ultimate_silly_trivia.json'];
- if(protectedFiles.includes(es.value)){
+ const qObj = quizList.find(x=>x.file===es.value);
+ const protectedFiles = ['quiz.json','quiz_chapter8.json','quiz_fun_facts.json','quiz_ultimate_silly_trivia.json','quiz_case_ethical_leadership.json'];
+ if((qObj && qObj.builtin) || protectedFiles.includes(es.value)){
   document.getElementById('customErr').textContent = 'Built-in permanent quizzes cannot be deleted.';
   return;
  }
@@ -788,12 +808,13 @@ function parseCustomQuestions(raw){
  }
   return blocks.map(b=>{
    const lines = b.split('\n').map(l=>l.trim()).filter(Boolean);
-   if(lines.length < 3) return null;
+   if(lines.length < 2) return null;
    const q = lines[0];
    const tl = lines.find(l=>/^type:/i.test(l));
    const type = tl ? tl.replace(/^type:\s*/i,'').toLowerCase().trim() : 'mc';
-   const maxA = (type==='order'||type==='text') ? 6 : 4;
-   const a = [], aimg = [];
+   const caseNoAns = (type==='open'||type==='info');
+   const maxA = (type==='order'||type==='text'||type==='rank') ? 6 : 4;
+   const a = [], aimg = [], lenses = [], exhibits = [], roles = [], bodyLines = [];
    let c = 0, quote = '', img = '', starTxt = '', topic = '', note = '';
    lines.slice(1).forEach(l=>{
     if(/^quote:/i.test(l)){ quote = l.replace(/^quote:\s*/i,''); }
@@ -801,19 +822,31 @@ function parseCustomQuestions(raw){
     else if(/^type:/i.test(l)){ }
     else if(/^topic:/i.test(l)){ topic = l.replace(/^topic:\s*/i,''); }
     else if(/^note:/i.test(l)){ note = l.replace(/^note:\s*/i,''); }
+    else if(/^body:/i.test(l)){ bodyLines.push(l.replace(/^body:\s*/i,'')); }
+    else if(/^exhibit:/i.test(l)){ const m = l.replace(/^exhibit:\s*/i,'').match(/^(\S+)\s*(?:\|\s*(.*))?$/); if(m) exhibits.push({url:m[1], caption:(m[2]||'').trim()}); }
+    else if(/^role:/i.test(l)){ const m = l.replace(/^role:\s*/i,'').split('|'); roles.push({name:m[0].trim(), text:m.slice(1).join('|').trim()}); }
+    else if(type==='info'){ bodyLines.push(l); }
+    else if(caseNoAns){ }
     else if(a.length < maxA){
      let t = l, star = false;
      if(t.startsWith('*')){ star = true; t = t.slice(1).trim(); }
      let im = '';
      const m = t.match(/^(.*?)\s*\|\s*((?:https?:\/\/|\/)\S+)$/);
      if(m){ t = m[1].trim(); im = m[2]; }
+     let lens = '';
+     const lm = t.match(/^(.*?)\s*::\s*(.+)$/);
+     if(lm){ t = lm[1].trim(); lens = lm[2].trim(); }
      if(star){ c = a.length; starTxt = t; }
-     a.push(t); aimg.push(im);
+     a.push(t); aimg.push(im); lenses.push(lens);
     }
    });
    const out = {q, a, c, quote, img, topic, note};
+   if(exhibits.length) out.exhibits = exhibits;
    if(type==='tf'){ out.type='tf'; out.a=['True','False']; out.c=/^f/i.test(starTxt||'t')?1:0; }
    else if(type==='text'||type==='order'){ out.type=type; out.c=0; }
+   else if(type==='poll'||type==='rank'){ out.type=type; out.c=0; if(lenses.some(Boolean)) out.lenses = lenses; }
+   else if(type==='open'){ out.type='open'; out.a=[]; }
+   else if(type==='info'){ out.type='info'; out.a=[]; out.body=bodyLines.join('\n\n'); if(roles.length) out.roles = roles; }
    else if(type==='zoom'){ out.type='zoom'; if(aimg.some(Boolean)) out.aimg = aimg; }
    else if(aimg.some(Boolean)) out.aimg = aimg;
    return out;
@@ -841,7 +874,7 @@ function renderQuizSelect(selectedFile){
  const groups = {};
   quizList.forEach(q=>{ const f = q.folder || (q.questions ? 'Saved on this device' : 'My Quizzes'); (groups[f] = groups[f] || []).push(q); });
   const order = Object.keys(groups).sort((a,b)=> (a==='Built-in')-(b==='Built-in') || a.localeCompare(b));
-  sel.innerHTML = order.map(f=>`<optgroup label="${esc(f)}">${groups[f].map(q=>`<option value="${esc(q.file)}">${esc(q.title)}${(q.tags&&q.tags.length)?' — #'+esc(q.tags.join(' #')):''}</option>`).join('')}</optgroup>`).join('');
+  sel.innerHTML = order.map(f=>`<optgroup label="${esc(f)}">${groups[f].map(q=>`<option value="${esc(q.file)}">${q.case?'📖 ':''}${esc(q.title)}${(q.tags&&q.tags.length)?' — #'+esc(q.tags.join(' #')):''}</option>`).join('')}</optgroup>`).join('');
  if(selectedFile) sel.value = selectedFile;
  syncQuizCount();
 }
@@ -1155,6 +1188,7 @@ function render(){
  const autoSuffix = S.auto && S.auto_left != null ? `<span id="autoNextLbl"> (${S.auto_left}s)</span>` : '';
  const zm = S.qtype==='zoom' && S.phase==='question';
  const imgHtml = S.img ? `<img class="q-img${zm?(inPrev?' zoom-hold':' zoom-go'):''}"${zm&&!inPrev?` style="animation-duration:${S.qtime||15}s"`:''} src="${esc(S.img)}" alt="">` : '';
+ const exH = exhibitsHtml(S.exhibits, false);
  const nAct = (S.n_active != null ? S.n_active : S.n);
  if(S.phase=='lobby'){
   spunQ = -1; seenWords.clear();
@@ -1204,12 +1238,14 @@ function render(){
   const wheelBanner = S.wheel_mod ? `<div class="wheel-banner">🎡 MYSTERY WHEEL: ${esc(S.wheel_mod)}</div>` : '';
   const extraB = `${S.team_battle?`<div class="team-banner">🤝 TEAM BATTLE! Your team's most popular answer earns +300 each</div>`:''}${S.hot?`<div class="hot-banner">🔥 HOT SEAT: ${esc(S.hot.name)} — will they nail it?</div>`:''}${S.tiebreak?`<div class="tb-banner">⚔️ SUDDEN DEATH TIEBREAKER: ${(S.tb_names||[]).map(esc).join(' vs ')}</div>`:''}`;
   const badges = `${wheelBanner}${S.speed?'<div class="speed-banner">⚡ SPEED ROUND — 5 seconds, no waiting!</div>':''}${S.dbl?'<div class="dbl-banner">💥 DOUBLE OR NOTHING — opt in on your phone!</div>':''}${extraB}${S.redemption?'<div class="redemp-banner">🔄 REDEMPTION QUESTION (MOST MISSED!) 🔄</div>':''}${S.boss?'<div class="double-banner">🎰 FINAL BOSS WAGER! 🎰</div>':S.double?'<div class="double-banner">⚡ DOUBLE POINTS! ⚡</div>':''}`;
-  if(inPrev){
+  if(S.qtype==='info'){
+   $.innerHTML = infoScreen();
+  } else if(inPrev){
    $.innerHTML=`<div class="qnum">Question ${S.index+1} <small>of ${S.total}</small></div>
    <div class="q-stage">
     <div>${badges}</div>
     <h1>${esc(S.question)}</h1>
-    ${imgHtml}
+    ${imgHtml}${exH}
     <div class="preview-box" style="width:100%">
      <div class="preview-label">${S.boss?'🎰 Place your wagers & read the question…':S.team_battle?'🤝 Discuss with your team…':'👀 Read the question…'}</div>
      <div class="preview-bar"><div class="preview-fill" id="pf" style="width:${pct}%"></div></div>
@@ -1219,7 +1255,7 @@ function render(){
    $.innerHTML=`<div class="qnum">Question ${S.index+1} <small>of ${S.total} &middot; <span id="ansCnt">${S.answered}/${nAct}</span> answered</small></div>
    <div>${badges}</div>
    <h1>${esc(S.question)}</h1>
-   ${imgHtml}
+   ${imgHtml}${exH}
    <div class="ans-reveal">
     <div class="timer-row">
      <button class="btn-sm" id="pauseBtn" onclick="hostCtl('pause')">${S.paused?'▶️ Resume':'⏸️ Pause'}</button>
@@ -1237,7 +1273,7 @@ function render(){
    ${resultArea()}
    ${resultExtras()}
    ${S.quote?quoteBox():''}
-   <div><button style="margin-top:14px" onclick="next()">${S.is_last?'🏆 Final Podium':'Top players'}${autoSuffix}</button></div>
+   <div><button style="margin-top:14px" onclick="next()">${S.is_last?'🏆 Final Podium':(S.case?'Continue ➔':'Top players')}${autoSuffix}</button></div>
   </div>`;
  } else if(S.phase=='board'){
   const shHtml = (S.shoutouts&&S.shoutouts.length)?`<div class="shouts">${S.shoutouts.map(s=>`<span class="shout">${esc(s)}</span>`).join('')}</div>`:'';
@@ -1867,12 +1903,13 @@ async function importSheet(){
 }
 async function aiGenerate(){
  const msg = document.getElementById('aiMsg'); msg.textContent = 'Working…';
- const r = await postPw('/api/ai_quiz', {text: document.getElementById('aiText').value, topic: document.getElementById('aiTopic').value, count: parseInt(document.getElementById('aiCount').value,10)||8});
+ const isCase = !!(document.getElementById('aiCase') && document.getElementById('aiCase').checked);
+ const r = await postPw('/api/ai_quiz', {text: document.getElementById('aiText').value, topic: document.getElementById('aiTopic').value, count: parseInt(document.getElementById('aiCount').value,10)||8, mode: isCase ? 'case' : 'quiz'});
  if(r.error){ msg.textContent = ''; document.getElementById('customErr').textContent = r.error; return; }
  document.getElementById('customErr').textContent = '';
  msg.textContent = r.message || 'Draft ready.';
  appendQuestions(r.questions);
- if(!document.getElementById('customTitle').value) document.getElementById('customTitle').value = document.getElementById('aiTopic').value || 'AI draft quiz';
+ if(!document.getElementById('customTitle').value) document.getElementById('customTitle').value = (isCase ? 'Case Study: ' : '') + (document.getElementById('aiTopic').value || (isCase ? 'Ethical Leadership Dilemma' : 'AI draft quiz'));
 }
 async function duplicateSelectedQuiz(){
  const es = document.getElementById('editQuizSel'); if(!es || !es.value) return;
@@ -1977,4 +2014,88 @@ function exportHw(){
 })();
 
 loadConfig();
+</script>
+<script>
+// ===== Case Study Mode =====
+function exhibitsHtml(list, big){
+ if(!list || !list.length) return '';
+ return `<div class="exh ${big?'big':''}">${list.map(e=>`<figure><img src="${esc(e.url)}" alt="${esc(e.caption||'')}">${e.caption?`<figcaption>${esc(e.caption)}</figcaption>`:''}</figure>`).join('')}</div>`;
+}
+function infoScreen(){
+ const paras = (S.body||'').split(/\n\s*\n/).map(p=>`<p>${esc(p).replace(/\n/g,'<br>')}</p>`).join('');
+ const hasRoles = true;
+ return `<div class="qnum">📖 Case slide ${S.index+1} <small>of ${S.total}</small></div>
+ <div class="case-card"><h1 style="margin-top:.1em">${esc(S.question)}</h1><div class="case-body">${paras}</div>${exhibitsHtml(S.exhibits, true)}</div>
+ <div class="speed-banner" style="background:linear-gradient(90deg,#6a1b9a,#4527a0);animation:none">📱 The full case is on every phone under "📁 Case file"</div>
+ <div><button onclick="next()">Continue ➔</button></div>`;
+}
+const _answerArea0 = answerArea;
+answerArea = function(){
+ if(S.qtype==='poll') return `<div class="grid">${S.answers.map((a,i)=>`<div class="a c${i}"><span>${sh[i]}${esc(a)}</span></div>`).join('')}</div><p style="font-size:1.2em;font-weight:700">🗳️ Vote on your phone — there is no wrong answer</p>`;
+ if(S.qtype==='rank') return `<div><div class="oq-title">📊 Rank these on your phone — most important first</div><div class="grid">${S.answers.map((a,i)=>`<div class="a c${i%4}"><span>${'ABCDEF'[i]}. ${esc(a)}</span></div>`).join('')}</div></div>`;
+ if(S.qtype==='open') return `<div class="textq">✍️ Write your response on your phone<small>1–2 sentences. Responses stay anonymous, then the class votes on the most persuasive.</small></div>`;
+ return _answerArea0();
+};
+const _resultArea0 = resultArea;
+resultArea = function(){
+ if(!S.case) return _resultArea0();
+ const nAct = (S.n_active != null ? S.n_active : S.n);
+ if(S.qtype==='poll'){
+  const tot = Math.max(1, (S.counts||[]).reduce((a,b)=>a+b,0));
+  return `<div class="grid" style="margin-top:10px">${S.answers.map((a,i)=>{
+   const c = (S.counts&&S.counts[i])||0, pct = Math.round(c/tot*100), ln = S.lenses && S.lenses[i];
+   return `<div class="a res c${i}"><div class="a-fill" style="width:${pct}%"></div><span class="a-txt">${sh[i]}${esc(a)}${ln?`<span class="lens">🔎 ${esc(ln)}</span>`:''}</span><span class="a-cnt">${pct}% · ${c}</span></div>`;
+  }).join('')}</div>`;
+ }
+ if(S.qtype==='rank'){
+  return `<div class="reveal-box"><div class="rb-label">📊 Class ranking (best average position first)</div><ol class="rb-ol">${(S.rank_avg||[]).map(r=>`<li>${esc(r.item)} <small style="opacity:.7">avg position ${r.avg}</small></li>`).join('')}</ol><div class="rb-count">${S.rank_n||0} of ${nAct} students ranked</div></div>`;
+ }
+ if(S.qtype==='open'){
+  const rs = S.responses || [];
+  return `<div class="resp-grid">${rs.map(r=>`<div class="resp ${r.votes?'voted':''}">“${esc(r.text)}”${r.votes?`<div class="rv">👍 ${r.votes}</div>`:''}</div>`).join('') || '<p>No responses yet.</p>'}</div><p style="opacity:.85">Students: vote for the two most persuasive responses on your phone.</p>`;
+ }
+ return '';
+};
+const _resultExtras0 = resultExtras;
+resultExtras = function(){
+ if(!S.case) return _resultExtras0();
+ let h = '';
+ if(S.qtype==='poll' && (S.defenders||[]).length){
+  h += `<div class="defend">🎤 <b>Defend your side!</b><br>${S.defenders.map(d=>`${esc(d.name)} speaks for <b>${sh[d.side]}${esc(S.answers[d.side])}</b>`).join('<br>')}<br><button class="btn-sm" style="margin-top:8px" onclick="startDiscuss(60)">⏱️ Start 60-second discussion</button> <span id="dtimer" style="font-weight:900;font-size:1.3em"></span></div>`;
+ }
+ return h;
+};
+let discussT = null;
+function startDiscuss(sec){
+ clearInterval(discussT);
+ let left = sec;
+ const el = () => document.getElementById('dtimer');
+ const tick = () => { const e = el(); if(!e){ clearInterval(discussT); return; } e.textContent = left > 0 ? left + 's' : '⏰ Time!'; if(left-- <= 0){ clearInterval(discussT); sfxReveal(); } };
+ tick(); discussT = setInterval(tick, 1000);
+}
+const _syncQuizCount0 = syncQuizCount;
+syncQuizCount = function(){
+ _syncQuizCount0();
+ const sel = document.getElementById('quizSel'), hint = document.getElementById('caseHint');
+ const q = quizList.find(x=>x.file===(sel&&sel.value));
+ if(hint){
+  if(q && q.case){ hint.style.display = 'block'; hint.innerHTML = '📖 Case-study quiz: plays in the order it was written (Randomize is ignored). Polls, rankings and open responses earn participation points; roles and the case file appear on student phones. Tip: leave Team Mode on for group discussion.'; }
+  else hint.style.display = 'none';
+ }
+};
+(function(){
+ GUIDE.push({id:'case', title:'📖 Case Study Mode (Ethical Leadership and more)', items:[
+  ['Try the sample case', 'Pick "📖 Case Study: The CardioWatch Launch (Ethical Leadership)" in the quiz picker. It is a fictional case with chapters, decision polls, a ranking, an open response with peer voting, a debrief and two concept checks.'],
+  ['📖 Case slides (Type: info)', 'A reading slide with the case text and exhibits on the big screen. Every student also gets it on their phone in the "📁 Case file" button, which grows as you reveal new chapters. Click Continue when ready. There is no timer.'],
+  ['🗳️ Decision polls (Type: poll)', 'Students pick a course of action; there is no right answer. Everyone earns 200 participation points. The screen shows the class split, picks a student on each side to defend their choice, and has a 60-second discussion timer.'],
+  ['🔎 Ethical lenses', 'Add a lens to each poll option with "Option text :: Utilitarian lens". After voting, each option shows its lens, and students see which lens their own choice reflects.'],
+  ['📊 Rankings (Type: rank)', 'Students rank 2–6 priorities. The screen shows the class\'s average ranking. Great for comparing values like safety, honesty, jobs and loyalty.'],
+  ['✍️ Open responses (Type: open)', 'Students write 1–2 sentences. Responses appear anonymously, then each student gets 2 votes for the most persuasive ones on their phone. Authors earn 150 points per vote (up to 4).'],
+  ['🎭 Roles', 'On an info slide add lines like "Role: CFO | You promised investors this quarter…". Each student gets a private role card on their phone and in their case file.'],
+  ['📎 Exhibits', 'On any slide or question add "Exhibit: https://…/chart.png | Caption". Exhibits show on the big screen and tap-to-enlarge on phones.'],
+  ['📝 Teacher notes', 'Use "Note:" for discussion prompts. Show them with the "📝 Show teacher note" button (N) at the bottom left of the host page, or read them on your phone remote.'],
+  ['Editor syntax', 'Example: question line, then "Type: poll", then option lines (add " :: lens"), then "Topic:", "Note:". For info slides use one "Body:" line per paragraph. Blank lines separate questions.'],
+  ['Scoring and stats', 'Case slides never break streaks and are left out of accuracy, the Tough Ones list, the redemption round and homework/practice. Scored questions (multiple choice and so on) mixed into a case still count normally.']
+ ]});
+})();
 </script></body></html>

@@ -250,7 +250,8 @@ def list_quizzes(owner="_shared"):
                 q = data
                 title = labels.get(f) or f[5:-5].replace("_", " ").title()
             if isinstance(q, list) and q:
-                items.append({"file": f, "title": "%s (%d Qs)" % (title, len(q)), "count": len(q), "folder": "Built-in", "tags": [], "builtin": True})
+                items.append({"file": f, "title": "%s (%d Qs)" % (title, len(q)), "count": len(q), "folder": "Built-in", "tags": [], "builtin": True,
+                              "case": any(isinstance(x, dict) and x.get("type") in CASE_TYPES for x in q)})
         except Exception:
             pass
     owners = ["_shared"] + ([owner] if owner != "_shared" else [])
@@ -1855,7 +1856,7 @@ class H(BaseHTTPRequestHandler):
             txt, err = K.fetch_sheet_csv(body.get("url"))
             self.send({"error": err} if err else {"csv": txt}, 400 if err else 200)
         elif path == "/api/ai_quiz":
-            items, msg = K.ai_generate(str(body.get("text") or ""), str(body.get("topic") or "")[:80], body.get("count", 8))
+            items, msg = K.ai_generate(str(body.get("text") or ""), str(body.get("topic") or "")[:80], body.get("count", 8), str(body.get("mode") or "quiz"))
             if items is None:
                 self.send({"error": msg}, 400)
             else:

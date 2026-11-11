@@ -272,7 +272,8 @@ def uq_list(owners):
     for o in owners:
         for qid, v in uq_load(o).items():
             items.append({"file": qid, "title": "%s (%d Qs)" % (v["title"], len(v["questions"])), "count": len(v["questions"]),
-                          "folder": v.get("folder") or "My Quizzes", "tags": v.get("tags", []), "owner": o, "user": True})
+                          "folder": v.get("folder") or "My Quizzes", "tags": v.get("tags", []), "owner": o, "user": True,
+                          "case": any(x.get("type") in ("poll", "open", "rank", "info") for x in v["questions"])})
     return items
 
 
@@ -580,16 +581,75 @@ def heuristic_questions(text, topic, count):
     return out
 
 
-def ai_generate(text, topic, count):
-    count = max(1, min(25, int(count or 8)))
+def heuristic_case(text, topic):
+    title = (topic or "Ethical Leadership Dilemma").strip()
+    paras = [re.sub(r"\s+", " ", p).strip() for p in re.split(r"\n\s*\n", text or "") if len(p.strip()) >= 25]
+    if not paras and (text or "").strip():
+        sents = [s.strip() for s in re.split(r"(?<=[.!?])\s+", re.sub(r"\s+", " ", text)) if s.strip()]
+        mid = max(1, len(sents) // 2)
+        paras = [" ".join(sents[:mid]), " ".join(sents[mid:])]
+    ch1 = paras[0][:1400] if paras else ("Scenario: You are leading a team facing a high-stakes decision on %s. "
+                                         "Key metrics look promising on paper, but a colleague raises an urgent concern right before a public commitment." % title)
+    ch2 = "\n\n".join(paras[1:3])[:1400] if len(paras) > 1 else ("New facts emerge: delaying action carries real financial and reputational cost, "
+                                                                 "while moving ahead risks harming trust and stakeholders who have no voice in the room.")
+    debrief = paras[3][:1400] if len(paras) > 3 else ("Debrief: Compare what the class chose at Decision Point 1 vs. after new pressures appeared. "
+                                                      "Which ethical lens dominated, and what culture did your leadership create for the next person with bad news?")
+    return [
+        {"type": "info", "q": "Chapter 1 — %s" % title, "body": ch1, "topic": title[:40],
+         "roles": [
+             {"name": "Team Lead", "text": "You own the final call and are accountable for both performance targets and team integrity."},
+             {"name": "Concerned Analyst", "text": "You spotted the risk early. You want leadership to take the evidence seriously without retaliation."},
+             {"name": "Operations / Finance Partner", "text": "Every week of delay has real budget and schedule consequences for the organization."},
+             {"name": "Affected Stakeholder", "text": "You were not in the meeting, yet you bear the direct impact if something goes wrong."},
+         ],
+         "note": "Give students 60 seconds to read Chapter 1 and check their private stakeholder role card on their phones."},
+        {"type": "poll", "q": "Decision Point 1: Based on what you know right now, what is your move?", "topic": "Ethical Lenses",
+         "a": ["Move forward on schedule while monitoring closely", "Pause and disclose the concern before proceeding",
+               "Hold a firm red line until independent verification passes", "Convene affected stakeholders to co-design a mitigation plan"],
+         "lenses": ["Utilitarian (outcomes)", "Virtue & transparency", "Rights & duty (deontological)", "Stakeholder & care ethics"],
+         "note": "Cold-call one defender from two different options and ask how their assigned role shaped their vote."},
+        {"type": "info", "q": "Chapter 2 — Mounting Pressure", "body": ch2, "topic": title[:40],
+         "note": "Ask: Did this new information change the facts, or just raise the cost of doing the right thing?"},
+        {"type": "rank", "q": "Rank these leadership priorities from MOST important (#1) to LEAST (#5) in this moment:", "topic": "Competing Values",
+         "a": ["Preventing harm to affected people", "Candor and transparency", "Psychological safety for truth-tellers",
+               "Meeting commitments and deadlines", "Short-term financial / reputational protection"],
+         "note": "Highlight where the class consensus splits between #1 and #2."},
+        {"type": "open", "q": "In 1–2 sentences, write what you will say to your team or stakeholders right now — and why.",
+         "topic": "Moral Courage", "note": "Have students vote on the two most persuasive statements, then read the top vote-getter aloud."},
+        {"type": "info", "q": "Epilogue & Debrief", "body": debrief, "topic": "Debrief",
+         "note": "Close by asking: What structural safeguard would prevent this dilemma next time?"},
+    ]
+
+
+def ai_generate(text, topic, count, mode="quiz"):
+    is_case = (mode == "case")
+    count = max(1, min(25, int(count or (8 if not is_case else 8))))
     key = os.environ.get("GEMINI_API_KEY", "")
     if key:
         model = os.environ.get("GEMINI_MODEL", "gemini-2.0-flash")
-        prompt = ("Create %d multiple-choice quiz questions for a classroom game. Topic: %s.\n%s"
-                  "Return ONLY a JSON array. Each item: {\"q\": question, \"a\": [4 answer strings], \"c\": index 0-3 of the correct answer, "
-                  "\"quote\": one-sentence explanation or fun fact, \"topic\": short topic tag}. Make wrong answers plausible and vary the position of the correct answer."
-                  % (count, topic or "general knowledge",
-                     ("Base the questions ONLY on this text:\n\"\"\"%s\"\"\"\n" % text[:7000]) if text.strip() else ""))
+        if is_case:
+            prompt = (
+                "Create an interactive Harvard Business School-style classroom case study (focused on ethical leadership and decision-making). "
+                "Topic: %s.\n%s"
+                "Return ONLY a JSON array of %d slides in narrative order mixing these item formats:\n"
+                "1) Chapter / Debrief slide: {\"type\":\"info\", \"q\":\"Chapter title\", \"body\":\"2 short paragraphs separated by \\n\\n\", "
+                "\"roles\":[{\"name\":\"Stakeholder Role\",\"text\":\"1-2 sentence private perspective\"}] (include 4 roles on Chapter 1), \"topic\":\"short tag\", \"note\":\"host facilitation prompt\"}\n"
+                "2) Decision poll (no wrong answer): {\"type\":\"poll\", \"q\":\"Decision question\", \"a\":[4 distinct action choices], "
+                "\"lenses\":[\"Utilitarian lens\",\"Rights/Duty lens\",\"Virtue/Integrity lens\",\"Care/Stakeholder lens\"], \"topic\":\"short tag\", \"note\":\"host cold-call prompt\"}\n"
+                "3) Priority ranking: {\"type\":\"rank\", \"q\":\"Rank these priorities...\", \"a\":[4 to 5 competing values], \"topic\":\"short tag\", \"note\":\"host prompt\"}\n"
+                "4) Open response with peer voting: {\"type\":\"open\", \"q\":\"1-2 sentence justification prompt\", \"topic\":\"short tag\", \"note\":\"host prompt\"}\n"
+                "5) Concept check MCQ (1-2 near the end): {\"q\":\"Question\", \"a\":[4 options], \"c\":0-3, \"quote\":\"1-sentence takeaway\", \"topic\":\"short tag\"}\n"
+                "Make the dilemma realistic with genuine tension between competing responsibilities."
+                % (topic or "Ethical Leadership",
+                   ("Base the case study on this material:\n\"\"\"%s\"\"\"\n" % text[:7000]) if text.strip() else "",
+                   max(6, min(12, count)))
+            )
+        else:
+            prompt = ("Create %d multiple-choice quiz questions for a classroom game. Topic: %s.\n%s"
+                      "Return ONLY a JSON array. Each item: {\"q\": question, \"a\": [4 answer strings], \"c\": index 0-3 of the correct answer, "
+                      "\"quote\": one-sentence explanation or fun fact, \"topic\": short topic tag}. Make wrong answers plausible and vary the position of the correct answer."
+                      % (count, topic or "general knowledge",
+                         ("Base the questions ONLY on this text:\n\"\"\"%s\"\"\"\n" % text[:7000]) if text.strip() else ""))
         body = json.dumps({"contents": [{"parts": [{"text": prompt}]}],
                            "generationConfig": {"responseMimeType": "application/json", "temperature": 0.7}}).encode()
         url = "https://generativelanguage.googleapis.com/v1beta/models/%s:generateContent?key=%s" % (model, key)
@@ -604,9 +664,13 @@ def ai_generate(text, topic, count):
             return items, "AI draft generated. Review and edit before saving."
         except Exception as e:
             err = "AI request failed (%s)." % e
+            if is_case:
+                return heuristic_case(text, topic), err + " Built a structured offline case template instead."
             if text.strip():
                 return heuristic_questions(text, topic, count), err + " Used the offline generator instead."
             return None, err
+    if is_case:
+        return heuristic_case(text, topic), "Structured case-study draft ready (chapters, roles, ethical lenses, ranking & open prompt). Add GEMINI_API_KEY on the server for full AI-written cases."
     if not text.strip():
         return None, "Paste some text to build questions from, or ask the server admin to add a GEMINI_API_KEY for topic-only AI generation."
     qs = heuristic_questions(text, topic, count)

@@ -60,7 +60,7 @@ async function start(){
   const r=await (await fetch('/api/quiz_data?file='+encodeURIComponent(file))).json();
   let qs=(r.questions||[]).slice();
   for(let i=qs.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[qs[i],qs[j]]=[qs[j],qs[i]]}
-  qs=qs.slice(0,n);
+  qs=qs.filter(q=>!['poll','open','rank','info'].includes(q.type)).slice(0,n);
   run={qs,i:0,score:0,streak:0,best:0,right:0,missed:[],timed,t:20,timer:null,sel:[],perm:null,done:false};
   show();
 }

@@ -87,7 +87,26 @@ body.hc{background:#000}body.hc .grid button{border:4px solid #fff}body.hc .pu-b
 @keyframes toastin{0%{opacity:0;transform:translateX(-50%) scale(.6)}12%{opacity:1;transform:translateX(-50%) scale(1.08)}20%{transform:translateX(-50%) scale(1)}85%{opacity:1}100%{opacity:0;transform:translateX(-50%) scale(1)}}
 #fx{position:fixed;inset:0;pointer-events:none;z-index:70}
 #sfxBtn{position:fixed;top:8px;left:8px;z-index:60;width:auto;font-size:.8em;padding:4px 10px;border-radius:99px;border:1px solid #fff5;background:#0006;color:#fff;cursor:pointer}
-</style></head><body><button id="sfxBtn" onclick="toggleSfx()">🔊</button><canvas id="fx"></canvas><div id="toast"></div><button id="a11y" onclick="cycleA11y()" title="Accessibility">👁️</button><div id="app"></div>
+
+.case-ph{text-align:left}
+.case-body-ph p{font-size:1.02em;line-height:1.5;margin:.7em 0}
+.role-card{background:#6a1b9a88;border:2px solid #ce93d8;border-radius:12px;padding:10px 14px;margin:12px 0;font-size:.95em}
+.exh-ph{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:8px 0}
+.exh-ph figure{margin:0;max-width:46%;text-align:center}.exh-ph img{max-width:100%;max-height:110px;border-radius:8px;background:#fff;object-fit:contain;cursor:zoom-in}
+.exh-ph figcaption{font-size:.72em;opacity:.85}
+.lens-pill{display:inline-block;background:#00bfa588;border:1px solid #1de9b6;border-radius:99px;padding:4px 14px;font-size:.55em;margin-top:8px;font-weight:800}
+.resp-ph{background:#fff;color:#2b0d57;border-radius:10px;padding:10px 12px;margin:8px 0;text-align:left;font-weight:600;font-size:.95em}
+.resp-ph button{margin-top:6px;padding:6px 14px;border-radius:99px;border:0;background:#26890c;color:#fff;font-weight:800;cursor:pointer}
+.resp-ph button:disabled{opacity:.4}
+.rk-list{background:#0004;border-radius:12px;padding:8px 14px;text-align:left;font-size:.95em;margin:10px 0}
+.rk-list div{padding:4px 0;border-top:1px solid #fff2}.rk-list div:first-child{border-top:0}
+#caseBtn{position:fixed;right:10px;bottom:10px;z-index:55;display:none;width:auto;margin:0;padding:10px 16px;border-radius:99px;border:2px solid #fff;background:#6a1b9a;color:#fff;font-weight:800;font-size:.95em;box-shadow:0 6px 18px #000a;cursor:pointer}
+#caseOv{position:fixed;inset:0;background:#000d;z-index:90;display:none;overflow-y:auto;padding:14px}
+#caseOv .card{max-width:520px;margin:0 auto;background:#2b0d57;border:2px solid #fff4;border-radius:14px;padding:14px 16px;text-align:left}
+#caseOv .xbtn{float:right;width:auto;margin:0;padding:6px 14px;border-radius:99px;border:0;background:#e21b3c;color:#fff;font-weight:800}
+#imgOv{position:fixed;inset:0;background:#000e;z-index:95;display:none;align-items:center;justify-content:center;padding:10px}
+#imgOv img{max-width:100%;max-height:100%;border-radius:8px;background:#fff}
+</style></head><body><button id="caseBtn" onclick="openCaseFile()">📁 Case file</button><div id="caseOv"></div><div id="imgOv" onclick="this.style.display='none'"><img id="imgBig" alt=""></div><button id="sfxBtn" onclick="toggleSfx()">🔊</button><canvas id="fx"></canvas><div id="toast"></div><button id="a11y" onclick="cycleA11y()" title="Accessibility">👁️</button><div id="app"></div>
 <script>
 let pin, pid, S = {}, avatar = '🦊', team = '';
 let iceBrokenQ = -1, iceTaps = 0;
@@ -204,7 +223,7 @@ let ordSel=[], ordIdx=-1;
 function drawOrd(){
  const el=document.getElementById('ordWrap'); if(!el) return;
  const d=S.answers||[];
- el.innerHTML=`<p style="margin:6px 0">Tap the items in the <b>correct order</b>:</p>`+
+ el.innerHTML=`<p style="margin:6px 0">${S.qtype==='rank'?'Tap in <b>your order</b>, most important first:':'Tap the items in the <b>correct order</b>:'}</p>`+
   ordSel.map((j,n)=>`<div class="slot">${n+1}. ${esc(d[j])}</div>`).join('')+
   `<div class="grid">${d.map((a,j)=>ordSel.includes(j)?'':`<button class="c${j}" style="min-height:11vh" onclick="tapOrd(${j})"><span>${esc(a)}</span></button>`).join('')}</div>`+
   `<div style="margin-top:8px">${ordSel.length?`<button class="pu-btn" style="width:auto;padding:8px 18px" onclick="ordSel.pop();drawOrd()">↩ Undo</button>`:''}</div>`+
@@ -306,6 +325,7 @@ function confettiBurst(){
 }
 let fxQ = -1, bestStreak = 0, everCorrect = false, lastRank = 0;
 function maybeResultFX(){
+ if(S.case) return;
  const m = S.me;
  if(S.phase !== 'results' || !m || fxQ === S.index || m.spectating) return;
  fxQ = S.index;
@@ -328,6 +348,60 @@ function stealUi(m){
 }
 async function steal(mode){ const r = await post('/api/steal', {pin, pid, mode}); if(!r.ok) alert(r.error || 'Not available'); poll(); }
 async function toggleDon(){ await post('/api/don', {pin, pid}); poll(); }
+function exhibitsPhone(list){
+ if(!list || !list.length) return '';
+ return `<div class="exh-ph">${list.map(e=>`<figure><img src="${esc(e.url)}" alt="${esc(e.caption||'')}" onclick="zoomImg(this.src)">${e.caption?`<figcaption>${esc(e.caption)}</figcaption>`:''}</figure>`).join('')}</div>`;
+}
+function zoomImg(src){ document.getElementById('imgBig').src = src; document.getElementById('imgOv').style.display = 'flex'; }
+function paras(t){ return (t||'').split(/\n\s*\n/).map(p=>`<p>${esc(p).replace(/\n/g,'<br>')}</p>`).join(''); }
+function infoPhone(m){
+ const role = (m.roles||[]).filter(r=>r.chapter===S.question).slice(-1)[0];
+ return `<div class="case-ph"><div><span class="qnum">📖 ${esc(S.question)}</span></div>
+  <div class="case-body-ph">${paras(S.body)}</div>${exhibitsPhone(S.exhibits)}
+  ${role?`<div class="role-card">🎭 <b>Your role: ${esc(role.name)}</b><br>${esc(role.text)}</div>`:''}
+  <p style="opacity:.8;text-align:center"><small>Read carefully, then wait for your teacher to continue…<br>You can reopen this anytime with 📁 Case file.</small></p></div>${reactBar()}`;
+}
+function updCaseBtn(){
+ const b = document.getElementById('caseBtn'); if(!b) return;
+ const has = S.me && S.me.casefile && S.me.casefile.length;
+ b.style.display = has ? 'block' : 'none';
+}
+function openCaseFile(){
+ const cf = (S.me && S.me.casefile) || [], roles = (S.me && S.me.roles) || [];
+ const ov = document.getElementById('caseOv');
+ ov.innerHTML = `<div class="card"><button class="xbtn" onclick="document.getElementById('caseOv').style.display='none'">✕ Close</button><h2 style="margin:.2em 0">📁 Case file</h2>
+  ${roles.length?roles.map(r=>`<div class="role-card">🎭 <b>Your role: ${esc(r.name)}</b><br>${esc(r.text)}</div>`).join(''):''}
+  ${cf.map(c=>`<h3 style="color:#ffdf5d;margin-bottom:0">${esc(c.title)}</h3>${paras(c.body)}${exhibitsPhone(c.exhibits)}`).join('<hr style="border-color:#fff3">')}</div>`;
+ ov.style.display = 'block';
+}
+async function sendOpen(){
+ const e = document.getElementById('openTxt'); if(!e || !e.value.trim()) return;
+ const r = await post('/api/answer', {pin, pid, text: e.value.trim()});
+ if(!r.ok){ alert(r.error || 'Could not send'); return; }
+ poll();
+}
+async function vote(rid){
+ const r = await post('/api/vote', {pin, pid, rid});
+ if(!r.ok) alert(r.error || 'Could not vote');
+ poll();
+}
+function caseResultPhone(m){
+ const t = S.qtype;
+ let body = '';
+ if(t==='poll'){
+  const tot = Math.max(1, (S.counts||[]).reduce((a,b)=>a+b,0));
+  const mine = (m.choice != null && S.answers[m.choice]) ? esc(S.answers[m.choice]) : null;
+  const def = (S.defenders||[]).some(d=>d.name===m.name);
+  body = `<div class="big">${m.answered?'🗳️ Vote recorded':'⏰ Time\'s up'}${mine?`<br><small>You chose: ${mine}</small>`:''}${m.lens?`<br><span class="lens-pill">🔎 ${esc(m.lens)}</span>`:''}${def?'<br><span class="hot-pill" style="font-size:.5em">🎤 You were picked to defend your side!</span>':''}</div>
+   <div class="rk-list">${S.answers.map((a,i)=>`<div>${sh[i]} ${esc(a)} — <b>${Math.round(((S.counts||[])[i]||0)/tot*100)}%</b>${(S.lenses&&S.lenses[i])?` <small style="opacity:.75">(${esc(S.lenses[i])})</small>`:''}</div>`).join('')}</div>`;
+ } else if(t==='rank'){
+  body = `<div class="big">📊 Class ranking<br><small>${S.rank_n||0} students ranked</small></div><div class="rk-list">${(S.rank_avg||[]).map((r,i)=>`<div><b>${i+1}.</b> ${esc(r.item)} <small style="opacity:.75">(avg ${r.avg})</small></div>`).join('')}</div>`;
+ } else {
+  const rs = m.responses || [], left = 2 - (m.votes_used || 0);
+  body = `<div class="big">✍️ Vote for the most persuasive<br><small>${left>0?left+' vote'+(left>1?'s':'')+' left':'Votes used. Thanks!'}</small></div>${rs.map(r=>`<div class="resp-ph">“${esc(r.text)}”<br><button ${(r.voted||left<=0)?'disabled':''} onclick="vote(${r.id})">👍 ${r.voted?'Voted':'Vote'}</button></div>`).join('') || '<p>No other responses yet.</p>'}`;
+ }
+ return `<div><span class="qnum">Question ${S.index+1} of ${S.total}</span></div>${body}<div style="opacity:.85"><small>Score ${m.score} (+${m.gained||0} for taking part)</small></div>${reactBar()}`;
+}
 let dead=false;
 async function poll(){
   if(dead) return;
@@ -348,6 +422,7 @@ async function poll(){
  }
 let last='';
 function render(){
+  updCaseBtn();
   if(S.pending){ $.innerHTML = `<div class="big">⏳ Waiting for your teacher…<br><small>Your name has been sent for approval.</small></div>`; return; }
   maybeResultFX();
  const inPrev = S.phase==='question' && (S.preview_left||0) > 0;
@@ -393,8 +468,8 @@ function render(){
    <p style="font-size:1.25em"><b>${esc(m.frozen_by)}</b> threw a Snowball at you!</p>
    <p style="font-size:1.4em;font-weight:900;color:#ffdf5d">Tap <span id="iceRem">5</span> times to shake off the snow!</p>
   </div>` : '';
-  const qn = `<div><span class="qnum">Question ${S.index+1} of ${S.total}</span></div>`;
-  const whl = qn + (S.speed ? '<div><span class="speed-pill">⚡ SPEED ROUND — 5 seconds!</span></div>' : '') + (S.qtype==='zoom' ? '<div><span class="wheel-pill">🔍 Picture guess — watch the big screen!</span></div>' : '') + (S.wheel_mod ? `<div><span class="wheel-pill">🎡 ${esc(S.wheel_mod)}</span></div>` : '')
+  const qn = `<div><span class="qnum">Question ${S.index+1} of ${S.total}</span></div>` + exhibitsPhone(S.exhibits);
+  const whl = qn + (S.case ? '<div><span class="wheel-pill">🗳️ Case study — no single right answer</span></div>' : '') + (S.speed ? '<div><span class="speed-pill">⚡ SPEED ROUND — 5 seconds!</span></div>' : '') + (S.qtype==='zoom' ? '<div><span class="wheel-pill">🔍 Picture guess — watch the big screen!</span></div>' : '') + (S.wheel_mod ? `<div><span class="wheel-pill">🎡 ${esc(S.wheel_mod)}</span></div>` : '')
    + (S.team_battle ? `<div><span class="team-pill">🤝 TEAM BATTLE — ${inPrev?'discuss with your team now!':'majority answer earns +300 each'}</span></div>` : '')
    + (S.tiebreak ? `<div><span class="hot-pill">⚔️ SUDDEN DEATH TIEBREAKER</span></div>` : '');
   const dbl = S.redemption ? `<div class="double-pill">🔄 REDEMPTION BONUS (2x)! 🔄</div>` : S.boss ? `<div class="double-pill">🎰 FINAL BOSS WAGER! 🎰</div>` : (S.double || m.active_2x) ? `<div class="double-pill">⚡ ${S.double && m.active_2x ? '4x' : 'DOUBLE'} POINTS ACTIVE! ⚡</div>` : '';
@@ -409,8 +484,9 @@ function render(){
    <div class="wager-btns">
     ${[0,50,100].map(pct=>`<button class="wager-btn ${curW===pct?'sel':''}" onclick="setWager(${pct})">${pct}% (${Math.round(stake*pct/100)} pts)</button>`).join('')}
    </div>
-  </div>` : (!S.boss && !S.tiebreak && !m.answered) ? `<button class="conf-btn ${m.confident?'on':''}" onclick="toggleConf()">🔥 ${m.confident?'Confidence Bet ON (+250 / -150)':'Bet on Yourself (+250 / -150)'}</button>` : '';
+  </div>` : (!S.boss && !S.tiebreak && !S.case && !m.answered) ? `<button class="conf-btn ${m.confident?'on':''}" onclick="toggleConf()">🔥 ${m.confident?'Confidence Bet ON (+250 / -150)':'Bet on Yourself (+250 / -150)'}</button>` : '';
   const t = S.qtype || 'mc';
+  if(t==='info'){ $.innerHTML = infoPhone(m); return; }
   if(m.spectating){
    $.innerHTML=`<div class="big">${whl}<br>⚔️ Sudden death!<br><small>Only the tied leaders play this one.<br>Watch the big screen!</small></div>${reactBar()}`;
   } else if(m.answered){
@@ -428,12 +504,15 @@ function render(){
     ${choiceQ?`<button class="pu-btn ${m.active_audience?'active':''}" ${m.pu_audience||m.active_audience?'':'disabled'} onclick="usePu('audience')">📊 ${m.active_audience?'Poll ON':'Audience'}</button>`:''}
    </div>`;
    let inputUi;
-   if(t==='text') inputUi = `<input id="txtAns" class="txtans" placeholder="Type your answer…" autocomplete="off" autocapitalize="off" onkeydown="if(event.key==='Enter')sendText()"><button class="go" onclick="sendText()">Submit answer</button>`;
-   else if(t==='order') inputUi = `<div id="ordWrap"></div>`;
+   if(t==='open') inputUi = `<textarea id="openTxt" class="txtans" rows="4" maxlength="240" placeholder="Write 1–2 sentences…" style="display:block;width:100%;box-sizing:border-box;font-size:1.05em;padding:12px;border-radius:8px;border:0;color:#2b0d57;font-family:inherit"></textarea><button class="go" onclick="sendOpen()">Send my response</button>`;
+   else if(t==='text') inputUi = `<input id="txtAns" class="txtans" placeholder="Type your answer…" autocomplete="off" autocapitalize="off" onkeydown="if(event.key==='Enter')sendText()"><button class="go" onclick="sendText()">Submit answer</button>`;
+   else if(t==='order' || t==='rank') inputUi = `<div id="ordWrap"></div>`;
    else inputUi = `<div class="grid">${S.answers.map((a,i)=>`<button class="c${i} ${hide.includes(i)?'elim':''}" onclick="ans(${i})">${S.aimg&&S.aimg[i]?`<img src="${esc(S.aimg[i])}" alt="">`:''}<span class="sh">${sh[i]}</span><span>${esc(a)}</span>${pcts?`<span class="aud-badge" id="aud${i}">📊 ${pcts[i]}%</span>`:''}</button>`).join('')}</div>`;
-   $.innerHTML=`${iceHtml}${whl}${dbl}${udog}${hot}${teamP}${donUi}${wagerUi}${puBar}${inputUi}`;
-   if(t==='order') drawOrd();
+   $.innerHTML=`${iceHtml}${whl}${dbl}${udog}${hot}${teamP}${donUi}${wagerUi}${S.case?'':puBar}${inputUi}`;
+   if(t==='order' || t==='rank') drawOrd();
   }
+ } else if(S.phase=='results' && S.case && !(m.spectating)){
+  $.innerHTML = caseResultPhone(m);
  } else if(S.phase=='results'){
   if(m.spectating){
    $.innerHTML=`<div class="big">⚔️ Tiebreaker results<br><small>See the big screen!</small></div>${reactBar()}`;
