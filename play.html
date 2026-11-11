@@ -1329,7 +1329,7 @@ function render(){
    if(S.redemption){
     $.innerHTML = `<div class="state-card">${qn0}<div class="state-icon">🔄</div><div class="state-title">Redemption Round!</div><p class="state-sub">The most-missed question is back for a second shot — worth <b>DOUBLE POINTS</b>!</p></div>${reactBar()}`;
    } else if(S.speed){
-    $.innerHTML = `<div class="state-card">${qn0}<div class="state-icon">⚡</div><div class="state-title">Speed Round!</div><p class="state-sub">5 rapid-fire questions — <b>5 seconds</b> each, zero reading delay. Fast fingers win!</p></div>${reactBar()}`;
+    $.innerHTML = `<div class="state-card">${qn0}<div class="state-icon">⚡</div><div class="state-title">Speed Round!</div><p class="state-sub">5 rapid-fire questions — <b>${S.speed_time||5} seconds</b> each, zero reading delay. Fast fingers win!</p></div>${reactBar()}`;
    } else {
     $.innerHTML = `<div class="state-card">${qn0}<div class="state-icon">🎡</div><div class="state-title">Mystery Wheel!</div><p class="state-sub">${S.wheel_mod?`Spinning up: <b>${esc(S.wheel_mod)}</b>`:'Watch to see which modifier lands for this round…'}</p></div>${reactBar()}`;
    }
@@ -1350,7 +1350,7 @@ function render(){
    const chips = [
     `<span class="qnum">${S.case?'Slide':'Q'} ${S.index+1}/${S.total}</span>`,
     S.case ? `<span class="wheel-pill">🗳️ ${t==='poll'?'Decision Poll':t==='rank'?'Priority Rank':'Open Prompt'}</span>` : '',
-    S.speed ? `<span class="speed-pill">⚡ 5s Speed</span>` : '',
+    S.speed ? `<span class="speed-pill">⚡ ${S.qtime||S.speed_time||5}s Speed</span>` : '',
     t==='zoom' ? `<span class="wheel-pill">🔍 Zoom Reveal</span>` : '',
     S.wheel_mod ? `<span class="wheel-pill">🎡 ${esc(S.wheel_mod)}</span>` : '',
     S.team_battle ? `<span class="team-pill">🤝 Team Battle</span>` : '',

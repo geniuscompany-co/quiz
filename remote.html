@@ -1,51 +1,646 @@
 <!doctype html>
-<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Brainrush! Host Remote</title>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Brainrush! — Host Remote</title>
 <style>
-body{margin:0;font-family:system-ui,-apple-system,sans-serif;background:#1a0938;color:#fff;text-align:center;min-height:100vh;padding:14px;box-sizing:border-box}
-.card{max-width:480px;margin:0 auto;background:#ffffff14;border:1px solid #ffffff28;border-radius:16px;padding:18px;box-shadow:0 8px 28px #0006}
-.badge{display:inline-block;background:#ffdf5d;color:#2b0d57;font-weight:900;padding:5px 14px;border-radius:99px;font-size:.88em;margin-bottom:8px;letter-spacing:.2px}
-.badge.green{background:#7dff6b;color:#103808}
-h1{font-size:1.35em;margin:.3em 0}
-.sub{font-size:.92em;opacity:.86;line-height:1.4;margin:6px 0 12px}
-.big-btn{width:100%;font-size:1.38em;padding:18px 14px;border:0;border-radius:14px;background:#26890c;color:#fff;font-weight:800;cursor:pointer;margin:10px 0;box-shadow:0 6px 18px #0005;transition:opacity .15s,transform .1s}
-.big-btn:active{transform:scale(.98)}
-.big-btn:disabled{opacity:.42;cursor:not-allowed;transform:none}
-.big-btn.sec{background:#1368ce;font-size:1.12em;padding:14px}
-.ctrl-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
-.ctrl-btn{padding:13px 10px;font-size:1.02em;font-weight:700;border:1px solid #fff4;border-radius:12px;background:#ffffff1f;color:#fff;cursor:pointer}
-.ctrl-btn:active{transform:scale(.98)}
-.ctrl-btn.on{background:#26890c;border-color:#fff}
-.ans-box{background:#0006;border:1px solid #ffffff1c;border-radius:12px;padding:11px 14px;margin:10px 0;text-align:left;font-size:.95em;line-height:1.4}
-.ans-box b{color:#7dff6b}
-.body-prev{max-height:155px;overflow-y:auto;white-space:pre-wrap;background:#ffffff10;border-radius:8px;padding:8px 10px;margin-top:8px;font-size:.9em;line-height:1.42;color:#fffd}
-.poll-row{margin:6px 0;padding:6px 8px;background:#ffffff12;border-radius:8px}
-.lens-tag{display:inline-block;font-size:.8em;background:#ffdf5d2b;color:#ffdf5d;padding:1px 7px;border-radius:99px;margin-left:4px;font-weight:700}
-.disc-bar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:8px;padding-top:8px;border-top:1px solid #fff2}
-.disc-bar .ctrl-btn{flex:1;padding:9px 8px;font-size:.9em}
-.launch-card{background:#0005;border:1px solid #ffffff2b;border-radius:14px;padding:14px;margin-top:12px;text-align:left}
-.launch-card h3{margin:0 0 10px;text-align:center;font-size:1.08em;color:#ffdf5d}
-.seg{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:#0006;padding:4px;border-radius:10px;margin-bottom:10px}
-.seg button{padding:9px 8px;border:0;border-radius:8px;background:transparent;color:#fffc;font-weight:800;font-size:.95em;cursor:pointer}
-.seg button.active{background:#7b2cbf;color:#fff;box-shadow:0 2px 8px #0006}
-.sel{width:100%;padding:11px 12px;border-radius:10px;border:0;background:#fff;color:#2b0d57;font-weight:800;font-size:.98em;margin-bottom:10px;box-sizing:border-box}
-.opt-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin:8px 0}
-.opt-pill{display:flex;align-items:center;gap:7px;background:#ffffff12;border:1px solid #ffffff24;padding:8px 9px;border-radius:9px;font-size:.86em;font-weight:600;cursor:pointer;user-select:none}
-.opt-pill input{width:16px;height:16px;margin:0;accent-color:#26890c}
-.timer-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:8px 0}
-.timer-item{display:flex;align-items:center;justify-content:space-between;gap:5px;background:#ffffff12;border:1px solid #ffffff24;padding:6px 9px;border-radius:9px;font-size:.82em;font-weight:700}
-.timer-item input{width:54px;padding:4px 5px;border-radius:6px;border:0;text-align:center;font-weight:800;font-size:.98em;color:#2b0d57;background:#fff}
-.set-row{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:8px;padding:8px 10px;background:#ffffff12;border:1px solid #ffffff24;border-radius:10px;flex-wrap:wrap;font-size:.9em;font-weight:700}
-.set-row input,.disc-bar input{width:62px;padding:7px 6px;border-radius:8px;border:0;text-align:center;font-weight:800;font-size:.98em;color:#2b0d57;background:#fff}
-.bots-row{display:flex;align-items:center;justify-content:space-between;background:#ffffff12;border:1px solid #ffffff24;border-radius:9px;padding:7px 11px;margin-top:8px;font-size:.9em;font-weight:700}
-.bots-row input{width:64px;padding:5px 6px;border-radius:7px;border:0;text-align:center;font-weight:800;font-size:1em;color:#2b0d57;background:#fff}
-.err-msg{color:#ff8a8a;font-weight:700;font-size:.88em;margin:6px 0;text-align:center;display:none}
+:root{
+  --bg1:#3b1478;
+  --bg2:#220a4a;
+  --bg3:#120429;
+  --surface:rgba(255,255,255,.09);
+  --surface-hi:rgba(255,255,255,.14);
+  --border:rgba(255,255,255,.18);
+  --gold:#ffdf5d;
+  --green:#26890c;
+  --green-hi:#69f0ae;
+  --blue:#1368ce;
+  --ink:#2b0d57;
+  --radius:16px;
+  --radius-sm:11px;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;min-height:100vh;min-height:100dvh}
+body{
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  background:radial-gradient(circle at 50% -10%,var(--bg1) 0%,var(--bg2) 55%,var(--bg3) 100%) fixed;
+  color:#fff;
+  display:flex;
+  flex-direction:column;
+  font-variant-numeric:tabular-nums;
+  overflow-x:hidden;
+}
+
+/* --- Sticky Studio HUD --- */
+#topHud{
+  position:sticky;
+  top:0;
+  z-index:50;
+  background:rgba(16,4,38,.84);
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid rgba(255,255,255,.14);
+}
+.hud-inner{
+  max-width:520px;
+  margin:0 auto;
+  padding:8px 12px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  min-height:48px;
+}
+.hud-left{display:flex;align-items:center;gap:7px;min-width:0;flex-wrap:wrap}
+.badge{
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  background:var(--gold);
+  color:var(--ink);
+  font-weight:900;
+  padding:4px 11px;
+  border-radius:99px;
+  font-size:.8em;
+  letter-spacing:.02em;
+  white-space:nowrap;
+}
+.badge.green{background:#69f0ae;color:#0b3318}
+.badge.muted{background:rgba(255,255,255,.15);color:#fff}
+.players-pill{
+  font-size:.82em;
+  font-weight:800;
+  color:rgba(255,255,255,.9);
+  background:rgba(255,255,255,.1);
+  border:1px solid rgba(255,255,255,.16);
+  padding:3px 9px;
+  border-radius:99px;
+  white-space:nowrap;
+}
+.awake-pill{
+  border:1px solid rgba(255,255,255,.24);
+  background:rgba(255,255,255,.1);
+  color:#fff;
+  font-size:.78em;
+  font-weight:800;
+  padding:5px 10px;
+  border-radius:99px;
+  cursor:pointer;
+  white-space:nowrap;
+  flex-shrink:0;
+}
+.awake-pill.on{
+  background:rgba(105,240,174,.18);
+  border-color:rgba(105,240,174,.55);
+  color:#b9f6ca;
+}
+
+/* --- Live Timer Progress Strip --- */
+#rProgWrap{
+  display:none;
+  max-width:520px;
+  width:100%;
+  margin:0 auto;
+  padding:0 12px 7px;
+}
+.rp-track{
+  height:6px;
+  background:rgba(255,255,255,.16);
+  border-radius:99px;
+  overflow:hidden;
+}
+.rp-fill{
+  height:100%;
+  width:100%;
+  background:linear-gradient(90deg,#69f0ae,#ffdf5d);
+  border-radius:99px;
+  transition:width .14s linear,background .25s ease;
+}
+.rp-fill.preview{background:linear-gradient(90deg,#00e5ff,#ffdf5d)}
+.rp-fill.urgent{background:linear-gradient(90deg,#ff1744,#ff9100)}
+.rp-fill.paused{background:#ffdf5d;opacity:.65}
+
+/* --- Main Stage --- */
+#app{
+  flex:1;
+  width:100%;
+  max-width:520px;
+  margin:0 auto;
+  padding:12px 12px 0;
+  display:flex;
+  flex-direction:column;
+}
+.stage-body{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  padding-bottom:12px;
+}
+
+/* --- Cards & Callouts --- */
+.card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:15px;
+  box-shadow:0 10px 28px rgba(0,0,0,.28);
+}
+.phase-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-bottom:8px;
+}
+.phase-tag{
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  font-size:.76em;
+  font-weight:900;
+  text-transform:uppercase;
+  letter-spacing:.06em;
+  padding:4px 10px;
+  border-radius:99px;
+  background:rgba(255,255,255,.14);
+  color:var(--gold);
+}
+.q-counter{
+  font-size:.82em;
+  font-weight:900;
+  background:#fff;
+  color:var(--ink);
+  padding:3px 11px;
+  border-radius:99px;
+}
+h1{font-size:1.32em;margin:.2em 0;font-weight:900;letter-spacing:-.01em}
+h2{font-size:1.18em;margin:.2em 0;font-weight:900}
+.sub{font-size:.9em;opacity:.84;line-height:1.42;margin:4px 0 10px}
+
+.q-stem{
+  font-size:1.08em;
+  font-weight:800;
+  line-height:1.34;
+  margin:4px 0 8px;
+  text-align:left;
+}
+.live-metrics{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  background:rgba(0,0,0,.32);
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:11px;
+  padding:8px 11px;
+  margin-top:8px;
+  font-size:.92em;
+}
+.live-metrics b{color:var(--gold)}
+.ans-meter{
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  font-weight:800;
+}
+.ans-mini-bar{
+  width:52px;
+  height:7px;
+  background:rgba(255,255,255,.18);
+  border-radius:99px;
+  overflow:hidden;
+}
+.ans-mini-bar i{
+  display:block;
+  height:100%;
+  background:var(--green-hi);
+  border-radius:99px;
+  transition:width .25s ease;
+}
+
+.key-box{
+  display:flex;
+  align-items:flex-start;
+  gap:8px;
+  background:rgba(38,137,12,.24);
+  border:1px solid rgba(105,240,174,.45);
+  border-radius:12px;
+  padding:10px 12px;
+  margin-top:9px;
+  text-align:left;
+  font-size:.95em;
+  line-height:1.35;
+}
+.key-box b{color:#9cffbe}
+
+.note-card{
+  background:linear-gradient(180deg,#fffbeb,#fef08a);
+  color:var(--ink);
+  border-radius:13px;
+  padding:11px 14px;
+  text-align:left;
+  font-size:.93em;
+  line-height:1.4;
+  font-weight:650;
+  box-shadow:0 6px 18px rgba(0,0,0,.22);
+}
+.note-card b{color:#1e0842;font-weight:900}
+
+.pend-card{
+  background:linear-gradient(135deg,#ffdf5d,#ffc107);
+  color:var(--ink);
+  border-radius:13px;
+  padding:11px 13px;
+  text-align:left;
+  box-shadow:0 6px 18px rgba(0,0,0,.25);
+}
+.pend-title{font-weight:900;font-size:.92em;margin-bottom:6px}
+.pend-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  background:rgba(255,255,255,.55);
+  border-radius:9px;
+  padding:6px 9px;
+  margin-top:5px;
+  font-weight:800;
+}
+.pend-actions{display:flex;gap:6px;flex-shrink:0}
+.pend-btn{
+  border:0;
+  border-radius:8px;
+  padding:6px 12px;
+  color:#fff;
+  font-weight:900;
+  font-size:.9em;
+  cursor:pointer;
+}
+.pend-btn.ok{background:#26890c}
+.pend-btn.no{background:#e21b3c}
+
+.body-prev{
+  max-height:175px;
+  overflow-y:auto;
+  white-space:pre-wrap;
+  background:rgba(0,0,0,.28);
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:10px;
+  padding:10px 12px;
+  margin-top:8px;
+  font-size:.9em;
+  line-height:1.46;
+  color:rgba(255,255,255,.92);
+  text-align:left;
+}
+
+/* --- Results Detail --- */
+.poll-row{
+  position:relative;
+  overflow:hidden;
+  margin:6px 0;
+  padding:8px 10px;
+  background:rgba(0,0,0,.28);
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:9px;
+  text-align:left;
+  font-size:.91em;
+}
+.poll-fill{
+  position:absolute;
+  inset:0 auto 0 0;
+  background:rgba(255,223,93,.20);
+  pointer-events:none;
+}
+.poll-content{
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  flex-wrap:wrap;
+}
+.lens-tag{
+  display:inline-block;
+  font-size:.78em;
+  background:rgba(255,223,93,.22);
+  color:var(--gold);
+  padding:1px 7px;
+  border-radius:99px;
+  margin-left:5px;
+  font-weight:800;
+}
+.defend-box{
+  margin-top:8px;
+  padding:8px 10px;
+  border-radius:9px;
+  background:rgba(226,27,60,.2);
+  border:1px solid rgba(255,138,128,.35);
+  text-align:left;
+  font-size:.9em;
+  line-height:1.4;
+}
+
+/* --- Discussion / Chapter Timer Bar --- */
+.disc-bar{
+  display:flex;
+  gap:6px;
+  align-items:center;
+  flex-wrap:wrap;
+  margin-top:10px;
+  padding:9px 10px;
+  background:rgba(0,0,0,.28);
+  border:1px solid rgba(255,255,255,.16);
+  border-radius:11px;
+}
+.disc-bar .ctrl-btn{flex:1;min-width:70px;padding:8px 8px;font-size:.86em}
+.disc-bar input,.set-row input{
+  width:62px;
+  padding:7px 6px;
+  border-radius:8px;
+  border:0;
+  text-align:center;
+  font-weight:900;
+  font-size:.95em;
+  color:var(--ink);
+  background:#fff;
+}
+
+/* --- Secondary Session Tools Drawer --- */
+.tools-toggle{
+  width:100%;
+  padding:10px 13px;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,.18);
+  background:rgba(0,0,0,.24);
+  color:rgba(255,255,255,.9);
+  font-size:.88em;
+  font-weight:800;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+.tools-drawer{
+  display:none;
+  background:rgba(0,0,0,.28);
+  border:1px solid rgba(255,255,255,.15);
+  border-radius:13px;
+  padding:10px;
+  margin-top:6px;
+}
+.tools-drawer.open{display:block}
+.set-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:6px;
+  margin-bottom:8px;
+  padding:7px 10px;
+  background:rgba(255,255,255,.07);
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:10px;
+  flex-wrap:wrap;
+  font-size:.88em;
+  font-weight:750;
+}
+.set-row-right{display:flex;align-items:center;gap:6px}
+
+/* --- Buttons & Sticky Bottom Thumb Dock --- */
+.ctrl-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.ctrl-btn{
+  padding:11px 10px;
+  font-size:.94em;
+  font-weight:800;
+  border:1px solid rgba(255,255,255,.24);
+  border-radius:11px;
+  background:rgba(255,255,255,.13);
+  color:#fff;
+  cursor:pointer;
+  transition:transform .08s,background .15s;
+}
+.ctrl-btn:active{transform:scale(.97)}
+.ctrl-btn.on{
+  background:linear-gradient(180deg,#2fa80f,#217a0a);
+  border-color:rgba(255,255,255,.65);
+}
+
+.thumb-dock{
+  position:sticky;
+  bottom:0;
+  z-index:45;
+  margin:auto -12px 0;
+  padding:10px 12px calc(12px + env(safe-area-inset-bottom,0px));
+  background:linear-gradient(180deg,rgba(18,4,41,.75) 0%,rgba(18,4,41,.96) 30%);
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+  border-top:1px solid rgba(255,255,255,.16);
+}
+.quick-tbar{
+  display:grid;
+  grid-template-columns:1.3fr repeat(3,1fr);
+  gap:6px;
+  margin-bottom:8px;
+}
+.quick-tbar .ctrl-btn{
+  padding:9px 6px;
+  font-size:.86em;
+  border-radius:10px;
+}
+.skip-prev-btn{
+  width:100%;
+  padding:11px 12px;
+  margin-bottom:8px;
+  border:0;
+  border-radius:11px;
+  background:linear-gradient(180deg,#ffe57f,#ffc107);
+  color:var(--ink);
+  font-weight:900;
+  font-size:.98em;
+  cursor:pointer;
+  box-shadow:0 3px 0 #b28704;
+}
+.big-btn{
+  width:100%;
+  font-size:1.24em;
+  padding:16px 14px;
+  border:0;
+  border-radius:14px;
+  background:linear-gradient(180deg,#2fa80f,#20780a);
+  color:#fff;
+  font-weight:900;
+  cursor:pointer;
+  box-shadow:0 5px 0 #134e04,0 8px 22px rgba(0,0,0,.35);
+  transition:opacity .15s,transform .08s;
+  letter-spacing:.01em;
+}
+.big-btn:active{transform:translateY(3px);box-shadow:0 2px 0 #134e04,0 4px 10px rgba(0,0,0,.3)}
+.big-btn:disabled{opacity:.42;cursor:not-allowed;transform:none;box-shadow:none}
+.big-btn.sec{
+  background:linear-gradient(180deg,#1e7ae8,#1158b0);
+  box-shadow:0 5px 0 #0a3975,0 8px 20px rgba(0,0,0,.3);
+  font-size:1.08em;
+  padding:14px;
+}
+
+/* --- Standby Launch Card --- */
+.launch-card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:15px;
+  text-align:left;
+  box-shadow:0 10px 28px rgba(0,0,0,.28);
+}
+.launch-card h3{
+  margin:0 0 10px;
+  text-align:center;
+  font-size:1.06em;
+  color:var(--gold);
+  font-weight:900;
+}
+.seg{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:6px;
+  background:rgba(0,0,0,.36);
+  padding:4px;
+  border-radius:11px;
+  margin-bottom:10px;
+}
+.seg button{
+  padding:9px 8px;
+  border:0;
+  border-radius:8px;
+  background:transparent;
+  color:rgba(255,255,255,.78);
+  font-weight:800;
+  font-size:.94em;
+  cursor:pointer;
+}
+.seg button.active{
+  background:linear-gradient(135deg,#8e24aa,#5e35b1);
+  color:#fff;
+  box-shadow:0 2px 10px rgba(0,0,0,.35);
+}
+.sel{
+  width:100%;
+  padding:12px;
+  border-radius:11px;
+  border:2px solid transparent;
+  background:#fff;
+  color:var(--ink);
+  font-weight:800;
+  font-size:.98em;
+  margin-bottom:8px;
+}
+.sel:focus{outline:none;border-color:var(--gold)}
+.sec-lbl{
+  font-size:.76em;
+  font-weight:900;
+  text-transform:uppercase;
+  letter-spacing:.06em;
+  color:var(--gold);
+  margin:10px 2px 5px;
+}
+.timer-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:4px 0 8px}
+.timer-item{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:6px;
+  background:rgba(0,0,0,.24);
+  border:1px solid rgba(255,255,255,.16);
+  padding:6px 9px;
+  border-radius:9px;
+  font-size:.82em;
+  font-weight:750;
+}
+.timer-item input{
+  width:54px;
+  padding:5px;
+  border-radius:7px;
+  border:0;
+  text-align:center;
+  font-weight:900;
+  font-size:.96em;
+  color:var(--ink);
+  background:#fff;
+}
+.opt-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:4px 0 8px}
+.opt-pill{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.16);
+  padding:8px 9px;
+  border-radius:9px;
+  font-size:.83em;
+  font-weight:700;
+  cursor:pointer;
+  user-select:none;
+  transition:background .12s,border-color .12s;
+}
+.opt-pill:has(input:checked){
+  background:rgba(38,137,12,.28);
+  border-color:rgba(105,240,174,.65);
+}
+.opt-pill input{width:16px;height:16px;margin:0;accent-color:#26890c;flex-shrink:0}
+.bots-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  background:rgba(0,0,0,.24);
+  border:1px solid rgba(255,255,255,.16);
+  border-radius:10px;
+  padding:8px 11px;
+  margin:8px 0 10px;
+  font-size:.88em;
+  font-weight:800;
+}
+.bots-row input{
+  width:64px;
+  padding:5px 6px;
+  border-radius:7px;
+  border:0;
+  text-align:center;
+  font-weight:900;
+  font-size:.98em;
+  color:var(--ink);
+  background:#fff;
+}
+.err-msg{
+  background:rgba(226,27,60,.22);
+  border:1px solid rgba(255,138,128,.45);
+  border-radius:9px;
+  padding:8px 10px;
+  color:#ffb4b4;
+  font-weight:800;
+  font-size:.86em;
+  margin:6px 0 10px;
+  text-align:center;
+  display:none;
+}
 </style></head><body>
-<div class="card" id="app">Loading remote…</div>
+
+<div id="topHud">
+  <div class="hud-inner">
+    <div class="hud-left" id="hudLeft">
+      <span class="badge muted">🕹️ HOST REMOTE</span>
+    </div>
+    <button id="awakeBtn" class="awake-pill" onclick="toggleAwake()" title="Keep phone screen awake">☀️ <span id="awakeState">ON</span></button>
+  </div>
+  <div id="rProgWrap"><div class="rp-track"><div class="rp-fill" id="rProgFill"></div></div></div>
+</div>
+
+<div id="app"><div class="card" style="text-align:center;margin-top:20px">Loading remote…</div></div>
+
 <script>
 const qs = new URLSearchParams(location.search);
 let rkey = qs.get('key') || '', pin = qs.get('pin') || '', host = qs.get('host') || '', S = {};
 let lastKey = '', launchMode = 'quiz', quizCatalog = [], quizzesLoaded = false, launching = false;
+let toolsOpen = false, pollStamp = performance.now();
 const $ = document.getElementById('app'), sh = ["▲ ","◆ ","● ","■ "];
 
 function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
@@ -60,6 +655,29 @@ async function next(){await post('/api/next',{pin,host});pollNow()}
 async function ctl(action,sec=10){await post('/api/host_ctl',{pin,host,action,sec});pollNow()}
 async function appr(name,ok){await post('/api/approve',{pin,host,name,approve:ok});pollNow()}
 async function addBots(n=5){await post('/api/bots',{pin,host,count:n});pollNow()}
+
+function toggleTools(){
+ toolsOpen = !toolsOpen;
+ const d = document.getElementById('toolsDrawer');
+ const c = document.getElementById('toolsChev');
+ if(d) d.classList.toggle('open', toolsOpen);
+ if(c) c.textContent = toolsOpen ? '▴' : '▾';
+}
+
+function setHudStatus(mode){
+ const hl = document.getElementById('hudLeft');
+ const pw = document.getElementById('rProgWrap');
+ if(!hl) return;
+ if(mode === 'standby'){
+  hl.innerHTML = `<span class="badge green">🟢 PAIRED STANDBY</span>`;
+  if(pw) pw.style.display = 'none';
+ } else if(mode === 'unpaired'){
+  hl.innerHTML = `<span class="badge muted">🕹️ UNPAIRED</span>`;
+  if(pw) pw.style.display = 'none';
+ } else if(mode === 'live'){
+  hl.innerHTML = `<span class="badge">🕹️ PIN ${esc(pin)}</span><span class="players-pill">👥 <span id="rPlayers">${S.n || 0} players</span></span>`;
+ }
+}
 
 async function loadQuizzes(){
  if(quizzesLoaded) return;
@@ -96,16 +714,16 @@ function setLaunchMode(m){
 function renderOptsHtml(){
  if(launchMode === 'case'){
   return `
-   <label class="opt-pill"><input type="checkbox" id="mIce"> 💭 Word Cloud Warm-Up</label>
-   <label class="opt-pill"><input type="checkbox" id="mTeams"> 🛡️ Discussion Teams</label>
+   <label class="opt-pill"><input type="checkbox" id="mIce"> 💭 Word Cloud</label>
+   <label class="opt-pill"><input type="checkbox" id="mTeams"> 🛡️ Teams</label>
    <label class="opt-pill"><input type="checkbox" id="mMod"> 🛡️ Approve Names</label>
   `;
  }
  return `
-  <label class="opt-pill"><input type="checkbox" id="mShuf"> 🎲 Randomize Order</label>
-  <label class="opt-pill"><input type="checkbox" id="mIce"> 💭 Word Cloud Warm-Up</label>
+  <label class="opt-pill"><input type="checkbox" id="mShuf"> 🎲 Shuffle Qs</label>
+  <label class="opt-pill"><input type="checkbox" id="mIce"> 💭 Word Cloud</label>
   <label class="opt-pill"><input type="checkbox" id="mTeams"> 🛡️ Team Mode</label>
-  <label class="opt-pill"><input type="checkbox" id="mWager"> 🎰 Final Boss Wager</label>
+  <label class="opt-pill"><input type="checkbox" id="mWager"> 🎰 Final Boss</label>
   <label class="opt-pill"><input type="checkbox" id="mRedemp"> 🔄 Redemption</label>
   <label class="opt-pill"><input type="checkbox" id="mWheel"> 🎡 Mystery Wheel</label>
   <label class="opt-pill"><input type="checkbox" id="mHot"> 🔥 Hot Seat</label>
@@ -117,7 +735,7 @@ function renderOptsHtml(){
 function renderTimersHtml(){
  if(launchMode === 'case'){
   return `
-   <div style="font-size:.82em;font-weight:800;color:#ffdf5d;margin:8px 0 4px">⏱️ Case Study Timers (seconds)</div>
+   <div class="sec-lbl">⏱️ Case Study Timers (seconds)</div>
    <div class="timer-grid">
     <label class="timer-item"><span>🗳️ Poll</span><input type="number" id="mPollTime" min="5" max="900" value="45"></label>
     <label class="timer-item"><span>🎤 Discuss</span><input type="number" id="mDiscTime" min="5" max="900" value="60"></label>
@@ -128,9 +746,10 @@ function renderTimersHtml(){
    </div>`;
  }
  return `
+  <div class="sec-lbl">⏱️ Pacing (seconds)</div>
   <div class="timer-grid">
-   <label class="timer-item"><span>⏱️ Timer (s)</span><input type="number" id="mQTime" min="5" max="900" value="15"></label>
-   <label class="timer-item"><span>👀 Preview (s)</span><input type="number" id="mPrevTime" min="0" max="120" value="5"></label>
+   <label class="timer-item"><span>⏱️ Timer</span><input type="number" id="mQTime" min="5" max="900" value="15"></label>
+   <label class="timer-item"><span>👀 Preview</span><input type="number" id="mPrevTime" min="0" max="120" value="5"></label>
   </div>`;
 }
 
@@ -138,30 +757,32 @@ function renderStandby(){
  const sk = 'standby:' + launchMode;
  if(lastKey === sk) return;
  lastKey = sk;
+ setHudStatus('standby');
  $.innerHTML = `
-  <div class="badge green">🟢 PAIRED WITH HOST &middot; STANDBY</div>
-  <h1>🕹️ Mobile Host Remote</h1>
-  <p class="sub">Live controls will appear automatically as soon as the session launches on your computer — or start one right from your phone below.</p>
-  <div class="launch-card">
-   <h3>📱 Launch Directly from Phone</h3>
-   <div class="seg">
-    <button type="button" class="${launchMode==='quiz'?'active':''}" onclick="setLaunchMode('quiz')">🎮 Quizzes</button>
-    <button type="button" class="${launchMode==='case'?'active':''}" onclick="setLaunchMode('case')">📖 Case Studies</button>
+  <div class="stage-body">
+   <div class="card" style="text-align:center;padding:14px 16px">
+    <h1>🕹️ Mobile Host Remote</h1>
+    <p class="sub" style="margin-bottom:0">Controls appear automatically when you start on your computer — or launch a session directly from your phone below.</p>
    </div>
-   <select id="mQuizSel" class="sel">
-    <option value="">${launchMode==='case'?'— Select a Case Study —':'— Select a Quiz —'}</option>
-   </select>
-   ${renderTimersHtml()}
-   <div class="opt-grid">${renderOptsHtml()}</div>
-   <div class="bots-row">
-    <span>🤖 Practice Bots</span>
-    <input type="number" id="mBots" min="0" max="30" value="0">
+   <div class="launch-card">
+    <h3>📱 Launch Session from Phone</h3>
+    <div class="seg">
+     <button type="button" class="${launchMode==='quiz'?'active':''}" onclick="setLaunchMode('quiz')">🎮 Quizzes</button>
+     <button type="button" class="${launchMode==='case'?'active':''}" onclick="setLaunchMode('case')">📖 Case Studies</button>
+    </div>
+    <select id="mQuizSel" class="sel">
+     <option value="">${launchMode==='case'?'— Select a Case Study —':'— Select a Quiz —'}</option>
+    </select>
+    ${renderTimersHtml()}
+    <div class="sec-lbl">✨ Session Options</div>
+    <div class="opt-grid">${renderOptsHtml()}</div>
+    <div class="bots-row">
+     <span>🤖 Practice Bots</span>
+     <input type="number" id="mBots" min="0" max="30" value="0">
+    </div>
+    <div id="mErr" class="err-msg"></div>
+    <button type="button" id="mLaunchBtn" class="big-btn" onclick="launchFromPhone()">🚀 Create Session from Phone</button>
    </div>
-   <div id="mErr" class="err-msg"></div>
-   <button type="button" id="mLaunchBtn" class="big-btn" style="margin-bottom:4px" onclick="launchFromPhone()">🚀 Create Session from Phone</button>
-  </div>
-  <div class="ctrl-grid" style="grid-template-columns:1fr;margin-top:12px">
-   <button id="awakeBtn" class="ctrl-btn" onclick="toggleAwake()">☀️ Awake: <span id="awakeState">ON</span></button>
   </div>
  `;
  populateSelect();
@@ -293,11 +914,11 @@ function remoteDiscussBar(lbl){
  const defSec = S.discuss_default || 60;
  const running = S.discuss_left != null && S.discuss_left > 0;
  return `<div class="disc-bar">
-  <div id="rDiscuss" data-lbl="${esc(lbl||'Discussion Timer')}" style="width:100%;font-weight:800;color:#ffdf5d"></div>
+  <div id="rDiscuss" data-lbl="${esc(lbl||'Discussion Timer')}" style="width:100%;font-weight:800;color:#ffdf5d;text-align:left;font-size:.9em"></div>
   <input id="rDiscSec" type="number" min="5" max="900" value="${defSec}" onkeydown="if(event.key==='Enter')startRemoteDiscuss()">
-  <span style="font-weight:700;font-size:.88em">s</span>
+  <span style="font-weight:800;font-size:.86em;opacity:.85">sec</span>
   <button class="ctrl-btn" onclick="startRemoteDiscuss()">⏱️ ${running ? 'Restart' : 'Start'}</button>
-  ${running ? `<button class="ctrl-btn" style="flex:0 0 auto" onclick="ctl('discuss_add',-15)">-15s</button><button class="ctrl-btn" style="flex:0 0 auto" onclick="ctl('discuss_add',30)">+30s</button><button class="ctrl-btn" style="flex:0 0 auto" onclick="ctl('discuss',0)">⏹️ Clear</button>` : ''}
+  ${running ? `<button class="ctrl-btn" style="flex:0 0 auto" onclick="ctl('discuss_add',-15)">-15s</button><button class="ctrl-btn" style="flex:0 0 auto" onclick="ctl('discuss_add',30)">+30s</button><button class="ctrl-btn" style="flex:0 0 auto;background:rgba(226,27,60,.35)" onclick="ctl('discuss',0)">⏹️ Clear</button>` : ''}
  </div>`;
 }
 
@@ -305,16 +926,17 @@ function buildResultsDetail(denom){
  const qt = S.qtype || 'mc';
  if(qt === 'poll'){
   const cnts = S.counts || [];
-  const tot = Math.max(1, cnts.reduce((a, b) => a + b, 0));
+  const sum = cnts.reduce((a, b) => a + b, 0);
+  const tot = Math.max(1, sum);
   const lenses = S.lenses || [];
   const bars = (S.answers || []).map((a, i) => {
    const c = cnts[i] || 0;
-   const pct = cnts.reduce((x, y) => x + y, 0) ? Math.round(100 * c / tot) : 0;
+   const pct = sum ? Math.round(100 * c / tot) : 0;
    const lns = lenses[i] ? `<span class="lens-tag">${esc(lenses[i])}</span>` : '';
-   return `<div class="poll-row">${sh[i]||''}${esc(a)} &mdash; <b>${pct}% (${c})</b>${lns}</div>`;
+   return `<div class="poll-row"><div class="poll-fill" style="width:${pct}%"></div><div class="poll-content"><span>${sh[i]||''}${esc(a)}${lns}</span><b>${pct}% (${c})</b></div></div>`;
   }).join('');
   const defs = (S.defenders || []).length
-   ? `<div style="margin-top:8px">🎤 <b>Defend your side:</b><br>${S.defenders.map(d => `${sh[d.side]||''}<b>${esc(d.name)}</b> <small>(${esc((S.answers||[])[d.side]||'')})</small>`).join('<br>')}</div>`
+   ? `<div class="defend-box">🎤 <b>Call on to defend:</b><br>${S.defenders.map(d => `${sh[d.side]||''}<b>${esc(d.name)}</b> <small style="opacity:.85">(${esc((S.answers||[])[d.side]||'')})</small>`).join('<br>')}</div>`
    : '';
   return `
    <div style="margin-top:8px">${bars}</div>
@@ -322,18 +944,44 @@ function buildResultsDetail(denom){
    ${remoteDiscussBar('Discussion Timer')}`;
  }
  if(qt === 'rank'){
-  const items = (S.rank_avg || []).map((r, idx) => `<li><b>${esc(r.item)}</b> <small>(avg #${esc(r.avg)})</small></li>`).join('');
-  return `<div style="margin-top:8px">📊 <b>Priority Ranking (${S.rank_n || 0} ranked):</b><ol style="margin:6px 0 2px;padding-left:20px">${items || '<li><i>No rankings submitted</i></li>'}</ol></div>${remoteDiscussBar('Debrief Timer')}`;
+  const items = (S.rank_avg || []).map((r, idx) => `<div class="poll-row"><div class="poll-content"><span><b>#${idx+1}</b> ${esc(r.item)}</span><small style="color:var(--gold);font-weight:800">avg #${esc(r.avg)}</small></div></div>`).join('');
+  return `<div style="margin-top:8px;text-align:left"><div style="font-size:.9em;font-weight:800;margin-bottom:4px">📊 Priority Ranking (${S.rank_n || 0} ranked)</div>${items || '<div class="sub">No rankings submitted</div>'}</div>${remoteDiscussBar('Debrief Timer')}`;
  }
  if(qt === 'open'){
   const rs = S.responses || [];
-  const top = rs.slice(0, 5).map(r => `<div class="poll-row">“${esc(r.text)}” ${r.votes ? `<b>(👍 ${r.votes})</b>` : ''}</div>`).join('');
-  return `<div style="margin-top:8px">✍️ <b>${rs.length} response${rs.length === 1 ? '' : 's'} submitted</b>${top ? `<div style="margin-top:6px">${top}</div>` : ''}</div>${remoteDiscussBar('Debrief Timer')}`;
+  const top = rs.slice(0, 5).map(r => `<div class="poll-row"><div class="poll-content"><span>“${esc(r.text)}”</span>${r.votes ? `<b style="color:var(--gold)">👍 ${r.votes}</b>` : ''}</div></div>`).join('');
+  return `<div style="margin-top:8px;text-align:left"><div style="font-size:.9em;font-weight:800;margin-bottom:4px">✍️ ${rs.length} response${rs.length === 1 ? '' : 's'} submitted</div>${top}</div>${remoteDiscussBar('Debrief Timer')}`;
  }
  if(qt === 'info') return '';
  const kt = buildKeyText();
- return `<div style="margin-top:6px">✅ Correct: <b>${esc(kt)}</b> <small>(${S.n_correct || 0}/${denom})</small></div>`;
+ const accPct = denom > 0 ? Math.round(100 * (S.n_correct || 0) / denom) : 0;
+ return `<div class="key-box"><span>✅</span><div><b>${esc(kt)}</b><div style="font-size:.86em;opacity:.88;margin-top:2px">${S.n_correct || 0} of ${denom} correct (${accPct}%)</div></div></div>`;
 }
+
+function updTopBar(){
+ const pw = document.getElementById('rProgWrap');
+ const pf = document.getElementById('rProgFill');
+ if(!pw || !pf) return;
+ if(!pin || !host || S.phase !== 'question' || S.qtype === 'info'){
+  pw.style.display = 'none';
+  return;
+ }
+ pw.style.display = 'block';
+ const elapsed = S.paused ? 0 : Math.max(0, (performance.now() - pollStamp) / 1000);
+ const pv = S.preview_left || 0;
+ if(pv > 0){
+  const rem = Math.max(0, pv - elapsed);
+  const tot = Math.max(1, S.preview_total || 5);
+  pf.style.width = Math.min(100, (rem / tot) * 100) + '%';
+  pf.className = 'rp-fill preview' + (S.paused ? ' paused' : '');
+ } else {
+  const rem = Math.max(0, (S.left || 0) - elapsed);
+  const tot = Math.max(1, S.qtime || 15);
+  pf.style.width = Math.min(100, (rem / tot) * 100) + '%';
+  pf.className = 'rp-fill' + (S.paused ? ' paused' : (rem <= 5 ? ' urgent' : ''));
+ }
+}
+setInterval(updTopBar, 140);
 
 function updateLiveText(){
  const ph = S.phase;
@@ -348,7 +996,11 @@ function updateLiveText(){
  }
  const anEl = document.getElementById('rAns');
  if(anEl && ph === 'question' && S.qtype !== 'info'){
-  anEl.textContent = `${S.answered || 0}/${denom} answered`;
+  anEl.textContent = `${S.answered || 0}/${denom}`;
+ }
+ const afEl = document.getElementById('rAnsFill');
+ if(afEl && ph === 'question' && S.qtype !== 'info'){
+  afEl.style.width = (denom > 0 ? Math.min(100, Math.round(100 * (S.answered || 0) / denom)) : 0) + '%';
  }
  const dcEl = document.getElementById('rDiscuss');
  if(dcEl){
@@ -364,6 +1016,7 @@ function updateLiveText(){
  if(auEl){
   auEl.textContent = (S.auto && S.auto_left != null) ? ` (${S.auto_left}s)` : '';
  }
+ updTopBar();
 }
 
 function render(){
@@ -391,6 +1044,8 @@ function render(){
 
  if(stateKey !== lastKey){
   lastKey = stateKey;
+  setHudStatus('live');
+
   let mainLbl = 'Next Step ➔';
   if(ph === 'lobby') mainLbl = isCaseGame ? '🚀 Start Case Study' : '🚀 Start Game';
   else if(ph === 'icebreaker') mainLbl = isCaseGame ? '▶️ Start Slide 1' : '🚀 Start Question 1';
@@ -400,69 +1055,140 @@ function render(){
   else if(ph === 'board') mainLbl = (S.index + 1 >= S.total) ? '🏆 Final Podium' : (isCaseGame ? '➡️ Next Slide ➔' : '➡️ Next Question');
 
   const itemTag = isCaseSlide ? 'Slide' : 'Q';
-  let qInfo = '';
-  if(ph === 'icebreaker'){
-   qInfo = `<div class="ans-box"><div><b>Warm-Up Prompt:</b> ${esc(S.prompt || '')}</div><div id="rWords" style="margin-top:6px;font-weight:700;color:#ffdf5d"></div></div>`;
+  const qtLabels = {mc:'Multiple Choice', tf:'True / False', text:'Type Answer', order:'Put in Order', zoom:'Zoom Reveal', poll:'Decision Poll', rank:'Priority Rank', open:'Open Response', info:'Case Chapter'};
+  const qtBadge = S.qtype ? (qtLabels[S.qtype] || S.qtype.toUpperCase()) : '';
+
+  let stageCard = '';
+  if(ph === 'lobby'){
+   stageCard = `
+    <div class="card" style="text-align:center">
+     <div class="phase-row" style="justify-content:center"><span class="phase-tag">🟢 Lobby Open</span></div>
+     <div style="font-size:2.2em;font-weight:900;letter-spacing:3px;color:var(--gold);margin:4px 0">PIN ${esc(pin)}</div>
+     <p class="sub">${startDisabled ? 'Waiting for students to join on their phones — or add practice bots below.' : 'Students are in! Tap Start below whenever everyone is ready.'}</p>
+     <div class="ctrl-grid" style="margin-top:10px">
+      <button class="ctrl-btn" onclick="addBots(5)">🤖 +5 Practice Bots</button>
+      ${!isCaseGame ? `<button class="ctrl-btn ${S.auto ? 'on' : ''}" onclick="ctl('toggle_auto')">⏭️ Auto: ${S.auto ? 'ON' : 'Off'}</button>` : `<button class="ctrl-btn" onclick="addBots(1)">🤖 +1 Bot</button>`}
+     </div>
+     ${(!isCaseGame && S.auto) ? `<div class="set-row" style="margin:10px 0 0"><span>⏭️ Auto-Advance Wait</span><div class="set-row-right"><input id="rAutoSec" type="number" min="2" max="120" value="${S.auto_time || 7}" onkeydown="if(event.key==='Enter')setRemoteAuto()"><span>s</span><button class="ctrl-btn" style="padding:7px 12px" onclick="setRemoteAuto()">Set</button></div></div>` : ''}
+    </div>`;
+  } else if(ph === 'icebreaker'){
+   stageCard = `
+    <div class="card">
+     <div class="phase-row"><span class="phase-tag">💭 Warm-Up Word Cloud</span></div>
+     <div class="q-stem">${esc(S.prompt || '')}</div>
+     <div id="rWords" style="margin-top:8px;font-weight:800;color:var(--gold)"></div>
+    </div>`;
+  } else if(ph === 'intro'){
+   const introKind = S.redemption ? '🔄 Redemption Round' : S.speed ? '⚡ Speed Round' : '🎡 Mystery Wheel';
+   stageCard = `
+    <div class="card" style="text-align:center">
+     <div class="phase-row"><span class="phase-tag">${introKind}</span><span class="q-counter">${itemTag} ${(S.index || 0) + 1}/${S.total || 0}</span></div>
+     <h2>Intro playing on main screen…</h2>
+     <p class="sub" style="margin-bottom:0">Advances automatically in a moment, or tap Skip Intro below.</p>
+    </div>`;
   } else if(ph === 'question' || ph === 'results'){
    const keyTxt = buildKeyText();
    const showKeyInQ = (ph === 'question' && !S.case && S.qtype !== 'info' && keyTxt);
-   qInfo = `
-    <div class="ans-box">
-     <div><b>${itemTag} ${(S.index || 0) + 1}/${S.total || 0}:</b> ${esc(S.question)}</div>
+   stageCard = `
+    <div class="card">
+     <div class="phase-row">
+      <span class="phase-tag">${ph === 'results' ? '📊 Results' : (inPrev ? '👀 Reading Preview' : '⚡ Live Question')}${qtBadge ? ' · ' + esc(qtBadge) : ''}</span>
+      <span class="q-counter">${itemTag} ${(S.index || 0) + 1}/${S.total || 0}</span>
+     </div>
+     <div class="q-stem">${esc(S.question)}</div>
      ${S.qtype === 'info' && S.body ? `<div class="body-prev">${esc(S.body)}</div>` : ''}
      ${ph === 'question' && S.qtype === 'info' ? remoteDiscussBar('Chapter Timer') : ''}
-     ${ph === 'question' && S.qtype !== 'info' ? `<div style="margin-top:6px"><b id="rTimer"></b> &middot; <span id="rAns" style="font-weight:700"></span></div>` : ''}
-     ${showKeyInQ ? `<div style="margin-top:6px">🔑 Answer Key: <b>${esc(keyTxt)}</b></div>` : ''}
+     ${ph === 'question' && S.qtype !== 'info' ? `
+      <div class="live-metrics">
+       <b id="rTimer"></b>
+       <span class="ans-meter"><span id="rAns"></span> answered <span class="ans-mini-bar"><i id="rAnsFill" style="width:0%"></i></span></span>
+      </div>` : ''}
+     ${showKeyInQ ? `<div class="key-box"><span>🔑</span><div><span style="opacity:.82;font-size:.84em;font-weight:800;display:block;text-transform:uppercase;letter-spacing:.05em">Answer Key</span><b>${esc(keyTxt)}</b></div></div>` : ''}
      ${ph === 'results' ? buildResultsDetail(denom) : ''}
+    </div>`;
+  } else if(ph === 'board'){
+   stageCard = `
+    <div class="card" style="text-align:center">
+     <div class="phase-row"><span class="phase-tag">🏆 Standings</span><span class="q-counter">After ${itemTag} ${(S.index || 0) + 1}/${S.total || 0}</span></div>
+     <h2>Leaderboard on Big Screen</h2>
+     <p class="sub" style="margin-bottom:0">Highlight top streaks or rivalries, then tap below for the next ${isCaseGame ? 'slide' : 'question'}.</p>
+    </div>`;
+  } else if(ph === 'final'){
+   stageCard = `
+    <div class="card" style="text-align:center;padding:22px 16px">
+     <div style="font-size:2.8em;line-height:1">🏆</div>
+     <h1>Session Complete!</h1>
+     <p class="sub">Final podium and awards are live on the main display.</p>
+     ${rkey ? `<button class="big-btn sec" style="margin-top:8px" onclick="backToStandby()">🏠 Back to Mobile Standby / Launch New</button>` : ''}
     </div>`;
   }
 
   const noteHtml = ((ph === 'question' || ph === 'results') && S.note)
-   ? `<div class="ans-box" style="background:#fffbe6;color:#2b0d57">📝 <b style="color:#2b0d57">Teacher note:</b> ${esc(S.note)}</div>`
+   ? `<div class="note-card">📝 <b>Teacher Note:</b> ${esc(S.note)}</div>`
    : '';
+
   const pendHtml = (S.pending_list || []).length
-   ? `<div class="ans-box" style="background:#ffdf5d;color:#2b0d57"><b style="color:#2b0d57">🛡️ Waiting for approval:</b><br>${S.pending_list.map(p => `${esc((p.avatar ? p.avatar + ' ' : '') + p.name)} <button class="ctrl-btn" style="padding:4px 10px;background:#26890c" data-n="${esc(p.name)}" onclick="appr(this.dataset.n,true)">✓</button> <button class="ctrl-btn" style="padding:4px 10px;background:#e21b3c" data-n="${esc(p.name)}" onclick="appr(this.dataset.n,false)">✕</button>`).join('<br>')}</div>`
+   ? `<div class="pend-card"><div class="pend-title">🛡️ Waiting for Name Approval (${S.pending_list.length})</div>${S.pending_list.map(p => `<div class="pend-row"><span>${esc((p.avatar ? p.avatar + ' ' : '') + p.name)}</span><span class="pend-actions"><button class="pend-btn ok" data-n="${esc(p.name)}" onclick="appr(this.dataset.n,true)">✓ Allow</button><button class="pend-btn no" data-n="${esc(p.name)}" onclick="appr(this.dataset.n,false)">✕</button></span></div>`).join('')}</div>`
    : '';
-  const lobbyHint = startDisabled ? `<div class="sub" style="margin:2px 0 6px;color:#ffdf5d">Waiting for players to join (or tap 🤖 +5 Bots)</div>` : '';
+
+  const showTools = (ph !== 'lobby' && ph !== 'final');
   const timerSetRow = (ph === 'question' && S.qtype !== 'info')
    ? `<div class="set-row">
-       <span>⏱️ Set Timer:</span>
-       <input id="rSetSec" type="number" min="1" max="900" value="${Math.max(5, Math.ceil(S.left || S.qtime || 15))}" onkeydown="if(event.key==='Enter')setRemoteTimer()">
-       <span>s</span>
-       <button class="ctrl-btn" style="padding:7px 14px" onclick="setRemoteTimer()">Set</button>
+       <span>⏱️ Exact Timer</span>
+       <div class="set-row-right">
+        <input id="rSetSec" type="number" min="1" max="900" value="${Math.max(5, Math.ceil(S.left || S.qtime || 15))}" onkeydown="if(event.key==='Enter')setRemoteTimer()">
+        <span>s</span>
+        <button class="ctrl-btn" style="padding:7px 13px" onclick="setRemoteTimer()">Set</button>
+       </div>
       </div>`
    : '';
   const autoSetRow = (!isCaseGame && S.auto)
    ? `<div class="set-row">
-       <span>⏭️ Auto Wait:</span>
-       <input id="rAutoSec" type="number" min="2" max="120" value="${S.auto_time || 7}" onkeydown="if(event.key==='Enter')setRemoteAuto()">
-       <span>s</span>
-       <button class="ctrl-btn" style="padding:7px 14px" onclick="setRemoteAuto()">Set</button>
+       <span>⏭️ Auto Wait</span>
+       <div class="set-row-right">
+        <input id="rAutoSec" type="number" min="2" max="120" value="${S.auto_time || 7}" onkeydown="if(event.key==='Enter')setRemoteAuto()">
+        <span>s</span>
+        <button class="ctrl-btn" style="padding:7px 13px" onclick="setRemoteAuto()">Set</button>
+       </div>
       </div>`
    : '';
+  const toolsHtml = showTools ? `
+   <div>
+    <button type="button" class="tools-toggle" onclick="toggleTools()">
+     <span>⚙️ Session &amp; Custom Timer Tools${!isCaseGame && S.auto ? ' · Auto ON' : ''}</span>
+     <span id="toolsChev">${toolsOpen ? '▴' : '▾'}</span>
+    </button>
+    <div id="toolsDrawer" class="tools-drawer ${toolsOpen ? 'open' : ''}">
+     ${timerSetRow}
+     ${autoSetRow}
+     <div class="ctrl-grid">
+      ${!isCaseGame ? `<button class="ctrl-btn ${S.auto ? 'on' : ''}" onclick="ctl('toggle_auto')">⏭️ Auto: ${S.auto ? 'ON' : 'Off'}</button>` : ''}
+      <button class="ctrl-btn" onclick="addBots(5)">🤖 +5 Bots</button>
+     </div>
+    </div>
+   </div>` : '';
+
+  const dockHtml = ph !== 'final' ? `
+   <div class="thumb-dock">
+    ${inPrev ? `<button class="skip-prev-btn" onclick="ctl('skip_preview')">⏭️ Open Answers Now (Skip Preview)</button>` : ''}
+    ${ph === 'question' && S.qtype !== 'info' ? `
+     <div class="quick-tbar">
+      <button class="ctrl-btn" onclick="ctl('pause')">${S.paused ? '▶️ Resume' : '⏸️ Pause'}</button>
+      <button class="ctrl-btn" onclick="ctl('add_time',-10)">-10s</button>
+      <button class="ctrl-btn" onclick="ctl('add_time',10)">+10s</button>
+      <button class="ctrl-btn" onclick="ctl('add_time',30)">+30s</button>
+     </div>` : ''}
+    <button class="big-btn" onclick="next()" ${startDisabled ? 'disabled' : ''}>${mainLbl}<span id="rAutoLeft"></span></button>
+   </div>` : '';
 
   $.innerHTML = `
-   <div class="badge">🕹️ HOST REMOTE &middot; PIN ${esc(pin)}</div>
-   <h1>Phase: ${esc(ph.toUpperCase())} (<span id="rPlayers">${S.n || 0} players</span>)</h1>
-   ${pendHtml}${qInfo}${noteHtml}${lobbyHint}
-   ${ph !== 'final'
-     ? `<button class="big-btn" onclick="next()" ${startDisabled ? 'disabled' : ''}>${mainLbl}<span id="rAutoLeft"></span></button>`
-     : `<p style="font-weight:800;font-size:1.15em;margin:10px 0">🎉 Session Complete!</p>${rkey ? `<button class="big-btn sec" onclick="backToStandby()">🏠 Back to Mobile Standby / Launch New</button>` : ''}`
-   }
-   <div class="ctrl-grid">
-    ${inPrev ? `<button class="ctrl-btn" style="grid-column:1/-1;background:#ffdf5d;color:#2b0d57" onclick="ctl('skip_preview')">⏭️ Open Answers Now</button>` : ''}
-    ${ph === 'question' && S.qtype !== 'info' ? `
-     <button class="ctrl-btn" onclick="ctl('pause')">${S.paused ? '▶️ Resume' : '⏸️ Pause'}</button>
-     <button class="ctrl-btn" onclick="ctl('add_time',-10)">⏱️ -10s</button>
-     <button class="ctrl-btn" onclick="ctl('add_time',10)">⏱️ +10s</button>
-     <button class="ctrl-btn" onclick="ctl('add_time',30)">⏱️ +30s</button>
-    ` : ''}
-    ${!isCaseGame ? `<button class="ctrl-btn ${S.auto ? 'on' : ''}" onclick="ctl('toggle_auto')">⏭️ Auto: ${S.auto ? 'ON' : 'Off'}</button>` : ''}
-    <button class="ctrl-btn" onclick="addBots(5)">🤖 +5 Bots</button>
-    <button id="awakeBtn" class="ctrl-btn" onclick="toggleAwake()">☀️ Awake: <span id="awakeState">ON</span></button>
+   <div class="stage-body">
+    ${pendHtml}
+    ${stageCard}
+    ${noteHtml}
+    ${toolsHtml}
    </div>
-   ${timerSetRow}
-   ${autoSetRow}
+   ${dockHtml}
   `;
   setAwakeLabel();
  }
@@ -492,7 +1218,8 @@ async function pollOnce(){
    }
    if(lastKey !== 'unpaired'){
     lastKey = 'unpaired';
-    $.innerHTML = `<h2>🕹️ Host Remote</h2><p class="sub">Open the <b>📱 Remote</b> button on your Host screen to pair this phone with your live game.</p>`;
+    setHudStatus('unpaired');
+    $.innerHTML = `<div class="stage-body"><div class="card" style="text-align:center;margin-top:16px"><div style="font-size:2.6em">📱</div><h2>Pair Your Phone Remote</h2><p class="sub">Click the <b>📱 Remote</b> button on your computer's Host screen and scan the QR code to pair this phone.</p></div></div>`;
    }
    return;
   }
@@ -518,11 +1245,13 @@ async function pollOnce(){
    }
    if(lastKey !== 'ended'){
     lastKey = 'ended';
-    $.innerHTML = `<h2>Game ended or not found</h2>`;
+    setHudStatus('unpaired');
+    $.innerHTML = `<div class="stage-body"><div class="card" style="text-align:center;margin-top:16px"><div style="font-size:2.4em">😴</div><h2>Session Ended</h2><p class="sub">This game has closed or is no longer active.</p></div></div>`;
    }
    return;
   }
   S = await r.json();
+  pollStamp = performance.now();
   if(S.repaired && S.repaired.pin && S.repaired.pin !== pin){
    pin = S.repaired.pin;
    host = S.repaired.host;
@@ -567,18 +1296,18 @@ let wakeLock = null;
 function setAwakeLabel(txt){
  const el = document.getElementById('awakeState'), b = document.getElementById('awakeBtn');
  const off = localStorage.getItem('brainrush_awake') === '0';
- if(el) el.textContent = txt || (off ? 'Off' : (wakeLock ? 'ON' : 'ON (waiting)'));
- if(b) b.classList.toggle('on', !off && !!wakeLock);
+ if(el) el.textContent = txt || (off ? 'Off' : (wakeLock ? 'ON' : 'ON'));
+ if(b) b.classList.toggle('on', !off);
 }
 async function acquireWake(){
  if(localStorage.getItem('brainrush_awake') === '0') return;
- if(!('wakeLock' in navigator)){ setAwakeLabel('Not supported'); return; }
+ if(!('wakeLock' in navigator)){ setAwakeLabel('N/A'); return; }
  if(wakeLock || document.visibilityState !== 'visible') return;
  try{
   wakeLock = await navigator.wakeLock.request('screen');
   wakeLock.addEventListener('release', ()=>{ wakeLock = null; setAwakeLabel(); });
   setAwakeLabel();
- }catch(e){ wakeLock = null; setAwakeLabel('Blocked'); }
+ }catch(e){ wakeLock = null; setAwakeLabel(); }
 }
 function toggleAwake(){
  const on = localStorage.getItem('brainrush_awake') !== '0';
