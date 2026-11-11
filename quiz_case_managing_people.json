@@ -1,0 +1,146 @@
+{
+ "title": "Case Study: The Star Performer & The Silent Team (Managing People)",
+ "questions": [
+  {
+   "q": "Chapter 1: Inheriting Harborlight's Top Team",
+   "type": "info",
+   "topic": "Managing People",
+   "body": "Maya Lin has just been promoted to Director of Client Solutions at Harborlight Analytics, an 85-person data consulting firm. Two weeks into her new role, she faces annual performance calibration AND a firm-wide 10% budget trim requiring her to eliminate one position on her 9-person team.\n\nHer top producer, Senior Engagement Lead Marcus Vance, brings in 38% of the team's billable revenue and is praised by Harborlight's two biggest clients. Every previous manager rated Marcus \"Exceeds Expectations.\"\n\nDuring Maya's 1-on-1 listening tour, however, data scientist Elena Rostova and junior analyst Sam Patel independently share troubling patterns: Marcus routinely changes specs at 10 PM, presents Elena's models to executives under his sole name, and belittles teammates in Slack when they raise questions. Three analysts have transferred or quit from Marcus's pod in 14 months.\n\nExhibit A — Pod Metrics: Marcus's pod: 138% of revenue quota ($2.4M), 42% annual turnover, team pulse 2.6 / 5.0. Other pods: 98% of quota, 8% turnover, pulse 4.3 / 5.0.\nExhibit B — Email from VP of Sales: \"Congrats on the role, Maya! Assuming Marcus is a lock for Principal tomorrow — two $1.8M client renewals next month depend on him.\"\n\n(Fictional case written for classroom discussion.)",
+   "roles": [
+    {
+     "name": "Elena Rostova (Data Scientist)",
+     "text": "You built the forecasting engine Marcus presented to the CEO with only his name on the deck. You have an external job offer expiring Monday; you will stay only if Maya shows that credit and fairness actually matter here."
+    },
+    {
+     "name": "Marcus Vance (Star Lead)",
+     "text": "You work 65-hour weeks, rescue tough client accounts, and bring in the revenue that pays everyone's salary. You believe high standards feel uncomfortable to people who aren't ready for big-league consulting."
+    },
+    {
+     "name": "VP of Sales & Partnerships",
+     "text": "Two flagship renewals ($1.8M) close next month and both clients specifically asked for Marcus. Losing him right now could trigger wider layoffs across the company."
+    },
+    {
+     "name": "HR Business Partner",
+     "text": "Two exit interviews last year mentioned Marcus's 'abrasive style,' but his former manager never documented a single warning — on paper, Marcus has a spotless record."
+    },
+    {
+     "name": "Sam Patel (First-Year Analyst)",
+     "text": "You joined four months ago. Teammates rate you collaborative and dependable, but your billable hours look low because Marcus hoards client-facing tasks. Under 'last in, first out,' your job is most at risk."
+    }
+   ],
+   "note": "Give students 90–120 seconds to read silently and check their private role card on their phone. Ask: Why did previous managers rate Marcus 'Exceeds Expectations' despite 42% turnover? Do not reveal role cards yet."
+  },
+  {
+   "q": "Decision Point 1: Principal nominations are due tomorrow morning. What should Maya do?",
+   "type": "poll",
+   "topic": "Fairness & Standards",
+   "a": [
+    "Nominate Marcus based on his 138% revenue results, and coach his behavior privately",
+    "Pause Marcus's nomination, document the conduct & credit concerns, and set clear conditions",
+    "Nominate Elena for promotion instead and tell Marcus candidly why his nomination is on hold",
+    "Request a 72-hour extension to audit project contributions and past exit interviews first"
+   ],
+   "lenses": [
+    "Utilitarian / results-first lens (protects revenue now)",
+    "Procedural justice lens (standards apply equally to stars)",
+    "Distributive justice & moral courage lens (reward real contribution)",
+    "Due-process & prudence lens (verify evidence before acting)"
+   ],
+   "note": "Use 'Defend your side!' to hear from two different choices. Ask: What cultural message does an organization send when it promotes someone whose team has 42% turnover?"
+  },
+  {
+   "q": "Chapter 2: Commit Logs & an Ultimatum",
+   "type": "info",
+   "topic": "Managing People",
+   "body": "Maya reviews project repositories and slide version histories before Friday's calibration. On the flagship Apex Health pitch, Elena authored 85% of the analytical code and slides, Sam built the data validation pipeline, and Marcus edited only the title slide and pricing table — after removing Elena's and Sam's names from the cover.\n\nWhen Maya meets privately with Marcus to share specific, factual feedback, he leans back and says: \"Clients buy one throat to choke, not a group project. Look — a competitor offered me a Partner track yesterday. Confirm my Principal promotion by Friday at 5 PM, or I resign Monday, and Apex Health will likely follow me.\"\n\nMeanwhile, Finance reminds Maya that one salary slot on her team must be cut by Friday. Keeping and promoting Marcus means laying off Sam — and likely losing Elena on Monday. Letting Marcus walk frees enough budget to keep Sam, promote Elena, and backfill a collaborative senior lead, but puts Q1 renewals at immediate risk.\n\nExhibit C — Contribution Log (Apex Pitch): Elena 47 commits · Sam 11 commits · Marcus 3 commits (removed co-author credits 18 minutes before client meeting).",
+   "note": "Pause and ask: How does seeing the timestamped commit log change Maya's ethical obligation? When an employee issues an ultimatum to bypass behavioral standards, what is at stake?"
+  },
+  {
+   "q": "Rank Maya's ethical responsibilities in managing her people, from MOST important (#1) to LEAST (#6):",
+   "type": "rank",
+   "topic": "Competing Responsibilities",
+   "a": [
+    "Truthful credit attribution and honest performance evaluations",
+    "Psychological safety and respectful day-to-day treatment on the team",
+    "Protecting junior staff (Sam & Elena) from paying for senior misconduct",
+    "Fair due process — giving Marcus clear facts rather than rumors",
+    "Protecting client revenue that sustains company-wide jobs",
+    "Meeting the VP of Sales's short-term expectations"
+   ],
+   "note": "Look at where 'Fair due process' and 'Protecting client revenue' land in the class average. Discuss why ethical people management requires fairness even toward someone behaving badly."
+  },
+  {
+   "q": "In 1–2 sentences: what should Maya say directly to Marcus in response to his ultimatum?",
+   "type": "open",
+   "topic": "Candid Conversations",
+   "note": "Remind students their responses appear anonymously, then everyone gets 2 votes on their phone for the most effective leadership response. Highlight answers that are firm on integrity without being disrespectful."
+  },
+  {
+   "q": "Decision Point 2: It is Friday at 4 PM. Which people-and-budget decision does Maya submit?",
+   "type": "poll",
+   "topic": "Moral Courage",
+   "a": [
+    "Decline Marcus's ultimatum; if he leaves, use his salary slot to keep Sam and promote Elena",
+    "Hold the promotion, put Marcus on a 90-day conduct & credit agreement, and propose cutting vendor/travel spend instead of Sam",
+    "Promote Marcus to protect Q1 revenue, lay off Sam with generous severance, and promise Elena the next promotion",
+    "Bring the documented evidence to the CEO and HR so senior leadership shares accountability for client transitions"
+   ],
+   "lenses": [
+    "Integrity & cultural stewardship lens",
+    "Restorative accountability & care lens",
+    "Short-term utilitarian compromise lens",
+    "Institutional transparency & governance lens"
+   ],
+   "note": "Compare Option 1, Option 2, and Option 4. Ask whoever played Elena's or Sam's role how Option 3 would feel from their seat — now invite students to reveal their role cards!"
+  },
+  {
+   "q": "Debrief: What Happened Next (Fictional Outcome)",
+   "type": "info",
+   "topic": "Managing People",
+   "body": "Maya declined to nominate Marcus for Principal, documented the credit removal with HR, and briefed the CEO and VP of Sales ahead of time with a client-transition plan. She told Marcus calmly: \"I value your client work, and I want you to succeed here — but taking credit for teammates' work violates our standards, and I won't trade team integrity for an ultimatum.\"\n\nMarcus resigned the following week. Maya immediately introduced Elena to Apex Health as the technical architect behind their forecasting model; impressed by her depth, Apex renewed its contract, while the smaller second account left — costing the team 11% of Q1 revenue.\n\nMarcus's vacated budget spared Sam's role and funded Elena's promotion. Over the next year, team turnover dropped to 0%, voluntary cross-pod collaboration surged, and Maya's team hit 114% of annual target.\n\nLeadership Takeaway: Culture is defined by the worst behavior a leader is willing to reward.",
+   "note": "Emphasize that Maya did NOT get a cost-free win — she lost an account in Q1 and had to prepare executives before Marcus quit. Ask: What systems prevent 'toxic stars' from going undocumented for years?"
+  },
+  {
+   "q": "Concept Check: Past managers ignored exit interviews about Marcus because he hit 138% of quota. What ethical trap is this?",
+   "a": [
+    "Procedural justice (applying transparent rules to everyone)",
+    "Motivated blindness (overlooking unethical behavior when it benefits our goals)",
+    "Psychological safety (making it safe to take interpersonal risks)",
+    "Servant leadership (putting employee growth ahead of ego)"
+   ],
+   "c": 1,
+   "topic": "Behavioral Ethics",
+   "quote": "Motivated blindness occurs when leaders overlook misconduct by high performers because those performers help hit short-term targets."
+  },
+  {
+   "q": "Concept Check: In management ethics, ensuring fair, consistent, evidence-based processes for promotions and layoffs is called:",
+   "a": [
+    "Survivorship bias",
+    "Groupthink",
+    "Procedural justice",
+    "Moral licensing"
+   ],
+   "c": 2,
+   "topic": "Organizational Justice",
+   "quote": "Employees judge leaders not only by outcomes (distributive justice) and respect (interactional justice), but by whether rules are applied fairly to everyone (procedural justice)."
+  },
+  {
+   "q": "Closing Reflection: Which people-management practice does the most to build an ethical team culture?",
+   "type": "poll",
+   "topic": "Leadership Practice",
+   "a": [
+    "Evaluating 'how' results are achieved with equal weight to 'what' numbers are hit",
+    "Sharing credit publicly and giving tough feedback privately and early",
+    "Documenting conduct patterns honestly instead of passing problems to the next manager",
+    "Protecting truth-tellers and junior staff when power dynamics are unequal"
+   ],
+   "lenses": [
+    "Accountability systems lens",
+    "Interactional dignity lens",
+    "Stewardship & candor lens",
+    "Care & power-stewardship lens"
+   ],
+   "note": "Wrap up by asking two students which single habit they want to practice in their own teams or workplaces."
+  }
+ ]
+}
