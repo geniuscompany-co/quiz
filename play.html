@@ -455,6 +455,8 @@ function render(){
   const qn0 = `<div><span class="qnum">Question ${S.index+1} of ${S.total}</span></div>`;
   $.innerHTML = S.redemption
    ? `<div class="big">${qn0}🔄 REDEMPTION!<br><small>The question the class missed most is back for a second chance — worth DOUBLE points!</small></div>${reactBar()}`
+   : S.speed
+   ? `<div class="big">${qn0}⚡ SPEED ROUND!<br><small>5 rapid-fire questions (${S.speed_time||5}s each) — stay sharp!</small></div>${reactBar()}`
    : `<div class="big">${qn0}🎡 Mystery Wheel!<br><small>Watch the big screen to see what's in play…</small></div>${reactBar()}`;
  } else if(S.phase=='question'){
   if(S.index !== iceBrokenQ && m.frozen && !inPrev && !m.answered){
@@ -469,7 +471,7 @@ function render(){
    <p style="font-size:1.4em;font-weight:900;color:#ffdf5d">Tap <span id="iceRem">5</span> times to shake off the snow!</p>
   </div>` : '';
   const qn = `<div><span class="qnum">Question ${S.index+1} of ${S.total}</span></div>` + exhibitsPhone(S.exhibits);
-  const whl = qn + (S.case ? '<div><span class="wheel-pill">🗳️ Case study — no single right answer</span></div>' : '') + (S.speed ? '<div><span class="speed-pill">⚡ SPEED ROUND — 5 seconds!</span></div>' : '') + (S.qtype==='zoom' ? '<div><span class="wheel-pill">🔍 Picture guess — watch the big screen!</span></div>' : '') + (S.wheel_mod ? `<div><span class="wheel-pill">🎡 ${esc(S.wheel_mod)}</span></div>` : '')
+  const whl = qn + (S.case ? '<div><span class="wheel-pill">🗳️ Case study — no single right answer</span></div>' : '') + (S.speed ? `<div><span class="speed-pill">⚡ SPEED ROUND — ${S.qtime||S.speed_time||5} seconds!</span></div>` : '') + (S.qtype==='zoom' ? '<div><span class="wheel-pill">🔍 Picture guess — watch the big screen!</span></div>' : '') + (S.wheel_mod ? `<div><span class="wheel-pill">🎡 ${esc(S.wheel_mod)}</span></div>` : '')
    + (S.team_battle ? `<div><span class="team-pill">🤝 TEAM BATTLE — ${inPrev?'discuss with your team now!':'majority answer earns +300 each'}</span></div>` : '')
    + (S.tiebreak ? `<div><span class="hot-pill">⚔️ SUDDEN DEATH TIEBREAKER</span></div>` : '');
   const dbl = S.redemption ? `<div class="double-pill">🔄 REDEMPTION BONUS (2x)! 🔄</div>` : S.boss ? `<div class="double-pill">🎰 FINAL BOSS WAGER! 🎰</div>` : (S.double || m.active_2x) ? `<div class="double-pill">⚡ ${S.double && m.active_2x ? '4x' : 'DOUBLE'} POINTS ACTIVE! ⚡</div>` : '';

@@ -312,6 +312,20 @@ body.is-presenter-console #metaBar,body.is-presenter-console #lateJoin{display:n
 .remote-url-row button,.remote-url-row a.rbtn{margin:0;padding:7px 12px;font-size:.86em;border-radius:8px;background:#ffffff28;color:#fff;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;gap:4px;border:1px solid #fff3;cursor:pointer;white-space:nowrap}
 .remote-url-row button:hover,.remote-url-row a.rbtn:hover{background:#ffffff3d}
 .remote-qr-box{display:none;align-items:center;gap:14px;margin-top:10px;padding-top:10px;border-top:1px solid #fff2;flex-wrap:wrap}
+.case-timers{margin-top:12px;background:#0005;border:1px solid #fff3;border-radius:12px;padding:10px 13px;text-align:left}
+.case-timers-hd{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;font-size:.82em;text-transform:uppercase;letter-spacing:.8px;font-weight:800;color:#ffdf5d;margin-bottom:8px}
+.case-timers-hd small{text-transform:none;letter-spacing:0;color:#fffb;font-weight:600}
+.case-timers-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+@media (max-width:600px){.case-timers-grid{grid-template-columns:1fr 1fr}}
+.ct-item{display:flex;align-items:center;justify-content:space-between;gap:6px;background:#fff1;border:1px solid #fff2;border-radius:9px;padding:6px 10px;font-size:.86em;font-weight:700}
+.ct-item input[type=number]{width:54px;font-size:.98em;padding:5px 6px;border-radius:7px;border:0;text-align:center;font-weight:800;color:#2b0d57;background:#fff;margin:0}
+.mode-trow{display:none;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;background:#0004;border:1px solid #fff2;border-radius:9px;padding:8px 12px;margin-bottom:10px;font-size:.88em;font-weight:700}
+.tset-wrap{display:inline-flex;align-items:center;gap:4px;background:#0005;border:1px solid #fff3;border-radius:99px;padding:3px 6px 3px 10px;font-size:.9em;font-weight:700}
+.tset-wrap input[type=number]{width:52px;padding:4px 5px;border-radius:6px;border:0;text-align:center;font-weight:800;font-size:.95em;color:#2b0d57;background:#fff;margin:0}
+.tset-wrap .btn-sm{margin:0;padding:5px 12px;font-size:.88em}
+.disc-ctrl{display:inline-flex;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap;margin-top:8px}
+.disc-ctrl input[type=number]{width:56px;padding:5px 6px;border-radius:7px;border:0;text-align:center;font-weight:800;font-size:.95em;color:#2b0d57;background:#fff;margin:0}
+.disc-ctrl .btn-sm{margin:0;padding:6px 13px;font-size:.9em}
 </style></head><body>
 <button id="fsBtn" onclick="toggleFullscreen()">⛶ Fullscreen (F)</button>
 <div class="late-join" id="lateJoin">
@@ -344,6 +358,9 @@ body.is-presenter-console #metaBar,body.is-presenter-console #lateJoin{display:n
    </select></label>
   </div>
   <button id="autoBtn" class="quiz-only" style="display:none" onclick="hostCtl('toggle_auto')"><span>⏭️ Auto-Advance</span><span class="state" id="autoState">Off</span></button>
+  <div id="autoMenuRow" class="voice-cfg quiz-only" style="display:none" onclick="event.stopPropagation()">
+   <label>⏭️ Wait time <span style="display:inline-flex;align-items:center;gap:4px"><input id="menuAutoSec" type="number" min="2" max="120" value="7" style="width:52px;padding:4px 6px;border-radius:6px;border:0;text-align:center;font-weight:800;color:#2b0d57" onchange="if(pin&&host)hostCtl('set_auto_time',parseInt(this.value,10)||7)">s</span></label>
+  </div>
   <button onclick="cycleTheme()"><span>🎨 Visual Theme</span><span class="state" id="themeState">Purple</span></button>
    <button id="musicBtn" onclick="cycleMusic()"><span>🎵 Background Music</span><span class="state" id="musicState">Classic</span></button>
    <button id="awakeBtn" onclick="toggleAwake()"><span>☀️ Keep Screen Awake</span><span class="state" id="awakeState">ON</span></button>
@@ -362,7 +379,7 @@ body.is-presenter-console #metaBar,body.is-presenter-console #lateJoin{display:n
    <button onclick="closeNavMenu();openGuide(document.body.classList.contains('sec-case')?'case':undefined)"><span>📖 Feature Guide</span><span class="state">What's what</span></button>
    <button id="addQuizMenuBtn" onclick="closeNavMenu();openQuizModal()"><span><span class="quiz-only">➕ Create / Upload Quiz</span><span class="case-only">📖 Create / Edit Case Study</span></span><span class="state">New</span></button>
   <div class="menu-sep"></div>
-  <div class="menu-kb">⌨️ <b>Shortcuts:</b> [Space/→] Next &middot; [P] Pause &middot; [+] +10s &middot; [M] Mute &middot; [V] Voice</div>
+  <div class="menu-kb">⌨️ <b>Shortcuts:</b> [Space/→] Next &middot; [P] Pause &middot; [+/-] ±10s &middot; [M] Mute &middot; [V] Voice</div>
  </div>
 </div>
 <canvas id="confetti"></canvas>
@@ -424,8 +441,8 @@ body.is-presenter-console #metaBar,body.is-presenter-console #lateJoin{display:n
    <button class="btn-sm" style="margin:0" onclick="aiGenerate()">✨ Generate draft ↓</button> <span id="aiMsg" style="font-weight:700"></span>
   </div>
   <label><b><span class="quiz-modal-only">Or type/paste questions (one per block, mark correct answer with *, optional Image: or Quote:):</span><span class="case-modal-only">Case slides (one slide per blank-line block):</span></b></label>
-  <div class="quiz-modal-only" style="font-size:.8em;opacity:.75;margin:2px 0 6px">Extras: <code>Type: tf</code> (<code>*True</code>/<code>*False</code>), <code>Type: text</code>, <code>Type: order</code>, <code>Type: zoom</code> + <code>Image:</code>. Answer pictures: <code>Paris | https://…/paris.jpg</code></div>
-  <div class="case-modal-only" style="font-size:.8em;opacity:.82;margin:2px 0 6px">Supported slide types: <code>Type: info</code> (<code>Body:</code> paragraphs, <code>Role: Title | Private brief</code>), <code>Type: poll</code> (<code>Option :: Ethical lens</code>), <code>Type: rank</code> (2–6 priorities), <code>Type: open</code> (1–2 sentence peer-voted response), optional MCQ (mark right answer with <code>*</code>). Add <code>Exhibit: url | caption</code>, <code>Topic:</code>, or private host <code>Note:</code> on any slide.</div>
+  <div class="quiz-modal-only" style="font-size:.8em;opacity:.75;margin:2px 0 6px">Extras: <code>Type: tf</code> (<code>*True</code>/<code>*False</code>), <code>Type: text</code>, <code>Type: order</code>, <code>Type: zoom</code> + <code>Image:</code>, custom per-question timer <code>Time: 45</code>. Answer pictures: <code>Paris | https://…/paris.jpg</code></div>
+  <div class="case-modal-only" style="font-size:.8em;opacity:.82;margin:2px 0 6px">Supported slide types: <code>Type: info</code> (<code>Body:</code> paragraphs, <code>Role: Title | Private brief</code>), <code>Type: poll</code> (<code>Option :: Ethical lens</code>), <code>Type: rank</code> (2–6 priorities), <code>Type: open</code> (1–2 sentence peer-voted response), optional MCQ (mark right answer with <code>*</code>). Add <code>Time: 90</code> (custom seconds for that slide), <code>Exhibit: url | caption</code>, <code>Topic:</code>, or private host <code>Note:</code> on any slide.</div>
   <textarea id="customText" placeholder="What is the capital of France?
 Berlin
 *Paris
@@ -503,12 +520,26 @@ Quote: Paris has been the capital since 987 CE."></textarea>
   <div id="caseHint" style="display:none"></div>
   <div class="case-spec case-only">
    <b>📖 Case Study Session (<span id="cSlideCnt">—</span> slides in chapter order)</b><br>
-   Uses only Case Study tools: untimed <b>Chapters</b> &amp; phone <b>Case File</b>, private <b>Stakeholder Roles</b>, <b>Ethical-Lens Polls</b> (45s + 60s debate timer), <b>Priority Rankings</b> (60s), <b>Anonymous Open Responses</b> with peer voting (120s), and optional <b>Concept Checks</b>.
+   Uses only Case Study tools: untimed <b>Chapters</b> &amp; phone <b>Case File</b>, private <b>Stakeholder Roles</b>, <b>Ethical-Lens Polls</b> (<span id="cSpecPoll">45</span>s + <span id="cSpecDisc">60</span>s debate timer), <b>Priority Rankings</b> (<span id="cSpecRank">60</span>s), <b>Anonymous Open Responses</b> with peer voting (<span id="cSpecOpen">120</span>s), and optional <b>Concept Checks</b> (<span id="cSpecCheck">20</span>s).
+  </div>
+  <div class="case-timers case-only" oninput="syncCaseTimerSpec()">
+   <div class="case-timers-hd">
+    <span>⏱️ Case Study Timers (Editable Pre-Game &amp; Live)</span>
+    <small>Per-slide override: add <code>Time: 90</code> in editor</small>
+   </div>
+   <div class="case-timers-grid">
+    <label class="ct-item" title="Voting timer on Decision Poll slides"><span>🗳️ Poll</span><span><input id="cPollTime" type="number" min="5" max="900" value="45">s</span></label>
+    <label class="ct-item" title="Default debate / discussion countdown timer"><span>🎤 Discuss</span><span><input id="cDiscussTime" type="number" min="5" max="900" value="60">s</span></label>
+    <label class="ct-item" title="Timer for Priority Ranking slides"><span>📊 Ranking</span><span><input id="cRankTime" type="number" min="5" max="900" value="60">s</span></label>
+    <label class="ct-item" title="Writing timer for Open Response slides"><span>✍️ Writing</span><span><input id="cOpenTime" type="number" min="5" max="900" value="120">s</span></label>
+    <label class="ct-item" title="Timer for scored Concept-Check MCQs"><span>✅ Check</span><span><input id="cTime" type="number" min="5" max="900" value="20">s</span></label>
+    <label class="ct-item" title="Seconds to read the prompt before choices open (0 = instant)"><span>👀 Preview</span><span><input id="cPrevTime" type="number" min="0" max="120" value="5">s</span></label>
+   </div>
   </div>
    <div class="quick-bar">
    <label class="quiz-only">📝 Questions: <input id="qCount" type="number" min="1" max="200" value="" placeholder="—"> <span id="qMax" style="opacity:.8">/ —</span></label>
-   <label class="quiz-only">⏱️ Timer: <input id="qTime" type="number" min="5" max="120" value="15"><span style="opacity:.8">s</span></label>
-   <label class="case-only" title="Applies only to scored Concept-Check MCQs inside a case; Polls use 45s, Rankings 60s, Open Writing 120s, Chapters untimed">⏱️ Concept-check timer: <input id="cTime" type="number" min="5" max="120" value="20"><span style="opacity:.8">s</span></label>
+   <label class="quiz-only" title="Seconds players get to answer each question">⏱️ Timer: <input id="qTime" type="number" min="5" max="900" value="15"><span style="opacity:.8">s</span></label>
+   <label class="quiz-only" title="Reading preview before answer buttons open (set 0 for instant)">👀 Preview: <input id="qPrevTime" type="number" min="0" max="120" value="5"><span style="opacity:.8">s</span></label>
    <button type="button" class="drawer-toggle" id="advBtn" onclick="toggleAdvPanel()">⚙️ Options <span id="optSummary" style="background:#26890c;padding:2px 8px;border-radius:99px;font-size:.85em">0 active</span> <span id="advCaret">▾</span></button>
   </div>
   <div class="adv-panel" id="advPanel" onchange="updateOptSummary()">
@@ -520,18 +551,30 @@ Quote: Paris has been the capital since 987 CE."></textarea>
     <label class="mode-pill quiz-only"><input id="qRedemp" type="checkbox"> 🔄 Redemption Round</label>
     <label class="mode-pill quiz-only"><input id="qSabotage" type="checkbox"> ⛄ Snowballs</label>
     <label class="mode-pill quiz-only"><input id="qWheel" type="checkbox"> 🎡 Mystery Wheel</label>
-    <label class="mode-pill"><input id="qTeams" type="checkbox" onchange="if(!this.checked){document.getElementById('qBattle').checked=false}"> <span class="quiz-only">🛡️ Team Mode</span><span class="case-only">🛡️ Discussion Teams</span></label>
+    <label class="mode-pill"><input id="qTeams" type="checkbox" onchange="if(!this.checked){document.getElementById('qBattle').checked=false;document.getElementById('battleTimeRow').style.display='none'}"> <span class="quiz-only">🛡️ Team Mode</span><span class="case-only">🛡️ Discussion Teams</span></label>
     <label class="mode-pill"><input id="qIce" type="checkbox" onchange="document.getElementById('icePromptRow').style.display=this.checked?'block':'none';updateOptSummary()"> 💭 Word Cloud Warm-Up</label>
-    <label class="mode-pill quiz-only"><input id="qAuto" type="checkbox"> ⏭️ Auto-Advance</label>
+    <label class="mode-pill quiz-only"><input id="qAuto" type="checkbox" onchange="document.getElementById('autoTimeRow').style.display=this.checked?'flex':'none';updateOptSummary()"> ⏭️ Auto-Advance</label>
     <label class="mode-pill quiz-only"><input id="qHot" type="checkbox"> 🔥 Hot Seat Rounds</label>
-    <label class="mode-pill quiz-only"><input id="qBattle" type="checkbox" onchange="if(this.checked){document.getElementById('qTeams').checked=true}updateOptSummary()"> 🤝 Team Battle (every 5th Q)</label>
+    <label class="mode-pill quiz-only"><input id="qBattle" type="checkbox" onchange="if(this.checked){document.getElementById('qTeams').checked=true}document.getElementById('battleTimeRow').style.display=this.checked?'flex':'none';updateOptSummary()"> 🤝 Team Battle (every 5th Q)</label>
     <label class="mode-pill quiz-only"><input id="qTie" type="checkbox"> ⚔️ Sudden-Death Tiebreaker</label>
-    <label class="mode-pill quiz-only"><input id="qSpeed" type="checkbox"> ⚡ Speed Round (5 rapid Qs)</label>
+    <label class="mode-pill quiz-only"><input id="qSpeed" type="checkbox" onchange="document.getElementById('speedTimeRow').style.display=this.checked?'flex':'none';updateOptSummary()"> ⚡ Speed Round (5 rapid Qs)</label>
     <label class="mode-pill quiz-only"><input id="qDbl" type="checkbox"> 💥 Double or Nothing Question</label>
     <label class="mode-pill quiz-only"><input id="qSteal" type="checkbox"> 🕵️ Steal / Swap Power-Up</label>
     <label class="mode-pill"><input id="qMod" type="checkbox"> 🛡️ Approve Names First</label>
     <label class="mode-pill"><input id="qRosterOn" type="checkbox" onchange="document.getElementById('rosterRow').style.display=this.checked?'block':'none';updateOptSummary()"> 👥 Class Roster</label>
     <label class="mode-pill"><input id="qRemote" type="checkbox" onchange="onRemoteOptChange()"> 📱 Phone Host Remote</label>
+   </div>
+   <div id="autoTimeRow" class="mode-trow quiz-only">
+    <span>⏭️ Auto-Advance Wait Timer (Results &amp; Standings):</span>
+    <label><input id="qAutoTime" type="number" min="2" max="120" value="7"> s</label>
+   </div>
+   <div id="battleTimeRow" class="mode-trow quiz-only">
+    <span>🤝 Team Battle Discussion Preview Timer:</span>
+    <label><input id="qTeamTime" type="number" min="0" max="180" value="12"> s</label>
+   </div>
+   <div id="speedTimeRow" class="mode-trow quiz-only">
+    <span>⚡ Speed Round Question Timer:</span>
+    <label><input id="qSpeedTime" type="number" min="3" max="120" value="5"> s</label>
    </div>
    <div id="icePromptRow" style="display:none;margin-bottom:12px">
     <label style="display:block;font-size:.86em;font-weight:700;opacity:.85;margin-bottom:4px">💭 Warm-Up Question:</label>
@@ -693,6 +736,7 @@ window.addEventListener('keydown', e=>{
  if(e.code==='Space' || e.code==='ArrowRight'){ if(pin && S.phase!=='final'){ e.preventDefault(); next(); } }
  else if(e.key==='p' || e.key==='P'){ if(pin && S.phase==='question') hostCtl('pause'); }
  else if(e.key==='+' || e.key==='='){ if(pin && S.phase==='question') hostCtl('add_time', 10); }
+ else if(e.key==='-' || e.key==='_'){ if(pin && S.phase==='question') hostCtl('add_time', -10); }
  else if(e.key==='m' || e.key==='M'){ toggleMute(); }
  else if(e.key==='v' || e.key==='V'){ toggleTts(); }
 });
@@ -1006,6 +1050,7 @@ function formatQuestionsBlock(qs){
   const t = q.type || 'mc';
   const lines = [q.q];
   if(t !== 'mc') lines.push('Type: '+t);
+  if(q.t && t !== 'info' && (q.t_custom || ['poll','rank','open'].includes(t))) lines.push('Time: '+q.t);
   if(t === 'info'){
    (q.body||'').split(/\n\s*\n/).forEach(p=>{ if(p.trim()) lines.push('Body: '+p.replace(/\n/g,' ').trim()); });
    (q.roles||[]).forEach(r=>lines.push('Role: '+r.name+' | '+r.text));
@@ -1107,11 +1152,12 @@ function parseCustomQuestions(raw){
    const caseNoAns = (type==='open'||type==='info');
    const maxA = (type==='order'||type==='text'||type==='rank') ? 6 : 4;
    const a = [], aimg = [], lenses = [], exhibits = [], roles = [], bodyLines = [];
-   let c = 0, quote = '', img = '', starTxt = '', topic = '', note = '';
+   let c = 0, quote = '', img = '', starTxt = '', topic = '', note = '', customT = 0;
    lines.slice(1).forEach(l=>{
     if(/^quote:/i.test(l)){ quote = l.replace(/^quote:\s*/i,''); }
     else if(/^image:/i.test(l)){ img = l.replace(/^image:\s*/i,''); }
     else if(/^type:/i.test(l)){ }
+    else if(/^timer?:/i.test(l)){ const tv = parseInt(l.replace(/^timer?:\s*/i,''), 10); if(tv > 0) customT = Math.max(5, Math.min(900, tv)); }
     else if(/^topic:/i.test(l)){ topic = l.replace(/^topic:\s*/i,''); }
     else if(/^note:/i.test(l)){ note = l.replace(/^note:\s*/i,''); }
     else if(/^body:/i.test(l)){ bodyLines.push(l.replace(/^body:\s*/i,'')); }
@@ -1133,6 +1179,7 @@ function parseCustomQuestions(raw){
     }
    });
    const out = {q, a, c, quote, img, topic, note};
+   if(customT > 0 && type !== 'info'){ out.t = customT; out.t_custom = true; }
    if(exhibits.length) out.exhibits = exhibits;
    if(type==='tf'){ out.type='tf'; out.a=['True','False']; out.c=/^f/i.test(starTxt||'t')?1:0; }
    else if(type==='text'||type==='order'){ out.type=type; out.c=0; }
@@ -1254,13 +1301,22 @@ async function create(){
  const auto = document.getElementById('qAuto');
  const picked = quizList.find(x=>x.file===qf);
  const cnt = inp ? (parseInt(inp.value, 10) || null) : null;
- const qtm = tm ? parseInt(tm.value, 10) || 15 : 15;
+ const qtm = tm ? Math.max(5, Math.min(900, parseInt(tm.value, 10) || 15)) : 15;
+ const prevEl = document.getElementById('qPrevTime');
+ const prevParsed = prevEl && prevEl.value !== '' ? parseFloat(prevEl.value) : 5;
+ const prevSec = Number.isFinite(prevParsed) ? Math.max(0, Math.min(120, prevParsed)) : 5;
+ const tbEl = document.getElementById('qTeamTime');
+ const tbParsed = tbEl && tbEl.value !== '' ? parseFloat(tbEl.value) : 12;
+ const tbSec = Number.isFinite(tbParsed) ? Math.max(0, Math.min(180, tbParsed)) : 12;
+ const spdSec = Math.max(3, Math.min(120, parseInt((document.getElementById('qSpeedTime')||{}).value, 10) || 5));
+ const autoSec = Math.max(2, Math.min(120, parseInt((document.getElementById('qAutoTime')||{}).value, 10) || 7));
  const bcnt = bots ? parseInt(bots.value, 10) || 0 : 0;
  window._lastShuffle = shuf ? shuf.checked : false;
  window.lastGame={file:qf,count:cnt}; try{ localStorage.setItem('brainrush_last', JSON.stringify(window.lastGame)); }catch(e){}
  const r=await postPw('/api/create',{
   quiz:qf, custom_questions: picked && picked.questions ? picked.questions : null,
-  count:cnt, shuffle:shuf ? shuf.checked : false, qtime:qtm, bots:bcnt,
+  count:cnt, shuffle:shuf ? shuf.checked : false, qtime:qtm, preview:prevSec,
+  team_preview:tbSec, speed_time:spdSec, auto_time:autoSec, bots:bcnt,
   teams:teams ? teams.checked : false,
   wager:wager ? wager.checked : false,
   redemption:redemp ? redemp.checked : false,
@@ -1292,6 +1348,11 @@ async function create(){
 }
 async function addBots(n=5){ensureAudio();await post('/api/bots',{pin,host,count:n});await poll()}
 async function hostCtl(action, sec=10, prompt=''){ensureAudio();await post('/api/host_ctl',{pin,host,action,sec,prompt});await poll()}
+async function applyLiveTimer(inpId){
+ const el = document.getElementById(inpId);
+ const v = el ? parseInt(el.value, 10) : 0;
+ if(v > 0 && pin && host) await hostCtl('set_time', Math.max(1, Math.min(900, v)));
+}
 async function editIcePrompt(){
  const np = window.prompt('Enter new Word Cloud Warm-Up question:', S.prompt || '');
  if(np && np.trim()) await hostCtl('set_prompt', 0, np.trim());
@@ -1300,9 +1361,11 @@ let busy=false;
 async function next(){ensureAudio();if(busy)return;busy=true;try{await post('/api/next',{pin,host});await poll()}finally{setTimeout(()=>busy=false,500)}}
 async function poll(){
  const r=await fetch('/api/state?pin='+pin+'&host='+encodeURIComponent(host||''));S=await r.json();
- const ab = document.getElementById('autoBtn'), ast = document.getElementById('autoState');
+ const ab = document.getElementById('autoBtn'), ast = document.getElementById('autoState'), amr = document.getElementById('autoMenuRow'), ams = document.getElementById('menuAutoSec');
  if(ab) ab.classList.toggle('on', !!S.auto);
  if(ast) ast.textContent = S.auto ? 'ON' : 'Off';
+ if(amr) amr.style.display = (pin && !S.case_game && S.auto) ? 'flex' : 'none';
+ if(ams && S.auto_time && document.activeElement !== ams) ams.value = S.auto_time;
  showReactions(S.reactions);handleAudio();render();updateMeta();
 }
 
@@ -1507,8 +1570,8 @@ function render(){
  if(lp && pin) lp.textContent = pin;
  const inPrev = S.phase==='question' && (S.preview_left||0) > 0;
  const k = S.phase==='question'
-  ? `q:${S.index}:${inPrev?1:0}:${window.presenterMode?1:0}:${(S.pending_list||[]).length}:${S.n||0}`
-  : JSON.stringify({...S,left:0,qtime:0,answered:0,preview_left:0,auto_left:0,intro_left:0,discuss_left:0,reactions:null, _pm:!!window.presenterMode});
+  ? `q:${S.index}:${inPrev?1:0}:${window.presenterMode?1:0}:${(S.pending_list||[]).length}:${S.n||0}:${S.discuss_left!=null?1:0}`
+  : JSON.stringify({...S,left:0,qtime:0,answered:0,preview_left:0,auto_left:0,intro_left:0,discuss_left:0,_da:S.discuss_left!=null,reactions:null, _pm:!!window.presenterMode});
  if(k==last){
   const t=document.getElementById('t');
   if(t){
@@ -1567,7 +1630,7 @@ function render(){
   if(S.speed && !S.redemption){
    $.innerHTML=`<div class="qnum">Question ${S.index+1} <small>of ${S.total}</small></div>
    <div class="redemp-screen" style="border-color:#00e5ff"><div class="redemp-big" style="color:#00e5ff">⚡ SPEED ROUND ⚡</div>
-    <p>Five rapid-fire questions — just <b>5 seconds</b> each, no reading time.</p>
+    <p>Five rapid-fire questions — just <b>${S.speed_time||5} seconds</b> each, no reading time.</p>
     <p>The leaderboard stays hidden until the round ends. Fast fingers win!</p>
     <div class="preview-bar"><div class="preview-fill" id="ib" style="width:${ipct}%"></div></div>
    </div>`;
@@ -1590,7 +1653,7 @@ function render(){
   const pct = Math.min(100, ((S.preview_left||0)/(S.preview_total||5))*100);
   const wheelBanner = S.wheel_mod ? `<div class="wheel-banner">🎡 MYSTERY WHEEL: ${esc(S.wheel_mod)}</div>` : '';
   const extraB = `${S.team_battle?`<div class="team-banner">🤝 TEAM BATTLE! Your team's most popular answer earns +300 each</div>`:''}${S.hot?`<div class="hot-banner">🔥 HOT SEAT: ${esc(S.hot.name)} — will they nail it?</div>`:''}${S.tiebreak?`<div class="tb-banner">⚔️ SUDDEN DEATH TIEBREAKER: ${(S.tb_names||[]).map(esc).join(' vs ')}</div>`:''}`;
-  const badges = `${wheelBanner}${S.speed?'<div class="speed-banner">⚡ SPEED ROUND — 5 seconds, no waiting!</div>':''}${S.dbl?'<div class="dbl-banner">💥 DOUBLE OR NOTHING — opt in on your phone!</div>':''}${extraB}${S.redemption?'<div class="redemp-banner">🔄 REDEMPTION QUESTION (MOST MISSED!) 🔄</div>':''}${S.boss?'<div class="double-banner">🎰 FINAL BOSS WAGER! 🎰</div>':S.double?'<div class="double-banner">⚡ DOUBLE POINTS! ⚡</div>':''}`;
+  const badges = `${wheelBanner}${S.speed?`<div class="speed-banner">⚡ SPEED ROUND — ${S.speed_time||5} seconds, no waiting!</div>`:''}${S.dbl?'<div class="dbl-banner">💥 DOUBLE OR NOTHING — opt in on your phone!</div>':''}${extraB}${S.redemption?'<div class="redemp-banner">🔄 REDEMPTION QUESTION (MOST MISSED!) 🔄</div>':''}${S.boss?'<div class="double-banner">🎰 FINAL BOSS WAGER! 🎰</div>':S.double?'<div class="double-banner">⚡ DOUBLE POINTS! ⚡</div>':''}`;
   if(S.qtype==='info'){
    $.innerHTML = infoScreen();
   } else if(inPrev){
@@ -1602,6 +1665,7 @@ function render(){
     <div class="preview-box" style="width:100%">
      <div class="preview-label">${S.boss?'🎰 Place your wagers & read the question…':S.team_battle?'🤝 Discuss with your team…':'👀 Read the question…'}</div>
      <div class="preview-bar"><div class="preview-fill" id="pf" style="width:${pct}%"></div></div>
+     <div class="aud-hide" style="margin-top:10px"><button class="btn-sm" onclick="hostCtl('skip_preview')">⏭️ Open Answers Now</button></div>
     </div>
    </div>`;
   } else {
@@ -1610,10 +1674,16 @@ function render(){
    <h1>${esc(S.question)}</h1>
    ${imgHtml}${exH}
    <div class="ans-reveal">
-    <div class="timer-row">
+    <div class="timer-row" style="flex-wrap:wrap">
      <button class="btn-sm aud-hide" id="pauseBtn" onclick="hostCtl('pause')">${S.paused?'▶️ Resume':'⏸️ Pause'}</button>
+     <button class="btn-sm aud-hide" onclick="hostCtl('add_time',-10)" title="Subtract 10 seconds">-10s</button>
      <div class="timer ${!S.paused&&sec<=5?'urgent':''} ${S.paused?'paused':''}" id="t">${S.paused?'⏸️ '+sec:sec}</div>
-     <button class="btn-sm aud-hide" onclick="hostCtl('add_time',10)">+10s</button>
+     <button class="btn-sm aud-hide" onclick="hostCtl('add_time',10)" title="Add 10 seconds">+10s</button>
+     <button class="btn-sm aud-hide" onclick="hostCtl('add_time',30)" title="Add 30 seconds">+30s</button>
+     <span class="tset-wrap aud-hide" title="Set timer to any custom number of seconds">
+      <input id="liveSecInp" type="number" min="1" max="900" value="${sec}" onkeydown="if(event.key==='Enter')applyLiveTimer('liveSecInp')"><span>s</span>
+      <button class="btn-sm" onclick="applyLiveTimer('liveSecInp')">Set</button>
+     </span>
     </div>
     ${answerArea()}
     <button class="aud-hide" onclick="next()">Skip</button>
@@ -1940,8 +2010,8 @@ const GUIDE = [
   ['☰ Menu – Spectator & Practice Links', 'Links for a second-screen leaderboard / word cloud and the student practice page.'],
   ['☰ Menu – Create / Upload Quiz', 'Build a quiz by typing or uploading, or load an existing quiz to edit, export as .json or delete.'],
   ['☀️ Keep Screen Awake', 'On by default: asks your browser not to let this computer dim or sleep while the host page is open and visible, so you can run the quiz from your phone remote. Toggle it in the menu. It stops working if you switch to another tab, minimize the window, or close the laptop lid.'],
-  ['⏸️ Pause / +10s / Skip', 'During a question: pause the clock, add 10 seconds, or skip to the results.'],
-  ['⌨️ Keyboard shortcuts', 'Space or → next, P pause, + add 10 seconds, M mute, V voice.'],
+  ['⏸️ Pause / -10s / +10s / +30s / Set / Skip', 'During a question or case slide: pause the clock, skip the reading preview early, subtract or add seconds, type an exact countdown and click Set, or skip to results.'],
+  ['⌨️ Keyboard shortcuts', 'Space or → next, P pause, + add 10s, - subtract 10s, M mute, V voice.'],
   ['✖ Kick', 'In the lobby, the ✖ next to a player removes them and blocks that name. Nicknames and word-cloud words are also filtered for bad language.'],
   ['📱 Late-join badge', 'During play, the top-left badge shows the PIN and a mini QR code so latecomers can join.'],
   ['▶️ Resume', 'If you refresh the host page mid-game, a Resume card brings your game back.'],
@@ -1957,7 +2027,7 @@ const GUIDE = [
  ]},
  {id:'screens', title:'🖥️ Other Screens', items:[
   ['/spectator', 'A second-screen view with the live leaderboard and word cloud. Add ?mode=board or ?mode=cloud for just one. Standings hide the current question\'s results until it ends.'],
-  ['/practice', 'Students study alone with any quiz: instant feedback, a score, an optional 20-second timer and a review of missed questions. Nothing is shared with the class.'],
+  ['/practice', 'Students study alone with any quiz: instant feedback, a score, an optional customizable countdown timer and a review of missed questions. Nothing is shared with the class.'],
   ['/remote', 'The phone host remote — pair via Options → 📱 Phone Host Remote or ☰ Menu → Phone Host Remote to pick & launch a session pre-game and control slides live.'],
   ['👁️ Phone accessibility button', 'On the join screen and in-game, cycles normal, colorblind and high-contrast colors.']
  ]}
@@ -2220,7 +2290,7 @@ function tableToQuestions(text){
  const norm = s => s.toLowerCase().replace(/[^a-z0-9]/g,'');
  const first = rows[0].map(norm);
  const hasHeader = first.some(h=>['question','q','prompt','questiontext'].includes(h));
- let col = {q:0, a:[1,2,3,4], correct:5, type:-1, topic:-1, quote:-1, note:-1, img:-1};
+ let col = {q:0, a:[1,2,3,4], correct:5, type:-1, topic:-1, quote:-1, note:-1, img:-1, time:-1};
  let body = rows;
  if(hasHeader){
   body = rows.slice(1);
@@ -2231,6 +2301,7 @@ function tableToQuestions(text){
   col.correct = idx(['correct','correctanswer','right','key','correctoption','answer']);
   col.type = idx(['type','questiontype']); col.topic = idx(['topic','tag','standard','skill','chapter','category']);
   col.quote = idx(['quote','fact','funfact','explanation','feedback']); col.note = idx(['note','notes','teachernote','teachernotes']); col.img = idx(['image','img','picture','imageurl']);
+  col.time = idx(['time','timer','seconds','duration','sec','timelimit']);
  }
  const out = [];
  body.forEach(r=>{
@@ -2242,6 +2313,8 @@ function tableToQuestions(text){
   else if(/^[1-4]$/.test(cv)) c = parseInt(cv,10) - 1;
   else { const k = a.findIndex(x=>x.toLowerCase()===cv.toLowerCase()); if(k>=0) c = k; }
   const item = {q, a, c, topic:get(col.topic), quote:get(col.quote), note:get(col.note), img:get(col.img)};
+  const tv = parseInt(get(col.time), 10);
+  if(tv > 0){ item.t = Math.max(5, Math.min(900, tv)); item.t_custom = true; }
   const ty = get(col.type).toLowerCase();
   if(['tf','truefalse','true/false'].includes(ty.replace(/[^a-z/]/g,'')) || (a.length===2 && /^(true|false)$/i.test(a[0]))){ item.type='tf'; item.a=['True','False']; item.c = /^(f|false|2)/i.test(cv) ? 1 : 0; }
   else if(ty==='text'){ item.type='text'; item.c=0; }
@@ -2617,6 +2690,14 @@ duplicateSelectedQuiz = async function(){
  if(es2 && r.file) es2.value = r.file;
 };
 
+function syncCaseTimerSpec(){
+ const map = [['cPollTime','cSpecPoll',45],['cDiscussTime','cSpecDisc',60],['cRankTime','cSpecRank',60],['cOpenTime','cSpecOpen',120],['cTime','cSpecCheck',20]];
+ map.forEach(([inpId, spId, defV])=>{
+  const el = document.getElementById(inpId), sp = document.getElementById(spId);
+  if(sp) sp.textContent = (el && parseInt(el.value, 10) > 0) ? parseInt(el.value, 10) : defV;
+ });
+}
+
 const _create0 = create;
 create = async function(){
  if(hostSection !== 'case') return _create0();
@@ -2625,7 +2706,15 @@ create = async function(){
  if(!qf){ alert('Please select a Case Study first.'); if(sel) sel.focus(); return; }
  ensureAudio(); sfxJoin();
  const picked = quizList.find(x=>x.file===qf);
- const ctm = parseInt((document.getElementById('cTime')||{}).value, 10) || 20;
+ const clampSec = (id, defV, lo=5, hi=900) => Math.max(lo, Math.min(hi, parseInt((document.getElementById(id)||{}).value, 10) || defV));
+ const ctm = clampSec('cTime', 20);
+ const pollSec = clampSec('cPollTime', 45);
+ const discSec = clampSec('cDiscussTime', 60);
+ const rankSec = clampSec('cRankTime', 60);
+ const openSec = clampSec('cOpenTime', 120);
+ const cpEl = document.getElementById('cPrevTime');
+ const cpParsed = cpEl && cpEl.value !== '' ? parseFloat(cpEl.value) : 5;
+ const cPrevSec = Number.isFinite(cpParsed) ? Math.max(0, Math.min(120, cpParsed)) : 5;
  const bcnt = parseInt((document.getElementById('qBots')||{}).value, 10) || 0;
  const teams = !!(document.getElementById('qTeams') && document.getElementById('qTeams').checked);
  const ice = !!(document.getElementById('qIce') && document.getElementById('qIce').checked);
@@ -2637,7 +2726,10 @@ create = async function(){
  const r = await postPw('/api/create', {
   quiz: qf,
   custom_questions: picked && picked.questions ? picked.questions : null,
-  count: null, shuffle: false, qtime: ctm, bots: bcnt,
+  count: null, shuffle: false, qtime: ctm, preview: cPrevSec,
+  case_times: {poll: pollSec, rank: rankSec, open: openSec},
+  discuss_time: discSec,
+  bots: bcnt,
   teams: teams,
   wager: false, redemption: false, sabotage: false, wheel: false,
   hotseat: false, team_battle: false, tiebreak: false,
@@ -2669,10 +2761,23 @@ function exhibitsHtml(list, big){
  if(!list || !list.length) return '';
  return `<div class="exh ${big?'big':''}">${list.map(e=>`<figure><img src="${esc(e.url)}" alt="${esc(e.caption||'')}">${e.caption?`<figcaption>${esc(e.caption)}</figcaption>`:''}</figure>`).join('')}</div>`;
 }
+function discussCtrlHtml(inpId, btnLbl){
+ const defSec = S.discuss_default || 60;
+ const active = S.discuss_left != null;
+ return `<span class="disc-ctrl aud-hide">
+  <input id="${inpId}" type="number" min="5" max="900" value="${defSec}" onkeydown="if(event.key==='Enter')startDiscussFrom('${inpId}')"><span>s</span>
+  <button class="btn-sm" onclick="startDiscussFrom('${inpId}')">${btnLbl||'⏱️ Start Discussion'}</button>
+  ${active ? `<button class="btn-sm" onclick="addDiscuss(-15)">-15s</button><button class="btn-sm" onclick="addDiscuss(30)">+30s</button><button class="btn-sm" onclick="startDiscuss(0)">⏹️ Clear</button>` : ''}
+ </span>`;
+}
 function infoScreen(){
  const paras = (S.body||'').split(/\n\s*\n/).map(p=>`<p>${esc(p).replace(/\n/g,'<br>')}</p>`).join('');
+ const tBox = (!IS_AUDIENCE || S.discuss_left != null)
+  ? `<div class="defend" style="padding:8px 14px;margin:10px auto">${S.discuss_left!=null?'🗣️ <b>Timer:</b> ':''}<span id="dtimer" style="font-weight:900;font-size:1.3em;color:#ffdf5d">${discussText()}</span> ${discussCtrlHtml('infoDiscInp','⏱️ Start Chapter Timer')}</div>`
+  : '';
  return `<div class="qnum">📖 Case slide ${S.index+1} <small>of ${S.total}</small></div>
  <div class="case-card"><h1 style="margin-top:.1em">${esc(S.question)}</h1><div class="case-body">${paras}</div>${exhibitsHtml(S.exhibits, true)}</div>
+ ${tBox}
  <div class="speed-banner" style="background:linear-gradient(90deg,#6a1b9a,#4527a0);animation:none">📱 The full case is on every phone under "📁 Case file"</div>
  <div class="aud-hide"><button onclick="next()">Continue ➔</button></div>`;
 }
@@ -2715,7 +2820,11 @@ resultExtras = function(){
  if(S.qtype==='poll'){
   const defs = (S.defenders||[]).length ? `🎤 <b>Defend your side!</b><br>${S.defenders.map(d=>`${esc(d.name)} speaks for <b>${sh[d.side]}${esc(S.answers[d.side])}</b>`).join('<br>')}<br>` : '';
   if(defs || !IS_AUDIENCE || S.discuss_left != null){
-   h += `<div class="defend">${defs}<button class="btn-sm aud-hide" style="margin-top:8px" onclick="startDiscuss(60)">⏱️ Start 60-second discussion</button>${S.discuss_left!=null?` <button class="btn-sm aud-hide" style="margin-top:8px" onclick="startDiscuss(0)">⏹️ Clear</button>`:''} <span id="dtimer" style="font-weight:900;font-size:1.3em;color:#ffdf5d">${discussText()}</span></div>`;
+   h += `<div class="defend">${defs}${!defs&&S.discuss_left!=null?'🗣️ <b>Discussion:</b> ':''}<span id="dtimer" style="font-weight:900;font-size:1.3em;color:#ffdf5d">${discussText()}</span> ${discussCtrlHtml('discussSecInp','⏱️ Start Discussion')}</div>`;
+  }
+ } else if(S.qtype==='rank' || S.qtype==='open'){
+  if(!IS_AUDIENCE || S.discuss_left != null){
+   h += `<div class="defend" style="padding:8px 14px">${S.discuss_left!=null?'🗣️ <b>Discussion:</b> ':''}<span id="dtimer" style="font-weight:900;font-size:1.3em;color:#ffdf5d">${discussText()}</span> ${discussCtrlHtml('discussSecInp','⏱️ Start Debrief Timer')}</div>`;
   }
  }
  return h;
@@ -2723,15 +2832,24 @@ resultExtras = function(){
 async function startDiscuss(sec){
  if(pin && host) await hostCtl('discuss', sec);
 }
+async function startDiscussFrom(inpId){
+ const el = document.getElementById(inpId);
+ const sec = Math.max(5, Math.min(900, parseInt(el && el.value, 10) || S.discuss_default || 60));
+ await startDiscuss(sec);
+}
+async function addDiscuss(sec){
+ if(pin && host) await hostCtl('discuss_add', sec);
+}
 (function(){
  GUIDE.push({id:'case', title:'📖 Case Study Section (Ethical Leadership and more)', items:[
   ['Dedicated 📖 Case Studies tab', 'Switch to "📖 Case Studies" at the top of the host screen. It filters to Case Studies, hides quiz-only mechanics (Randomize, Snowballs, Wheel, Wagers, Speed Round, Homework, Practice), and launches every case in full narrative order.'],
+  ['⏱️ Editable Case Study Timers (Pre-Game, Per-Slide & Live)', 'Edit every timer right on the Case Studies setup card before launching (Poll voting, Discussion/Debate, Priority Ranking, Open Writing, Concept Check, and Reading Preview — set Preview to 0s for instant voting). Add "Time: 90" to any slide in the editor for a per-slide override, or adjust any live countdown on the fly (-10s, +10s, +30s, or type exact seconds + Set).'],
   ['Try the built-in case', 'Pick "📖 Case Study: The CardioWatch Launch (Ethical Leadership)" and click "📖 Launch Case Study".'],
-  ['📖 Case slides (Type: info)', 'Untimed reading/debrief slides with narrative text and exhibits on the big screen. Every student also gets revealed chapters in the floating "📁 Case file" button on their phone.'],
+  ['📖 Case slides (Type: info)', 'Untimed reading/debrief slides with narrative text and exhibits on the big screen (plus an optional live Chapter Timer if you want a reading countdown). Every student also gets revealed chapters in the floating "📁 Case file" button on their phone.'],
   ['🎭 Private Stakeholder Roles', 'On an info slide add "Role: CFO | You promised investors this quarter…". Human players are assigned distinct role cards on their phone and inside their case file.'],
-  ['🗳️ Decision polls & 🔎 Ethical lenses (Type: poll)', '45-second timer, no wrong answer (+200 participation pts). Add " :: Utilitarian lens" to each option to reveal the ethical lens after voting, cold-call "🎤 Defend your side!" speakers, and run a 60-second discussion timer.'],
-  ['📊 Priority Rankings (Type: rank)', '60-second timer for ranking 2–6 competing values. Reveals the class\'s average priority order.'],
-  ['✍️ Open Responses + Peer Voting (Type: open)', '120-second timer for 1–2 sentence justifications. Responses display anonymously, then students get 2 votes on their phones for the most persuasive arguments (+150 pts per vote, up to 4).'],
+  ['🗳️ Decision polls & 🔎 Ethical lenses (Type: poll)', 'Default 45-second timer (editable), no wrong answer (+200 participation pts). Add " :: Utilitarian lens" to each option to reveal the ethical lens after voting, cold-call "🎤 Defend your side!" speakers, and run a customizable discussion timer.'],
+  ['📊 Priority Rankings (Type: rank)', 'Default 60-second timer (editable) for ranking 2–6 competing values. Reveals the class\'s average priority order.'],
+  ['✍️ Open Responses + Peer Voting (Type: open)', 'Default 120-second timer (editable) for 1–2 sentence justifications. Responses display anonymously, then students get 2 votes on their phones for the most persuasive arguments (+150 pts per vote, up to 4).'],
   ['📖 + New / Edit Case builder', 'Includes 1-click "+ Insert slide" templates (Chapter, Poll, Ranking, Open Response, Concept Check) and "✨ Draft Case from Scenario / Topic" (works offline or with Gemini).'],
   ['📄 Case Debrief Summary', 'At the end of a session, click "📄 Case Debrief Summary" for a printable recap of poll splits, ethical lenses, class priority rankings, top peer-voted student arguments, and concept checks.']
  ]});
@@ -2968,16 +3086,24 @@ function renderPresenter(){
  if(ph === 'question' && S.qtype !== 'info'){
   if(inPrev){
    const pct = Math.min(100, ((S.preview_left||0)/(S.preview_total||5))*100);
-   ctrlHtml = `<div class="pcon-ctrl"><div style="flex:1"><div style="font-weight:800;color:#ffdf5d;margin-bottom:6px">👀 Reading preview on projector…</div><div class="preview-bar"><div class="preview-fill" id="pf" style="width:${pct}%"></div></div></div></div>`;
+   ctrlHtml = `<div class="pcon-ctrl"><div style="flex:1"><div style="font-weight:800;color:#ffdf5d;margin-bottom:6px">👀 Reading preview on projector…</div><div class="preview-bar"><div class="preview-fill" id="pf" style="width:${pct}%"></div></div></div><button class="btn-sm" onclick="hostCtl('skip_preview')">⏭️ Open Answers Now</button></div>`;
   } else {
    const sec = Math.ceil(S.left || 0);
    ctrlHtml = `<div class="pcon-ctrl">
     <div class="timer ${!S.paused&&sec<=5?'urgent':''} ${S.paused?'paused':''}" id="t">${S.paused ? '⏸️ ' + sec : sec}</div>
     <button class="btn-sm" id="pauseBtn" onclick="hostCtl('pause')">${S.paused ? '▶️ Resume' : '⏸️ Pause'}</button>
-    <button class="btn-sm" onclick="hostCtl('add_time',10)">⏱️ +10s</button>
+    <button class="btn-sm" onclick="hostCtl('add_time',-10)" title="Subtract 10 seconds">-10s</button>
+    <button class="btn-sm" onclick="hostCtl('add_time',10)" title="Add 10 seconds">+10s</button>
+    <button class="btn-sm" onclick="hostCtl('add_time',30)" title="Add 30 seconds">+30s</button>
+    <span class="tset-wrap" title="Set timer to any custom number of seconds">
+     <input id="pconSecInp" type="number" min="1" max="900" value="${sec}" onkeydown="if(event.key==='Enter')applyLiveTimer('pconSecInp')"><span>s</span>
+     <button class="btn-sm" onclick="applyLiveTimer('pconSecInp')">Set</button>
+    </span>
     <span class="pcon-chip" style="margin-left:auto">📝 <b id="ansCnt">${S.answered||0}/${nAct}</b> responded</span>
    </div>`;
   }
+ } else if(ph === 'question' && S.qtype === 'info'){
+  ctrlHtml = `<div class="pcon-ctrl"><span style="font-weight:800;color:#ffdf5d">🗣️ Chapter Timer: <span id="dtimer">${discussText()||'Ready'}</span></span>${discussCtrlHtml('pconInfoDiscInp','⏱️ Start Timer')}</div>`;
  } else if(ph === 'intro'){
   const ipct = Math.max(0, Math.min(100, ((S.intro_left||0)/(S.intro_total||5))*100));
   ctrlHtml = `<div class="pcon-ctrl"><div style="flex:1"><div class="preview-bar"><div class="preview-fill" id="ib" style="width:${ipct}%"></div></div></div></div>`;
@@ -3006,7 +3132,7 @@ function renderPresenter(){
     ${words.length ? words.map(w=>`<span class="pcon-chip">${esc(w.text)}${w.count>1?` <b>×${w.count}</b>`:''}</span>`).join('') : '<span style="opacity:.7">Waiting for responses on phones…</span>'}
    </div>`;
  } else if(ph === 'intro'){
-  const title = S.redemption ? '🔄 Redemption Round (Double Points)' : S.speed ? '⚡ Speed Round (5 Rapid Questions)' : ('🎡 Mystery Wheel: ' + (S.wheel_mod || 'Spinning…'));
+  const title = S.redemption ? '🔄 Redemption Round (Double Points)' : S.speed ? `⚡ Speed Round (5 × ${S.speed_time||5}s Rapid Questions)` : ('🎡 Mystery Wheel: ' + (S.wheel_mod || 'Spinning…'));
   slideBody = `<div class="pcon-lbl"><span>🎪 Special Round Announcement</span><span>Slide ${(S.index||0)+1}/${S.total}</span></div>
    <h2 style="margin:.2em 0">${esc(title)}</h2>`;
  } else if(ph === 'question'){
@@ -3031,7 +3157,7 @@ function renderPresenter(){
    detail = `<div class="pcon-opts">${(S.answers||[]).map((a,i)=>`<div class="pcon-opt c${i%4}"><span>${LET[i]}. ${esc(a)}</span></div>`).join('')}</div>
     ${S.host_ans?`<div style="margin-top:10px;padding:8px 12px;border-radius:10px;background:#0d3b26;border:1px solid #7dff6b;font-weight:700"><span style="color:#7dff6b">✅ Correct Order:</span> ${esc(S.host_ans)}</div>`:''}`;
   } else if(S.qtype === 'open'){
-   detail = `<div style="margin-top:10px;padding:14px;border-radius:10px;background:#0004;opacity:.9">✍️ Students have <b>120s</b> to write 1–2 sentence anonymous responses on their phones. Peer voting opens when you advance to Results.</div>`;
+   detail = `<div style="margin-top:10px;padding:14px;border-radius:10px;background:#0004;opacity:.9">✍️ Students have <b>${S.qtime||120}s</b> to write 1–2 sentence anonymous responses on their phones. Peer voting opens when you advance to Results.</div>`;
   } else if(S.qtype === 'rank'){
    detail = `<div class="pcon-opts">${(S.answers||[]).map((a,i)=>`<div class="pcon-opt c${i%4}"><span>${'ABCDEF'[i]}. ${esc(a)}</span></div>`).join('')}</div>`;
   } else {
@@ -3090,6 +3216,7 @@ function renderPresenter(){
   ${un
    ? `<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px">
        <span class="pcon-chip" style="font-size:.82em">${qtypeBadge(un.qtype, un.case)}</span>
+       <span class="pcon-chip" style="font-size:.82em">⏱️ ${un.qtime ? un.qtime + 's' : 'Untimed'}</span>
        ${un.topic ? `<span class="pcon-chip" style="font-size:.82em">🏷️ ${esc(un.topic)}</span>` : ''}
       </div>
       <div style="font-size:1.08em;font-weight:800;line-height:1.35">${esc(un.q)}</div>`

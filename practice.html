@@ -44,24 +44,35 @@ try{ const a=localStorage.getItem('brainrush_a11y'); if(a==='cb')document.body.c
 let quizzes=[], run=null;
 async function setup(){
   try{ quizzes=(await (await fetch('/api/quizzes')).json()).quizzes||[]; }catch(e){}
+  const qPool=quizzes.filter(q=>!q.case);
   $.innerHTML=`<img class="logo" src="/logo.jpg" alt="" onerror="this.style.display='none'"><h1>🧑‍🎓 Practice Mode</h1>
   <p style="opacity:.85">Study on your own, at your own pace. No score is shared with the class.</p>
-  <select id="qs">${quizzes.map(q=>`<option value="${esc(q.file)}" data-n="${q.count}">${esc(q.title)}</option>`).join('')}</select>
-  <input id="cnt" type="number" min="1" value="10" placeholder="How many questions?">
-  <label style="display:block;margin:6px"><input type="checkbox" id="timed"> ⏱️ Add a 20-second timer</label>
+  <select id="qs"><option value="">— Select a Quiz —</option>${(qPool.length?qPool:quizzes).map(q=>`<option value="${esc(q.file)}" data-n="${q.count}">${esc(q.title)}</option>`).join('')}</select>
+  <input id="cnt" type="number" min="1" value="" placeholder="How many questions? (blank = all)">
+  <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin:10px 0;flex-wrap:wrap;font-weight:700">
+    <label style="cursor:pointer"><input type="checkbox" id="timed"> ⏱️ Add countdown timer:</label>
+    <input id="pTime" type="number" min="5" max="600" value="20" style="display:inline-block;width:78px;padding:7px 8px;margin:0;font-size:1em">
+    <span>seconds</span>
+  </div>
+  <div id="pErr" style="color:#ff9b9b;font-weight:700;margin:4px 0;display:none"></div>
   <button class="go" onclick="start()">▶️ Start Practice</button>
   <p><a href="/play">← Back to join a live game</a></p>`;
   const sel=document.getElementById('qs');
-  sel.onchange=()=>{const n=sel.selectedOptions[0].dataset.n; document.getElementById('cnt').max=n; document.getElementById('cnt').value=Math.min(10,n)};
-  sel.onchange();
+  sel.onchange=()=>{const opt=sel.selectedOptions[0]; const n=opt&&opt.dataset?opt.dataset.n:''; const cEl=document.getElementById('cnt'); if(n){cEl.max=n; cEl.placeholder=`How many questions? (1–${n}, blank = all)`}else{cEl.removeAttribute('max'); cEl.placeholder='How many questions? (blank = all)'}};
 }
 async function start(){
-  const file=document.getElementById('qs').value, n=Math.max(1,parseInt(document.getElementById('cnt').value)||10), timed=document.getElementById('timed').checked;
+  const file=document.getElementById('qs').value, errEl=document.getElementById('pErr');
+  if(!file){ if(errEl){errEl.textContent='Please select a quiz first.'; errEl.style.display='block'} return; }
+  if(errEl) errEl.style.display='none';
+  const rawCnt=parseInt(document.getElementById('cnt').value,10);
+  const timed=document.getElementById('timed').checked;
+  const tMax=Math.max(5,Math.min(600,parseInt(document.getElementById('pTime').value,10)||20));
   const r=await (await fetch('/api/quiz_data?file='+encodeURIComponent(file))).json();
   let qs=(r.questions||[]).slice();
   for(let i=qs.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[qs[i],qs[j]]=[qs[j],qs[i]]}
-  qs=qs.filter(q=>!['poll','open','rank','info'].includes(q.type)).slice(0,n);
-  run={qs,i:0,score:0,streak:0,best:0,right:0,missed:[],timed,t:20,timer:null,sel:[],perm:null,done:false};
+  qs=qs.filter(q=>!['poll','open','rank','info'].includes(q.type));
+  if(!isNaN(rawCnt)&&rawCnt>0) qs=qs.slice(0,rawCnt);
+  run={qs,i:0,score:0,streak:0,best:0,right:0,missed:[],timed,tMax,t:tMax,timer:null,sel:[],perm:null,done:false};
   show();
 }
 function stopTimer(){ if(run&&run.timer){clearInterval(run.timer);run.timer=null} }
@@ -69,17 +80,18 @@ function show(){
   stopTimer();
   if(run.i>=run.qs.length) return finish();
   const q=run.qs[run.i], t=qtype(q); run.done=false; run.sel=[];
+  const qSec = (q.t_custom && q.t >= 5) ? q.t : run.tMax;
   if(t==='order'){ const n=q.a.length; let p=[...Array(n).keys()]; for(let k=0;k<12;k++){p.sort(()=>Math.random()-.5); if(p.some((v,i)=>v!==i))break} run.perm=p; }
   let body='';
   if(t==='text') body=`<input type="text" id="txt" placeholder="Type your answer…" autocomplete="off" autocapitalize="off" onkeydown="if(event.key==='Enter')submitText()"><button class="go" onclick="submitText()">Submit</button>`;
   else if(t==='order') body=`<p>Tap the items in the correct order:</p><div id="ord"></div>`;
   else body=`<div class="grid">${q.a.map((a,i)=>`<button class="c${i}" onclick="pick(${i})">${q.aimg&&q.aimg[i]?`<img src="${esc(q.aimg[i])}" alt="">`:''}<span class="sh">${sh[i]}</span><span>${esc(a)}</span></button>`).join('')}</div>`;
-  $.innerHTML=`<div class="qnum">Question ${run.i+1} of ${run.qs.length}</div> <span class="stat" style="padding:4px 12px">⭐ ${run.score}</span>
+  $.innerHTML=`<div class="qnum">Question ${run.i+1} of ${run.qs.length}</div> <span class="stat" style="padding:4px 12px">⭐ ${run.score}</span>${run.timed?` <span class="stat" id="tlbl" style="padding:4px 12px">⏱️ ${qSec}s</span>`:''}
   ${run.timed?'<div class="bar"><i id="tb" style="width:100%"></i></div>':''}
   <div class="q">${esc(q.q)}</div>${q.img?`<img class="q-img" src="${esc(q.img)}" alt="">`:''}${body}<div id="fb"></div>`;
   if(t==='order') drawOrder();
   if(t==='text'){const e=document.getElementById('txt'); e&&e.focus()}
-  if(run.timed){ run.t=20; run.timer=setInterval(()=>{run.t-=0.2; const b=document.getElementById('tb'); if(b)b.style.width=Math.max(0,run.t/20*100)+'%'; if(run.t<=0){stopTimer(); grade(false,'(time ran out)')}},200); }
+  if(run.timed){ run.t=qSec; run.timer=setInterval(()=>{run.t-=0.2; const b=document.getElementById('tb'), l=document.getElementById('tlbl'); if(b)b.style.width=Math.max(0,run.t/qSec*100)+'%'; if(l)l.textContent='⏱️ '+Math.max(0,Math.ceil(run.t))+'s'; if(run.t<=0){stopTimer(); grade(false,'(time ran out)')}},200); }
 }
 function pick(i){ if(run.done)return; const q=run.qs[run.i]; grade(i===q.c, q.a[i], i); }
 function submitText(){ if(run.done)return; const q=run.qs[run.i]; const v=document.getElementById('txt').value; if(!v.trim())return; grade(q.a.some(a=>norm(a)===norm(v)), v); }
