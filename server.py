@@ -332,7 +332,7 @@ def clean_questions(questions):
         if qtype == "info" or q.get("body"):
             item["body"] = str(q.get("body") or "").strip()[:3000]
         if isinstance(q.get("lenses"), list) and qtype in ("poll", "rank"):
-            ln = [str(x).strip()[:40] for x in q["lenses"][:len(ans)]]
+            ln = [str(x).strip()[:80] for x in q["lenses"][:len(ans)]]
             ln += [""] * (len(ans) - len(ln))
             if any(ln):
                 item["lenses"] = ln

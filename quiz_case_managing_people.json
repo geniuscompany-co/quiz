@@ -1,146 +1,146 @@
 {
- "title": "Case Study: The Star Performer & The Silent Team (Managing People)",
+ "title": "Case Study: No Clean Hands — Managing People in Crisis (Ethical Leadership)",
  "questions": [
   {
-   "q": "Chapter 1: Inheriting Harborlight's Top Team",
+   "q": "Chapter 1: Four Good People, One Irreversible Cut",
    "type": "info",
-   "topic": "Managing People",
-   "body": "Maya Lin has just been promoted to Director of Client Solutions at Harborlight Analytics, an 85-person data consulting firm. Two weeks into her new role, she faces annual performance calibration AND a firm-wide 10% budget trim requiring her to eliminate one position on her 9-person team.\n\nHer top producer, Senior Engagement Lead Marcus Vance, brings in 38% of the team's billable revenue and is praised by Harborlight's two biggest clients. Every previous manager rated Marcus \"Exceeds Expectations.\"\n\nDuring Maya's 1-on-1 listening tour, however, data scientist Elena Rostova and junior analyst Sam Patel independently share troubling patterns: Marcus routinely changes specs at 10 PM, presents Elena's models to executives under his sole name, and belittles teammates in Slack when they raise questions. Three analysts have transferred or quit from Marcus's pod in 14 months.\n\nExhibit A — Pod Metrics: Marcus's pod: 138% of revenue quota ($2.4M), 42% annual turnover, team pulse 2.6 / 5.0. Other pods: 98% of quota, 8% turnover, pulse 4.3 / 5.0.\nExhibit B — Email from VP of Sales: \"Congrats on the role, Maya! Assuming Marcus is a lock for Principal tomorrow — two $1.8M client renewals next month depend on him.\"\n\n(Fictional case written for classroom discussion.)",
+   "topic": "Right vs. Right",
+   "body": "Claire Sato directs production supervisors at Alder Creek Foods, an employer of 140 hourly plant workers in a town of 19,000 where the factory is one of the few sources of full family healthcare. Last month, Alder Creek's largest distributor went bankrupt. Executives already cut their own pay 20% and froze all non-payroll spend. To stop lenders from foreclosing and shutting down all 140 floor jobs, every department must permanently cut $155,000 (22%) of salaried payroll by Friday at noon. There is no hidden budget left.\n\nClaire leads 6 supervisors — every one of them honest and dedicated:\n• David Morales (56, $92k, 19 years): Built the plant's safety culture and mentored half the crew. Yet on the new computerized lines, his shift throughput trails by 19% with $48k in changeover spoilage despite 6 months of coaching. His wife is mid-way through chemotherapy on Alder Creek's health plan.\n• Nadia Okafor (29, $84k, 14 months): Single mother whom Claire personally recruited 600 miles from Chicago with a promise: \"Deliver here, and you'll have a long-term home.\" Nadia ranks #1 in quality and is the ONLY supervisor certified on the automated line required for next quarter's hospital contract that keeps the 140 workers employed.\n• Mei Lin (26, $60k) & Tomas Vega (24, $58k): High-performing junior assistant supervisors. Mei is on an employer-sponsored work visa (60 days to leave the country if laid off); Tomas supports two younger siblings.\n\nExhibit A — Audited Math: Cutting 1 senior role requires an 8–9% pay cut across the rest to reach $155k. Cutting 0 roles requires a 22% pay cut for everyone — which HR warns will push Nadia and another lead to rival offers immediately, forfeiting the hospital contract.",
    "roles": [
     {
-     "name": "Elena Rostova (Data Scientist)",
-     "text": "You built the forecasting engine Marcus presented to the CEO with only his name on the deck. You have an external job offer expiring Monday; you will stay only if Maya shows that credit and fairness actually matter here."
+     "name": "David Morales (19-Year Supervisor)",
+     "text": "You gave 19 loyal years to this plant and trained half the floor. You are trying your hardest to learn the digital controls while caring for your wife during chemotherapy; losing health coverage right now terrifies you."
     },
     {
-     "name": "Marcus Vance (Star Lead)",
-     "text": "You work 65-hour weeks, rescue tough client accounts, and bring in the revenue that pays everyone's salary. You believe high standards feel uncomfortable to people who aren't ready for big-league consulting."
+     "name": "Nadia Okafor (Top Digital Lead)",
+     "text": "You uprooted your young son and retired mother from Chicago solely because Claire gave you her personal word. You delivered #1 plant metrics — if 'last-in, first-out' cuts you, your family has no local safety net."
     },
     {
-     "name": "VP of Sales & Partnerships",
-     "text": "Two flagship renewals ($1.8M) close next month and both clients specifically asked for Marcus. Losing him right now could trigger wider layoffs across the company."
+     "name": "Mei Lin (Junior Assistant, Visa Holder)",
+     "text": "You work 50 reliable hours a week for $60k and never missed a target. If laid off to protect two higher-paid senior supervisors, you have 60 days to find visa sponsorship in a rural region or leave the country."
     },
     {
-     "name": "HR Business Partner",
-     "text": "Two exit interviews last year mentioned Marcus's 'abrasive style,' but his former manager never documented a single warning — on paper, Marcus has a spotless record."
+     "name": "Hourly Floor Representative (140 Workers)",
+     "text": "Your 140 line workers watch two things: if Alder Creek fails the automated hospital audit without Nadia, dozens of hourly families lose their jobs — yet if David is discarded mid-cancer treatment, floor trust will shatter."
     },
     {
-     "name": "Sam Patel (First-Year Analyst)",
-     "text": "You joined four months ago. Teammates rate you collaborative and dependable, but your billable hours look low because Marcus hoards client-facing tasks. Under 'last in, first out,' your job is most at risk."
+     "name": "Claire Sato (Operations Director)",
+     "text": "You already took the 20% executive cut, though you could forfeit another $37k of your own pay (putting strain on your own household). Whatever you submit Friday, innocent people you care about will be badly hurt."
     }
    ],
-   "note": "Give students 90–120 seconds to read silently and check their private role card on their phone. Ask: Why did previous managers rate Marcus 'Exceeds Expectations' despite 42% turnover? Do not reveal role cards yet."
+   "note": "Let students read for 2 minutes and check their private role cards. Point out: nobody lied, stole, or slacked off here. Every option defends a real moral principle — and inflicts real human harm."
   },
   {
-   "q": "Decision Point 1: Principal nominations are due tomorrow morning. What should Maya do?",
+   "q": "Decision Point 1: Which payroll plan does Claire submit to reach the mandatory $155k cut?",
    "type": "poll",
-   "topic": "Fairness & Standards",
+   "topic": "Tragic Trade-Offs",
    "a": [
-    "Nominate Marcus based on his 138% revenue results, and coach his behavior privately",
-    "Pause Marcus's nomination, document the conduct & credit concerns, and set clear conditions",
-    "Nominate Elena for promotion instead and tell Marcus candidly why his nomination is on hold",
-    "Request a 72-hour extension to audit project contributions and past exit interviews first"
+    "Cut David ($92k) + 9% trim — saves 140 jobs, Mei's visa & Nadia, but cuts David during his wife's chemo",
+    "Seniority rule: cut Nadia ($84k) + 10% trim — saves chemo care, breaks promise & risks the 140-job audit",
+    "Zero layoffs, 22% pay cut for all 6 — shares pain, hurts low-paid staff & sparks Nadia's exit anyway",
+    "Cut Mei & Tomas ($118k) + $37k from Claire's pay — spares chemo & promise, costs 2 jobs, Mei's visa & safe shifts"
    ],
    "lenses": [
-    "Utilitarian / results-first lens (protects revenue now)",
-    "Procedural justice lens (standards apply equally to stars)",
-    "Distributive justice & moral courage lens (reward real contribution)",
-    "Due-process & prudence lens (verify evidence before acting)"
+    "Utilitarian & merit lens (saves plant, harsh to veteran in crisis)",
+    "Seniority & care lens (saves chemo care, breaks promise & risks plant)",
+    "Solidarity lens (nobody singled out, triggers flight & hardship)",
+    "Leader-sacrifice lens (spares seniors, deports Mei & strains safety)"
    ],
-   "note": "Use 'Defend your side!' to hear from two different choices. Ask: What cultural message does an organization send when it promotes someone whose team has 42% turnover?"
+   "note": "Use 'Defend your side!' and the 60s debate timer. Push EVERY side on its devastating cost — do not let anyone claim a cost-free moral high ground."
   },
   {
-   "q": "Chapter 2: Commit Logs & an Ultimatum",
+   "q": "Chapter 2: Wednesday 6 PM — Two Knocks on Claire's Door",
    "type": "info",
-   "topic": "Managing People",
-   "body": "Maya reviews project repositories and slide version histories before Friday's calibration. On the flagship Apex Health pitch, Elena authored 85% of the analytical code and slides, Sam built the data validation pipeline, and Marcus edited only the title slide and pricing table — after removing Elena's and Sam's names from the cover.\n\nWhen Maya meets privately with Marcus to share specific, factual feedback, he leans back and says: \"Clients buy one throat to choke, not a group project. Look — a competitor offered me a Partner track yesterday. Confirm my Principal promotion by Friday at 5 PM, or I resign Monday, and Apex Health will likely follow me.\"\n\nMeanwhile, Finance reminds Maya that one salary slot on her team must be cut by Friday. Keeping and promoting Marcus means laying off Sam — and likely losing Elena on Monday. Letting Marcus walk frees enough budget to keep Sam, promote Elena, and backfill a collaborative senior lead, but puts Q1 renewals at immediate risk.\n\nExhibit C — Contribution Log (Apex Pitch): Elena 47 commits · Sam 11 commits · Marcus 3 commits (removed co-author credits 18 minutes before client meeting).",
-   "note": "Pause and ask: How does seeing the timestamped commit log change Maya's ethical obligation? When an employee issues an ultimatum to bypass behavioral standards, what is at stake?"
+   "topic": "Honesty vs. Harm",
+   "body": "Forty-eight hours before Friday's announcement, two urgent dilemmas hit Claire at once:\n\n1. The Lease Deposit: Nadia steps into Claire's office at 6 PM. \"Claire, my landlord needs a 12-month lease signature by 8 PM tonight with a non-refundable $4,800 deposit — almost everything I have saved. You brought me to this town. Just tell me honestly: should I sign it?\" Legal and HR put all directors under a strict written non-disclosure order until Friday noon: leaking or hinting early violates fiduciary duty, gives one employee unfair insider treatment over Tomas, Mei, and David, and if word reaches raw-material suppliers, they will freeze credit and trigger immediate plant closure.\n\n2. The Severance Classification: HR informs Claire that if David is let go under \"Position Eliminated (Restructuring),\" his wife keeps 6 months of subsidized chemo coverage + 16 weeks' pay — BUT labor rules legally bar Alder Creek from reassigning or backfilling his supervisory duties for 12 months, forcing dangerous 60-hour fatigue shifts on remaining leads. Classifying his exit accurately as \"Performance-Based\" (citing his documented 19% throughput gap) lets Claire keep Tomas in a safe hybrid floor role — but cuts David's healthcare off on the 1st of next month ($1,850/mo out of pocket).",
+   "note": "Ask the room: Notice how strict honesty in BOTH moments ('say nothing to Nadia' or 'file David accurately as performance') preserves rules and fairness — yet directly devastates a family."
   },
   {
-   "q": "Rank Maya's ethical responsibilities in managing her people, from MOST important (#1) to LEAST (#6):",
+   "q": "Rank which ethical duty Claire should weigh MOST heavily (#1) to LEAST (#6) when duties collide:",
    "type": "rank",
-   "topic": "Competing Responsibilities",
+   "topic": "Competing Duties",
    "a": [
-    "Truthful credit attribution and honest performance evaluations",
-    "Psychological safety and respectful day-to-day treatment on the team",
-    "Protecting junior staff (Sam & Elena) from paying for senior misconduct",
-    "Fair due process — giving Marcus clear facts rather than rumors",
-    "Protecting client revenue that sustains company-wide jobs",
-    "Meeting the VP of Sales's short-term expectations"
+    "Protecting the livelihoods of the 140 hourly plant families",
+    "Preventing catastrophic medical or immigration harm (David's wife's chemo / Mei's visa)",
+    "Keeping personal promises made to someone who took a risk on your word (Nadia)",
+    "Strict truthfulness in records and equal confidentiality rules for all employees",
+    "Minimizing total number of people who lose their jobs",
+    "Maintaining safe, sustainable shift hours so remaining workers aren't injured"
    ],
-   "note": "Look at where 'Fair due process' and 'Protecting client revenue' land in the class average. Discuss why ethical people management requires fairness even toward someone behaving badly."
+   "note": "Examine the class average ranking. Point out that items #1 through #6 are ALL moral goods — whichever lands at #5 or #6 is the moral principle the class just decided to sacrifice."
   },
   {
-   "q": "In 1–2 sentences: what should Maya say directly to Marcus in response to his ultimatum?",
+   "q": "It is 6:05 PM. Nadia is waiting across your desk before signing away $4,800 at 8 PM. In 1–2 sentences, write the exact words Claire says to her — and why.",
    "type": "open",
-   "topic": "Candid Conversations",
-   "note": "Remind students their responses appear anonymously, then everyone gets 2 votes on their phone for the most effective leadership response. Highlight answers that are firm on integrity without being disrespectful."
+   "topic": "Moral Remainder",
+   "note": "Have students vote on the two most compelling responses. Ask: Did the top-voted response break confidentiality (unfair to peers & risky to plant survival), or uphold silence (letting Nadia risk $4,800)? Neither is clean!"
   },
   {
-   "q": "Decision Point 2: It is Friday at 4 PM. Which people-and-budget decision does Maya submit?",
+   "q": "Decision Point 2: If David's supervisor slot must end Friday, how does Claire handle his classification & shift safety?",
    "type": "poll",
-   "topic": "Moral Courage",
+   "topic": "Rules vs. Mercy",
    "a": [
-    "Decline Marcus's ultimatum; if he leaves, use his salary slot to keep Sam and promote Elena",
-    "Hold the promotion, put Marcus on a 90-day conduct & credit agreement, and propose cutting vendor/travel spend instead of Sam",
-    "Promote Marcus to protect Q1 revenue, lay off Sam with generous severance, and promise Elena the next promotion",
-    "Bring the documented evidence to the CEO and HR so senior leadership shares accountability for client transitions"
+    "File as 'Restructuring' so his wife keeps 6 months of chemo care — triggers hiring ban & risky 60-hr shifts",
+    "File truthfully as 'Performance-Based' so Tomas stays & floor stays safe — David loses chemo care next month",
+    "Move David to hourly trainer ($52k, keeps insurance) — requires laying off Mei & starting her 60-day visa clock",
+    "File as 'Restructuring' for David's care & Claire works 25 night-shift hrs/week herself alongside her day job"
    ],
    "lenses": [
-    "Integrity & cultural stewardship lens",
-    "Restorative accountability & care lens",
-    "Short-term utilitarian compromise lens",
-    "Institutional transparency & governance lens"
+    "Mercy lens (saves chemo care, bends record & strains floor safety)",
+    "Candor & safety lens (truthful record & safe shifts, severe medical blow)",
+    "Medical-care lens (saves chemo & knowledge, costs blameless visa holder)",
+    "Self-sacrifice lens (absorbs harm personally, high leader burnout risk)"
    ],
-   "note": "Compare Option 1, Option 2, and Option 4. Ask whoever played Elena's or Sam's role how Option 3 would feel from their seat — now invite students to reveal their role cards!"
+   "note": "Have students reveal their private roles now! Ask 'Mei', 'David', 'Nadia', and the 'Hourly Floor Rep' what even the kindest-sounding option just did to them."
   },
   {
-   "q": "Debrief: What Happened Next (Fictional Outcome)",
+   "q": "Debrief: Even Moral Decisions Can Have Devastating Outcomes",
    "type": "info",
-   "topic": "Managing People",
-   "body": "Maya declined to nominate Marcus for Principal, documented the credit removal with HR, and briefed the CEO and VP of Sales ahead of time with a client-transition plan. She told Marcus calmly: \"I value your client work, and I want you to succeed here — but taking credit for teammates' work violates our standards, and I won't trade team integrity for an ultimatum.\"\n\nMarcus resigned the following week. Maya immediately introduced Elena to Apex Health as the technical architect behind their forecasting model; impressed by her depth, Apex renewed its contract, while the smaller second account left — costing the team 11% of Q1 revenue.\n\nMarcus's vacated budget spared Sam's role and funded Elena's promotion. Over the next year, team turnover dropped to 0%, voluntary cross-pod collaboration surged, and Maya's team hit 114% of annual target.\n\nLeadership Takeaway: Culture is defined by the worst behavior a leader is willing to reward.",
-   "note": "Emphasize that Maya did NOT get a cost-free win — she lost an account in Q1 and had to prepare executives before Marcus quit. Ask: What systems prevent 'toxic stars' from going undocumented for years?"
+   "topic": "Tragic Leadership",
+   "body": "There is no painless ending to this case — across real manufacturing restructurings, EVERY moral path leaves scars:\n\n• Path 1 (Protecting Plant Survival & Merit — keeping Nadia & Mei, letting David go with restructuring healthcare): The plant passed the hospital audit and all 140 hourly jobs survived. Yet floor morale fractured: two veteran operators quit in protest, supervisors burned out under the 12-month backfill ban, and when David's 6-month subsidy expired mid-treatment, coworkers passed an envelope in the breakroom while Claire lived with the weight of ending a 19-year career.\n\n• Path 2 (Protecting Vulnerability / Seniority — keeping David, losing Nadia or Mei, or cutting pay 22%): David's wife completed treatment with uninterrupted insurance. Within four months, however, without Nadia's automated-line certification, Alder Creek failed two hospital quality audits, lost the contract, and had to lay off 28 hourly workers — including people David had mentored (and in cases where Mei was cut instead, she was unable to secure rural visa sponsorship within 60 days and had to leave the country).\n\nLeadership Lesson: Hard leadership is rarely 'good people vs. bad people.' Philosopher Bernard Williams called the lingering human cost of a justified choice 'moral remainder.' Ethical leaders don't pretend their choice was harmless — they face those they hurt in person, tell the truth without spin, and fight to soften the blow.",
+   "note": "Ask: How did it feel realizing there was no loophole where everyone wins? Why is it dangerous when managers convince themselves a layoff or cut was 'purely objective' so they don't have to feel moral weight?"
   },
   {
-   "q": "Concept Check: Past managers ignored exit interviews about Marcus because he hit 138% of quota. What ethical trap is this?",
+   "q": "Concept Check: Harvard's Joseph Badaracco describes situations where every option upholds one genuine moral duty while violating another as:",
    "a": [
-    "Procedural justice (applying transparent rules to everyone)",
-    "Motivated blindness (overlooking unethical behavior when it benefits our goals)",
-    "Psychological safety (making it safe to take interpersonal risks)",
-    "Servant leadership (putting employee growth ahead of ego)"
+    "Compliance failures",
+    "Right-versus-right dilemmas (defining moments)",
+    "Principal-agent conflicts",
+    "Moral hazard"
    ],
    "c": 1,
-   "topic": "Behavioral Ethics",
-   "quote": "Motivated blindness occurs when leaders overlook misconduct by high performers because those performers help hit short-term targets."
+   "topic": "Right vs. Right",
+   "quote": "Right-vs-wrong choices test basic honesty; right-vs-right dilemmas force leaders to choose between two real responsibilities when innocent people will be hurt either way."
   },
   {
-   "q": "Concept Check: In management ethics, ensuring fair, consistent, evidence-based processes for promotions and layoffs is called:",
+   "q": "Concept Check: In ethics, what does 'moral remainder' mean after a manager makes the most defensible decision available?",
    "a": [
-    "Survivorship bias",
-    "Groupthink",
-    "Procedural justice",
-    "Moral licensing"
+    "The leftover budget saved after a restructuring",
+    "Proof that the manager chose the wrong ethical framework",
+    "The real, uncompensated human harm left behind — which an ethical leader still acknowledges and works to ease",
+    "A legal waiver protecting the company from lawsuits"
    ],
    "c": 2,
-   "topic": "Organizational Justice",
-   "quote": "Employees judge leaders not only by outcomes (distributive justice) and respect (interactional justice), but by whether rules are applied fairly to everyone (procedural justice)."
+   "topic": "Moral Remainder",
+   "quote": "Recognizing moral remainder keeps leaders humane: even when a tough call was necessary, you still owe candor, dignity, and practical support to the person paying the price."
   },
   {
-   "q": "Closing Reflection: Which people-management practice does the most to build an ethical team culture?",
+   "q": "Closing Reflection: When every choice hurts someone innocent, what separates an ethical leader from a callous one?",
    "type": "poll",
-   "topic": "Leadership Practice",
+   "topic": "Human Dignity",
    "a": [
-    "Evaluating 'how' results are achieved with equal weight to 'what' numbers are hit",
-    "Sharing credit publicly and giving tough feedback privately and early",
-    "Documenting conduct patterns honestly instead of passing problems to the next manager",
-    "Protecting truth-tellers and junior staff when power dynamics are unequal"
+    "Delivering the news face-to-face without hiding behind HR scripts or blaming 'corporate'",
+    "Refusing to invent flaws in good people just to make laying them off feel easier",
+    "Investing personal time and political capital (references, job placement, transition aid) in whoever pays the cost",
+    "Making the painful call transparently so the surviving team understands the principle behind it"
    ],
    "lenses": [
-    "Accountability systems lens",
-    "Interactional dignity lens",
-    "Stewardship & candor lens",
-    "Care & power-stewardship lens"
+    "Interactional dignity & courage lens",
+    "Intellectual honesty & respect lens",
+    "Reparative care & stewardship lens",
+    "Procedural transparency & trust lens"
    ],
-   "note": "Wrap up by asking two students which single habit they want to practice in their own teams or workplaces."
+   "note": "Close by highlighting Option 2 ('Refusing to invent flaws in good people just to make hurting them feel easier') — one of the most common psychological traps managers fall into during tough decisions."
   }
  ]
 }
