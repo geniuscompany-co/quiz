@@ -271,10 +271,18 @@ HOST_PW = os.environ.get("HOST_PASSWORD", "")
 REQUIRE_LOGIN = os.environ.get("REQUIRE_LOGIN", "") == "1"
 DATA_DIR = os.environ.get("DATA_DIR") or os.path.join(ROOT, ".data")
 TEAM_BONUS = 300
+CONSENSUS_BONUS = 250
 HOT_BONUS = 400
 PRED_BONUS = 200
-INT_KEY_G = ("wheel_mods", "robin_stolen", "shuf", "hot", "team_results", "team_prompts", "responses", "defenders")
-INT_KEY_P = ("answers", "wagers", "confident", "plan", "don", "roles")
+INT_KEY_G = (
+    "wheel_mods", "robin_stolen", "shuf", "match_shuf", "hot", "team_results",
+    "team_prompts", "responses", "defenders", "init_counts", "revotes",
+    "consensus_votes", "consensus_res",
+)
+INT_KEY_P = ("answers", "wagers", "confident", "plan", "don", "roles", "init_choices")
+SCORING_MODES = ("classic", "accuracy", "percent", "survey")
+AV_HATS = {"", "👑", "🎩", "🎓", "🧢", "🤠", "🕶️", "🎧", "⛑️", "🎀", "🧙", "🥷", "🔥", "⚡", "🌟", "💎", "🦄"}
+AV_RINGS = {"", "gold", "neon", "fire", "ice", "rainbow", "violet", "#ffd54f", "#7dff6b", "#40c4ff", "#ff6eb4", "#b388ff", "#ff6d00", "#ff5252", "#ffffff"}
 
 
 def pw_ok(val):
@@ -305,7 +313,10 @@ def qtype_of(q):
 
 
 CASE_TYPES = ("poll", "open", "rank", "info")
-CASE_TIMES = {"poll": 45, "rank": 60, "open": 120}
+SURVEY_TYPES = ("scale", "brainstorm")
+UNSCORED_TYPES = CASE_TYPES + SURVEY_TYPES
+GRADABLE_TYPES = ("mc", "tf", "multi", "text", "order", "match", "slider", "pin", "zoom")
+CASE_TIMES = {"poll": 45, "rank": 60, "open": 120, "brainstorm": 90, "scale": 25}
 CASE_PTS = 200
 VOTE_PTS = 150
 BOT_OPINIONS = [
@@ -323,8 +334,12 @@ def is_case_type(q):
     return qtype_of(q) in CASE_TYPES
 
 
+def is_unscored_type(q):
+    return qtype_of(q) in UNSCORED_TYPES
+
+
 def is_case_q(g, idx):
-    return 0 <= idx < len(g["quiz"]) and is_case_type(g["quiz"][idx])
+    return 0 <= idx < len(g["quiz"]) and is_unscored_type(g["quiz"][idx])
 
 
 def norm_text(x):
@@ -333,31 +348,54 @@ def norm_text(x):
 
 def text_correct(q, txt):
     n = norm_text(txt)
-    return bool(n) and any(norm_text(a) == n for a in q["a"])
+    return bool(n) and (bool(q.get("all_correct")) or any(norm_text(a) == n for a in q["a"]))
 
 
 def ans_text(q):
     t = qtype_of(q)
+    if q.get("all_correct"):
+        return "Any answer"
     if t == "order":
         return " \u2192 ".join(q["a"])
     if t == "text":
         return " / ".join(q["a"][:3])
-    return q["a"][q["c"]] if 0 <= q["c"] < len(q["a"]) else q["a"][0]
+    if t == "match":
+        return ", ".join("%s \u2192 %s" % (p["l"], p["r"]) for p in (q.get("pairs") or []))
+    if t == "slider":
+        sl = q.get("slider") or {}
+        u = sl.get("unit") or ""
+        mg = sl.get("margin") or 0
+        return ("%g%s (\u00b1%g)" % (sl.get("target", 0), u, mg)) if mg else ("%g%s" % (sl.get("target", 0), u))
+    if t == "pin":
+        pn = q.get("pin") or {}
+        return "Target (%g%%, %g%%)" % (pn.get("x", 50), pn.get("y", 50))
+    if t == "multi":
+        cm = q.get("correct_multi") or [q.get("c", 0)]
+        return " + ".join(q["a"][k] for k in cm if 0 <= k < len(q["a"]))
+    if q.get("correct_multi") and len(q["correct_multi"]) > 1:
+        return " OR ".join(q["a"][k] for k in q["correct_multi"] if 0 <= k < len(q["a"]))
+    return q["a"][q["c"]] if (q.get("a") and 0 <= q["c"] < len(q["a"])) else (q["a"][0] if q.get("a") else "")
 
 
 def bot_choice(q, skill):
+    t = qtype_of(q)
     if random.random() < skill:
         return q["c"]
-    if qtype_of(q) in ("text", "order"):
+    if t in ("text", "order", "multi", "match", "slider", "pin"):
         return -1
-    wrongs = [i for i in range(len(q["a"])) if i != q["c"]]
+    valid_set = set(q.get("correct_multi") or [q["c"]])
+    wrongs = [i for i in range(len(q["a"])) if i not in valid_set]
     return random.choice(wrongs) if wrongs else -1
 
 
 def bot_given(q, ch):
+    t = qtype_of(q)
     if ch != q["c"]:
         return "(wrong)"
-    return ans_text(q) if qtype_of(q) == "order" else q["a"][0]
+    if t in ("order", "multi", "match", "slider", "pin"):
+        return ans_text(q)
+    return q["a"][q["c"]] if (q.get("a") and 0 <= q["c"] < len(q["a"])) else ""
+
 
 WHEEL_EVENTS = [
     {"id": "speed", "label": "⚡ SPEED DEMON: 1.35x Points for Fast Answers!"},
@@ -402,7 +440,7 @@ def is_speed_q(g, idx):
     if ss is None or not (0 <= idx < len(g["quiz"])):
         return False
     q = g["quiz"][idx]
-    return ss <= idx < ss + 5 and not q.get("redemption") and not q.get("tiebreak") and not is_case_type(q)
+    return ss <= idx < ss + 5 and not q.get("redemption") and not q.get("tiebreak") and not is_unscored_type(q)
 
 
 def dbl_index(g):
@@ -420,7 +458,7 @@ def is_dbl_q(g, idx):
     if not g.get("dbl") or not (0 <= idx < len(g["quiz"])) or idx != dbl_index(g):
         return False
     q = g["quiz"][idx]
-    return not q.get("redemption") and not q.get("tiebreak") and not is_case_type(q)
+    return not q.get("redemption") and not q.get("tiebreak") and not is_unscored_type(q)
 
 
 def modlog(g, kind, text):
@@ -460,7 +498,7 @@ def qtime(g, i=None):
 def qmult(g, i=None):
     idx = g["q"] if i is None else i
     q = g["quiz"][idx]
-    if is_case_type(q):
+    if is_unscored_type(q):
         return 1
     if "double" in q:
         return 2 if q["double"] else 1
@@ -472,7 +510,7 @@ def qmult(g, i=None):
 def is_boss_q(g, i=None):
     idx = g["q"] if i is None else i
     q = g["quiz"][idx]
-    if q.get("redemption") or q.get("tiebreak") or is_case_type(q):
+    if q.get("redemption") or q.get("tiebreak") or is_unscored_type(q):
         return False
     return bool(g.get("wager") and idx == len(g["quiz"]) - 1)
 
@@ -506,8 +544,10 @@ def list_quizzes(owner="_shared"):
                 q = data
                 title = labels.get(f) or f[5:-5].replace("_", " ").title()
             if isinstance(q, list) and q:
+                es = K.estimate_duration_sec(q)
                 items.append({"file": f, "title": "%s (%d Qs)" % (title, len(q)), "count": len(q), "folder": "Built-in", "tags": [], "builtin": True,
-                              "case": any(isinstance(x, dict) and x.get("type") in CASE_TYPES for x in q)})
+                              "case": any(isinstance(x, dict) and x.get("type") in CASE_TYPES for x in q),
+                              "est_sec": es, "est_min": max(1, int(round(es / 60.0)))})
         except Exception:
             pass
     owners = ["_shared"] + ([owner] if owner != "_shared" else [])
@@ -541,46 +581,152 @@ def clean_questions(questions):
             continue
         alist = q["a"] if isinstance(q.get("a"), list) else []
         qtype = str(q.get("type") or "mc").lower()
-        if qtype not in ("mc", "tf", "text", "order", "zoom") + CASE_TYPES:
+        if qtype not in GRADABLE_TYPES + UNSCORED_TYPES:
             qtype = "mc"
         if qtype == "zoom" and not clean_url(q.get("img")):
             qtype = "mc"
+        if qtype == "pin" and not clean_url(q.get("img")):
+            if len(alist) >= 2:
+                qtype = "mc"
+            else:
+                continue
         raw = [str(x).strip() for x in alist if str(x).strip()]
         try:
             c = int(q.get("c", 0))
         except Exception:
             c = 0
+        extra_fields = {}
         if qtype == "tf":
             ans, c = ["True", "False"], max(0, min(1, c))
         elif qtype == "text":
             if not raw:
                 continue
-            ans, c = raw[:6], 0
+            ans, c = raw[:8], 0
         elif qtype == "order":
             if len(raw) < 2:
                 continue
-            ans, c = raw[:4], 0
+            ans, c = raw[:8], 0
+        elif qtype == "multi":
+            if len(raw) < 2:
+                continue
+            ans = raw[:6]
+            cm_raw = q.get("correct_multi")
+            cm = []
+            if isinstance(cm_raw, list):
+                for idx_ in cm_raw:
+                    try:
+                        vi = int(idx_)
+                        if 0 <= vi < len(ans) and vi not in cm:
+                            cm.append(vi)
+                    except Exception:
+                        pass
+            cm.sort()
+            if not cm:
+                cm = [max(0, min(len(ans) - 1, c))]
+            c = cm[0]
+            extra_fields["correct_multi"] = cm
+            extra_fields["partial"] = bool(q.get("partial", True))
+        elif qtype == "match":
+            pairs = []
+            if isinstance(q.get("pairs"), list):
+                for pr in q["pairs"][:6]:
+                    if isinstance(pr, dict):
+                        lv = str(pr.get("l") or "").strip()[:100]
+                        rv = str(pr.get("r") or "").strip()[:100]
+                        if lv and rv:
+                            pairs.append({"l": lv, "r": rv})
+            if not pairs and raw:
+                for ln in raw[:6]:
+                    sep = "=>" if "=>" in ln else ("->" if "->" in ln else ("=" if "=" in ln else None))
+                    if sep:
+                        lv, _, rv = ln.partition(sep)
+                        lv, rv = lv.strip()[:100], rv.strip()[:100]
+                        if lv and rv:
+                            pairs.append({"l": lv, "r": rv})
+            if len(pairs) < 2:
+                continue
+            ans, c = [p_["l"] for p_ in pairs], 0
+            extra_fields["pairs"] = pairs
+            extra_fields["matches"] = [p_["r"] for p_ in pairs]
+        elif qtype == "slider":
+            sl_in = q.get("slider") if isinstance(q.get("slider"), dict) else {}
+            try:
+                s_min = float(sl_in.get("min", 0))
+                s_max = float(sl_in.get("max", 100))
+                if s_max <= s_min:
+                    s_max = s_min + 100.0
+                s_step = float(sl_in.get("step", 1))
+                if s_step <= 0:
+                    s_step = 1.0
+                s_tgt = max(s_min, min(s_max, float(sl_in.get("target", (s_min + s_max) / 2.0))))
+                s_mrg = max(0.0, float(sl_in.get("margin", 0)))
+                s_unit = str(sl_in.get("unit") or "").strip()[:16]
+            except Exception:
+                s_min, s_max, s_step, s_tgt, s_mrg, s_unit = 0.0, 100.0, 1.0, 50.0, 5.0, ""
+            sl_clean = {"min": s_min, "max": s_max, "step": s_step, "target": s_tgt, "margin": s_mrg, "unit": s_unit}
+            ans, c = ["%g%s" % (s_tgt, s_unit)], 0
+            extra_fields["slider"] = sl_clean
+        elif qtype == "pin":
+            pn_in = q.get("pin") if isinstance(q.get("pin"), dict) else {}
+            try:
+                px = max(0.0, min(100.0, float(pn_in.get("x", 50.0))))
+                py = max(0.0, min(100.0, float(pn_in.get("y", 50.0))))
+                pr = max(3.0, min(40.0, float(pn_in.get("r", 12.0))))
+            except Exception:
+                px, py, pr = 50.0, 50.0, 12.0
+            extra_fields["pin"] = {"x": round(px, 1), "y": round(py, 1), "r": round(pr, 1)}
+            ans, c = ["(%.0f%%, %.0f%%)" % (px, py)], 0
+        elif qtype == "scale":
+            ans = raw[:7] if 2 <= len(raw) <= 7 else ["1", "2", "3", "4", "5"]
+            c = 0
+            lbls = q.get("scale_labels")
+            if isinstance(lbls, list) and len(lbls) >= 2:
+                extra_fields["scale_labels"] = [str(lbls[0]).strip()[:40] or "Low", str(lbls[1]).strip()[:40] or "High"]
+            else:
+                extra_fields["scale_labels"] = ["Strongly Disagree", "Strongly Agree"]
         elif qtype == "poll":
             if len(raw) < 2:
                 continue
-            ans, c = raw[:4], 0
+            ans, c = raw[:6], 0
         elif qtype == "rank":
             if len(raw) < 2:
                 continue
             ans, c = raw[:6], 0
-        elif qtype in ("open", "info"):
+        elif qtype in ("open", "info", "brainstorm"):
             ans, c = [], 0
         else:
             if len(raw) < 2:
                 continue
-            ans = raw[:4]
+            ans = raw[:6]
             while len(ans) < 4:
                 ans.append("Option %d" % (len(ans) + 1))
-            c = max(0, min(3, c))
+            c = max(0, min(len(ans) - 1, c))
+            if isinstance(q.get("correct_multi"), list):
+                cm = sorted({int(x) for x in q["correct_multi"] if str(x).isdigit() and 0 <= int(x) < len(ans)})
+                if len(cm) >= 2:
+                    extra_fields["correct_multi"] = cm
+                    c = cm[0]
         item = {"q": str(q["q"]).strip(), "a": ans, "c": c}
+        item.update(extra_fields)
         if qtype != "mc":
             item["type"] = qtype
-        if qtype == "mc" and isinstance(q.get("aimg"), list):
+        if q.get("all_correct") and qtype not in UNSCORED_TYPES:
+            item["all_correct"] = True
+        if q.get("pts") is not None and qtype not in UNSCORED_TYPES:
+            try:
+                pv = int(q["pts"])
+                if 0 <= pv <= 5000:
+                    item["pts"] = pv
+            except Exception:
+                pass
+        if q.get("think") is not None and qtype != "info":
+            try:
+                thv = int(q["think"])
+                if 1 <= thv <= 120:
+                    item["think"] = thv
+            except Exception:
+                pass
+        if qtype in ("mc", "multi") and isinstance(q.get("aimg"), list):
             ai = [clean_url(x) for x in q["aimg"][:len(ans)]]
             ai += [""] * (len(ans) - len(ai))
             if any(ai):
@@ -592,6 +738,21 @@ def clean_questions(questions):
             ln += [""] * (len(ans) - len(ln))
             if any(ln):
                 item["lenses"] = ln
+        if isinstance(q.get("outcomes"), list) and qtype in ("poll", "mc", "tf"):
+            oc = [str(x).strip()[:240] for x in q["outcomes"][:len(ans)]]
+            oc += [""] * (len(ans) - len(oc))
+            if any(oc):
+                item["outcomes"] = oc
+        if isinstance(q.get("goto"), list) and qtype in ("poll", "mc", "tf"):
+            gt = []
+            for gx in q["goto"][:len(ans)]:
+                try:
+                    gt.append(max(0, min(200, int(gx))))
+                except Exception:
+                    gt.append(0)
+            gt += [0] * (len(ans) - len(gt))
+            if any(x > 0 for x in gt):
+                item["goto"] = gt
         if isinstance(q.get("exhibits"), list):
             ex = []
             for e_ in q["exhibits"][:6]:
@@ -615,13 +776,13 @@ def clean_questions(questions):
         if q.get("src"):
             item["src"] = str(q["src"]).strip()
         if q.get("img"):
-            item["img"] = str(q["img"]).strip()
+            item["img"] = clean_url(q["img"]) or str(q["img"]).strip()
         if q.get("t") is not None and qtype != "info":
             try:
                 tv = int(q["t"])
                 if tv > 0:
                     item["t"] = max(5, min(900, tv))
-                    if q.get("t_custom") or qtype in CASE_TYPES:
+                    if q.get("t_custom") or qtype in UNSCORED_TYPES:
                         item["t_custom"] = True
             except Exception:
                 pass
@@ -651,7 +812,7 @@ def new_game(quiz_file="quiz.json", count=None, shuffle=False, custom_questions=
             k = len(bank)
     else:
         k = len(bank)
-    if any(is_case_type(x) for x in bank):
+    if any(is_case_type(x) for x in bank) or any(x.get("goto") for x in bank):
         quiz = [dict(x) for x in bank[:k]]
     elif k < len(bank) or shuffle:
         quiz = [dict(x) for x in random.sample(bank, k)]
@@ -659,7 +820,7 @@ def new_game(quiz_file="quiz.json", count=None, shuffle=False, custom_questions=
         quiz = bank
     GAMES[pin] = {
         "pin": pin, "host": "h%08x" % random.getrandbits(32), "quiz": quiz,
-        "phase": "lobby", "q": -1, "start": 0, "preview": PREVIEW_TIME, "players": {},
+        "phase": "lobby", "q": -1, "start": 0, "preview": PREVIEW_TIME, "think_time": 0.0, "players": {},
         "reactions": [], "rseq": 0,
         "teams": False, "wager": True, "redemption": False, "redemption_added": False,
         "sabotage": False, "icebreaker": False, "icebreaker_prompt": "In one word, how are you feeling about today's quiz?",
@@ -667,12 +828,16 @@ def new_game(quiz_file="quiz.json", count=None, shuffle=False, custom_questions=
         "wheel": True, "wheel_mods": {}, "robin_stolen": {},
         "hotseat": True, "team_battle": True, "tiebreak": True,
         "roster": [], "banned": [], "logo": "", "bank": bank, "quiz_file": quiz_file,
-        "created": time.time(), "shuf": {}, "hot": {}, "team_results": {}, "team_prompts": {},
+        "created": time.time(), "shuf": {}, "match_shuf": {}, "hot": {}, "team_results": {}, "team_prompts": {},
         "owner": owner, "n_base": len(quiz), "speed": False, "dbl": False, "steal": False, "moderate": False,
         "pending": {}, "modlog": [],
         "auto": False, "phase_entered": time.time(),
-        "paused": False, "pause_rem": 0.0, "pause_prev": 0.0, "extra_time": 0.0,
+        "paused": False, "pause_rem": 0.0, "pause_prev": 0.0, "pause_think": 0.0, "extra_time": 0.0,
         "case_times": {}, "discuss_time": 60,
+        "scoring_mode": "classic", "hide_board": False, "allow_tts": False,
+        "consensus": False, "consensus_step": 0, "consensus_until": 0.0, "consensus_total": 0,
+        "consensus_votes": {}, "consensus_res": {},
+        "init_counts": {}, "revotes": {}, "branched_qs": [], "visited_qs": [],
     }
     return GAMES[pin]
 
@@ -687,7 +852,7 @@ def replay_game(g, quiz_file="quiz.json", count=None, shuffle=True, custom_quest
             k = len(bank)
     else:
         k = len(bank)
-    if any(is_case_type(x) for x in bank):
+    if any(is_case_type(x) for x in bank) or any(x.get("goto") for x in bank):
         g["quiz"] = [dict(x) for x in bank[:k]]
     elif k < len(bank) or shuffle:
         g["quiz"] = [dict(x) for x in random.sample(bank, k)]
@@ -701,6 +866,7 @@ def replay_game(g, quiz_file="quiz.json", count=None, shuffle=True, custom_quest
     g["wheel_mods"] = {}
     g["robin_stolen"] = {}
     g["shuf"] = {}
+    g["match_shuf"] = {}
     g["hot"] = {}
     g["team_results"] = {}
     g["settled_q"] = -1
@@ -714,10 +880,19 @@ def replay_game(g, quiz_file="quiz.json", count=None, shuffle=True, custom_quest
     g["paused"] = False
     g["extra_time"] = 0.0
     g["discuss_until"] = 0.0
+    g["consensus_step"] = 0
+    g["consensus_until"] = 0.0
+    g["consensus_votes"] = {}
+    g["consensus_res"] = {}
+    g["init_counts"] = {}
+    g["revotes"] = {}
+    g["branched_qs"] = []
+    g["visited_qs"] = []
     g["phase_entered"] = time.time()
     for p in g["players"].values():
         p["score"] = 0
         p["answers"] = {}
+        p["init_choices"] = {}
         p["powerups"] = {}
         p["wagers"] = {}
         p["confident"] = {}
@@ -859,13 +1034,27 @@ def is_team_battle(g, qi):
     if qi < 4 or (qi + 1) % 5 != 0 or is_speed_q(g, qi):
         return False
     q = g["quiz"][qi]
-    if q.get("redemption") or q.get("tiebreak") or is_boss_q(g, qi) or is_case_type(q):
+    if q.get("redemption") or q.get("tiebreak") or is_boss_q(g, qi) or is_unscored_type(q):
         return False
     return qi not in g.get("wheel_mods", {})
 
 
+def has_consensus_phase(g, qi=None):
+    idx = g["q"] if qi is None else qi
+    if not g.get("consensus") or not g.get("teams") or idx is None or not (0 <= idx < len(g["quiz"])):
+        return False
+    if is_speed_q(g, idx):
+        return False
+    q = g["quiz"][idx]
+    if q.get("tiebreak") or is_unscored_type(q):
+        return False
+    return qtype_of(q) in ("mc", "tf", "zoom")
+
+
 def prev_time(g, qi=None):
     idx = g["q"] if qi is None else qi
+    if idx is not None and g.get("revotes", {}).get(idx):
+        return 0.0
     base = max(0.0, float(g.get("preview", PREVIEW_TIME)))
     if idx is not None and is_speed_q(g, idx):
         return 0.0
@@ -877,10 +1066,37 @@ def prev_time(g, qi=None):
     return base
 
 
+def think_sec(g, qi=None):
+    idx = g["q"] if qi is None else qi
+    if idx is None or not (0 <= idx < len(g["quiz"])):
+        return 0.0
+    if g.get("revotes", {}).get(idx) or is_speed_q(g, idx) or qtype_of(g["quiz"][idx]) == "info":
+        return 0.0
+    q = g["quiz"][idx]
+    if q.get("think") is not None:
+        return max(0.0, float(q["think"]))
+    return max(0.0, float(g.get("think_time") or 0.0))
+
+
+def cur_think_left(g):
+    """Return (think_left, think_total) during question phase."""
+    thk_t = think_sec(g)
+    if thk_t <= 0 or g["phase"] != "question" or g.get("consensus_step") == 2:
+        return 0.0, thk_t
+    if g.get("paused"):
+        return max(0.0, float(g.get("pause_think", 0.0))), thk_t
+    prev_t = prev_time(g)
+    elapsed = time.time() - g["start"]
+    if elapsed < prev_t:
+        return thk_t, thk_t
+    return max(0.0, (prev_t + thk_t) - elapsed), thk_t
+
+
 def cur_timer_state(g):
     """Return (preview_left, q_left, q_elapsed, total_qtime)."""
     qt = qtime(g) + g.get("extra_time", 0.0)
     prev_t = prev_time(g)
+    thk_t = think_sec(g)
     if g.get("paused"):
         prev_left = g.get("pause_prev", 0.0)
         q_left = g.get("pause_rem", qt)
@@ -888,7 +1104,7 @@ def cur_timer_state(g):
         return prev_left, q_left, q_elapsed, qt
     elapsed = time.time() - g["start"]
     prev_left = max(0.0, prev_t - elapsed) if g["phase"] == "question" else 0.0
-    q_elapsed = max(0.0, elapsed - prev_t)
+    q_elapsed = max(0.0, elapsed - prev_t - thk_t)
     q_left = max(0.0, qt - q_elapsed)
     return prev_left, q_left, q_elapsed, qt
 
@@ -923,17 +1139,35 @@ def audience_pcts(g, qi):
     return pcts
 
 
-def record_answer(g, p, choice, t, given=None):
+def record_answer(g, p, choice, t, given=None, credit=None, extra=None):
     qi = g["q"]
     q = g["quiz"][qi]
     qt = max(1.0, qtime(g) + g.get("extra_time", 0.0))
-    is_correct = (choice == q["c"])
+    qtp = qtype_of(q)
+    if credit is None:
+        if q.get("all_correct"):
+            is_correct = (choice >= 0) if qtp in ("text", "order") else True
+        elif qtp in ("mc", "tf", "zoom") and q.get("correct_multi"):
+            is_correct = (choice in q["correct_multi"])
+        else:
+            is_correct = (choice == q["c"])
+        credit = 1.0 if is_correct else 0.0
+    else:
+        credit = max(0.0, min(1.0, float(credit)))
+        is_correct = bool(extra.get("ok")) if (extra and "ok" in extra) else (credit >= 0.999)
     if q.get("tiebreak"):
-        p["answers"][qi] = {
+        rec = {
             "choice": choice, "gained": 0, "bonus": 0, "wager": 0, "correct": is_correct,
             "time": round(t, 2), "shielded": False, "underdog": False, "given": given,
         }
+        if extra:
+            rec.update({k: v for k, v in extra.items() if k != "ok"})
+        p["answers"][qi] = rec
         return
+    smode = g.get("scoring_mode") or "classic"
+    q_pts = q.get("pts")
+    base_max = 1000 if q_pts is None else max(0, int(q_pts))
+    unscored_mode = (smode == "survey") or (base_max == 0)
     pu = p.get("powerups", {})
     p_mult = 2 if pu.get("2x_q") == qi else 1
     shielded = (pu.get("shield_q") == qi)
@@ -944,18 +1178,22 @@ def record_answer(g, p, choice, t, given=None):
     don = bool(p.get("don", {}).get(qi)) and is_dbl_q(g, qi)
     wager_pct = p.get("wagers", {}).get(qi)
     wager_amt = 0
-    if wager_pct is not None and wager_pct > 0:
+    if not unscored_mode and wager_pct is not None and wager_pct > 0:
         stake = max(500, p["score"])
         wager_amt = round(stake * (wager_pct / 100.0))
     wheel_bonus = 0
     conf_delta = 0
-    if is_correct:
+    bonus = 0
+    if unscored_mode:
+        gained = 0
+    elif is_correct:
         prev_streak = calc_streak(p, qi - 1) if qi > 0 else 0
         new_streak = prev_streak + 1
         s_mult = 2 if (wmod and wmod["id"] == "streak2x") else 1
         bonus = (min(300, (new_streak - 1) * 100) if new_streak >= 2 else 0) * s_mult
-        spd_mult = 1.35 if (wmod and wmod["id"] == "speed" and t <= qt * 0.45) else 1.0
-        base = round(1000 * (1 - min(1.0, t / qt) / 2) * qmult(g) * p_mult * u_mult * spd_mult * (2 if don else 1))
+        spd_mult = 1.35 if (smode == "classic" and wmod and wmod["id"] == "speed" and t <= qt * 0.45) else 1.0
+        speed_factor = (1.0 - min(1.0, t / qt) / 2.0) if smode == "classic" else 1.0
+        base = round(base_max * credit * speed_factor * qmult(g) * p_mult * u_mult * spd_mult * (2 if don else 1))
         if wmod and wmod["id"] == "crate":
             wheel_bonus = random.choice([150, 200, 250, 300, 400])
         elif wmod and wmod["id"] == "robin" and len(g["players"]) > 1:
@@ -970,37 +1208,111 @@ def record_answer(g, p, choice, t, given=None):
         if confident:
             conf_delta = 250
         gained = base + bonus + wager_amt + wheel_bonus + conf_delta
+    elif credit > 0:
+        speed_factor = (1.0 - min(1.0, t / qt) / 2.0) if smode == "classic" else 1.0
+        gained = round(base_max * credit * speed_factor * qmult(g))
     else:
-        bonus = 0
         wager_loss = wager_amt if (wager_amt > 0 and not shielded) else 0
         if confident and not shielded:
             conf_delta = -150
         gained = -wager_loss + conf_delta - (400 if (don and not shielded) else 0)
     p["score"] = max(0, p["score"] + gained)
-    p["answers"][qi] = {
+    rec = {
         "choice": choice, "gained": gained, "bonus": bonus,
-        "wager": wager_amt, "correct": is_correct, "time": round(t, 2),
+        "wager": wager_amt, "correct": is_correct, "partial": (not is_correct and credit > 0),
+        "credit": round(credit, 3), "time": round(t, 2),
         "shielded": shielded, "underdog": underdog and is_correct,
         "confident": confident, "conf_delta": conf_delta, "wheel_bonus": wheel_bonus,
         "given": given, "don": don,
     }
+    if extra:
+        rec.update({k: v for k, v in extra.items() if k != "ok"})
+    p["answers"][qi] = rec
 
 
-def record_case_answer(g, p, choice, t, given=None, rank=None):
+def bot_auto_answer(g, p, delay):
     qi = g["q"]
-    p["answers"][qi] = {
-        "choice": choice, "gained": CASE_PTS, "bonus": 0, "wager": 0, "correct": False, "neutral": True,
+    q = g["quiz"][qi]
+    qtp = qtype_of(q)
+    skill = p.get("skill", 0.65)
+    hit = (random.random() < skill)
+    if qtp == "multi":
+        req = list(q.get("correct_multi") or [q["c"]])
+        if hit:
+            picked = sorted(req)
+        else:
+            picked = sorted(random.sample(range(len(q["a"])), max(1, min(len(q["a"]), random.randint(1, 2)))))
+        pset, rset = set(picked), set(req)
+        ok = bool(q.get("all_correct")) or (pset == rset)
+        credit = 1.0 if ok else (max(0.0, (len(pset & rset) - len(pset - rset)) / float(max(1, len(rset)))) if q.get("partial", True) else 0.0)
+        record_answer(g, p, picked[0], delay, " + ".join(q["a"][k] for k in picked), credit=credit, extra={"ok": ok, "choices": picked})
+    elif qtp == "match":
+        pairs = q.get("pairs") or []
+        n = len(pairs)
+        shuf = g.get("match_shuf", {}).get(qi) or list(range(n))
+        inv = [shuf.index(i) for i in range(n)]
+        rel = list(inv)
+        if not hit:
+            random.shuffle(rel)
+        hits_list = [(shuf[rel[li]] == li) or (pairs[shuf[rel[li]]]["r"].lower() == pairs[li]["r"].lower()) for li in range(n)]
+        hits = sum(1 for h in hits_list if h)
+        ok = bool(q.get("all_correct")) or (hits == n)
+        credit = 1.0 if ok else (hits / float(max(1, n)))
+        gv = ", ".join("%s \u2192 %s" % (pairs[li]["l"], pairs[shuf[rel[li]]]["r"]) for li in range(n))
+        record_answer(g, p, 0 if ok else -1, delay, gv, credit=credit, extra={"ok": ok, "pairs": rel, "pair_hits": hits_list})
+    elif qtp == "slider":
+        sl = q.get("slider") or {"min": 0.0, "max": 100.0, "step": 1.0, "target": 50.0, "margin": 5.0, "unit": ""}
+        span = max(1.0, sl["max"] - sl["min"])
+        mg = float(sl.get("margin") or 0.0)
+        spread = (mg if mg > 0 else span * 0.05) * (0.65 if hit else 2.6)
+        step = max(1e-6, float(sl.get("step") or 1.0))
+        raw_v = sl["target"] + (0.0 if (hit and mg == 0) else random.uniform(-spread, spread))
+        val = max(sl["min"], min(sl["max"], round((raw_v - sl["min"]) / step) * step + sl["min"]))
+        diff = abs(val - sl["target"])
+        ok = bool(q.get("all_correct")) or (diff <= 1e-6) or (mg > 0 and diff <= mg + 1e-6)
+        credit = (1.0 if (diff <= 1e-6 or q.get("all_correct")) else max(0.75, 1.0 - 0.25 * (diff / mg))) if ok else 0.0
+        record_answer(g, p, 0 if ok else -1, delay, "%g%s" % (val, sl.get("unit", "")), credit=credit, extra={"ok": ok, "slider_val": round(val, 4)})
+    elif qtp == "pin":
+        pn = q.get("pin") or {"x": 50.0, "y": 50.0, "r": 12.0}
+        r_ = max(3.0, float(pn.get("r", 12.0)))
+        sig = r_ * (0.38 if hit else 1.6)
+        px = max(2.0, min(98.0, pn["x"] + random.gauss(0, sig)))
+        py = max(2.0, min(98.0, pn["y"] + random.gauss(0, sig)))
+        dist = ((px - pn["x"]) ** 2 + (py - pn["y"]) ** 2) ** 0.5
+        ok = bool(q.get("all_correct")) or (dist <= r_)
+        credit = max(0.6, 1.0 - 0.4 * (dist / r_)) if ok else 0.0
+        record_answer(g, p, 0 if ok else -1, delay, "(%.0f%%, %.0f%%)" % (px, py), credit=credit, extra={"ok": ok, "pin_xy": [round(px, 1), round(py, 1)]})
+    else:
+        ch = bot_choice(q, skill)
+        record_answer(g, p, ch, delay, bot_given(q, ch))
+
+
+def record_case_answer(g, p, choice, t, given=None, rank=None, ideas=None):
+    qi = g["q"]
+    pts = 0 if g.get("scoring_mode") == "survey" else CASE_PTS
+    prev_a = p["answers"].get(qi)
+    if prev_a:
+        # Adding additional brainstorm sticky-note idea without double-awarding participation pts
+        if ideas is not None:
+            prev_a["ideas"] = list(ideas)
+            prev_a["given"] = " | ".join(ideas)
+        return
+    rec = {
+        "choice": choice, "gained": pts, "bonus": 0, "wager": 0, "correct": False, "neutral": True,
         "time": round(t, 2), "shielded": False, "underdog": False, "given": given, "case": True,
     }
     if rank is not None:
-        p["answers"][qi]["rank"] = list(rank)
-    p["score"] += CASE_PTS
+        rec["rank"] = list(rank)
+    if ideas is not None:
+        rec["ideas"] = list(ideas)
+    p["answers"][qi] = rec
+    p["score"] += pts
 
 
 def bot_case(g, p, t):
     q = g["quiz"][g["q"]]
     ty = qtype_of(q)
-    if ty == "poll":
+    if ty in ("poll", "scale"):
         ch = random.randrange(len(q["a"]))
         record_case_answer(g, p, ch, t, q["a"][ch])
     elif ty == "rank":
@@ -1009,6 +1321,9 @@ def bot_case(g, p, t):
         record_case_answer(g, p, 0, t, " > ".join(q["a"][k] for k in seq), rank=seq)
     elif ty == "open":
         record_case_answer(g, p, 0, t, random.choice(BOT_OPINIONS))
+    elif ty == "brainstorm":
+        idea = random.choice(BOT_OPINIONS)[:90]
+        record_case_answer(g, p, 0, t, idea, ideas=[idea])
 
 
 def settle_case(g, qi):
@@ -1025,12 +1340,16 @@ def settle_case(g, qi):
         g.setdefault("defenders", {})[qi] = [
             {"side": side, "name": random.choice(humans.get(side) or names)} for side, names in sorted(anyone.items())
         ]
-    elif t == "open":
+    elif t in ("open", "brainstorm"):
+        prev_starred = {r["text"]: bool(r.get("starred")) for r in g.get("responses", {}).get(qi, [])}
         res = []
         for pid, p in g["players"].items():
             a = p["answers"].get(qi)
-            if a and a.get("given"):
-                res.append({"id": len(res), "pid": pid, "text": a["given"], "voters": []})
+            if not a:
+                continue
+            texts = a.get("ideas") if (t == "brainstorm" and a.get("ideas")) else ([a["given"]] if a.get("given") else [])
+            for tx in texts:
+                res.append({"id": len(res), "pid": pid, "text": tx, "voters": [], "starred": prev_starred.get(tx, False)})
         random.shuffle(res)
         for i, r in enumerate(res):
             r["id"] = i
@@ -1055,6 +1374,32 @@ def eligible(g):
     return list(g["players"].values())
 
 
+def enter_consensus_phase2(g):
+    qi = g["q"]
+    q = g["quiz"][qi]
+    g["consensus_step"] = 2
+    cdur = max(10, int(g.get("team_preview") or 20))
+    g["consensus_total"] = cdur
+    g["consensus_until"] = time.time() + cdur
+    g["paused"] = False
+    cv = g.setdefault("consensus_votes", {})[qi] = {}
+    # Seed bot consensus votes from their team's Phase 1 plurality (or individual pick)
+    by_team = {}
+    for pid, p in g["players"].items():
+        if p.get("team") in TEAM_MAP:
+            by_team.setdefault(p["team"], []).append((pid, p))
+    for tid, members in by_team.items():
+        counts = {}
+        for _, m in members:
+            a = m["answers"].get(qi)
+            if a and not a.get("blank") and 0 <= a.get("choice", -1) < len(q["a"]):
+                counts[a["choice"]] = counts.get(a["choice"], 0) + 1
+        top_ch = max(counts.items(), key=lambda kv: kv[1])[0] if counts else q["c"]
+        for pid, m in members:
+            if m.get("bot"):
+                cv[pid] = top_ch
+
+
 def settle_question(g):
     qi = g["q"]
     if qi < 0 or g.get("settled_q") == qi:
@@ -1074,11 +1419,52 @@ def settle_question(g):
             best[1]["answers"][qi]["gained"] = 1
             g["tb_winner"] = best[1]["name"]
         return
-    if is_case_type(q):
+    if is_unscored_type(q):
         settle_case(g, qi)
         return
     qt = qtype_of(q)
-    if is_team_battle(g, qi):
+    valid_set = set(q.get("correct_multi") or [q["c"]])
+    if has_consensus_phase(g, qi):
+        cv = g.get("consensus_votes", {}).get(qi, {})
+        by_team = {}
+        for pid, p in P.items():
+            if p.get("team") in TEAM_MAP:
+                by_team.setdefault(p["team"], []).append((pid, p))
+        indiv_ans = [p["answers"].get(qi) for p in P.values() if qi in p["answers"] and not p["answers"][qi].get("blank")]
+        indiv_pct = round(100.0 * sum(1 for a in indiv_ans if a.get("correct")) / max(1, len(indiv_ans))) if indiv_ans else 0
+        team_rows = []
+        team_member_ok, team_member_tot = 0, 0
+        for tid, members in by_team.items():
+            if not members:
+                continue
+            votes = {}
+            for pid, m in members:
+                ch_ = cv.get(pid)
+                if ch_ is None:
+                    a_ = m["answers"].get(qi)
+                    ch_ = a_["choice"] if (a_ and not a_.get("blank")) else None
+                if ch_ is not None and 0 <= ch_ < len(q["a"]):
+                    votes[ch_] = votes.get(ch_, 0) + 1
+            if not votes:
+                continue
+            t_choice = max(votes.items(), key=lambda kv: kv[1])[0]
+            t_ok = bool(q.get("all_correct")) or (t_choice in valid_set)
+            team_member_tot += len(members)
+            if t_ok:
+                team_member_ok += len(members)
+                if g.get("scoring_mode") != "survey":
+                    for _, m in members:
+                        add_bonus(m, qi, CONSENSUS_BONUS, "team_bonus")
+            t_meta = TEAM_MAP[tid]
+            team_rows.append({
+                "id": tid, "name": t_meta["name"], "emoji": t_meta["emoji"], "color": t_meta["color"],
+                "choice": t_choice, "ans": q["a"][t_choice], "correct": t_ok, "members": len(members),
+            })
+        team_pct = round(100.0 * team_member_ok / max(1, team_member_tot)) if team_member_tot else indiv_pct
+        g.setdefault("consensus_res", {})[qi] = {
+            "indiv_pct": indiv_pct, "team_pct": team_pct, "delta": team_pct - indiv_pct, "teams": team_rows,
+        }
+    elif is_team_battle(g, qi):
         by_team = {}
         for p in P.values():
             if p.get("team") in TEAM_MAP:
@@ -1094,10 +1480,10 @@ def settle_question(g):
                     a = m["answers"][qi]
                     votes.setdefault(a["choice"], []).append(a["time"])
                 top = max(votes.items(), key=lambda kv: (len(kv[1]), -min(kv[1])))
-                ok = (top[0] == q["c"])
+                ok = bool(q.get("all_correct")) or (top[0] in valid_set)
             else:
                 ok = sum(1 for m in answered if m["answers"][qi]["correct"]) * 2 > len(answered)
-            if ok:
+            if ok and g.get("scoring_mode") != "survey":
                 for m in answered:
                     add_bonus(m, qi, TEAM_BONUS, "team_bonus")
             t = TEAM_MAP[tid]
@@ -1107,13 +1493,14 @@ def settle_question(g):
     if hs:
         hp = P.get(hs["pid"])
         hot_ok = bool(hp and hp["answers"].get(qi, {}).get("correct"))
-        if hp and hot_ok:
+        if hp and hot_ok and g.get("scoring_mode") != "survey":
             add_bonus(hp, qi, HOT_BONUS, "hot_bonus")
         right = 0
         for pid, guess in hs.get("preds", {}).items():
             pp = P.get(pid)
             if pp and bool(guess) == hot_ok:
-                add_bonus(pp, qi, PRED_BONUS, "pred_bonus")
+                if g.get("scoring_mode") != "survey":
+                    add_bonus(pp, qi, PRED_BONUS, "pred_bonus")
                 right += 1
         hs["ok"] = hot_ok
         hs["right"] = right
@@ -1121,11 +1508,16 @@ def settle_question(g):
 
 def start_question(g, qi):
     g["q"] = qi
+    vq_ = g.setdefault("visited_qs", [])
+    if qi not in vq_:
+        vq_.append(qi)
     g["phase"] = "question"
     g["paused"] = False
     g["extra_time"] = 0.0
     g["discuss_until"] = 0.0
-    if g.get("wheel", True) and qi > 0 and (qi + 1) % 4 == 0 and not is_boss_q(g, qi) and not g["quiz"][qi].get("redemption") and not is_speed_q(g, qi) and not is_case_type(g["quiz"][qi]):
+    g["consensus_step"] = 1 if has_consensus_phase(g, qi) else 0
+    g["consensus_until"] = 0.0
+    if g.get("wheel", True) and qi > 0 and (qi + 1) % 4 == 0 and not is_boss_q(g, qi) and not g["quiz"][qi].get("redemption") and not is_speed_q(g, qi) and not is_unscored_type(g["quiz"][qi]):
         g.setdefault("wheel_mods", {})[qi] = random.choice(WHEEL_EVENTS)
     q = g["quiz"][qi]
     if qtype_of(q) == "order":
@@ -1136,7 +1528,15 @@ def start_question(g, qi):
             if perm != list(range(n)):
                 break
         g.setdefault("shuf", {})[qi] = perm
-    if is_team_battle(g, qi):
+    elif qtype_of(q) == "match":
+        n = len(q.get("pairs") or [])
+        perm = list(range(n))
+        for _ in range(12):
+            random.shuffle(perm)
+            if perm != list(range(n)):
+                break
+        g.setdefault("match_shuf", {})[qi] = perm
+    if is_team_battle(g, qi) or has_consensus_phase(g, qi):
         used = random.sample(TEAM_PROMPTS, min(len(TEAM_PROMPTS), len(TEAMS)))
         g.setdefault("team_prompts", {})[qi] = {t["id"]: used[i % len(used)] for i, t in enumerate(TEAMS)}
     if qtype_of(q) == "info" and q.get("roles") and g["players"]:
@@ -1146,8 +1546,8 @@ def start_question(g, qi):
         random.shuffle(bots_)
         for i_, pid_ in enumerate(hum + bots_):
             g["players"][pid_].setdefault("roles", {})[qi] = q["roles"][i_ % len(q["roles"])]
-    if (g.get("hotseat", True) and qi >= 5 and not is_case_type(q) and not is_speed_q(g, qi) and (qi + 1) % 6 == 0 and len(g["players"]) >= 3
-            and qi not in g.get("wheel_mods", {}) and not is_team_battle(g, qi)
+    if (g.get("hotseat", True) and qi >= 5 and not is_unscored_type(q) and not is_speed_q(g, qi) and (qi + 1) % 6 == 0 and len(g["players"]) >= 3
+            and qi not in g.get("wheel_mods", {}) and not is_team_battle(g, qi) and not has_consensus_phase(g, qi)
             and not is_boss_q(g, qi) and not q.get("redemption") and not q.get("tiebreak")):
         humans = [pid for pid, p in g["players"].items() if not p.get("bot")]
         pool = humans or list(g["players"].keys())
@@ -1184,6 +1584,8 @@ def begin_question(g):
     g["start"] = time.time()
     g["phase_entered"] = time.time()
     g["paused"] = False
+    g["consensus_step"] = 1 if has_consensus_phase(g, g["q"]) else 0
+    g["consensus_until"] = 0.0
 
 
 def find_most_missed(g):
@@ -1192,7 +1594,7 @@ def find_most_missed(g):
         return None
     best = None
     for qi, q in enumerate(g["quiz"]):
-        if q.get("redemption") or is_case_type(q):
+        if q.get("redemption") or is_unscored_type(q):
             continue
         ans_count = 0
         wrong_count = 0
@@ -1257,7 +1659,7 @@ def topic_stats(g):
     agg = {}
     for qi, q in enumerate(g["quiz"]):
         t = q.get("topic")
-        if not t or q.get("tiebreak") or is_case_type(q):
+        if not t or q.get("tiebreak") or is_unscored_type(q):
             continue
         cor = sum(1 for p in g["players"].values() if p["answers"].get(qi, {}).get("correct"))
         a = agg.setdefault(t, [0, 0])
@@ -1276,7 +1678,7 @@ def finalize_game(g):
         n_p = max(1, len(g["players"]))
         qs = []
         for qi, q in enumerate(g["quiz"]):
-            if q.get("tiebreak") or is_case_type(q):
+            if q.get("tiebreak") or is_unscored_type(q):
                 continue
             cor = sum(1 for p in g["players"].values() if p["answers"].get(qi, {}).get("correct"))
             qs.append({"q": q["q"], "pct": round(100.0 * cor / n_p), "ans": ans_text(q), "topic": q.get("topic", "")})
@@ -1287,7 +1689,9 @@ def finalize_game(g):
             "quiz": title, "players": len(g["players"]),
             "humans": sum(1 for p in g["players"].values() if not p.get("bot")),
             "questions": len(qs), "accuracy": st["accuracy"], "topics": st.get("topics", []),
-            "top": [{"name": r["name"], "score": r["score"]} for r in lb[:3]], "qs": qs,
+            "calibration": st.get("calibration"),
+            "scoring_mode": g.get("scoring_mode", "classic"),
+            "top": [{"name": r["name"], "score": r["score"], "pct": r.get("pct", 0)} for r in lb[:3]], "qs": qs,
         }
         K.hist_add(entry)
         if g.get("roster"):
@@ -1298,7 +1702,7 @@ def finalize_game(g):
                 topics = {}
                 for qi, q in enumerate(g["quiz"]):
                     t = q.get("topic")
-                    if not t or q.get("tiebreak") or is_case_type(q):
+                    if not t or q.get("tiebreak") or is_unscored_type(q):
                         continue
                     c = topics.setdefault(t, [0, 0])
                     c[1] += 1
@@ -1314,7 +1718,43 @@ def go_final(g):
     finalize_game(g)
 
 
+def branch_target_info(g, qi=None):
+    idx = g["q"] if qi is None else qi
+    if idx is None or not (0 <= idx < len(g["quiz"])):
+        return None
+    if idx in g.get("branched_qs", []):
+        return None
+    q = g["quiz"][idx]
+    gt = q.get("goto")
+    if not gt or not q.get("a"):
+        return None
+    counts = [0] * len(q["a"])
+    for p in g["players"].values():
+        a = p["answers"].get(idx)
+        if a and not a.get("blank") and 0 <= a.get("choice", -1) < len(counts):
+            counts[a["choice"]] += 1
+    if sum(counts) <= 0:
+        return None
+    win_opt = max(range(len(counts)), key=lambda k: counts[k])
+    if win_opt < len(gt) and gt[win_opt] >= 1:
+        cand = gt[win_opt] - 1
+        if 0 <= cand < len(g["quiz"]) and cand != idx:
+            return {"idx": cand, "slide": cand + 1, "title": g["quiz"][cand]["q"], "win_opt": win_opt, "win_ans": q["a"][win_opt]}
+    return None
+
+
+def resolve_next_q(g):
+    bt = branch_target_info(g)
+    if bt:
+        g.setdefault("branched_qs", []).append(g["q"])
+        return bt["idx"]
+    return g["q"] + 1
+
+
 def will_finish_after_results(g):
+    bt = branch_target_info(g)
+    if bt:
+        return False
     if g["q"] + 1 < len(g["quiz"]):
         return False
     return pending_extra(g) is None
@@ -1323,21 +1763,28 @@ def will_finish_after_results(g):
 def advance_game(g):
     if g["phase"] == "question":
         qi = g["q"]
+        if has_consensus_phase(g, qi) and g.get("consensus_step") == 1:
+            for p in eligible(g):
+                if p.get("bot") and qi not in p["answers"]:
+                    delay = round(random.uniform(2.0, qtime(g) * 0.7), 2)
+                    bot_auto_answer(g, p, delay)
+            enter_consensus_phase2(g)
+            return
         for p in eligible(g):
             if p.get("bot") and qi not in p["answers"]:
-                if is_case_type(g["quiz"][qi]):
+                if is_unscored_type(g["quiz"][qi]):
                     bot_case(g, p, 3.0)
                     continue
                 plan = p.get("plan", {})
                 if qi in plan:
-                    delay, ch = plan[qi]
+                    delay, _ = plan[qi]
                 else:
                     delay = round(random.uniform(2.0, qtime(g) * 0.7), 2)
-                    ch = bot_choice(g["quiz"][qi], p.get("skill", 0.65))
                 if is_boss_q(g, qi) and qi not in p.setdefault("wagers", {}):
                     p["wagers"][qi] = random.choice([0, 50, 50, 100])
-                record_answer(g, p, ch, delay, bot_given(g["quiz"][qi], ch))
+                bot_auto_answer(g, p, delay)
         g["phase"] = "results"
+        g["consensus_step"] = 0
         g["phase_entered"] = time.time()
         g["paused"] = False
         g["discuss_until"] = 0.0
@@ -1346,7 +1793,8 @@ def advance_game(g):
             advance_game(g)
     elif g["phase"] == "results":
         g["discuss_until"] = 0.0
-        if g["q"] + 1 >= len(g["quiz"]):
+        bt = branch_target_info(g)
+        if not bt and g["q"] + 1 >= len(g["quiz"]):
             kind = pending_extra(g)
             if kind == "redemption":
                 missed_qi = find_most_missed(g)
@@ -1355,8 +1803,11 @@ def advance_game(g):
                 rq["redemption"] = True
                 rq["double"] = True
                 g["quiz"].append(rq)
-                g["phase"] = "board"
-                g["phase_entered"] = time.time()
+                if g.get("hide_board"):
+                    start_question(g, g["q"] + 1)
+                else:
+                    g["phase"] = "board"
+                    g["phase_entered"] = time.time()
                 return
             if kind == "tiebreak":
                 g["tb_done"] = True
@@ -1367,18 +1818,17 @@ def advance_game(g):
                 return
             g["redemption_added"] = True
             go_final(g)
-        elif is_speed_q(g, g["q"]) and is_speed_q(g, g["q"] + 1):
-            start_question(g, g["q"] + 1)
-        elif is_case_q(g, g["q"]):
-            start_question(g, g["q"] + 1)
+        elif (is_speed_q(g, g["q"]) and is_speed_q(g, g["q"] + 1)) or is_case_q(g, g["q"]) or g.get("hide_board"):
+            start_question(g, resolve_next_q(g))
         else:
             g["phase"] = "board"
             g["phase_entered"] = time.time()
     elif g["phase"] == "board":
-        if g["q"] + 1 >= len(g["quiz"]):
+        nxt_q = resolve_next_q(g)
+        if nxt_q >= len(g["quiz"]):
             go_final(g)
         else:
-            start_question(g, g["q"] + 1)
+            start_question(g, nxt_q)
     elif g["phase"] == "intro":
         begin_question(g)
     elif g["phase"] == "icebreaker":
@@ -1398,14 +1848,27 @@ def tick(g):
     """Move question -> results when time is up or everyone answered, run bots, and handle auto-advance."""
     now = time.time()
     if g["phase"] == "question":
-        prev_left, q_left, q_elapsed, qt = cur_timer_state(g)
         qi = g["q"]
         q = g["quiz"][qi]
-        if not g.get("paused") and prev_left <= 0:
+        if g.get("consensus_step") == 2:
+            cv = g.get("consensus_votes", {}).get(qi, {})
+            humans = [pid for pid, p in g["players"].items() if not p.get("bot") and p.get("team") in TEAM_MAP]
+            done_c = bool(humans) and all(pid in cv for pid in humans)
+            if (not g.get("paused") and now >= g.get("consensus_until", 0.0)) or done_c:
+                g["phase"] = "results"
+                g["consensus_step"] = 0
+                g["phase_entered"] = now
+                g["paused"] = False
+                g["discuss_until"] = 0.0
+                settle_question(g)
+            return
+        prev_left, q_left, q_elapsed, qt = cur_timer_state(g)
+        thk_left, _ = cur_think_left(g)
+        if not g.get("paused") and prev_left <= 0 and thk_left <= 0:
             for p in eligible(g):
                 if not p.get("bot") or qi in p["answers"]:
                     continue
-                if is_case_type(q):
+                if is_unscored_type(q):
                     if q_elapsed >= 2.0 + (sum(map(ord, p["name"])) % 9):
                         bot_case(g, p, q_elapsed)
                     continue
@@ -1425,9 +1888,9 @@ def tick(g):
                         p.setdefault("wagers", {})[qi] = random.choice([0, 50, 50, 100])
                     elif p.get("skill", 0.65) >= 0.72 and random.random() < 0.25:
                         p.setdefault("confident", {})[qi] = True
-                delay, ch = plan[qi]
+                delay, _ = plan[qi]
                 if q_elapsed >= delay:
-                    record_answer(g, p, ch, delay, bot_given(q, ch))
+                    bot_auto_answer(g, p, delay)
                     if random.random() < 0.22:
                         g["rseq"] = g.get("rseq", 0) + 1
                         g["reactions"].append({
@@ -1436,13 +1899,20 @@ def tick(g):
                             "name": p["name"], "t": now,
                         })
         ps = eligible(g)
-        done = ps and all(qi in p["answers"] for p in ps)
+        if qtype_of(q) == "brainstorm":
+            done = False
+        else:
+            done = ps and all(qi in p["answers"] for p in ps)
         if qtype_of(q) != "info" and ((not g.get("paused") and q_left <= 0) or done):
-            g["phase"] = "results"
-            g["phase_entered"] = now
-            g["paused"] = False
-            g["discuss_until"] = 0.0
-            settle_question(g)
+            if has_consensus_phase(g, qi) and g.get("consensus_step") == 1:
+                enter_consensus_phase2(g)
+            else:
+                g["phase"] = "results"
+                g["consensus_step"] = 0
+                g["phase_entered"] = now
+                g["paused"] = False
+                g["discuss_until"] = 0.0
+                settle_question(g)
     elif g["phase"] == "intro":
         if now - g.get("intro_start", now) >= intro_len(g):
             begin_question(g)
@@ -1456,25 +1926,79 @@ def tick(g):
             advance_game(g)
 
 
+def gradable_qis(g, up_to=None):
+    n_all = len(g["quiz"])
+    lim = (n_all - 1) if up_to is None else min(n_all - 1, up_to)
+    if lim < 0:
+        return []
+    use_v = bool(g.get("branched_qs") and g.get("visited_qs"))
+    vset = set(g.get("visited_qs") or [])
+    out = []
+    for qi in range(lim + 1):
+        q = g["quiz"][qi]
+        if q.get("tiebreak") or is_unscored_type(q):
+            continue
+        if use_v and qi not in vset:
+            continue
+        out.append(qi)
+    return out
+
+
+def calc_calibration(g, players_list, qis):
+    conf_n = conf_ok = calm_n = calm_ok = 0
+    for p in players_list:
+        ans_map = p.get("answers", {})
+        conf_map = p.get("confident", {})
+        for qi in qis:
+            a = ans_map.get(qi)
+            is_conf = bool((a and a.get("confident")) or conf_map.get(qi))
+            ok = bool(a and a.get("correct"))
+            if is_conf:
+                conf_n += 1
+                if ok:
+                    conf_ok += 1
+            elif a and not a.get("blank"):
+                calm_n += 1
+                if ok:
+                    calm_ok += 1
+    return {
+        "conf_n": conf_n, "conf_ok": conf_ok, "conf_wrong": conf_n - conf_ok,
+        "conf_pct": round(100.0 * conf_ok / conf_n) if conf_n else None,
+        "calm_n": calm_n, "calm_ok": calm_ok,
+        "calm_pct": round(100.0 * calm_ok / calm_n) if calm_n else None,
+    }
+
+
 def leaderboard(g):
     q = g["q"]
+    ph = g.get("phase")
+    up_to = (q - 1) if ph == "question" else ((len(g["quiz"]) - 1) if ph == "final" else q)
+    grad_qis = gradable_qis(g, up_to=up_to)
+    grd_n = len(grad_qis)
     rows = []
     for p in g["players"].values():
         a = p["answers"].get(q, {}) if q >= 0 else {}
         gained = a.get("gained", 0)
         streak = calc_streak(p, q) if q >= 0 else 0
         t_info = TEAM_MAP.get(p.get("team", ""), {})
+        cor_n = sum(1 for i in grad_qis if p["answers"].get(i, {}).get("correct"))
+        pct = round(100.0 * cor_n / grd_n) if grd_n > 0 else 0
         rows.append({
             "name": p["name"], "avatar": p.get("avatar", ""),
+            "av_hat": p.get("av_hat", ""), "av_ring": p.get("av_ring", ""),
             "team": p.get("team", ""), "team_emoji": t_info.get("emoji", ""),
             "score": p["score"], "prev": p["score"] - gained,
             "gained": gained, "streak": streak,
+            "correct_n": cor_n, "graded_n": grd_n, "pct": pct,
             "frozen_next": bool(p.get("frozen_next")),
             "color": p.get("color", ""), "ctag": p.get("ctag", ""),
             "_ans": a,
         })
     prev_order = [x["name"] for x in sorted(rows, key=lambda x: -x["prev"])]
-    rows.sort(key=lambda x: -x["score"])
+    if g.get("scoring_mode") == "percent":
+        rows.sort(key=lambda x: (-x["pct"], -x["score"]))
+    else:
+        rows.sort(key=lambda x: -x["score"])
     for i, r in enumerate(rows):
         r["prev_rank"] = prev_order.index(r["name"]) + 1
         r["rank"] = i + 1
@@ -1545,13 +2069,14 @@ def round_shoutouts(g, rows):
 
 def final_stats(g):
     n_all = len(g["quiz"])
-    total_q = sum(1 for q in g["quiz"] if not is_case_type(q))
+    g_qis = gradable_qis(g)
+    total_q = len(g_qis)
     total_cor = 0
     speed_best = None
     streak_best = None
     for p in g["players"].values():
         cor_times = []
-        for qi in range(n_all):
+        for qi in g_qis:
             a = p["answers"].get(qi)
             if a and a.get("correct"):
                 total_cor += 1
@@ -1573,9 +2098,8 @@ def final_stats(g):
         awards.append({"title": "🔥 Longest Streak", "winner": ptag(streak_best[1]), "detail": "%d in a row" % streak_best[0]})
     q_stats = []
     n_p = max(1, len(g["players"]))
-    for qi, q in enumerate(g["quiz"]):
-        if q.get("tiebreak") or is_case_type(q):
-            continue
+    for qi in g_qis:
+        q = g["quiz"][qi]
         cor = sum(1 for p in g["players"].values() if p["answers"].get(qi, {}).get("correct"))
         pct = round(100.0 * cor / n_p)
         if pct < 100:
@@ -1588,6 +2112,8 @@ def final_stats(g):
     return {
         "accuracy": accuracy, "correct": total_cor, "possible": possible,
         "awards": awards, "tough": q_stats[:3], "topics": topic_stats(g),
+        "calibration": calc_calibration(g, list(g["players"].values()), g_qis),
+        "scoring_mode": g.get("scoring_mode", "classic"),
     }
 
 
@@ -1595,11 +2121,10 @@ def player_report(g, p):
     cor = 0
     times = []
     missed = []
-    total_q = 0
-    for qi, q in enumerate(g["quiz"]):
-        if q.get("tiebreak") or is_case_type(q):
-            continue
-        total_q += 1
+    g_qis = gradable_qis(g)
+    total_q = len(g_qis)
+    for qi in g_qis:
+        q = g["quiz"][qi]
         a = p["answers"].get(qi)
         if a and a.get("correct"):
             cor += 1
@@ -1607,7 +2132,7 @@ def player_report(g, p):
                 times.append(a["time"])
         else:
             if a and a.get("given"):
-                your_ans = a["given"]
+                your_ans = a["given"] + (" (partial)" if a.get("partial") else "")
             elif a and a.get("choice") is not None and 0 <= a["choice"] < len(q["a"]) and not a.get("blank"):
                 your_ans = q["a"][a["choice"]]
             else:
@@ -1621,6 +2146,7 @@ def player_report(g, p):
         "fastest": round(min(times), 1) if times else None,
         "max_streak": calc_max_streak(p, len(g["quiz"])),
         "missed": missed,
+        "calibration": calc_calibration(g, [p], g_qis),
     }
 
 
@@ -1628,7 +2154,7 @@ def export_csv(g):
     buf = io.StringIO()
     w = csv.writer(buf)
     total_q = len(g["quiz"])
-    headers = ["Rank", "Nickname", "Team", "Score", "Correct", "Accuracy %", "Max Streak", "Fastest (s)"]
+    headers = ["Rank", "Nickname", "Team", "Score", "Correct", "Accuracy %", "Max Streak", "Fastest (s)", "Confident Right/Total"]
     for qi in range(total_q):
         headers.append("Q%d" % (qi + 1))
     w.writerow(headers)
@@ -1637,6 +2163,8 @@ def export_csv(g):
     for r in rows:
         p = by_name.get(r["name"], {})
         rep = player_report(g, p) if p else {}
+        cal = rep.get("calibration") or {}
+        conf_cell = "%d/%d" % (cal.get("conf_ok", 0), cal.get("conf_n", 0)) if cal.get("conf_n") else "-"
         t_name = TEAM_MAP.get(p.get("team", ""), {}).get("name", "")
         row = [
             r["rank"], r["name"], t_name, r["score"],
@@ -1644,6 +2172,7 @@ def export_csv(g):
             "%d%%" % rep.get("accuracy", 0),
             rep.get("max_streak", 0),
             rep.get("fastest") if rep.get("fastest") is not None else "-",
+            conf_cell,
         ]
         for qi, q in enumerate(g["quiz"]):
             if qtype_of(q) == "info":
@@ -1652,12 +2181,12 @@ def export_csv(g):
             a = p.get("answers", {}).get(qi)
             if not a or a.get("blank"):
                 row.append("No answer")
-            elif is_case_type(q):
-                ch_txt = a.get("given") or (q["a"][a["choice"]] if 0 <= a["choice"] < len(q["a"]) else "?")
+            elif is_unscored_type(q):
+                ch_txt = a.get("given") or (q["a"][a["choice"]] if 0 <= a.get("choice", -1) < len(q["a"]) else "?")
                 row.append("%s (%.1fs)" % (ch_txt, a.get("time", 0)))
             else:
-                mark = "✓" if a.get("correct") else "✗"
-                ch_txt = a.get("given") or (q["a"][a["choice"]] if 0 <= a["choice"] < len(q["a"]) else "?")
+                mark = "✓" if a.get("correct") else ("½" if a.get("partial") else "✗")
+                ch_txt = a.get("given") or (q["a"][a["choice"]] if 0 <= a.get("choice", -1) < len(q["a"]) else "?")
                 row.append("%s %s (%.1fs)" % (mark, ch_txt, a.get("time", 0)))
         w.writerow(row)
     return buf.getvalue().encode("utf-8")
@@ -1667,8 +2196,9 @@ def study_html(g):
     n_p = max(1, len(g["players"]))
     e = html.escape
     is_cg = any(is_case_type(x) for x in g["quiz"])
+    has_unscored = any(is_unscored_type(x) for x in g["quiz"])
     body = []
-    if is_cg:
+    if is_cg or has_unscored:
         for qi, q in enumerate(g["quiz"]):
             qt = qtype_of(q)
             if qt == "poll":
@@ -1679,11 +2209,26 @@ def study_html(g):
                         counts[a["choice"]] += 1
                 tot = max(1, sum(counts))
                 lns = q.get("lenses") or []
-                opts = "".join("<li><b>%d%% (%d)</b> — %s%s</li>" % (
+                outs = q.get("outcomes") or []
+                opts = "".join("<li><b>%d%% (%d)</b> — %s%s%s</li>" % (
                     round(100.0 * counts[i] / tot), counts[i], e(ans),
-                    (" <i>[%s]</i>" % e(lns[i])) if i < len(lns) and lns[i] else "")
+                    (" <i>[%s]</i>" % e(lns[i])) if i < len(lns) and lns[i] else "",
+                    (" <div class='fact'>Outcome: %s</div>" % e(outs[i])) if i < len(outs) and outs[i] else "")
                     for i, ans in enumerate(q["a"]))
                 body.append("<div class='item'><div class='pct'>🗳️ Decision Poll</div><h3>%s</h3><ul>%s</ul></div>" % (e(q["q"]), opts))
+            elif qt == "scale":
+                counts = [0] * len(q["a"])
+                for p in g["players"].values():
+                    a = p["answers"].get(qi)
+                    if a and not a.get("blank") and 0 <= a["choice"] < len(counts):
+                        counts[a["choice"]] += 1
+                tot = sum(counts)
+                avg_s = ("%.2f / %d" % (sum((i + 1) * c for i, c in enumerate(counts)) / tot, len(counts))) if tot else "N/A"
+                lbls = q.get("scale_labels") or ["Low", "High"]
+                opts = "".join("<li><b>%s</b>: %d (%d%%)</li>" % (e(ans), counts[i], round(100.0 * counts[i] / max(1, tot)))
+                               for i, ans in enumerate(q["a"]))
+                body.append("<div class='item'><div class='pct'>📏 Rating Scale (%s → %s · Avg %s)</div><h3>%s</h3><ul>%s</ul></div>"
+                            % (e(lbls[0]), e(lbls[1]), avg_s, e(q["q"]), opts))
             elif qt == "rank":
                 n_it = len(q["a"])
                 tot_, cnt_ = [0] * n_it, 0
@@ -1696,14 +2241,25 @@ def study_html(g):
                 avg = sorted(({"item": q["a"][i], "avg": round(tot_[i] / cnt_, 2) if cnt_ else 0, "i": i} for i in range(n_it)), key=lambda r: (r["avg"] if cnt_ else r["i"]))
                 ol = "".join("<li><b>%s</b> <small>(avg #%s)</small></li>" % (e(r["item"]), r["avg"]) for r in avg)
                 body.append("<div class='item'><div class='pct'>📊 Class Priority Ranking (%d ranked)</div><h3>%s</h3><ol>%s</ol></div>" % (cnt_, e(q["q"]), ol))
-            elif qt == "open":
-                rs_ = sorted(g.get("responses", {}).get(qi, []), key=lambda r: (-len(r["voters"]), r["id"]))
-                quotes = "".join("<li>“%s” %s</li>" % (e(r["text"]), ("<b>(👍 %d)</b>" % len(r["voters"])) if r["voters"] else "") for r in rs_[:8]) or "<li><i>No responses submitted</i></li>"
-                body.append("<div class='item'><div class='pct'>✍️ Open Responses &amp; Peer Votes</div><h3>%s</h3><ul>%s</ul></div>" % (e(q["q"]), quotes))
+            elif qt in ("open", "brainstorm"):
+                rs_ = sorted(g.get("responses", {}).get(qi, []), key=lambda r: (-int(bool(r.get("starred"))), -len(r["voters"]), r["id"]))
+                quotes = "".join("<li>%s“%s” %s</li>" % (
+                    "⭐ <b>Spotlight:</b> " if r.get("starred") else "",
+                    e(r["text"]),
+                    ("<b>(👍 %d)</b>" % len(r["voters"])) if r["voters"] else "") for r in rs_[:10]) or "<li><i>No responses submitted</i></li>"
+                hdr_lbl = "💡 Brainstorm Ideas &amp; Peer Votes" if qt == "brainstorm" else "✍️ Open Responses &amp; Peer Votes"
+                body.append("<div class='item'><div class='pct'>%s</div><h3>%s</h3><ul>%s</ul></div>" % (hdr_lbl, e(q["q"]), quotes))
+    g_qis = gradable_qis(g)
+    cal = calc_calibration(g, list(g["players"].values()), g_qis)
+    if cal["conf_n"] > 0:
+        body.append("<div class='item'><div class='pct'>🎯 Confidence Calibration</div>"
+                    "<p>When students marked <b>Confident</b>: <b>%d%%</b> accurate (%d/%d). "
+                    "Standard answers: <b>%s</b>.</p></div>" % (
+                        cal["conf_pct"] or 0, cal["conf_ok"], cal["conf_n"],
+                        ("%d%% (%d/%d)" % (cal["calm_pct"], cal["calm_ok"], cal["calm_n"])) if cal["calm_n"] else "N/A"))
     rows = []
-    for qi, q in enumerate(g["quiz"]):
-        if q.get("tiebreak") or is_case_type(q):
-            continue
+    for qi in g_qis:
+        q = g["quiz"][qi]
         cor = sum(1 for p in g["players"].values() if p["answers"].get(qi, {}).get("correct"))
         pct = round(100.0 * cor / n_p)
         if pct < 100 or is_cg:
@@ -1713,6 +2269,11 @@ def study_html(g):
         extra = ""
         if q.get("quote"):
             extra = "<div class='fact'>%s</div>" % e(q["quote"])
+        if q.get("outcomes"):
+            outs_html = "".join("<li><b>%s:</b> %s</li>" % (e(q["a"][i]), e(tx))
+                                for i, tx in enumerate(q["outcomes"]) if i < len(q["a"]) and tx)
+            if outs_html:
+                extra += "<ul class='fact'>%s</ul>" % outs_html
         body.append("<div class='item'><div class='pct'>%s%d%% got this right</div><h3>%s</h3><div class='ans'>Answer: <b>%s</b></div>%s</div>"
                     % ("✅ Concept Check · " if is_cg else "", pct, e(q["q"]), e(ans_text(q)), extra))
     if not body:
@@ -1733,7 +2294,8 @@ def spectator_view(g):
     tick(g)
     ph = g["phase"]
     rows = []
-    if ph != "lobby":
+    hb = bool(g.get("hide_board")) and ph != "final"
+    if ph != "lobby" and not hb:
         lb = leaderboard(g)
         if ph == "question":
             lb = sorted(lb, key=lambda r: -r["prev"])
@@ -1741,8 +2303,12 @@ def spectator_view(g):
                 r["score"] = r["prev"]
                 r["rank"] = i + 1
         for r in lb[:10]:
-            rows.append({"name": r["name"], "avatar": r.get("avatar", ""), "team_emoji": r.get("team_emoji", ""),
-                         "score": r["score"], "streak": r["streak"], "title": r.get("title", ""), "rank": r["rank"],
+            rows.append({"name": r["name"], "avatar": r.get("avatar", ""),
+                         "av_hat": r.get("av_hat", ""), "av_ring": r.get("av_ring", ""),
+                         "team_emoji": r.get("team_emoji", ""),
+                         "score": r["score"], "pct": r.get("pct", 0),
+                         "correct_n": r.get("correct_n", 0), "graded_n": r.get("graded_n", 0),
+                         "streak": r["streak"], "title": r.get("title", ""), "rank": r["rank"],
                          "color": r.get("color", ""), "ctag": r.get("ctag", "")})
     counts = {}
     for w in g.get("words", []):
@@ -1752,7 +2318,9 @@ def spectator_view(g):
         "board": rows, "prompt": g.get("icebreaker_prompt"), "word_total": len(g.get("words", [])),
         "words": [{"text": k, "count": v} for k, v in counts.items()],
         "names": [ptag(p) for p in g["players"].values()] if ph == "lobby" else None,
-        "team_board": team_leaderboard(g) if g.get("teams") else [],
+        "team_board": team_leaderboard(g) if (g.get("teams") and not hb) else [],
+        "scoring_mode": g.get("scoring_mode", "classic"),
+        "hide_board": bool(g.get("hide_board")),
     }
 
 
@@ -1764,10 +2332,11 @@ def view(g, pid=None, host=False):
     out = {
         "phase": ph, "pin": g["pin"], "n": len(g["players"]), "total": len(g["quiz"]),
         "names": [ptag(p) for p in g["players"].values()] if ph == "lobby" else None,
-        "pending_list": [{"name": r["name"], "avatar": r.get("avatar", "")} for r in g.get("pending", {}).values()] if host else [],
-        "lobby": [{"name": p["name"], "tag": ptag(p), "bot": bool(p.get("bot")), "color": p.get("color", ""), "ctag": p.get("ctag", "")} for p in g["players"].values()] if ph == "lobby" else None,
+        "pending_list": [{"name": r["name"], "avatar": r.get("avatar", ""), "av_hat": r.get("av_hat", ""), "av_ring": r.get("av_ring", "")} for r in g.get("pending", {}).values()] if host else [],
+        "lobby": [{"name": p["name"], "tag": ptag(p), "avatar": p.get("avatar", ""), "av_hat": p.get("av_hat", ""), "av_ring": p.get("av_ring", ""), "bot": bool(p.get("bot")), "color": p.get("color", ""), "ctag": p.get("ctag", "")} for p in g["players"].values()] if ph == "lobby" else None,
         "reactions": g["reactions"][-25:],
         "teams_enabled": bool(g.get("teams")),
+        "consensus_enabled": bool(g.get("consensus")),
         "sabotage_enabled": bool(g.get("sabotage", True)),
         "team_board": team_leaderboard(g) if g.get("teams") else [],
         "auto": bool(g.get("auto")),
@@ -1776,6 +2345,10 @@ def view(g, pid=None, host=False):
         "case_game": any(is_case_type(x) for x in g["quiz"]),
         "discuss_default": int(g.get("discuss_time", 60)),
         "speed_time": int(g.get("speed_time", 5)),
+        "scoring_mode": g.get("scoring_mode", "classic"),
+        "hide_board": bool(g.get("hide_board")),
+        "allow_tts": bool(g.get("allow_tts")),
+        "think_default": int(g.get("think_time") or 0),
         "logo": g.get("logo") or "",
     }
     du = g.get("discuss_until", 0.0)
@@ -1783,16 +2356,18 @@ def view(g, pid=None, host=False):
         out["discuss_left"] = max(0, int(-(-(du - now) // 1))) if du > now else 0
     if host:
         out["host_players"] = [
-            {"name": p["name"], "avatar": p.get("avatar", ""), "score": p["score"], "bot": bool(p.get("bot"))}
+            {"name": p["name"], "avatar": p.get("avatar", ""), "av_hat": p.get("av_hat", ""), "av_ring": p.get("av_ring", ""), "score": p["score"], "bot": bool(p.get("bot"))}
             for p in sorted(g["players"].values(), key=lambda x: (-x["score"], x["name"].lower()))[:40]
         ]
-        ni = 0 if ph in ("lobby", "icebreaker") else (len(g["quiz"]) if ph == "final" else g["q"] + 1)
+        bt_next = branch_target_info(g) if ph in ("results", "board") else None
+        ni = bt_next["idx"] if bt_next else (0 if ph in ("lobby", "icebreaker") else (len(g["quiz"]) if ph == "final" else g["q"] + 1))
         if 0 <= ni < len(g["quiz"]):
             nq = g["quiz"][ni]
             out["up_next"] = {
                 "num": ni + 1, "total": len(g["quiz"]), "q": nq["q"],
                 "qtype": qtype_of(nq), "case": is_case_type(nq), "topic": nq.get("topic") or "",
                 "qtime": 0 if qtype_of(nq) == "info" else round(qtime(g, ni)),
+                "branched": bool(bt_next),
             }
         else:
             out["up_next"] = None
@@ -1811,6 +2386,7 @@ def view(g, pid=None, host=False):
     if g["q"] >= 0 and ph in ("question", "results"):
         q = g["quiz"][g["q"]]
         prev_left, q_left, q_elapsed, qt = cur_timer_state(g)
+        thk_left, thk_tot = cur_think_left(g)
         wmod = g.get("wheel_mods", {}).get(g["q"])
         qtp = qtype_of(q)
         disp = q["a"]
@@ -1818,30 +2394,58 @@ def view(g, pid=None, host=False):
             perm = g.get("shuf", {}).get(g["q"])
             if perm:
                 disp = [q["a"][k] for k in perm]
-        elif qtp == "text":
+        elif qtp in ("text", "slider", "pin", "brainstorm"):
             disp = []
         out.update(
             qtype=qtp, aimg=q.get("aimg"), tiebreak=bool(q.get("tiebreak")),
-            case=is_case_type(q), body=q.get("body"), exhibits=q.get("exhibits"),
+            case=is_case_type(q), unscored=is_unscored_type(q),
+            body=q.get("body"), exhibits=q.get("exhibits"),
             team_battle=is_team_battle(g, g["q"]),
             index=g["q"], question=q["q"], answers=disp, img=q.get("img"), qtime=round(qt),
             left=round(q_left, 2),
             preview_left=round(prev_left, 2),
             preview_total=prev_time(g),
+            think_left=round(thk_left, 2),
+            think_total=round(thk_tot, 1),
+            pts=q.get("pts"),
+            all_correct=bool(q.get("all_correct")),
+            consensus_step=g.get("consensus_step", 0),
             double=(qmult(g) == 2),
             boss=is_boss_q(g),
             redemption=bool(q.get("redemption")),
             wheel_mod=wmod["label"] if wmod else None,
             wheel_id=wmod["id"] if wmod else None,
         )
+        if g.get("consensus_step") == 2 and ph == "question":
+            c_left = max(0.0, float(g.get("pause_consensus", 0.0))) if g.get("paused") else max(0.0, g.get("consensus_until", 0.0) - now)
+            out["consensus_left"] = round(c_left, 1)
+            out["consensus_total"] = g.get("consensus_total", 20)
+            out["consensus_voted"] = len(g.get("consensus_votes", {}).get(g["q"], {}))
+        if qtp == "multi":
+            out["multi_partial"] = bool(q.get("partial", True))
+        elif qtp == "match":
+            pairs_ = q.get("pairs") or []
+            shuf_m = g.get("match_shuf", {}).get(g["q"]) or list(range(len(pairs_)))
+            out["match_left"] = [x["l"] for x in pairs_]
+            out["match_right"] = [pairs_[k]["r"] for k in shuf_m]
+        elif qtp == "slider":
+            sl = q.get("slider") or {"min": 0, "max": 100, "step": 1, "target": 50, "margin": 5, "unit": ""}
+            out["slider_cfg"] = {"min": sl["min"], "max": sl["max"], "step": sl["step"], "unit": sl.get("unit", "")}
+        elif qtp == "scale":
+            out["scale_labels"] = q.get("scale_labels") or ["Low", "High"]
         out["speed"] = is_speed_q(g, g["q"])
         out["dbl"] = is_dbl_q(g, g["q"])
         out["topic"] = q.get("topic")
         if host:
             if q.get("note"):
                 out["note"] = q["note"]
-            out["host_correct"] = q["c"] if (not is_case_type(q) and qtp in ("mc", "tf", "zoom")) else -1
-            out["host_ans"] = ans_text(q) if not is_case_type(q) else ""
+            out["host_correct"] = q["c"] if (not is_unscored_type(q) and qtp in ("mc", "tf", "zoom")) else -1
+            out["host_correct_multi"] = q.get("correct_multi")
+            out["host_ans"] = ans_text(q) if not is_unscored_type(q) else ""
+            if qtp == "pin":
+                out["host_pin"] = q.get("pin")
+            elif qtp == "slider":
+                out["host_slider"] = q.get("slider")
             if q.get("quote"):
                 out["host_quote"] = q["quote"]
         el = eligible(g)
@@ -1862,21 +2466,35 @@ def view(g, pid=None, host=False):
             out["answers_correct"] = q["a"]
             out["n_correct"] = sum(1 for p in g["players"].values() if p["answers"].get(g["q"], {}).get("correct"))
             out["correct"] = q["c"]
+            if q.get("correct_multi"):
+                out["correct_multi"] = q["correct_multi"]
             out["quote"] = q.get("quote")
             out["source"] = q.get("src")
             out["is_last"] = will_finish_after_results(g)
             counts = [0] * len(q["a"])
-            for p in g["players"].values():
-                a = p["answers"].get(g["q"])
-                if a and 0 <= a["choice"] < len(counts):
-                    counts[a["choice"]] += 1
+            if qtp == "multi":
+                for p in g["players"].values():
+                    a = p["answers"].get(g["q"])
+                    if a and not a.get("blank"):
+                        for k_ in (a.get("choices") or []):
+                            if 0 <= k_ < len(counts):
+                                counts[k_] += 1
+                out["correct_multi"] = q.get("correct_multi") or [q["c"]]
+            else:
+                for p in g["players"].values():
+                    a = p["answers"].get(g["q"])
+                    if a and 0 <= a.get("choice", -1) < len(counts):
+                        counts[a["choice"]] += 1
             out["counts"] = counts
-            if qtp in ("poll", "rank", "open", "info"):
+            if is_unscored_type(q):
                 out["correct"] = -1
                 out["n_correct"] = 0
                 out["lenses"] = q.get("lenses")
             if qtp == "poll":
                 out["defenders"] = [{"side": d["side"], "name": d["name"]} for d in g.get("defenders", {}).get(g["q"], [])]
+            elif qtp == "scale":
+                tot_sc = sum(counts)
+                out["scale_avg"] = round(sum((i + 1) * c for i, c in enumerate(counts)) / tot_sc, 2) if tot_sc > 0 else None
             elif qtp == "rank":
                 n_it = len(q["a"])
                 tot_, cnt_ = [0] * n_it, 0
@@ -1889,9 +2507,51 @@ def view(g, pid=None, host=False):
                 avg = sorted(({"item": q["a"][i], "avg": round(tot_[i] / cnt_, 2) if cnt_ else 0, "i": i} for i in range(n_it)), key=lambda r: (r["avg"] if cnt_ else r["i"]))
                 out["rank_avg"] = avg
                 out["rank_n"] = cnt_
-            elif qtp == "open":
-                rs_ = sorted(g.get("responses", {}).get(g["q"], []), key=lambda r: (-len(r["voters"]), r["id"]))
-                out["responses"] = [{"id": r["id"], "text": r["text"], "votes": len(r["voters"])} for r in rs_]
+            elif qtp in ("open", "brainstorm"):
+                rs_ = sorted(g.get("responses", {}).get(g["q"], []), key=lambda r: (-int(bool(r.get("starred"))), -len(r["voters"]), r["id"]))
+                out["responses"] = [{"id": r["id"], "text": r["text"], "votes": len(r["voters"]), "starred": bool(r.get("starred"))} for r in rs_]
+            elif qtp == "match":
+                pairs_ = q.get("pairs") or []
+                p_cnts = [0] * len(pairs_)
+                for p in g["players"].values():
+                    ph_ = (p["answers"].get(g["q"]) or {}).get("pair_hits") or []
+                    for idx_p, hit_p in enumerate(ph_):
+                        if hit_p and idx_p < len(p_cnts):
+                            p_cnts[idx_p] += 1
+                out["pairs_correct"] = pairs_
+                out["pair_counts"] = p_cnts
+            elif qtp == "slider":
+                vals_ = [p["answers"][g["q"]]["slider_val"] for p in g["players"].values() if g["q"] in p["answers"] and "slider_val" in p["answers"][g["q"]]]
+                out["slider_res"] = {**(q.get("slider") or {}), "vals": vals_, "avg": round(sum(vals_) / len(vals_), 2) if vals_ else None}
+            elif qtp == "pin":
+                out["pin_target"] = q.get("pin")
+                out["pins"] = [{"x": p["answers"][g["q"]]["pin_xy"][0], "y": p["answers"][g["q"]]["pin_xy"][1], "ok": bool(p["answers"][g["q"]].get("correct")), "name": p["name"]}
+                               for p in g["players"].values() if g["q"] in p["answers"] and p["answers"][g["q"]].get("pin_xy")]
+            if q.get("outcomes"):
+                out["outcomes"] = q["outcomes"]
+            bt_ = branch_target_info(g)
+            if bt_:
+                out["branch_target"] = bt_
+            if g["q"] in g.get("consensus_res", {}):
+                out["consensus_stats"] = g["consensus_res"][g["q"]]
+            out["can_reconsider"] = qtp in ("poll", "mc", "tf", "scale")
+            out["revoted"] = bool(g.get("revotes", {}).get(g["q"]))
+            if g["q"] in g.get("init_counts", {}):
+                init_c = g["init_counts"][g["q"]]
+                changed_n, tot_cmp = 0, 0
+                flows = {}
+                for p_ in g["players"].values():
+                    ic = p_.get("init_choices", {}).get(g["q"])
+                    ca = p_["answers"].get(g["q"])
+                    nc = ca.get("choice") if (ca and not ca.get("blank")) else None
+                    if ic is not None and nc is not None and 0 <= ic < len(q["a"]) and 0 <= nc < len(q["a"]):
+                        tot_cmp += 1
+                        if ic != nc:
+                            changed_n += 1
+                            flows[(ic, nc)] = flows.get((ic, nc), 0) + 1
+                top_shifts = [{"from": k[0], "to": k[1], "from_txt": q["a"][k[0]], "to_txt": q["a"][k[1]], "n": v}
+                              for k, v in sorted(flows.items(), key=lambda kv: -kv[1])[:4]]
+                out["vote_shift"] = {"init_counts": init_c, "changed": changed_n, "total": tot_cmp, "shifts": top_shifts}
     if ph == "intro":
         iq = g["quiz"][g["q"]]
         iw = g.get("wheel_mods", {}).get(g["q"])
@@ -1935,14 +2595,27 @@ def view(g, pid=None, host=False):
             if passed:
                 ov = passed[0]
                 overtook = ((ov["avatar"] + " ") if ov.get("avatar") else "") + ov["name"]
+        if not g.get("hide_board") or ph == "final":
+            lb_top = sorted(lb, key=lambda r: -r["prev"]) if ph == "question" else lb
+            out["top3"] = [{"name": x["name"], "score": x["prev"] if ph == "question" else x["score"], "pct": x.get("pct", 0), "avatar": x.get("avatar", "")} for x in lb_top[:3]]
         act_aud = (pu.get("audience_q") == g["q"])
         me = {
             "name": p["name"], "avatar": p.get("avatar", ""),
+            "av_hat": p.get("av_hat", ""), "av_ring": p.get("av_ring", ""),
             "team": p.get("team", ""), "team_name": t_info.get("name", ""), "team_emoji": t_info.get("emoji", ""),
             "title": my_row.get("title", ""), "color": p.get("color", ""), "ctag": p.get("ctag", ""),
             "score": p["score"],
+            "pct": my_row.get("pct", 0), "correct_n": my_row.get("correct_n", 0), "graded_n": my_row.get("graded_n", 0),
             "answered": a is not None and not a.get("blank"),
             "choice": a["choice"] if a else None,
+            "given": a.get("given") if a else None,
+            "partial": bool(a.get("partial")) if a else False,
+            "choices": a.get("choices") if a else None,
+            "pair_hits": a.get("pair_hits") if a else None,
+            "slider_val": a.get("slider_val") if a else None,
+            "pin_xy": a.get("pin_xy") if a else None,
+            "ideas_sent": len(a.get("ideas", [])) if a else 0,
+            "ideas_list": list(a.get("ideas", [])) if a else [],
             "gained": a["gained"] if a else 0,
             "bonus": a.get("bonus", 0) if a else 0,
             "wager_amt": a.get("wager", 0) if a else 0,
@@ -1996,6 +2669,22 @@ def view(g, pid=None, host=False):
         cq = g["quiz"][g["q"]] if 0 <= g["q"] < len(g["quiz"]) else {}
         if cq.get("tiebreak") and pid not in g.get("tb_pids", []):
             me["spectating"] = True
+        if ph == "question" and g.get("consensus_step") == 2 and cq.get("a"):
+            tid_ = p.get("team")
+            split_ = [0] * len(cq["a"])
+            for m_ in g["players"].values():
+                if m_.get("team") == tid_:
+                    ma_ = m_["answers"].get(g["q"])
+                    if ma_ and not ma_.get("blank") and 0 <= ma_.get("choice", -1) < len(split_):
+                        split_[ma_["choice"]] += 1
+            cv_ = g.get("consensus_votes", {}).get(g["q"], {})
+            tv_ = {}
+            for pid_m, m_ in g["players"].items():
+                if m_.get("team") == tid_ and pid_m in cv_:
+                    tv_[cv_[pid_m]] = tv_.get(cv_[pid_m], 0) + 1
+            me["team_split"] = split_
+            me["team_consensus_my"] = cv_.get(pid)
+            me["team_consensus_cur"] = max(tv_.items(), key=lambda kv: kv[1])[0] if tv_ else None
         cf, rl_ = [], []
         for ci in range(0, g["q"] + 1):
             cq2 = g["quiz"][ci]
@@ -2008,12 +2697,21 @@ def view(g, pid=None, host=False):
         me["roles"] = rl_
         if ph == "results" and cq.get("lenses") and a is not None and 0 <= a.get("choice", -1) < len(cq["lenses"]):
             me["lens"] = cq["lenses"][a["choice"]]
-        if ph == "results" and qtype_of(cq) == "open":
+        if ph == "results" and cq.get("outcomes") and a is not None and 0 <= a.get("choice", -1) < len(cq["outcomes"]):
+            if cq["outcomes"][a["choice"]]:
+                me["outcome"] = cq["outcomes"][a["choice"]]
+        if ph == "results" and g["q"] in p.get("init_choices", {}):
+            ic_ = p["init_choices"][g["q"]]
+            if a is not None and ic_ != a.get("choice") and 0 <= ic_ < len(cq.get("a", [])):
+                me["shifted_from"] = cq["a"][ic_]
+        if ph == "results" and qtype_of(cq) in ("open", "brainstorm"):
             rs2 = g.get("responses", {}).get(g["q"], [])
             mine = [r for r in rs2 if r["pid"] != pid]
             random.Random(pid + str(g["q"])).shuffle(mine)
-            me["responses"] = [{"id": r["id"], "text": r["text"], "voted": pid in r["voters"]} for r in mine[:12]]
+            max_v = 3 if qtype_of(cq) == "brainstorm" else 2
+            me["responses"] = [{"id": r["id"], "text": r["text"], "voted": pid in r["voters"], "starred": bool(r.get("starred"))} for r in mine[:16]]
             me["votes_used"] = sum(1 for r in rs2 if pid in r["voters"])
+            me["votes_max"] = max_v
         if ph == "final":
             me["report"] = player_report(g, p)
         out["me"] = me
@@ -2034,10 +2732,12 @@ class H(BaseHTTPRequestHandler):
         data = obj if isinstance(obj, bytes) else json.dumps(obj).encode()
         self.send_response(code)
         self.send_header("Content-Type", ctype)
-        self.send_header("Cache-Control", "no-store")
+        cc = extra_headers.get("Cache-Control", "no-store") if extra_headers else "no-store"
+        self.send_header("Cache-Control", cc)
         if extra_headers:
             for k, v in extra_headers.items():
-                self.send_header(k, v)
+                if k.lower() != "cache-control":
+                    self.send_header(k, v)
         self.send_header("Content-Length", str(len(data)))
         self.end_headers()
         self.wfile.write(data)
@@ -2164,7 +2864,7 @@ class H(BaseHTTPRequestHandler):
             self.send(ans)
             return True
         gated = ("/api/upload_quiz", "/api/delete_quiz", "/api/dup_quiz", "/api/history_clear", "/api/ai_quiz",
-                 "/api/import_sheet", "/api/hw_create")
+                 "/api/import_sheet", "/api/hw_create", "/api/upload_img")
         if path not in gated:
             return False
         if not authed(tok, body.get("password")):
@@ -2173,6 +2873,9 @@ class H(BaseHTTPRequestHandler):
         if path == "/api/history_clear":
             K.hist_clear(owner)
             self.send({"ok": True})
+        elif path == "/api/upload_img":
+            url, err = K.img_save(owner, body.get("data"), body.get("mime"))
+            self.send({"error": err}, 400) if err else self.send({"ok": True, "url": url})
         elif path == "/api/upload_quiz":
             try:
                 fname, cnt, cleaned = save_custom_quiz(body.get("title"), body.get("questions") or [], owner,
@@ -2209,9 +2912,9 @@ class H(BaseHTTPRequestHandler):
                     self.send({"questions": cl, "message": msg})
         elif path == "/api/hw_create":
             bank = clean_questions(body.get("custom_questions")) if body.get("custom_questions") else [dict(x) for x in load_quiz(body.get("quiz") or "quiz.json")]
-            bank = [x for x in clean_questions(bank) if not is_case_type(x)]
+            bank = [x for x in clean_questions(bank) if not is_unscored_type(x)]
             if not bank:
-                self.send({"error": "That quiz only has case-study slides. Homework needs scored questions."}, 400)
+                self.send({"error": "That quiz only has unscored or case-study slides. Homework needs scored questions."}, 400)
                 return True
             try:
                 k = max(1, min(len(bank), int(body.get("count") or len(bank))))
@@ -2229,6 +2932,11 @@ class H(BaseHTTPRequestHandler):
 
     def do_GET(self):
         path, _, qs = self.path.partition("?")
+        if path.startswith("/api/img/"):
+            raw, mime = K.img_get(path[len("/api/img/"):])
+            if not raw:
+                return self.send({"error": "Image not found"}, 404)
+            return self.send(raw, code=200, ctype=mime, extra_headers={"Cache-Control": "public, max-age=86400"})
         if self.store_get(path, qs):
             return
         if path == "/api/active":
@@ -2347,13 +3055,21 @@ class H(BaseHTTPRequestHandler):
                     custom_questions=body.get("custom_questions"),
                     owner=owner_of(body.get("token")),
                 )
-                for k_ in ("speed", "dbl", "steal", "moderate"):
+                for k_ in ("speed", "dbl", "steal", "moderate", "hide_board", "allow_tts", "consensus"):
                     if k_ in body:
                         g[k_] = bool(body[k_])
+                sm_ = str(body.get("scoring_mode") or "").strip().lower()
+                if sm_ in SCORING_MODES:
+                    g["scoring_mode"] = sm_
                 g["n_base"] = len(g["quiz"])
                 if "preview" in body and body["preview"] is not None:
                     try:
                         g["preview"] = max(0.0, min(120.0, float(body["preview"])))
+                    except Exception:
+                        pass
+                if "think_time" in body and body["think_time"] is not None:
+                    try:
+                        g["think_time"] = max(0.0, min(120.0, float(body["think_time"])))
                     except Exception:
                         pass
                 if "team_preview" in body and body["team_preview"] is not None:
@@ -2383,7 +3099,7 @@ class H(BaseHTTPRequestHandler):
                         pass
                 if isinstance(body.get("case_times"), dict):
                     ct_ = {}
-                    for ck in ("poll", "rank", "open"):
+                    for ck in ("poll", "rank", "open", "brainstorm", "scale"):
                         if body["case_times"].get(ck):
                             try:
                                 ct_[ck] = max(5, min(900, int(body["case_times"][ck])))
@@ -2393,6 +3109,8 @@ class H(BaseHTTPRequestHandler):
                         g["case_times"] = ct_
                 if "teams" in body:
                     g["teams"] = bool(body["teams"])
+                if g.get("consensus"):
+                    g["teams"] = True
                 if "wager" in body:
                     g["wager"] = bool(body["wager"])
                 if "redemption" in body:
@@ -2499,19 +3217,36 @@ class H(BaseHTTPRequestHandler):
             if path == "/api/vote":
                 p = g["players"].get(body.get("pid"))
                 qi = g["q"]
-                if not p or g["phase"] != "results" or qi < 0 or qtype_of(g["quiz"][qi]) != "open":
+                if not p or g["phase"] != "results" or qi < 0 or qtype_of(g["quiz"][qi]) not in ("open", "brainstorm"):
                     return self.send({"error": "Voting is not open"}, 400)
+                max_v = 3 if qtype_of(g["quiz"][qi]) == "brainstorm" else 2
                 rs_ = g.get("responses", {}).get(qi, [])
                 tgt = next((r for r in rs_ if r["id"] == body.get("rid")), None)
                 if not tgt or tgt["pid"] == body["pid"] or body["pid"] in tgt["voters"]:
                     return self.send({"error": "Cannot vote for that"}, 400)
-                if sum(1 for r in rs_ if body["pid"] in r["voters"]) >= 2:
-                    return self.send({"error": "You have used both of your votes"}, 400)
+                if sum(1 for r in rs_ if body["pid"] in r["voters"]) >= max_v:
+                    return self.send({"error": "You have used all of your votes"}, 400)
                 tgt["voters"].append(body["pid"])
                 author = g["players"].get(tgt["pid"])
-                if author and len(tgt["voters"]) <= 4:
+                if author and len(tgt["voters"]) <= 4 and g.get("scoring_mode") != "survey":
                     add_bonus(author, qi, VOTE_PTS, "vote_bonus")
                 return self.send({"ok": True})
+            if path == "/api/team_answer":
+                p = g["players"].get(body.get("pid"))
+                qi = g["q"]
+                if not p or g["phase"] != "question" or g.get("consensus_step") != 2 or qi < 0:
+                    return self.send({"error": "Team consensus voting is not active"}, 400)
+                if p.get("team") not in TEAM_MAP:
+                    return self.send({"error": "You are not assigned to a team"}, 400)
+                try:
+                    ch_c = int(body.get("choice", -1))
+                except Exception:
+                    ch_c = -1
+                if not 0 <= ch_c < len(g["quiz"][qi]["a"]):
+                    return self.send({"error": "Bad choice"}, 400)
+                g.setdefault("consensus_votes", {}).setdefault(qi, {})[body["pid"]] = ch_c
+                tick(g)
+                return self.send({"ok": True, "choice": ch_c})
             if path == "/api/steal":
                 res, err = do_steal(g, body.get("pid"), body.get("mode"))
                 return self.send({"error": err}, 400) if err else self.send({"ok": True, **res})
@@ -2538,6 +3273,52 @@ class H(BaseHTTPRequestHandler):
                 if act == "toggle_auto":
                     g["auto"] = not g.get("auto", False)
                     g["phase_entered"] = time.time()
+                elif act == "toggle_hide_board":
+                    g["hide_board"] = not g.get("hide_board", False)
+                elif act == "toggle_student_tts":
+                    g["allow_tts"] = not g.get("allow_tts", False)
+                elif act == "spotlight":
+                    qi_s = g["q"]
+                    if qi_s >= 0:
+                        rid_s = body.get("rid")
+                        for r_s in g.get("responses", {}).get(qi_s, []):
+                            if r_s["id"] == rid_s:
+                                r_s["starred"] = not r_s.get("starred", False)
+                                break
+                elif act == "reconsider" and g["phase"] == "results" and 0 <= g["q"] < len(g["quiz"]):
+                    qi_r = g["q"]
+                    q_r = g["quiz"][qi_r]
+                    if qtype_of(q_r) in ("poll", "mc", "tf", "scale"):
+                        counts_r = [0] * len(q_r["a"])
+                        for p_r in g["players"].values():
+                            a_r = p_r["answers"].get(qi_r)
+                            if a_r and not a_r.get("blank") and 0 <= a_r.get("choice", -1) < len(counts_r):
+                                counts_r[a_r["choice"]] += 1
+                        g.setdefault("init_counts", {}).setdefault(qi_r, counts_r)
+                        for p_r in g["players"].values():
+                            a_r = p_r["answers"].pop(qi_r, None)
+                            if a_r:
+                                if not a_r.get("blank") and 0 <= a_r.get("choice", -1) < len(q_r["a"]):
+                                    p_r.setdefault("init_choices", {}).setdefault(qi_r, a_r["choice"])
+                                p_r["score"] = max(0, p_r["score"] - a_r.get("gained", 0))
+                            if p_r.get("bot"):
+                                p_r.get("plan", {}).pop(qi_r, None)
+                        g.setdefault("revotes", {})[qi_r] = True
+                        g["settled_q"] = -1
+                        g["consensus_step"] = 1 if has_consensus_phase(g, qi_r) else 0
+                        g["consensus_until"] = 0.0
+                        g.get("consensus_votes", {}).pop(qi_r, None)
+                        g.get("consensus_res", {}).pop(qi_r, None)
+                        g["discuss_until"] = 0.0
+                        g["paused"] = False
+                        try:
+                            sec_rev = max(5.0, min(900.0, float(body.get("sec") or 30)))
+                        except Exception:
+                            sec_rev = 30.0
+                        g["phase"] = "question"
+                        g["phase_entered"] = time.time()
+                        g["start"] = time.time()
+                        g["extra_time"] = sec_rev - qtime(g, qi_r)
                 elif act == "set_auto_time":
                     try:
                         g["auto_time"] = max(2, min(120, int(float(body.get("sec", 7)))))
@@ -2545,18 +3326,30 @@ class H(BaseHTTPRequestHandler):
                     except Exception:
                         pass
                 elif act == "pause" and g["phase"] == "question":
-                    if not g.get("paused"):
+                    if g.get("consensus_step") == 2:
+                        if not g.get("paused"):
+                            g["paused"] = True
+                            g["pause_consensus"] = max(0.0, g.get("consensus_until", 0.0) - time.time())
+                        else:
+                            g["consensus_until"] = time.time() + float(g.get("pause_consensus", 10.0))
+                            g["paused"] = False
+                    elif not g.get("paused"):
                         prev_l, q_l, _, _ = cur_timer_state(g)
+                        thk_l, _ = cur_think_left(g)
                         g["paused"] = True
                         g["pause_prev"] = prev_l
+                        g["pause_think"] = thk_l
                         g["pause_rem"] = q_l
                     else:
                         prev_t = prev_time(g)
+                        thk_t = think_sec(g)
                         qt = qtime(g) + g.get("extra_time", 0.0)
                         if g.get("pause_prev", 0) > 0:
                             g["start"] = time.time() - (prev_t - g["pause_prev"])
+                        elif g.get("pause_think", 0) > 0:
+                            g["start"] = time.time() - prev_t - (thk_t - g["pause_think"])
                         else:
-                            g["start"] = time.time() - prev_t - (qt - g.get("pause_rem", qt))
+                            g["start"] = time.time() - prev_t - thk_t - (qt - g.get("pause_rem", qt))
                         g["paused"] = False
                 elif act == "skip_preview" and g["phase"] == "question":
                     if g.get("paused"):
@@ -2565,24 +3358,49 @@ class H(BaseHTTPRequestHandler):
                         prev_l, _, _, _ = cur_timer_state(g)
                         if prev_l > 0:
                             g["start"] = time.time() - prev_time(g)
-                elif act == "add_time" and g["phase"] == "question":
-                    add_s = float(body.get("sec", 10))
-                    _, q_l, _, _ = cur_timer_state(g)
-                    new_rem = max(1.0, min(900.0, q_l + add_s))
-                    delta = new_rem - q_l
-                    g["extra_time"] = g.get("extra_time", 0.0) + delta
-                    if g.get("paused"):
-                        g["pause_rem"] = new_rem
-                elif act == "set_time" and g["phase"] == "question":
-                    target_s = max(1.0, min(900.0, float(body.get("sec", 30))))
-                    prev_l, q_l, _, _ = cur_timer_state(g)
-                    delta = target_s - q_l
-                    g["extra_time"] = g.get("extra_time", 0.0) + delta
+                elif act == "skip_think" and g["phase"] == "question":
                     if g.get("paused"):
                         g["pause_prev"] = 0.0
-                        g["pause_rem"] = target_s
-                    elif prev_l > 0:
-                        g["start"] = time.time() - prev_time(g)
+                        g["pause_think"] = 0.0
+                    else:
+                        prev_l, _, _, _ = cur_timer_state(g)
+                        thk_l, _ = cur_think_left(g)
+                        if prev_l > 0 or thk_l > 0:
+                            g["start"] = time.time() - prev_time(g) - think_sec(g)
+                elif act == "add_time" and g["phase"] == "question":
+                    add_s = float(body.get("sec", 10))
+                    if g.get("consensus_step") == 2:
+                        if g.get("paused"):
+                            g["pause_consensus"] = max(1.0, min(900.0, float(g.get("pause_consensus", 10.0)) + add_s))
+                        else:
+                            cur_c = max(0.0, g.get("consensus_until", 0.0) - time.time())
+                            g["consensus_until"] = time.time() + max(1.0, min(900.0, cur_c + add_s))
+                    else:
+                        _, q_l, _, _ = cur_timer_state(g)
+                        new_rem = max(1.0, min(900.0, q_l + add_s))
+                        delta = new_rem - q_l
+                        g["extra_time"] = g.get("extra_time", 0.0) + delta
+                        if g.get("paused"):
+                            g["pause_rem"] = new_rem
+                elif act == "set_time" and g["phase"] == "question":
+                    target_s = max(1.0, min(900.0, float(body.get("sec", 30))))
+                    if g.get("consensus_step") == 2:
+                        g["consensus_total"] = int(round(target_s))
+                        if g.get("paused"):
+                            g["pause_consensus"] = target_s
+                        else:
+                            g["consensus_until"] = time.time() + target_s
+                    else:
+                        prev_l, q_l, _, _ = cur_timer_state(g)
+                        thk_l, _ = cur_think_left(g)
+                        delta = target_s - q_l
+                        g["extra_time"] = g.get("extra_time", 0.0) + delta
+                        if g.get("paused"):
+                            g["pause_prev"] = 0.0
+                            g["pause_think"] = 0.0
+                            g["pause_rem"] = target_s
+                        elif prev_l > 0 or thk_l > 0:
+                            g["start"] = time.time() - prev_time(g) - think_sec(g)
                 elif act == "discuss":
                     sec_ = max(0.0, min(900.0, float(body.get("sec", g.get("discuss_time", 60)))))
                     if sec_ > 0:
@@ -2604,10 +3422,15 @@ class H(BaseHTTPRequestHandler):
                         for p in g["players"].values():
                             p["word_sent"] = False
                             p.get("plan", {}).pop("ice_t", None)
-                return self.send({"ok": True, "auto": g["auto"], "paused": g["paused"]})
+                return self.send({
+                    "ok": True, "auto": g["auto"], "paused": g["paused"],
+                    "hide_board": bool(g.get("hide_board")), "allow_tts": bool(g.get("allow_tts")),
+                })
             if path == "/api/join":
                 name = (body.get("name") or "").strip()[:24]
                 avatar = (body.get("avatar") or "").strip()[:4]
+                av_hat = body.get("av_hat") if body.get("av_hat") in AV_HATS else ""
+                av_ring = body.get("av_ring") if body.get("av_ring") in AV_RINGS else ""
                 team_req = (body.get("team") or "").strip()
                 color = body.get("color") if body.get("color") in NAME_COLORS else ""
                 ctag = re.sub(r"\s+", " ", str(body.get("ctag") or "")).strip()[:14]
@@ -2624,6 +3447,12 @@ class H(BaseHTTPRequestHandler):
                     name = match
                     for old_pid, op in g["players"].items():
                         if op["name"].lower() == name.lower() and not op.get("bot"):
+                            if avatar:
+                                op["avatar"] = avatar
+                            if av_hat:
+                                op["av_hat"] = av_hat
+                            if av_ring:
+                                op["av_ring"] = av_ring
                             modlog(g, "rejoined", name)
                             return self.send({"pid": old_pid, "team": op.get("team", "")})
                 else:
@@ -2645,8 +3474,10 @@ class H(BaseHTTPRequestHandler):
                 if not name or taken:
                     return self.send({"error": "Pick a unique nickname. If that's you, tap 'Rejoin as this name'.", "can_reclaim": bool(name)}, 400)
                 pid = "p%08x" % random.getrandbits(32)
-                rec = {"name": name, "avatar": avatar, "color": color, "ctag": ctag, "team": "",
-                       "score": 0, "answers": {}, "powerups": {}, "wagers": {}, "confident": {}, "don": {}, "seen": time.time()}
+                rec = {"name": name, "avatar": avatar, "av_hat": av_hat, "av_ring": av_ring,
+                       "color": color, "ctag": ctag, "team": "",
+                       "score": 0, "answers": {}, "init_choices": {},
+                       "powerups": {}, "wagers": {}, "confident": {}, "don": {}, "seen": time.time()}
                 if g.get("moderate"):
                     rec["team_req"] = team_req
                     g.setdefault("pending", {})[pid] = rec
@@ -2712,11 +3543,12 @@ class H(BaseHTTPRequestHandler):
                 if not p or g["phase"] != "question" or g["q"] in p["answers"]:
                     return self.send({"error": "Cannot use powerup"}, 400)
                 pu = p.setdefault("powerups", {})
-                if kind in ("5050", "audience") and qtype_of(g["quiz"][g["q"]]) in ("text", "order") + CASE_TYPES:
+                if kind in ("5050", "audience") and qtype_of(g["quiz"][g["q"]]) not in ("mc", "tf", "zoom"):
                     return self.send({"error": "Not available for this question type"}, 400)
                 if kind == "5050" and not pu.get("5050_used"):
                     q = g["quiz"][g["q"]]
-                    wrongs = [i for i in range(len(q["a"])) if i != q["c"]]
+                    valid_c = set(q.get("correct_multi") or [q["c"]])
+                    wrongs = [i for i in range(len(q["a"])) if i not in valid_c]
                     random.shuffle(wrongs)
                     pu["5050_used"] = True
                     pu["5050_q"] = g["q"]
@@ -2748,18 +3580,29 @@ class H(BaseHTTPRequestHandler):
             if path == "/api/answer":
                 tick(g)
                 p = g["players"].get(body.get("pid"))
-                if not p or g["phase"] != "question" or g["q"] in p["answers"]:
+                qi = g["q"]
+                if not p or g["phase"] != "question" or qi < 0:
+                    return self.send({"error": "Cannot answer"}, 400)
+                if g.get("consensus_step") == 2:
+                    return self.send({"error": "Individual answers closed — submit your team consensus vote!"}, 400)
+                q = g["quiz"][qi]
+                qtp = qtype_of(q)
+                if qtp == "brainstorm":
+                    if len((p["answers"].get(qi) or {}).get("ideas") or []) >= 3:
+                        return self.send({"error": "Maximum 3 ideas submitted"}, 400)
+                elif qi in p["answers"]:
                     return self.send({"error": "Cannot answer"}, 400)
                 if p not in eligible(g):
                     return self.send({"error": "Only the tied players can answer this one"}, 400)
-                q = g["quiz"][g["q"]]
-                qtp = qtype_of(q)
+                thk_l, _ = cur_think_left(g)
+                if thk_l > 0:
+                    return self.send({"error": "Thinking time — read the options and reason before submitting!"}, 400)
                 given = None
-                if qtp in CASE_TYPES:
+                if is_unscored_type(q):
                     if qtp == "info":
                         return self.send({"error": "Nothing to answer here"}, 400)
                     _, _, q_el, _ = cur_timer_state(g)
-                    if qtp == "poll":
+                    if qtp in ("poll", "scale"):
                         try:
                             ch_ = int(body.get("choice", -1))
                         except Exception:
@@ -2772,6 +3615,19 @@ class H(BaseHTTPRequestHandler):
                         if not isinstance(seq_, list) or sorted(seq_) != list(range(len(q["a"]))):
                             return self.send({"error": "Rank every item"}, 400)
                         record_case_answer(g, p, 0, q_el, " > ".join(q["a"][k] for k in seq_), rank=seq_)
+                    elif qtp == "brainstorm":
+                        txt_ = str(body.get("text") or "").strip()[:120]
+                        if not txt_:
+                            return self.send({"error": "Write an idea first"}, 400)
+                        if is_profane(txt_):
+                            modlog(g, "blocked response", txt_)
+                            return self.send({"error": "Please rephrase that so it's classroom-friendly."}, 400)
+                        cur_ideas = list((p["answers"].get(qi) or {}).get("ideas") or [])
+                        if txt_.lower() in {x.lower() for x in cur_ideas}:
+                            return self.send({"error": "You already submitted that idea"}, 400)
+                        cur_ideas.append(txt_)
+                        record_case_answer(g, p, 0, q_el, " | ".join(cur_ideas), ideas=cur_ideas)
+                        return self.send({"ok": True, "ideas_sent": len(cur_ideas)})
                     else:
                         txt_ = str(body.get("text") or "").strip()[:240]
                         if not txt_:
@@ -2781,26 +3637,97 @@ class H(BaseHTTPRequestHandler):
                             return self.send({"error": "Please rephrase that so it's classroom-friendly."}, 400)
                         record_case_answer(g, p, 0, q_el, txt_)
                     return self.send({"ok": True})
+                _, _, q_elapsed, _ = cur_timer_state(g)
                 if qtp == "text":
                     given = str(body.get("text") or "").strip()[:80]
                     if not given:
                         return self.send({"error": "Type an answer"}, 400)
-                    choice = q["c"] if text_correct(q, given) else -1
+                    choice = q["c"] if (q.get("all_correct") or text_correct(q, given)) else -1
+                    record_answer(g, p, choice, q_elapsed, given)
                 elif qtp == "order":
                     seq = body.get("seq")
                     n_ = len(q["a"])
-                    perm = g.get("shuf", {}).get(g["q"]) or list(range(n_))
+                    perm = g.get("shuf", {}).get(qi) or list(range(n_))
                     if not isinstance(seq, list) or sorted(seq) != list(range(n_)):
                         return self.send({"error": "Order all the items"}, 400)
                     orig = [perm[j] for j in seq]
-                    choice = q["c"] if orig == list(range(n_)) else -1
+                    choice = q["c"] if (q.get("all_correct") or orig == list(range(n_))) else -1
                     given = " \u2192 ".join(q["a"][k] for k in orig)
+                    record_answer(g, p, choice, q_elapsed, given)
+                elif qtp == "multi":
+                    raw_ch = body.get("choices")
+                    if not isinstance(raw_ch, list) or not raw_ch:
+                        return self.send({"error": "Select at least one option"}, 400)
+                    try:
+                        picked = sorted({int(x) for x in raw_ch})
+                    except Exception:
+                        return self.send({"error": "Bad choices"}, 400)
+                    if not picked or any(x < 0 or x >= len(q["a"]) for x in picked):
+                        return self.send({"error": "Bad choices"}, 400)
+                    req = set(q.get("correct_multi") or [q["c"]])
+                    pset = set(picked)
+                    ok = bool(q.get("all_correct")) or (pset == req)
+                    credit = 1.0 if ok else (max(0.0, (len(pset & req) - len(pset - req)) / float(max(1, len(req)))) if q.get("partial", True) else 0.0)
+                    given = " + ".join(q["a"][k] for k in picked)
+                    record_answer(g, p, picked[0], q_elapsed, given, credit=credit, extra={"ok": ok, "choices": picked})
+                elif qtp == "match":
+                    raw_p = body.get("pairs")
+                    pairs_ = q.get("pairs") or []
+                    n_ = len(pairs_)
+                    try:
+                        rel = [int(x) for x in (raw_p or [])]
+                    except Exception:
+                        rel = []
+                    if len(rel) != n_ or sorted(rel) != list(range(n_)):
+                        return self.send({"error": "Match every pair first"}, 400)
+                    shuf = g.get("match_shuf", {}).get(qi) or list(range(n_))
+                    hits_list = [(shuf[rel[li]] == li) or (pairs_[shuf[rel[li]]]["r"].lower() == pairs_[li]["r"].lower()) for li in range(n_)]
+                    hits = sum(1 for h in hits_list if h)
+                    ok = bool(q.get("all_correct")) or (hits == n_)
+                    credit = 1.0 if ok else (hits / float(max(1, n_)))
+                    given = ", ".join("%s \u2192 %s" % (pairs_[li]["l"], pairs_[shuf[rel[li]]]["r"]) for li in range(n_))
+                    record_answer(g, p, 0 if ok else -1, q_elapsed, given, credit=credit, extra={"ok": ok, "pairs": rel, "pair_hits": hits_list})
+                elif qtp == "slider":
+                    try:
+                        val = float(body["val"])
+                    except Exception:
+                        return self.send({"error": "Choose a number"}, 400)
+                    sl = q.get("slider") or {"min": 0.0, "max": 100.0, "step": 1.0, "target": 50.0, "margin": 5.0, "unit": ""}
+                    if not (sl["min"] - 1e-6 <= val <= sl["max"] + 1e-6):
+                        return self.send({"error": "Value out of range"}, 400)
+                    val = max(sl["min"], min(sl["max"], val))
+                    mg = float(sl.get("margin") or 0.0)
+                    diff = abs(val - sl["target"])
+                    ok = bool(q.get("all_correct")) or (diff <= 1e-6) or (mg > 0 and diff <= mg + 1e-6)
+                    credit = (1.0 if (diff <= 1e-6 or q.get("all_correct")) else max(0.75, 1.0 - 0.25 * (diff / mg))) if ok else 0.0
+                    given = "%g%s" % (round(val, 4), sl.get("unit", ""))
+                    record_answer(g, p, 0 if ok else -1, q_elapsed, given, credit=credit, extra={"ok": ok, "slider_val": round(val, 4)})
+                elif qtp == "pin":
+                    xy = body.get("pin_xy")
+                    try:
+                        if isinstance(xy, (list, tuple)) and len(xy) >= 2:
+                            px, py = float(xy[0]), float(xy[1])
+                        else:
+                            px, py = float(body["x"]), float(body["y"])
+                    except Exception:
+                        return self.send({"error": "Tap the image to place a pin"}, 400)
+                    if not (0.0 <= px <= 100.0 and 0.0 <= py <= 100.0):
+                        return self.send({"error": "Pin out of bounds"}, 400)
+                    pn = q.get("pin") or {"x": 50.0, "y": 50.0, "r": 12.0}
+                    r_ = max(3.0, float(pn.get("r", 12.0)))
+                    dist = ((px - pn["x"]) ** 2 + (py - pn["y"]) ** 2) ** 0.5
+                    ok = bool(q.get("all_correct")) or (dist <= r_)
+                    credit = max(0.6, 1.0 - 0.4 * (dist / r_)) if ok else 0.0
+                    given = "(%.0f%%, %.0f%%)" % (px, py)
+                    record_answer(g, p, 0 if ok else -1, q_elapsed, given, credit=credit, extra={"ok": ok, "pin_xy": [round(px, 1), round(py, 1)]})
                 else:
-                    choice = int(body["choice"])
+                    try:
+                        choice = int(body["choice"])
+                    except Exception:
+                        return self.send({"error": "Bad choice"}, 400)
                     if not 0 <= choice < len(q["a"]):
                         return self.send({"error": "Bad choice"}, 400)
-                _, _, q_elapsed, _ = cur_timer_state(g)
-                record_answer(g, p, choice, q_elapsed, given)
+                    record_answer(g, p, choice, q_elapsed, given)
                 return self.send({"ok": True})
             if path == "/api/next":
                 if body.get("host") != g["host"]:
@@ -2846,7 +3773,10 @@ def restore_games():
                 g["start"] = now - 0.1
                 g["paused"] = True
                 g["pause_prev"] = prev_time(g)
+                g["pause_think"] = think_sec(g)
                 g["pause_rem"] = qtime(g) + g.get("extra_time", 0.0)
+                if g.get("consensus_step") == 2:
+                    g["pause_consensus"] = float(g.get("consensus_total") or 15.0)
             GAMES[pin] = g
             if valid_rkey(g.get("pair_key")):
                 REMOTE_PAIRS[g["pair_key"]] = {"pin": pin, "host": g["host"], "ts": now, "phone_seen": 0.0}

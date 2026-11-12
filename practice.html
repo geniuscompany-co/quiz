@@ -354,12 +354,16 @@ button.sec:active{transform:scale(.97)}
 .c1{background:linear-gradient(180deg,#1b75e0,#115bb5);box-shadow:0 5px 0 #0a3c7a,0 6px 14px rgba(0,0,0,.24)}
 .c2{background:linear-gradient(180deg,#e5a900,#c68f00);box-shadow:0 5px 0 #8c6400,0 6px 14px rgba(0,0,0,.24)}
 .c3{background:linear-gradient(180deg,#2d9e0f,#217c09);box-shadow:0 5px 0 #145004,0 6px 14px rgba(0,0,0,.24)}
+.c4{background:linear-gradient(180deg,#8e24aa,#6a1b9a);box-shadow:0 5px 0 #4a148c,0 6px 14px rgba(0,0,0,.24)}
+.c5{background:linear-gradient(180deg,#00897b,#00695c);box-shadow:0 5px 0 #004d40,0 6px 14px rgba(0,0,0,.24)}
 
 body.cb .c0{background:#D55E00;box-shadow:0 5px 0 #8f3e00}
 body.cb .c1{background:#0072B2;box-shadow:0 5px 0 #004973}
 body.cb .c2{background:#F0E442;color:#1b1b1b!important;text-shadow:none;box-shadow:0 5px 0 #a89e14}
 body.cb .c2 .sh{background:rgba(0,0,0,.12)}
 body.cb .c3{background:#009E73;box-shadow:0 5px 0 #00664a}
+body.cb .c4{background:#CC79A7;box-shadow:0 5px 0 #8a4b6e}
+body.cb .c5{background:#56B4E9;color:#1b1b1b!important;text-shadow:none;box-shadow:0 5px 0 #2e7aa6}
 body.hc .grid button{border:3px solid #fff}
 
 .grid button.right{
@@ -371,6 +375,74 @@ body.hc .grid button{border:3px solid #fff}
   outline:3px solid rgba(255,255,255,.8);
 }
 .grid button.dim{opacity:.28;filter:grayscale(.25)}
+.grid button.msel{outline:3.5px solid var(--gold);transform:translateY(-2px);box-shadow:0 0 16px rgba(255,223,93,.55)!important}
+
+.q-top-row{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px;flex-wrap:wrap}
+.q-top-row .qnum{margin-bottom:0}
+.tts-btn{
+  padding:4px 11px;
+  border-radius:99px;
+  border:1px solid rgba(255,255,255,.32);
+  background:rgba(255,255,255,.14);
+  color:#fff;
+  font-size:.78em;
+  font-weight:850;
+  cursor:pointer;
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+}
+.tts-btn.on{background:var(--gold);color:var(--ink);border-color:#fff}
+.q-img.zoom-go{animation:zoomrev 14s linear forwards}
+@keyframes zoomrev{from{filter:blur(24px)}to{filter:blur(0)}}
+
+/* --- Match Tap-to-Pair --- */
+.match-cols{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:6px 0 10px;text-align:left}
+.match-col{display:flex;flex-direction:column;gap:7px}
+.match-hdr{font-size:.75em;font-weight:900;text-transform:uppercase;letter-spacing:.06em;opacity:.82;text-align:center}
+.m-item{
+  padding:10px 11px;
+  border-radius:11px;
+  border:2px solid rgba(255,255,255,.22);
+  background:rgba(255,255,255,.12);
+  color:#fff;
+  font-weight:800;
+  font-size:.92em;
+  line-height:1.25;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:6px;
+  text-align:left;
+  word-break:break-word;
+}
+.m-item.active{border-color:var(--gold);background:rgba(255,223,93,.22);box-shadow:0 0 12px rgba(255,223,93,.4)}
+.m-badge{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-width:24px;height:24px;padding:0 6px;border-radius:99px;
+  font-size:.78em;font-weight:900;color:#fff;flex-shrink:0;
+}
+.pc0{background:#e21b3c}.pc1{background:#1368ce}.pc2{background:#d89e00}.pc3{background:#26890c}.pc4{background:#8e24aa}.pc5{background:#00897b}
+
+/* --- Slider & Pin --- */
+.slider-box{background:rgba(0,0,0,.28);border:1px solid rgba(255,255,255,.2);border-radius:14px;padding:16px 14px;margin-bottom:8px}
+.slider-val{font-size:2em;font-weight:900;color:var(--gold);margin-bottom:8px}
+.slider-box input[type=range]{width:100%;accent-color:var(--gold);height:8px;cursor:pointer;margin:6px 0}
+.slider-ends{display:flex;justify-content:space-between;font-size:.8em;opacity:.8;font-weight:800;margin-bottom:10px}
+.slider-num{width:130px!important;display:inline-block!important;padding:8px 10px!important;font-size:1.05em!important;margin:0!important;border-radius:9px!important}
+
+.pin-wrap{background:rgba(0,0,0,.28);border:1px solid rgba(255,255,255,.2);border-radius:14px;padding:10px;margin-bottom:8px}
+.pin-stage{position:relative;display:inline-block;max-width:100%;border-radius:10px;overflow:hidden;cursor:crosshair;line-height:0;background:#fff;touch-action:manipulation}
+.pin-stage img{display:block;max-width:100%;max-height:290px;width:auto;height:auto;user-select:none;-webkit-user-drag:none}
+.pin-marker{
+  position:absolute;width:26px;height:26px;border-radius:50%;
+  border:3px solid #fff;background:rgba(226,27,60,.9);
+  box-shadow:0 0 0 2px #000,0 3px 10px rgba(0,0,0,.55);
+  transform:translate(-50%,-50%);pointer-events:none;z-index:3;
+}
+.pin-marker::after{content:'';position:absolute;left:50%;top:50%;width:6px;height:6px;background:#fff;border-radius:50%;transform:translate(-50%,-50%)}
+.pin-svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2}
 
 /* --- Order Slots --- */
 .slot{
@@ -380,8 +452,8 @@ body.hc .grid button{border:3px solid #fff}
   background:rgba(255,255,255,.15);
   border:1px solid rgba(255,255,255,.26);
   border-radius:10px;
-  padding:9px 12px;
-  margin:5px 0;
+  padding:8px 12px;
+  margin:4px 0;
   font-weight:800;
   text-align:left;
   cursor:pointer;
@@ -399,7 +471,14 @@ body.hc .grid button{border:3px solid #fff}
   box-shadow:0 6px 18px rgba(0,0,0,.25);
 }
 .fb.ok{background:linear-gradient(135deg,#2e9e10,#1e7308);border:1px solid rgba(105,240,174,.5)}
+.fb.partial{background:linear-gradient(135deg,#f57c00,#e65100);border:1px solid rgba(255,223,93,.6)}
 .fb.no{background:linear-gradient(135deg,#d32f2f,#9a1b1b);border:1px solid rgba(255,138,128,.45)}
+.grade-hero{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(0,0,0,.35);border:2px solid var(--gold);
+  border-radius:99px;padding:6px 18px;margin:6px 0 4px;
+  font-size:1.25em;font-weight:900;color:var(--gold);
+}
 blockquote{
   background:#fff;
   color:var(--ink);
@@ -489,11 +568,47 @@ blockquote{
 <canvas id="fx"></canvas>
 
 <script>
-const $ = document.getElementById('app'), sh = ["▲","◆","●","■"];
+const $ = document.getElementById('app'), sh = ["▲","◆","●","■","★","⬟"];
 function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
 function norm(s){return String(s).toLowerCase().replace(/[^a-z0-9]+/g,' ').trim()}
 function qtype(q){return q.type||'mc'}
 function zoomImg(src){ document.getElementById('imgBig').src = src; document.getElementById('imgOv').style.display = 'flex'; }
+
+/* --- Read-Aloud TTS --- */
+function stopSpeak(){
+  try{ if(window.speechSynthesis) window.speechSynthesis.cancel(); }catch(e){}
+  const b = document.getElementById('ttsBtn');
+  if(b){ b.classList.remove('on'); b.textContent = '🔊 Read Aloud'; }
+}
+function speakPractice(){
+  if(!run || run.i >= run.qs.length) return;
+  if(!('speechSynthesis' in window)) return;
+  if(window.speechSynthesis.speaking){
+    stopSpeak();
+    return;
+  }
+  const q = run.qs[run.i], t = qtype(q);
+  const parts = [q.q || ''];
+  if(['mc','tf','zoom','multi'].includes(t) && Array.isArray(q.a) && q.a.length){
+    parts.push('Options: ' + q.a.map((a, i) => `${i + 1}: ${a}`).join('. '));
+  } else if(t === 'order' && run.perm && Array.isArray(q.a)){
+    parts.push('Items to order: ' + run.perm.map(k => q.a[k]).join(', '));
+  } else if(t === 'match' && Array.isArray(q.pairs)){
+    parts.push('Match: ' + q.pairs.map(p => p.l).join(', '));
+  } else if(t === 'slider' && q.slider){
+    parts.push(`Range from ${q.slider.min} to ${q.slider.max}${q.slider.unit ? ' ' + q.slider.unit : ''}.`);
+  }
+  try{
+    const u = new SpeechSynthesisUtterance(parts.join('. '));
+    const b = document.getElementById('ttsBtn');
+    if(b){ b.classList.add('on'); b.textContent = '⏹️ Stop Reading'; }
+    u.onend = u.onerror = () => {
+      const btn = document.getElementById('ttsBtn');
+      if(btn){ btn.classList.remove('on'); btn.textContent = '🔊 Read Aloud'; }
+    };
+    window.speechSynthesis.speak(u);
+  }catch(e){}
+}
 
 /* --- Accessibility & Sound --- */
 function applyA11y(){
@@ -534,6 +649,7 @@ function beep(f, d, type, v, delay){
   o.connect(g); g.connect(ac.destination); o.start(t); o.stop(t + d + .02);
 }
 function sfxCorrect(){ [523.25,659.25,783.99].forEach((f,i)=>beep(f,.15,'triangle',.25,i*.08)); }
+function sfxPartial(){ [440,554.37].forEach((f,i)=>beep(f,.14,'triangle',.2,i*.09)); }
 function sfxWrong(){ beep(196,.24,'sawtooth',.16,0); beep(147,.3,'sawtooth',.16,.11); }
 function updSfx(){ const b = document.getElementById('sfxBtn'); if(b) b.textContent = sfxOn ? '🔊' : '🔇'; }
 function toggleSfx(){
@@ -564,8 +680,10 @@ function syncHud(){
     if(ht) ht.style.display = 'none';
     return;
   }
+  const doneN = run.done ? (run.i + 1) : run.i;
+  const livePct = doneN > 0 ? Math.round(100 * run.creditSum / doneN) + '%' : '';
   if(hs){
-    hs.innerHTML = `<span class="hud-stats"><span>Q ${run.i+1}/${run.qs.length}</span><span class="hs-score">⭐ ${run.score}</span>${run.streak >= 2 ? `<span class="hs-streak">🔥 ${run.streak}</span>` : ''}</span>`;
+    hs.innerHTML = `<span class="hud-stats"><span>Q ${run.i+1}/${run.qs.length}</span>${livePct ? `<span>📊 ${livePct}</span>` : ''}<span class="hs-score">⭐ ${run.score}</span>${run.streak >= 2 ? `<span class="hs-streak">🔥 ${run.streak}</span>` : ''}</span>`;
   }
   if(ht) ht.style.display = run.timed ? 'flex' : 'none';
 }
@@ -573,6 +691,7 @@ function syncHud(){
 let quizzes = [], run = null, lastFile = '';
 async function setup(){
   stopTimer();
+  stopSpeak();
   run = null;
   syncHud();
   try{ quizzes = (await (await fetch('/api/quizzes')).json()).quizzes || []; }catch(e){}
@@ -587,11 +706,18 @@ async function setup(){
       <div class="field-lbl"><span>Choose a Quiz</span></div>
       <select id="qs">
         <option value="">— Select a Quiz —</option>
-        ${list.map(q => `<option value="${esc(q.file)}" data-n="${q.count}" ${q.file === lastFile ? 'selected' : ''}>${esc(q.title)} (${q.count} Qs)</option>`).join('')}
+        ${list.map(q => {
+          const lbl = /\(\d+\s*Qs\)$/i.test(q.title || '') ? q.title : `${q.title} (${q.count} Qs)`;
+          return `<option value="${esc(q.file)}" data-n="${q.count}">${esc(lbl)}</option>`;
+        }).join('')}
       </select>
 
       <div class="field-lbl"><span>Question Count</span><span style="opacity:.7;text-transform:none;letter-spacing:0">Optional</span></div>
       <input id="cnt" type="number" min="1" value="" placeholder="How many questions? (blank = all)">
+
+      <div class="timer-opt-row">
+        <label><input type="checkbox" id="pracShuffle"> 🎲 Randomize Question Order</label>
+      </div>
 
       <div class="timer-opt-row">
         <label><input type="checkbox" id="timed"> ⏱️ Countdown timer</label>
@@ -623,9 +749,11 @@ async function setup(){
 }
 
 async function start(customQs){
+  stopSpeak();
   let qs = customQs;
   let timed = run ? run.timed : false;
   let tMax = run ? run.tMax : 20;
+  let shuffle = run ? !!run.shuffle : false;
   if(!qs){
     const sel = document.getElementById('qs');
     const file = sel ? sel.value : lastFile;
@@ -640,19 +768,31 @@ async function start(customQs){
     const rawCnt = cntEl ? parseInt(cntEl.value, 10) : NaN;
     const tmEl = document.getElementById('timed');
     timed = tmEl ? tmEl.checked : timed;
+    const shufEl = document.getElementById('pracShuffle');
+    shuffle = shufEl ? shufEl.checked : shuffle;
     const ptEl = document.getElementById('pTime');
     tMax = Math.max(5, Math.min(600, parseInt(ptEl ? ptEl.value : tMax, 10) || 20));
     const r = await (await fetch('/api/quiz_data?file=' + encodeURIComponent(file))).json();
-    qs = (r.questions || []).slice();
-    for(let i = qs.length - 1; i > 0; i--){
-      const j = Math.floor(Math.random() * (i + 1));
-      [qs[i], qs[j]] = [qs[j], qs[i]];
+    qs = (r.questions || []).filter(q => !['poll','open','rank','info','scale','brainstorm'].includes(q.type));
+    if(shuffle){
+      for(let i = qs.length - 1; i > 0; i--){
+        const j = Math.floor(Math.random() * (i + 1));
+        [qs[i], qs[j]] = [qs[j], qs[i]];
+      }
     }
-    qs = qs.filter(q => !['poll','open','rank','info'].includes(q.type));
     if(!isNaN(rawCnt) && rawCnt > 0) qs = qs.slice(0, rawCnt);
+    if(!qs.length){
+      if(errEl){ errEl.textContent = 'This deck has no gradable practice questions.'; errEl.style.display = 'block'; }
+      return;
+    }
   }
   if(!qs.length) return;
-  run = {qs, i:0, score:0, streak:0, best:0, right:0, missed:[], missedQ:[], timed, tMax, t:tMax, timer:null, sel:[], perm:null, done:false};
+  run = {
+    qs, i:0, score:0, streak:0, best:0, right:0, creditSum:0,
+    missed:[], missedQ:[], timed, tMax, shuffle, t:tMax, timer:null,
+    sel:[], perm:null, matchPerm:null, matchPairs:[], matchLeft:0,
+    sliderVal:0, pinXY:null, done:false
+  };
   show();
 }
 
@@ -660,43 +800,106 @@ function stopTimer(){ if(run && run.timer){ clearInterval(run.timer); run.timer 
 
 function show(){
   stopTimer();
+  stopSpeak();
   if(run.i >= run.qs.length) return finish();
   const q = run.qs[run.i], t = qtype(q);
   run.done = false;
   run.sel = [];
+  run.pinXY = null;
   const qSec = (q.t_custom && q.t >= 5) ? q.t : run.tMax;
   syncHud();
 
   if(t === 'order'){
-    const n = q.a.length;
+    const n = (q.a || []).length;
     let p = [...Array(n).keys()];
     for(let k = 0; k < 12; k++){
       p.sort(() => Math.random() - .5);
-      if(p.some((v, i) => v !== i)) break;
+      if(n <= 1 || p.some((v, i) => v !== i)) break;
     }
     run.perm = p;
+  } else if(t === 'match'){
+    const pairs = q.pairs || [];
+    const n = pairs.length;
+    let p = [...Array(n).keys()];
+    for(let k = 0; k < 12; k++){
+      p.sort(() => Math.random() - .5);
+      if(n <= 1 || p.some((v, i) => v !== i)) break;
+    }
+    run.matchPerm = p;
+    run.matchPairs = Array(n).fill(-1);
+    run.matchLeft = 0;
+  } else if(t === 'slider'){
+    const sc = q.slider || {min:0, max:100, step:1, target:50, margin:0, unit:''};
+    const rawMid = (Number(sc.min) + Number(sc.max)) / 2;
+    const st = Number(sc.step) || 1;
+    const snapped = Number(sc.min) + Math.round((rawMid - Number(sc.min)) / st) * st;
+    run.sliderVal = Number(Math.min(Number(sc.max), Math.max(Number(sc.min), snapped)).toFixed(6));
   }
 
   let body = '';
   if(t === 'text'){
     body = `<div class="card-panel" style="padding:14px"><input type="text" id="txt" placeholder="Type your answer…" autocomplete="off" autocapitalize="off" onkeydown="if(event.key==='Enter')submitText()"><button class="go" onclick="submitText()">Submit Answer</button></div>`;
   } else if(t === 'order'){
-    body = `<div class="sub" style="margin:2px 0 8px;font-weight:750">Tap items in the correct order (tap a placed slot to remove):</div><div id="ord"></div>`;
+    body = `<div class="sub" style="margin:2px 0 8px;font-weight:750">Tap items in the correct order (1 → ${(q.a||[]).length}; tap a placed slot to remove):</div><div id="ord"></div>`;
+  } else if(t === 'multi'){
+    body = `
+      <div class="sub" style="margin:2px 0 8px;font-weight:750">Select ALL correct options, then tap Submit:</div>
+      <div class="grid">${(q.a||[]).map((a,i)=>`<button id="mb${i}" class="c${i%6}" onclick="toggleMulti(${i})">${q.aimg && q.aimg[i] ? `<img src="${esc(q.aimg[i])}" alt="">` : ''}<span class="sh">${sh[i%6]}</span><span>${esc(a)}</span></button>`).join('')}</div>
+      <button class="go" id="multiSubBtn" style="margin-top:10px" onclick="submitMulti()" disabled>✅ Submit Selection (0)</button>
+    `;
+  } else if(t === 'match'){
+    body = `<div class="sub" style="margin:2px 0 6px;font-weight:750">Tap a left item and its matching right partner (tap a paired item to unpair):</div><div id="matchBox"></div>`;
+  } else if(t === 'slider'){
+    const sc = q.slider || {min:0, max:100, step:1, unit:''};
+    const u = sc.unit ? ' ' + esc(sc.unit) : '';
+    body = `
+      <div class="slider-box">
+        <div class="slider-val" id="slReadout">${run.sliderVal}${u}</div>
+        <input type="range" id="slRange" min="${sc.min}" max="${sc.max}" step="${sc.step}" value="${run.sliderVal}" oninput="syncSlider(this.value)">
+        <div class="slider-ends"><span>${sc.min}${u}</span><span>${sc.max}${u}</span></div>
+        <div style="display:flex;align-items:center;justify-content:center;gap:8px">
+          <input type="number" id="slNum" class="slider-num" min="${sc.min}" max="${sc.max}" step="${sc.step}" value="${run.sliderVal}" oninput="syncSlider(this.value)">
+          ${sc.unit ? `<span style="font-weight:850">${esc(sc.unit)}</span>` : ''}
+        </div>
+        <button class="go" id="slSubBtn" style="margin-top:12px" onclick="submitSlider()">🎯 Lock In Estimate</button>
+      </div>
+    `;
+  } else if(t === 'pin'){
+    body = `
+      <div class="pin-wrap">
+        <div class="sub" style="margin:0 0 8px;font-weight:750">Tap directly on the image to place your pin:</div>
+        <div class="pin-stage" id="pinStage" onclick="placePin(event)">
+          <img src="${esc(q.img || '')}" alt="Target image" draggable="false">
+          <svg class="pin-svg" id="pinSvg" viewBox="0 0 100 100" preserveAspectRatio="none"></svg>
+          <div class="pin-marker" id="pinMarker" style="display:none"></div>
+        </div>
+        <div id="pinCoord" style="font-size:.82em;opacity:.82;margin-top:6px;font-weight:750">Tap anywhere on the image to drop a pin</div>
+        <button class="go" id="pinSubBtn" style="margin-top:10px" onclick="submitPin()" disabled>📍 Lock In Pin</button>
+      </div>
+    `;
   } else {
-    body = `<div class="grid">${q.a.map((a,i)=>`<button class="c${i}" onclick="pick(${i})">${q.aimg && q.aimg[i] ? `<img src="${esc(q.aimg[i])}" alt="">` : ''}<span class="sh">${sh[i]}</span><span>${esc(a)}</span></button>`).join('')}</div>`;
+    body = `<div class="grid">${(q.a||[]).map((a,i)=>`<button class="c${i%6}" onclick="pick(${i})">${q.aimg && q.aimg[i] ? `<img src="${esc(q.aimg[i])}" alt="">` : ''}<span class="sh">${sh[i%6]}</span><span>${esc(a)}</span></button>`).join('')}</div>`;
   }
+
+  const ptsTag = (q.pts != null && Number(q.pts) !== 1000) ? ` · ⭐ ${q.pts} pts` : '';
+  const showStemImg = q.img && t !== 'pin';
+  const zoomCls = t === 'zoom' ? ' zoom-go' : '';
 
   $.innerHTML = `
     <div class="q-card">
-      <div class="qnum">Question ${run.i+1} of ${run.qs.length}</div>
+      <div class="q-top-row">
+        <div class="qnum">Question ${run.i+1} of ${run.qs.length}${ptsTag}</div>
+        <button type="button" class="tts-btn" id="ttsBtn" onclick="speakPractice()">🔊 Read Aloud</button>
+      </div>
       <div class="q">${esc(q.q)}</div>
-      ${q.img ? `<img class="q-img" src="${esc(q.img)}" alt="" onclick="zoomImg(this.src)">` : ''}
+      ${showStemImg ? `<img class="q-img${zoomCls}" id="qStemImg" src="${esc(q.img)}" alt="" onclick="zoomImg(this.src)">` : ''}
     </div>
     ${body}
     <div id="fb"></div>
   `;
 
   if(t === 'order') drawOrder();
+  if(t === 'match') drawMatch();
   if(t === 'text'){ const e = document.getElementById('txt'); if(e) e.focus(); }
   if(run.timed){
     run.t = qSec;
@@ -715,13 +918,209 @@ function show(){
         l.textContent = '⏱️ ' + Math.max(0, Math.ceil(run.t)) + 's';
         l.className = 'tlbl-pill' + (urg ? ' urgent' : '');
       }
-      if(run.t <= 0){ stopTimer(); grade(false, '(time ran out)'); }
+      if(run.t <= 0){ stopTimer(); grade(false, 0, '(time ran out)'); }
     }, 200);
   }
 }
 
-function pick(i){ if(run.done) return; const q = run.qs[run.i]; grade(i === q.c, q.a[i], i); }
-function submitText(){ if(run.done) return; const q = run.qs[run.i]; const v = document.getElementById('txt').value; if(!v.trim()) return; grade(q.a.some(a => norm(a) === norm(v)), v); }
+function pick(i){
+  if(run.done) return;
+  const q = run.qs[run.i];
+  const valid = (Array.isArray(q.correct_multi) && q.correct_multi.length) ? q.correct_multi : [q.c || 0];
+  const ok = !!q.all_correct || valid.includes(i);
+  grade(ok, ok ? 1 : 0, (q.a || [])[i] || '', {picked:[i], valid: q.all_correct ? (q.a||[]).map((_,k)=>k) : valid});
+}
+
+function toggleMulti(i){
+  if(run.done) return;
+  const pos = run.sel.indexOf(i);
+  if(pos >= 0) run.sel.splice(pos, 1);
+  else run.sel.push(i);
+  run.sel.sort((a,b) => a - b);
+  const btn = document.getElementById('mb' + i);
+  if(btn) btn.classList.toggle('msel', run.sel.includes(i));
+  const sub = document.getElementById('multiSubBtn');
+  if(sub){
+    sub.disabled = !run.sel.length;
+    sub.textContent = `✅ Submit Selection (${run.sel.length})`;
+  }
+}
+
+function submitMulti(){
+  if(run.done || !run.sel.length) return;
+  const q = run.qs[run.i];
+  const picked = run.sel.slice();
+  const req = (Array.isArray(q.correct_multi) && q.correct_multi.length) ? q.correct_multi : [q.c || 0];
+  const exact = !!q.all_correct || (picked.length === req.length && picked.every(x => req.includes(x)));
+  let credit = 0;
+  if(exact) credit = 1;
+  else if(q.partial !== false){
+    const hits = picked.filter(x => req.includes(x)).length;
+    const wrongs = picked.filter(x => !req.includes(x)).length;
+    credit = Math.max(0, (hits - wrongs) / Math.max(1, req.length));
+  }
+  const sub = document.getElementById('multiSubBtn');
+  if(sub) sub.disabled = true;
+  const given = picked.map(k => (q.a || [])[k]).join(' + ');
+  grade(exact, credit, given, {picked, valid: q.all_correct ? (q.a||[]).map((_,k)=>k) : req});
+}
+
+function drawMatch(){
+  const q = run.qs[run.i], el = document.getElementById('matchBox');
+  if(!el) return;
+  const pairs = q.pairs || [];
+  const n = pairs.length;
+  const rightDisp = run.matchPerm.map(k => pairs[k].r);
+  const allLinked = n > 0 && run.matchPairs.every(v => v >= 0);
+  el.innerHTML = `
+    <div class="match-cols">
+      <div class="match-col">
+        <div class="match-hdr">Prompts</div>
+        ${pairs.map((p, li) => {
+          const rj = run.matchPairs[li];
+          const act = run.matchLeft === li && !run.done;
+          return `<button type="button" class="m-item${act ? ' active' : ''}" onclick="tapMatchLeft(${li})" ${run.done ? 'disabled' : ''}><span>${esc(p.l)}</span>${rj >= 0 ? `<span class="m-badge pc${li%6}">#${li+1}</span>` : ''}</button>`;
+        }).join('')}
+      </div>
+      <div class="match-col">
+        <div class="match-hdr">Matches</div>
+        ${rightDisp.map((rt, rj) => {
+          const li = run.matchPairs.indexOf(rj);
+          return `<button type="button" class="m-item" onclick="tapMatchRight(${rj})" ${run.done ? 'disabled' : ''}><span>${esc(rt)}</span>${li >= 0 ? `<span class="m-badge pc${li%6}">#${li+1}</span>` : ''}</button>`;
+        }).join('')}
+      </div>
+    </div>
+    ${!run.done ? `<button class="go" onclick="submitMatch()" ${allLinked ? '' : 'disabled'}>🔗 Submit Pairs (${run.matchPairs.filter(v => v >= 0).length}/${n})</button>` : ''}
+  `;
+}
+
+function tapMatchLeft(li){
+  if(run.done) return;
+  if(run.matchPairs[li] >= 0){
+    run.matchPairs[li] = -1;
+    run.matchLeft = li;
+  } else {
+    run.matchLeft = (run.matchLeft === li) ? null : li;
+  }
+  drawMatch();
+}
+
+function tapMatchRight(rj){
+  if(run.done) return;
+  const existingLi = run.matchPairs.indexOf(rj);
+  let targetLi = run.matchLeft;
+  if(targetLi === null || targetLi === undefined){
+    if(existingLi >= 0){
+      run.matchPairs[existingLi] = -1;
+      run.matchLeft = existingLi;
+      drawMatch();
+      return;
+    }
+    targetLi = run.matchPairs.findIndex(v => v < 0);
+  }
+  if(targetLi === null || targetLi < 0) return;
+  if(existingLi >= 0) run.matchPairs[existingLi] = -1;
+  run.matchPairs[targetLi] = rj;
+  const nextUnpaired = run.matchPairs.findIndex(v => v < 0);
+  run.matchLeft = nextUnpaired >= 0 ? nextUnpaired : null;
+  drawMatch();
+}
+
+function submitMatch(){
+  if(run.done) return;
+  const q = run.qs[run.i], pairs = q.pairs || [], n = pairs.length;
+  if(run.matchPairs.some(v => v < 0)) return;
+  let hits = 0;
+  const parts = [];
+  for(let li = 0; li < n; li++){
+    const origIdx = run.matchPerm[run.matchPairs[li]];
+    const chosenR = pairs[origIdx].r;
+    if(origIdx === li || chosenR.trim().toLowerCase() === pairs[li].r.trim().toLowerCase()) hits++;
+    parts.push(`${pairs[li].l} → ${chosenR}`);
+  }
+  const ok = !!q.all_correct || hits === n;
+  const credit = ok ? 1 : (hits / Math.max(1, n));
+  grade(ok, credit, parts.join(', '));
+  drawMatch();
+}
+
+function syncSlider(v){
+  if(run.done) return;
+  const q = run.qs[run.i], sc = q.slider || {min:0, max:100, step:1, unit:''};
+  const num = parseFloat(v);
+  if(isNaN(num)) return;
+  run.sliderVal = num;
+  const rEl = document.getElementById('slRange');
+  const nEl = document.getElementById('slNum');
+  const rd = document.getElementById('slReadout');
+  if(rEl && rEl.value !== String(num)) rEl.value = num;
+  if(nEl && document.activeElement !== nEl) nEl.value = num;
+  if(rd) rd.textContent = num + (sc.unit ? ' ' + sc.unit : '');
+}
+
+function submitSlider(){
+  if(run.done) return;
+  const q = run.qs[run.i], sc = q.slider || {min:0, max:100, step:1, target:50, margin:0, unit:''};
+  const nEl = document.getElementById('slNum');
+  let val = nEl ? parseFloat(nEl.value) : run.sliderVal;
+  if(isNaN(val)) val = run.sliderVal;
+  val = Math.max(Number(sc.min), Math.min(Number(sc.max), val));
+  const diff = Math.abs(val - Number(sc.target));
+  const mg = Number(sc.margin) || 0;
+  let ok = false, credit = 0;
+  if(q.all_correct || diff <= 1e-6){ ok = true; credit = 1; }
+  else if(mg > 0 && diff <= mg + 1e-6){ ok = true; credit = Math.max(0.75, 1 - 0.25 * (diff / mg)); }
+  const rEl = document.getElementById('slRange'), bEl = document.getElementById('slSubBtn');
+  if(rEl) rEl.disabled = true;
+  if(nEl) nEl.disabled = true;
+  if(bEl) bEl.disabled = true;
+  grade(ok, credit, `${val}${sc.unit ? ' ' + sc.unit : ''}`);
+}
+
+function placePin(ev){
+  if(run.done) return;
+  const st = document.getElementById('pinStage');
+  if(!st) return;
+  const rect = st.getBoundingClientRect();
+  if(!rect.width || !rect.height) return;
+  const x = Math.max(0, Math.min(100, ((ev.clientX - rect.left) / rect.width) * 100));
+  const y = Math.max(0, Math.min(100, ((ev.clientY - rect.top) / rect.height) * 100));
+  run.pinXY = [Number(x.toFixed(1)), Number(y.toFixed(1))];
+  const mk = document.getElementById('pinMarker');
+  if(mk){ mk.style.display = 'block'; mk.style.left = run.pinXY[0] + '%'; mk.style.top = run.pinXY[1] + '%'; }
+  const cd = document.getElementById('pinCoord');
+  if(cd) cd.textContent = `Pin placed at (${Math.round(run.pinXY[0])}%, ${Math.round(run.pinXY[1])}%) — tap again to adjust`;
+  const btn = document.getElementById('pinSubBtn');
+  if(btn) btn.disabled = false;
+}
+
+function submitPin(){
+  if(run.done || !run.pinXY) return;
+  const q = run.qs[run.i], pn = q.pin || {x:50, y:50, r:12};
+  const [px, py] = run.pinXY;
+  const r = Math.max(1, Number(pn.r) || 12);
+  const dist = Math.hypot(px - Number(pn.x), py - Number(pn.y));
+  const ok = !!q.all_correct || dist <= r;
+  const credit = ok ? Math.max(0.6, 1 - 0.4 * (dist / r)) : 0;
+  const svg = document.getElementById('pinSvg');
+  if(svg){
+    svg.innerHTML = `<ellipse cx="${pn.x}" cy="${pn.y}" rx="${r}" ry="${r}" fill="rgba(46,204,113,0.32)" stroke="#69f0ae" stroke-width="1.2"/>`;
+  }
+  const btn = document.getElementById('pinSubBtn');
+  if(btn) btn.disabled = true;
+  grade(ok, credit, `(${Math.round(px)}%, ${Math.round(py)}%)`);
+}
+
+function submitText(){
+  if(run.done) return;
+  const q = run.qs[run.i];
+  const el = document.getElementById('txt');
+  const v = el ? el.value : '';
+  if(!v.trim()) return;
+  if(el) el.disabled = true;
+  const ok = !!q.all_correct || (q.a || []).some(a => norm(a) === norm(v));
+  grade(ok, ok ? 1 : 0, v);
+}
 
 function drawOrder(){
   const q = run.qs[run.i], el = document.getElementById('ord');
@@ -729,35 +1128,72 @@ function drawOrder(){
   const disp = run.perm.map(k => q.a[k]);
   el.innerHTML =
     run.sel.map((j, n) => `<div class="slot" onclick="removeOrd(${n})"><span><b>#${n+1}</b> ${esc(disp[j])}</span><span class="rm">✕</span></div>`).join('') +
-    `<div class="grid">${disp.map((a, j) => run.sel.includes(j) ? '' : `<button class="c${j%4}" style="min-height:74px" onclick="tapOrd(${j})"><span>${esc(a)}</span></button>`).join('')}</div>` +
-    `<div style="display:flex;gap:8px;justify-content:center;align-items:center;margin-top:8px">${run.sel.length ? `<button class="sec" style="margin:0" onclick="run.sel.pop();drawOrder()">↩ Undo</button>` : ''}${run.sel.length === disp.length ? `<button class="go" style="margin:0;flex:1" onclick="submitOrder()">✅ Submit Order</button>` : ''}</div>`;
+    `<div class="grid">${disp.map((a, j) => run.sel.includes(j) ? '' : `<button class="c${j%6}" style="min-height:70px" onclick="tapOrd(${j})"><span>${esc(a)}</span></button>`).join('')}</div>` +
+    `<div style="display:flex;gap:8px;justify-content:center;align-items:center;margin-top:8px">${run.sel.length && !run.done ? `<button class="sec" style="margin:0" onclick="run.sel.pop();drawOrder()">↩ Undo</button>` : ''}${run.sel.length === disp.length && !run.done ? `<button class="go" style="margin:0;flex:1" onclick="submitOrder()">✅ Submit Order</button>` : ''}</div>`;
 }
 function tapOrd(j){ if(run.done) return; run.sel.push(j); drawOrder(); }
 function removeOrd(pos){ if(run.done) return; run.sel.splice(pos, 1); drawOrder(); }
 function submitOrder(){
   const q = run.qs[run.i];
   const orig = run.sel.map(j => run.perm[j]);
-  grade(orig.every((v, i) => v === i), orig.map(k => q.a[k]).join(' → '));
+  const ok = !!q.all_correct || orig.every((v, i) => v === i);
+  grade(ok, ok ? 1 : 0, orig.map(k => q.a[k]).join(' → '));
 }
 
 function ansText(q){
+  if(q.all_correct) return 'Any option (all accepted)';
   const t = qtype(q);
-  return t === 'order' ? q.a.join(' → ') : t === 'text' ? q.a.slice(0, 3).join(' / ') : q.a[q.c];
+  if(t === 'order') return (q.a || []).join(' → ');
+  if(t === 'text') return (q.a || []).slice(0, 3).join(' / ');
+  if(t === 'multi'){
+    const cm = (Array.isArray(q.correct_multi) && q.correct_multi.length) ? q.correct_multi : [q.c || 0];
+    return cm.map(k => (q.a || [])[k]).filter(Boolean).join(' + ');
+  }
+  if(t === 'match') return (q.pairs || []).map(p => `${p.l} → ${p.r}`).join(', ');
+  if(t === 'slider'){
+    const sl = q.slider || {};
+    const u = sl.unit ? ' ' + sl.unit : '';
+    return sl.margin ? `${sl.target}${u} (±${sl.margin})` : `${sl.target}${u}`;
+  }
+  if(t === 'pin'){
+    const pn = q.pin || {};
+    return `Target zone (${Math.round(pn.x ?? 50)}%, ${Math.round(pn.y ?? 50)}%)`;
+  }
+  if(Array.isArray(q.correct_multi) && q.correct_multi.length > 1){
+    return q.correct_multi.map(k => (q.a || [])[k]).filter(Boolean).join(' OR ');
+  }
+  return (q.a || [])[q.c || 0] || '';
 }
 
-function grade(ok, given, idx){
+function grade(ok, credit, given, meta){
   if(run.done) return;
   run.done = true;
   stopTimer();
-  const q = run.qs[run.i];
+  stopSpeak();
+  const q = run.qs[run.i], t = qtype(q);
+  const zImg = document.getElementById('qStemImg');
+  if(zImg) zImg.classList.remove('zoom-go');
+
+  const cr = Math.max(0, Math.min(1, Number(credit) || 0));
+  const partial = !ok && cr > 0;
+  const ptsScale = (q.pts != null) ? (Number(q.pts) / 1000) : 1;
   let pts = 0;
+  run.creditSum += ok ? 1 : cr;
+
   if(ok){
     run.streak++;
     run.best = Math.max(run.best, run.streak);
     run.right++;
-    pts = 100 + Math.min(100, (run.streak - 1) * 25);
+    pts = Math.round((100 + Math.min(100, (run.streak - 1) * 25)) * cr * ptsScale);
     run.score += pts;
     sfxCorrect();
+  } else if(partial){
+    run.streak = 0;
+    pts = Math.round(100 * cr * ptsScale);
+    run.score += pts;
+    run.missed.push({q: q.q, your: given, ans: ansText(q)});
+    run.missedQ.push(q);
+    sfxPartial();
   } else {
     run.streak = 0;
     run.missed.push({q: q.q, your: given, ans: ansText(q)});
@@ -766,22 +1202,31 @@ function grade(ok, given, idx){
   }
   syncHud();
 
+  const picked = (meta && meta.picked) || [];
+  const valid = (meta && meta.valid) || [];
   document.querySelectorAll('.grid button').forEach((b, i) => {
     b.disabled = true;
-    if(qtype(q) === 'mc' || qtype(q) === 'tf'){
-      if(i === idx) b.classList.add('picked');
-      if(i === q.c) b.classList.add('right');
+    b.classList.remove('msel');
+    if(['mc','tf','zoom','multi'].includes(t)){
+      if(picked.includes(i)) b.classList.add('picked');
+      if(valid.includes(i)) b.classList.add('right');
       else b.classList.add('dim');
     }
   });
 
   const fb = document.getElementById('fb');
+  const cls = ok ? 'ok' : partial ? 'partial' : 'no';
+  const headline = ok
+    ? `✅ Correct! +${pts} pts${run.streak > 1 ? ' · 🔥 ' + run.streak + ' streak' : ''}`
+    : partial
+      ? `⚡ Partial Credit! +${pts} pts (${Math.round(cr * 100)}%)`
+      : '❌ Not quite';
   fb.innerHTML = `
-    <div class="fb ${ok ? 'ok' : 'no'}">
-      ${ok ? `✅ Correct! +${pts} pts${run.streak > 1 ? ' · 🔥 ' + run.streak + ' streak' : ''}` : '❌ Not quite'}
+    <div class="fb ${cls}">
+      ${headline}
       ${ok ? '' : `<div style="font-size:.86em;font-weight:750;margin-top:4px;opacity:.95">Correct answer: <b>${esc(ansText(q))}</b></div>`}
     </div>
-    ${q.quote ? `<blockquote>“${esc(q.quote)}”</blockquote>` : ''}
+    ${q.quote ? `<blockquote>“${esc(q.quote)}”${q.src ? `<div style="font-size:.82em;font-style:normal;opacity:.75;margin-top:4px">— ${esc(q.src)}</div>` : ''}</blockquote>` : ''}
     <button class="go" onclick="run.i++;show()">${run.i + 1 >= run.qs.length ? '🏆 See Final Results' : 'Next Question ➔'}</button>
   `;
   fb.scrollIntoView({behavior:'smooth', block:'nearest'});
@@ -793,15 +1238,17 @@ function retryMissed(){
 }
 
 function finish(){
+  stopSpeak();
   syncHud();
-  const pct = Math.round(100 * run.right / run.qs.length);
+  const pct = Math.round(100 * run.creditSum / Math.max(1, run.qs.length));
   if(pct >= 80) confettiBurst();
   $.innerHTML = `
     <div class="card-panel">
       <div style="font-size:3em;line-height:1">${pct >= 90 ? '🏆' : pct >= 70 ? '🎉' : '💪'}</div>
       <h1>Practice Complete!</h1>
+      <div class="grade-hero">📊 Percentage Grade: ${pct}%</div>
       <div class="stats-grid">
-        <div class="stat"><b>${pct}%</b>${run.right}/${run.qs.length} Correct</div>
+        <div class="stat"><b>${pct}%</b>${run.right}/${run.qs.length} Exact</div>
         <div class="stat"><b>⭐ ${run.score}</b>Points</div>
         <div class="stat"><b>🔥 ${run.best}</b>Best Streak</div>
       </div>

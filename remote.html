@@ -115,6 +115,8 @@ body{
   transition:width .14s linear,background .25s ease;
 }
 .rp-fill.preview{background:linear-gradient(90deg,#00e5ff,#ffdf5d)}
+.rp-fill.think{background:linear-gradient(90deg,#b388ff,#00e5ff)}
+.rp-fill.consensus{background:linear-gradient(90deg,#40c4ff,#69f0ae)}
 .rp-fill.urgent{background:linear-gradient(90deg,#ff1744,#ff9100)}
 .rp-fill.paused{background:#ffdf5d;opacity:.65}
 
@@ -622,6 +624,54 @@ h2{font-size:1.18em;margin:.2em 0;font-weight:900}
   text-align:center;
   display:none;
 }
+.spot-btn{
+  border:1px solid rgba(255,223,93,.5);
+  background:rgba(255,255,255,.1);
+  color:var(--gold);
+  border-radius:99px;
+  padding:5px 10px;
+  font-size:.8em;
+  font-weight:850;
+  cursor:pointer;
+  flex-shrink:0;
+}
+.spot-btn.on{
+  background:linear-gradient(135deg,#ffd600,#ff9100);
+  color:var(--ink);
+  border-color:#fff;
+}
+.reconsider-btn{
+  width:100%;
+  margin-top:8px;
+  padding:10px 12px;
+  border-radius:11px;
+  border:1.5px solid rgba(128,222,234,.65);
+  background:linear-gradient(135deg,rgba(0,172,193,.35),rgba(19,104,206,.45));
+  color:#fff;
+  font-weight:900;
+  font-size:.92em;
+  cursor:pointer;
+}
+.meta-callout{
+  margin-top:8px;
+  padding:9px 11px;
+  border-radius:10px;
+  background:rgba(0,0,0,.3);
+  border:1px solid rgba(255,255,255,.18);
+  text-align:left;
+  font-size:.88em;
+  line-height:1.38;
+}
+.meta-callout b{color:var(--gold)}
+.upnext-card{
+  background:rgba(255,255,255,.07);
+  border:1px dashed rgba(255,255,255,.24);
+  border-radius:12px;
+  padding:9px 12px;
+  text-align:left;
+  font-size:.86em;
+  line-height:1.35;
+}
 </style></head><body>
 
 <div id="topHud">
@@ -641,7 +691,7 @@ const qs = new URLSearchParams(location.search);
 let rkey = qs.get('key') || '', pin = qs.get('pin') || '', host = qs.get('host') || '', S = {};
 let lastKey = '', launchMode = 'quiz', quizCatalog = [], quizzesLoaded = false, launching = false;
 let toolsOpen = false, pollStamp = performance.now();
-const $ = document.getElementById('app'), sh = ["▲ ","◆ ","● ","■ "];
+const $ = document.getElementById('app'), sh = ["▲ ","◆ ","● ","■ ","★ ","⬟ "];
 
 function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
 async function post(u,b){
@@ -652,7 +702,12 @@ async function post(u,b){
  return d;
 }
 async function next(){await post('/api/next',{pin,host});pollNow()}
-async function ctl(action,sec=10){await post('/api/host_ctl',{pin,host,action,sec});pollNow()}
+async function hostCtl(action, extra={}){
+ const p = (typeof extra === 'number') ? {sec: extra} : (extra || {});
+ await post('/api/host_ctl', {pin, host, action, ...p});
+ pollNow();
+}
+async function ctl(action, sec=10){ return hostCtl(action, {sec}); }
 async function appr(name,ok){await post('/api/approve',{pin,host,name,approve:ok});pollNow()}
 async function addBots(n=5){await post('/api/bots',{pin,host,count:n});pollNow()}
 
@@ -716,6 +771,9 @@ function renderOptsHtml(){
   return `
    <label class="opt-pill"><input type="checkbox" id="mIce"> 💭 Word Cloud</label>
    <label class="opt-pill"><input type="checkbox" id="mTeams"> 🛡️ Teams</label>
+   <label class="opt-pill"><input type="checkbox" id="rConsensus"> 🤝 Team Consensus</label>
+   <label class="opt-pill"><input type="checkbox" id="rHideBoard"> 🙈 Hide Leaderboard</label>
+   <label class="opt-pill"><input type="checkbox" id="rAllowTts"> 🔊 Student TTS</label>
    <label class="opt-pill"><input type="checkbox" id="mMod"> 🛡️ Approve Names</label>
   `;
  }
@@ -723,6 +781,9 @@ function renderOptsHtml(){
   <label class="opt-pill"><input type="checkbox" id="mShuf"> 🎲 Shuffle Qs</label>
   <label class="opt-pill"><input type="checkbox" id="mIce"> 💭 Word Cloud</label>
   <label class="opt-pill"><input type="checkbox" id="mTeams"> 🛡️ Team Mode</label>
+  <label class="opt-pill"><input type="checkbox" id="rConsensus"> 🤝 Team Consensus</label>
+  <label class="opt-pill"><input type="checkbox" id="rHideBoard"> 🙈 Hide Leaderboard</label>
+  <label class="opt-pill"><input type="checkbox" id="rAllowTts"> 🔊 Student TTS</label>
   <label class="opt-pill"><input type="checkbox" id="mWager"> 🎰 Final Boss</label>
   <label class="opt-pill"><input type="checkbox" id="mRedemp"> 🔄 Redemption</label>
   <label class="opt-pill"><input type="checkbox" id="mWheel"> 🎡 Mystery Wheel</label>
@@ -741,8 +802,11 @@ function renderTimersHtml(){
     <label class="timer-item"><span>🎤 Discuss</span><input type="number" id="mDiscTime" min="5" max="900" value="60"></label>
     <label class="timer-item"><span>📊 Ranking</span><input type="number" id="mRankTime" min="5" max="900" value="60"></label>
     <label class="timer-item"><span>✍️ Writing</span><input type="number" id="mOpenTime" min="5" max="900" value="120"></label>
+    <label class="timer-item"><span>💡 Brainstorm</span><input type="number" id="mBrainTime" min="5" max="900" value="90"></label>
+    <label class="timer-item"><span>📏 Scale</span><input type="number" id="mScaleTime" min="5" max="900" value="25"></label>
     <label class="timer-item"><span>✅ Check</span><input type="number" id="mCheckTime" min="5" max="900" value="20"></label>
     <label class="timer-item"><span>👀 Preview</span><input type="number" id="mCasePrev" min="0" max="120" value="5"></label>
+    <label class="timer-item"><span>🧠 Think</span><input type="number" id="rThinkTime" min="0" max="120" value="0"></label>
    </div>`;
  }
  return `
@@ -750,6 +814,7 @@ function renderTimersHtml(){
   <div class="timer-grid">
    <label class="timer-item"><span>⏱️ Timer</span><input type="number" id="mQTime" min="5" max="900" value="15"></label>
    <label class="timer-item"><span>👀 Preview</span><input type="number" id="mPrevTime" min="0" max="120" value="5"></label>
+   <label class="timer-item"><span>🧠 Think</span><input type="number" id="rThinkTime" min="0" max="120" value="0"></label>
   </div>`;
 }
 
@@ -773,12 +838,22 @@ function renderStandby(){
     <select id="mQuizSel" class="sel">
      <option value="">${launchMode==='case'?'— Select a Case Study —':'— Select a Quiz —'}</option>
     </select>
-    ${renderTimersHtml()}
-    <div class="sec-lbl">✨ Session Options</div>
-    <div class="opt-grid">${renderOptsHtml()}</div>
-    <div class="bots-row">
-     <span>🤖 Practice Bots</span>
-     <input type="number" id="mBots" min="0" max="30" value="0">
+    <div id="preOptions">
+     <div class="sec-lbl">🏆 Scoring Mode</div>
+     <select id="rScoring" class="sel">
+      <option value="">— Scoring Mode (Default: Classic) —</option>
+      <option value="classic">🏆 Classic (Speed + Accuracy)</option>
+      <option value="accuracy">🎯 Accuracy Only (No Speed Bonus)</option>
+      <option value="percent">📊 Percentage Grade (%)</option>
+      <option value="survey">📋 Unscored Survey / Formative</option>
+     </select>
+     ${renderTimersHtml()}
+     <div class="sec-lbl">✨ Session Options</div>
+     <div class="opt-grid">${renderOptsHtml()}</div>
+     <div class="bots-row">
+      <span>🤖 Practice Bots</span>
+      <input type="number" id="mBots" min="0" max="30" value="0">
+     </div>
     </div>
     <div id="mErr" class="err-msg"></div>
     <button type="button" id="mLaunchBtn" class="big-btn" onclick="launchFromPhone()">🚀 Create Session from Phone</button>
@@ -812,15 +887,23 @@ async function launchFromPhone(){
  if(errEl) errEl.style.display = 'none';
  const bots = Math.max(0, Math.min(30, parseInt((document.getElementById('mBots')||{}).value, 10) || 0));
  const isCase = launchMode === 'case';
- const teamsOn = chk('mTeams');
+ const consensusOn = chk('rConsensus');
+ const teamsOn = chk('mTeams') || consensusOn;
+ const scSel = document.getElementById('rScoring');
+ const scoringMode = (scSel && scSel.value) ? scSel.value : 'classic';
  const payload = {
   quiz: qf,
   pair_key: rkey,
+  scoring_mode: scoringMode,
   qtime: isCase ? numVal('mCheckTime', 20, 5, 900) : numVal('mQTime', 15, 5, 900),
   preview: isCase ? numVal('mCasePrev', 5, 0, 120) : numVal('mPrevTime', 5, 0, 120),
+  think_time: numVal('rThinkTime', 0, 0, 120),
   shuffle: isCase ? false : chk('mShuf'),
   icebreaker: chk('mIce'),
   teams: teamsOn,
+  consensus: consensusOn,
+  hide_board: chk('rHideBoard'),
+  allow_tts: chk('rAllowTts'),
   team_battle: isCase ? false : teamsOn,
   wager: isCase ? false : chk('mWager'),
   redemption: isCase ? false : chk('mRedemp'),
@@ -842,7 +925,9 @@ async function launchFromPhone(){
   payload.case_times = {
    poll: numVal('mPollTime', 45, 5, 900),
    rank: numVal('mRankTime', 60, 5, 900),
-   open: numVal('mOpenTime', 120, 5, 900)
+   open: numVal('mOpenTime', 120, 5, 900),
+   brainstorm: numVal('mBrainTime', 90, 5, 900),
+   scale: numVal('mScaleTime', 25, 5, 900)
   };
  }
  launching = true;
@@ -886,11 +971,38 @@ async function backToStandby(){
 }
 
 function buildKeyText(){
- if(S.case || S.qtype === 'info') return '';
- const prefix = (S.host_correct != null && S.host_correct >= 0) ? (sh[S.host_correct] || '') : '';
+ if(S.case || S.unscored || S.qtype === 'info') return '';
+ if(S.all_correct) return 'Any option (all accepted)';
+ const qt = S.qtype || 'mc';
+ if(qt === 'pin'){
+  const pn = S.host_pin || S.pin_target;
+  if(pn) return `Target (${Math.round(pn.x)}%, ${Math.round(pn.y)}%) · radius ${pn.r || 12}%`;
+  return S.host_ans || '';
+ }
+ if(qt === 'slider'){
+  const sl = S.host_slider || S.slider_res;
+  if(sl){
+   const u = sl.unit ? ' ' + sl.unit : '';
+   return sl.margin ? `${sl.target}${u} (±${sl.margin})` : `${sl.target}${u}`;
+  }
+  return S.host_ans || '';
+ }
+ const cm = S.host_correct_multi || S.correct_multi;
+ if(qt === 'multi' && Array.isArray(cm) && cm.length){
+  const opts = S.answers_correct || S.answers || [];
+  return cm.map(i => (sh[i] || '') + (opts[i] || '')).join(' + ') || S.host_ans || '';
+ }
+ if(Array.isArray(cm) && cm.length > 1 && ['mc','tf','zoom'].includes(qt)){
+  const opts = S.answers_correct || S.answers || [];
+  return cm.map(i => (sh[i] || '') + (opts[i] || '')).join(' OR ') || S.host_ans || '';
+ }
+ const prefix = (S.host_correct != null && S.host_correct >= 0 && ['mc','tf','zoom'].includes(qt)) ? (sh[S.host_correct] || '') : '';
  if(S.host_ans) return prefix + S.host_ans;
- if(S.qtype === 'text') return (S.answers_correct || [''])[0] || '';
- if(S.qtype === 'order') return (S.answers_correct || []).join(' → ');
+ if(qt === 'match' && Array.isArray(S.pairs_correct)){
+  return S.pairs_correct.map(p => `${p.l} → ${p.r}`).join(', ');
+ }
+ if(qt === 'text') return (S.answers_correct || [''])[0] || '';
+ if(qt === 'order') return (S.answers_correct || []).join(' → ');
  if(S.correct != null && S.correct >= 0) return (sh[S.correct] || '') + ((S.answers || [])[S.correct] || '');
  return '';
 }
@@ -922,9 +1034,32 @@ function remoteDiscussBar(lbl){
  </div>`;
 }
 
+function buildResultsExtras(){
+ let html = '';
+ if(S.consensus_stats){
+  const cs = S.consensus_stats;
+  const sign = (cs.delta || 0) > 0 ? '+' : '';
+  html += `<div class="meta-callout">🤝 <b>Team Consensus:</b> Individual <b>${cs.indiv_pct}%</b> → Team <b>${cs.team_pct}%</b> (${sign}${cs.delta || 0}%)</div>`;
+ }
+ if(S.vote_shift && S.vote_shift.total > 0){
+  const vs = S.vote_shift;
+  const topSh = (vs.shifts || []).slice(0, 2).map(x => `${esc(x.from_txt)} → ${esc(x.to_txt)} (${x.n})`).join(' · ');
+  html += `<div class="meta-callout">🔄 <b>Vote Shift:</b> <b>${vs.changed}/${vs.total}</b> changed their vote${topSh ? `<div style="opacity:.86;margin-top:2px;font-size:.92em">${topSh}</div>` : ''}</div>`;
+ }
+ if(S.branch_target){
+  const bt = S.branch_target;
+  html += `<div class="meta-callout">🌿 <b>Branching Next:</b> Jumping to Slide ${bt.slide} — “${esc(bt.title)}” <small style="opacity:.82">(via ${esc(bt.win_ans)})</small></div>`;
+ }
+ if(S.can_reconsider){
+  html += `<button type="button" class="reconsider-btn" onclick="hostCtl('reconsider',{sec:30})">🔄 Re-open Vote (Reconsider · 30s)${S.revoted ? ' · Revoted' : ''}</button>`;
+ }
+ return html;
+}
+
 function buildResultsDetail(denom){
  const qt = S.qtype || 'mc';
- if(qt === 'poll'){
+ const extras = buildResultsExtras();
+ if(qt === 'poll' || qt === 'scale'){
   const cnts = S.counts || [];
   const sum = cnts.reduce((a, b) => a + b, 0);
   const tot = Math.max(1, sum);
@@ -933,29 +1068,47 @@ function buildResultsDetail(denom){
    const c = cnts[i] || 0;
    const pct = sum ? Math.round(100 * c / tot) : 0;
    const lns = lenses[i] ? `<span class="lens-tag">${esc(lenses[i])}</span>` : '';
-   return `<div class="poll-row"><div class="poll-fill" style="width:${pct}%"></div><div class="poll-content"><span>${sh[i]||''}${esc(a)}${lns}</span><b>${pct}% (${c})</b></div></div>`;
+   const pre = qt === 'scale' ? `<b>${i+1}.</b> ` : (sh[i] || '');
+   return `<div class="poll-row"><div class="poll-fill" style="width:${pct}%"></div><div class="poll-content"><span>${pre}${esc(a)}${lns}</span><b>${pct}% (${c})</b></div></div>`;
   }).join('');
+  const scAvg = (qt === 'scale' && S.scale_avg != null)
+   ? `<div class="meta-callout">📏 <b>Class Rating Average:</b> ${S.scale_avg} / ${(S.answers||[]).length || 5} <small style="opacity:.82">(${esc((S.scale_labels||[])[0]||'Low')} ↔ ${esc((S.scale_labels||[])[1]||'High')})</small></div>`
+   : '';
   const defs = (S.defenders || []).length
    ? `<div class="defend-box">🎤 <b>Call on to defend:</b><br>${S.defenders.map(d => `${sh[d.side]||''}<b>${esc(d.name)}</b> <small style="opacity:.85">(${esc((S.answers||[])[d.side]||'')})</small>`).join('<br>')}</div>`
    : '';
   return `
+   ${scAvg}
    <div style="margin-top:8px">${bars}</div>
    ${defs}
+   ${extras}
    ${remoteDiscussBar('Discussion Timer')}`;
  }
  if(qt === 'rank'){
   const items = (S.rank_avg || []).map((r, idx) => `<div class="poll-row"><div class="poll-content"><span><b>#${idx+1}</b> ${esc(r.item)}</span><small style="color:var(--gold);font-weight:800">avg #${esc(r.avg)}</small></div></div>`).join('');
-  return `<div style="margin-top:8px;text-align:left"><div style="font-size:.9em;font-weight:800;margin-bottom:4px">📊 Priority Ranking (${S.rank_n || 0} ranked)</div>${items || '<div class="sub">No rankings submitted</div>'}</div>${remoteDiscussBar('Debrief Timer')}`;
+  return `<div style="margin-top:8px;text-align:left"><div style="font-size:.9em;font-weight:800;margin-bottom:4px">📊 Priority Ranking (${S.rank_n || 0} ranked)</div>${items || '<div class="sub">No rankings submitted</div>'}</div>${extras}${remoteDiscussBar('Debrief Timer')}`;
  }
- if(qt === 'open'){
+ if(qt === 'open' || qt === 'brainstorm'){
   const rs = S.responses || [];
-  const top = rs.slice(0, 5).map(r => `<div class="poll-row"><div class="poll-content"><span>“${esc(r.text)}”</span>${r.votes ? `<b style="color:var(--gold)">👍 ${r.votes}</b>` : ''}</div></div>`).join('');
-  return `<div style="margin-top:8px;text-align:left"><div style="font-size:.9em;font-weight:800;margin-bottom:4px">✍️ ${rs.length} response${rs.length === 1 ? '' : 's'} submitted</div>${top}</div>${remoteDiscussBar('Debrief Timer')}`;
+  const icon = qt === 'brainstorm' ? '💡' : '✍️';
+  const noun = qt === 'brainstorm' ? 'idea' : 'response';
+  const top = rs.slice(0, 12).map(r => `
+   <div class="poll-row" style="${r.starred ? 'border-color:var(--gold);background:rgba(255,223,93,.14)' : ''}">
+    <div class="poll-content">
+     <span style="flex:1;min-width:0;word-break:break-word">${r.starred ? '⭐ ' : ''}“${esc(r.text)}” ${r.votes ? `<b style="color:var(--gold);margin-left:4px">👍 ${r.votes}</b>` : ''}</span>
+     <button type="button" class="spot-btn ${r.starred ? 'on' : ''}" onclick="hostCtl('spotlight',{rid:${r.id}})">${r.starred ? '⭐ Spotlight' : '☆ Spotlight'}</button>
+    </div>
+   </div>`).join('');
+  return `<div style="margin-top:8px;text-align:left"><div style="font-size:.9em;font-weight:800;margin-bottom:4px">${icon} ${rs.length} ${noun}${rs.length === 1 ? '' : 's'} — tap ☆ to Spotlight on big screen</div>${top || '<div class="sub">No submissions yet</div>'}</div>${extras}${remoteDiscussBar('Debrief Timer')}`;
  }
- if(qt === 'info') return '';
+ if(qt === 'info') return extras;
  const kt = buildKeyText();
  const accPct = denom > 0 ? Math.round(100 * (S.n_correct || 0) / denom) : 0;
- return `<div class="key-box"><span>✅</span><div><b>${esc(kt)}</b><div style="font-size:.86em;opacity:.88;margin-top:2px">${S.n_correct || 0} of ${denom} correct (${accPct}%)</div></div></div>`;
+ let subLine = `${S.n_correct || 0} of ${denom} correct (${accPct}%)`;
+ if(qt === 'slider' && S.slider_res && S.slider_res.avg != null){
+  subLine += ` · Class avg: ${S.slider_res.avg}${S.slider_res.unit ? ' ' + S.slider_res.unit : ''}`;
+ }
+ return `<div class="key-box"><span>✅</span><div><b>${esc(kt)}</b><div style="font-size:.86em;opacity:.88;margin-top:2px">${esc(subLine)}</div></div></div>${extras}`;
 }
 
 function updTopBar(){
@@ -969,11 +1122,22 @@ function updTopBar(){
  pw.style.display = 'block';
  const elapsed = S.paused ? 0 : Math.max(0, (performance.now() - pollStamp) / 1000);
  const pv = S.preview_left || 0;
- if(pv > 0){
+ const thk = S.think_left || 0;
+ if(S.consensus_step === 2){
+  const rem = Math.max(0, (S.consensus_left || 0) - elapsed);
+  const tot = Math.max(1, S.consensus_total || 20);
+  pf.style.width = Math.min(100, (rem / tot) * 100) + '%';
+  pf.className = 'rp-fill consensus' + (S.paused ? ' paused' : (rem <= 5 ? ' urgent' : ''));
+ } else if(pv > 0){
   const rem = Math.max(0, pv - elapsed);
   const tot = Math.max(1, S.preview_total || 5);
   pf.style.width = Math.min(100, (rem / tot) * 100) + '%';
   pf.className = 'rp-fill preview' + (S.paused ? ' paused' : '');
+ } else if(thk > 0){
+  const rem = Math.max(0, thk - elapsed);
+  const tot = Math.max(1, S.think_total || 5);
+  pf.style.width = Math.min(100, (rem / tot) * 100) + '%';
+  pf.className = 'rp-fill think' + (S.paused ? ' paused' : '');
  } else {
   const rem = Math.max(0, (S.left || 0) - elapsed);
   const tot = Math.max(1, S.qtime || 15);
@@ -988,19 +1152,31 @@ function updateLiveText(){
  const denom = S.n_active != null ? S.n_active : (S.n || 0);
  const plEl = document.getElementById('rPlayers');
  if(plEl) plEl.textContent = `${S.n || 0} player${S.n === 1 ? '' : 's'}`;
+ const elapsed = S.paused ? 0 : Math.max(0, (performance.now() - pollStamp) / 1000);
  const tmEl = document.getElementById('rTimer');
  if(tmEl && ph === 'question' && S.qtype !== 'info'){
-  if(S.paused) tmEl.textContent = `⏸️ Paused (${Math.ceil(S.left || 0)}s)`;
-  else if((S.preview_left || 0) > 0) tmEl.textContent = `👀 Reading (${Math.ceil(S.preview_left)}s)`;
-  else tmEl.textContent = `⏱️ ${Math.ceil(S.left || 0)}s left`;
+  const pvRem = Math.max(0, (S.preview_left || 0) - elapsed);
+  const thkRem = Math.max(0, (S.think_left || 0) - elapsed);
+  const cRem = Math.max(0, (S.consensus_left || 0) - elapsed);
+  const qRem = Math.max(0, (S.left || 0) - elapsed);
+  if(S.paused) tmEl.textContent = `⏸️ Paused (${Math.ceil(S.consensus_step === 2 ? (S.consensus_left || 0) : (S.left || 0))}s)`;
+  else if(S.consensus_step === 2) tmEl.textContent = `🤝 Consensus (${Math.ceil(cRem)}s)`;
+  else if(pvRem > 0) tmEl.textContent = `👀 Reading (${Math.ceil(pvRem)}s)`;
+  else if(thkRem > 0) tmEl.textContent = `🧠 Thinking (${Math.ceil(thkRem)}s)`;
+  else tmEl.textContent = `⏱️ ${Math.ceil(qRem)}s left`;
  }
+ const cntNow = (S.consensus_step === 2) ? (S.consensus_voted || 0) : (S.answered || 0);
  const anEl = document.getElementById('rAns');
  if(anEl && ph === 'question' && S.qtype !== 'info'){
-  anEl.textContent = `${S.answered || 0}/${denom}`;
+  anEl.textContent = `${cntNow}/${denom}`;
+ }
+ const alEl = document.getElementById('rAnsLbl');
+ if(alEl && ph === 'question' && S.qtype !== 'info'){
+  alEl.textContent = S.consensus_step === 2 ? 'locked in' : 'answered';
  }
  const afEl = document.getElementById('rAnsFill');
  if(afEl && ph === 'question' && S.qtype !== 'info'){
-  afEl.style.width = (denom > 0 ? Math.min(100, Math.round(100 * (S.answered || 0) / denom)) : 0) + '%';
+  afEl.style.width = (denom > 0 ? Math.min(100, Math.round(100 * cntNow / denom)) : 0) + '%';
  }
  const dcEl = document.getElementById('rDiscuss');
  if(dcEl){
@@ -1022,23 +1198,28 @@ function updateLiveText(){
 function render(){
  const ph = S.phase || 'lobby';
  const isCaseGame = !!S.case_game;
- const isCaseSlide = !!(S.case || isCaseGame);
+ const isCaseSlide = !!(S.case || S.unscored || isCaseGame);
  const denom = S.n_active != null ? S.n_active : (S.n || 0);
  const startDisabled = (ph === 'lobby' && (S.n || 0) === 0);
- const inPrev = (ph === 'question' && S.qtype !== 'info' && !S.paused && (S.preview_left || 0) > 0);
+ const inPrev = (ph === 'question' && S.qtype !== 'info' && !S.paused && (S.preview_left || 0) > 0 && S.consensus_step !== 2);
+ const inThink = (ph === 'question' && S.qtype !== 'info' && !S.paused && (S.preview_left || 0) <= 0 && (S.think_left || 0) > 0 && S.consensus_step !== 2);
  const discOn = (S.discuss_left != null && S.discuss_left > 0);
 
  const resSig = ph === 'results' ? JSON.stringify([
-  S.counts, S.defenders, S.rank_avg, S.rank_n,
-  (S.responses || []).slice(0, 5).map(r => [r.id, r.votes]),
-  S.n_correct, S.tb_winner
+  S.counts, S.defenders, S.rank_avg, S.rank_n, S.scale_avg,
+  (S.responses || []).slice(0, 12).map(r => [r.id, r.votes, r.starred ? 1 : 0]),
+  S.n_correct, S.tb_winner, S.can_reconsider, S.revoted,
+  S.vote_shift, S.branch_target, S.consensus_stats
  ]) : '';
 
  const stateKey = [
-  pin, ph, S.index, S.total, S.qtype || '', isCaseGame ? 1 : 0, S.case ? 1 : 0,
+  pin, ph, S.index, S.total, S.qtype || '', isCaseGame ? 1 : 0, S.case ? 1 : 0, S.unscored ? 1 : 0,
   S.is_last ? 1 : 0, startDisabled ? 1 : 0, S.paused ? 1 : 0, S.auto ? 1 : 0,
-  S.auto_time || 7, inPrev ? 1 : 0, discOn ? 1 : 0, S.discuss_default || 60,
+  S.auto_time || 7, inPrev ? 1 : 0, inThink ? 1 : 0, S.consensus_step || 0,
+  S.hide_board ? 1 : 0, S.allow_tts ? 1 : 0, S.scoring_mode || 'classic',
+  discOn ? 1 : 0, S.discuss_default || 60,
   rkey ? 1 : 0, S.note || '', S.question || '', S.body || '', S.prompt || '',
+  JSON.stringify(S.up_next || null),
   JSON.stringify(S.pending_list || []), resSig
  ].join('|');
 
@@ -1050,24 +1231,37 @@ function render(){
   if(ph === 'lobby') mainLbl = isCaseGame ? '🚀 Start Case Study' : '🚀 Start Game';
   else if(ph === 'icebreaker') mainLbl = isCaseGame ? '▶️ Start Slide 1' : '🚀 Start Question 1';
   else if(ph === 'intro') mainLbl = '⏭️ Skip Intro';
-  else if(ph === 'question') mainLbl = S.qtype === 'info' ? '➡️ Next Slide ➔' : '⏭️ Skip Timer / Show Results';
-  else if(ph === 'results') mainLbl = S.is_last ? '🏆 Show Final Podium' : (isCaseSlide ? '➡️ Next Slide ➔' : '🏆 Show Leaderboard');
+  else if(ph === 'question'){
+   if(S.qtype === 'info') mainLbl = '➡️ Next Slide ➔';
+   else if(S.consensus_step === 1) mainLbl = '🤝 Start Team Consensus ➔';
+   else mainLbl = '⏭️ Skip Timer / Show Results';
+  }
+  else if(ph === 'results') mainLbl = S.is_last ? '🏆 Show Final Podium' : (S.branch_target ? `🌿 Jump to Slide ${S.branch_target.slide} ➔` : (isCaseSlide || S.hide_board ? '➡️ Next Question ➔' : '🏆 Show Leaderboard'));
   else if(ph === 'board') mainLbl = (S.index + 1 >= S.total) ? '🏆 Final Podium' : (isCaseGame ? '➡️ Next Slide ➔' : '➡️ Next Question');
 
   const itemTag = isCaseSlide ? 'Slide' : 'Q';
-  const qtLabels = {mc:'Multiple Choice', tf:'True / False', text:'Type Answer', order:'Put in Order', zoom:'Zoom Reveal', poll:'Decision Poll', rank:'Priority Rank', open:'Open Response', info:'Case Chapter'};
+  const qtLabels = {
+   mc:'Multiple Choice', tf:'True / False', text:'Type Answer', order:'Put in Order',
+   zoom:'Zoom Reveal', multi:'Multi-Select', match:'Match Pairs', slider:'Slider Estimate',
+   pin:'Pin on Image', poll:'Decision Poll', scale:'Rating Scale', rank:'Priority Rank',
+   open:'Open Response', brainstorm:'Brainstorm', info:'Case Chapter'
+  };
   const qtBadge = S.qtype ? (qtLabels[S.qtype] || S.qtype.toUpperCase()) : '';
+  const modeMap = {classic:'🏆 Classic', accuracy:'🎯 Accuracy', percent:'📊 % Grade', survey:'📋 Survey'};
+  const modePill = S.scoring_mode && S.scoring_mode !== 'classic' ? ` · ${modeMap[S.scoring_mode] || S.scoring_mode}` : '';
 
   let stageCard = '';
   if(ph === 'lobby'){
    stageCard = `
     <div class="card" style="text-align:center">
-     <div class="phase-row" style="justify-content:center"><span class="phase-tag">🟢 Lobby Open</span></div>
+     <div class="phase-row" style="justify-content:center"><span class="phase-tag">🟢 Lobby Open${esc(modePill)}</span></div>
      <div style="font-size:2.2em;font-weight:900;letter-spacing:3px;color:var(--gold);margin:4px 0">PIN ${esc(pin)}</div>
      <p class="sub">${startDisabled ? 'Waiting for students to join on their phones — or add practice bots below.' : 'Students are in! Tap Start below whenever everyone is ready.'}</p>
      <div class="ctrl-grid" style="margin-top:10px">
       <button class="ctrl-btn" onclick="addBots(5)">🤖 +5 Practice Bots</button>
       ${!isCaseGame ? `<button class="ctrl-btn ${S.auto ? 'on' : ''}" onclick="ctl('toggle_auto')">⏭️ Auto: ${S.auto ? 'ON' : 'Off'}</button>` : `<button class="ctrl-btn" onclick="addBots(1)">🤖 +1 Bot</button>`}
+      <button class="ctrl-btn ${S.hide_board ? 'on' : ''}" onclick="hostCtl('toggle_hide_board')">🙈 Hide Board: ${S.hide_board ? 'ON' : 'Off'}</button>
+      <button class="ctrl-btn ${S.allow_tts ? 'on' : ''}" onclick="hostCtl('toggle_student_tts')">🔊 Student TTS: ${S.allow_tts ? 'ON' : 'Off'}</button>
      </div>
      ${(!isCaseGame && S.auto) ? `<div class="set-row" style="margin:10px 0 0"><span>⏭️ Auto-Advance Wait</span><div class="set-row-right"><input id="rAutoSec" type="number" min="2" max="120" value="${S.auto_time || 7}" onkeydown="if(event.key==='Enter')setRemoteAuto()"><span>s</span><button class="ctrl-btn" style="padding:7px 12px" onclick="setRemoteAuto()">Set</button></div></div>` : ''}
     </div>`;
@@ -1088,11 +1282,20 @@ function render(){
     </div>`;
   } else if(ph === 'question' || ph === 'results'){
    const keyTxt = buildKeyText();
-   const showKeyInQ = (ph === 'question' && !S.case && S.qtype !== 'info' && keyTxt);
+   const showKeyInQ = (ph === 'question' && !S.case && !S.unscored && S.qtype !== 'info' && keyTxt);
+   const qPhaseLbl = ph === 'results'
+    ? '📊 Results'
+    : S.consensus_step === 2
+      ? '🤝 Phase 2: Consensus'
+      : inPrev
+        ? '👀 Reading Preview'
+        : inThink
+          ? '🧠 Thinking Time'
+          : '⚡ Live Question';
    stageCard = `
     <div class="card">
      <div class="phase-row">
-      <span class="phase-tag">${ph === 'results' ? '📊 Results' : (inPrev ? '👀 Reading Preview' : '⚡ Live Question')}${qtBadge ? ' · ' + esc(qtBadge) : ''}</span>
+      <span class="phase-tag">${qPhaseLbl}${qtBadge ? ' · ' + esc(qtBadge) : ''}</span>
       <span class="q-counter">${itemTag} ${(S.index || 0) + 1}/${S.total || 0}</span>
      </div>
      <div class="q-stem">${esc(S.question)}</div>
@@ -1101,7 +1304,7 @@ function render(){
      ${ph === 'question' && S.qtype !== 'info' ? `
       <div class="live-metrics">
        <b id="rTimer"></b>
-       <span class="ans-meter"><span id="rAns"></span> answered <span class="ans-mini-bar"><i id="rAnsFill" style="width:0%"></i></span></span>
+       <span class="ans-meter"><span id="rAns"></span> <span id="rAnsLbl">${S.consensus_step === 2 ? 'locked in' : 'answered'}</span> <span class="ans-mini-bar"><i id="rAnsFill" style="width:0%"></i></span></span>
       </div>` : ''}
      ${showKeyInQ ? `<div class="key-box"><span>🔑</span><div><span style="opacity:.82;font-size:.84em;font-weight:800;display:block;text-transform:uppercase;letter-spacing:.05em">Answer Key</span><b>${esc(keyTxt)}</b></div></div>` : ''}
      ${ph === 'results' ? buildResultsDetail(denom) : ''}
@@ -1110,7 +1313,7 @@ function render(){
    stageCard = `
     <div class="card" style="text-align:center">
      <div class="phase-row"><span class="phase-tag">🏆 Standings</span><span class="q-counter">After ${itemTag} ${(S.index || 0) + 1}/${S.total || 0}</span></div>
-     <h2>Leaderboard on Big Screen</h2>
+     <h2>${S.hide_board ? '🙈 Standings Hidden Until Podium' : 'Leaderboard on Big Screen'}</h2>
      <p class="sub" style="margin-bottom:0">Highlight top streaks or rivalries, then tap below for the next ${isCaseGame ? 'slide' : 'question'}.</p>
     </div>`;
   } else if(ph === 'final'){
@@ -1125,6 +1328,10 @@ function render(){
 
   const noteHtml = ((ph === 'question' || ph === 'results') && S.note)
    ? `<div class="note-card">📝 <b>Teacher Note:</b> ${esc(S.note)}</div>`
+   : '';
+
+  const upNextHtml = (ph !== 'final' && S.up_next && S.up_next.q)
+   ? `<div class="upnext-card"><span style="color:var(--gold);font-weight:900;text-transform:uppercase;font-size:.8em">⏭️ Up Next (${itemTag} ${S.up_next.num}/${S.up_next.total})${S.up_next.branched ? ' · 🌿 Branched' : ''}</span><div style="margin-top:2px;font-weight:750">${esc(S.up_next.q)}</div></div>`
    : '';
 
   const pendHtml = (S.pending_list || []).length
@@ -1162,6 +1369,8 @@ function render(){
      ${timerSetRow}
      ${autoSetRow}
      <div class="ctrl-grid">
+      <button class="ctrl-btn ${S.hide_board ? 'on' : ''}" onclick="hostCtl('toggle_hide_board')">🙈 Hide Board: ${S.hide_board ? 'ON' : 'Off'}</button>
+      <button class="ctrl-btn ${S.allow_tts ? 'on' : ''}" onclick="hostCtl('toggle_student_tts')">🔊 Student TTS: ${S.allow_tts ? 'ON' : 'Off'}</button>
       ${!isCaseGame ? `<button class="ctrl-btn ${S.auto ? 'on' : ''}" onclick="ctl('toggle_auto')">⏭️ Auto: ${S.auto ? 'ON' : 'Off'}</button>` : ''}
       <button class="ctrl-btn" onclick="addBots(5)">🤖 +5 Bots</button>
      </div>
@@ -1171,6 +1380,7 @@ function render(){
   const dockHtml = ph !== 'final' ? `
    <div class="thumb-dock">
     ${inPrev ? `<button class="skip-prev-btn" onclick="ctl('skip_preview')">⏭️ Open Answers Now (Skip Preview)</button>` : ''}
+    ${inThink ? `<button class="skip-prev-btn" onclick="hostCtl('skip_think')">⏭️ Unlock Answers Now</button>` : ''}
     ${ph === 'question' && S.qtype !== 'info' ? `
      <div class="quick-tbar">
       <button class="ctrl-btn" onclick="ctl('pause')">${S.paused ? '▶️ Resume' : '⏸️ Pause'}</button>
@@ -1186,6 +1396,7 @@ function render(){
     ${pendHtml}
     ${stageCard}
     ${noteHtml}
+    ${upNextHtml}
     ${toolsHtml}
    </div>
    ${dockHtml}

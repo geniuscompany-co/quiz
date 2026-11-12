@@ -267,14 +267,79 @@ def uq_delete(owner, qid):
     return False
 
 
+def estimate_duration_sec(questions, qtime=15, preview=5):
+    tot = 0
+    for q in questions or []:
+        if not isinstance(q, dict):
+            continue
+        t = q.get("type") or "mc"
+        qt = q.get("t")
+        thk = int(q.get("think") or 0)
+        if t == "info":
+            tot += 45
+        elif t == "poll":
+            tot += (qt or 45) + 35 + thk
+        elif t == "rank":
+            tot += (qt or 60) + 25 + thk
+        elif t in ("open", "brainstorm"):
+            tot += (qt or 120) + 35 + thk
+        elif t == "scale":
+            tot += (qt or 25) + 15 + thk
+        else:
+            tot += (qt or qtime) + preview + thk + 10
+    return max(30, int(tot))
+
+
 def uq_list(owners):
     items = []
     for o in owners:
         for qid, v in uq_load(o).items():
-            items.append({"file": qid, "title": "%s (%d Qs)" % (v["title"], len(v["questions"])), "count": len(v["questions"]),
+            qs = v.get("questions") or []
+            es = estimate_duration_sec(qs)
+            items.append({"file": qid, "title": "%s (%d Qs)" % (v["title"], len(qs)), "count": len(qs),
                           "folder": v.get("folder") or "My Quizzes", "tags": v.get("tags", []), "owner": o, "user": True,
-                          "case": any(x.get("type") in ("poll", "open", "rank", "info") for x in v["questions"])})
+                          "case": any(x.get("type") in ("poll", "open", "rank", "info") for x in qs),
+                          "est_sec": es, "est_min": max(1, int(round(es / 60.0)))})
     return items
+
+
+# ---------------------------------------------------------------- Uploaded Images
+ALLOWED_IMG_MIMES = {"image/webp", "image/jpeg", "image/png", "image/gif"}
+
+
+def img_save(owner, data_b64, mime="image/webp"):
+    raw_s = str(data_b64 or "").strip()
+    if raw_s.startswith("data:"):
+        hdr, _, raw_s = raw_s.partition(",")
+        m = re.match(r"data:(image/[a-z0-9.+-]+);base64", hdr, re.I)
+        if m:
+            mime = m.group(1).lower()
+    mime = str(mime or "image/webp").lower().strip()
+    if mime not in ALLOWED_IMG_MIMES:
+        return None, "Unsupported image type"
+    try:
+        raw_bytes = base64.b64decode(raw_s, validate=False)
+    except Exception:
+        return None, "Invalid image data"
+    if not raw_bytes or len(raw_bytes) > 320000:
+        return None, "Image too large (max 300 KB after compression)"
+    clean_b64 = base64.b64encode(raw_bytes).decode("ascii")
+    iid = "".join(random.choice("abcdefghjkmnpqrstuvwxyz23456789") for _ in range(12))
+    store.set_json("img:" + iid, {"mime": mime, "b64": clean_b64, "owner": owner or "_shared", "ts": int(time.time())})
+    return "/api/img/" + iid, None
+
+
+def img_get(iid):
+    safe = re.sub(r"[^a-z0-9_-]", "", str(iid or "").lower())
+    if not safe:
+        return None, None
+    rec = store.get_json("img:" + safe)
+    if not rec or not rec.get("b64"):
+        return None, None
+    try:
+        return base64.b64decode(rec["b64"]), rec.get("mime") or "image/webp"
+    except Exception:
+        return None, None
 
 
 # ---------------------------------------------------------------- History + progress
@@ -406,19 +471,54 @@ def hw_start(doc, name):
     return sub, None
 
 
+def hw_ans_text(q):
+    t = q.get("type") or "mc"
+    if q.get("all_correct"):
+        return "Any answer"
+    if t == "text":
+        return " / ".join(q["a"][:3])
+    if t == "order":
+        return " -> ".join(q["a"])
+    if t == "match":
+        return ", ".join("%s -> %s" % (p["l"], p["r"]) for p in (q.get("pairs") or []))
+    if t == "slider":
+        sl = q.get("slider") or {}
+        u = sl.get("unit") or ""
+        mg = sl.get("margin") or 0
+        return ("%g%s (+/-%g)" % (sl.get("target", 0), u, mg)) if mg else ("%g%s" % (sl.get("target", 0), u))
+    if t == "pin":
+        pn = q.get("pin") or {}
+        return "Target (%g%%, %g%%)" % (pn.get("x", 50), pn.get("y", 50))
+    if t == "multi":
+        cm = q.get("correct_multi") or [q.get("c", 0)]
+        return " + ".join(q["a"][k] for k in cm if 0 <= k < len(q["a"]))
+    if q.get("correct_multi") and len(q["correct_multi"]) > 1:
+        return " OR ".join(q["a"][k] for k in q["correct_multi"] if 0 <= k < len(q["a"]))
+    return q["a"][q["c"]] if 0 <= q.get("c", 0) < len(q.get("a", [])) else ""
+
+
 def hw_question(doc, sub):
     i = len(sub["answers"])
     if i >= len(doc["questions"]):
         return None
     q = doc["questions"][i]
     t = q.get("type") or "mc"
-    a = q["a"]
+    a = q.get("a", [])
+    out = {"i": i, "n": len(doc["questions"]), "q": q["q"], "type": t, "qtype": t, "pts": q.get("pts"), "a": a, "img": q.get("img"), "aimg": q.get("aimg")}
     if t == "order":
         p = hw_perm(doc, sub["name"], i, len(a))
-        a = [q["a"][k] for k in p]
-    elif t == "text":
-        a = []
-    out = {"i": i, "n": len(doc["questions"]), "q": q["q"], "type": t, "a": a, "img": q.get("img"), "aimg": q.get("aimg")}
+        out["a"] = [q["a"][k] for k in p]
+    elif t in ("text", "slider", "pin"):
+        out["a"] = []
+    elif t == "match":
+        pairs = q.get("pairs") or []
+        p = hw_perm(doc, sub["name"], i, len(pairs))
+        out["match_left"] = [x["l"] for x in pairs]
+        out["match_right"] = [pairs[k]["r"] for k in p]
+        out["a"] = out["match_left"]
+    if t == "slider" and q.get("slider"):
+        sl = q["slider"]
+        out["slider_cfg"] = {"min": sl["min"], "max": sl["max"], "step": sl["step"], "unit": sl.get("unit", "")}
     return out
 
 
@@ -437,10 +537,11 @@ def hw_answer(doc, sub_key, body):
         i = len(sub["answers"])
         q = d["questions"][i]
         t = q.get("type") or "mc"
-        ok, given = False, ""
+        ok, credit, given = False, 0.0, ""
         if t == "text":
             given = str(body.get("text") or "").strip()[:80]
-            ok = bool(_norm(given)) and any(_norm(x) == _norm(given) for x in q["a"])
+            ok = bool(_norm(given)) and (bool(q.get("all_correct")) or any(_norm(x) == _norm(given) for x in q["a"]))
+            credit = 1.0 if ok else 0.0
         elif t == "order":
             seq = body.get("seq")
             n = len(q["a"])
@@ -448,8 +549,79 @@ def hw_answer(doc, sub_key, body):
                 return None, "Order every item"
             p = hw_perm(d, sub["name"], i, n)
             orig = [p[j] for j in seq]
-            ok = orig == list(range(n))
+            ok = bool(q.get("all_correct")) or (orig == list(range(n)))
+            credit = 1.0 if ok else 0.0
             given = " -> ".join(q["a"][k] for k in orig)
+        elif t == "multi":
+            raw_ch = body.get("choices")
+            if raw_ch is None and body.get("choice") is not None:
+                raw_ch = [body.get("choice")]
+            if not isinstance(raw_ch, list) or not raw_ch:
+                return None, "Select at least one option"
+            try:
+                picked = sorted({int(x) for x in raw_ch})
+            except Exception:
+                return None, "Bad selection"
+            if any(x < 0 or x >= len(q["a"]) for x in picked):
+                return None, "Bad selection"
+            req = set(q.get("correct_multi") or [q.get("c", 0)])
+            pset = set(picked)
+            if q.get("all_correct") or pset == req:
+                ok, credit = True, 1.0
+            elif q.get("partial", True):
+                credit = max(0.0, (len(pset & req) - len(pset - req)) / float(max(1, len(req))))
+                ok = False
+            given = " + ".join(q["a"][k] for k in picked)
+        elif t == "match":
+            pairs = q.get("pairs") or []
+            n = len(pairs)
+            rel = body.get("pairs")
+            if not isinstance(rel, list) or sorted(rel) != list(range(n)):
+                return None, "Match every pair"
+            p = hw_perm(d, sub["name"], i, n)
+            hits = 0
+            parts = []
+            for li in range(n):
+                orig_r = p[rel[li]]
+                hit = (orig_r == li) or (pairs[orig_r]["r"].strip().lower() == pairs[li]["r"].strip().lower())
+                if hit:
+                    hits += 1
+                parts.append("%s -> %s" % (pairs[li]["l"], pairs[orig_r]["r"]))
+            ok = bool(q.get("all_correct")) or (hits == n)
+            credit = 1.0 if ok else (hits / float(max(1, n)))
+            given = ", ".join(parts)
+        elif t == "slider":
+            sl = q.get("slider") or {"min": 0, "max": 100, "step": 1, "target": 50, "margin": 0, "unit": ""}
+            try:
+                val = float(body.get("val"))
+            except Exception:
+                return None, "Enter a number"
+            if val < sl["min"] - 1e-6 or val > sl["max"] + 1e-6:
+                return None, "Value out of range"
+            diff = abs(val - sl["target"])
+            mg = float(sl.get("margin") or 0)
+            if q.get("all_correct") or diff <= 1e-6:
+                ok, credit = True, 1.0
+            elif mg > 0 and diff <= mg + 1e-6:
+                ok = True
+                credit = max(0.75, 1.0 - 0.25 * (diff / mg))
+            given = "%g%s" % (val, sl.get("unit", ""))
+        elif t == "pin":
+            pn = q.get("pin") or {"x": 50.0, "y": 50.0, "r": 12.0}
+            xy = body.get("pin_xy")
+            if not isinstance(xy, list) or len(xy) != 2:
+                return None, "Tap the image to place your pin"
+            try:
+                px, py = float(xy[0]), float(xy[1])
+            except Exception:
+                return None, "Invalid pin"
+            px, py = max(0.0, min(100.0, px)), max(0.0, min(100.0, py))
+            dist = ((px - pn["x"]) ** 2 + (py - pn["y"]) ** 2) ** 0.5
+            r_ = max(1.0, float(pn.get("r", 12.0)))
+            if q.get("all_correct") or dist <= r_:
+                ok = True
+                credit = max(0.6, 1.0 - 0.4 * (dist / r_))
+            given = "(%.0f%%, %.0f%%)" % (px, py)
         else:
             try:
                 ch = int(body.get("choice"))
@@ -457,21 +629,28 @@ def hw_answer(doc, sub_key, body):
                 return None, "Bad choice"
             if not 0 <= ch < len(q["a"]):
                 return None, "Bad choice"
-            ok = ch == q["c"]
+            valid_set = set(q.get("correct_multi") or [q["c"]])
+            ok = bool(q.get("all_correct")) or (ch in valid_set)
+            credit = 1.0 if ok else 0.0
             given = q["a"][ch]
+        q_pts = q.get("pts")
+        scale = 1.0 if q_pts is None else (float(q_pts) / 1000.0)
         if ok:
             sub["streak"] += 1
             sub["correct"] += 1
-            sub["score"] += 100 + min(100, (sub["streak"] - 1) * 25)
+            sub["score"] += int(round((100 * credit + min(100, (sub["streak"] - 1) * 25)) * scale))
         else:
             sub["streak"] = 0
-        sub["answers"].append({"ok": ok, "given": given})
+            if credit > 0:
+                sub["score"] += int(round(100 * credit * scale))
+        sub["answers"].append({"ok": ok, "given": given, "credit": round(credit, 2)})
         if len(sub["answers"]) >= len(d["questions"]):
             sub["done"] = True
             sub["finished"] = int(time.time())
         store.set_json("hw:" + d["id"], d)
-        ans = {"ok": ok, "answer": q["a"][q["c"]] if t not in ("text", "order") else (" / ".join(q["a"][:3]) if t == "text" else " -> ".join(q["a"])),
-               "quote": q.get("quote", ""), "done": sub["done"], "score": sub["score"], "correct": sub["correct"], "n": len(d["questions"])}
+        ans_extra = {"pin_target": q.get("pin")} if t == "pin" else {}
+        ans = {"ok": ok, "partial": (not ok and credit > 0), "answer": hw_ans_text(q),
+               "quote": q.get("quote", ""), "done": sub["done"], "score": sub["score"], "correct": sub["correct"], "n": len(d["questions"]), **ans_extra}
     if ans["done"]:
         try:
             topics = {}

@@ -775,16 +775,215 @@ blockquote cite{display:block;font-style:normal;font-size:.82em;margin-top:6px;o
 #fx{position:fixed;inset:0;pointer-events:none;z-index:70}
 
 /* Colorblind & High-Contrast Modes */
+.c4{background:#8e24aa}.c5{background:#00897b}
 body.cb .c0{background:#D55E00}
 body.cb .c1{background:#0072B2}
 body.cb .c2{background:#F0E442;color:#1b1b1b}
 body.cb .c2 .sh{color:#fff;background:rgba(0,0,0,.55)}
 body.cb .c3{background:#009E73}
+body.cb .c4{background:#CC79A7}
+body.cb .c5{background:#56B4E9;color:#1b1b1b}
 body.hc{background:#000!important}
 body.hc #topHud{background:#000;border-bottom:2px solid #fff}
 body.hc .card-panel,body.hc .q-card,body.hc .state-card,body.hc .tac-dock,body.hc .case-ph{background:#000;border:2px solid #fff}
 body.hc .grid button{border:3px solid #fff;box-shadow:none}
 body.hc .pu-btn,body.hc .wager-btn,body.hc .conf-btn,body.hc .don-btn{border-color:#fff}
+
+/* --- Layered Avatar Badge --- */
+.av-layer{
+  position:relative;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:50%;
+  flex-shrink:0;
+  line-height:1;
+  background:rgba(255,255,255,.12);
+}
+.av-sm{width:26px;height:26px;font-size:1.05em}
+.av-md{width:34px;height:34px;font-size:1.25em}
+.av-lg{width:76px;height:76px;font-size:2.75em;margin:4px auto 6px}
+.av-layer .av-hat{
+  position:absolute;
+  top:-34%;
+  left:50%;
+  transform:translateX(-50%);
+  font-size:.66em;
+  line-height:1;
+  pointer-events:none;
+  filter:drop-shadow(0 2px 3px rgba(0,0,0,.55));
+}
+.av-sm .av-hat{top:-38%;font-size:.72em}
+.ring-gold{box-shadow:0 0 0 2.5px #ffd700,0 0 11px rgba(255,215,0,.75)}
+.ring-neon{box-shadow:0 0 0 2.5px #69f0ae,0 0 11px rgba(105,240,174,.8)}
+.ring-fire{box-shadow:0 0 0 2.5px #ff6d00,0 0 12px rgba(255,61,0,.85)}
+.ring-ice{box-shadow:0 0 0 2.5px #40c4ff,0 0 11px rgba(64,196,255,.8)}
+.ring-violet{box-shadow:0 0 0 2.5px #e040fb,0 0 11px rgba(224,64,251,.8)}
+.ring-rainbow{background:linear-gradient(135deg,#ff1744,#ffd600,#00e676,#00b0ff,#d500f9);box-shadow:0 0 12px rgba(255,255,255,.65)}
+.ring-hex{box-shadow:0 0 0 2.5px var(--rc,#fff),0 0 10px var(--rc,#fff)}
+.cust-sec-lbl{font-size:.73em;font-weight:900;text-transform:uppercase;letter-spacing:.06em;color:var(--gold);margin:7px 0 4px;text-align:left}
+.hat-row,.ring-row{display:flex;flex-wrap:wrap;gap:5px;justify-content:center;margin-bottom:7px}
+.hat-chip,.ring-chip{
+  padding:4px 9px;
+  border-radius:99px;
+  border:1.5px solid rgba(255,255,255,.22);
+  background:rgba(255,255,255,.1);
+  color:#fff;
+  font-size:.82em;
+  font-weight:800;
+  cursor:pointer;
+  user-select:none;
+}
+.hat-chip.sel,.ring-chip.sel{border-color:var(--gold);background:rgba(255,223,93,.26);transform:scale(1.05)}
+
+/* --- Student TTS & Mini Standings Drawer --- */
+.tts-pill{
+  margin-top:6px;
+  padding:5px 12px;
+  border-radius:99px;
+  border:1px solid rgba(255,255,255,.32);
+  background:rgba(255,255,255,.14);
+  color:#fff;
+  font-size:.8em;
+  font-weight:850;
+  cursor:pointer;
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+}
+.tts-pill.on{background:var(--gold);color:var(--ink);border-color:#fff}
+#standDrawer{
+  display:none;
+  max-width:540px;
+  margin:0 auto;
+  padding:8px 12px 10px;
+  border-top:1px solid rgba(255,255,255,.14);
+  background:rgba(14,4,34,.94);
+  text-align:left;
+  font-size:.85em;
+}
+#standDrawer.open{display:block}
+.stand-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  padding:4px 6px;
+  border-radius:8px;
+  font-weight:800;
+}
+.stand-row.me{background:rgba(255,223,93,.18);border:1px solid rgba(255,223,93,.45);margin-top:4px}
+
+/* --- Thinking Time, Consensus & New Question Types --- */
+.ts-fill.think{background:linear-gradient(90deg,#b388ff,#00e5ff)}
+.ts-fill.consensus{background:linear-gradient(90deg,#40c4ff,#69f0ae)}
+.think-banner{
+  background:linear-gradient(135deg,rgba(124,77,255,.48),rgba(0,176,255,.38));
+  border:1.5px solid #80d8ff;
+  border-radius:12px;
+  padding:9px 12px;
+  font-size:.9em;
+  line-height:1.35;
+}
+.consensus-banner{
+  background:linear-gradient(135deg,rgba(19,104,206,.55),rgba(0,200,83,.42));
+  border:1.5px solid #69f0ae;
+  border-radius:12px;
+  padding:10px 12px;
+  font-size:.9em;
+  line-height:1.35;
+}
+.grid button:disabled,button.go:disabled{opacity:.48;cursor:not-allowed;transform:none!important}
+.grid button.msel{outline:3.5px solid var(--gold);box-shadow:0 0 0 2px #000,0 0 16px rgba(255,223,93,.7)!important;transform:translateY(-2px)}
+.grid button.csel{outline:3.5px solid #69f0ae;box-shadow:0 0 0 2px #000,0 0 16px rgba(105,240,174,.75)!important}
+
+.match-cols{display:grid;grid-template-columns:1fr 1fr;gap:8px;text-align:left;margin-bottom:8px}
+.match-col{display:flex;flex-direction:column;gap:6px}
+.match-hdr{font-size:.73em;font-weight:900;text-transform:uppercase;letter-spacing:.06em;opacity:.82;text-align:center}
+.m-item{
+  padding:9px 10px;
+  border-radius:11px;
+  border:2px solid rgba(255,255,255,.22);
+  background:rgba(255,255,255,.13);
+  color:#fff;
+  font-weight:800;
+  font-size:.88em;
+  line-height:1.25;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:5px;
+  text-align:left;
+  word-break:break-word;
+}
+.m-item.active{border-color:var(--gold);background:rgba(255,223,93,.24);box-shadow:0 0 10px rgba(255,223,93,.45)}
+.m-badge{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-width:22px;height:22px;padding:0 5px;border-radius:99px;
+  font-size:.76em;font-weight:900;color:#fff;flex-shrink:0;
+}
+.pc0{background:#e21b3c}.pc1{background:#1368ce}.pc2{background:#d89e00}.pc3{background:#26890c}.pc4{background:#8e24aa}.pc5{background:#00897b}
+
+.slider-box{background:var(--surface-strong);border:1px solid rgba(255,255,255,.22);border-radius:14px;padding:14px 13px}
+.slider-val{font-size:1.9em;font-weight:900;color:var(--gold);margin-bottom:6px}
+.slider-box input[type=range]{width:100%;padding:0;margin:6px 0;box-shadow:none;background:transparent;accent-color:var(--gold);height:10px}
+.slider-ends{display:flex;justify-content:space-between;font-size:.8em;opacity:.82;font-weight:800;margin-bottom:8px}
+.slider-num{width:132px!important;display:inline-block!important;padding:8px 10px!important;font-size:1.05em!important;margin:0!important}
+
+.pin-wrap{background:var(--surface-strong);border:1px solid rgba(255,255,255,.22);border-radius:14px;padding:10px}
+.pin-stage{position:relative;display:inline-block;max-width:100%;border-radius:10px;overflow:hidden;cursor:crosshair;line-height:0;background:#fff;touch-action:manipulation}
+.pin-stage img{display:block;max-width:100%;max-height:250px;width:auto;height:auto;user-select:none;-webkit-user-drag:none}
+.pin-marker{
+  position:absolute;width:26px;height:26px;border-radius:50%;
+  border:3px solid #fff;background:rgba(226,27,60,.92);
+  box-shadow:0 0 0 2px #000,0 3px 10px rgba(0,0,0,.55);
+  transform:translate(-50%,-50%);pointer-events:none;z-index:3;
+}
+.pin-marker::after{content:'';position:absolute;left:50%;top:50%;width:6px;height:6px;background:#fff;border-radius:50%;transform:translate(-50%,-50%)}
+.pin-svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2}
+
+.scale-wrap{background:var(--surface-strong);border:1px solid rgba(255,255,255,.22);border-radius:14px;padding:12px}
+.scale-ends{display:flex;justify-content:space-between;gap:8px;font-size:.82em;font-weight:850;color:var(--gold);margin-bottom:8px}
+.scale-grid{display:flex;gap:7px;justify-content:center;flex-wrap:wrap}
+.scale-btn{
+  flex:1;min-width:52px;padding:12px 6px;border-radius:12px;border:2px solid rgba(255,255,255,.28);
+  background:linear-gradient(180deg,rgba(255,255,255,.2),rgba(255,255,255,.09));
+  color:#fff;font-weight:900;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;
+}
+.scale-btn b{font-size:1.3em;color:var(--gold)}
+.scale-btn small{font-size:.74em;opacity:.88;line-height:1.15}
+
+.sticky-list{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-bottom:8px}
+.sticky-note{
+  background:linear-gradient(180deg,#fff9c4,#fff176);color:var(--ink);
+  border-radius:10px;padding:7px 10px;font-size:.86em;font-weight:800;
+  box-shadow:0 3px 10px rgba(0,0,0,.22);text-align:left;max-width:100%;word-break:break-word;
+}
+.spot-badge{
+  display:inline-block;background:linear-gradient(90deg,#ffd600,#ff9100);color:var(--ink);
+  font-size:.74em;font-weight:900;padding:2px 8px;border-radius:99px;margin-bottom:3px;
+}
+
+.state-card.partial{background:linear-gradient(160deg,rgba(245,124,0,.55),rgba(230,81,0,.58));border-color:rgba(255,223,93,.65)}
+.outcome-card{
+  background:linear-gradient(135deg,rgba(74,20,140,.65),rgba(49,27,146,.68));
+  border:1.5px solid #b388ff;border-radius:13px;padding:11px 13px;margin:8px 0;
+  text-align:left;font-size:.93em;line-height:1.4;
+}
+.shift-pill{
+  display:inline-flex;align-items:center;gap:4px;border-radius:99px;
+  padding:4px 11px;font-size:.8em;font-weight:850;
+  background:rgba(0,229,255,.2);border:1px solid rgba(128,222,234,.6);color:#b2ebf2;
+}
+.consensus-card{
+  background:rgba(19,104,206,.32);border:1px solid rgba(105,240,174,.5);
+  border-radius:12px;padding:9px 12px;margin:8px 0;font-size:.9em;font-weight:800;
+}
+.calib-card{
+  background:rgba(0,0,0,.28);border:1px solid rgba(255,223,93,.4);
+  border-radius:11px;padding:9px 11px;margin:8px 0 10px;font-size:.88em;line-height:1.38;
+}
 
 @media (max-height:700px){
   .logo{max-height:60px}
@@ -803,9 +1002,11 @@ body.hc .pu-btn,body.hc .wager-btn,body.hc .conf-btn,body.hc .don-btn{border-col
     </div>
     <div id="hudMe" class="hud-me"></div>
     <div class="hud-right">
+      <button id="standBtn" class="hud-btn" style="display:none" onclick="toggleStandings()">🏆 Standings</button>
       <button id="caseBtn" class="hud-btn" onclick="openCaseFile()">📁 Case</button>
     </div>
   </div>
+  <div id="standDrawer"></div>
   <div id="timerStrip">
     <div class="ts-track"><div id="tsFill" class="ts-fill"></div></div>
     <div id="tsLbl" class="ts-lbl"></div>
@@ -817,10 +1018,20 @@ body.hc .pu-btn,body.hc .wager-btn,body.hc .conf-btn,body.hc .don-btn{border-col
 <div id="toast"></div>
 <main id="app"></main>
 <script>
-let pin, pid, S = {}, avatar = '🦊', team = '', custOpen = false;
+let pin, pid, S = {}, avatar = '🦊', avHat = '', avRing = '', team = '', custOpen = false, standOpen = false;
 let iceBrokenQ = -1, iceTaps = 0;
 let pollStamp = 0;
 const AVS = ['🦊','🐼','🦁','🐸','🦄','🐙','🦖','🐝','🦋','🐧','🚀','⚡','🐶','🐱','🐯','🐵','🐨','🐰','🐻','🐮','🐷','🐔','🦉','🦅','🐺','🐴','🦓','🦒','🐘','🦏','🐢','🐍','🐊','🐬','🐳','🦈','🐠','🦀','🦞','🐌','🦜','🦩','🦥','🦦','🦔','🐲','👽','🤖','👾','🎃','🌟','🍕','🍩','⚽','🏀','🎮'];
+const HATS = ['','👑','🎩','🎓','🧢','🤠','🎀','🎧','🕶️','⛑️','🧙','🥷','🌟'];
+const RINGS = [
+ {id:'', label:'None'},
+ {id:'gold', label:'✨ Gold'},
+ {id:'neon', label:'💚 Neon'},
+ {id:'fire', label:'🔥 Fire'},
+ {id:'ice', label:'❄️ Ice'},
+ {id:'rainbow', label:'🌈 Rainbow'},
+ {id:'violet', label:'💜 Violet'}
+];
 const TEAMS = [
  {id:'', label:'🎲 Auto Team'},
  {id:'red', label:'🔴 Red Dragons'},
@@ -829,17 +1040,34 @@ const TEAMS = [
  {id:'green', label:'🟢 Green Vipers'}
 ];
 const REACTS = ['🔥','😂','😮','🎉','👏','❤️'];
-const $ = document.getElementById('app'), sh = ["▲","◆","●","■"];
-async function post(u,b){const r=await fetch(u,{method:'POST',body:JSON.stringify(b)});return {ok:r.ok,...await r.json()}}
-function esc(s){return String(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+const $ = document.getElementById('app'), sh = ["▲","◆","●","■","★","⬟"];
+async function post(u,b){
+ const r = await fetch(u,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b)});
+ let d = {};
+ try{ d = await r.json(); }catch(e){}
+ return {ok: r.ok, ...d, _httpOk: r.ok};
+}
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+
+function avBadgeHtml(av, hat, ring, size='md'){
+ const rg = String(ring || '');
+ let rCls = '', rStyle = '';
+ if(rg){
+  if(rg.startsWith('#')){ rCls = 'ring-hex'; rStyle = ` style="--rc:${esc(rg)}"`; }
+  else rCls = 'ring-' + esc(rg);
+ }
+ return `<span class="av-layer av-${size}${rCls?' '+rCls:''}"${rStyle}><span>${esc(av||'🎮')}</span>${hat?`<span class="av-hat">${esc(hat)}</span>`:''}</span>`;
+}
 
 function updateCustPreview(){
  const pv = document.getElementById('custPrev');
+ const hero = document.getElementById('custHeroAv');
+ if(hero) hero.innerHTML = avBadgeHtml(avatar, avHat, avRing, 'lg');
  if(!pv) return;
  const nm = ((document.getElementById('n')||{}).value || lastName || 'Player').trim();
  const ct = ((document.getElementById('ctagCustom')||{}).value || ctag || '').trim();
  const colStyle = nameColor ? `style="color:${esc(nameColor)}"` : '';
- pv.innerHTML = `<span>${esc(avatar)}</span> <span ${colStyle}>${esc(nm)}</span>${ct?` <span class="title-badge" style="font-size:.75em;padding:1px 7px">${esc(ct)}</span>`:''}`;
+ pv.innerHTML = `${avBadgeHtml(avatar, avHat, avRing, 'sm')} <span ${colStyle}>${esc(nm)}</span>${ct?` <span class="title-badge" style="font-size:.75em;padding:1px 7px">${esc(ct)}</span>`:''}`;
 }
 function toggleCust(){
  custOpen = !custOpen;
@@ -848,6 +1076,8 @@ function toggleCust(){
  if(cr) cr.textContent = custOpen ? '▴' : '▾';
 }
 function pickAv(a){avatar=a;document.querySelectorAll('.av').forEach(el=>el.classList.toggle('sel',el.dataset.av===a));updateCustPreview()}
+function pickHat(h){avHat=h;document.querySelectorAll('.hat-chip').forEach(el=>el.classList.toggle('sel',el.dataset.hat===h));updateCustPreview()}
+function pickRing(r){avRing=r;document.querySelectorAll('.ring-chip').forEach(el=>el.classList.toggle('sel',el.dataset.ring===r));updateCustPreview()}
 function pickTm(t){team=t;document.querySelectorAll('.tm').forEach(el=>el.classList.toggle('sel',el.dataset.tm===t))}
 
 const urlPin = new URLSearchParams(location.search).get('pin') || '';
@@ -909,7 +1139,14 @@ function form(err, canReclaim){
 const COLORS = ['#ffffff','#ff6b6b','#ffd166','#7bed9f','#70a1ff','#ff9ff3','#a29bfe','#ffa502','#2ed573','#1e90ff'];
 const TITLES = ['','The Brain','Quiz Wizard','Speed Demon','Chaos Agent','Snack Lord','Night Owl','Hot Streak','Underdog','Big Mood','Mr Cool','Dino Fan'];
 function custHtml(){
- return `<div class="avatars">${AVS.map(a=>`<span class="av ${a===avatar?'sel':''}" data-av="${a}" onclick="pickAv('${a}')">${a}</span>`).join('')}</div>
+ return `<div id="custHeroAv" style="text-align:center;padding-top:6px">${avBadgeHtml(avatar, avHat, avRing, 'lg')}</div>
+  <div class="cust-sec-lbl">Character</div>
+  <div class="avatars">${AVS.map(a=>`<span class="av ${a===avatar?'sel':''}" data-av="${a}" onclick="pickAv('${a}')">${a}</span>`).join('')}</div>
+  <div class="cust-sec-lbl">Hat / Accessory</div>
+  <div class="hat-row">${HATS.map(h=>`<span class="hat-chip ${h===avHat?'sel':''}" data-hat="${h}" onclick="pickHat('${h}')">${h||'None'}</span>`).join('')}</div>
+  <div class="cust-sec-lbl">Aura Ring</div>
+  <div class="ring-row">${RINGS.map(r=>`<span class="ring-chip ${r.id===avRing?'sel':''}" data-ring="${r.id}" onclick="pickRing('${r.id}')">${r.label}</span>`).join('')}</div>
+  <div class="cust-sec-lbl">Name Color &amp; Title</div>
   <div class="swatches">${COLORS.map(c=>`<span class="sw ${c===nameColor?'sel':''}" style="background:${c}" onclick="pickColor('${c}')"></span>`).join('')}</div>
   <select id="ctagSel" class="tagsel" onchange="ctag=this.value;document.getElementById('ctagCustom').value='';updateCustPreview()">${TITLES.map(t=>`<option value="${t}" ${t===ctag?'selected':''}>${t||'— Pick a player title (optional) —'}</option>`).join('')}</select>
   <input id="ctagCustom" placeholder="…or type custom title (max 14)" maxlength="14" value="${TITLES.includes(ctag)?'':esc(ctag)}" oninput="ctag=this.value;document.getElementById('ctagSel').value='';updateCustPreview()">`;
@@ -920,17 +1157,29 @@ function pickColor(c){
  updateCustPreview();
 }
 function hexToRgb(h){ const n=parseInt(h.slice(1),16); return `rgb(${n>>16},${(n>>8)&255},${n&255})`; }
-try{ const sv = JSON.parse(localStorage.getItem('brainrush_cust')||'null'); if(sv){ if(sv.avatar) avatar = sv.avatar; nameColor = sv.color||''; ctag = sv.ctag||''; } }catch(e){}
+try{
+ const sv = JSON.parse(localStorage.getItem('brainrush_cust')||'null');
+ if(sv){
+  if(sv.avatar) avatar = sv.avatar;
+  if(sv.av_hat != null) avHat = sv.av_hat;
+  if(sv.av_ring != null) avRing = sv.av_ring;
+  nameColor = sv.color||'';
+  ctag = sv.ctag||'';
+ }
+}catch(e){}
 
 async function join(reclaim){
   const pEl = document.getElementById('p');
   pin = pEl ? pEl.value.trim() : (pin || '');
   lastName = (document.getElementById('n')||{}).value || '';
   const ct = ((document.getElementById('ctagCustom')||{}).value || ctag || '').slice(0,14);
-  const r = await post('/api/join', {pin, name:lastName, avatar, team, color:nameColor, ctag:ct, reclaim:!!reclaim});
-  if(!r.ok) return form(r.error, r.can_reclaim);
+  const r = await post('/api/join', {pin, name:lastName, avatar, av_hat:avHat, av_ring:avRing, team, color:nameColor, ctag:ct, reclaim:!!reclaim});
+  if(!r._httpOk) return form(r.error, r.can_reclaim);
   pid = r.pid;
-  try{ localStorage.setItem('brainrush_session', JSON.stringify({pin, pid})); localStorage.setItem('brainrush_cust', JSON.stringify({avatar, color:nameColor, ctag:ct})); }catch(e){}
+  try{
+   localStorage.setItem('brainrush_session', JSON.stringify({pin, pid}));
+   localStorage.setItem('brainrush_cust', JSON.stringify({avatar, av_hat:avHat, av_ring:avRing, color:nameColor, ctag:ct}));
+  }catch(e){}
   unlockAudio();
   poll(); setInterval(poll,600);
 }
@@ -954,35 +1203,270 @@ async function tryReconnect(){
  form();
 }
 
+/* --- Student Read-Aloud TTS & Mini Standings --- */
+let lastTtsSlide = '';
+function stopSpeech(){
+ try{ if(window.speechSynthesis) window.speechSynthesis.cancel(); }catch(e){}
+ const b = document.getElementById('stuTtsBtn');
+ if(b){ b.classList.remove('on'); b.textContent = '🔊 Read Aloud'; }
+}
+function speakQuestion(){
+ if(!('speechSynthesis' in window) || !S) return;
+ if(window.speechSynthesis.speaking){ stopSpeech(); return; }
+ const parts = [];
+ if(S.question) parts.push(S.question);
+ if(S.qtype === 'info' && S.body) parts.push(S.body);
+ else if((S.preview_left || 0) <= 0){
+  const qt = S.qtype || 'mc';
+  if(['mc','tf','zoom','multi','poll','scale'].includes(qt) && Array.isArray(S.answers) && S.answers.length){
+   parts.push('Options: ' + S.answers.map((a,i)=>`${i+1}: ${a}`).join('. '));
+  } else if((qt === 'order' || qt === 'rank') && Array.isArray(S.answers) && S.answers.length){
+   parts.push('Items: ' + S.answers.join(', '));
+  } else if(qt === 'match' && Array.isArray(S.match_left) && S.match_left.length){
+   parts.push('Match prompts: ' + S.match_left.join(', ') + '. With: ' + (S.match_right||[]).join(', '));
+  } else if(qt === 'slider' && S.slider_cfg){
+   parts.push(`Range ${S.slider_cfg.min} to ${S.slider_cfg.max}${S.slider_cfg.unit?' '+S.slider_cfg.unit:''}.`);
+  }
+ }
+ if(!parts.length) return;
+ try{
+  const u = new SpeechSynthesisUtterance(parts.join('. '));
+  const b = document.getElementById('stuTtsBtn');
+  if(b){ b.classList.add('on'); b.textContent = '⏹️ Stop'; }
+  u.onend = u.onerror = () => {
+   const btn = document.getElementById('stuTtsBtn');
+   if(btn){ btn.classList.remove('on'); btn.textContent = '🔊 Read Aloud'; }
+  };
+  window.speechSynthesis.speak(u);
+ }catch(e){}
+}
+function toggleStandings(){
+ standOpen = !standOpen;
+ updHud();
+}
+
+function isThinkLocked(){
+ if(!S || S.phase !== 'question' || S.consensus_step === 2) return false;
+ const elapsed = S.paused ? 0 : (pollStamp ? Math.max(0, (performance.now() - pollStamp) / 1000) : 0);
+ const pv = Math.max(0, (S.preview_left || 0) - elapsed);
+ const thk = Math.max(0, (S.think_left || 0) - elapsed);
+ return pv <= 0.05 && thk > 0.05;
+}
+
 async function sendWord(){
  const inp = document.getElementById('iceInp');
  if(!inp || !inp.value.trim()) return;
  await post('/api/word',{pin,pid,word:inp.value.trim()});
  poll();
 }
-async function ans(c){await post('/api/answer',{pin,pid,choice:c});poll()}
+async function ans(c){
+ if(isThinkLocked()) return toast('🧠 Thinking time — read carefully first!');
+ const r = await post('/api/answer',{pin,pid,choice:c});
+ if(!r._httpOk && r.error) toast(r.error);
+ poll();
+}
+async function teamAns(c){
+ const r = await post('/api/team_answer',{pin,pid,choice:c});
+ if(!r._httpOk && r.error) toast(r.error);
+ poll();
+}
 async function usePu(kind){await post('/api/powerup',{pin,pid,kind});poll()}
 async function setWager(pct){await post('/api/wager',{pin,pid,pct});poll()}
 async function toggleConf(){await post('/api/confident',{pin,pid});poll()}
 async function sabotage(){await post('/api/sabotage',{pin,pid});poll()}
 async function predict(g){await post('/api/predict',{pin,pid,guess:g});poll()}
 async function sendText(){
+ if(isThinkLocked()) return toast('🧠 Thinking time — unlocks in a moment!');
  const e=document.getElementById('txtAns'); if(!e||!e.value.trim()) return;
- await post('/api/answer',{pin,pid,text:e.value.trim()}); poll();
+ const r = await post('/api/answer',{pin,pid,text:e.value.trim()});
+ if(!r._httpOk && r.error) toast(r.error);
+ poll();
 }
 
-let ordSel=[], ordIdx=-1;
+/* --- Interactive Question State (Order, Multi, Match, Slider, Pin, Brainstorm) --- */
+let qStateSig = '', ordSel = [], multiSel = [], matchPairs = [], matchLeft = 0, sliderVal = 0, pinXY = null;
+function ensureQState(){
+ const sig = `${S.index}:${S.qtype||''}:${S.revoted?1:0}`;
+ if(qStateSig === sig) return;
+ qStateSig = sig;
+ ordSel = [];
+ multiSel = [];
+ const ml = (S.match_left || []).length;
+ matchPairs = Array(ml).fill(-1);
+ matchLeft = 0;
+ pinXY = null;
+ if(S.slider_cfg){
+  const sc = S.slider_cfg;
+  const rawMid = (Number(sc.min) + Number(sc.max)) / 2;
+  const st = Number(sc.step) || 1;
+  const snapped = Number(sc.min) + Math.round((rawMid - Number(sc.min)) / st) * st;
+  sliderVal = Number(Math.min(Number(sc.max), Math.max(Number(sc.min), snapped)).toFixed(6));
+ } else {
+  sliderVal = 0;
+ }
+}
+
 function drawOrd(){
  const el=document.getElementById('ordWrap'); if(!el) return;
  const d=S.answers||[];
- el.innerHTML=`<p style="margin:2px 0 6px;font-size:.92em;opacity:.92">${S.qtype==='rank'?'Tap items in <b>your priority order</b> (#1 first):':'Tap items in the <b>correct sequence</b>:'}</p>`+
+ const locked = isThinkLocked();
+ const ready = ordSel.length === d.length && d.length > 0;
+ const compactH = d.length > 4 ? '54px' : '68px';
+ el.innerHTML=`<p style="margin:2px 0 6px;font-size:.92em;opacity:.92">${S.qtype==='rank'?'Tap items in <b>your priority order</b> (#1 first):':'Tap items in the <b>correct sequence</b> (1 → '+d.length+'):'}</p>`+
   (ordSel.length ? `<div class="ord-slots">${ordSel.map((j,n)=>`<div class="slot" onclick="removeOrd(${n})"><span><b>${n+1}.</b> ${esc(d[j])}</span><small>✕</small></div>`).join('')}</div>` : '')+
-  `<div class="grid" style="min-height:auto">${d.map((a,j)=>ordSel.includes(j)?'':`<button class="c${j%4}" style="min-height:68px;padding:10px" onclick="tapOrd(${j})"><span>${esc(a)}</span></button>`).join('')}</div>`+
-  `<div style="display:flex;gap:8px;margin-top:8px">${ordSel.length?`<button class="pu-btn" style="flex:0 0 auto;padding:10px 16px" onclick="ordSel.pop();drawOrd()">↩ Undo</button>`:''}${ordSel.length===d.length?`<button class="go" style="flex:1" onclick="submitOrd()">✅ Submit Order</button>`:''}</div>`;
+  `<div class="grid" style="min-height:auto">${d.map((a,j)=>ordSel.includes(j)?'':`<button class="c${j%6}" style="min-height:${compactH};padding:9px" onclick="tapOrd(${j})"><span>${esc(a)}</span></button>`).join('')}</div>`+
+  `<div style="display:flex;gap:8px;margin-top:8px">${ordSel.length?`<button class="pu-btn" style="flex:0 0 auto;padding:10px 16px" onclick="ordSel.pop();drawOrd()">↩ Undo</button>`:''}${ready?`<button class="go" style="flex:1" data-think-lock="1" data-ready="1" ${locked?'disabled':''} onclick="submitOrd()">✅ Submit Order</button>`:''}</div>`;
 }
 function tapOrd(j){ ordSel.push(j); drawOrd(); }
 function removeOrd(pos){ ordSel.splice(pos,1); drawOrd(); }
-async function submitOrd(){ await post('/api/answer',{pin,pid,seq:ordSel}); poll(); }
+async function submitOrd(){
+ if(isThinkLocked()) return toast('🧠 Thinking time — unlocks in a moment!');
+ const r = await post('/api/answer',{pin,pid,seq:ordSel});
+ if(!r._httpOk && r.error) toast(r.error);
+ poll();
+}
+
+function toggleMultiOpt(i){
+ const pos = multiSel.indexOf(i);
+ if(pos >= 0) multiSel.splice(pos, 1); else multiSel.push(i);
+ multiSel.sort((a,b) => a - b);
+ const b = document.getElementById('mOpt' + i);
+ if(b){
+  b.classList.toggle('msel', multiSel.includes(i));
+  const ck = b.querySelector('.mchk');
+  if(ck) ck.textContent = multiSel.includes(i) ? '☑' : '☐';
+ }
+ const sb = document.getElementById('multiSubBtn');
+ if(sb){
+  const ready = multiSel.length > 0;
+  sb.dataset.ready = ready ? '1' : '0';
+  sb.disabled = !ready || isThinkLocked();
+  sb.textContent = `✅ Submit Selection (${multiSel.length})`;
+ }
+}
+async function submitMulti(){
+ if(!multiSel.length) return;
+ if(isThinkLocked()) return toast('🧠 Thinking time — unlocks in a moment!');
+ const r = await post('/api/answer',{pin,pid,choices:multiSel});
+ if(!r._httpOk && r.error) toast(r.error);
+ poll();
+}
+
+function drawMatchPhone(){
+ const el = document.getElementById('matchWrap');
+ if(!el) return;
+ const lefts = S.match_left || [], rights = S.match_right || [], n = lefts.length;
+ if(matchPairs.length !== n) matchPairs = Array(n).fill(-1);
+ const linked = matchPairs.filter(v => v >= 0).length;
+ const ready = n > 0 && linked === n;
+ const locked = isThinkLocked();
+ el.innerHTML = `
+  <div style="font-size:.86em;opacity:.9;margin-bottom:5px;font-weight:750">Tap a left item &amp; its matching partner (tap paired item to unpair):</div>
+  <div class="match-cols">
+   <div class="match-col">
+    <div class="match-hdr">Prompts</div>
+    ${lefts.map((lt, li) => {
+     const rj = matchPairs[li];
+     return `<button type="button" class="m-item ${matchLeft===li?'active':''}" onclick="tapMatchL(${li})"><span>${esc(lt)}</span>${rj>=0?`<span class="m-badge pc${li%6}">#${li+1}</span>`:''}</button>`;
+    }).join('')}
+   </div>
+   <div class="match-col">
+    <div class="match-hdr">Matches</div>
+    ${rights.map((rt, rj) => {
+     const li = matchPairs.indexOf(rj);
+     return `<button type="button" class="m-item" onclick="tapMatchR(${rj})"><span>${esc(rt)}</span>${li>=0?`<span class="m-badge pc${li%6}">#${li+1}</span>`:''}</button>`;
+    }).join('')}
+   </div>
+  </div>
+  <button class="go" id="matchSubBtn" data-think-lock="1" data-ready="${ready?1:0}" ${(locked || !ready)?'disabled':''} onclick="submitMatch()">🔗 Submit Pairs (${linked}/${n})</button>
+ `;
+}
+function tapMatchL(li){
+ if(matchPairs[li] >= 0){ matchPairs[li] = -1; matchLeft = li; }
+ else { matchLeft = (matchLeft === li) ? null : li; }
+ drawMatchPhone();
+}
+function tapMatchR(rj){
+ const existing = matchPairs.indexOf(rj);
+ let target = matchLeft;
+ if(target === null || target === undefined){
+  if(existing >= 0){ matchPairs[existing] = -1; matchLeft = existing; drawMatchPhone(); return; }
+  target = matchPairs.findIndex(v => v < 0);
+ }
+ if(target === null || target < 0) return;
+ if(existing >= 0) matchPairs[existing] = -1;
+ matchPairs[target] = rj;
+ const nx = matchPairs.findIndex(v => v < 0);
+ matchLeft = nx >= 0 ? nx : null;
+ drawMatchPhone();
+}
+async function submitMatch(){
+ if(matchPairs.some(v => v < 0)) return;
+ if(isThinkLocked()) return toast('🧠 Thinking time — unlocks in a moment!');
+ const r = await post('/api/answer',{pin,pid,pairs:matchPairs});
+ if(!r._httpOk && r.error) toast(r.error);
+ poll();
+}
+
+function syncPhoneSlider(v){
+ const sc = S.slider_cfg || {min:0, max:100, step:1, unit:''};
+ const num = parseFloat(v);
+ if(isNaN(num)) return;
+ sliderVal = num;
+ const rEl = document.getElementById('slRange');
+ const nEl = document.getElementById('slNum');
+ const rd = document.getElementById('slReadout');
+ if(rEl && rEl.value !== String(num)) rEl.value = num;
+ if(nEl && document.activeElement !== nEl) nEl.value = num;
+ if(rd) rd.textContent = num + (sc.unit ? ' ' + sc.unit : '');
+}
+async function submitSlider(){
+ if(isThinkLocked()) return toast('🧠 Thinking time — unlocks in a moment!');
+ const sc = S.slider_cfg || {min:0, max:100, step:1, unit:''};
+ const nEl = document.getElementById('slNum');
+ let val = nEl ? parseFloat(nEl.value) : sliderVal;
+ if(isNaN(val)) val = sliderVal;
+ val = Math.max(Number(sc.min), Math.min(Number(sc.max), val));
+ const r = await post('/api/answer',{pin,pid,val});
+ if(!r._httpOk && r.error) toast(r.error);
+ poll();
+}
+
+function tapPinStage(ev){
+ const st = document.getElementById('pinStage');
+ if(!st) return;
+ const rect = st.getBoundingClientRect();
+ if(!rect.width || !rect.height) return;
+ const x = Math.max(0, Math.min(100, ((ev.clientX - rect.left) / rect.width) * 100));
+ const y = Math.max(0, Math.min(100, ((ev.clientY - rect.top) / rect.height) * 100));
+ pinXY = [Number(x.toFixed(1)), Number(y.toFixed(1))];
+ const mk = document.getElementById('pinMarker');
+ if(mk){ mk.style.display = 'block'; mk.style.left = pinXY[0] + '%'; mk.style.top = pinXY[1] + '%'; }
+ const cd = document.getElementById('pinCoord');
+ if(cd) cd.textContent = `📍 Pin at (${Math.round(pinXY[0])}%, ${Math.round(pinXY[1])}%) — tap image to adjust`;
+ const sb = document.getElementById('pinSubBtn');
+ if(sb){ sb.dataset.ready = '1'; sb.disabled = isThinkLocked(); }
+}
+async function submitPin(){
+ if(!pinXY) return;
+ if(isThinkLocked()) return toast('🧠 Thinking time — unlocks in a moment!');
+ const r = await post('/api/answer',{pin,pid,pin_xy:pinXY});
+ if(!r._httpOk && r.error) toast(r.error);
+ poll();
+}
+
+async function sendBrainstorm(){
+ if(isThinkLocked()) return toast('🧠 Thinking time — unlocks in a moment!');
+ const e = document.getElementById('bsTxt');
+ if(!e || !e.value.trim()) return;
+ const val = e.value.trim();
+ const r = await post('/api/answer',{pin,pid,text:val});
+ if(!r._httpOk){ toast(r.error || 'Could not post idea'); return; }
+ e.value = '';
+ const c = document.getElementById('bsCnt');
+ if(c) c.textContent = '0 / 120';
+ poll();
+}
 
 function hotHtml(m){
  const h=m.hot; if(!h) return '';
@@ -1082,38 +1566,42 @@ function confettiBurst(){
 }
 let fxQ = -1, bestStreak = 0, everCorrect = false, lastRank = 0;
 function maybeResultFX(){
- if(S.case) return;
+ if(S.case || S.unscored || S.scoring_mode === 'survey') return;
  const m = S.me;
  if(S.phase !== 'results' || !m || fxQ === S.index || m.spectating) return;
  fxQ = S.index;
- if(m.correct) sfxCorrect(); else sfxWrong();
+ if(m.correct) sfxCorrect();
+ else if(m.partial) [440,554.37].forEach((f,i)=>beep(f,.14,'triangle',.22,i*.09));
+ else sfxWrong();
  const msgs = [];
  if(m.correct && !everCorrect) msgs.push('🎉 First correct answer!');
  if(m.correct) everCorrect = true;
  if(m.streak >= 3 && m.streak > bestStreak) msgs.push('🔥 New personal best streak: ' + m.streak + '!');
  bestStreak = Math.max(bestStreak, m.streak || 0);
- if(m.rank === 1 && lastRank > 1) msgs.push('🥇 You took the lead!');
- else if(lastRank && m.rank < lastRank - 1) msgs.push('🚀 Up ' + (lastRank - m.rank) + ' places!');
- lastRank = m.rank;
+ if(!S.hide_board){
+  if(m.rank === 1 && lastRank > 1) msgs.push('🥇 You took the lead!');
+  else if(lastRank && m.rank < lastRank - 1) msgs.push('🚀 Up ' + (lastRank - m.rank) + ' places!');
+  lastRank = m.rank;
+ }
  if((m.gained||0) >= 1500) msgs.push('💰 Huge round: +' + m.gained + '!');
  if(msgs.length){ toast(msgs[0]); confettiBurst(); sfxMile(); }
 }
 
 function stealUi(m){
- if(!m.pu_steal || S.is_last || !m.steal_target) return '';
+ if(!m.pu_steal || S.is_last || !m.steal_target || S.hide_board) return '';
  const ok = m.steal_gap <= 1500;
  return `<div class="steal-box"><div>🕵️ <b>Power-Up:</b> Target <b>${esc(m.steal_target)}</b> (${m.steal_gap} pts ahead)</div><div style="margin-top:4px"><button class="sab-btn" onclick="steal('steal')">🕵️ Steal up to 150</button><button class="sab-btn" ${ok?'':'disabled'} onclick="steal('swap')">🔀 Swap${ok?'':' (too far)'}</button></div></div>`;
 }
-async function steal(mode){ const r = await post('/api/steal', {pin, pid, mode}); if(!r.ok) alert(r.error || 'Not available'); poll(); }
+async function steal(mode){ const r = await post('/api/steal', {pin, pid, mode}); if(!r._httpOk) alert(r.error || 'Not available'); poll(); }
 async function toggleDon(){ await post('/api/don', {pin, pid}); poll(); }
 
 function exhibitsPhone(list){
  if(!list || !list.length) return '';
  return `<div class="exh-ph">${list.map(e=>`<figure><img src="${esc(e.url)}" alt="${esc(e.caption||'')}" onclick="zoomImg(this.src)">${e.caption?`<figcaption>${esc(e.caption)}</figcaption>`:''}</figure>`).join('')}</div>`;
 }
-function questionMediaHtml(inPrev){
+function questionMediaHtml(inPrev, hideMainImg){
  let h = '';
- if(S.img){
+ if(S.img && !hideMainImg){
   const zm = S.qtype === 'zoom' && S.phase === 'question';
   const cls = zm ? (inPrev ? 'q-media zoom-hold' : 'q-media zoom-go') : 'q-media';
   const dur = (zm && !inPrev) ? ` style="animation-duration:${S.qtime||15}s"` : '';
@@ -1123,17 +1611,20 @@ function questionMediaHtml(inPrev){
  h += exhibitsPhone(S.exhibits);
  return h;
 }
-function questionCardHtml(inPrev){
- if(!S.question && !S.img && !(S.exhibits && S.exhibits.length)) return '';
- return `<div class="q-card">${S.question?`<p class="q-stem">${esc(S.question)}</p>`:''}${questionMediaHtml(inPrev)}</div>`;
+function questionCardHtml(inPrev, hideMainImg){
+ const hasImg = S.img && !hideMainImg;
+ const ttsBtn = (S.allow_tts && S.phase === 'question') ? `<div><button type="button" class="tts-pill" id="stuTtsBtn" onclick="speakQuestion()">🔊 Read Aloud</button></div>` : '';
+ if(!S.question && !hasImg && !(S.exhibits && S.exhibits.length) && !ttsBtn) return '';
+ return `<div class="q-card">${S.question?`<p class="q-stem">${esc(S.question)}</p>`:''}${ttsBtn}${questionMediaHtml(inPrev, hideMainImg)}</div>`;
 }
 
 function zoomImg(src){ document.getElementById('imgBig').src = src; document.getElementById('imgOv').style.display = 'flex'; }
 function paras(t){ return (t||'').split(/\n\s*\n/).map(p=>`<p>${esc(p).replace(/\n/g,'<br>')}</p>`).join(''); }
 function infoPhone(m){
  const role = (m.roles||[]).filter(r=>r.chapter===S.question).slice(-1)[0];
+ const ttsBtn = S.allow_tts ? `<button type="button" class="tts-pill" id="stuTtsBtn" style="margin-top:0" onclick="speakQuestion()">🔊 Read Aloud</button>` : '';
  return `<div class="case-ph">
-  <div class="chip-row" style="justify-content:flex-start"><span class="qnum">📖 Slide ${S.index+1} of ${S.total}</span></div>
+  <div class="chip-row" style="justify-content:space-between"><span class="qnum">📖 Slide ${S.index+1} of ${S.total}</span>${ttsBtn}</div>
   <h2>${esc(S.question)}</h2>
   <div class="case-body-ph">${paras(S.body)}</div>${exhibitsPhone(S.exhibits)}
   ${role?`<div class="role-card">🎭 <b>Your Stakeholder Role: ${esc(role.name)}</b><br>${esc(role.text)}</div>`:''}
@@ -1149,15 +1640,37 @@ function updHud(){
   b.style.display = has ? 'inline-flex' : 'none';
   if(has) b.textContent = `📁 Case (${cf.length})`;
  }
+ const m = S && S.me;
  const hm = document.getElementById('hudMe');
  if(hm){
-  const m = S && S.me;
   if(m && m.name && S.phase && S.phase !== 'final'){
    hm.style.display = 'inline-flex';
    const col = m.color ? ` style="color:${esc(m.color)}"` : '';
-   hm.innerHTML = `<span>${esc(m.avatar||'')}</span><span class="hm-name"${col}>${esc(m.name)}</span>${m.score!=null?`<span class="hm-score">⭐${m.score}</span>`:''}${m.rank?`<span class="hm-rank">#${m.rank}</span>`:''}`;
+   const scBadge = S.scoring_mode === 'percent'
+    ? `<span class="hm-score">📊${m.pct ?? 0}%</span>`
+    : S.scoring_mode === 'survey'
+      ? `<span class="hm-score">📋</span>`
+      : (m.score != null ? `<span class="hm-score">⭐${m.score}</span>` : '');
+   const rkBadge = (!S.hide_board && m.rank) ? `<span class="hm-rank">#${m.rank}</span>` : '';
+   hm.innerHTML = `${avBadgeHtml(m.avatar||'🎮', m.av_hat, m.av_ring, 'sm')}<span class="hm-name"${col}>${esc(m.name)}</span>${scBadge}${rkBadge}`;
   } else {
    hm.style.display = 'none';
+  }
+ }
+ const sb = document.getElementById('standBtn');
+ const sd = document.getElementById('standDrawer');
+ const showStand = !!(m && S.top3 && S.top3.length && !S.hide_board && S.phase && S.phase !== 'lobby' && S.phase !== 'final');
+ if(sb) sb.style.display = showStand ? 'inline-flex' : 'none';
+ if(sd){
+  if(showStand && standOpen){
+   sd.classList.add('open');
+   const medals = ['🥇','🥈','🥉'];
+   const isPct = S.scoring_mode === 'percent';
+   sd.innerHTML = `<div style="font-size:.76em;font-weight:900;text-transform:uppercase;letter-spacing:.06em;color:var(--gold);margin-bottom:4px">🏆 Live Standings</div>` +
+    S.top3.map((r, i) => `<div class="stand-row"><span>${medals[i]||'•'} ${esc(r.avatar||'')} ${esc(r.name)}</span><span style="color:var(--gold)">${isPct ? `${r.pct??0}% · ${r.score} pts` : `${r.score} pts (${r.pct??0}%)`}</span></div>`).join('') +
+    `<div class="stand-row me"><span>👤 You (#${m.rank||'—'})</span><span style="color:var(--gold)">${isPct ? `${m.pct??0}% · ${m.score} pts` : `${m.score} pts · ${m.pct??0}%`}</span></div>`;
+  } else {
+   sd.classList.remove('open');
   }
  }
  updTimerBar();
@@ -1168,26 +1681,53 @@ function updTimerBar(){
  const fill = document.getElementById('tsFill');
  const lbl = document.getElementById('tsLbl');
  if(!wrap || !fill || !lbl) return;
- const elapsed = pollStamp ? Math.max(0, (performance.now() - pollStamp) / 1000) : 0;
+ const elapsed = (pollStamp && !(S && S.paused)) ? Math.max(0, (performance.now() - pollStamp) / 1000) : 0;
  if(S && S.phase === 'question' && S.qtype !== 'info'){
   wrap.style.display = 'flex';
-  if((S.preview_left || 0) > 0){
+  const pvRem = Math.max(0, (S.preview_left || 0) - elapsed);
+  const thkRem = Math.max(0, (S.think_left || 0) - elapsed);
+  if(S.consensus_step === 2){
+   const tot = Math.max(1, S.consensus_total || 20);
+   const cRem = Math.max(0, (S.consensus_left || 0) - elapsed);
+   fill.style.width = Math.min(100, (cRem / tot) * 100) + '%';
+   fill.className = 'ts-fill consensus' + (!S.paused && cRem <= 5 ? ' urgent' : '');
+   lbl.className = 'ts-lbl' + (!S.paused && cRem <= 5 ? ' urgent' : '');
+   lbl.textContent = `🤝 ${Math.ceil(cRem)}s`;
+   const csEl = document.getElementById('consSec');
+   if(csEl) csEl.textContent = Math.ceil(cRem);
+  } else if(pvRem > 0.05){
    const tot = Math.max(1, S.preview_total || 5);
-   const rem = Math.max(0, S.preview_left - (S.paused ? 0 : elapsed));
-   fill.style.width = Math.min(100, (rem / tot) * 100) + '%';
+   fill.style.width = Math.min(100, (pvRem / tot) * 100) + '%';
    fill.className = 'ts-fill preview';
    lbl.className = 'ts-lbl';
-   lbl.textContent = `👀 ${Math.ceil(rem)}s`;
-  } else if(S.qtime > 0){
-   const tot = Math.max(1, S.qtime || 15);
-   const rem = Math.max(0, (S.left || 0) - (S.paused ? 0 : elapsed));
-   const urg = !S.paused && rem <= 5;
-   fill.style.width = Math.min(100, (rem / tot) * 100) + '%';
-   fill.className = 'ts-fill' + (urg ? ' urgent' : '');
-   lbl.className = 'ts-lbl' + (urg ? ' urgent' : '');
-   lbl.textContent = S.paused ? `⏸️ ${Math.ceil(rem)}s` : `⏱️ ${Math.ceil(rem)}s`;
+   lbl.textContent = `👀 ${Math.ceil(pvRem)}s`;
+  } else if(thkRem > 0.05){
+   const tot = Math.max(1, S.think_total || 5);
+   fill.style.width = Math.min(100, (thkRem / tot) * 100) + '%';
+   fill.className = 'ts-fill think';
+   lbl.className = 'ts-lbl';
+   lbl.textContent = `🧠 ${Math.ceil(thkRem)}s`;
+   const tb = document.getElementById('thinkSec');
+   if(tb) tb.textContent = Math.ceil(thkRem);
   } else {
-   wrap.style.display = 'none';
+   const tbBanner = document.getElementById('thinkBanner');
+   if(tbBanner && tbBanner.style.display !== 'none'){
+    tbBanner.style.display = 'none';
+    document.querySelectorAll('[data-think-lock="1"]').forEach(el => {
+     if(el.dataset.ready !== '0') el.disabled = false;
+    });
+   }
+   if(S.qtime > 0){
+    const tot = Math.max(1, S.qtime || 15);
+    const rem = Math.max(0, (S.left || 0) - elapsed);
+    const urg = !S.paused && rem <= 5;
+    fill.style.width = Math.min(100, (rem / tot) * 100) + '%';
+    fill.className = 'ts-fill' + (urg ? ' urgent' : '');
+    lbl.className = 'ts-lbl' + (urg ? ' urgent' : '');
+    lbl.textContent = S.paused ? `⏸️ ${Math.ceil(rem)}s` : `⏱️ ${Math.ceil(rem)}s`;
+   } else {
+    wrap.style.display = 'none';
+   }
   }
  } else if(S && S.phase === 'intro' && (S.intro_total || 0) > 0){
   wrap.style.display = 'flex';
@@ -1211,39 +1751,83 @@ function openCaseFile(){
  ov.style.display = 'block';
 }
 async function sendOpen(){
+ if(isThinkLocked()) return toast('🧠 Thinking time — unlocks in a moment!');
  const e = document.getElementById('openTxt'); if(!e || !e.value.trim()) return;
  const r = await post('/api/answer', {pin, pid, text: e.value.trim()});
- if(!r.ok){ alert(r.error || 'Could not send'); return; }
+ if(!r._httpOk){ toast(r.error || 'Could not send'); return; }
  poll();
 }
 async function vote(rid){
  const r = await post('/api/vote', {pin, pid, rid});
- if(!r.ok) alert(r.error || 'Could not vote');
+ if(!r._httpOk) toast(r.error || 'Could not vote');
  poll();
 }
+
+function outcomeAndShiftHtml(m){
+ let h = '';
+ if(m.shifted_from){
+  h += `<div class="chip-row" style="margin-top:6px"><span class="shift-pill">🔄 Updated from “${esc(m.shifted_from)}”</span></div>`;
+ }
+ if(m.outcome){
+  h += `<div class="outcome-card">🔮 <b>Decision Consequence:</b> ${esc(m.outcome)}</div>`;
+ }
+ return h;
+}
+
+function consensusSummaryHtml(){
+ if(!S.consensus_stats) return '';
+ const cs = S.consensus_stats;
+ const sign = (cs.delta || 0) > 0 ? '+' : '';
+ return `<div class="consensus-card">🤝 <b>Individual vs Team Consensus:</b> ${cs.indiv_pct}% → <b>${cs.team_pct}%</b> (${sign}${cs.delta || 0}%)</div>`;
+}
+
 function caseResultPhone(m){
  const t = S.qtype;
  let body = '';
- if(t==='poll'){
+ if(t==='poll' || t==='scale'){
   const tot = Math.max(1, (S.counts||[]).reduce((a,b)=>a+b,0));
-  const mine = (m.choice != null && S.answers[m.choice]) ? esc(S.answers[m.choice]) : null;
+  const mine = (m.choice != null && S.answers && S.answers[m.choice]) ? esc(t==='scale' ? `${m.choice+1} — ${S.answers[m.choice]}` : S.answers[m.choice]) : null;
   const def = (S.defenders||[]).some(d=>d.name===m.name);
+  const scAvg = (t==='scale' && S.scale_avg != null)
+   ? `<div class="state-sub" style="color:var(--gold);font-weight:850">📏 Class Average: <b>${S.scale_avg}</b> / ${(S.answers||[]).length||5}</div>`
+   : '';
   body = `<div class="state-card" style="padding:16px">
-    <div class="state-title" style="font-size:1.35em">${m.answered?'🗳️ Vote Recorded':'⏰ Time\'s Up'}</div>
+    <div class="state-title" style="font-size:1.35em">${m.answered?(t==='scale'?'📏 Rating Recorded':'🗳️ Vote Recorded'):'⏰ Time\'s Up'}</div>
     ${mine?`<div class="state-sub">You chose: <b>${mine}</b></div>`:''}
+    ${scAvg}
     <div class="chip-row">${m.lens?`<span class="lens-pill">🔎 ${esc(m.lens)}</span>`:''}${def?'<span class="hot-pill">🎤 Picked to defend your side!</span>':''}</div>
-    <div class="rk-list">${S.answers.map((a,i)=>{
+    <div class="rk-list">${(S.answers||[]).map((a,i)=>{
      const pct = Math.round(((S.counts||[])[i]||0)/tot*100);
-     return `<div class="rk-row"><div class="rk-fill" style="width:${pct}%"></div><span class="rk-txt">${sh[i]} ${esc(a)}${(S.lenses&&S.lenses[i])?` <small style="opacity:.78">(${esc(S.lenses[i])})</small>`:''}</span><span class="rk-pct">${pct}%</span></div>`;
+     const pre = t==='scale' ? `<b>${i+1}.</b>` : (sh[i%6]||'');
+     return `<div class="rk-row"><div class="rk-fill" style="width:${pct}%"></div><span class="rk-txt">${pre} ${esc(a)}${(S.lenses&&S.lenses[i])?` <small style="opacity:.78">(${esc(S.lenses[i])})</small>`:''}</span><span class="rk-pct">${pct}%</span></div>`;
     }).join('')}</div>
    </div>`;
  } else if(t==='rank'){
   body = `<div class="state-card" style="padding:16px"><div class="state-title" style="font-size:1.35em">📊 Class Priority Ranking</div><div class="state-sub">${S.rank_n||0} students ranked</div><div class="rk-list">${(S.rank_avg||[]).map((r,i)=>`<div class="rk-row"><span class="rk-txt"><b>#${i+1}</b> ${esc(r.item)}</span><span class="rk-pct">avg ${r.avg}</span></div>`).join('')}</div></div>`;
  } else {
-  const rs = m.responses || [], left = 2 - (m.votes_used || 0);
-  body = `<div class="q-card" style="margin-bottom:8px"><div style="font-weight:900;font-size:1.12em">✍️ Vote for the Most Persuasive</div><div style="font-size:.88em;color:var(--gold);font-weight:800;margin-top:2px">${left>0?left+' vote'+(left>1?'s':'')+' remaining':'All votes used — thanks!'}</div></div>${rs.map(r=>`<div class="resp-ph"><span>“${esc(r.text)}”</span><button ${(r.voted||left<=0)?'disabled':''} onclick="vote(${r.id})">👍 ${r.voted?'Voted':'Vote'}</button></div>`).join('') || '<p style="opacity:.8">No other responses submitted yet.</p>'}`;
+  const rs = m.responses || [];
+  const starredMap = {};
+  (S.responses || []).forEach(x => { if(x.starred) starredMap[x.id] = x; });
+  const maxV = m.votes_max || (t === 'brainstorm' ? 3 : 2);
+  const left = Math.max(0, maxV - (m.votes_used || 0));
+  const starredClass = (S.responses || []).filter(x => x.starred && !rs.some(r => r.id === x.id));
+  const ownSpot = starredClass.length
+   ? starredClass.map(x => `<div class="resp-ph" style="border:2px solid var(--gold)"><div><div class="spot-badge">⭐ Spotlighted by Host</div><div>“${esc(x.text)}”</div></div><b style="color:var(--ink)">👍 ${x.votes||0}</b></div>`).join('')
+   : '';
+  body = `<div class="q-card" style="margin-bottom:8px">
+    <div style="font-weight:900;font-size:1.12em">${t==='brainstorm'?'💡 Vote on Peer Sticky Notes':'✍️ Vote for the Most Persuasive'}</div>
+    <div style="font-size:.88em;color:var(--gold);font-weight:800;margin-top:2px">${left>0?`${left} of ${maxV} vote${left>1?'s':''} remaining`:'All votes used — thanks!'}</div>
+   </div>
+   ${ownSpot}
+   ${rs.map(r=>{
+    const isStar = !!(r.starred || starredMap[r.id]);
+    return `<div class="resp-ph" style="${isStar?'border:2px solid var(--gold)':''}"><div>${isStar?'<div class="spot-badge">⭐ Spotlighted by Host</div>':''}<div>“${esc(r.text)}”</div></div><button ${(r.voted||left<=0)?'disabled':''} onclick="vote(${r.id})">👍 ${r.voted?'Voted':'Vote'}</button></div>`;
+   }).join('') || (!ownSpot ? '<p style="opacity:.8">No peer submissions to vote on yet.</p>' : '')}`;
  }
- return `<div class="chip-row"><span class="qnum">Slide ${S.index+1} of ${S.total}</span></div>${S.question?`<div class="q-card" style="margin:6px 0"><p class="q-stem" style="font-size:1rem">${esc(S.question)}</p></div>`:''}${body}<div style="opacity:.85;margin-top:6px"><small>Score ${m.score} (+${m.gained||0} participation)</small></div>${reactBar()}`;
+ const partFooter = S.scoring_mode === 'survey'
+  ? `<div style="opacity:.85;margin-top:6px"><small>📋 Survey response recorded</small></div>`
+  : `<div style="opacity:.85;margin-top:6px"><small>Score ${m.score} (+${m.gained||0} participation)</small></div>`;
+ return `<div class="chip-row"><span class="qnum">Slide ${S.index+1} of ${S.total}</span></div>${S.question?`<div class="q-card" style="margin:6px 0"><p class="q-stem" style="font-size:1rem">${esc(S.question)}</p></div>`:''}${body}${outcomeAndShiftHtml(m)}${partFooter}${reactBar()}`;
 }
 
 let dead=false;
@@ -1271,18 +1855,24 @@ async function poll(){
 let last='';
 function render(){
   updHud();
+  const ttsKey = `${S.phase||''}:${S.index??-1}`;
+  if(ttsKey !== lastTtsSlide){
+   if(lastTtsSlide) stopSpeech();
+   lastTtsSlide = ttsKey;
+  }
   if(S.pending){
    $.innerHTML = `<div class="state-card"><div class="state-icon">⏳</div><div class="state-title">Waiting for Approval</div><p class="state-sub">Your nickname was sent to the host for quick review.</p></div>`;
    return;
   }
   maybeResultFX();
-  const inPrev = S.phase==='question' && (S.preview_left||0) > 0;
-  const m=S.me||{};
+  const inPrev = S.phase==='question' && S.consensus_step !== 2 && (S.preview_left||0) > 0;
+  const inThinkSrv = S.phase==='question' && S.consensus_step !== 2 && !inPrev && (S.think_left||0) > 0;
+  const m = S.me || {};
   const k = S.phase==='question'
-   ? `q:${S.index}:${inPrev?1:0}:${m.answered?1:0}:${m.active_2x?1:0}:${m.active_shield?1:0}:${m.active_audience?1:0}:${m.confident?1:0}:${(m.hide||[]).join(',')}:${m.wager_pct??''}:${m.frozen?1:0}:${m.hot?(m.hot.pred===null||m.hot.pred===undefined?'n':m.hot.pred?'y':'x'):''}:${m.spectating?1:0}:${m.don?1:0}`
+   ? `q:${S.index}:${S.qtype||''}:${S.revoted?1:0}:${S.allow_tts?1:0}:${S.consensus_step||0}:${inPrev?1:0}:${inThinkSrv?1:0}:${m.answered?1:0}:${m.ideas_sent||0}:${(m.team_split||[]).join(',')}:${m.team_consensus_my??''}:${m.team_consensus_cur??''}:${m.active_2x?1:0}:${m.active_shield?1:0}:${m.active_audience?1:0}:${m.confident?1:0}:${(m.hide||[]).join(',')}:${m.wager_pct??''}:${m.frozen?1:0}:${m.hot?(m.hot.pred===null||m.hot.pred===undefined?'n':m.hot.pred?'y':'x'):''}:${m.spectating?1:0}:${m.don?1:0}`
    : S.phase==='icebreaker' ? `ice:${S.prompt}:${m.word_sent?1:0}`
-   : S.phase==='lobby' ? `lobby:${m.name}:${m.team_name}`
-   : JSON.stringify({...S,left:0,qtime:0,answered:0,team_board:null,preview_left:0,auto_left:0,intro_left:0,reactions:null,n:0,names:null,lobby:null,words:null,word_total:0});
+   : S.phase==='lobby' ? `lobby:${m.name}:${m.team_name}:${m.avatar}:${m.av_hat}:${m.av_ring}`
+   : JSON.stringify({...S,left:0,qtime:0,answered:0,team_board:null,preview_left:0,think_left:0,consensus_left:0,auto_left:0,intro_left:0,reactions:null,n:0,names:null,lobby:null,words:null,word_total:0});
 
   if(k==last){
    if(S.phase==='lobby'){
@@ -1307,7 +1897,7 @@ function render(){
    const tmBadge = m.team_name ? `<div style="margin-top:8px"><span class="team-pill">${esc(m.team_emoji||'')} ${esc(m.team_name)}</span></div>` : '';
    const ctBadge = m.ctag ? `<div style="margin-top:6px"><span class="title-badge">${esc(m.ctag)}</span></div>` : '';
    $.innerHTML=`<div class="state-card">
-     <div style="font-size:3.4em;line-height:1.1">${esc(m.avatar||'🎮')}</div>
+     <div>${avBadgeHtml(m.avatar||'🎮', m.av_hat, m.av_ring, 'lg')}</div>
      <div class="state-title" ${colStyle}>${esc(m.name||'Player')}</div>
      ${ctBadge}${tmBadge}
      <p class="state-sub" style="margin-top:12px">🟢 You're in! Eyes on the host — starting soon…</p>
@@ -1337,9 +1927,11 @@ function render(){
    const t = S.qtype || 'mc';
    if(t==='info'){ $.innerHTML = infoPhone(m); return; }
 
-   if(S.index !== iceBrokenQ && m.frozen && !inPrev && !m.answered){ iceTaps = 0; }
-   if(ordIdx !== S.index){ ordIdx = S.index; ordSel = []; }
-   const showIce = m.frozen && iceBrokenQ !== S.index && !inPrev && !m.answered;
+   ensureQState();
+   const inThink = isThinkLocked();
+   const fullyDone = m.answered && (t !== 'brainstorm' || (m.ideas_sent || 0) >= 3);
+   if(S.index !== iceBrokenQ && m.frozen && !inPrev && !fullyDone && S.consensus_step !== 2){ iceTaps = 0; }
+   const showIce = m.frozen && iceBrokenQ !== S.index && !inPrev && !fullyDone && S.consensus_step !== 2;
    const iceHtml = showIce ? `<div class="ice-overlay" id="iceOv" onclick="tapIce()">
     <div class="ice-cube">⛄</div>
     <h1>YOU'RE FROZEN!</h1>
@@ -1347,9 +1939,11 @@ function render(){
     <p style="font-size:1.35em;font-weight:900;color:#ffdf5d">Tap <span id="iceRem">5</span> times to break free!</p>
    </div>` : '';
 
+   const typePillMap = {poll:'🗳️ Decision Poll', rank:'📊 Priority Rank', open:'✍️ Open Prompt', scale:'📏 Rating Scale', brainstorm:'💡 Brainstorm', multi:'☑️ Multi-Select', match:'🔗 Match Pairs', slider:'🎯 Estimate', pin:'📍 Pin on Image'};
    const chips = [
-    `<span class="qnum">${S.case?'Slide':'Q'} ${S.index+1}/${S.total}</span>`,
-    S.case ? `<span class="wheel-pill">🗳️ ${t==='poll'?'Decision Poll':t==='rank'?'Priority Rank':'Open Prompt'}</span>` : '',
+    `<span class="qnum">${(S.case||S.unscored)?'Slide':'Q'} ${S.index+1}/${S.total}</span>`,
+    typePillMap[t] ? `<span class="wheel-pill">${typePillMap[t]}</span>` : '',
+    (S.pts != null && Number(S.pts) !== 1000 && !S.unscored) ? `<span class="title-badge">⭐ ${S.pts} pts</span>` : '',
     S.speed ? `<span class="speed-pill">⚡ ${S.qtime||S.speed_time||5}s Speed</span>` : '',
     t==='zoom' ? `<span class="wheel-pill">🔍 Zoom Reveal</span>` : '',
     S.wheel_mod ? `<span class="wheel-pill">🎡 ${esc(S.wheel_mod)}</span>` : '',
@@ -1359,7 +1953,8 @@ function render(){
     m.underdog ? `<span class="underdog-pill">🎯 1.5x Underdog</span>` : ''
    ].filter(Boolean).join('');
    const chipRow = `<div class="chip-row">${chips}</div>`;
-   const qCard = questionCardHtml(inPrev);
+   const hideTopImg = (t === 'pin' && !inPrev && !fullyDone && S.consensus_step !== 2);
+   const qCard = questionCardHtml(inPrev, hideTopImg);
    const hot = hotHtml(m);
    const teamP = m.team_prompt ? `<div class="team-prompt">💬 <b>Team talk:</b> ${esc(m.team_prompt)}</div>` : '';
    const donUi = (S.dbl && !m.answered) ? `<button class="don-btn ${m.don?'on':''}" onclick="toggleDon()">💥 ${m.don?'Double or Nothing ON (2x / −400)':'Double or Nothing? (2x / −400)'}</button>` : '';
@@ -1371,44 +1966,137 @@ function render(){
      ${[0,50,100].map(pct=>`<button class="wager-btn ${curW===pct?'sel':''}" onclick="setWager(${pct})">${pct}% (${Math.round(stake*pct/100)})</button>`).join('')}
     </div>
    </div>` : '';
-   const confBtn = (!S.boss && !S.tiebreak && !S.case && !S.case_game && !m.answered) ? `<button class="conf-btn ${m.confident?'on':''}" onclick="toggleConf()">🔥 ${m.confident?'Confidence Bet ON (+250 / −150)':'Bet on Yourself (+250 / −150)'}</button>` : '';
+   const confBtn = (!S.boss && !S.tiebreak && !S.case && !S.unscored && !S.case_game && S.scoring_mode !== 'survey' && !m.answered) ? `<button class="conf-btn ${m.confident?'on':''}" onclick="toggleConf()">🔥 ${m.confident?'Confidence Bet ON (+250 / −150)':'Bet on Yourself (+250 / −150)'}</button>` : '';
 
    if(m.spectating){
     $.innerHTML=`<div class="q-screen">${chipRow}${qCard}<div class="state-card"><div class="state-icon">⚔️</div><div class="state-title">Sudden Death Tiebreaker</div><p class="state-sub">Only the tied leaders answer this round.</p></div>${reactBar()}</div>`;
-   } else if(m.answered){
+   } else if(S.consensus_step === 2){
+    const cRem = Math.max(0, Math.ceil(S.consensus_left || 0));
+    const split = m.team_split || [];
+    const myVote = m.team_consensus_my;
+    const curPl = m.team_consensus_cur;
+    const tfCls = (S.answers && S.answers.length === 2) ? ' tf-grid' : '';
+    $.innerHTML = `<div class="q-screen">
+     ${chipRow}${qCard}
+     <div class="consensus-banner">
+      <div><b>🤝 Phase 2: Team Consensus (<span id="consSec">${cRem}</span>s)</b></div>
+      <div style="font-size:.88em;opacity:.92;margin-top:2px">${esc(m.team_emoji||'')} <b>${esc(m.team_name||'Your Team')}</b> — compare Phase 1 picks &amp; tap to lock in your shared team vote!</div>
+     </div>
+     <div class="ans-zone">
+      <div class="grid${tfCls}">
+       ${(S.answers||[]).map((a,i)=>{
+        const cnt = split[i] || 0;
+        const isMy = myVote === i;
+        const isPl = curPl === i;
+        return `<button class="c${i%6} ${isMy?'csel':''}" onclick="teamAns(${i})">
+         ${S.aimg&&S.aimg[i]?`<img src="${esc(S.aimg[i])}" alt="">`:''}
+         <span class="sh">${sh[i%6]||''}</span>
+         <span>${esc(a)}</span>
+         <span class="aud-badge">👥 ${cnt} in Phase 1${isPl?' · 👑 Team Lead':''}${isMy?' · ✓ Yours':''}</span>
+        </button>`;
+       }).join('')}
+      </div>
+     </div>
+    </div>`;
+   } else if(fullyDone){
     const denom = S.n_active != null ? S.n_active : (S.n || 0);
-    const picked = (m.choice != null && S.answers && S.answers[m.choice]) ? `<div class="ans-reveal-pill">${sh[m.choice]||''} ${esc(S.answers[m.choice])}</div>` : '';
-    $.innerHTML=`<div class="q-screen">${chipRow}${qCard}<div class="state-card"><div class="state-icon">✅</div><div class="state-title">Answer Locked In!</div>${picked}<p class="state-sub" id="waitCnt">${denom?`${S.answered||1} of ${denom} answered`:'Waiting for everyone else…'}</p></div>${hot}${reactBar()}</div>`;
+    let picked = '';
+    if(t === 'brainstorm' && (m.ideas_list || []).length){
+     picked = `<div class="sticky-list" style="margin-top:8px">${m.ideas_list.map((idTxt, idx)=>`<div class="sticky-note">💡 ${idx+1}/3: ${esc(idTxt)}</div>`).join('')}</div>`;
+    } else if(m.given){
+     picked = `<div class="ans-reveal-pill">${esc(m.given)}</div>`;
+    } else if(m.choice != null && S.answers && S.answers[m.choice]){
+     picked = `<div class="ans-reveal-pill">${sh[m.choice%6]||''} ${esc(S.answers[m.choice])}</div>`;
+    }
+    $.innerHTML=`<div class="q-screen">${chipRow}${qCard}<div class="state-card"><div class="state-icon">✅</div><div class="state-title">${t==='brainstorm'?'All 3 Sticky Notes Posted!':'Answer Locked In!'}</div>${picked}<p class="state-sub" id="waitCnt">${denom?`${S.answered||1} of ${denom} answered`:'Waiting for everyone else…'}</p></div>${hot}${reactBar()}</div>`;
    } else if(inPrev){
-    $.innerHTML=`<div class="q-screen">${chipRow}${qCard}<div class="state-card" style="padding:16px"><div class="state-icon" style="font-size:2em">👀</div><div class="state-title" style="font-size:1.3em">Read the Question</div><p class="state-sub">Answer tiles unlock when the reading bar finishes…</p></div>${hot}${teamP}${wagerBox}${donUi||confBtn?`<div class="tac-dock">${donUi}${confBtn}</div>`:''}${rivalHtml(m)}</div>`;
+    $.innerHTML=`<div class="q-screen">${chipRow}${qCard}<div class="state-card" style="padding:16px"><div class="state-icon" style="font-size:2em">👀</div><div class="state-title" style="font-size:1.3em">Read the Question</div><p class="state-sub">Answer tiles unlock when the reading bar finishes…</p></div>${hot}${teamP}${wagerBox}${donUi||confBtn?`<div class="tac-dock">${donUi}${confBtn}</div>`:''}${!S.hide_board?rivalHtml(m):''}</div>`;
    } else {
     const hide = m.hide || [];
     const pcts = m.audience_pcts || null;
     const choiceQ = (t==='mc' || t==='tf' || t==='zoom');
-    const puRow = (S.case || S.case_game) ? '' : `<div class="pu-bar">
+    const puRow = (S.case || S.unscored || S.case_game || S.scoring_mode === 'survey') ? '' : `<div class="pu-bar">
      ${choiceQ?`<button class="pu-btn" ${m.pu_5050?'':'disabled'} onclick="usePu('5050')">✂️ 50/50</button>`:''}
      <button class="pu-btn ${m.active_2x?'active':''}" ${m.pu_2x||m.active_2x?'':'disabled'} onclick="usePu('2x')">⚡ ${m.active_2x?'2x ON':'2x'}</button>
      <button class="pu-btn ${m.active_shield?'active':''}" ${m.pu_shield||m.active_shield?'':'disabled'} onclick="usePu('shield')">🛡️ ${m.active_shield?'Saved':'Shield'}</button>
      ${choiceQ?`<button class="pu-btn ${m.active_audience?'active':''}" ${m.pu_audience||m.active_audience?'':'disabled'} onclick="usePu('audience')">📊 ${m.active_audience?'Live':'Poll'}</button>`:''}
     </div>`;
     const dock = (puRow || donUi || confBtn) ? `<div class="tac-dock">${puRow}${donUi}${confBtn}</div>` : '';
+    const elapsedNow = S.paused ? 0 : (pollStamp ? Math.max(0, (performance.now() - pollStamp) / 1000) : 0);
+    const thkSec = Math.max(1, Math.ceil((S.think_left || 0) - elapsedNow));
+    const thinkBanner = inThink
+     ? `<div id="thinkBanner" class="think-banner">🧠 <b>Thinking Time: <span id="thinkSec">${thkSec}</span>s</b> — Read carefully, buttons unlock soon!</div>`
+     : '';
 
     let inputUi;
     if(t==='open'){
-     inputUi = `<div class="ans-zone"><textarea id="openTxt" class="txtans" rows="4" maxlength="240" placeholder="Write 1–2 persuasive sentences (anonymous)…" oninput="const c=document.getElementById('openCnt');if(c)c.textContent=this.value.length+' / 240'"></textarea><div class="char-cnt" id="openCnt">0 / 240</div><button class="go" onclick="sendOpen()">✍️ Submit Response</button></div>`;
+     inputUi = `<div class="ans-zone"><textarea id="openTxt" class="txtans" rows="4" maxlength="240" placeholder="Write 1–2 persuasive sentences (anonymous)…" oninput="const c=document.getElementById('openCnt');if(c)c.textContent=this.value.length+' / 240'"></textarea><div class="char-cnt" id="openCnt">0 / 240</div><button class="go" data-think-lock="1" data-ready="1" ${inThink?'disabled':''} onclick="sendOpen()">✍️ Submit Response</button></div>`;
+    } else if(t==='brainstorm'){
+     const sent = m.ideas_sent || 0;
+     const list = m.ideas_list || [];
+     inputUi = `<div class="ans-zone">
+      ${list.length ? `<div class="sticky-list">${list.map((txt, idx)=>`<div class="sticky-note">💡 ${idx+1}/3: ${esc(txt)}</div>`).join('')}</div>` : ''}
+      <textarea id="bsTxt" class="txtans" rows="2" maxlength="120" placeholder="Sticky note idea ${sent+1} of 3 (up to 120 chars)…" oninput="const c=document.getElementById('bsCnt');if(c)c.textContent=this.value.length+' / 120'"></textarea>
+      <div class="char-cnt" id="bsCnt">0 / 120</div>
+      <button class="go" data-think-lock="1" data-ready="1" ${inThink?'disabled':''} onclick="sendBrainstorm()">💡 Post Sticky Note (${sent+1}/3)</button>
+     </div>`;
     } else if(t==='text'){
-     inputUi = `<div class="ans-zone"><input id="txtAns" class="txtans" placeholder="Type your answer…" autocomplete="off" autocapitalize="off" onkeydown="if(event.key==='Enter')sendText()"><button class="go" onclick="sendText()">✅ Submit Answer</button></div>`;
+     inputUi = `<div class="ans-zone"><input id="txtAns" class="txtans" placeholder="Type your answer…" autocomplete="off" autocapitalize="off" onkeydown="if(event.key==='Enter')sendText()"><button class="go" data-think-lock="1" data-ready="1" ${inThink?'disabled':''} onclick="sendText()">✅ Submit Answer</button></div>`;
     } else if(t==='order' || t==='rank'){
      inputUi = `<div class="ans-zone"><div id="ordWrap"></div></div>`;
+    } else if(t==='multi'){
+     const ready = multiSel.length > 0;
+     inputUi = `<div class="ans-zone">
+      <div style="font-size:.86em;opacity:.9;margin-bottom:5px;font-weight:750">Select 1 or more options${S.multi_partial?' (partial credit on)':''}, then tap Submit:</div>
+      <div class="grid">${(S.answers||[]).map((a,i)=>{
+       const on = multiSel.includes(i);
+       return `<button id="mOpt${i}" class="c${i%6} ${on?'msel':''}" onclick="toggleMultiOpt(${i})">${S.aimg&&S.aimg[i]?`<img src="${esc(S.aimg[i])}" alt="">`:''}<span class="sh"><span class="mchk">${on?'☑':'☐'}</span></span><span>${esc(a)}</span></button>`;
+      }).join('')}</div>
+      <button class="go" id="multiSubBtn" style="margin-top:8px" data-think-lock="1" data-ready="${ready?1:0}" ${(inThink || !ready)?'disabled':''} onclick="submitMulti()">✅ Submit Selection (${multiSel.length})</button>
+     </div>`;
+    } else if(t==='match'){
+     inputUi = `<div class="ans-zone"><div id="matchWrap"></div></div>`;
+    } else if(t==='slider'){
+     const sc = S.slider_cfg || {min:0, max:100, step:1, unit:''};
+     const u = sc.unit ? ' ' + esc(sc.unit) : '';
+     inputUi = `<div class="ans-zone"><div class="slider-box">
+      <div class="slider-val" id="slReadout">${sliderVal}${u}</div>
+      <input type="range" id="slRange" min="${sc.min}" max="${sc.max}" step="${sc.step}" value="${sliderVal}" oninput="syncPhoneSlider(this.value)">
+      <div class="slider-ends"><span>${sc.min}${u}</span><span>${sc.max}${u}</span></div>
+      <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:10px">
+       <input type="number" id="slNum" class="slider-num" min="${sc.min}" max="${sc.max}" step="${sc.step}" value="${sliderVal}" oninput="syncPhoneSlider(this.value)">
+       ${sc.unit?`<span style="font-weight:850">${esc(sc.unit)}</span>`:''}
+      </div>
+      <button class="go" data-think-lock="1" data-ready="1" ${inThink?'disabled':''} onclick="submitSlider()">🎯 Lock In Estimate</button>
+     </div></div>`;
+    } else if(t==='pin'){
+     const hasPin = !!pinXY;
+     inputUi = `<div class="ans-zone"><div class="pin-wrap">
+      <div class="pin-stage" id="pinStage" onclick="tapPinStage(event)">
+       <img src="${esc(S.img||'')}" alt="Tap target" draggable="false">
+       <div class="pin-marker" id="pinMarker" style="${hasPin?`display:block;left:${pinXY[0]}%;top:${pinXY[1]}%`:'display:none'}"></div>
+      </div>
+      <div id="pinCoord" style="font-size:.82em;opacity:.88;margin:6px 0 8px;font-weight:750">${hasPin?`📍 Pin at (${Math.round(pinXY[0])}%, ${Math.round(pinXY[1])}%) — tap image to adjust`:'Tap anywhere on the image to place your pin'}</div>
+      <button class="go" id="pinSubBtn" data-think-lock="1" data-ready="${hasPin?1:0}" ${(inThink || !hasPin)?'disabled':''} onclick="submitPin()">📍 Lock In Pin</button>
+     </div></div>`;
+    } else if(t==='scale'){
+     const lbls = S.scale_labels || ['Low', 'High'];
+     inputUi = `<div class="ans-zone"><div class="scale-wrap">
+      <div class="scale-ends"><span>⬅ ${esc(lbls[0]||'Low')}</span><span>${esc(lbls[1]||'High')} ➡</span></div>
+      <div class="scale-grid">
+       ${(S.answers||[]).map((a,i)=>`<button class="scale-btn" data-think-lock="1" data-ready="1" ${inThink?'disabled':''} onclick="ans(${i})"><b>${i+1}</b><small>${esc(a)}</small></button>`).join('')}
+      </div>
+     </div></div>`;
     } else {
      const tfCls = (S.answers && S.answers.length === 2) ? ' tf-grid' : '';
-     inputUi = `<div class="ans-zone"><div class="grid${tfCls}">${S.answers.map((a,i)=>`<button class="c${i%4} ${hide.includes(i)?'elim':''}" onclick="ans(${i})">${S.aimg&&S.aimg[i]?`<img src="${esc(S.aimg[i])}" alt="">`:''}<span class="sh">${sh[i]||''}</span><span>${esc(a)}</span>${pcts?`<span class="aud-badge" id="aud${i}">📊 ${pcts[i]}%</span>`:''}</button>`).join('')}</div></div>`;
+     inputUi = `<div class="ans-zone"><div class="grid${tfCls}">${(S.answers||[]).map((a,i)=>`<button class="c${i%6} ${hide.includes(i)?'elim':''}" data-think-lock="1" data-ready="1" ${inThink?'disabled':''} onclick="ans(${i})">${S.aimg&&S.aimg[i]?`<img src="${esc(S.aimg[i])}" alt="">`:''}<span class="sh">${sh[i%6]||''}</span><span>${esc(a)}</span>${pcts?`<span class="aud-badge" id="aud${i}">📊 ${pcts[i]}%</span>`:''}</button>`).join('')}</div></div>`;
     }
-    $.innerHTML=`${iceHtml}<div class="q-screen">${chipRow}${qCard}${hot}${teamP}${wagerBox}${inputUi}${dock}</div>`;
+    $.innerHTML=`${iceHtml}<div class="q-screen">${chipRow}${qCard}${thinkBanner}${hot}${teamP}${wagerBox}${inputUi}${dock}</div>`;
     if(t==='order' || t==='rank') drawOrd();
-    if(t==='text'){ const e=document.getElementById('txtAns'); if(e) e.focus(); }
+    if(t==='match') drawMatchPhone();
+    if(t==='text' && !inThink){ const e=document.getElementById('txtAns'); if(e) e.focus(); }
    }
-  } else if(S.phase=='results' && S.case && !(m.spectating)){
+  } else if(S.phase=='results' && (S.case || S.unscored) && !(m.spectating)){
    $.innerHTML = caseResultPhone(m);
   } else if(S.phase=='results'){
    if(m.spectating){
@@ -1424,57 +2112,124 @@ function render(){
      if(m.hot.you) hotMsg = `<div class="state-sub" style="color:#ffd180">🔥 Hot Seat: ${m.hot.ok?'You nailed it! (+400)':'Missed this one'}</div>`;
      else if(m.hot.pred!==null && m.hot.pred!==undefined) hotMsg = `<div class="state-sub" style="color:#ffd180">🔥 Hot Seat call: ${m.hot.pred===m.hot.ok?'🎯 Spot on! (+200)':'Missed prediction'}</div>`;
     }
+    const qt = S.qtype || 'mc';
     let rightTxt = '';
-    if(S.qtype==='text') rightTxt = (S.answers_correct||[''])[0] || '';
-    else if(S.qtype==='order') rightTxt = (S.answers_correct||[]).join(' → ');
-    else if(S.correct != null && S.correct >= 0 && S.answers && S.answers[S.correct]) rightTxt = (sh[S.correct]||'') + ' ' + S.answers[S.correct];
+    if(S.all_correct) rightTxt = 'Any option (all accepted)';
+    else if(qt==='text') rightTxt = (S.answers_correct||[''])[0] || '';
+    else if(qt==='order') rightTxt = (S.answers_correct||[]).join(' → ');
+    else if(qt==='multi'){
+     const cm = S.correct_multi || [S.correct||0];
+     const opts = S.answers_correct || S.answers || [];
+     rightTxt = cm.map(k => (sh[k%6]||'') + ' ' + (opts[k]||'')).join(' + ');
+    } else if(qt==='match' && Array.isArray(S.pairs_correct)){
+     rightTxt = S.pairs_correct.map(p => `${p.l} → ${p.r}`).join(', ');
+    } else if(qt==='slider' && S.slider_res){
+     const sr = S.slider_res, u = sr.unit ? ' ' + sr.unit : '';
+     rightTxt = sr.margin ? `${sr.target}${u} (±${sr.margin})` : `${sr.target}${u}`;
+    } else if(qt==='pin' && S.pin_target){
+     rightTxt = `Target zone (${Math.round(S.pin_target.x)}%, ${Math.round(S.pin_target.y)}%)`;
+    } else if(Array.isArray(S.correct_multi) && S.correct_multi.length > 1){
+     const opts = S.answers_correct || S.answers || [];
+     rightTxt = S.correct_multi.map(k => (sh[k%6]||'') + ' ' + (opts[k]||'')).join(' OR ');
+    } else if(S.correct != null && S.correct >= 0 && S.answers && S.answers[S.correct]){
+     rightTxt = (sh[S.correct%6]||'') + ' ' + S.answers[S.correct];
+    }
+
+    const pinResVisual = (qt === 'pin' && S.img && S.pin_target) ? (()=>{
+     const pt = S.pin_target, r = Math.max(1, Number(pt.r)||12);
+     const myP = m.pin_xy;
+     return `<div style="margin-top:10px"><div class="pin-stage" style="cursor:default">
+      <img src="${esc(S.img)}" alt="" style="max-height:190px">
+      <svg class="pin-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+       <ellipse cx="${pt.x}" cy="${pt.y}" rx="${r}" ry="${r}" fill="rgba(46,204,113,0.34)" stroke="#69f0ae" stroke-width="1.3"/>
+      </svg>
+      ${myP?`<div class="pin-marker" style="left:${myP[0]}%;top:${myP[1]}%"></div>`:''}
+     </div></div>`;
+    })() : '';
+
     const reveal = (!m.correct && rightTxt) ? `<div class="ans-reveal-pill">✅ Answer: ${esc(rightTxt)}</div>` : '';
-    const gTxt = m.gained >= 0 ? '+'+m.gained : m.gained;
-    const canSab = S.sabotage_enabled && !S.is_last && m.pu_freeze && m.score >= 200 && S.n > 1;
+    const isSurvey = S.scoring_mode === 'survey';
+    const isPartial = !m.correct && !!m.partial;
+    const gTxt = isSurvey ? '' : (' ' + (m.gained >= 0 ? '+'+m.gained : m.gained) + (isPartial ? ' pts' : ''));
+    const cardCls = !m.answered ? 'no' : m.correct ? 'ok' : isPartial ? 'partial' : 'no';
+    const iconTxt = !m.answered ? '⏰' : m.correct ? '✅' : isPartial ? '⚡' : '❌';
+    const titleTxt = !m.answered
+     ? "Time's Up"
+     : m.correct
+       ? `Correct!${gTxt}`
+       : isPartial
+         ? `⚡ Partial Credit!${gTxt}`
+         : `Incorrect${(!isSurvey && m.gained<0)?` (${m.gained})`:''}`;
+
+    const canSab = S.sabotage_enabled && !S.hide_board && !S.is_last && m.pu_freeze && m.score >= 200 && S.n > 1;
     const sabBtn = canSab ? `<div style="margin-top:8px"><button class="sab-btn" onclick="sabotage()">⛄ Snowball Leader (−200 pts)</button></div>` : m.ice_sent ? `<div style="margin-top:6px"><small style="color:#80deea;font-weight:800">⛄ Snowball queued for the leader!</small></div>` : '';
     const bonusChips = [st, whMsg, cfMsg, tbMsg, shMsg].filter(Boolean).join('');
+    const scoreLine = S.scoring_mode === 'percent'
+     ? `Grade: <span style="color:var(--gold)">${m.pct??0}%</span> (${m.score} pts)${(!S.hide_board && m.rank)?` &middot; Rank #${m.rank}`:''}`
+     : isSurvey
+       ? `Accuracy so far: <span style="color:var(--gold)">${m.pct??0}%</span>`
+       : `Total Score: <span style="color:var(--gold)">${m.score}</span> (${m.pct??0}%)${(!S.hide_board && m.rank)?` &middot; Rank #${m.rank}`:''}`;
 
     $.innerHTML=`<div class="chip-row" style="margin-bottom:6px"><span class="qnum">Question ${S.index+1} of ${S.total}</span></div>
      ${S.question?`<div class="q-card" style="margin-bottom:8px"><p class="q-stem" style="font-size:.98rem">${esc(S.question)}</p></div>`:''}
-     <div class="state-card ${m.correct?'ok':'no'}" style="margin:0">
-      <div class="state-icon">${!m.answered?'⏰':m.correct?'✅':'❌'}</div>
-      <div class="state-title">${!m.answered?"Time's Up":m.correct?'Correct! '+gTxt:'Incorrect'+(m.gained<0?' ('+m.gained+')':'')}</div>
+     <div class="state-card ${cardCls}" style="margin:0">
+      <div class="state-icon">${iconTxt}</div>
+      <div class="state-title">${titleTxt}</div>
       ${bonusChips?`<div class="chip-row" style="margin-top:8px">${bonusChips}</div>`:''}
-      ${hotMsg}${reveal}
-      <div class="state-sub" style="margin-top:8px;font-weight:800">Total Score: <span style="color:var(--gold)">${m.score}</span>${m.rank?` &middot; Rank #${m.rank}`:''}</div>
+      ${hotMsg}${reveal}${pinResVisual}
+      <div class="state-sub" style="margin-top:8px;font-weight:800">${scoreLine}</div>
      </div>
-     ${rivalHtml(m)}${sabBtn}${stealUi(m)}
+     ${outcomeAndShiftHtml(m)}${consensusSummaryHtml()}
+     ${!S.hide_board?rivalHtml(m):''}${sabBtn}${stealUi(m)}
      ${S.quote?`<blockquote>&ldquo;${esc(S.quote)}&rdquo;${S.source?`<cite>&mdash; ${esc(S.source)}</cite>`:''}</blockquote>`:''}
      ${reactBar()}`;
    }
   } else if(S.phase=='board'){
-   const canSab = S.sabotage_enabled && m.pu_freeze && m.score >= 200 && S.n > 1;
-   const sabBtn = canSab ? `<div style="margin-top:10px"><button class="sab-btn" onclick="sabotage()">⛄ Throw Snowball at Leader (−200 pts)</button></div>` : m.ice_sent ? `<div style="margin-top:8px"><small style="color:#80deea;font-weight:800">⛄ Snowball thrown at the leader for next round!</small></div>` : '';
-   $.innerHTML=`<div class="state-card">
-     <div class="state-icon">🏆</div>
-     <div class="state-title" style="font-size:2em">Rank #${m.rank}</div>
-     <div class="state-sub" style="font-size:1.15em;font-weight:850;color:var(--gold)">${m.score} points</div>
-     <div class="chip-row" style="margin-top:8px">
-      ${m.title?`<span class="title-badge">${esc(m.title)}</span>`:''}
-      ${m.streak>=2?`<span class="streak-pill">🔥 ${m.streak} Streak</span>`:''}
-     </div>
-     ${rivalHtml(m)}${sabBtn}
-    </div>${reactBar()}`;
+   if(S.hide_board){
+    $.innerHTML=`<div class="state-card">
+      <div class="state-icon">🙈</div>
+      <div class="state-title" style="font-size:1.45em">Live Standings Hidden</div>
+      <div class="state-sub">Rankings stay under wraps until the Final Podium!</div>
+      <div class="state-sub" style="font-weight:850;color:var(--gold)">Your Grade: ${m.pct??0}% &middot; ${m.score} pts</div>
+     </div>${reactBar()}`;
+   } else {
+    const canSab = S.sabotage_enabled && m.pu_freeze && m.score >= 200 && S.n > 1;
+    const sabBtn = canSab ? `<div style="margin-top:10px"><button class="sab-btn" onclick="sabotage()">⛄ Throw Snowball at Leader (−200 pts)</button></div>` : m.ice_sent ? `<div style="margin-top:8px"><small style="color:#80deea;font-weight:800">⛄ Snowball thrown at the leader for next round!</small></div>` : '';
+    const subMetric = S.scoring_mode === 'percent' ? `${m.pct??0}% Grade · ${m.score} pts` : `${m.score} points · ${m.pct??0}%`;
+    $.innerHTML=`<div class="state-card">
+      <div class="state-icon">🏆</div>
+      <div class="state-title" style="font-size:2em">Rank #${m.rank}</div>
+      <div class="state-sub" style="font-size:1.15em;font-weight:850;color:var(--gold)">${subMetric}</div>
+      <div class="chip-row" style="margin-top:8px">
+       ${m.title?`<span class="title-badge">${esc(m.title)}</span>`:''}
+       ${m.streak>=2?`<span class="streak-pill">🔥 ${m.streak} Streak</span>`:''}
+      </div>
+      ${rivalHtml(m)}${sabBtn}
+     </div>${reactBar()}`;
+   }
   } else {
    const rep = m.report || {};
+   const accVal = rep.accuracy != null ? rep.accuracy : (m.pct || 0);
    const tClass = m.rank===1?'':m.rank===2?'silver':m.rank===3?'bronze':'';
-   const trophyHtml = m.rank <= 3 ? `<div class="trophy-card ${tClass}">
+   const trophyHtml = (m.rank <= 3 && S.scoring_mode !== 'survey') ? `<div class="trophy-card ${tClass}">
     <div style="font-size:1.7em">${m.rank===1?'🥇 1st Place Champion!':m.rank===2?'🥈 2nd Place Podium!':'🥉 3rd Place Podium!'}</div>
-    <div style="margin-top:4px">${tag} &middot; ${m.score} pts</div>
-    <button onclick="saveCert('${esc(m.name)}',${m.rank},${m.score},${rep.accuracy||0})">🏅 Save Winner Certificate</button>
-   </div>` : `<div class="state-card" style="margin:6px 0;padding:16px"><div class="state-title">🎉 Game Complete!</div><div class="state-sub" style="font-weight:850">Placed <b>#${m.rank}</b> &middot; <span style="color:var(--gold)">${m.score} pts</span></div></div>`;
+    <div style="margin-top:4px">${tag} &middot; ${S.scoring_mode==='percent'?`${accVal}% (${m.score} pts)`:`${m.score} pts (${accVal}%)`}</div>
+    <button onclick="saveCert('${esc(m.name)}',${m.rank},${m.score},${accVal})">🏅 Save Winner Certificate</button>
+   </div>` : `<div class="state-card" style="margin:6px 0;padding:16px"><div class="state-title">🎉 Session Complete!</div><div class="state-sub" style="font-weight:850">${S.scoring_mode==='survey'?'Thank you for participating!':`Placed <b>#${m.rank}</b> &middot; <span style="color:var(--gold)">${accVal}% Grade (${m.score} pts)</span>`}</div></div>`;
+
+   const cal = rep.calibration;
+   const calibHtml = (cal && cal.conf_n > 0)
+    ? `<div class="calib-card">🎯 <b>Confidence Calibration:</b> Confident bets: <b>${cal.conf_pct}% right</b> (${cal.conf_ok}/${cal.conf_n}) &middot; Calm answers: <b>${cal.calm_pct != null ? cal.calm_pct + '%' : '—'}</b></div>`
+    : '';
    const missedHtml = (rep.missed && rep.missed.length) ? `<div style="margin-top:6px"><b>📝 Questions to Review:</b>${rep.missed.map(x=>`<div class="missed-item"><b>Q${x.num}:</b> ${esc(x.q)}<br><span style="color:#ff9b9b">You: ${esc(x.your_ans)}</span> &middot; <span style="color:#7dff6b">✅ ${esc(x.correct_ans)}</span></div>`).join('')}</div>` : `<div style="text-align:center;color:#7dff6b;font-weight:850;padding:4px 0">🌟 Perfect Score! Every question right!</div>`;
    const repHtml = rep.total ? `<div class="report-card">
+    <div style="text-align:center;margin-bottom:10px"><span class="title-badge" style="font-size:1.05em;padding:5px 14px">📊 Final Grade: ${accVal}%</span></div>
     <div class="report-stats">
-     <div class="stat-pill"><b>${rep.accuracy}%</b>${rep.correct}/${rep.total} Right</div>
+     <div class="stat-pill"><b>${accVal}%</b>${rep.correct}/${rep.total} Right</div>
      <div class="stat-pill"><b>🔥 ${rep.max_streak||0}</b>Best Streak</div>
      <div class="stat-pill"><b>${rep.fastest!=null?rep.fastest+'s':'—'}</b>Fastest</div>
     </div>
+    ${calibHtml}
     ${missedHtml}
    </div>` : '';
    $.innerHTML=`${trophyHtml}${repHtml}<div class="join-links"><a class="plink" href="/play" onclick="try{localStorage.removeItem('brainrush_session')}catch(e){}">🔁 Join New Game</a><a class="plink" href="/practice">🧑‍🎓 Solo Practice</a></div>${reactBar()}`;

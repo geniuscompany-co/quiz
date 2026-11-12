@@ -220,6 +220,47 @@ main.both{grid-template-columns:1.08fr .92fr}
   color:var(--gold);
 }
 .row.top1 .rk{background:var(--gold);color:var(--ink)}
+.av-wrap{
+  position:relative;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:1.78em;
+  height:1.78em;
+  border-radius:50%;
+  background:rgba(255,255,255,.1);
+  flex-shrink:0;
+  vertical-align:middle;
+  margin-right:3px;
+}
+.av-wrap.ringed{
+  border:2.5px solid var(--rc,#ffd54f);
+  box-shadow:0 0 12px var(--rc,#ffd54f);
+}
+.av-wrap.rainbow{
+  border:2.5px solid #ffdf5d;
+  box-shadow:0 0 12px #ff6eb4,0 0 20px #40c4ff;
+}
+.av-hat{
+  position:absolute;
+  top:-.5em;
+  right:-.22em;
+  font-size:.66em;
+  line-height:1;
+  filter:drop-shadow(0 1px 2px rgba(0,0,0,.65));
+  pointer-events:none;
+}
+.sc-grp{display:inline-flex;align-items:center;gap:8px;flex-shrink:0}
+.pct-sub{
+  font-size:.76em;
+  font-weight:850;
+  color:#b9f6ca;
+  background:rgba(105,240,174,.14);
+  border:1px solid rgba(105,240,174,.35);
+  padding:3px 10px;
+  border-radius:99px;
+  white-space:nowrap;
+}
 .row b.sc{
   font-size:1.14em;
   color:var(--gold);
@@ -337,24 +378,54 @@ applyA11y();
 const cols = ['#e21b3c','#1368ce','#d89e00','#26890c','#8e24aa','#00897b'];
 const cbCols = ['#D55E00','#0072B2','#CC79A7','#009E73','#56B4E9','#E69F00'];
 
+const RING_MAP = {gold:'#ffd54f', neon:'#7dff6b', ice:'#40c4ff', fire:'#ff6d00', violet:'#b388ff', pink:'#ff6eb4', ruby:'#ff5252'};
+function avHtml(r){
+  if(!r.avatar && !r.av_hat && !r.av_ring) return '';
+  const rawRing = String(r.av_ring || '');
+  const isRainbow = rawRing === 'rainbow';
+  const rc = rawRing.startsWith('#') ? rawRing : (RING_MAP[rawRing] || '');
+  const cls = isRainbow ? 'av-wrap rainbow' : (rc ? 'av-wrap ringed' : 'av-wrap');
+  const st = rc ? ` style="--rc:${esc(rc)}"` : '';
+  return `<span class="${cls}"${st}><span>${esc(r.avatar || '🎮')}</span>${r.av_hat ? `<span class="av-hat">${esc(r.av_hat)}</span>` : ''}</span>`;
+}
+
 function board(S){
+  if(S.hide_board && S.phase !== 'final'){
+    return `<div class="center" style="font-size:1.2em;padding:42px 18px">
+      <div style="font-size:2.2em;line-height:1;margin-bottom:8px">🙈</div>
+      <div style="font-weight:900">🙈 Live Standings Hidden Until Final Podium</div>
+      <div style="font-size:.78em;opacity:.82;margin-top:8px">Focus on every question — full standings reveal at the end!</div>
+    </div>`;
+  }
   if(!S.board || !S.board.length){
     return `<div class="center" style="font-size:1.15em;opacity:.82;padding:36px 16px">⏳ Standings appear right after Question 1!</div>`;
   }
   const medals = {1:'🥇', 2:'🥈', 3:'🥉'};
+  const isPctMode = S.scoring_mode === 'percent';
+  const isSurvey = S.scoring_mode === 'survey';
   return S.board.map(r => {
     const topCls = r.rank === 1 ? 'top1' : r.rank === 2 ? 'top2' : r.rank === 3 ? 'top3' : '';
     const rkLbl = medals[r.rank] || r.rank;
     const colStyle = r.color ? ` style="color:${esc(r.color)};text-shadow:0 1px 3px rgba(0,0,0,.6)"` : '';
+    const hasPct = (r.graded_n || 0) > 0 || isPctMode;
+    let scHtml;
+    if(isPctMode){
+      scHtml = `<span class="sc-grp">${r.score ? `<span class="pct-sub">${r.score} pts</span>` : ''}<b class="sc">${r.pct ?? 0}%</b></span>`;
+    } else if(isSurvey){
+      scHtml = `<span class="sc-grp"><span class="pct-sub">📋 Survey</span></span>`;
+    } else {
+      scHtml = `<span class="sc-grp">${hasPct ? `<span class="pct-sub">${r.pct ?? 0}%</span>` : ''}<b class="sc">${r.score}</b></span>`;
+    }
     return `<div class="row ${topCls}">
       <span class="row-left">
         <span class="rk">${rkLbl}</span>
-        <span>${esc(r.team_emoji ? r.team_emoji + ' ' : '')}${esc(r.avatar ? r.avatar + ' ' : '')}<span${colStyle}>${esc(r.name)}</span></span>
+        ${avHtml(r)}
+        <span>${esc(r.team_emoji ? r.team_emoji + ' ' : '')}<span${colStyle}>${esc(r.name)}</span></span>
         ${r.ctag ? `<span class="ttl">${esc(r.ctag)}</span>` : ''}
         ${r.title ? `<span class="ttl">${esc(r.title)}</span>` : ''}
         ${r.streak >= 5 ? '<span class="fire">🔥🔥</span>' : r.streak >= 2 ? `<span class="fire">🔥${r.streak}</span>` : ''}
       </span>
-      <b class="sc">${r.score}</b>
+      ${scHtml}
     </div>`;
   }).join('');
 }
@@ -386,6 +457,7 @@ function render(S){
       <span class="pin-badge">PIN ${esc(S.pin)}</span>
     </span>
     <span class="pill subtle">👥 ${S.n} player${S.n === 1 ? '' : 's'}</span>
+    ${S.scoring_mode === 'percent' ? `<span class="pill subtle">📊 % Grade</span>` : ''}
     ${S.index >= 0 && S.phase !== 'final' ? `<span class="pill">Q ${S.index + 1}/${S.total}</span>` : ''}
   `;
 
@@ -415,9 +487,10 @@ function render(S){
   const showCloud = (mode === 'cloud') || (mode === 'both' && S.word_total > 0 && S.phase !== 'final');
   const showBoard = (mode === 'board') || mode === 'both';
   const boardTitle = S.phase === 'final' ? '🏆 Final Podium & Standings' : S.phase === 'question' ? '🏆 Live Standings' : '🏆 Leaderboard';
+  const boardBadge = (S.hide_board && S.phase !== 'final') ? '🙈 Hidden' : `Top ${(S.board || []).length}`;
 
   m.innerHTML =
-    (showBoard ? `<div class="panel-card"><div class="panel-head"><h2>${boardTitle}</h2><span class="pill subtle">Top ${(S.board || []).length}</span></div>${board(S)}</div>` : '') +
+    (showBoard ? `<div class="panel-card"><div class="panel-head"><h2>${boardTitle}</h2><span class="pill subtle">${boardBadge}</span></div>${board(S)}</div>` : '') +
     (showCloud ? `<div class="panel-card"><div class="panel-head"><h2>💭 ${esc(S.prompt || 'Word Cloud')}</h2><span class="pill subtle">${S.word_total || 0} words</span></div>${cloud(S)}</div>` : '');
 }
 

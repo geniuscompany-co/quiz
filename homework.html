@@ -330,12 +330,16 @@ button.sec{
 .c1{background:linear-gradient(180deg,#1b75e0,#115bb5);box-shadow:0 5px 0 #0a3c7a,0 6px 14px rgba(0,0,0,.24)}
 .c2{background:linear-gradient(180deg,#e5a900,#c68f00);box-shadow:0 5px 0 #8c6400,0 6px 14px rgba(0,0,0,.24)}
 .c3{background:linear-gradient(180deg,#2d9e0f,#217c09);box-shadow:0 5px 0 #145004,0 6px 14px rgba(0,0,0,.24)}
+.c4{background:linear-gradient(180deg,#8e24aa,#6a1b9a);box-shadow:0 5px 0 #4a148c,0 6px 14px rgba(0,0,0,.24)}
+.c5{background:linear-gradient(180deg,#00897b,#00695c);box-shadow:0 5px 0 #004d40,0 6px 14px rgba(0,0,0,.24)}
 
 body.cb .c0{background:#D55E00;box-shadow:0 5px 0 #8f3e00}
 body.cb .c1{background:#0072B2;box-shadow:0 5px 0 #004973}
 body.cb .c2{background:#F0E442;color:#1b1b1b!important;text-shadow:none;box-shadow:0 5px 0 #a89e14}
 body.cb .c2 .sh{background:rgba(0,0,0,.12)}
 body.cb .c3{background:#009E73;box-shadow:0 5px 0 #00664a}
+body.cb .c4{background:#CC79A7;box-shadow:0 5px 0 #8a4b6e}
+body.cb .c5{background:#56B4E9;color:#1b1b1b!important;text-shadow:none;box-shadow:0 5px 0 #2e7aa6}
 body.hc .grid button{border:3px solid #fff}
 
 .grid button.right{
@@ -345,6 +349,74 @@ body.hc .grid button{border:3px solid #fff}
 }
 .grid button.picked:not(.right){outline:3px solid rgba(255,255,255,.85)}
 .grid button.dim{opacity:.28;filter:grayscale(.25)}
+.grid button.msel{outline:3.5px solid var(--gold);transform:translateY(-2px);box-shadow:0 0 16px rgba(255,223,93,.55)!important}
+
+.q-top-row{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px;flex-wrap:wrap}
+.q-top-row .qnum{margin-bottom:0}
+.tts-btn{
+  padding:4px 11px;
+  border-radius:99px;
+  border:1px solid rgba(255,255,255,.32);
+  background:rgba(255,255,255,.14);
+  color:#fff;
+  font-size:.78em;
+  font-weight:850;
+  cursor:pointer;
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+}
+.tts-btn.on{background:var(--gold);color:var(--ink);border-color:#fff}
+.q-img.zoom-go{animation:zoomrev 14s linear forwards}
+@keyframes zoomrev{from{filter:blur(24px)}to{filter:blur(0)}}
+
+/* --- Match Tap-to-Pair --- */
+.match-cols{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:6px 0 10px;text-align:left}
+.match-col{display:flex;flex-direction:column;gap:7px}
+.match-hdr{font-size:.75em;font-weight:900;text-transform:uppercase;letter-spacing:.06em;opacity:.82;text-align:center}
+.m-item{
+  padding:10px 11px;
+  border-radius:11px;
+  border:2px solid rgba(255,255,255,.22);
+  background:rgba(255,255,255,.12);
+  color:#fff;
+  font-weight:800;
+  font-size:.92em;
+  line-height:1.25;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:6px;
+  text-align:left;
+  word-break:break-word;
+}
+.m-item.active{border-color:var(--gold);background:rgba(255,223,93,.22);box-shadow:0 0 12px rgba(255,223,93,.4)}
+.m-badge{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-width:24px;height:24px;padding:0 6px;border-radius:99px;
+  font-size:.78em;font-weight:900;color:#fff;flex-shrink:0;
+}
+.pc0{background:#e21b3c}.pc1{background:#1368ce}.pc2{background:#d89e00}.pc3{background:#26890c}.pc4{background:#8e24aa}.pc5{background:#00897b}
+
+/* --- Slider & Pin --- */
+.slider-box{background:rgba(0,0,0,.28);border:1px solid rgba(255,255,255,.2);border-radius:14px;padding:16px 14px;margin-bottom:8px}
+.slider-val{font-size:2em;font-weight:900;color:var(--gold);margin-bottom:8px}
+.slider-box input[type=range]{width:100%;accent-color:var(--gold);height:8px;cursor:pointer;margin:6px 0}
+.slider-ends{display:flex;justify-content:space-between;font-size:.8em;opacity:.8;font-weight:800;margin-bottom:10px}
+.slider-num{width:130px!important;display:inline-block!important;padding:8px 10px!important;font-size:1.05em!important;margin:0!important;border-radius:9px!important;border:2px solid transparent;text-align:center;font-weight:850;color:var(--ink);background:#fff}
+
+.pin-wrap{background:rgba(0,0,0,.28);border:1px solid rgba(255,255,255,.2);border-radius:14px;padding:10px;margin-bottom:8px}
+.pin-stage{position:relative;display:inline-block;max-width:100%;border-radius:10px;overflow:hidden;cursor:crosshair;line-height:0;background:#fff;touch-action:manipulation}
+.pin-stage img{display:block;max-width:100%;max-height:300px;width:auto;height:auto;user-select:none;-webkit-user-drag:none}
+.pin-marker{
+  position:absolute;width:26px;height:26px;border-radius:50%;
+  border:3px solid #fff;background:rgba(226,27,60,.9);
+  box-shadow:0 0 0 2px #000,0 3px 10px rgba(0,0,0,.55);
+  transform:translate(-50%,-50%);pointer-events:none;z-index:3;
+}
+.pin-marker::after{content:'';position:absolute;left:50%;top:50%;width:6px;height:6px;background:#fff;border-radius:50%;transform:translate(-50%,-50%)}
+.pin-svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2}
 
 /* --- Order Slots --- */
 .slot{
@@ -354,8 +426,8 @@ body.hc .grid button{border:3px solid #fff}
   background:rgba(255,255,255,.15);
   border:1px solid rgba(255,255,255,.26);
   border-radius:10px;
-  padding:9px 12px;
-  margin:5px 0;
+  padding:8px 12px;
+  margin:4px 0;
   font-weight:800;
   text-align:left;
   cursor:pointer;
@@ -372,6 +444,7 @@ body.hc .grid button{border:3px solid #fff}
   box-shadow:0 6px 18px rgba(0,0,0,.25);
 }
 .fb.ok{background:linear-gradient(135deg,#2e9e10,#1e7308);border:1px solid rgba(105,240,174,.5)}
+.fb.partial{background:linear-gradient(135deg,#f57c00,#e65100);border:1px solid rgba(255,223,93,.6)}
 .fb.no{background:linear-gradient(135deg,#d32f2f,#9a1b1b);border:1px solid rgba(255,138,128,.45)}
 blockquote{
   background:#fff;
@@ -457,13 +530,42 @@ blockquote{
 <canvas id="fx"></canvas>
 
 <script>
-const $ = document.getElementById('app'), sh = ["▲","◆","●","■"];
+const $ = document.getElementById('app'), sh = ["▲","◆","●","■","★","⬟"];
 const hid = new URLSearchParams(location.search).get('id') || '';
-let info = null, me = null, cur = null, sel = [], busy = false;
+let info = null, me = null, cur = null, sel = [], multiSel = [], matchSelLeft = 0, matchMap = [], sliderVal = 50, pinXY = null, busy = false, answeredDone = false;
 
 function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
 function zoomImg(src){ document.getElementById('imgBig').src = src; document.getElementById('imgOv').style.display = 'flex'; }
-async function post(u,b){const r=await fetch(u,{method:'POST',body:JSON.stringify(b)});return {ok:r.ok,...await r.json()}}
+async function post(u,b){
+  const r = await fetch(u,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b)});
+  let d = {};
+  try{ d = await r.json(); }catch(e){}
+  return {_httpOk: r.ok, ok: r.ok, ...d};
+}
+
+function stopSpeech(){
+  try{ if(window.speechSynthesis) window.speechSynthesis.cancel(); }catch(e){}
+  const b = document.getElementById('ttsBtn');
+  if(b){ b.classList.remove('on'); b.textContent = '🔊 Read Aloud'; }
+}
+function readAloud(){
+  if(!cur || !window.speechSynthesis) return;
+  if(window.speechSynthesis.speaking){ stopSpeech(); return; }
+  const t = cur.qtype || cur.type || 'mc';
+  let txt = cur.q || '';
+  if((t === 'mc' || t === 'tf' || t === 'multi' || t === 'order') && cur.a && cur.a.length){
+    txt += '. Options: ' + cur.a.join(', ');
+  } else if(t === 'match' && cur.match_left && cur.match_right){
+    txt += '. Match: ' + cur.match_left.join(', ') + ' with ' + cur.match_right.join(', ');
+  } else if(t === 'slider' && cur.slider_cfg){
+    txt += `. Choose a value from ${cur.slider_cfg.min} to ${cur.slider_cfg.max}${cur.slider_cfg.unit ? ' ' + cur.slider_cfg.unit : ''}.`;
+  }
+  const u = new SpeechSynthesisUtterance(txt);
+  const b = document.getElementById('ttsBtn');
+  if(b){ b.classList.add('on'); b.textContent = '⏹️ Stop'; }
+  u.onend = u.onerror = () => stopSpeech();
+  window.speechSynthesis.speak(u);
+}
 
 /* --- Accessibility & Sound --- */
 function applyA11y(){
@@ -532,7 +634,9 @@ function syncHud(qIdx, qTot){
   const pf = document.getElementById('progFill');
   const pl = document.getElementById('progLbl');
   if(me && me.name){
-    hm.innerHTML = `<span class="hud-pill"><span class="hp-name">👤 ${esc(me.name)}</span><span class="hp-score">⭐ ${me.score || 0}</span></span>`;
+    const ansCnt = me.answered || 0;
+    const pctTxt = ansCnt > 0 ? ` · ${Math.round(100 * (me.correct || 0) / ansCnt)}%` : '';
+    hm.innerHTML = `<span class="hud-pill"><span class="hp-name">👤 ${esc(me.name)}</span><span class="hp-score">⭐ ${me.score || 0}${pctTxt}</span></span>`;
   } else {
     hm.innerHTML = `<span class="hud-pill">📚 Homework</span>`;
   }
@@ -595,7 +699,7 @@ function welcome(err){
 
 async function begin(name){
   const r = await post('/api/hw_start', {id: hid, name});
-  if(!r.ok){
+  if(!r._httpOk){
     localStorage.removeItem('hw_name_' + hid);
     return welcome(r.error);
   }
@@ -607,76 +711,270 @@ async function begin(name){
 }
 
 function show(){
+  stopSpeech();
   sel = [];
-  const q = cur, t = q.type || 'mc';
+  multiSel = [];
+  answeredDone = false;
+  pinXY = null;
+  const q = cur, t = q.qtype || q.type || 'mc';
   syncHud(q.i, q.n);
+
+  if(t === 'match'){
+    const n = (q.match_left || []).length;
+    matchMap = Array(n).fill(-1);
+    matchSelLeft = 0;
+  } else if(t === 'slider'){
+    const sc = q.slider_cfg || {min: 0, max: 100, step: 1, unit: ''};
+    const mid = (sc.min + sc.max) / 2;
+    const st = sc.step || 1;
+    sliderVal = Number((Math.round((mid - sc.min) / st) * st + sc.min).toFixed(4));
+  }
 
   let body = '';
   if(t === 'text'){
-    body = `<div class="card-panel" style="padding:14px"><input type="text" id="txt" placeholder="Type your answer…" autocomplete="off" autocapitalize="off" onkeydown="if(event.key==='Enter')submitText()"><button class="go" onclick="submitText()">Submit Answer</button></div>`;
+    body = `<div class="card-panel" style="padding:14px"><input type="text" id="txt" placeholder="Type your answer…" autocomplete="off" autocapitalize="off" onkeydown="if(event.key==='Enter')submitText()"><button class="go" id="subBtn" onclick="submitText()">✅ Submit Answer</button></div>`;
   } else if(t === 'order'){
-    body = `<div style="font-size:.9em;opacity:.86;margin:2px 0 8px;font-weight:750">Tap items in the correct order (tap a placed slot to remove):</div><div id="ord"></div>`;
+    body = `<div style="font-size:.9em;opacity:.86;margin:2px 0 8px;font-weight:750">Tap items in the correct sequence (tap a placed slot to remove):</div><div id="ord"></div>`;
+  } else if(t === 'multi'){
+    body = `<div style="font-size:.9em;opacity:.88;margin:2px 0 8px;font-weight:750">☑️ Select <b>all</b> correct options, then tap Submit:</div><div id="multiWrap"></div>`;
+  } else if(t === 'match'){
+    body = `<div style="font-size:.9em;opacity:.88;margin:2px 0 6px;font-weight:750">🔗 Tap a prompt on the left, then tap its match on the right:</div><div id="matchWrap"></div>`;
+  } else if(t === 'slider'){
+    const sc = q.slider_cfg || {min: 0, max: 100, step: 1, unit: ''};
+    const u = sc.unit ? ' ' + esc(sc.unit) : '';
+    body = `<div class="slider-box">
+      <div class="slider-val"><span id="slDisp">${sliderVal}</span>${u}</div>
+      <input type="range" id="slRange" min="${sc.min}" max="${sc.max}" step="${sc.step}" value="${sliderVal}" oninput="syncSlider(this.value)">
+      <div class="slider-ends"><span>${sc.min}${u}</span><span>${sc.max}${u}</span></div>
+      <div><input type="number" id="slNum" class="slider-num" min="${sc.min}" max="${sc.max}" step="${sc.step}" value="${sliderVal}" oninput="syncSlider(this.value)"></div>
+      <button class="go" id="subBtn" style="margin-top:12px" onclick="submitSlider()">🎯 Lock In Estimate</button>
+    </div>`;
+  } else if(t === 'pin'){
+    body = `<div class="pin-wrap">
+      <div style="font-size:.88em;font-weight:800;margin-bottom:6px;opacity:.9" id="pinReadout">📍 Tap anywhere on the image to place your pin</div>
+      <div class="pin-stage" id="pinStage" onclick="tapPin(event)">
+        <img id="pinImg" src="${esc(q.img || '')}" alt="">
+        <svg class="pin-svg" id="pinSvg" viewBox="0 0 100 100" preserveAspectRatio="none"></svg>
+        <div class="pin-marker" id="pinMark" style="display:none"></div>
+      </div>
+      <button class="go" id="subBtn" style="margin-top:10px" disabled onclick="submitPin()">📍 Lock In Pin</button>
+    </div>`;
   } else {
-    body = `<div class="grid">${q.a.map((a,i)=>`<button class="c${i}" onclick="pick(${i})">${q.aimg && q.aimg[i] ? `<img src="${esc(q.aimg[i])}" alt="">` : ''}<span class="sh">${sh[i]}</span><span>${esc(a)}</span></button>`).join('')}</div>`;
+    body = `<div class="grid">${(q.a || []).map((a,i)=>`<button class="c${i%6}" onclick="pick(${i})">${q.aimg && q.aimg[i] ? `<img src="${esc(q.aimg[i])}" alt="">` : ''}<span class="sh">${sh[i]||''}</span><span>${esc(a)}</span></button>`).join('')}</div>`;
   }
 
+  const showCardImg = q.img && t !== 'pin';
+  const imgCls = t === 'zoom' ? 'q-img zoom-go' : 'q-img';
   $.innerHTML = `
     <div class="q-card">
-      <div class="qnum">Question ${q.i+1} of ${q.n}</div>
+      <div class="q-top-row">
+        <span class="qnum">Question ${q.i+1} of ${q.n}</span>
+        <button type="button" class="tts-btn" id="ttsBtn" onclick="readAloud()">🔊 Read Aloud</button>
+      </div>
       <div class="q">${esc(q.q)}</div>
-      ${q.img ? `<img class="q-img" src="${esc(q.img)}" alt="" onclick="zoomImg(this.src)">` : ''}
+      ${showCardImg ? `<img class="${imgCls}" id="qMainImg" src="${esc(q.img)}" alt="" ${t === 'zoom' ? '' : 'onclick="zoomImg(this.src)"'}>` : ''}
     </div>
     ${body}
     <div id="fb"></div>
   `;
   if(t === 'order') drawOrd();
+  if(t === 'multi') drawMulti();
+  if(t === 'match') drawMatch();
   if(t === 'text'){ const e = document.getElementById('txt'); if(e) e.focus(); }
+}
+
+function drawMulti(){
+  const el = document.getElementById('multiWrap');
+  if(!el) return;
+  const d = cur.a || [];
+  const compact = d.length > 4 ? ' style="min-height:86px"' : '';
+  el.innerHTML = `<div class="grid">${d.map((a, i) => {
+    const on = multiSel.includes(i);
+    return `<button class="c${i%6} ${on ? 'msel' : ''}"${compact} ${answeredDone ? 'disabled' : ''} onclick="toggleMulti(${i})">${cur.aimg && cur.aimg[i] ? `<img src="${esc(cur.aimg[i])}" alt="">` : ''}<span class="sh">${on ? '☑️' : '⬜'}</span><span>${esc(a)}</span></button>`;
+  }).join('')}</div>` +
+  (!answeredDone ? `<button class="go" id="subBtn" style="margin-top:10px" ${multiSel.length ? '' : 'disabled'} onclick="submitMulti()">✅ Submit Selection (${multiSel.length})</button>` : '');
+}
+function toggleMulti(i){
+  if(busy || answeredDone) return;
+  const k = multiSel.indexOf(i);
+  if(k >= 0) multiSel.splice(k, 1); else multiSel.push(i);
+  drawMulti();
+}
+function submitMulti(){
+  if(!multiSel.length) return;
+  send({choices: multiSel.slice().sort((a, b) => a - b)});
+}
+
+function drawMatch(){
+  const el = document.getElementById('matchWrap');
+  if(!el) return;
+  const L = cur.match_left || [], R = cur.match_right || [];
+  const rightOwner = Array(R.length).fill(-1);
+  matchMap.forEach((ri, li) => { if(ri >= 0 && ri < R.length) rightOwner[ri] = li; });
+  const allLinked = L.length > 0 && matchMap.every(v => v >= 0);
+  el.innerHTML = `<div class="match-cols">
+    <div class="match-col">
+      <div class="match-hdr">Prompts</div>
+      ${L.map((txt, li) => {
+        const paired = matchMap[li] >= 0;
+        const act = !answeredDone && matchSelLeft === li && !paired;
+        return `<button type="button" class="m-item ${act ? 'active' : ''}" ${answeredDone ? 'disabled' : ''} onclick="tapMatchLeft(${li})"><span>${esc(txt)}</span>${paired ? `<span class="m-badge pc${li%6}">#${li+1}</span>` : `<span class="m-badge" style="background:rgba(255,255,255,.15)">${li+1}</span>`}</button>`;
+      }).join('')}
+    </div>
+    <div class="match-col">
+      <div class="match-hdr">Matches</div>
+      ${R.map((txt, ri) => {
+        const li = rightOwner[ri];
+        return `<button type="button" class="m-item" ${answeredDone ? 'disabled' : ''} onclick="tapMatchRight(${ri})"><span>${esc(txt)}</span>${li >= 0 ? `<span class="m-badge pc${li%6}">#${li+1}</span>` : ''}</button>`;
+      }).join('')}
+    </div>
+  </div>` +
+  (!answeredDone ? `<button class="go" id="subBtn" ${allLinked ? '' : 'disabled'} onclick="submitMatch()">🔗 Submit Pairs (${matchMap.filter(v => v >= 0).length}/${L.length})</button>` : '');
+}
+function tapMatchLeft(li){
+  if(busy || answeredDone) return;
+  if(matchMap[li] >= 0) matchMap[li] = -1;
+  matchSelLeft = li;
+  drawMatch();
+}
+function tapMatchRight(ri){
+  if(busy || answeredDone) return;
+  const prevOwner = matchMap.indexOf(ri);
+  if(prevOwner >= 0){
+    matchMap[prevOwner] = -1;
+    matchSelLeft = prevOwner;
+    drawMatch();
+    return;
+  }
+  let li = matchSelLeft;
+  if(li < 0 || li >= matchMap.length || matchMap[li] >= 0) li = matchMap.indexOf(-1);
+  if(li < 0) return;
+  matchMap[li] = ri;
+  matchSelLeft = matchMap.indexOf(-1);
+  drawMatch();
+}
+function submitMatch(){
+  if(matchMap.some(v => v < 0)) return;
+  send({pairs: matchMap.slice()});
+}
+
+function syncSlider(v){
+  if(answeredDone) return;
+  const num = parseFloat(v);
+  if(isNaN(num)) return;
+  sliderVal = num;
+  const r = document.getElementById('slRange'), n = document.getElementById('slNum'), d = document.getElementById('slDisp');
+  if(r && r.value !== String(v)) r.value = num;
+  if(n && document.activeElement !== n) n.value = num;
+  if(d) d.textContent = num;
+}
+function submitSlider(){
+  const n = document.getElementById('slNum');
+  const v = n ? parseFloat(n.value) : sliderVal;
+  if(isNaN(v)) return;
+  send({val: v});
+}
+
+function tapPin(ev){
+  if(busy || answeredDone) return;
+  const img = document.getElementById('pinImg');
+  if(!img) return;
+  const rect = img.getBoundingClientRect();
+  if(!rect.width || !rect.height) return;
+  const x = Math.max(0, Math.min(100, ((ev.clientX - rect.left) / rect.width) * 100));
+  const y = Math.max(0, Math.min(100, ((ev.clientY - rect.top) / rect.height) * 100));
+  pinXY = [Math.round(x * 10) / 10, Math.round(y * 10) / 10];
+  const mk = document.getElementById('pinMark'), rd = document.getElementById('pinReadout'), sb = document.getElementById('subBtn');
+  if(mk){ mk.style.display = 'block'; mk.style.left = pinXY[0] + '%'; mk.style.top = pinXY[1] + '%'; }
+  if(rd) rd.textContent = `📍 Pin placed at (${Math.round(pinXY[0])}%, ${Math.round(pinXY[1])}%) — tap image to adjust`;
+  if(sb) sb.disabled = false;
+}
+function submitPin(){
+  if(!pinXY) return;
+  send({pin_xy: pinXY});
 }
 
 function drawOrd(){
   const el = document.getElementById('ord');
   if(!el) return;
-  const d = cur.a;
+  const d = cur.a || [];
+  const minH = d.length > 5 ? '56px' : '72px';
   el.innerHTML =
     sel.map((j, n) => `<div class="slot" onclick="removeOrd(${n})"><span><b>#${n+1}</b> ${esc(d[j])}</span><span style="opacity:.7">✕</span></div>`).join('') +
-    `<div class="grid">${d.map((a, j) => sel.includes(j) ? '' : `<button class="c${j%4}" style="min-height:74px" onclick="sel.push(${j});drawOrd()"><span>${esc(a)}</span></button>`).join('')}</div>` +
-    `<div style="display:flex;gap:8px;justify-content:center;align-items:center;margin-top:8px">${sel.length ? `<button class="sec" style="margin:0" onclick="sel.pop();drawOrd()">↩ Undo</button>` : ''}${sel.length === d.length ? `<button class="go" style="margin:0;flex:1" onclick="submitOrd()">✅ Submit Order</button>` : ''}</div>`;
+    `<div class="grid">${d.map((a, j) => sel.includes(j) ? '' : `<button class="c${j%6}" style="min-height:${minH}" ${answeredDone ? 'disabled' : ''} onclick="tapOrd(${j})"><span>${esc(a)}</span></button>`).join('')}</div>` +
+    (!answeredDone ? `<div style="display:flex;gap:8px;justify-content:center;align-items:center;margin-top:8px">${sel.length ? `<button class="sec" style="margin:0" onclick="sel.pop();drawOrd()">↩ Undo</button>` : ''}${sel.length === d.length ? `<button class="go" style="margin:0;flex:1" onclick="submitOrd()">✅ Submit Order</button>` : ''}</div>` : '');
 }
-function removeOrd(pos){ if(busy) return; sel.splice(pos, 1); drawOrd(); }
+function tapOrd(j){ if(busy || answeredDone) return; sel.push(j); drawOrd(); }
+function removeOrd(pos){ if(busy || answeredDone) return; sel.splice(pos, 1); drawOrd(); }
 
 function pick(i){ send({choice: i}, i); }
 function submitText(){ const v = document.getElementById('txt').value.trim(); if(v) send({text: v}); }
 function submitOrd(){ send({seq: sel.slice()}); }
 
 async function send(payload, idx){
-  if(busy) return;
+  if(busy || answeredDone) return;
   busy = true;
+  const prevScore = me.score || 0;
   const r = await post('/api/hw_answer', {id: hid, name: me.name, ...payload});
   busy = false;
-  if(!r.ok){
+  if(!r._httpOk){
     alert(r.error || 'Something went wrong');
     if((r.error || '').includes('closed')) location.reload();
     return;
   }
+  answeredDone = true;
+  stopSpeech();
+  const isRight = !!r.ok;
+  const isPartial = !isRight && !!r.partial;
+  const gained = r.gained != null ? r.gained : Math.max(0, (r.score || 0) - prevScore);
   me.score = r.score;
+  me.correct = r.correct;
+  me.answered = (cur.i || 0) + 1;
   syncHud(cur.i + 1, cur.n);
-  if(r.ok) sfxCorrect(); else sfxWrong();
+  if(isRight || isPartial) sfxCorrect(); else sfxWrong();
 
-  const t = cur.type || 'mc';
-  document.querySelectorAll('.grid button').forEach((b, i) => {
-    b.disabled = true;
-    if(t === 'mc' || t === 'tf'){
-      if(i === idx) b.classList.add(r.ok ? 'right' : 'picked');
-      if(!r.ok && cur.a[i] === r.answer) b.classList.add('right');
-      else if(i !== idx || !r.ok) b.classList.add('dim');
-    }
-  });
+  const t = cur.qtype || cur.type || 'mc';
+  const zm = document.getElementById('qMainImg');
+  if(zm) zm.classList.remove('zoom-go');
+
+  const subBtn = document.getElementById('subBtn');
+  if(subBtn) subBtn.style.display = 'none';
+  if(t === 'slider'){
+    const sr = document.getElementById('slRange'), sn = document.getElementById('slNum');
+    if(sr) sr.disabled = true;
+    if(sn) sn.disabled = true;
+  } else if(t === 'pin' && r.pin_target){
+    const svg = document.getElementById('pinSvg');
+    const pt = r.pin_target;
+    if(svg) svg.innerHTML = `<ellipse cx="${pt.x}" cy="${pt.y}" rx="${pt.r}" ry="${pt.r}" fill="rgba(105,240,174,0.32)" stroke="#69f0ae" stroke-width="1.2"/>`;
+  } else if(t === 'multi'){
+    drawMulti();
+  } else if(t === 'match'){
+    drawMatch();
+  } else if(t === 'order'){
+    drawOrd();
+  } else {
+    document.querySelectorAll('.grid button').forEach((b, i) => {
+      b.disabled = true;
+      if(t === 'mc' || t === 'tf' || t === 'zoom'){
+        if(i === idx) b.classList.add(isRight ? 'right' : 'picked');
+        if(!isRight && cur.a && cur.a[i] === r.answer) b.classList.add('right');
+        else if(i !== idx || !isRight) b.classList.add('dim');
+      }
+    });
+  }
+
+  const ansTxt = r.answer != null ? r.answer : (r.correct_ans || '');
+  const fbCls = isRight ? 'ok' : (isPartial ? 'partial' : 'no');
+  const fbTitle = isRight
+    ? `✅ Correct!${gained > 0 ? ' +' + gained + ' pts' : ''}`
+    : (isPartial ? `⚡ Partial Credit!${gained > 0 ? ' +' + gained + ' pts' : ''}` : '❌ Not quite');
 
   const fb = document.getElementById('fb');
   fb.innerHTML = `
-    <div class="fb ${r.ok ? 'ok' : 'no'}">
-      ${r.ok ? '✅ Correct!' : '❌ Not quite'}
-      ${r.ok ? '' : `<div style="font-size:.86em;font-weight:750;margin-top:4px;opacity:.95">Correct answer: <b>${esc(r.answer)}</b></div>`}
+    <div class="fb ${fbCls}">
+      ${fbTitle}
+      ${isRight ? '' : `<div style="font-size:.86em;font-weight:750;margin-top:4px;opacity:.95">Correct answer: <b>${esc(ansTxt)}</b></div>`}
     </div>
     ${r.quote ? `<blockquote>“${esc(r.quote)}”</blockquote>` : ''}
     <button class="go" id="nx">${r.done ? '🏆 See My Results' : 'Next Question ➔'}</button>
@@ -689,6 +987,7 @@ async function send(payload, idx){
 }
 
 function finish(r){
+  stopSpeech();
   syncHud(null, 0);
   const pct = Math.round(100 * r.correct / Math.max(1, r.n));
   if(pct >= 80) confettiBurst();
@@ -696,11 +995,12 @@ function finish(r){
     <div class="card-panel">
       <div style="font-size:3.1em;line-height:1">${pct >= 90 ? '🏆' : pct >= 70 ? '🎉' : '💪'}</div>
       <h1>All Done, ${esc(me.name)}!</h1>
-      <div class="meta-row" style="margin-bottom:4px">
+      <div class="meta-row" style="margin-bottom:6px">
         <span class="meta-pill" style="color:#69f0ae;border-color:rgba(105,240,174,.4)">✅ Submitted to Instructor</span>
+        <span class="meta-pill" style="color:var(--gold);border-color:rgba(255,223,93,.45)">📊 Grade: ${pct}%</span>
       </div>
       <div class="stats-grid">
-        <div class="stat"><b>${pct}%</b>${r.correct}/${r.n} Correct</div>
+        <div class="stat"><b>${pct}%</b>Percentage Grade (${r.correct}/${r.n})</div>
         <div class="stat"><b>⭐ ${r.score}</b>Total Points</div>
       </div>
       <p style="opacity:.84;font-size:.92em;margin:6px 0 4px">Your score has been recorded. You may safely close this page.</p>

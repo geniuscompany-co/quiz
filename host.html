@@ -188,6 +188,12 @@ a.join-link:hover{background:#ffffff2b;text-decoration:underline}
 .c1{background:linear-gradient(180deg,#1e7ae8,#115bb8)}
 .c2{background:linear-gradient(180deg,#e6aa00,#c48e00)}
 .c3{background:linear-gradient(180deg,#2ea012,#20780a)}
+.c4{background:linear-gradient(180deg,#8e24aa,#6a1b9a)}
+.c5{background:linear-gradient(180deg,#00897b,#00695c)}
+.c6{background:linear-gradient(180deg,#f4511e,#bf360c)}
+.c7{background:linear-gradient(180deg,#3949ab,#283593)}
+.grid.grid-compact{gap:8px}
+.grid.grid-compact .a{padding:12px 16px;font-size:1.12em}
 
 /* Unified Floating Bottom Host Control Dock */
 .host-dock{position:fixed;left:50%;bottom:12px;transform:translateX(-50%);z-index:37;display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;padding:8px 12px;background:#110424e8;border:1px solid var(--border-hi);border-radius:99px;box-shadow:0 12px 36px #000b;backdrop-filter:blur(16px);max-width:calc(100vw - 24px)}
@@ -197,8 +203,8 @@ a.join-link:hover{background:#ffffff2b;text-decoration:underline}
 .host-dock .disc-ctrl{margin-top:0}
 @media (max-width:760px){.host-dock{border-radius:18px;bottom:8px;padding:7px 10px}}
 
-/* Quiz/Case Builder Modal & Collapsible Slide Preview */
-.modal.modal-builder{max-width:680px;padding:20px 24px}
+/* Quiz/Case Builder Modal, Visual Card Editor & Collapsible Slide Preview */
+.modal.modal-builder{max-width:860px;padding:20px 24px}
 .builder-prev-list{max-height:280px;overflow-y:auto;display:flex;flex-direction:column;gap:8px;padding-right:2px}
 .bp-card{background:#ffffff12;border:1px solid #ffffff24;border-radius:11px;padding:9px 11px;font-size:.86em;line-height:1.35}
 .bp-top{display:flex;align-items:center;justify-content:space-between;gap:6px;flex-wrap:wrap;margin-bottom:4px;font-size:.82em}
@@ -457,6 +463,108 @@ body.is-presenter-console #metaBar,body.is-presenter-console #lateJoin,body.is-p
 .disc-ctrl{display:inline-flex;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap;margin-top:6px}
 .disc-ctrl input[type=number]{width:54px;padding:5px 6px;border-radius:7px;border:0;text-align:center;font-weight:800;font-size:.95em;color:#2b0d57;background:#fff;margin:0;font-variant-numeric:tabular-nums}
 .disc-ctrl .btn-sm{margin:0;padding:6px 12px;font-size:.88em}
+body.cb .c4{background:#CC79A7}body.cb .c5{background:#56B4E9;color:#111}body.cb .c6{background:#E69F00;color:#111}body.cb .c7{background:#999999;color:#111}
+
+/* Layered Avatars, Deck Cards, New Question Types & Visual Card Editor */
+.av-wrap{position:relative;display:inline-flex;align-items:center;justify-content:center;width:1.62em;height:1.62em;border-radius:50%;vertical-align:middle;margin-right:5px;flex-shrink:0;line-height:1}
+.av-wrap.ringed{background:#0006;box-shadow:0 0 10px var(--avr,#ffd54f);border:2px solid var(--avr,#ffd54f)}
+.av-wrap .av-hat{position:absolute;top:-.5em;right:-.26em;font-size:.66em;line-height:1;filter:drop-shadow(0 1px 3px #000b);pointer-events:none}
+.av-wrap.av-pod{width:1.34em;height:1.34em;margin-right:0}
+.pct-pill{font-size:.8em;background:#ffffff24;border:1px solid #ffffff38;padding:1px 8px;border-radius:99px;margin-right:7px;font-weight:800;color:#ffdf5d}
+.deck-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;max-height:240px;overflow-y:auto;padding-right:2px}
+@media (max-width:560px){.deck-grid{grid-template-columns:1fr}}
+.deck-card{background:#ffffff12;border:1px solid #ffffff26;border-radius:11px;padding:9px 11px;cursor:pointer;text-align:left;transition:background .15s,border-color .15s}
+.deck-card:hover{background:#ffffff20;border-color:#ffffff45}
+.deck-card.active{background:#26890c66;border-color:#7dff6b;box-shadow:0 0 0 1px #7dff6b}
+.deck-card-top{display:flex;align-items:center;justify-content:space-between;gap:6px;margin-bottom:4px}
+.deck-title{font-weight:850;font-size:.9em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.deck-cnt{font-size:.76em;background:#0005;padding:2px 7px;border-radius:99px;font-weight:800;white-space:nowrap;color:var(--gold)}
+.deck-est{font-size:.75em;background:#ffffff1c;padding:1px 7px;border-radius:99px;font-weight:750;white-space:nowrap}
+.deck-meta{display:flex;align-items:center;gap:5px;flex-wrap:wrap;font-size:.76em;opacity:.88}
+.deck-tag{background:#0005;padding:1px 6px;border-radius:99px}
+.f-chip{margin:0;padding:4px 10px;font-size:.78em;border-radius:99px;background:#ffffff18;border:1px solid #ffffff28;color:#fff;font-weight:750;box-shadow:none}
+.f-chip.active{background:var(--gold);color:#2b0d57;border-color:var(--gold)}
+
+.pts-badge{display:inline-block;background:#120526d9;border:1.5px solid #ffdf5d99;color:#ffdf5d;font-weight:850;padding:4px 14px;border-radius:99px;font-size:.9em;margin:2px}
+.pts-badge.all-ok{background:#1b5e20dd;border-color:#7dff6b;color:#d7ffd2}
+.think-banner{max-width:860px;margin:6px auto 10px;background:linear-gradient(90deg,#1a237ecc,#4a148ccc);border:2px solid #82b1ff;border-radius:16px;padding:10px 16px;box-shadow:0 8px 24px #0006}
+.think-top{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:1.06em}
+.preview-fill.think-fill{background:linear-gradient(90deg,#40c4ff,#7c4dff)}
+.cons-banner{max-width:880px;margin:6px auto 10px;background:linear-gradient(90deg,#004d40dd,#01579bdd);border:2px solid #64ffda;border-radius:16px;padding:12px 18px;box-shadow:0 8px 26px #0006}
+.cons-card{max-width:860px;margin:10px auto;background:#0b263bee;border:2px solid #64ffda;border-radius:16px;padding:14px 18px;box-shadow:0 8px 26px #0006}
+.cons-vs{display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;font-size:1.15em;font-weight:850;margin:6px 0}
+.cons-delta{padding:3px 11px;border-radius:99px;font-weight:900;font-size:.92em;background:#1b5e20;color:#7dff6b;border:1px solid #7dff6b}
+.cons-delta.neg{background:#b71c1c;color:#ffcdd2;border-color:#ff8a80}
+
+.match-cols{display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:900px;margin:10px auto;text-align:left}
+@media (max-width:640px){.match-cols{grid-template-columns:1fr}}
+.match-col{background:#0004;border:1px solid #fff3;border-radius:14px;padding:12px 14px;display:flex;flex-direction:column;gap:8px}
+.match-col h4{margin:0 0 4px;font-size:.86em;text-transform:uppercase;letter-spacing:1px;color:var(--gold)}
+.match-item{padding:11px 14px;border-radius:10px;font-weight:800;font-size:1.12em;background:#ffffff1c;border:1px solid #ffffff30}
+.match-pair-row{display:flex;align-items:center;justify-content:space-between;gap:12px;background:#ffffff1c;border:1.5px solid #7dff6b88;border-radius:12px;padding:11px 16px;margin:6px auto;max-width:820px;font-weight:800;font-size:1.14em;text-align:left}
+
+.slider-stage{max-width:780px;margin:12px auto;background:var(--glass);border:1.5px solid var(--border-hi);border-radius:18px;padding:22px 24px}
+.slider-line-wrap{position:relative;height:44px;margin:22px 10px 12px}
+.slider-track{position:absolute;left:0;right:0;top:18px;height:10px;background:#ffffff2b;border-radius:99px}
+.slider-tol{position:absolute;top:12px;height:22px;background:#2ea01288;border:1.5px solid #7dff6b;border-radius:8px}
+.slider-tgt{position:absolute;top:4px;width:4px;height:36px;background:var(--gold);border-radius:4px;transform:translateX(-50%);box-shadow:0 0 10px var(--gold)}
+.slider-dot{position:absolute;top:23px;width:12px;height:12px;border-radius:50%;transform:translate(-50%,-50%);border:2px solid #fff;box-shadow:0 2px 6px #0009}
+.slider-dot.ok{background:#00e676}.slider-dot.miss{background:#ff5252}
+
+.pin-stage{position:relative;display:inline-block;max-width:min(100%,720px);border-radius:14px;overflow:hidden;box-shadow:0 12px 34px #0008;border:2px solid #ffffff45;background:#fff;line-height:0}
+.pin-stage img{display:block;max-width:100%;max-height:380px;width:auto;height:auto}
+.pin-svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.pin-dot{position:absolute;width:14px;height:14px;border-radius:50%;transform:translate(-50%,-50%);border:2px solid #fff;box-shadow:0 2px 8px #000b;pointer-events:auto}
+.pin-dot.ok{background:#00e676;z-index:3}.pin-dot.miss{background:#ff5252;z-index:2}
+
+.scale-ends{display:flex;justify-content:space-between;gap:12px;max-width:860px;margin:4px auto 8px;font-weight:850;color:var(--gold);font-size:1.05em}
+.scale-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(95px,1fr));gap:10px;max-width:860px;margin:8px auto}
+.scale-card{padding:18px 10px;border-radius:14px;font-size:1.55em;font-weight:900;text-align:center;border:1px solid #ffffff38;box-shadow:0 6px 0 #0000004d}
+.scale-avg-pill{display:inline-block;background:linear-gradient(90deg,#ffd54f,#ffb300);color:#2b0d57;font-weight:900;font-size:1.2em;padding:7px 20px;border-radius:99px;margin:6px 0 10px;box-shadow:0 4px 14px #0005}
+
+.resp.starred{grid-column:1/-1;background:linear-gradient(135deg,#fffdf0,#fff3c4);border:3px solid #ffb300;box-shadow:0 0 26px #ffd54f88,0 8px 24px #0006;font-size:1.24em;padding:16px 20px}
+.spot-badge{display:inline-block;background:#ffb300;color:#2b0d57;font-weight:900;font-size:.72em;padding:2px 10px;border-radius:99px;margin-bottom:6px;text-transform:uppercase;letter-spacing:.6px}
+.spot-btn{padding:3px 10px;font-size:.78em;background:#2b0d57;color:#ffdf5d;border:1px solid #2b0d5744;margin:0}
+.spot-btn:hover{background:#46178f}
+
+.outcome-box{max-width:880px;margin:10px auto;background:#120526dd;border:1.5px solid #ffdf5d88;border-radius:14px;padding:12px 16px;text-align:left}
+.outcome-row{padding:6px 10px;border-radius:9px;margin:4px 0;background:#ffffff12;font-size:.96em}
+.outcome-row.win{background:#26890c66;border:1px solid #7dff6b;font-weight:800}
+.shift-card{max-width:860px;margin:10px auto;background:#1a0b38ee;border:2px solid #b388ff;border-radius:14px;padding:12px 16px;text-align:center}
+.branch-banner{display:inline-block;background:linear-gradient(90deg,#651fff,#00b0ff);color:#fff;font-weight:850;padding:7px 18px;border-radius:99px;margin:8px 4px;border:1.5px solid #fff8;box-shadow:0 4px 14px #0006;font-size:1.02em}
+
+/* Two-Way Visual Card Editor */
+.bmode-tabs{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:#0006;padding:4px;border-radius:12px;margin:4px 0 10px;border:1px solid #fff2}
+.bmode-tabs button{margin:0;padding:8px 12px;font-size:.94em;border-radius:9px;background:transparent;color:#fffd;font-weight:800;box-shadow:none}
+.bmode-tabs button.active{background:linear-gradient(180deg,#ffe57f,#ffd54f);color:#2b0d57}
+.vc-toolbar{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.vc-nav{display:flex;gap:5px;flex-wrap:wrap;max-height:66px;overflow-y:auto;flex:1}
+.vc-pill{margin:0;padding:4px 10px;font-size:.78em;border-radius:99px;background:#ffffff1c;border:1px solid #ffffff2e;color:#fff;font-weight:800;box-shadow:none}
+.vc-pill:hover{background:#ffffff30}
+.vc-list{display:flex;flex-direction:column;gap:12px;max-height:54vh;overflow-y:auto;padding-right:4px;margin-bottom:10px}
+.vc-card{background:#120526cc;border:1.5px solid #ffffff30;border-radius:14px;padding:12px 14px;box-shadow:0 6px 18px #0005}
+.vc-head{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:8px;padding-bottom:7px;border-bottom:1px solid #fff2}
+.vc-head select{padding:6px 10px;border-radius:8px;border:0;background:#fff;color:#2b0d57;font-weight:800;font-size:.88em;cursor:pointer}
+.vc-acts{display:inline-flex;gap:4px;align-items:center}
+.vc-acts button{margin:0;padding:4px 9px;font-size:.78em;border-radius:7px;background:#ffffff20;box-shadow:none}
+.vc-meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(115px,1fr));gap:6px;margin:6px 0 8px;align-items:end}
+.vc-meta label{display:block;font-size:.74em;font-weight:800;opacity:.86;margin-bottom:2px}
+.vc-meta input[type=text],.vc-meta input[type=number]{margin:0;padding:6px 8px;font-size:.86em;border-radius:7px;width:100%;color:#2b0d57;font-weight:700}
+.vc-chk-lbl{display:inline-flex!important;align-items:center;gap:6px;font-size:.82em!important;font-weight:750;cursor:pointer;padding:6px 8px;background:#ffffff14;border-radius:7px;user-select:none}
+.vc-chk-lbl input[type=checkbox]{width:15px;height:15px;margin:0}
+.vc-opt-row{display:flex;align-items:center;gap:6px;margin:5px 0}
+.vc-opt-row input{margin:0;padding:7px 10px;font-size:.88em;color:#2b0d57;font-weight:650}
+.vc-ok-btn{margin:0!important;width:32px;height:32px;padding:0!important;border-radius:8px!important;font-size:.95em!important;background:#ffffff20!important;border:1.5px solid #ffffff40!important;color:#fff;flex-shrink:0;box-shadow:none!important}
+.vc-ok-btn.on{background:#2ea012!important;border-color:#7dff6b!important;color:#fff;font-weight:900}
+.vc-del-mini{margin:0!important;padding:5px 9px!important;font-size:.8em!important;border-radius:7px!important;background:#e21b3c88!important;box-shadow:none!important;flex-shrink:0}
+.vc-img-row{display:flex;align-items:center;gap:6px;margin:6px 0;flex-wrap:wrap}
+.vc-img-row input[type=text]{flex:1;min-width:170px;margin:0;padding:6px 9px;font-size:.85em;color:#2b0d57}
+.vc-pin-picker{position:relative;display:inline-block;max-width:100%;border-radius:10px;overflow:hidden;border:2px solid #ffdf5d;cursor:crosshair;background:#fff;line-height:0;margin-top:6px}
+.vc-pin-picker img{display:block;max-width:100%;max-height:240px;pointer-events:none;user-select:none}
+.vc-sub{background:#ffffff0d;border:1px solid #ffffff22;border-radius:9px;margin-top:7px;padding:0}
+.vc-sub>summary{list-style:none;cursor:pointer;padding:6px 10px;font-size:.8em;font-weight:750;color:#ffdf5d;display:flex;justify-content:space-between;align-items:center}
+.vc-sub>summary::-webkit-details-marker{display:none}
+.vc-sub-body{padding:8px 10px;border-top:1px solid #ffffff1a;font-size:.84em}
 </style></head><body>
 <button id="fsBtn" onclick="toggleFullscreen()">⛶ Fullscreen (F)</button>
 <header class="ws-bar" id="workspaceBar">
@@ -476,14 +584,18 @@ body.is-presenter-console #metaBar,body.is-presenter-console #lateJoin,body.is-p
  </nav>
 </header>
 <div class="late-join" id="lateJoin">
- <button class="late-btn" onclick="toggleLateQr(event)" title="Click to toggle Auto-PIN QR code for late joiners">
-  <span>📱 PIN <b id="latePin">------</b></span>
-  <span style="background:#fff2;padding:2px 8px;border-radius:99px;font-size:.82em">QR ▾</span>
- </button>
+ <div style="display:flex;align-items:center;gap:6px">
+  <button class="late-btn" onclick="toggleLateQr(event)" title="Click to toggle Auto-PIN QR code for late joiners">
+   <span>📱 PIN <b id="latePin">------</b></span>
+   <span style="background:#fff2;padding:2px 8px;border-radius:99px;font-size:.82em">QR ▾</span>
+  </button>
+  <button class="late-btn aud-hide" onclick="copyJoinLink(this)" title="Copy 1-click student join link for Zoom / Teams / Meet chat">📋 Copy Link</button>
+ </div>
  <div class="late-qr" id="lateQrBox" onclick="event.stopPropagation()">
   <div id="lateQrSvg"></div>
   <div id="lateHostLbl" style="font-size:.84em;color:#46178f">play</div>
   <div>Scan to Auto-Fill PIN!</div>
+  <button type="button" class="btn-sm aud-hide" style="background:#46178f;color:#fff;margin-top:4px;font-size:.8em" onclick="copyJoinLink(this)">📋 Copy Direct Join Link</button>
  </div>
 </div>
 <div class="top-bar" id="topNav">
@@ -511,6 +623,8 @@ body.is-presenter-console #metaBar,body.is-presenter-console #lateJoin,body.is-p
    <div id="autoMenuRow" class="voice-cfg quiz-only" style="display:none" onclick="event.stopPropagation()">
     <label>⏭️ Wait time <span style="display:inline-flex;align-items:center;gap:4px"><input id="menuAutoSec" type="number" min="2" max="120" value="7" style="width:52px;padding:4px 6px;border-radius:6px;border:0;text-align:center;font-weight:800;color:#2b0d57" onchange="if(pin&&host)hostCtl('set_auto_time',parseInt(this.value,10)||7)">s</span></label>
    </div>
+   <button id="hideBoardMenuBtn" style="display:none" onclick="hostCtl('toggle_hide_board')"><span>🙈 Hide Leaderboard</span><span class="state" id="hideBoardMenuState">OFF</span></button>
+   <button id="stuTtsMenuBtn" style="display:none" onclick="hostCtl('toggle_student_tts')"><span>🔊 Student Read-Aloud</span><span class="state" id="stuTtsMenuState">OFF</span></button>
    <button onclick="cycleTheme()"><span>🎨 Visual Theme</span><span class="state" id="themeState">Purple</span></button>
    <button id="musicBtn" onclick="cycleMusic()"><span>🎵 Background Music</span><span class="state" id="musicState">Classic</span></button>
    <button id="awakeBtn" onclick="toggleAwake()"><span>☀️ Keep Screen Awake</span><span class="state" id="awakeState">ON</span></button>
@@ -554,13 +668,16 @@ body.is-presenter-console #metaBar,body.is-presenter-console #lateJoin,body.is-p
 </div>
 <div class="modal-bg" id="quizModal">
  <div class="modal modal-builder">
-  <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px">
+  <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:10px">
    <h2 style="margin:0;text-align:left"><span class="quiz-modal-only">➕ Quiz Builder</span><span class="case-modal-only">📖 Case Study Builder</span></h2>
-   <button type="button" class="close-x" style="float:none" onclick="closeQuizModal()">✕ Close</button>
+   <div style="display:flex;align-items:center;gap:6px">
+    <button type="button" class="btn-sm" id="aiToggleBtn" style="margin:0" onclick="toggleBuilderAi()">✨ AI Tools: ON</button>
+    <button type="button" class="close-x" style="float:none" onclick="closeQuizModal()">✕ Close</button>
+   </div>
   </div>
   <label><b><span class="quiz-modal-only">Quiz Title:</span><span class="case-modal-only">Case Study Title:</span></b></label>
   <input id="customTitle" placeholder="e.g. Chapter 9 Review">
-  <div style="display:flex;flex-direction:column;gap:7px;margin-bottom:12px">
+  <div style="display:flex;flex-direction:column;gap:7px;margin-bottom:10px">
    <details class="sub-acc" id="builderExistAcc">
     <summary><span><span class="quiz-modal-only">📂 Load, Duplicate, Export or Delete Existing Quiz</span><span class="case-modal-only">📂 Load, Duplicate, Export or Delete Existing Case</span></span><span class="sub-caret">▾</span></summary>
     <div class="sub-body" style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
@@ -602,38 +719,69 @@ body.is-presenter-console #metaBar,body.is-presenter-console #lateJoin,body.is-p
     </div>
    </details>
   </div>
-  <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:4px">
-   <label style="margin:0"><b><span class="quiz-modal-only">Questions (blank-line separated, mark correct with *):</span><span class="case-modal-only">Case Slides (one slide per blank-line block):</span></b></label>
-   <select id="caseTplSel" class="case-modal-only" onchange="if(this.value){insertCaseTpl(this.value);this.value=''}" style="padding:5px 10px;border-radius:8px;border:0;background:#fff;color:#2b0d57;font-weight:800;font-size:.85em;cursor:pointer">
-    <option value="">➕ Insert Slide Template…</option>
-    <option value="info">📖 Chapter / Narrative Slide</option>
-    <option value="poll">🗳️ Ethical-Lens Decision Poll</option>
-    <option value="rank">📊 Priority Ranking Slide</option>
-    <option value="open">✍️ Open Response + Peer Vote</option>
-    <option value="mc">✅ Scored Concept Check (MCQ)</option>
-   </select>
+  <div class="bmode-tabs">
+   <button type="button" id="bTabVisual" class="active" onclick="setBuilderTab('visual')">🃏 Visual Card Editor</button>
+   <button type="button" id="bTabText" onclick="setBuilderTab('text')">📝 Fast Text / Paste</button>
   </div>
-  <details class="sub-acc" style="margin:0 0 6px">
-   <summary style="padding:6px 10px;font-size:.8em;opacity:.88"><span>💡 Formatting &amp; Per-Slide Options Cheat Sheet</span><span class="sub-caret">▾</span></summary>
-   <div class="sub-body" style="font-size:.8em;line-height:1.45;opacity:.9">
-    <div class="quiz-modal-only">Question types: <code>Type: tf</code> (<code>*True</code>/<code>*False</code>), <code>Type: text</code>, <code>Type: order</code>, <code>Type: zoom</code> + <code>Image: url</code>. Optional lines: <code>Time: 45</code>, <code>Topic:</code>, private <code>Note:</code>, <code>Quote:</code>.</div>
-    <div class="case-modal-only">Slide types: <code>Type: info</code> (<code>Body:</code>, <code>Role: Title | Brief</code>), <code>Type: poll</code> (<code>Option :: Ethical lens</code>), <code>Type: rank</code>, <code>Type: open</code>, or MCQ (<code>*</code>). Optional lines: <code>Time: 90</code>, <code>Exhibit: url | caption</code>, <code>Topic:</code>, private <code>Note:</code>.</div>
+  <div id="visualEditorPane">
+   <div class="vc-toolbar">
+    <div class="vc-nav" id="vcNavBar"></div>
+    <div style="display:flex;gap:6px;align-items:center">
+     <select id="vcTplSel" class="case-modal-only" onchange="if(this.value){addVisualCard(this.value);this.value=''}" style="padding:5px 9px;border-radius:8px;border:0;background:#fff;color:#2b0d57;font-weight:800;font-size:.82em;cursor:pointer">
+      <option value="">+ Case Slide…</option>
+      <option value="info">📖 Chapter</option>
+      <option value="poll">🗳️ Poll</option>
+      <option value="rank">📊 Ranking</option>
+      <option value="open">✍️ Open</option>
+      <option value="brainstorm">💡 Brainstorm</option>
+      <option value="scale">📏 Scale</option>
+      <option value="mc">✅ Check (MCQ)</option>
+     </select>
+     <button type="button" class="btn-sm" style="margin:0;background:#26890c;border-color:#7dff6b" onclick="addVisualCard()">+ Add Question / Slide</button>
+    </div>
    </div>
-  </details>
-  <textarea id="customText" oninput="renderBuilderPreview()" placeholder="What is the capital of France?
+   <div class="vc-list" id="visualCardList"></div>
+   <div style="text-align:center;margin-bottom:10px">
+    <button type="button" class="btn-sm" style="margin:0;padding:8px 18px;background:#ffffff24" onclick="addVisualCard()">+ Add Question / Slide</button>
+   </div>
+  </div>
+  <div id="textEditorPane" style="display:none">
+   <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:4px">
+    <label style="margin:0"><b><span class="quiz-modal-only">Questions (blank-line separated, mark correct with *):</span><span class="case-modal-only">Case Slides (one slide per blank-line block):</span></b></label>
+    <select id="caseTplSel" class="case-modal-only" onchange="if(this.value){insertCaseTpl(this.value);this.value=''}" style="padding:5px 10px;border-radius:8px;border:0;background:#fff;color:#2b0d57;font-weight:800;font-size:.85em;cursor:pointer">
+     <option value="">➕ Insert Slide Template…</option>
+     <option value="info">📖 Chapter / Narrative Slide</option>
+     <option value="poll">🗳️ Ethical-Lens Decision Poll</option>
+     <option value="rank">📊 Priority Ranking Slide</option>
+     <option value="open">✍️ Open Response + Peer Vote</option>
+     <option value="brainstorm">💡 Sticky-Note Brainstorm</option>
+     <option value="scale">📏 Rating Scale Poll</option>
+     <option value="mc">✅ Scored Concept Check (MCQ)</option>
+    </select>
+   </div>
+   <details class="sub-acc" style="margin:0 0 6px">
+    <summary style="padding:6px 10px;font-size:.8em;opacity:.88"><span>💡 Formatting &amp; Per-Slide Options Cheat Sheet</span><span class="sub-caret">▾</span></summary>
+    <div class="sub-body" style="font-size:.8em;line-height:1.45;opacity:.9">
+     <div class="quiz-modal-only">Types: <code>Type: tf|multi|match|order|text|slider|pin|zoom|scale|brainstorm</code>. Match: <code>- Left =&gt; Right</code>. Slider: <code>Slider: min=0 | max=100 | step=1 | target=42 | margin=5 | unit=%</code>. Pin: <code>Pin: 50, 40, 12</code> + <code>Image: url</code>. Modifiers: <code>Time: 45</code>, <code>Think: 10</code>, <code>Points: 500</code>, <code>AllCorrect: yes</code>, <code>Topic:</code>, <code>Note:</code>, <code>Quote:</code>.</div>
+     <div class="case-modal-only">Slide types: <code>Type: info|poll|rank|open|brainstorm|scale</code> or MCQ (<code>*</code>). Option extras: <code>Option :: Lens || Consequence =&gt; 5</code> (branch to slide #5). Optional lines: <code>Time: 90</code>, <code>Think: 10</code>, <code>Exhibit: url | caption</code>, <code>Topic:</code>, private <code>Note:</code>.</div>
+    </div>
+   </details>
+   <textarea id="customText" oninput="renderBuilderPreview()" placeholder="What is the capital of France?
 Berlin
 *Paris
 Madrid
 Rome
 Image: https://example.com/paris.jpg
 Quote: Paris has been the capital since 987 CE."></textarea>
-  <details class="sub-acc" id="builderPrevAcc" style="margin:0 0 10px">
-   <summary><span>👁️ Live Slide Preview</span><span class="acc-right"><span class="acc-badge" id="builderCountBadge">0 slides</span><span class="sub-caret">▾</span></span></summary>
-   <div class="sub-body"><div class="builder-prev-list" id="builderPreview"></div></div>
-  </details>
+   <details class="sub-acc" id="builderPrevAcc" style="margin:0 0 10px">
+    <summary><span>👁️ Live Slide Preview</span><span class="acc-right"><span class="acc-badge" id="builderCountBadge">0 slides</span><span class="sub-caret">▾</span></span></summary>
+    <div class="sub-body"><div class="builder-prev-list" id="builderPreview"></div></div>
+   </details>
+  </div>
   <div id="customErr" style="color:#ff9b9b;font-weight:700;margin-bottom:8px"></div>
-  <div style="display:flex;justify-content:flex-end;gap:10px">
+  <div style="display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap">
    <button type="button" class="btn-sec" style="margin:0" onclick="closeQuizModal()">Cancel</button>
+   <button type="button" class="btn-sec" style="margin:0;border-color:#7dff6b;color:#d7ffd2" onclick="useWithoutSaving()">▶️ Use Without Saving</button>
    <button type="button" style="margin:0;font-size:1.05em;padding:10px 24px" onclick="saveCustomQuiz()"><span class="quiz-modal-only">💾 Save Quiz</span><span class="case-modal-only">💾 Save Case Study</span></button>
   </div>
  </div>
@@ -708,16 +856,29 @@ Quote: Paris has been the capital since 987 CE."></textarea>
   </div>
   <div id="caseHint" style="display:none"></div>
   <div class="acc-list">
+   <details class="acc-box" id="deckBrowserAcc">
+    <summary>
+     <span><span class="quiz-only">📚 Browse Quiz Cards</span><span class="case-only">📚 Browse Case Cards</span></span>
+     <span class="acc-right"><span class="acc-badge" id="deckBrowserBadge">—</span><span class="acc-caret">▾</span></span>
+    </summary>
+    <div class="acc-body">
+     <input id="deckSearch" type="text" placeholder="🔍 Filter by title, folder, or #tag…" oninput="renderDeckCards()" style="margin:0 0 8px;padding:7px 11px;font-size:.88em">
+     <div id="deckFolders" style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px"></div>
+     <div class="deck-grid" id="deckGrid"></div>
+    </div>
+   </details>
+
    <details class="acc-box" id="accTimers">
     <summary>
      <span>⏱️ Timers &amp; Pacing</span>
-     <span class="acc-right"><span class="acc-badge" id="timerSummary">15s · 5s preview</span><span class="acc-caret">▾</span></span>
+     <span class="acc-right"><span class="acc-badge" id="timerSummary"><span id="timerSubTxt">15s · 5s preview</span></span><span class="acc-caret">▾</span></span>
     </summary>
     <div class="acc-body">
-     <div class="quick-bar quiz-only" oninput="updateTimerSummary()">
+     <div class="quick-bar quiz-only" oninput="updateTimerSummary();updateOptSummary()">
       <label>📝 Questions: <input id="qCount" type="number" min="1" max="200" value="" placeholder="—"> <span id="qMax" style="opacity:.8">/ —</span></label>
       <label title="Seconds players get to answer each question">⏱️ Timer: <input id="qTime" type="number" min="5" max="900" value="15"><span style="opacity:.8">s</span></label>
       <label title="Reading preview before answer buttons open (set 0 for instant)">👀 Preview: <input id="qPrevTime" type="number" min="0" max="120" value="5"><span style="opacity:.8">s</span></label>
+      <label title="Choices shown on screen &amp; phones, but answers locked while students reason">🧠 Thinking Time: <input id="qThinkTime" type="number" min="0" max="120" value="0"><span style="opacity:.8">s</span></label>
      </div>
      <div class="case-only" oninput="syncCaseTimerSpec();updateTimerSummary()">
       <div class="case-timers-grid">
@@ -725,6 +886,8 @@ Quote: Paris has been the capital since 987 CE."></textarea>
        <label class="ct-item" title="Default debate / discussion countdown timer"><span>🎤 Discuss</span><span><input id="cDiscussTime" type="number" min="5" max="900" value="60">s</span></label>
        <label class="ct-item" title="Timer for Priority Ranking slides"><span>📊 Ranking</span><span><input id="cRankTime" type="number" min="5" max="900" value="60">s</span></label>
        <label class="ct-item" title="Writing timer for Open Response slides"><span>✍️ Writing</span><span><input id="cOpenTime" type="number" min="5" max="900" value="120">s</span></label>
+       <label class="ct-item" title="Timer for Sticky-Note Brainstorm slides"><span>💡 Brainstorm</span><span><input id="qBrainTime" type="number" min="5" max="900" value="45">s</span></label>
+       <label class="ct-item" title="Timer for Rating Scale Poll slides"><span>📏 Scale</span><span><input id="qScaleTime" type="number" min="5" max="900" value="25">s</span></label>
        <label class="ct-item" title="Timer for scored Concept-Check MCQs"><span>✅ Check</span><span><input id="cTime" type="number" min="5" max="900" value="20">s</span></label>
        <label class="ct-item" title="Seconds to read the prompt before choices open (0 = instant)"><span>👀 Preview</span><span><input id="cPrevTime" type="number" min="0" max="120" value="5">s</span></label>
       </div>
@@ -755,6 +918,15 @@ Quote: Paris has been the capital since 987 CE."></textarea>
        <option value="custom" hidden>🎛️ Custom Combination</option>
       </select>
      </div>
+     <div class="preset-sel-row">
+      <span>🎯 Scoring Method:</span>
+      <select id="qScoring" onchange="updateOptSummary()">
+       <option value="classic">⚡ Classic (Accuracy + Speed + Streaks)</option>
+       <option value="accuracy">🎯 Accuracy Only (No Speed Penalty)</option>
+       <option value="percent">📊 Percentage Grade (% Correct)</option>
+       <option value="survey">🗳️ Ungraded / Formative (0 pts)</option>
+      </select>
+     </div>
 
      <details class="sub-acc quiz-only" id="subTwists">
       <summary>
@@ -763,14 +935,14 @@ Quote: Paris has been the capital since 987 CE."></textarea>
       </summary>
       <div class="sub-body">
        <div class="mode-grid">
-        <label class="mode-pill"><input id="qWheel" type="checkbox"> 🎡 Mystery Wheel</label>
-        <label class="mode-pill"><input id="qWager" type="checkbox"> 🎰 Final Boss Wager</label>
-        <label class="mode-pill"><input id="qRedemp" type="checkbox"> 🔄 Redemption Round</label>
-        <label class="mode-pill"><input id="qHot" type="checkbox"> 🔥 Hot Seat Rounds</label>
-        <label class="mode-pill"><input id="qDbl" type="checkbox"> 💥 Double or Nothing</label>
-        <label class="mode-pill"><input id="qSabotage" type="checkbox"> ⛄ Snowballs</label>
-        <label class="mode-pill"><input id="qSteal" type="checkbox"> 🕵️ Steal / Swap Power-Up</label>
-        <label class="mode-pill"><input id="qTie" type="checkbox"> ⚔️ Sudden-Death Tiebreaker</label>
+        <label class="mode-pill quiz-only"><input id="qWheel" type="checkbox"> 🎡 Mystery Wheel</label>
+        <label class="mode-pill quiz-only"><input id="qWager" type="checkbox"> 🎰 Final Boss Wager</label>
+        <label class="mode-pill quiz-only"><input id="qRedemp" type="checkbox"> 🔄 Redemption Round</label>
+        <label class="mode-pill quiz-only"><input id="qHot" type="checkbox"> 🔥 Hot Seat Rounds</label>
+        <label class="mode-pill quiz-only"><input id="qDbl" type="checkbox"> 💥 Double or Nothing</label>
+        <label class="mode-pill quiz-only"><input id="qSabotage" type="checkbox"> ⛄ Snowballs</label>
+        <label class="mode-pill quiz-only"><input id="qSteal" type="checkbox"> 🕵️ Steal / Swap Power-Up</label>
+        <label class="mode-pill quiz-only"><input id="qTie" type="checkbox"> ⚔️ Sudden-Death Tiebreaker</label>
        </div>
        <div style="text-align:right;margin-top:6px;font-size:.8em"><a href="#" onclick="openGuide('setup');return false" style="color:#ffdf5d;font-weight:700">📖 What do these twists do?</a></div>
       </div>
@@ -786,8 +958,9 @@ Quote: Paris has been the capital since 987 CE."></textarea>
         <label class="mode-pill quiz-only"><input id="qShuffle" type="checkbox"> 🎲 Randomize Order</label>
         <label class="mode-pill quiz-only"><input id="qSpeed" type="checkbox" onchange="document.getElementById('speedTimeRow').style.display=this.checked?'flex':'none';updateOptSummary()"> ⚡ Speed Round (5 rapid Qs)</label>
         <label class="mode-pill quiz-only"><input id="qAuto" type="checkbox" onchange="document.getElementById('autoTimeRow').style.display=this.checked?'flex':'none';updateOptSummary()"> ⏭️ Auto-Advance</label>
-        <label class="mode-pill"><input id="qTeams" type="checkbox" onchange="if(!this.checked){document.getElementById('qBattle').checked=false;document.getElementById('battleTimeRow').style.display='none'}"> <span class="quiz-only">🛡️ Team Mode</span><span class="case-only">🛡️ Discussion Teams</span></label>
+        <label class="mode-pill"><input id="qTeams" type="checkbox" onchange="if(!this.checked){document.getElementById('qBattle').checked=false;document.getElementById('qConsensus').checked=false;document.getElementById('battleTimeRow').style.display='none'}"> <span class="quiz-only">🛡️ Team Mode</span><span class="case-only">🛡️ Discussion Teams</span></label>
         <label class="mode-pill quiz-only"><input id="qBattle" type="checkbox" onchange="if(this.checked){document.getElementById('qTeams').checked=true}document.getElementById('battleTimeRow').style.display=this.checked?'flex':'none';updateOptSummary()"> 🤝 Team Battle (every 5th Q)</label>
+        <label class="mode-pill"><input id="qConsensus" type="checkbox" onchange="if(this.checked){document.getElementById('qTeams').checked=true}updateOptSummary()"> 🤝 Team Consensus (Indiv → Team)</label>
         <label class="mode-pill"><input id="qIce" type="checkbox" onchange="document.getElementById('icePromptRow').style.display=this.checked?'block':'none';updateOptSummary()"> 💭 Word Cloud Warm-Up</label>
        </div>
        <div id="autoTimeRow" class="mode-trow quiz-only" style="margin-top:8px;margin-bottom:0">
@@ -818,6 +991,8 @@ Quote: Paris has been the capital since 987 CE."></textarea>
        <div class="mode-grid" style="margin-bottom:8px">
         <label class="mode-pill"><input id="qMod" type="checkbox"> 🛡️ Approve Names First</label>
         <label class="mode-pill"><input id="qRosterOn" type="checkbox" onchange="document.getElementById('rosterRow').style.display=this.checked?'block':'none';updateOptSummary()"> 👥 Class Roster</label>
+        <label class="mode-pill"><input id="qHideBoard" type="checkbox"> 🙈 Hide Live Leaderboard</label>
+        <label class="mode-pill"><input id="qStudentTts" type="checkbox"> 🔊 Student Read-Aloud</label>
        </div>
        <div id="rosterRow" style="display:none;margin-bottom:8px">
         <label style="display:block;font-size:.82em;font-weight:700;opacity:.85;margin-bottom:4px">👥 Class Roster (one name per line):</label>
@@ -872,9 +1047,9 @@ Quote: Paris has been the capital since 987 CE."></textarea>
 const IS_AUDIENCE = location.pathname === '/present' || new URLSearchParams(location.search).get('present') === '1';
 if(IS_AUDIENCE){ document.body.classList.add('is-audience'); document.title = 'Brainrush! — Presentation Screen'; }
 let pin, host, S = {};
-const $ = document.getElementById('app'), sh = ["▲ ","◆ ","● ","■ "];
+const $ = document.getElementById('app'), sh = ["▲ ","◆ ","● ","■ ","★ ","⬢ ","✦ ","❖ "];
 
-// --- Hamburger Nav, Dynamic Join QR & Setup Presets ---
+// --- Hamburger Nav, Dynamic Join QR, Avatar Layers & Setup Presets ---
 function joinPlayDisplay(){
  return `${location.host || 'localhost:8000'}/play`;
 }
@@ -883,6 +1058,26 @@ function joinPlayUrl(p){
  const base = `${orig}/play`;
  const full = p ? `${base}?pin=${encodeURIComponent(p)}` : base;
  return full.length <= 128 ? full : base;
+}
+function copyJoinLink(btn){
+ const orig = (location.origin && location.origin !== 'null') ? location.origin : 'http://localhost:8000';
+ const url = `${orig}/play?pin=${encodeURIComponent(pin || '')}`;
+ try{ navigator.clipboard.writeText(url); }catch(e){}
+ if(btn){
+  if(!btn.dataset.origTxt) btn.dataset.origTxt = btn.textContent;
+  btn.textContent = '✅ Join Link Copied!';
+  setTimeout(()=>{ if(btn && btn.dataset.origTxt) btn.textContent = btn.dataset.origTxt; }, 1600);
+ }
+}
+const AV_RING_COL = {gold:'#ffd54f', neon:'#7dff6b', fire:'#ff6d00', ice:'#40c4ff', rainbow:'#ff6eb4', violet:'#b388ff'};
+function fmtAvatar(p, cls=''){
+ if(!p) return '';
+ const av = p.avatar || '';
+ const hat = p.av_hat ? `<i class="av-hat" style="font-style:normal">${esc(p.av_hat)}</i>` : '';
+ const rRaw = String(p.av_ring || '').trim();
+ const ring = AV_RING_COL[rRaw] || (/^#[0-9a-f]{3,8}$/i.test(rRaw) ? rRaw : '');
+ if(!av && !hat && !ring) return '';
+ return `<span class="av-wrap${ring?' ringed':''}${cls?' '+cls:''}"${ring?` style="--avr:${ring}"`:''}>${esc(av||'🙂')}${hat}</span>`;
 }
 function joinQrHtml(p, size=204){
  const src = '/api/qr?text=' + encodeURIComponent(joinPlayUrl(p));
@@ -951,7 +1146,7 @@ function toggleAdvPanel(){
  const acc = document.getElementById('accOptions');
  if(acc) acc.open = !acc.open;
 }
-const GAMEPLAY_OPT_IDS = ['qShuffle','qWager','qRedemp','qSabotage','qWheel','qTeams','qIce','qAuto','qHot','qBattle','qTie','qSpeed','qDbl','qSteal'];
+const GAMEPLAY_OPT_IDS = ['qShuffle','qWager','qRedemp','qSabotage','qWheel','qTeams','qIce','qAuto','qHot','qBattle','qTie','qSpeed','qDbl','qSteal','qConsensus','qHideBoard','qStudentTts'];
 const QUIZ_PRESETS = {
  clean: [],
  quick: ['qShuffle'],
@@ -962,6 +1157,9 @@ const QUIZ_PRESETS = {
 function syncPresetHighlight(){
  const sel = document.getElementById('presetSel');
  if(!sel) return;
+ const scSel = document.getElementById('qScoring');
+ const thk = parseFloat((document.getElementById('qThinkTime')||{}).value) || 0;
+ if((scSel && scSel.value && scSel.value !== 'classic') || thk > 0){ sel.value = 'custom'; return; }
  const activeSet = new Set(GAMEPLAY_OPT_IDS.filter(id=>{ const el = document.getElementById(id); return el && el.checked; }));
  let matched = 'custom';
  for(const [k, target] of Object.entries(QUIZ_PRESETS)){
@@ -975,30 +1173,52 @@ function applyPreset(name){
   const el = document.getElementById(id);
   if(el) el.checked = want.has(id);
  });
+ if(name === 'clean'){
+  const scSel = document.getElementById('qScoring'); if(scSel) scSel.value = 'classic';
+  const thkEl = document.getElementById('qThinkTime'); if(thkEl) thkEl.value = '0';
+ }
  const ar = document.getElementById('autoTimeRow'); if(ar) ar.style.display = want.has('qAuto') ? 'flex' : 'none';
  const br = document.getElementById('battleTimeRow'); if(br) br.style.display = want.has('qBattle') ? 'flex' : 'none';
  const sr = document.getElementById('speedTimeRow'); if(sr) sr.style.display = want.has('qSpeed') ? 'flex' : 'none';
  const ir = document.getElementById('icePromptRow'); if(ir) ir.style.display = want.has('qIce') ? 'block' : 'none';
+ updateTimerSummary();
  updateOptSummary();
 }
 function updateTimerSummary(){
- const b = document.getElementById('timerSummary');
+ const b = document.getElementById('timerSummary'), sub = document.getElementById('timerSubTxt');
  if(!b) return;
+ const setTxt = t => { if(sub) sub.textContent = t; else b.textContent = t; };
  const isC = (typeof hostSection !== 'undefined' && hostSection === 'case');
  const sel = document.getElementById('quizSel');
  const q = (typeof quizList !== 'undefined' ? quizList : []).find(x => x.file === (sel && sel.value));
  if(isC){
   const poll = parseInt((document.getElementById('cPollTime')||{}).value, 10) || 45;
   const disc = parseInt((document.getElementById('cDiscussTime')||{}).value, 10) || 60;
-  b.textContent = q ? `${q.count} slides · Poll ${poll}s` : `Poll ${poll}s · Debate ${disc}s`;
+  if(q){
+   const baseSec = q.est_sec || ((q.count || 1) * 65);
+   const estMin = Math.max(1, Math.round((baseSec + (q.count || 1) * ((poll - 45) * 0.35 + (disc - 60) * 0.25)) / 60));
+   setTxt(`${q.count} slides · Poll ${poll}s · ⏱ ~${estMin} min`);
+  } else {
+   setTxt(`Poll ${poll}s · Debate ${disc}s`);
+  }
   b.classList.toggle('on', !!(q || poll !== 45 || disc !== 60));
  } else {
   const cnt = parseInt((document.getElementById('qCount')||{}).value, 10) || 0;
   const tm = parseInt((document.getElementById('qTime')||{}).value, 10) || 15;
   const pvEl = document.getElementById('qPrevTime');
   const pv = (pvEl && pvEl.value !== '') ? Math.max(0, parseFloat(pvEl.value) || 0) : 5;
-  b.textContent = cnt > 0 ? `${cnt} Qs · ${tm}s · ${pv}s prev` : `${tm}s · ${pv}s preview`;
-  b.classList.toggle('on', !!(cnt > 0 || tm !== 15 || pv !== 5));
+  const thkEl = document.getElementById('qThinkTime');
+  const thk = (thkEl && thkEl.value !== '') ? Math.max(0, parseFloat(thkEl.value) || 0) : 0;
+  const thkLbl = thk > 0 ? ` · ${thk}s think` : '';
+  if(cnt > 0){
+   const basePerQ = (q && q.est_sec && q.count) ? (q.est_sec / q.count) : 32;
+   const estSec = Math.max(cnt * 8, cnt * (basePerQ + (tm - 15) + (pv - 5) + thk));
+   const estMin = Math.max(1, Math.round(estSec / 60));
+   setTxt(`${cnt} Qs · ${tm}s${thkLbl} · ⏱ ~${estMin} min`);
+  } else {
+   setTxt(`${tm}s · ${pv}s preview${thkLbl}`);
+  }
+  b.classList.toggle('on', !!(cnt > 0 || tm !== 15 || pv !== 5 || thk > 0));
  }
 }
 function updateScreenSummary(){
@@ -1018,14 +1238,17 @@ function updateOptSummary(){
  const isC = (typeof hostSection !== 'undefined' && hostSection === 'case');
  const cntChecked = arr => arr.filter(id=>{ const el = document.getElementById(id); return el && el.checked; }).length;
  const nTwist = isC ? 0 : cntChecked(['qWheel','qWager','qRedemp','qHot','qDbl','qSabotage','qSteal','qTie']);
- const nTeam = cntChecked(isC ? ['qTeams','qIce'] : ['qShuffle','qSpeed','qAuto','qTeams','qBattle','qIce']);
+ const nTeam = cntChecked(isC ? ['qTeams','qConsensus','qIce'] : ['qShuffle','qSpeed','qAuto','qTeams','qBattle','qConsensus','qIce']);
  const bots = document.getElementById('qBots');
- const nClass = cntChecked(['qMod','qRosterOn']) + ((bots && parseInt(bots.value, 10) > 0) ? 1 : 0);
+ const nClass = cntChecked(['qMod','qRosterOn','qHideBoard','qStudentTts']) + ((bots && parseInt(bots.value, 10) > 0) ? 1 : 0);
+ const scSel = document.getElementById('qScoring');
+ const nScore = (scSel && scSel.value && scSel.value !== 'classic') ? 1 : 0;
+ const nThink = (!isC && (parseFloat((document.getElementById('qThinkTime')||{}).value) || 0) > 0) ? 1 : 0;
  const setSub = (id, n) => { const el = document.getElementById(id); if(el){ el.textContent = `${n} on`; el.classList.toggle('on', n > 0); } };
  setSub('twistSubCnt', nTwist);
  setSub('teamSubCnt', nTeam);
  setSub('classSubCnt', nClass);
- const total = nTwist + nTeam + nClass;
+ const total = nTwist + nTeam + nClass + nScore + nThink;
  const s = document.getElementById('optSummary');
  if(s){ s.textContent = `${total} active`; s.classList.toggle('on', total > 0); }
  syncPresetHighlight();
@@ -1452,39 +1675,57 @@ function renderBuilderPreview(){
   return;
  }
  const typeName = qt => ({
-  info:'📖 Chapter', poll:'🗳️ Poll', rank:'📊 Ranking', open:'✍️ Open',
-  mc: isC ? '✅ Check' : '✅ MCQ', tf:'✓/✗ T/F', text:'⌨️ Type', order:'🔢 Order', zoom:'🔍 Zoom'
+  info:'📖 Chapter', poll:'🗳️ Poll', rank:'📊 Ranking', open:'✍️ Open', brainstorm:'💡 Brainstorm', scale:'📏 Scale',
+  mc: isC ? '✅ Check' : '✅ MCQ', tf:'✓/✗ T/F', multi:'☑️ Multi', match:'🔗 Match',
+  text:'⌨️ Type', order:'🔢 Order', slider:'🎚️ Slider', pin:'📍 Pin', zoom:'🔍 Zoom'
  }[qt || 'mc'] || '❓ Slide');
  box.innerHTML = qs.map((q, idx)=>{
   const qt = q.type || 'mc';
   const tPill = qt === 'info' ? '<span class="bp-badge">Untimed</span>' : (q.t ? `<span class="bp-badge">⏱️ ${q.t}s</span>` : '');
+  const thkPill = q.think ? `<span class="bp-badge">🧠 ${q.think}s</span>` : '';
+  const ptsPill = (q.pts !== undefined && q.pts !== null && q.pts !== '') ? `<span class="bp-badge">💎 ${q.pts} pts</span>` : '';
   const topTopic = q.topic ? `<span class="bp-badge">🏷️ ${esc(q.topic)}</span>` : '';
   let body = '';
   if(qt === 'info'){
    const snip = (q.body || '').replace(/\s+/g,' ').trim().slice(0, 110);
    body = `<div style="opacity:.82;font-size:.85em">${esc(snip)}${snip.length>=110?'…':''}</div>`
     + ((q.roles && q.roles.length) ? `<div style="margin-top:4px;font-size:.8em;color:#ffdf5d">🎭 ${q.roles.length} role card(s): ${q.roles.map(r=>esc(r.name)).join(', ')}</div>` : '');
-  } else if(qt === 'open'){
-   body = `<div style="opacity:.8;font-size:.83em">✍️ Anonymous 1–2 sentence response + peer voting</div>`;
+  } else if(qt === 'open' || qt === 'brainstorm'){
+   body = `<div style="opacity:.8;font-size:.83em">${qt==='brainstorm'?'💡 Students submit up to 3 sticky-note ideas + peer vote':'✍️ Anonymous 1–2 sentence response + peer voting'}</div>`;
   } else if(qt === 'text'){
    body = `<div style="font-size:.84em;color:#b9ffaf">✅ Accepted: ${(q.a||[]).map(esc).join(' / ')}</div>`;
+  } else if(qt === 'match'){
+   body = `<div class="bp-ans">${(q.pairs||[]).map(p=>`<div class="bp-a ok">${esc(p.l)} ➔ ${esc(p.r)}</div>`).join('')}</div>`;
+  } else if(qt === 'slider'){
+   const sl = q.slider || {};
+   body = `<div style="font-size:.84em;color:#b9ffaf">🎚️ ${sl.min}–${sl.max}${esc(sl.unit||'')} · Target: <b>${sl.target}${esc(sl.unit||'')}</b> (±${sl.margin||0})</div>`;
+  } else if(qt === 'pin'){
+   const pn = q.pin || {x:50,y:50,r:12};
+   body = `<div style="font-size:.84em;color:#b9ffaf">📍 Target zone: (${pn.x}%, ${pn.y}%) · radius ${pn.r}%</div>`;
+  } else if(qt === 'scale'){
+   const lb = q.scale_labels || ['Low','High'];
+   body = `<div style="font-size:.83em;color:#ffdf5d">📏 ${(q.a||[]).length || 5}-pt scale: ${esc(lb[0])} ↔ ${esc(lb[1])}</div>`;
   } else if(qt === 'order' || qt === 'rank'){
    body = `<div class="bp-ans">${(q.a||[]).map((a,i)=>`<div class="bp-a">${i+1}. ${esc(a)}</div>`).join('')}</div>`;
   } else {
+   const cm = Array.isArray(q.correct_multi) && q.correct_multi.length ? q.correct_multi : null;
    body = `<div class="bp-ans">${(q.a||[]).map((a,i)=>{
-    const ok = (qt === 'mc' || qt === 'tf' || qt === 'zoom') && i === (q.c || 0);
+    const ok = q.all_correct || ((qt === 'mc' || qt === 'tf' || qt === 'zoom' || qt === 'multi') && (cm ? cm.includes(i) : i === (q.c || 0)));
     const ln = (q.lenses && q.lenses[i]) ? ` · 🔎 ${esc(q.lenses[i])}` : '';
-    return `<div class="bp-a${ok?' ok':''}">${ok?'✓ ':''}${esc(a)}${ln}</div>`;
+    const gt = (q.goto && q.goto[i] > 0) ? ` ➔ #${q.goto[i]}` : '';
+    return `<div class="bp-a${ok?' ok':''}">${ok?'✓ ':''}${esc(a)}${ln}${gt}</div>`;
    }).join('')}</div>`;
   }
   const extras = [
+   q.all_correct ? '✅ All Accepted' : '',
    q.img ? '🖼️ Image' : '',
    (q.exhibits && q.exhibits.length) ? `📎 ${q.exhibits.length} Exhibit` : '',
+   (q.outcomes && q.outcomes.some(Boolean)) ? '⚡ Outcomes' : '',
    q.note ? '📝 Note' : '',
    q.quote ? '💡 Quote' : ''
   ].filter(Boolean);
   return `<div class="bp-card">
-   <div class="bp-top"><span><span class="bp-num">#${idx+1}</span> &middot; <span class="bp-badge">${typeName(qt)}</span></span><span>${tPill} ${topTopic}</span></div>
+   <div class="bp-top"><span><span class="bp-num">#${idx+1}</span> &middot; <span class="bp-badge">${typeName(qt)}</span></span><span>${tPill} ${thkPill} ${ptsPill} ${topTopic}</span></div>
    <div class="bp-q">${esc(q.q || '(Untitled slide)')}</div>
    ${body}
    ${extras.length ? `<div style="margin-top:5px;font-size:.76em;opacity:.75">${extras.join(' &middot; ')}</div>` : ''}
@@ -1494,14 +1735,44 @@ function renderBuilderPreview(){
 function formatQuestionsBlock(qs){
  return (qs||[]).map(q=>{
   const t = q.type || 'mc';
-  const lines = [q.q];
+  const lines = [q.q || ''];
   if(t !== 'mc') lines.push('Type: '+t);
-  if(q.t && t !== 'info' && (q.t_custom || ['poll','rank','open'].includes(t))) lines.push('Time: '+q.t);
+  if(q.t && t !== 'info' && (q.t_custom || ['poll','rank','open','brainstorm','scale'].indexOf(t) >= 0)) lines.push('Time: '+q.t);
+  if(q.think && t !== 'info') lines.push('Think: '+q.think);
+  if(q.pts !== undefined && q.pts !== null && q.pts !== '') lines.push('Points: '+q.pts);
+  if(q.all_correct) lines.push('AllCorrect: yes');
+  if(t === 'multi' && q.partial === false) lines.push('Partial: no');
   if(t === 'info'){
    (q.body||'').split(/\n\s*\n/).forEach(p=>{ if(p.trim()) lines.push('Body: '+p.replace(/\n/g,' ').trim()); });
    (q.roles||[]).forEach(r=>lines.push('Role: '+r.name+' | '+r.text));
-  } else if(t === 'tf') lines.push('*'+(q.a[q.c]||'True'));
-  else (q.a||[]).forEach((ans,i)=>lines.push((t==='mc'&&i===q.c?'*':'')+ans+((q.lenses&&q.lenses[i])?' :: '+q.lenses[i]:'')+((q.aimg&&q.aimg[i])?' | '+q.aimg[i]:'')));
+  } else if(t === 'match'){
+   (q.pairs||[]).forEach(p=>{ if(p && (p.l || p.r)) lines.push('- '+(p.l||'')+' => '+(p.r||'')); });
+  } else if(t === 'slider'){
+   const sl = q.slider || {min:0,max:100,step:1,target:50,margin:5,unit:''};
+   lines.push('Slider: min='+sl.min+' | max='+sl.max+' | step='+(sl.step!==undefined?sl.step:1)+' | target='+sl.target+' | margin='+(sl.margin!==undefined?sl.margin:0)+(sl.unit?' | unit='+sl.unit:''));
+  } else if(t === 'pin'){
+   const pn = q.pin || {x:50,y:50,r:12};
+   lines.push('Pin: '+pn.x+', '+pn.y+', '+pn.r);
+  } else if(t === 'scale'){
+   const slb = (Array.isArray(q.scale_labels) && q.scale_labels.length >= 2) ? q.scale_labels : ['Strongly Disagree','Strongly Agree'];
+   lines.push('Scale: '+slb[0]+' | '+slb[1]);
+   const sa = (q.a && q.a.length) ? q.a : ['1','2','3','4','5'];
+   sa.forEach((ans,i)=>lines.push('- '+ans+((q.outcomes&&q.outcomes[i])?' || '+q.outcomes[i]:'')+((q.goto&&q.goto[i]>0)?' => '+q.goto[i]:'')));
+  } else if(t === 'open' || t === 'brainstorm'){
+  } else if(t === 'tf'){
+   const hasTfExtra = (q.outcomes && q.outcomes.some(Boolean)) || (q.goto && q.goto.some(x=>x>0));
+   if(!hasTfExtra){
+    lines.push('*'+((q.a && q.a[q.c]) || (q.c===1?'False':'True')));
+   } else {
+    ['True','False'].forEach((ans,i)=>lines.push((i===(q.c||0)?'*':'')+ans+((q.outcomes&&q.outcomes[i])?' || '+q.outcomes[i]:'')+((q.goto&&q.goto[i]>0)?' => '+q.goto[i]:'')));
+   }
+  } else {
+   const cm = (Array.isArray(q.correct_multi) && q.correct_multi.length) ? q.correct_multi : null;
+   (q.a||[]).forEach((ans,i)=>{
+    const isStar = (t==='multi') ? (cm ? cm.indexOf(i)>=0 : i===(q.c||0)) : (t==='mc' ? (cm && cm.length>=2 ? cm.indexOf(i)>=0 : i===(q.c||0)) : (t==='zoom' && i===(q.c||0)));
+    lines.push((isStar?'*':'')+ans+((q.lenses&&q.lenses[i])?' :: '+q.lenses[i]:'')+((q.aimg&&q.aimg[i])?' | '+q.aimg[i]:'')+((q.outcomes&&q.outcomes[i])?' || '+q.outcomes[i]:'')+((q.goto&&q.goto[i]>0)?' => '+q.goto[i]:''));
+   });
+  }
   (q.exhibits||[]).forEach(e=>lines.push('Exhibit: '+e.url+(e.caption?' | '+e.caption:'')));
   if(q.img) lines.push('Image: '+q.img);
   if(q.topic) lines.push('Topic: '+q.topic);
@@ -1531,6 +1802,7 @@ async function loadExistingQuiz(){
  if(tg) tg.value = (qObj && Array.isArray(qObj.tags)) ? qObj.tags.join(', ') : '';
  document.getElementById('customText').value = formatQuestionsBlock(qs);
  renderBuilderPreview();
+ if(typeof syncTextToVisual === 'function') syncTextToVisual();
 }
 async function exportSelectedQuiz(){
  const es = document.getElementById('editQuizSel');
@@ -1575,7 +1847,17 @@ function loadCustomFile(ev){
   document.getElementById('customTitle').value = f.name.replace(/\.(json|csv)$/i,'').replace(/[_-]+/g,' ');
  }
  const reader = new FileReader();
- reader.onload = () => { document.getElementById('customText').value = reader.result; renderBuilderPreview(); };
+ reader.onload = () => {
+  const txt = reader.result || '';
+  if(txt.trim().startsWith('[') || txt.trim().startsWith('{')){
+   try{ document.getElementById('customText').value = formatQuestionsBlock(parseCustomQuestions(txt)); }
+   catch(e){ document.getElementById('customText').value = txt; }
+  } else {
+   document.getElementById('customText').value = txt;
+  }
+  renderBuilderPreview();
+  if(typeof syncTextToVisual === 'function') syncTextToVisual();
+ };
  reader.readAsText(f);
 }
 function parseCustomQuestions(raw){
@@ -1586,60 +1868,160 @@ function parseCustomQuestions(raw){
   return Array.isArray(j) ? j : (j.questions || []);
  }
  const blocks = s.split(/\n\s*\n/).map(b=>b.trim()).filter(Boolean);
- if(blocks.length === 1 && s.includes(',') && s.split('\n').length > 1){
+ if(blocks.length === 1 && s.includes(',') && s.split('\n').length > 1 && !/^(type|slider|pin|scale|image|quote|explain|body|role|exhibit|points|think|topic|note|timer?|allcorrect|partial):/im.test(s) && !/^\*/m.test(s)){
   return s.split('\n').map(l=>l.trim()).filter(Boolean).map(line=>{
    const p = line.split(',').map(x=>x.trim());
    if(p.length < 5 || p[0].toLowerCase()==='question') return null;
    return {q:p[0], a:p.slice(1,5), c:Math.max(0, (parseInt(p[5],10)||1)-1), quote:p[6]||''};
   }).filter(Boolean);
  }
-  return blocks.map(b=>{
-   const lines = b.split('\n').map(l=>l.trim()).filter(Boolean);
-   if(lines.length < 2) return null;
-   const q = lines[0];
-   const tl = lines.find(l=>/^type:/i.test(l));
-   const type = tl ? tl.replace(/^type:\s*/i,'').toLowerCase().trim() : 'mc';
-   const caseNoAns = (type==='open'||type==='info');
-   const maxA = (type==='order'||type==='text'||type==='rank') ? 6 : 4;
-   const a = [], aimg = [], lenses = [], exhibits = [], roles = [], bodyLines = [];
-   let c = 0, quote = '', img = '', starTxt = '', topic = '', note = '', customT = 0;
-   lines.slice(1).forEach(l=>{
-    if(/^quote:/i.test(l)){ quote = l.replace(/^quote:\s*/i,''); }
-    else if(/^image:/i.test(l)){ img = l.replace(/^image:\s*/i,''); }
-    else if(/^type:/i.test(l)){ }
-    else if(/^timer?:/i.test(l)){ const tv = parseInt(l.replace(/^timer?:\s*/i,''), 10); if(tv > 0) customT = Math.max(5, Math.min(900, tv)); }
-    else if(/^topic:/i.test(l)){ topic = l.replace(/^topic:\s*/i,''); }
-    else if(/^note:/i.test(l)){ note = l.replace(/^note:\s*/i,''); }
-    else if(/^body:/i.test(l)){ bodyLines.push(l.replace(/^body:\s*/i,'')); }
-    else if(/^exhibit:/i.test(l)){ const m = l.replace(/^exhibit:\s*/i,'').match(/^(\S+)\s*(?:\|\s*(.*))?$/); if(m) exhibits.push({url:m[1], caption:(m[2]||'').trim()}); }
-    else if(/^role:/i.test(l)){ const m = l.replace(/^role:\s*/i,'').split('|'); roles.push({name:m[0].trim(), text:m.slice(1).join('|').trim()}); }
-    else if(type==='info'){ bodyLines.push(l); }
-    else if(caseNoAns){ }
-    else if(a.length < maxA){
-     let t = l, star = false;
-     if(t.startsWith('*')){ star = true; t = t.slice(1).trim(); }
-     let im = '';
-     const m = t.match(/^(.*?)\s*\|\s*((?:https?:\/\/|\/)\S+)$/);
-     if(m){ t = m[1].trim(); im = m[2]; }
-     let lens = '';
-     const lm = t.match(/^(.*?)\s*::\s*(.+)$/);
-     if(lm){ t = lm[1].trim(); lens = lm[2].trim(); }
-     if(star){ c = a.length; starTxt = t; }
-     a.push(t); aimg.push(im); lenses.push(lens);
+ return blocks.map(b=>{
+  const lines = b.split('\n').map(l=>l.trim()).filter(Boolean);
+  if(lines.length < 2) return null;
+  const q = lines[0];
+  const tl = lines.find(l=>/^type:/i.test(l));
+  const type = tl ? tl.replace(/^type:\s*/i,'').toLowerCase().trim() : 'mc';
+  const noAns = (type==='open'||type==='info'||type==='brainstorm'||type==='slider'||type==='pin');
+  const maxA = (type==='order'||type==='text') ? 8 : (type==='scale' ? 7 : 6);
+  const a = [], aimg = [], lenses = [], outcomes = [], gotos = [], stars = [], pairs = [], exhibits = [], roles = [], bodyLines = [];
+  let c = 0, quote = '', img = '', starTxt = '', topic = '', note = '', customT = 0;
+  let ptsVal = null, thinkVal = 0, allCorrect = false, partialVal = true, sliderCfg = null, pinCfg = null, scaleLabels = null;
+  lines.slice(1).forEach(l=>{
+   if(/^(quote|explain):/i.test(l)){ quote = l.replace(/^(quote|explain):\s*/i,''); }
+   else if(/^image:/i.test(l)){ img = l.replace(/^image:\s*/i,''); }
+   else if(/^type:/i.test(l)){ }
+   else if(/^timer?:/i.test(l)){ const tv = parseInt(l.replace(/^timer?:\s*/i,''), 10); if(tv > 0) customT = Math.max(5, Math.min(900, tv)); }
+   else if(/^think:/i.test(l)){ const thv = parseInt(l.replace(/^think:\s*/i,''), 10); if(thv > 0) thinkVal = Math.max(1, Math.min(120, thv)); }
+   else if(/^points:/i.test(l)){ const pv = parseInt(l.replace(/^points:\s*/i,''), 10); if(!isNaN(pv)) ptsVal = Math.max(0, Math.min(5000, pv)); }
+   else if(/^allcorrect:/i.test(l)){ allCorrect = /^(yes|true|1|on)/i.test(l.replace(/^allcorrect:\s*/i,'').trim()); }
+   else if(/^partial:/i.test(l)){ partialVal = !/^(no|false|0|off)/i.test(l.replace(/^partial:\s*/i,'').trim()); }
+   else if(/^slider:/i.test(l)){
+    const cfg = {min:0, max:100, step:1, target:50, margin:5, unit:''};
+    l.replace(/^slider:\s*/i,'').split(/[|,]/).forEach(seg=>{
+     const kv = seg.split('=');
+     if(kv.length >= 2){
+      const k = kv[0].trim().toLowerCase(), v = kv.slice(1).join('=').trim();
+      if(k==='unit') cfg.unit = v;
+      else if(k in cfg && !isNaN(parseFloat(v))) cfg[k] = parseFloat(v);
+     }
+    });
+    sliderCfg = cfg;
+   }
+   else if(/^pin:/i.test(l)){
+    const nums = l.replace(/^pin:\s*/i,'').match(/-?\d+(?:\.\d+)?/g);
+    if(nums && nums.length >= 2){
+     pinCfg = {
+      x: Math.max(0, Math.min(100, parseFloat(nums[0]))),
+      y: Math.max(0, Math.min(100, parseFloat(nums[1]))),
+      r: nums[2] !== undefined ? Math.max(3, Math.min(40, parseFloat(nums[2]))) : 12
+     };
     }
-   });
-   const out = {q, a, c, quote, img, topic, note};
-   if(customT > 0 && type !== 'info'){ out.t = customT; out.t_custom = true; }
-   if(exhibits.length) out.exhibits = exhibits;
-   if(type==='tf'){ out.type='tf'; out.a=['True','False']; out.c=/^f/i.test(starTxt||'t')?1:0; }
-   else if(type==='text'||type==='order'){ out.type=type; out.c=0; }
-   else if(type==='poll'||type==='rank'){ out.type=type; out.c=0; if(lenses.some(Boolean)) out.lenses = lenses; }
-   else if(type==='open'){ out.type='open'; out.a=[]; }
-   else if(type==='info'){ out.type='info'; out.a=[]; out.body=bodyLines.join('\n\n'); if(roles.length) out.roles = roles; }
-   else if(type==='zoom'){ out.type='zoom'; if(aimg.some(Boolean)) out.aimg = aimg; }
-   else if(aimg.some(Boolean)) out.aimg = aimg;
-   return out;
-  }).filter(Boolean);
+   }
+   else if(/^scale:/i.test(l)){
+    const sp = l.replace(/^scale:\s*/i,'').split('|').map(x=>x.trim());
+    scaleLabels = [sp[0] || 'Strongly Disagree', sp[1] || 'Strongly Agree'];
+   }
+   else if(/^topic:/i.test(l)){ topic = l.replace(/^topic:\s*/i,''); }
+   else if(/^note:/i.test(l)){ note = l.replace(/^note:\s*/i,''); }
+   else if(/^body:/i.test(l)){ bodyLines.push(l.replace(/^body:\s*/i,'')); }
+   else if(/^exhibit:/i.test(l)){ const m = l.replace(/^exhibit:\s*/i,'').match(/^(\S+)\s*(?:\|\s*(.*))?$/); if(m) exhibits.push({url:m[1], caption:(m[2]||'').trim()}); }
+   else if(/^role:/i.test(l)){ const m = l.replace(/^role:\s*/i,'').split('|'); roles.push({name:m[0].trim(), text:m.slice(1).join('|').trim()}); }
+   else if(type==='info'){ bodyLines.push(l); }
+   else if(type==='match'){
+    if(pairs.length < 6){
+     const mt = l.replace(/^[-*•]\s*/,'');
+     const mm = mt.match(/^(.*?)\s*(?:=>|->)\s*(.+)$/);
+     if(mm && mm[1].trim() && mm[2].trim()) pairs.push({l:mm[1].trim(), r:mm[2].trim()});
+    }
+   }
+   else if(noAns){ }
+   else if(a.length < maxA){
+    let t = l, star = false;
+    if(t.startsWith('*')){ star = true; t = t.slice(1).trim(); }
+    else if(/^-\s+/.test(t)){ t = t.replace(/^-\s+/,'').trim(); }
+    let gt = 0;
+    const gm = t.match(/^(.*?)\s*=>\s*(\d+)\s*$/);
+    if(gm){ t = gm[1].trim(); gt = parseInt(gm[2], 10) || 0; }
+    let oc = '';
+    const om = t.match(/^(.*?)\s*\|\|\s*(.+)$/);
+    if(om){ t = om[1].trim(); oc = om[2].trim(); }
+    let im = '';
+    const bm1 = t.match(/^(.*?)\s*\[\s*((?:https?:\/\/|\/)[^\]]+)\s*\]$/);
+    if(bm1){ t = bm1[1].trim(); im = bm1[2].trim(); }
+    else {
+     const pm1 = t.match(/^(.*?)\s*\|\s*((?:https?:\/\/|\/)\S+)$/);
+     if(pm1){ t = pm1[1].trim(); im = pm1[2].trim(); }
+    }
+    let lens = '';
+    const lm = t.match(/^(.*?)\s*::\s*(.+)$/);
+    if(lm){ t = lm[1].trim(); lens = lm[2].trim(); }
+    if(!im){
+     const bm2 = t.match(/^(.*?)\s*\[\s*((?:https?:\/\/|\/)[^\]]+)\s*\]$/);
+     if(bm2){ t = bm2[1].trim(); im = bm2[2].trim(); }
+     else {
+      const pm2 = t.match(/^(.*?)\s*\|\s*((?:https?:\/\/|\/)\S+)$/);
+      if(pm2){ t = pm2[1].trim(); im = pm2[2].trim(); }
+     }
+    }
+    if(star){ c = a.length; starTxt = t; stars.push(a.length); }
+    a.push(t); aimg.push(im); lenses.push(lens); outcomes.push(oc); gotos.push(gt);
+   }
+  });
+  const out = {q, a, c, quote, img, topic, note};
+  if(customT > 0 && type !== 'info'){ out.t = customT; out.t_custom = true; }
+  if(thinkVal > 0 && type !== 'info') out.think = thinkVal;
+  if(ptsVal !== null) out.pts = ptsVal;
+  if(allCorrect) out.all_correct = true;
+  if(exhibits.length) out.exhibits = exhibits;
+  if(type==='tf'){
+   out.type='tf'; out.a=['True','False']; out.c=/^f/i.test(starTxt||'t')?1:0;
+   if(outcomes.some(Boolean)) out.outcomes = [outcomes[0]||'', outcomes[1]||''];
+   if(gotos.some(x=>x>0)) out.goto = [gotos[0]||0, gotos[1]||0];
+  } else if(type==='multi'){
+   out.type='multi'; out.correct_multi = stars.length ? stars : [0]; out.c = out.correct_multi[0] || 0;
+   if(!partialVal) out.partial = false;
+   if(aimg.some(Boolean)) out.aimg = aimg;
+  } else if(type==='match'){
+   out.type='match'; out.pairs = pairs; out.a = pairs.map(p=>p.l); out.matches = pairs.map(p=>p.r); out.c = 0;
+  } else if(type==='slider'){
+   out.type='slider';
+   const sl = sliderCfg || {min:0, max:100, step:1, target:50, margin:5, unit:''};
+   out.slider = sl; out.a = [String(sl.target)+(sl.unit||'')]; out.c = 0;
+  } else if(type==='pin'){
+   out.type='pin';
+   const pn = pinCfg || {x:50, y:50, r:12};
+   out.pin = pn; out.a = ['('+Math.round(pn.x)+'%, '+Math.round(pn.y)+'%)']; out.c = 0;
+  } else if(type==='scale'){
+   out.type='scale';
+   if(!out.a.length) out.a = ['1','2','3','4','5'];
+   out.c = 0;
+   out.scale_labels = scaleLabels || ['Strongly Disagree','Strongly Agree'];
+   if(outcomes.some(Boolean)) out.outcomes = outcomes;
+   if(gotos.some(x=>x>0)) out.goto = gotos;
+  } else if(type==='brainstorm'){
+   out.type='brainstorm'; out.a=[]; out.c=0;
+  } else if(type==='text'||type==='order'){
+   out.type=type; out.c=0;
+  } else if(type==='poll'||type==='rank'){
+   out.type=type; out.c=0;
+   if(lenses.some(Boolean)) out.lenses = lenses;
+   if(type==='poll' && outcomes.some(Boolean)) out.outcomes = outcomes;
+   if(type==='poll' && gotos.some(x=>x>0)) out.goto = gotos;
+  } else if(type==='open'){
+   out.type='open'; out.a=[];
+  } else if(type==='info'){
+   out.type='info'; out.a=[]; out.body=bodyLines.join('\n\n');
+   if(roles.length) out.roles = roles;
+  } else if(type==='zoom'){
+   out.type='zoom'; if(aimg.some(Boolean)) out.aimg = aimg;
+  } else {
+   if(stars.length >= 2){ out.correct_multi = stars; out.c = stars[0]; }
+   if(aimg.some(Boolean)) out.aimg = aimg;
+   if(outcomes.some(Boolean)) out.outcomes = outcomes;
+   if(gotos.some(x=>x>0)) out.goto = gotos;
+  }
+  return out;
+ }).filter(Boolean);
 }
 function getSavedCustomQuizzes(){
  try{ return JSON.parse(localStorage.getItem('brainrush_custom_quizzes') || '[]'); }catch(e){ return []; }
@@ -1681,10 +2063,22 @@ function syncSelectedDeckBar(){
  closeDeckMore();
 }
 function renderDeckGrid(){
- const grid = document.getElementById('deckGrid'), fBox = document.getElementById('deckFolders'), sel = document.getElementById('quizSel');
- if(!grid) return;
+ const grid = document.getElementById('deckGrid'), fBox = document.getElementById('deckFolders'), sel = document.getElementById('quizSel'), bBadge = document.getElementById('deckBrowserBadge');
  const wantCase = (typeof hostSection !== 'undefined' && hostSection === 'case');
  const pool = quizList.filter(q => wantCase ? !!q.case : !q.case);
+ const cur = sel ? sel.value : '';
+ const pickedQ = pool.find(q => q.file === cur);
+ if(bBadge){
+  if(pickedQ){
+   const em = pickedQ.est_min || Math.max(1, Math.round(((pickedQ.count || 1) * (pickedQ.case ? 65 : 32)) / 60));
+   bBadge.textContent = `✓ ~${em} min`;
+   bBadge.classList.add('on');
+  } else {
+   bBadge.textContent = `${pool.length} ${wantCase ? (pool.length===1?'case':'cases') : (pool.length===1?'deck':'decks')}`;
+   bBadge.classList.remove('on');
+  }
+ }
+ if(!grid) return;
  const folders = [...new Set(pool.map(q => deckFolderOf(q, wantCase)))].sort((a,b)=>(a==='Built-in')-(b==='Built-in') || a.localeCompare(b));
  if(deckFolderFilter !== 'ALL' && !folders.includes(deckFolderFilter)) deckFolderFilter = 'ALL';
  if(fBox){
@@ -1701,25 +2095,27 @@ function renderDeckGrid(){
  });
  if(!shown.length){
   grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:18px 12px;opacity:.78;font-size:.92em;background:#0003;border-radius:12px">
-   ${pool.length ? 'No decks match your filter.' : (wantCase ? 'No case studies yet — click <b>📖 + New / Edit Case</b> below!' : 'No quizzes yet — click <b>➕ New / Upload Quiz</b> below!')}
+   ${pool.length ? 'No decks match your filter.' : (wantCase ? 'No case studies yet — click <b>📖 + New / Edit Case</b> above!' : 'No quizzes yet — click <b>➕ New / Edit</b> above!')}
   </div>`;
   return;
  }
- const cur = sel ? sel.value : '';
  grid.innerHTML = shown.map(q => {
   const cleanTitle = (q.title || '').replace(/\s*\(\d+\s*(?:Qs|slides?)\)\s*$/i, '');
   const f = deckFolderOf(q, wantCase);
   const tags = (q.tags || []).slice(0, 3).map(t => `<span class="deck-tag">#${esc(t)}</span>`).join('');
   const isSel = cur === q.file;
-  return `<div class="deck-card${isSel?' selected':''}" data-file="${esc(q.file)}" onclick="pickDeckCard(this.dataset.file)">
+  const estMin = q.est_min || Math.max(1, Math.round(((q.count || 1) * (q.case ? 65 : 32)) / 60));
+  return `<div class="deck-card${isSel?' active':''}" data-file="${esc(q.file)}" onclick="pickDeckCard(this.dataset.file)">
    <div class="deck-card-top">
     <span class="deck-title">${q.case ? '📖 ' : '🎮 '}${esc(cleanTitle)}</span>
-    <span class="deck-cnt">${q.count || '—'} ${q.case ? 'slides' : 'Qs'}</span>
+    <span style="display:inline-flex;gap:4px;align-items:center;flex-shrink:0"><span class="deck-cnt">${q.count || '—'} ${q.case ? 'slides' : 'Qs'}</span><span class="deck-est">⏱ ~${estMin} min</span></span>
    </div>
-   <div class="deck-meta"><span>📂 ${esc(f)}</span>${tags}${isSel ? '<span style="margin-left:auto;color:#7dff6b;font-weight:850">✓ Selected</span>' : ''}</div>
+   <div class="deck-meta"><span>📂 ${esc(f)}</span>${tags}${isSel ? '<span style="margin-left:auto;color:#7dff6b;font-weight:850">✓ Active</span>' : ''}</div>
   </div>`;
  }).join('');
 }
+const renderDeckCards = renderDeckGrid;
+window.renderDeckCards = renderDeckGrid;
 async function editSelectedDeck(){
  const sel = document.getElementById('quizSel');
  if(!sel || !sel.value) return;
@@ -1850,19 +2246,33 @@ async function create(){
  const prevEl = document.getElementById('qPrevTime');
  const prevParsed = prevEl && prevEl.value !== '' ? parseFloat(prevEl.value) : 5;
  const prevSec = Number.isFinite(prevParsed) ? Math.max(0, Math.min(120, prevParsed)) : 5;
+ const thkEl = document.getElementById('qThinkTime');
+ const thkParsed = thkEl && thkEl.value !== '' ? parseFloat(thkEl.value) : 0;
+ const thinkSec = Number.isFinite(thkParsed) ? Math.max(0, Math.min(120, thkParsed)) : 0;
  const tbEl = document.getElementById('qTeamTime');
  const tbParsed = tbEl && tbEl.value !== '' ? parseFloat(tbEl.value) : 12;
  const tbSec = Number.isFinite(tbParsed) ? Math.max(0, Math.min(180, tbParsed)) : 12;
  const spdSec = Math.max(3, Math.min(120, parseInt((document.getElementById('qSpeedTime')||{}).value, 10) || 5));
  const autoSec = Math.max(2, Math.min(120, parseInt((document.getElementById('qAutoTime')||{}).value, 10) || 7));
  const bcnt = bots ? parseInt(bots.value, 10) || 0 : 0;
+ const consensusOn = !!(document.getElementById('qConsensus') && document.getElementById('qConsensus').checked);
+ const hideBoardOn = !!(document.getElementById('qHideBoard') && document.getElementById('qHideBoard').checked);
+ const stuTtsOn = !!(document.getElementById('qStudentTts') && document.getElementById('qStudentTts').checked);
+ const scoringMode = ((document.getElementById('qScoring')||{}).value || 'classic');
+ const clampCt = (id, defV) => Math.max(5, Math.min(900, parseInt((document.getElementById(id)||{}).value, 10) || defV));
  window._lastShuffle = shuf ? shuf.checked : false;
  window.lastGame={file:qf,count:cnt}; try{ localStorage.setItem('brainrush_last', JSON.stringify(window.lastGame)); }catch(e){}
  const r=await postPw('/api/create',{
   quiz:qf, custom_questions: picked && picked.questions ? picked.questions : null,
   count:cnt, shuffle:shuf ? shuf.checked : false, qtime:qtm, preview:prevSec,
+  think_time:thinkSec, scoring_mode:scoringMode,
+  hide_board:hideBoardOn, allow_tts:stuTtsOn, consensus:consensusOn,
+  case_times:{
+   poll:clampCt('cPollTime',45), rank:clampCt('cRankTime',60), open:clampCt('cOpenTime',120),
+   brainstorm:clampCt('qBrainTime',45), scale:clampCt('qScaleTime',25)
+  },
   team_preview:tbSec, speed_time:spdSec, auto_time:autoSec, bots:bcnt,
-  teams:teams ? teams.checked : false,
+  teams:(teams ? teams.checked : false) || consensusOn,
   wager:wager ? wager.checked : false,
   redemption:redemp ? redemp.checked : false,
   sabotage:sab ? sab.checked : false,
@@ -1887,12 +2297,23 @@ async function create(){
  ensureRemoteProbe();
  document.getElementById('autoBtn').style.display = 'flex';
  document.getElementById('remoteBtn').style.display = 'flex';
+ const hbBtn = document.getElementById('hideBoardMenuBtn'); if(hbBtn) hbBtn.style.display = 'flex';
+ const stBtn = document.getElementById('stuTtsMenuBtn'); if(stBtn) stBtn.style.display = 'flex';
  const aq = document.getElementById('addQuizMenuBtn');
  if(aq) aq.style.display = 'none';
  startHostPoll();
 }
+window.startGame = function(){ return create(); };
 async function addBots(n=5){ensureAudio();await post('/api/bots',{pin,host,count:n});await poll()}
-async function hostCtl(action, sec=10, prompt=''){ensureAudio();await post('/api/host_ctl',{pin,host,action,sec,prompt});await poll()}
+async function hostCtl(action, sec=10, prompt=''){
+ ensureAudio();
+ const extra = (sec && typeof sec === 'object') ? sec : {sec, prompt};
+ await post('/api/host_ctl',{pin,host,action,...extra});
+ await poll();
+}
+async function reconsiderVote(sec=30){
+ if(pin && host) await hostCtl('reconsider', {sec});
+}
 async function applyLiveTimer(inpId){
  const el = document.getElementById(inpId);
  const v = el ? parseInt(el.value, 10) : 0;
@@ -1911,6 +2332,12 @@ async function poll(){
  if(ast) ast.textContent = S.auto ? 'ON' : 'Off';
  if(amr) amr.style.display = (pin && !S.case_game && S.auto) ? 'flex' : 'none';
  if(ams && S.auto_time && document.activeElement !== ams) ams.value = S.auto_time;
+ const hbB = document.getElementById('hideBoardMenuBtn'), hbS = document.getElementById('hideBoardMenuState');
+ if(hbB){ if(pin) hbB.style.display = 'flex'; hbB.classList.toggle('on', !!S.hide_board); }
+ if(hbS) hbS.textContent = S.hide_board ? 'ON' : 'OFF';
+ const stB = document.getElementById('stuTtsMenuBtn'), stS = document.getElementById('stuTtsMenuState');
+ if(stB){ if(pin) stB.style.display = 'flex'; stB.classList.toggle('on', !!S.allow_tts); }
+ if(stS) stS.textContent = S.allow_tts ? 'ON' : 'OFF';
  showReactions(S.reactions);handleAudio();render();updateMeta();
 }
 
@@ -1923,16 +2350,25 @@ function handleAudio(){
   startBgmForPhase();
   if(S.phase === 'icebreaker'){ speak(S.prompt); }
   else if(S.phase === 'intro'){ if(S.redemption){ sfxReveal(); speak('Redemption question! The most missed question is back for double points.'); } }
-   else if(S.phase === 'question'){ sfxQuestion(); lastTickSec = -1; speak(S.question); }
+  else if(S.phase === 'question'){ sfxQuestion(); lastTickSec = -1; speak(S.question); }
   else if(S.phase === 'results'){
    sfxReveal();
-   if(S.case){
-    if(S.qtype==='poll') speak('Votes are in! Let us hear from each side.');
+   if(S.case || S.unscored){
+    if(S.qtype==='poll' || S.qtype==='scale') speak('Votes are in!');
     else if(S.qtype==='rank') speak('The class priority ranking is in!');
-    else if(S.qtype==='open') speak('Responses are on screen! Vote for the two most persuasive on your phone.');
+    else if(S.qtype==='open' || S.qtype==='brainstorm') speak('Responses are on screen!');
+   } else if(S.all_correct){
+    speak('All answers accepted!');
    } else {
-    const winAns = S.qtype==='text' ? (S.answers_correct||[''])[0] : S.qtype==='order' ? (S.answers_correct||[]).join(', then ') : ((S.answers||[])[S.correct] || '');
-    speak('Correct answer: ' + winAns);
+    let winAns = '';
+    if(S.qtype==='text') winAns = (S.answers_correct||[''])[0];
+    else if(S.qtype==='order') winAns = (S.answers_correct||[]).join(', then ');
+    else if(S.qtype==='multi' || (Array.isArray(S.correct_multi) && S.correct_multi.length)) winAns = (S.correct_multi||[]).map(i=>(S.answers||[])[i]||'').filter(Boolean).join(' and ');
+    else if(S.qtype==='match') winAns = (S.pairs_correct||[]).map(p=>p.l+' matches '+p.r).join('; ');
+    else if(S.qtype==='slider' && S.slider_res) winAns = S.slider_res.target + (S.slider_res.unit||'');
+    else if(S.qtype==='pin') winAns = 'Target zone revealed on screen!';
+    else winAns = ((S.answers||[])[S.correct] || '');
+    if(winAns) speak('Correct answer: ' + winAns);
    }
   }
   else if(S.phase === 'board'){
@@ -1958,11 +2394,22 @@ function teamStandingsHtml(){
  return `<div class="team-grid">${S.team_board.map((t,i)=>`<div class="team-card" style="background:${t.color}">${i===0?'👑 ':''}${t.emoji} ${esc(t.name)}<small>${t.avg} avg pts (${t.members})</small></div>`).join('')}</div>`;
 }
 
-function board(b,off=0){return b.map((x,i)=>`<div class="row"><span>${i+1+off}. ${x.team_emoji?x.team_emoji+' ':''}${esc(x.avatar?x.avatar+' ':'')}${nameHtml(x)}${x.title?`<span class="title-pill">${esc(x.title)}</span>`:''}${x.streak>=2?`<span class="streak">🔥${x.streak}</span>`:''}${x.frozen_next?' ⛄':''}</span><b>${x.score}</b></div>`).join('')}
+function board(b,off=0){
+ const isPct = S && S.scoring_mode === 'percent';
+ return b.map((x,i)=>{
+  const av = fmtAvatar(x);
+  const pctBadge = x.pct != null ? `<span class="pct-pill">${x.pct}%</span>` : '';
+  const rightMetric = isPct
+   ? `<b>${x.pct!=null?x.pct:0}% <small style="opacity:.75">(${x.correct_n||0}/${x.graded_n||0} · ${x.score} pts)</small></b>`
+   : `<span>${pctBadge}<b>${x.score}</b></span>`;
+  return `<div class="row"><span>${i+1+off}. ${x.team_emoji?x.team_emoji+' ':''}${av?av+' ':''}${nameHtml(x)}${x.title?`<span class="title-pill">${esc(x.title)}</span>`:''}${x.streak>=2?`<span class="streak">🔥${x.streak}</span>`:''}${x.frozen_next?' ⛄':''}</span>${rightMetric}</div>`;
+ }).join('');
+}
 
 let animDone = -1;
 function animBoard(b, qIdx){
  const H = 41, first = animDone !== qIdx && qIdx > 0;
+ const isPct = S && S.scoring_mode === 'percent';
  const prevOrder = [...b].sort((a,c)=>(a.prev_rank||99)-(c.prev_rank||99));
  const prevPos = new Map(prevOrder.map((x,i)=>[x.name, i]));
  const rows = b.map((x,i)=>{
@@ -1975,8 +2422,12 @@ function animBoard(b, qIdx){
   const streak = x.streak >= 5 ? `<span class="streak fire">🔥🔥${x.streak}</span>` : x.streak >= 2 ? `<span class="streak">🔥${x.streak}</span>` : '';
   const ice = x.frozen_next ? ` <span title="Frozen by a snowball for next question!">⛄</span>` : '';
   const gain = x.gained !== 0 ? `<span class="gain ${first?'':'show'}">${x.gained>0?'+'+x.gained:x.gained}</span>` : '';
-  const label = (x.team_emoji ? x.team_emoji + ' ' : '') + esc(x.avatar ? x.avatar + ' ' : '') + nameHtml(x);
-  return `<div class="row${x.streak>=5?' onfire':''}" data-idx="${i}" data-prev="${sc}" data-score="${x.score}" data-diff="${diff}" style="transform:translateY(${pIdx*H}px)"><span><b class="rk">${rk}</b>. ${label}${ttl}${streak}${ice}${arrow}</span><span>${gain}<b class="sc">${sc}</b></span></div>`;
+  const av = fmtAvatar(x);
+  const label = (x.team_emoji ? x.team_emoji + ' ' : '') + (av ? av + ' ' : '') + nameHtml(x);
+  const scoreHtml = isPct
+   ? `${gain}<b>${x.pct!=null?x.pct:0}% <small style="opacity:.78">(${x.correct_n||0}/${x.graded_n||0})</small></b> <small style="opacity:.72">· <span class="sc">${sc}</span> pts</small>`
+   : `${gain}${x.pct!=null?`<span class="pct-pill">${x.pct}%</span>`:''}<b class="sc">${sc}</b>`;
+  return `<div class="row${x.streak>=5?' onfire':''}" data-idx="${i}" data-prev="${sc}" data-score="${x.score}" data-diff="${diff}" style="transform:translateY(${pIdx*H}px)"><span><b class="rk">${rk}</b>. ${label}${ttl}${streak}${ice}${arrow}</span><span>${scoreHtml}</span></div>`;
  }).join('');
  if(first){
   animDone = qIdx;
@@ -2047,11 +2498,15 @@ function newGame(){
 }
 function renderFinal(b){
  const p1 = b[0], p2 = b[1], p3 = b[2];
+ const isPct = S && S.scoring_mode === 'percent';
+ const podScoreTxt = p => isPct
+  ? `${p.pct!=null?p.pct:0}% (${p.correct_n||0}/${p.graded_n||0}) · ${p.score} pts`
+  : `${p.score} pts${p.pct!=null?` · ${p.pct}%`:''}`;
  const podSlot = (p, place, medal) => p ? `<div class="pod pod-${place} ${podiumShown?'show':''}" id="pod${place}">
   ${place===1?'<div class="pod-crown">👑</div>':''}
-  <div class="pod-avatar">${esc(p.avatar||'🙂')}</div>
+  <div class="pod-avatar">${fmtAvatar(p, 'av-pod') || esc(p.avatar||'🙂')}</div>
   <div class="pod-name">${p.team_emoji?p.team_emoji+' ':''}${nameHtml(p)}</div>
-  <div class="pod-score">${p.score} pts</div>
+  <div class="pod-score">${podScoreTxt(p)}</div>
   <div class="pod-bar"><div class="pod-medal">${medal}</div><div class="pod-rank">${place}</div></div>
  </div>` : '';
  const podiumHtml = `<div class="podium-stage"><div class="podium">${podSlot(p2,2,'🥈')}${podSlot(p1,1,'🥇')}${podSlot(p3,3,'🥉')}</div><div class="podium-floor"></div></div>`;
@@ -2065,10 +2520,12 @@ function renderFinal(b){
  const st = S.stats || {};
  const accHtml = st.possible ? `<div class="acc-pill">🎯 Group Accuracy: ${st.accuracy}% (${st.correct}/${st.possible} correct)</div>` : '';
  const awHtml = (st.awards && st.awards.length) ? `<div class="awards">${st.awards.map(a=>`<div class="award"><b>${esc(a.title)}</b>${esc(a.winner)} <small>(${esc(a.detail)})</small></div>`).join('')}</div>` : '';
+ const cal = st.calibration;
+ const calHtml = (cal && cal.conf_n > 0) ? `<div class="tough-box" style="border-color:#ffdf5d66"><h3 style="color:#ffdf5d">🎯 Confidence Calibration</h3><div class="tough-item">Confident Bets: <b>${cal.conf_pct}% accurate (${cal.conf_ok}/${cal.conf_n})</b> vs Standard Answers: <b>${cal.calm_pct !== null && cal.calm_pct !== undefined ? cal.calm_pct + '%' : 'N/A'}</b></div></div>` : '';
  const toughHtml = (st.tough && st.tough.length) ? `<div class="tough-box"><h3>🧠 Tough Ones Recap (Most Missed)</h3>${st.tough.map(t=>`<div class="tough-item"><b>Q${t.index}${t.redemption?' (Redemption)':''} (${t.pct}% correct):</b> ${esc(t.q)}<br><span style="color:#7dff6b">✅ ${esc(t.ans)}</span></div>`).join('')}</div>` : '';
  const pool = quizList.filter(q => S.case_game ? !!q.case : !q.case);
  const qOpts = `<option value="">— Select ${S.case_game ? 'a Case Study' : 'a Quiz'} —</option>` + (pool.length ? pool : quizList).map(q=>`<option value="${esc(q.file)}">${esc(q.title)}</option>`).join('');
- return `<h1 class="final-title">${S.case_game?'📖 CASE COMPLETE 🏆':'🏆 FINAL PODIUM 🏆'}</h1>${accHtml}${teamStandingsHtml()}${podiumHtml}${awHtml}${topicPanel()}${toughHtml}${rest.length?'<h2>Runners-up</h2>'+board(rest,3):''}
+ return `<h1 class="final-title">${S.case_game?'📖 CASE COMPLETE 🏆':'🏆 FINAL PODIUM 🏆'}</h1>${accHtml}${teamStandingsHtml()}${podiumHtml}${awHtml}${calHtml}${topicPanel()}${toughHtml}${rest.length?'<h2>Runners-up</h2>'+board(rest,3):''}
  <div class="replay-box" id="replayBox">
   <b>🔁 Next ${S.case_game?'Case':'Round'} (Keep Players):</b>
   <select id="repQuizSel" onchange="syncRepCount()">${qOpts}</select>
@@ -2122,9 +2579,11 @@ function render(){
   lqs.dataset.pin = String(pin||'');
  }
  const inPrev = S.phase==='question' && (S.preview_left||0) > 0;
+ const inCons = S.phase==='question' && S.consensus_step === 2;
+ const inThink = S.phase==='question' && !inPrev && !inCons && (S.think_left||0) > 0;
  const k = S.phase==='question'
-  ? `q:${S.index}:${inPrev?1:0}:${window.presenterMode?1:0}:${(S.pending_list||[]).length}:${S.n||0}:${S.discuss_left!=null?1:0}`
-  : JSON.stringify({...S,left:0,qtime:0,answered:0,preview_left:0,auto_left:0,intro_left:0,discuss_left:0,_da:S.discuss_left!=null,reactions:null, _pm:!!window.presenterMode});
+  ? `q:${S.index}:${inPrev?1:0}:${inThink?1:0}:${S.consensus_step||0}:${window.presenterMode?1:0}:${(S.pending_list||[]).length}:${S.n||0}:${S.discuss_left!=null?1:0}`
+  : JSON.stringify({...S,left:0,qtime:0,answered:0,preview_left:0,think_left:0,consensus_left:0,consensus_voted:0,auto_left:0,intro_left:0,discuss_left:0,_da:S.discuss_left!=null,reactions:null, _pm:!!window.presenterMode});
  if(k==last){
   const t=document.getElementById('t');
   if(t){
@@ -2139,6 +2598,16 @@ function render(){
   if(ac) ac.textContent = `${S.answered}/${(S.n_active != null ? S.n_active : S.n)}`;
   const pf=document.getElementById('pf');
   if(pf) pf.style.width = Math.min(100, ((S.preview_left||0)/(S.preview_total||5))*100)+'%';
+  const thkS=document.getElementById('thkSec');
+  if(thkS) thkS.textContent = Math.ceil(S.think_left||0);
+  const thkf=document.getElementById('thkf');
+  if(thkf) thkf.style.width = Math.min(100, ((S.think_left||0)/Math.max(1, S.think_total||5))*100)+'%';
+  const cSecEl=document.getElementById('consSec');
+  if(cSecEl) cSecEl.textContent = Math.ceil(S.consensus_left||0);
+  const cFillEl=document.getElementById('consFill');
+  if(cFillEl) cFillEl.style.width = Math.min(100, ((S.consensus_left||0)/Math.max(1, S.consensus_total||20))*100)+'%';
+  const cVotedEl=document.getElementById('consVoted');
+  if(cVotedEl) cVotedEl.textContent = S.consensus_voted||0;
   const ib=document.getElementById('ib');
   if(ib) ib.style.width = Math.max(0, Math.min(100, ((S.intro_left||0)/(S.intro_total||5))*100))+'%';
   const ab=document.getElementById('autoNextLbl');
@@ -2155,12 +2624,21 @@ function render(){
  }
  const autoSuffix = S.auto && S.auto_left != null ? `<span id="autoNextLbl"> (${S.auto_left}s)</span>` : '';
  const zm = S.qtype==='zoom' && S.phase==='question';
- const imgHtml = S.img ? `<img class="q-img${zm?(inPrev?' zoom-hold':' zoom-go'):''}"${zm&&!inPrev?` style="animation-duration:${S.qtime||15}s"`:''} src="${esc(S.img)}" alt="">` : '';
+ const imgHtml = (S.img && (S.qtype !== 'pin' || inPrev)) ? `<img class="q-img${zm?(inPrev?' zoom-hold':' zoom-go'):''}"${zm&&!inPrev?` style="animation-duration:${S.qtime||15}s"`:''} src="${esc(S.img)}" alt="">` : '';
  const exH = exhibitsHtml(S.exhibits, false);
  const nAct = (S.n_active != null ? S.n_active : S.n);
+ const ptsB = (S.pts !== null && S.pts !== undefined) ? `<span class="pts-badge">${S.pts === 0 ? 'Ungraded · 0 pts' : `💎 ${S.pts} pts`}</span>` : '';
+ const allOkB = S.all_correct ? `<span class="pts-badge all-ok">✅ All Answers Accepted</span>` : '';
  if(S.phase=='lobby'){
   spunQ = -1; seenWords.clear();
-  const nm = (S.lobby||[]).map(p=>`<span${p.color?` style="color:${p.color}"`:''}>${esc(p.tag)}${p.ctag?`<em class="ctag">${esc(p.ctag)}</em>`:''}<button class="kick" title="Remove ${esc(p.name)}" data-n="${esc(p.name)}" onclick="kickPlayer(this.dataset.n)">✖</button></span>`).join('');
+  const nm = (S.lobby||[]).map(p=>{
+   const av = fmtAvatar(p);
+   const tPre = (p.tag && p.avatar && p.tag.indexOf(p.avatar) > 0) ? esc(p.tag.slice(0, p.tag.indexOf(p.avatar))) : '';
+   const body = (av || p.av_hat || p.av_ring)
+    ? `${tPre}${av}${av?' ':''}${esc(p.name)}${p.bot?' 🤖':''}`
+    : esc(p.tag);
+   return `<span${p.color?` style="color:${p.color}"`:''}>${body}${p.ctag?`<em class="ctag">${esc(p.ctag)}</em>`:''}<button class="kick" title="Remove ${esc(p.name)}" data-n="${esc(p.name)}" onclick="kickPlayer(this.dataset.n)">✖</button></span>`;
+  }).join('');
   const startCta = S.n
    ? `<button class="btn-start-hero" onclick="next()">🚀 Start ${S.case_game?'Case Study':'Game'} ➔</button>`
    : `<button class="btn-sec" disabled style="margin:0;opacity:.55;cursor:not-allowed">⏳ Waiting for 1st player…</button>`;
@@ -2170,6 +2648,7 @@ function render(){
     ${joinQrHtml(pin, 204)}
     <div style="font-size:.86em;opacity:.82">Or open on your phone:</div>
     <a class="join-link" href="/play?pin=${pin}" target="_blank">${esc(joinPlayDisplay())}</a>
+    <button class="btn-sm aud-hide" style="background:#26890c;border-color:#7dff6b;padding:8px 16px;font-size:.92em;margin-top:2px" onclick="copyJoinLink(this)">📋 Copy Direct Join Link</button>
     <div class="pin-lbl">Game PIN</div>
     <div class="pin">${esc(pin)}</div>
    </div>
@@ -2236,8 +2715,29 @@ function render(){
   const pct = Math.min(100, ((S.preview_left||0)/(S.preview_total||5))*100);
   const wheelBanner = S.wheel_mod ? `<div class="wheel-banner">🎡 MYSTERY WHEEL: ${esc(S.wheel_mod)}</div>` : '';
   const extraB = `${S.team_battle?`<div class="team-banner">🤝 TEAM BATTLE! Your team's most popular answer earns +300 each</div>`:''}${S.hot?`<div class="hot-banner">🔥 HOT SEAT: ${esc(S.hot.name)} — will they nail it?</div>`:''}${S.tiebreak?`<div class="tb-banner">⚔️ SUDDEN DEATH TIEBREAKER: ${(S.tb_names||[]).map(esc).join(' vs ')}</div>`:''}`;
-  const badges = `${wheelBanner}${S.speed?`<div class="speed-banner">⚡ SPEED ROUND — ${S.speed_time||5} seconds, no waiting!</div>`:''}${S.dbl?'<div class="dbl-banner">💥 DOUBLE OR NOTHING — opt in on your phone!</div>':''}${extraB}${S.redemption?'<div class="redemp-banner">🔄 REDEMPTION QUESTION (MOST MISSED!) 🔄</div>':''}${S.boss?'<div class="double-banner">🎰 FINAL BOSS WAGER! 🎰</div>':S.double?'<div class="double-banner">⚡ DOUBLE POINTS! ⚡</div>':''}`;
+  const badges = `${ptsB}${allOkB}${wheelBanner}${S.speed?`<div class="speed-banner">⚡ SPEED ROUND — ${S.speed_time||5} seconds, no waiting!</div>`:''}${S.dbl?'<div class="dbl-banner">💥 DOUBLE OR NOTHING — opt in on your phone!</div>':''}${extraB}${S.redemption?'<div class="redemp-banner">🔄 REDEMPTION QUESTION (MOST MISSED!) 🔄</div>':''}${S.boss?'<div class="double-banner">🎰 FINAL BOSS WAGER! 🎰</div>':S.double?'<div class="double-banner">⚡ DOUBLE POINTS! ⚡</div>':''}`;
   const mediaCol = (imgHtml || exH) ? `<div class="q-media">${imgHtml}${exH}</div>` : '';
+  const thkPct = Math.min(100, ((S.think_left||0)/Math.max(1, S.think_total||5))*100);
+  const thinkBanner = inThink ? `<div class="think-banner">
+   <div class="think-top">
+    <span>🧠 Thinking Time — Read &amp; Reason (<span id="thkSec">${Math.ceil(S.think_left||0)}</span>s)</span>
+    <button class="btn-sm aud-hide" style="background:#7c4dff;border-color:#d1c4e9" onclick="hostCtl('skip_think')">⏭️ Unlock Answers Now</button>
+   </div>
+   <div style="font-size:.86em;opacity:.88;text-align:left">Choices are shown below so everyone can read &amp; reason before phones unlock!</div>
+   <div class="preview-bar" style="height:10px;margin:0"><div class="think-fill" id="thkf" style="width:${thkPct}%"></div></div>
+  </div>` : '';
+  const cSec = Math.ceil(S.consensus_left||0);
+  const cPct = Math.min(100, ((S.consensus_left||0)/Math.max(1, S.consensus_total||20))*100);
+  const consBanner = inCons ? `<div class="cons-banner">
+   <div class="think-top">
+    <span>🤝 Phase 2: Team Consensus Discussion (<span id="consSec">${cSec}</span>s) · <span style="color:#fff"><b id="consVoted">${S.consensus_voted||0}</b> votes locked in</span></span>
+    <span class="aud-hide" style="display:inline-flex;gap:6px;flex-wrap:wrap">
+     <button class="btn-sm" onclick="hostCtl('add_time',15)">+15s</button>
+     <button class="btn-sm" style="background:#26890c;border-color:#7dff6b" onclick="next()">⏭️ Skip to Results</button>
+    </span>
+   </div>
+   <div class="preview-bar" style="height:10px;margin:0"><div class="preview-fill" id="consFill" style="width:${cPct}%"></div></div>
+  </div>` : '';
   if(S.qtype==='info'){
    $.innerHTML = infoScreen();
   } else if(inPrev){
@@ -2272,8 +2772,11 @@ function render(){
     <h1>${esc(S.question)}</h1>
     ${mediaCol}
    </div>
+   ${thinkBanner}
+   ${consBanner}
    <div class="ans-reveal">${answerArea()}</div>
    <div class="host-dock aud-hide">
+    ${inThink ? `<button class="btn-sm" style="background:#7c4dff;border-color:#d1c4e9" onclick="hostCtl('skip_think')">⏭️ Unlock Answers Now</button>` : ''}
     <button class="btn-sm" id="pauseBtn" onclick="hostCtl('pause')">${S.paused?'▶️ Resume':'⏸️ Pause'}</button>
     <button class="btn-sm" onclick="hostCtl('add_time',-10)" title="Subtract 10 seconds">-10s</button>
     <button class="btn-sm" onclick="hostCtl('add_time',10)" title="Add 10 seconds">+10s</button>
@@ -2287,10 +2790,12 @@ function render(){
    </div>`;
   }
  } else if(S.phase=='results'){
+  const resBadges = `${ptsB}${allOkB}`;
   $.innerHTML=`<div class="stage-hud">
    <div class="stage-hud-left"><span class="qnum">${S.case_game?'Slide':'Question'} ${S.index+1} <small>of ${S.total}</small></span></div>
    <div class="stage-hud-right"><span class="ans-pill">📊 <b>${S.answered}/${nAct}</b> Responded</span></div>
   </div>
+  ${resBadges?`<div class="stage-badges">${resBadges}</div>`:''}
   <h2 style="margin:.15em auto .35em;max-width:920px;font-size:1.65em;line-height:1.25">${esc(S.question)}</h2>
   <div class="ans-reveal">
    ${resultArea()}
@@ -2298,7 +2803,8 @@ function render(){
    ${S.quote?quoteBox():''}
   </div>
   <div class="host-dock aud-hide">
-   <button class="dock-next" onclick="next()">${S.is_last?'🏆 Final Podium':(S.case?'Continue ➔':'🏆 Top Players ➔')}${autoSuffix}</button>
+   ${S.can_reconsider ? `<button class="btn-sm" onclick="reconsiderVote(30)">🔄 Re-open Vote (Reconsider)</button><span class="dock-sep"></span>` : ''}
+   <button class="dock-next" onclick="next()">${S.is_last?'🏆 Final Podium':(S.case||S.hide_board?'Continue ➔':'🏆 Top Players ➔')}${autoSuffix}</button>
   </div>`;
  } else if(S.phase=='board'){
   const shHtml = (S.shoutouts&&S.shoutouts.length)?`<div class="shouts">${S.shoutouts.map(s=>`<span class="shout">${esc(s)}</span>`).join('')}</div>`:'';
@@ -2316,16 +2822,63 @@ function render(){
 </script>
 <script>
 // ===== Extra features =====
-const LET = 'ABCD';
+const LET = 'ABCDEFGH';
 const seenWords = new Set();
 function tileHtml(a,i){
  const im = (S.aimg && S.aimg[i]) ? `<img class="a-img" src="${esc(S.aimg[i])}" alt="">` : '';
- return `<div class="a c${i}">${im}<span>${sh[i]}${esc(a)}</span></div>`;
+ return `<div class="a c${i%8}">${im}<span>${sh[i%sh.length]}${esc(a)}</span></div>`;
 }
 function answerArea(){
  if(S.qtype==='text') return `<div class="textq">✍️ Players are typing their answers…<small>Spelling counts — capitalization doesn't</small></div>`;
- if(S.qtype==='order') return `<div><div class="oq-title">🔢 Put these in the right order!</div><div class="grid">${S.answers.map((a,i)=>`<div class="a c${i}"><span>${LET[i]}. ${esc(a)}</span></div>`).join('')}</div></div>`;
- return `<div class="grid">${S.answers.map((a,i)=>tileHtml(a,i)).join('')}</div>`;
+ if(S.qtype==='brainstorm') return `<div class="textq">💡 Submit up to 3 ideas on your phone!<small>Short sticky-note ideas — then the class votes on the strongest ones.</small></div>`;
+ if(S.qtype==='order'){
+  const ans = S.answers||[];
+  return `<div><div class="oq-title">🔢 Put these in the right order!</div><div class="grid${ans.length>4?' grid-compact':''}">${ans.map((a,i)=>`<div class="a c${i%8}"><span>${LET[i]||i+1}. ${esc(a)}</span></div>`).join('')}</div></div>`;
+ }
+ if(S.qtype==='multi'){
+  const ans = S.answers||[];
+  return `<div><div class="oq-title">☑️ Select ALL that apply${S.multi_partial===false?' (Exact match required)':''}</div><div class="grid${ans.length>4?' grid-compact':''}">${ans.map((a,i)=>tileHtml(a,i)).join('')}</div></div>`;
+ }
+ if(S.qtype==='match'){
+  const ml = S.match_left||[], mr = S.match_right||[];
+  return `<div><div class="oq-title">🔗 Match each left item with its pair on your phone!</div>
+   <div class="match-cols">
+    <div class="match-col"><h4>Prompts</h4>${ml.map((x,i)=>`<div class="match-item"><span style="color:#ffdf5d;margin-right:6px">${i+1}.</span>${esc(x)}</div>`).join('')}</div>
+    <div class="match-col"><h4>Choices</h4>${mr.map((x,i)=>`<div class="match-item"><span style="color:#80d8ff;margin-right:6px">${LET[i]||i+1}.</span>${esc(x)}</div>`).join('')}</div>
+   </div></div>`;
+ }
+ if(S.qtype==='slider'){
+  const cfg = S.slider_cfg || {min:0, max:100, step:1, unit:''};
+  const u = esc(cfg.unit||'');
+  return `<div class="slider-stage">
+   <div style="font-size:.95em;opacity:.85;font-weight:700">🎚️ Dial in your estimate on your phone</div>
+   <div style="font-size:2.4em;font-weight:900;color:var(--gold);margin:8px 0">${cfg.min}${u} — ${cfg.max}${u}</div>
+   <div style="font-size:.88em;opacity:.75">Step: ${cfg.step||1}${u}</div>
+  </div>`;
+ }
+ if(S.qtype==='pin'){
+  return `<div><div class="oq-title">📍 Tap on your phone to drop your pin!</div>
+   ${S.img ? `<div class="pin-stage"><img src="${esc(S.img)}" alt="Pin target"></div>` : '<div class="textq">📍 Tap the image on your phone!</div>'}
+  </div>`;
+ }
+ if(S.qtype==='scale'){
+  const lb = S.scale_labels || ['Low', 'High'];
+  return `<div style="width:100%;max-width:860px;margin:0 auto">
+   <div class="scale-ends"><span>⬅️ ${esc(lb[0]||'Low')}</span><span>${esc(lb[1]||'High')} ➡️</span></div>
+   <div class="scale-grid">${(S.answers||[]).map((a,i)=>`<div class="scale-card c${i%8}"><div>${i+1}</div><div style="font-size:.52em;opacity:.92;margin-top:3px">${esc(a)}</div></div>`).join('')}</div>
+  </div>`;
+ }
+ const ans = S.answers||[];
+ return `<div class="grid${ans.length>4?' grid-compact':''}">${ans.map((a,i)=>tileHtml(a,i)).join('')}</div>`;
+}
+function responsesGridHtml(rs, hint){
+ const cards = (rs||[]).map(r=>`<div class="resp ${r.starred?'starred':''} ${r.votes?'voted':''}">
+  ${r.starred?'<div class="spot-badge">⭐ Spotlight for Class Discussion</div>':''}
+  <div>“${esc(r.text)}”</div>
+  ${r.votes?`<div class="rv">👍 ${r.votes}</div>`:''}
+  ${!IS_AUDIENCE ? `<button class="btn-sm spot-btn aud-hide" onclick="hostCtl('spotlight',{rid:${r.id}})">${r.starred?'★ Unspotlight':'⭐ Spotlight'}</button>` : ''}
+ </div>`).join('') || '<p>No responses yet.</p>';
+ return `<div class="resp-grid">${cards}</div>${hint?`<p style="opacity:.85">${esc(hint)}</p>`:''}`;
 }
 function resultArea(){
  const nAct = (S.n_active != null ? S.n_active : S.n), nOk = S.n_correct||0;
@@ -2337,18 +2890,132 @@ function resultArea(){
  if(S.qtype==='order'){
   return `<div class="reveal-box"><div class="rb-label">✅ Correct order</div><ol class="rb-ol">${(S.answers_correct||[]).map(a=>`<li>${esc(a)}</li>`).join('')}</ol>${cnt}</div>`;
  }
+ if(S.qtype==='match'){
+  const pairs = S.pairs_correct || [], pcnts = S.pair_counts || [];
+  return `<div class="reveal-box" style="max-width:780px"><div class="rb-label">🔗 Matched Pairs</div>
+   ${pairs.map((p,i)=>`<div class="match-pair-row"><span>${esc(p.l)} <span style="color:#ffdf5d;margin:0 8px">➔</span> <span style="color:#7dff6b">${esc(p.r)}</span></span><span class="ans-pill" style="font-size:.82em">✅ ${pcnts[i]||0}/${nAct}</span></div>`).join('')}
+   ${cnt}</div>`;
+ }
+ if(S.qtype==='slider'){
+  const res = S.slider_res || {min:0,max:100,target:50,margin:0,unit:'',vals:[],avg:null};
+  const u = esc(res.unit||''), span = Math.max(1e-6, (res.max - res.min) || 100);
+  const pctOf = v => Math.max(0, Math.min(100, ((v - res.min) / span) * 100));
+  const loPct = pctOf(res.target - (res.margin||0)), hiPct = pctOf(res.target + (res.margin||0)), tPct = pctOf(res.target);
+  const dots = (res.vals||[]).map(v=>{
+   const ok = Math.abs(v - res.target) <= (res.margin||0) + 1e-9;
+   return `<span class="slider-dot ${ok?'ok':'miss'}" style="left:${pctOf(v)}%" title="${v}${u}"></span>`;
+  }).join('');
+  return `<div class="slider-stage">
+   <div class="rb-label">🎯 Target: <b style="color:#7dff6b;font-size:1.25em">${res.target}${u}</b> ${res.margin?`<small style="opacity:.85">(±${res.margin}${u} accepted)</small>`:''}</div>
+   <div style="margin-top:4px;font-weight:800;color:#ffdf5d">📊 Class Average: ${res.avg !== null && res.avg !== undefined ? res.avg + u : '—'}</div>
+   <div class="slider-line-wrap">
+    <div class="slider-track"></div>
+    <div class="slider-tol" style="left:${loPct}%;width:${Math.max(1, hiPct - loPct)}%"></div>
+    <div class="slider-tgt" style="left:${tPct}%" title="Target ${res.target}${u}"></div>
+    ${dots}
+   </div>
+   <div style="display:flex;justify-content:space-between;font-size:.82em;opacity:.75;font-weight:700"><span>${res.min}${u}</span><span>${(res.vals||[]).length} guess${(res.vals||[]).length===1?'':'es'}</span><span>${res.max}${u}</span></div>
+   ${cnt}
+  </div>`;
+ }
+ if(S.qtype==='pin'){
+  const t = S.pin_target || {x:50, y:50, r:12};
+  const pins = S.pins || [];
+  return `<div>
+   <div class="pin-stage">
+    ${S.img ? `<img src="${esc(S.img)}" alt="Pin results">` : '<div style="width:480px;height:300px;background:#ffffff14"></div>'}
+    <svg class="pin-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+     <circle cx="${t.x}" cy="${t.y}" r="${t.r}" fill="rgba(46,204,113,0.28)" stroke="#7dff6b" stroke-width="0.9"/>
+     <circle cx="${t.x}" cy="${t.y}" r="1.2" fill="#7dff6b"/>
+    </svg>
+    ${pins.map(p=>`<span class="pin-dot ${p.ok?'ok':'miss'}" style="left:${p.x}%;top:${p.y}%" title="${esc(p.name)}: (${p.x}%, ${p.y}%)"></span>`).join('')}
+   </div>
+   ${cnt}
+  </div>`;
+ }
+ if(S.qtype==='scale'){
+  const lb = S.scale_labels || ['Low', 'High'];
+  const ans = S.answers || [];
+  const tot = Math.max(1, (S.counts||[]).reduce((a,b)=>a+b,0));
+  return `<div style="width:100%;max-width:860px;margin:0 auto">
+   ${S.scale_avg != null ? `<div class="scale-avg-pill">📏 Class Average: ${S.scale_avg} / ${ans.length}</div>` : ''}
+   <div class="scale-ends"><span>⬅️ ${esc(lb[0]||'Low')}</span><span>${esc(lb[1]||'High')} ➡️</span></div>
+   <div class="grid${ans.length>4?' grid-compact':''}" style="margin-top:6px">${ans.map((a,i)=>{
+    const c = (S.counts&&S.counts[i])||0, pct = Math.round((c/tot)*100);
+    return `<div class="a res c${i%8}"><div class="a-fill" style="width:${pct}%"></div><span class="a-txt">${i+1}. ${esc(a)}</span><span class="a-cnt">${pct}% · ${c}</span></div>`;
+   }).join('')}</div>
+  </div>`;
+ }
+ if(S.qtype==='brainstorm' || S.qtype==='open'){
+  return responsesGridHtml(S.responses || [], S.qtype==='brainstorm' ? '💡 Vote on your favorite brainstorm ideas on your phone!' : 'Students: vote for the two most persuasive responses on your phone.');
+ }
+ const cm = Array.isArray(S.correct_multi) && S.correct_multi.length ? S.correct_multi : null;
  const ci = S.correct, tot = Math.max(1, (S.counts||[]).reduce((a,b)=>a+b, 0));
- return `<div class="grid" style="margin-top:10px">${S.answers.map((a,i)=>{
-  const c = (S.counts&&S.counts[i])||0, pct = Math.round((c / tot) * 100), win = i===ci;
+ const ans = S.answers || [];
+ return `<div class="grid${ans.length>4?' grid-compact':''}" style="margin-top:10px">${ans.map((a,i)=>{
+  const c = (S.counts&&S.counts[i])||0, pct = Math.round((c / tot) * 100);
+  const win = S.all_correct || (cm ? cm.includes(i) : i===ci);
   const im = (S.aimg && S.aimg[i]) ? `<img class="a-img" src="${esc(S.aimg[i])}" alt="">` : '';
-  return `<div class="a res c${i} ${win?'win':'dim'}"><div class="a-fill" style="width:${pct}%"></div>${im}<span class="a-txt">${sh[i]}${esc(a)}</span><span class="a-cnt">${c}${win?' ✓':''}</span></div>`;
+  return `<div class="a res c${i%8} ${win?'win':'dim'}"><div class="a-fill" style="width:${pct}%"></div>${im}<span class="a-txt">${sh[i%sh.length]}${esc(a)}</span><span class="a-cnt">${c}${win?' ✓':''}</span></div>`;
  }).join('')}</div>`;
+}
+function sharedResultExtrasHtml(){
+ let h = '';
+ if(S.consensus_stats){
+  const cs = S.consensus_stats;
+  const dSign = cs.delta > 0 ? '+' : '';
+  const dCls = cs.delta >= 0 ? 'pos' : 'neg';
+  const tChips = (cs.teams||[]).map(t=>{
+   const ansTxt = (t.ans != null && S.answers && S.answers[t.ans] != null) ? S.answers[t.ans] : 'No vote';
+   return `<span class="tr" style="background:${t.color};padding:5px 11px;border-radius:99px;font-weight:800;font-size:.86em">${t.emoji} ${esc(t.name)}: ${esc(ansTxt)} ${t.correct===true?'✅':t.correct===false?'❌':''}</span>`;
+  }).join(' ');
+  h += `<div class="cons-card">
+   <div style="font-weight:900;color:#80d8ff;font-size:.95em">🤝 Individual vs. Team Consensus</div>
+   <div class="cons-vs">
+    <span>👤 Individual Accuracy: <b>${cs.indiv_pct}%</b></span>
+    <span>➔</span>
+    <span>🛡️ Team Consensus: <b>${cs.team_pct}%</b></span>
+    <span class="cons-delta ${dCls}">${dSign}${cs.delta}%</span>
+   </div>
+   ${tChips ? `<div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin-top:6px">${tChips}</div>` : ''}
+  </div>`;
+ }
+ if(S.outcomes && S.outcomes.some(Boolean)){
+  const cnts = S.counts || [];
+  const maxC = cnts.length ? Math.max(...cnts) : 0;
+  h += `<div class="outcome-box"><h4>⚡ Revealed Consequences</h4>${(S.outcomes||[]).map((o,i)=>{
+   if(!o) return '';
+   const isPlurality = maxC > 0 && cnts[i] === maxC;
+   const optLbl = (S.answers && S.answers[i]) ? S.answers[i] : ('Option ' + (i+1));
+   return `<div class="outcome-row${isPlurality?' win':''}"><b>${sh[i%sh.length]}${esc(optLbl)}${isPlurality?' (Class Choice)':''}:</b> Outcome: ${esc(o)}</div>`;
+  }).join('')}</div>`;
+ }
+ if(S.vote_shift){
+  const vs = S.vote_shift;
+  const shiftsHtml = (vs.shifts||[]).slice(0,4).map(s=>`<span class="pcon-chip" style="font-size:.84em">${esc(s.from_txt)} → ${esc(s.to_txt)}: <b>${s.n}</b></span>`).join(' ');
+  const initVsRev = (vs.init_counts||[]).map((ic,i)=>{
+   const rc = (S.counts && S.counts[i]) || 0;
+   const lbl = (S.answers && S.answers[i]) ? S.answers[i] : ('#'+(i+1));
+   return `<span style="font-size:.82em;opacity:.88">${esc(lbl)}: <b>${ic} → ${rc}</b></span>`;
+  }).join(' · ');
+  h += `<div class="shift-card">
+   <div style="font-weight:900;color:#d1c4e9;font-size:1.02em">🔄 Opinion Shift: <b>${vs.changed}</b> of <b>${vs.total}</b> students changed their mind</div>
+   ${shiftsHtml ? `<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px">${shiftsHtml}</div>` : ''}
+   ${initVsRev ? `<div style="margin-top:6px">${initVsRev}</div>` : ''}
+  </div>`;
+ }
+ if(S.branch_target){
+  const bt = S.branch_target;
+  h += `<div class="branch-banner">🔀 Class chose "${esc(bt.win_ans)}" → Next: Slide #${bt.slide} (${esc(bt.title)})</div>`;
+ }
+ return h;
 }
 function resultExtras(){
  let h = '';
  if(S.team_results && S.team_results.length) h += `<div class="team-res">${S.team_results.map(t=>`<span class="tr" style="background:${t.color}">${t.emoji} ${esc(t.name)} ${t.correct?'✅ +300 each':'❌'}</span>`).join('')}</div>`;
  if(S.hot) h += `<div class="hot-banner">🔥 ${esc(S.hot.name)} ${S.hot.ok?'NAILED IT! (+400)':'missed it!'} · ${S.hot.right||0} predictor(s) guessed right (+200 each)</div>`;
  if(S.tiebreak && S.tb_winner) h += `<div class="tb-banner">👑 ${esc(S.tb_winner)} wins the tiebreaker!</div>`;
+ h += sharedResultExtrasHtml();
  return h;
 }
 
@@ -2520,6 +3187,8 @@ function enterGame(){
  ensureRemoteProbe();
  document.getElementById('autoBtn').style.display = 'flex';
  document.getElementById('remoteBtn').style.display = 'flex';
+ const hbBtn = document.getElementById('hideBoardMenuBtn'); if(hbBtn) hbBtn.style.display = 'flex';
+ const stBtn = document.getElementById('stuTtsMenuBtn'); if(stBtn) stBtn.style.display = 'flex';
  const aq = document.getElementById('addQuizMenuBtn'); if(aq) aq.style.display = 'none';
  startHostPoll();
 }
@@ -2700,7 +3369,10 @@ function nameHtml(x){
 function pendingHtml(){
  const pl = S.pending_list || [];
  if(!pl.length) return '';
- return `<div class="pend-box"><b>🛡️ Waiting for approval:</b> ${pl.map(p=>`<span class="pend">${esc((p.avatar||'')+' '+p.name)} <button data-n="${esc(p.name)}" onclick="approveName(this.dataset.n,true)">✓</button><button style="background:#e21b3c" data-n="${esc(p.name)}" onclick="approveName(this.dataset.n,false)">✕</button></span>`).join('')}</div>`;
+ return `<div class="pend-box"><b>🛡️ Waiting for approval:</b> ${pl.map(p=>{
+  const av = fmtAvatar(p);
+  return `<span class="pend">${av?av+' ':''}${esc(p.name)} <button data-n="${esc(p.name)}" onclick="approveName(this.dataset.n,true)">✓</button><button style="background:#e21b3c" data-n="${esc(p.name)}" onclick="approveName(this.dataset.n,false)">✕</button></span>`;
+ }).join('')}</div>`;
 }
 async function approveName(name, ok){ await post('/api/approve', {pin, host, name, approve: ok}); await poll(); if(document.getElementById('modModal').classList.contains('open')) refreshMod(); }
 function topicPanel(){
@@ -2831,8 +3503,8 @@ async function refreshMod(){
   if(m.error) return;
   const when = ts => new Date(ts*1000).toLocaleTimeString([], {hour:'numeric', minute:'2-digit', second:'2-digit'});
   document.getElementById('modBody').innerHTML =
-   (m.pending.length ? `<div class="pend-box"><b>Waiting for approval</b><br>${m.pending.map(p=>`<span class="pend">${esc((p.avatar||'')+' '+p.name)}${p.ctag?' <small>('+esc(p.ctag)+')</small>':''} <button data-n="${esc(p.name)}" onclick="approveName(this.dataset.n,true)">✓ Approve</button><button style="background:#e21b3c" data-n="${esc(p.name)}" onclick="approveName(this.dataset.n,false)">✕ Reject</button></span>`).join('')}</div>` : `<p style="opacity:.8">${m.moderate?'No names waiting for approval.':'Tip: turn on <b>🛡️ Approve Names First</b> in Options to review each name before a student joins.'}</p>`) +
-   `<h3>Players (${m.players.length})</h3><div>${m.players.map(p=>`<span class="pend" style="background:#fff3;color:#fff">${esc((p.avatar||'')+' '+p.name)}${p.bot?' 🤖':''} <button style="background:#e21b3c" data-n="${esc(p.name)}" onclick="kickPlayer(this.dataset.n).then(refreshMod)">Remove</button></span>`).join('') || '<i>No players yet</i>'}</div>` +
+   (m.pending.length ? `<div class="pend-box"><b>Waiting for approval</b><br>${m.pending.map(p=>{const av=fmtAvatar(p);return `<span class="pend">${av?av+' ':''}${esc(p.name)}${p.ctag?' <small>('+esc(p.ctag)+')</small>':''} <button data-n="${esc(p.name)}" onclick="approveName(this.dataset.n,true)">✓ Approve</button><button style="background:#e21b3c" data-n="${esc(p.name)}" onclick="approveName(this.dataset.n,false)">✕ Reject</button></span>`;}).join('')}</div>` : `<p style="opacity:.8">${m.moderate?'No names waiting for approval.':'Tip: turn on <b>🛡️ Approve Names First</b> in Options to review each name before a student joins.'}</p>`) +
+   `<h3>Players (${m.players.length})</h3><div>${m.players.map(p=>{const av=fmtAvatar(p);return `<span class="pend" style="background:#fff3;color:#fff">${av?av+' ':''}${esc(p.name)}${p.bot?' 🤖':''} <button style="background:#e21b3c" data-n="${esc(p.name)}" onclick="kickPlayer(this.dataset.n).then(refreshMod)">Remove</button></span>`;}).join('') || '<i>No players yet</i>'}</div>` +
    `<h3>Blocked / activity log</h3>${m.log.length ? m.log.map(l=>`<div class="hist-q"><span>${when(l.ts)} · <b>${esc(l.kind)}</b></span><span>${esc(l.text)}</span></div>`).join('') : '<p style="opacity:.8">Nothing has been blocked yet.</p>'}`;
  }catch(e){}
 }
@@ -2869,10 +3541,16 @@ async function openHistory(){
  const fmt = ts => new Date(ts*1000).toLocaleString([], {dateStyle:'medium', timeStyle:'short'});
  body.innerHTML = (tp.length ? `<div class="tough-box" style="max-width:none"><h3>📊 Accuracy by topic (all games)</h3>${tp.map(x=>`<div class="tough-item"><b>${x.avg}%</b> — ${esc(x.topic)} <small>(${x.n} answers)</small><div class="tbar"><i style="width:${x.avg}%;background:${x.avg<60?'#ff5252':x.avg<80?'#ffb300':'#69f0ae'}"></i></div></div>`).join('')}</div>` : '')
   + (rt.length ? `<div class="tough-box" style="max-width:none"><h3>🎯 Questions to reteach (lowest average across all games)</h3>${rt.map(x=>`<div class="tough-item"><b>${x.avg}% correct</b> <small>(${x.games} game${x.games>1?'s':''})</small> — ${esc(x.q)}<br><span style="color:#7dff6b">✅ ${esc(x.ans)}</span></div>`).join('')}</div>` : '')
-  + (g.length ? g.map((e,i)=>`<div class="hist-game" onclick="document.getElementById('hq${i}').style.display=document.getElementById('hq${i}').style.display==='none'?'block':'none'">
+  + (g.length ? g.map((e,i)=>{
+   const cal = e.calibration;
+   const calLine = (cal && cal.conf_n > 0)
+    ? `<div style="margin-top:4px;font-size:.84em;color:#ffdf5d">🎯 <b>Confidence Calibration:</b> Confident Bets ${cal.conf_pct}% accurate (${cal.conf_ok}/${cal.conf_n}) vs Standard Answers ${cal.calm_pct != null ? cal.calm_pct + '%' : 'N/A'}</div>`
+    : '';
+   return `<div class="hist-game" onclick="document.getElementById('hq${i}').style.display=document.getElementById('hq${i}').style.display==='none'?'block':'none'">
     <b>${esc(e.quiz)}</b> <small>· ${fmt(e.ts)}</small><br>
-    <small>👥 ${e.humans} students (${e.players} total) · 🎯 ${e.accuracy}% accuracy · 🏆 ${(e.top||[]).map(t=>esc(t.name)+' '+t.score).join(' / ')}</small>
-    <div id="hq${i}" style="display:none;margin-top:8px">${(e.qs||[]).slice().sort((a,b)=>a.pct-b.pct).map(q=>`<div class="hist-q"><span>${q.topic?'<em class="ctag" style="margin:0 6px 0 0">'+esc(q.topic)+'</em>':''}${esc(q.q)}</span><b>${q.pct}%</b></div>`).join('')}</div></div>`).join('') : '<p>No finished games yet. Results are saved here automatically when a game ends.</p>');
+    <small>👥 ${e.humans} students (${e.players} total) · 🎯 ${e.accuracy}% accuracy · 🏆 ${(e.top||[]).map(t=>esc(t.name)+' '+t.score).join(' / ')}</small>${calLine}
+    <div id="hq${i}" style="display:none;margin-top:8px">${(e.qs||[]).slice().sort((a,b)=>a.pct-b.pct).map(q=>`<div class="hist-q"><span>${q.topic?'<em class="ctag" style="margin:0 6px 0 0">'+esc(q.topic)+'</em>':''}${esc(q.q)}</span><b>${q.pct}%</b></div>`).join('')}</div></div>`;
+  }).join('') : '<p>No finished games yet. Results are saved here automatically when a game ends.</p>');
 }
 
 // --- Quiz editor tools ---
@@ -2882,10 +3560,11 @@ function toggleTool(which){
  else { if(a) a.open = !a.open; if(i) i.open = false; updateAcctLabels(); }
 }
 function appendQuestions(qs){
+ if(typeof syncVisualToTextIfActive === 'function') syncVisualToTextIfActive();
  const t = document.getElementById('customText');
  t.value = (t.value.trim() ? t.value.trim() + '\n\n' : '') + formatQuestionsBlock(qs);
- t.scrollIntoView({behavior:'smooth', block:'nearest'});
  if(typeof renderBuilderPreview === 'function') renderBuilderPreview();
+ if(typeof syncTextToVisual === 'function') syncTextToVisual();
 }
 function parseDelimited(text){
  const delim = text.includes('\t') ? '\t' : ',';
@@ -2907,18 +3586,27 @@ function tableToQuestions(text){
  const norm = s => s.toLowerCase().replace(/[^a-z0-9]/g,'');
  const first = rows[0].map(norm);
  const hasHeader = first.some(h=>['question','q','prompt','questiontext'].includes(h));
- let col = {q:0, a:[1,2,3,4], correct:5, type:-1, topic:-1, quote:-1, note:-1, img:-1, time:-1};
+ let col = {q:0, a:[1,2,3,4], correct:5, type:-1, topic:-1, quote:-1, note:-1, img:-1, time:-1, pts:-1, think:-1};
  let body = rows;
  if(hasHeader){
   body = rows.slice(1);
   const idx = names => first.findIndex(h=>names.includes(h));
   col.q = idx(['question','q','prompt','questiontext']);
   col.a = [];
-  [['a','answera','optiona','choicea','answer1','option1','choice1','a1'],['b','answerb','optionb','choiceb','answer2','option2','choice2','b1'],['c','answerc','optionc','choicec','answer3','option3','choice3','c1'],['d','answerd','optiond','choiced','answer4','option4','choice4','d1']].forEach(n=>{ const k = idx(n); if(k>=0) col.a.push(k); });
+  [
+   ['a','answera','optiona','choicea','answer1','option1','choice1','a1'],
+   ['b','answerb','optionb','choiceb','answer2','option2','choice2','b1'],
+   ['c','answerc','optionc','choicec','answer3','option3','choice3','c1'],
+   ['d','answerd','optiond','choiced','answer4','option4','choice4','d1'],
+   ['e','answere','optione','choicee','answer5','option5','choice5','e1'],
+   ['f','answerf','optionf','choicef','answer6','option6','choice6','f1']
+  ].forEach(n=>{ const k = idx(n); if(k>=0) col.a.push(k); });
   col.correct = idx(['correct','correctanswer','right','key','correctoption','answer']);
   col.type = idx(['type','questiontype']); col.topic = idx(['topic','tag','standard','skill','chapter','category']);
-  col.quote = idx(['quote','fact','funfact','explanation','feedback']); col.note = idx(['note','notes','teachernote','teachernotes']); col.img = idx(['image','img','picture','imageurl']);
+  col.quote = idx(['quote','fact','funfact','explanation','feedback','explain']); col.note = idx(['note','notes','teachernote','teachernotes']); col.img = idx(['image','img','picture','imageurl']);
   col.time = idx(['time','timer','seconds','duration','sec','timelimit']);
+  col.pts = idx(['points','pts','point','score']);
+  col.think = idx(['think','thinktime','thinkingtime']);
  }
  const out = [];
  body.forEach(r=>{
@@ -2926,16 +3614,32 @@ function tableToQuestions(text){
   const q = get(col.q); if(!q) return;
   const a = col.a.map(k=>get(k)).filter(Boolean);
   const cv = get(col.correct); let c = 0;
-  if(/^[a-d]$/i.test(cv)) c = cv.toUpperCase().charCodeAt(0) - 65;
-  else if(/^[1-4]$/.test(cv)) c = parseInt(cv,10) - 1;
+  if(/^[a-f]$/i.test(cv)) c = cv.toUpperCase().charCodeAt(0) - 65;
+  else if(/^[1-6]$/.test(cv)) c = parseInt(cv,10) - 1;
   else { const k = a.findIndex(x=>x.toLowerCase()===cv.toLowerCase()); if(k>=0) c = k; }
   const item = {q, a, c, topic:get(col.topic), quote:get(col.quote), note:get(col.note), img:get(col.img)};
   const tv = parseInt(get(col.time), 10);
   if(tv > 0){ item.t = Math.max(5, Math.min(900, tv)); item.t_custom = true; }
+  const pv = parseInt(get(col.pts), 10);
+  if(!isNaN(pv) && get(col.pts) !== '') item.pts = Math.max(0, Math.min(5000, pv));
+  const thv = parseInt(get(col.think), 10);
+  if(thv > 0) item.think = Math.max(1, Math.min(120, thv));
   const ty = get(col.type).toLowerCase();
   if(['tf','truefalse','true/false'].includes(ty.replace(/[^a-z/]/g,'')) || (a.length===2 && /^(true|false)$/i.test(a[0]))){ item.type='tf'; item.a=['True','False']; item.c = /^(f|false|2)/i.test(cv) ? 1 : 0; }
+  else if(ty==='multi'){
+   item.type='multi';
+   const cm = cv.split(/[,;/|&\s]+/).map(tok=>{
+    if(/^[a-f]$/i.test(tok)) return tok.toUpperCase().charCodeAt(0) - 65;
+    if(/^[1-6]$/.test(tok)) return parseInt(tok, 10) - 1;
+    return a.findIndex(x=>x.toLowerCase()===tok.toLowerCase());
+   }).filter(v=>v>=0 && v<a.length);
+   item.correct_multi = cm.length ? Array.from(new Set(cm)).sort((x,y)=>x-y) : [c];
+   item.c = item.correct_multi[0] || 0;
+  }
   else if(ty==='text'){ item.type='text'; item.c=0; }
   else if(ty==='order'){ item.type='order'; item.c=0; }
+  else if(ty==='poll' || ty==='rank' || ty==='scale'){ item.type=ty; item.c=0; }
+  else if(ty==='open' || ty==='brainstorm'){ item.type=ty; item.a=[]; item.c=0; out.push(item); return; }
   else if(ty==='zoom' && item.img){ item.type='zoom'; }
   if(item.a.length >= 1) out.push(item);
  });
@@ -3151,6 +3855,7 @@ syncQuizCount = function(){
  }
  if(typeof updateTimerSummary === 'function') updateTimerSummary();
  if(typeof syncSelectedDeckBar === 'function') syncSelectedDeckBar();
+ if(typeof renderDeckGrid === 'function') renderDeckGrid();
 };
 
 const CASE_PLACEHOLDER = `Chapter 1: The Dilemma
@@ -3176,6 +3881,721 @@ Rome
 Image: https://example.com/paris.jpg
 Quote: Paris has been the capital since 987 CE.`;
 
+function isBuilderAiOff(){
+ try{ return localStorage.getItem('brainrush_disable_ai') === '1'; }catch(e){ return false; }
+}
+function syncBuilderAiUI(){
+ const off = isBuilderAiOff();
+ const btn = document.getElementById('aiToggleBtn');
+ const tool = document.getElementById('toolAi');
+ const hint = document.getElementById('aiHint');
+ if(btn){
+  btn.textContent = off ? '✨ AI Tools: OFF' : '✨ AI Tools: ON';
+  btn.style.opacity = off ? '0.72' : '1';
+  btn.style.background = off ? '#ffffff1a' : '#26890c88';
+ }
+ if(tool){
+  if(off) tool.open = false;
+  tool.style.display = off ? 'none' : '';
+ }
+ if(hint) hint.style.display = off ? 'none' : '';
+}
+function toggleBuilderAi(){
+ const nextOff = !isBuilderAiOff();
+ try{ localStorage.setItem('brainrush_disable_ai', nextOff ? '1' : '0'); }catch(e){}
+ syncBuilderAiUI();
+}
+
+// --- Two-Way Visual Card Editor + Client-Side Compressed Image Upload ---
+let builderTab = 'visual';
+let visualCards = [];
+
+const VC_TYPES = [
+ ['mc', '✅ Multiple Choice'],
+ ['tf', '✓/✗ True / False'],
+ ['multi', '☑️ Multi-Select (All that apply)'],
+ ['match', '🔗 Matching Pairs'],
+ ['order', '🔢 Put in Order (2–8)'],
+ ['text', '⌨️ Type the Answer'],
+ ['slider', '🎚️ Number / Estimation Slider'],
+ ['pin', '📍 Drop-Pin on Image'],
+ ['zoom', '🔍 Zoom Reveal Picture'],
+ ['scale', '📏 Rating Scale Poll'],
+ ['brainstorm', '💡 Sticky-Note Brainstorm'],
+ ['poll', '🗳️ Decision Poll (Lenses / Branch)'],
+ ['open', '✍️ Open Response + Peer Vote'],
+ ['rank', '📊 Priority Ranking'],
+ ['info', '📖 Case Chapter / Narrative']
+];
+
+function makeStarterCard(kind){
+ const t = kind || (quizModalMode === 'case' ? 'poll' : 'mc');
+ if(t === 'tf') return {q:'', type:'tf', a:['True','False'], c:0};
+ if(t === 'multi') return {q:'', type:'multi', a:['','','',''], c:0, correct_multi:[0,1], partial:true};
+ if(t === 'match') return {q:'', type:'match', pairs:[{l:'',r:''},{l:'',r:''},{l:'',r:''}], a:[], c:0};
+ if(t === 'order') return {q:'', type:'order', a:['','','',''], c:0};
+ if(t === 'text') return {q:'', type:'text', a:[''], c:0};
+ if(t === 'slider') return {q:'', type:'slider', slider:{min:0,max:100,step:1,target:50,margin:5,unit:''}, a:[], c:0};
+ if(t === 'pin') return {q:'', type:'pin', img:'', pin:{x:50,y:50,r:12}, a:[], c:0};
+ if(t === 'zoom') return {q:'', type:'zoom', img:'', a:['','','',''], c:0};
+ if(t === 'scale') return {q:'', type:'scale', scale_labels:['Strongly Disagree','Strongly Agree'], a:['1','2','3','4','5'], c:0};
+ if(t === 'brainstorm') return {q:'', type:'brainstorm', a:[], c:0};
+ if(t === 'poll') return {q:'', type:'poll', a:['','','',''], lenses:['','','',''], c:0};
+ if(t === 'open') return {q:'', type:'open', a:[], c:0};
+ if(t === 'rank') return {q:'', type:'rank', a:['','','',''], c:0};
+ if(t === 'info') return {q:'', type:'info', body:'', roles:[], exhibits:[], a:[], c:0};
+ return {q:'', type:'mc', a:['','','',''], c:0};
+}
+
+function normalizeVisualCard(rawQ){
+ const q = JSON.parse(JSON.stringify(rawQ || {}));
+ q.type = q.type || 'mc';
+ q.q = q.q || '';
+ if(q.type === 'tf'){
+  q.a = ['True','False'];
+  q.c = q.c === 1 ? 1 : 0;
+ } else if(q.type === 'match'){
+  if(!Array.isArray(q.pairs) || q.pairs.length < 2) q.pairs = [{l:'',r:''},{l:'',r:''}];
+ } else if(q.type === 'slider'){
+  const s = q.slider || {};
+  q.slider = {
+   min: s.min !== undefined ? s.min : 0,
+   max: s.max !== undefined ? s.max : 100,
+   step: s.step !== undefined ? s.step : 1,
+   target: s.target !== undefined ? s.target : 50,
+   margin: s.margin !== undefined ? s.margin : 5,
+   unit: s.unit || ''
+  };
+ } else if(q.type === 'pin'){
+  const p = q.pin || {};
+  q.pin = {
+   x: p.x !== undefined ? p.x : 50,
+   y: p.y !== undefined ? p.y : 50,
+   r: p.r !== undefined ? p.r : 12
+  };
+ } else if(q.type === 'scale'){
+  if(!Array.isArray(q.scale_labels) || q.scale_labels.length < 2) q.scale_labels = ['Strongly Disagree','Strongly Agree'];
+  if(!Array.isArray(q.a) || q.a.length < 3) q.a = ['1','2','3','4','5'];
+ } else if(q.type === 'text'){
+  if(!Array.isArray(q.a) || !q.a.length) q.a = [''];
+ } else if(['open','brainstorm','info'].includes(q.type)){
+  q.a = q.a || [];
+  if(q.type === 'info'){
+   q.body = q.body || '';
+   q.roles = Array.isArray(q.roles) ? q.roles : [];
+   q.exhibits = Array.isArray(q.exhibits) ? q.exhibits : [];
+  }
+ } else {
+  if(!Array.isArray(q.a) || q.a.length < 2) q.a = ['','','',''];
+  if(q.type === 'multi' && (!Array.isArray(q.correct_multi) || !q.correct_multi.length)){
+   q.correct_multi = [q.c || 0];
+  }
+ }
+ return q;
+}
+
+function hasPlayableCardContent(q){
+ if(!q) return false;
+ if((q.q || '').trim()) return true;
+ if((q.body || '').trim() || (q.img || '').trim()) return true;
+ if(Array.isArray(q.a) && q.a.some(x => String(x||'').trim() && !['True','False','1','2','3','4','5','6','7'].includes(String(x)))) return true;
+ if(Array.isArray(q.pairs) && q.pairs.some(p => (p.l||'').trim() || (p.r||'').trim())) return true;
+ return false;
+}
+
+function syncVisualToText(){
+ const ta = document.getElementById('customText');
+ if(!ta) return;
+ const nonEmpty = visualCards.filter(hasPlayableCardContent);
+ ta.value = nonEmpty.length ? formatQuestionsBlock(visualCards) : '';
+ if(typeof renderBuilderPreview === 'function') renderBuilderPreview();
+}
+
+function syncVisualToTextIfActive(){
+ if(builderTab === 'visual') syncVisualToText();
+}
+
+function syncTextToVisual(){
+ const ta = document.getElementById('customText');
+ const raw = ta ? (ta.value || '').trim() : '';
+ if(!raw){
+  visualCards = [makeStarterCard()];
+ } else {
+  try{
+   const parsed = parseCustomQuestions(raw);
+   visualCards = parsed.length ? parsed.map(normalizeVisualCard) : [makeStarterCard()];
+  }catch(e){
+   if(!visualCards.length) visualCards = [makeStarterCard()];
+  }
+ }
+ if(builderTab === 'visual') renderVisualCards();
+}
+
+function setBuilderTab(tab){
+ if(tab === 'text'){
+  if(builderTab === 'visual') syncVisualToText();
+  builderTab = 'text';
+ } else {
+  builderTab = 'visual';
+  syncTextToVisual();
+ }
+ const bV = document.getElementById('bTabVisual'), bT = document.getElementById('bTabText');
+ const pV = document.getElementById('visualEditorPane'), pT = document.getElementById('textEditorPane');
+ if(bV) bV.classList.toggle('active', builderTab === 'visual');
+ if(bT) bT.classList.toggle('active', builderTab === 'text');
+ if(pV) pV.style.display = builderTab === 'visual' ? '' : 'none';
+ if(pT) pT.style.display = builderTab === 'text' ? '' : 'none';
+ if(builderTab === 'text' && typeof renderBuilderPreview === 'function') renderBuilderPreview();
+}
+
+function renderVcNavBar(){
+ const nav = document.getElementById('vcNavBar');
+ if(!nav) return;
+ nav.innerHTML = visualCards.map((q, i)=>{
+  const snip = (q.q || '').trim().slice(0, 18);
+  return `<button type="button" class="vc-pill" onclick="scrollToVcCard(${i})">#${i+1} ${esc(snip || (q.type||'mc').toUpperCase())}</button>`;
+ }).join('');
+}
+
+function scrollToVcCard(idx){
+ const el = document.getElementById('vcCard_' + idx);
+ if(el) el.scrollIntoView({behavior:'smooth', block:'nearest'});
+}
+
+function renderVisualCards(){
+ const listEl = document.getElementById('visualCardList');
+ if(!listEl) return;
+ if(!visualCards.length) visualCards = [makeStarterCard()];
+ renderVcNavBar();
+ const typeOptsHtml = VC_TYPES.map(([val, lbl])=>`<option value="${val}">${lbl}</option>`).join('');
+ const scaleCntOpts = [3,4,5,6,7].map(n=>`<option value="${n}">${n}-point scale</option>`).join('');
+
+ listEl.innerHTML = visualCards.map((q, idx)=>{
+  const qt = q.type || 'mc';
+  const isChoice = ['mc','multi','poll','rank','order','zoom','text'].includes(qt);
+  const maxOpts = qt === 'order' ? 8 : 6;
+  const minOpts = qt === 'text' ? 1 : 2;
+  const cm = Array.isArray(q.correct_multi) && q.correct_multi.length ? q.correct_multi : [q.c || 0];
+
+  let bodyHtml = '';
+  if(qt === 'info'){
+   const roles = q.roles || [];
+   const exhs = q.exhibits || [];
+   bodyHtml = `
+    <label style="font-size:.78em;font-weight:800;opacity:.86;display:block;margin-bottom:3px">Narrative Body (blank line = new paragraph):</label>
+    <textarea style="min-height:84px;margin:0 0 8px;font-size:.88em" placeholder="Describe the case chapter, data, or developments…" oninput="vcSetField(${idx},'body',this.value)">${esc(q.body||'')}</textarea>
+    <div style="margin-bottom:6px">
+     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+      <b style="font-size:.8em;color:#ffdf5d">🎭 Private Stakeholder Roles (${roles.length})</b>
+      <button type="button" class="btn-sm" style="margin:0;padding:3px 9px;font-size:.76em" onclick="vcAddRole(${idx})">+ Add Role</button>
+     </div>
+     ${roles.map((r,ri)=>`<div class="vc-opt-row">
+      <input type="text" style="max-width:160px" placeholder="Role (e.g. CFO)" value="${esc(r.name||'')}" oninput="vcSetRole(${idx},${ri},'name',this.value)">
+      <input type="text" style="flex:1" placeholder="Private briefing shown on phone…" value="${esc(r.text||'')}" oninput="vcSetRole(${idx},${ri},'text',this.value)">
+      <button type="button" class="vc-del-mini" onclick="vcDelRole(${idx},${ri})">✕</button>
+     </div>`).join('')}
+    </div>
+    <div>
+     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+      <b style="font-size:.8em;color:#80d8ff">📎 Exhibits (${exhs.length})</b>
+      <button type="button" class="btn-sm" style="margin:0;padding:3px 9px;font-size:.76em" onclick="vcAddExhibit(${idx})">+ Add Exhibit</button>
+     </div>
+     ${exhs.map((ex,ei)=>`<div class="vc-opt-row" style="flex-wrap:wrap">
+      <input type="text" style="flex:1;min-width:160px" placeholder="Exhibit Image URL" value="${esc(ex.url||'')}" oninput="vcSetExhibit(${idx},${ei},'url',this.value)">
+      <input type="text" style="flex:1;min-width:140px" placeholder="Caption (optional)" value="${esc(ex.caption||'')}" oninput="vcSetExhibit(${idx},${ei},'caption',this.value)">
+      <label class="btn-sm" style="margin:0;padding:4px 9px;font-size:.76em;cursor:pointer">📷 Upload<input type="file" accept="image/*" style="display:none" onchange="onVcImgPick(event,${idx},'exhibit',${ei})"></label>
+      <button type="button" class="vc-del-mini" onclick="vcDelExhibit(${idx},${ei})">✕</button>
+     </div>`).join('')}
+    </div>`;
+  } else if(qt === 'match'){
+   const pairs = q.pairs || [];
+   bodyHtml = `
+    <div style="font-size:.78em;font-weight:800;opacity:.86;margin-bottom:4px">🔗 Matched Pairs (Left prompt ➔ Right match — shuffled automatically in play):</div>
+    ${pairs.map((p,pi)=>`<div class="vc-opt-row">
+     <span style="font-weight:800;width:20px;font-size:.84em">${pi+1}.</span>
+     <input type="text" style="flex:1" placeholder="Left item ${pi+1}" value="${esc(p.l||'')}" oninput="vcSetPair(${idx},${pi},'l',this.value)">
+     <span style="color:#ffdf5d;font-weight:900">➔</span>
+     <input type="text" style="flex:1" placeholder="Right match ${pi+1}" value="${esc(p.r||'')}" oninput="vcSetPair(${idx},${pi},'r',this.value)">
+     ${pairs.length > 2 ? `<button type="button" class="vc-del-mini" onclick="vcDelPair(${idx},${pi})">✕</button>` : ''}
+    </div>`).join('')}
+    ${pairs.length < 6 ? `<button type="button" class="btn-sm" style="margin:4px 0 0;padding:4px 11px;font-size:.78em" onclick="vcAddPair(${idx})">+ Add Pair</button>` : ''}`;
+  } else if(qt === 'slider'){
+   const sl = q.slider || {min:0,max:100,step:1,target:50,margin:5,unit:''};
+   bodyHtml = `
+    <div class="vc-meta">
+     <div><label>Min</label><input type="number" step="any" value="${sl.min}" oninput="vcSetSlider(${idx},'min',this.value)"></div>
+     <div><label>Max</label><input type="number" step="any" value="${sl.max}" oninput="vcSetSlider(${idx},'max',this.value)"></div>
+     <div><label>Step</label><input type="number" step="any" min="0.001" value="${sl.step}" oninput="vcSetSlider(${idx},'step',this.value)"></div>
+     <div><label>🎯 Target</label><input type="number" step="any" value="${sl.target}" oninput="vcSetSlider(${idx},'target',this.value)"></div>
+     <div><label>Tolerance (±)</label><input type="number" step="any" min="0" value="${sl.margin}" oninput="vcSetSlider(${idx},'margin',this.value)"></div>
+     <div><label>Unit (e.g. %, km)</label><input type="text" placeholder="%" value="${esc(sl.unit||'')}" oninput="vcSetSlider(${idx},'unit',this.value)"></div>
+    </div>`;
+  } else if(qt === 'pin'){
+   const pn = q.pin || {x:50,y:50,r:12};
+   bodyHtml = `
+    <div class="vc-img-row">
+     <input type="text" placeholder="Image URL (required for Drop-Pin) — paste URL or upload →" value="${esc(q.img||'')}" onchange="vcSetPinImg(${idx},this.value)">
+     <label class="btn-sm" style="margin:0;padding:6px 12px;font-size:.82em;cursor:pointer;background:#26890c;border-color:#7dff6b">📷 Upload Image<input type="file" accept="image/*" style="display:none" onchange="onVcImgPick(event,${idx},'img')"></label>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:6px 0;font-size:.84em">
+     <span>📍 Target: <b id="vcPinCoord_${idx}" style="color:#7dff6b">(${pn.x}%, ${pn.y}%)</b></span>
+     <label style="display:inline-flex;align-items:center;gap:6px;margin:0">Radius: <input type="range" min="3" max="35" step="1" value="${pn.r}" style="width:120px;margin:0" oninput="vcSetPinRadius(${idx},this.value)"> <b id="vcPinRadLbl_${idx}">${pn.r}%</b></label>
+     <span style="opacity:.78;font-size:.9em">👆 Click anywhere on the image below to place the target zone!</span>
+    </div>
+    ${q.img ? `<div class="vc-pin-picker" onclick="onVcPinClick(event,${idx})">
+     <img src="${esc(q.img)}" alt="Click to set target zone">
+     <svg class="pin-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+      <circle id="vcPinCirc_${idx}" cx="${pn.x}" cy="${pn.y}" r="${pn.r}" fill="rgba(46,204,113,0.32)" stroke="#7dff6b" stroke-width="1"/>
+      <circle id="vcPinDot_${idx}" cx="${pn.x}" cy="${pn.y}" r="1.5" fill="#ffdf5d"/>
+     </svg>
+    </div>` : `<div style="padding:12px;border-radius:9px;background:#ffffff10;font-size:.82em;opacity:.8">Upload or paste an image URL above to interactively click &amp; set the target zone.</div>`}`;
+  } else if(qt === 'scale'){
+   const lb = q.scale_labels || ['Strongly Disagree','Strongly Agree'];
+   bodyHtml = `
+    <div class="vc-meta">
+     <div><label>Scale Steps</label><select class="vc-scale-cnt" data-idx="${idx}" onchange="vcSetScaleCount(${idx},this.value)" style="width:100%;padding:6px 8px;border-radius:7px;border:0;font-weight:800;color:#2b0d57">${scaleCntOpts}</select></div>
+     <div><label>⬅️ Low Endpoint Label</label><input type="text" value="${esc(lb[0]||'')}" placeholder="Strongly Disagree" oninput="vcSetScaleLbl(${idx},0,this.value)"></div>
+     <div><label>High Endpoint Label ➡️</label><input type="text" value="${esc(lb[1]||'')}" placeholder="Strongly Agree" oninput="vcSetScaleLbl(${idx},1,this.value)"></div>
+    </div>`;
+  } else if(qt === 'open' || qt === 'brainstorm'){
+   bodyHtml = `<div style="padding:9px 12px;border-radius:9px;background:#ffffff10;font-size:.83em;opacity:.88">${qt === 'brainstorm' ? '💡 Students submit up to 3 short sticky-note ideas on their phones, then vote on favorites. You can ⭐ Spotlight top ideas live!' : '✍️ Students write a 1–2 sentence anonymous response on their phones, then vote on the most persuasive.'}</div>`;
+  } else if(qt === 'tf'){
+   bodyHtml = `<div style="display:flex;gap:8px;margin:4px 0">
+    ${['True','False'].map((lbl,ti)=>`<button type="button" class="btn-sm" style="margin:0;flex:1;padding:9px;background:${(q.c||0)===ti?'#2ea012':'#ffffff1c'};border-color:${(q.c||0)===ti?'#7dff6b':'#ffffff35'}" onclick="vcToggleCorrect(${idx},${ti})">${(q.c||0)===ti?'✓ ':''}${lbl}</button>`).join('')}
+   </div>`;
+  } else if(isChoice){
+   const opts = q.a || [];
+   const canMark = (qt === 'mc' || qt === 'multi' || qt === 'zoom');
+   const hdrHint = qt === 'order' ? '🔢 List steps in the CORRECT order (1st to last):'
+    : qt === 'rank' ? '📊 Competing items for students to rank:'
+    : qt === 'text' ? '⌨️ Accepted text answers (case/punctuation insensitive):'
+    : qt === 'poll' ? '🗳️ Poll options (optional Ethical Lens on right):'
+    : qt === 'multi' ? '☑️ Options — click ✓ on ALL correct answers:'
+    : '✅ Options — click ✓ to mark correct answer(s):';
+   bodyHtml = `<div style="font-size:.78em;font-weight:800;opacity:.86;margin-bottom:4px">${hdrHint}</div>`
+    + opts.map((opt,oi)=>{
+     const isOk = canMark && (qt === 'zoom' ? (q.c||0)===oi : cm.includes(oi));
+     return `<div class="vc-opt-row">
+      ${canMark ? `<button type="button" class="vc-ok-btn${isOk?' on':''}" title="Toggle correct answer" onclick="vcToggleCorrect(${idx},${oi})">${isOk?'✓':LET[oi]||oi+1}</button>` : `<span style="font-weight:800;width:22px;font-size:.84em">${qt==='order'||qt==='rank'?(oi+1)+'.':(LET[oi]||oi+1)+'.'}</span>`}
+      <input type="text" style="flex:1" placeholder="${qt==='text'?'Accepted answer':'Option '+(LET[oi]||oi+1)}" value="${esc(opt||'')}" oninput="vcSetOpt(${idx},${oi},this.value)">
+      ${qt === 'poll' ? `<input type="text" style="max-width:175px" placeholder="🔎 Lens (optional)" value="${esc((q.lenses&&q.lenses[oi])||'')}" oninput="vcSetLens(${idx},${oi},this.value)">` : ''}
+      ${opts.length > minOpts ? `<button type="button" class="vc-del-mini" title="Remove option" onclick="vcDelOpt(${idx},${oi})">✕</button>` : ''}
+     </div>`;
+    }).join('')
+    + `<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:5px">
+     ${opts.length < maxOpts ? `<button type="button" class="btn-sm" style="margin:0;padding:4px 11px;font-size:.78em" onclick="vcAddOpt(${idx})">+ Add ${qt==='order'?'Step':qt==='text'?'Accepted Answer':'Option'}</button>` : ''}
+     ${qt === 'multi' ? `<label class="vc-chk-lbl"><input type="checkbox" class="vc-partial-chk" data-idx="${idx}" onchange="vcSetPartial(${idx},this.checked)"> Award partial credit</label>` : ''}
+    </div>`;
+  }
+
+  const supportsBranch = ['mc','tf','poll','scale'].includes(qt);
+  const bOpts = qt === 'tf' ? ['True','False'] : (q.a || []);
+  const branchHtml = supportsBranch ? `<details class="vc-sub vc-branch-det" data-idx="${idx}">
+   <summary><span>⚡ Consequences &amp; Majority-Vote Branching (Outcome / Jump to Slide #)</span><span>▾</span></summary>
+   <div class="vc-sub-body">
+    ${bOpts.map((bo,bi)=>`<div class="vc-opt-row">
+     <span style="font-weight:800;min-width:68px;font-size:.8em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(bo || ('Option '+(bi+1)))}</span>
+     <input type="text" style="flex:1" placeholder="Revealed consequence (Outcome)" value="${esc((q.outcomes&&q.outcomes[bi])||'')}" oninput="vcSetOutcome(${idx},${bi},this.value)">
+     <input type="number" min="0" max="200" style="width:88px" placeholder="Jump # (0)" title="Jump to 1-based Slide # if plurality picks this option" value="${(q.goto&&q.goto[bi]>0)?q.goto[bi]:''}" oninput="vcSetGoto(${idx},${bi},this.value)">
+    </div>`).join('')}
+   </div>
+  </details>` : '';
+
+  const showImgRow = (qt !== 'pin' && qt !== 'info');
+  const extraDetails = `<details class="vc-sub vc-extra-det" data-idx="${idx}">
+   <summary><span>🖼️ Image Upload, Teacher Note &amp; Takeaway Quote</span><span>▾</span></summary>
+   <div class="vc-sub-body">
+    ${showImgRow ? `<div class="vc-img-row">
+     <input type="text" id="vcImgInp_${idx}" placeholder="Image URL (optional)" value="${esc(q.img||'')}" oninput="vcSetField(${idx},'img',this.value)">
+     <label class="btn-sm" style="margin:0;padding:5px 11px;font-size:.8em;cursor:pointer;background:#26890c;border-color:#7dff6b">📷 Upload Image<input type="file" accept="image/*" style="display:none" onchange="onVcImgPick(event,${idx},'img')"></label>
+    </div>` : ''}
+    <div class="row2" style="margin-top:4px">
+     <div><label style="font-size:.76em;font-weight:800;opacity:.85">📝 Private Teacher Note</label><input type="text" style="margin:2px 0 0;padding:6px 9px;font-size:.85em;color:#2b0d57" placeholder="Shown only on your laptop / remote" value="${esc(q.note||'')}" oninput="vcSetField(${idx},'note',this.value)"></div>
+     <div><label style="font-size:.76em;font-weight:800;opacity:.85">💡 Takeaway / Explanation</label><input type="text" style="margin:2px 0 0;padding:6px 9px;font-size:.85em;color:#2b0d57" placeholder="Shown after answers lock in" value="${esc(q.quote||'')}" oninput="vcSetField(${idx},'quote',this.value)"></div>
+    </div>
+   </div>
+  </details>`;
+
+  return `<div class="vc-card" id="vcCard_${idx}">
+   <div class="vc-head">
+    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+     <span class="bp-num" style="font-size:.95em">#${idx+1}</span>
+     <select class="vc-type-sel" data-idx="${idx}" onchange="vcChangeType(${idx},this.value)">${typeOptsHtml}</select>
+    </div>
+    <div class="vc-acts">
+     <button type="button" title="Duplicate card" onclick="vcDupCard(${idx})">⧉ Dup</button>
+     <button type="button" title="Move up" onclick="vcMoveCard(${idx},-1)" ${idx===0?'disabled style="opacity:.4"':''}>↑</button>
+     <button type="button" title="Move down" onclick="vcMoveCard(${idx},1)" ${idx===visualCards.length-1?'disabled style="opacity:.4"':''}>↓</button>
+     <button type="button" style="background:#e21b3c99" title="Delete card" onclick="vcDelCard(${idx})">🗑️</button>
+    </div>
+   </div>
+   <input type="text" style="margin:0 0 6px;padding:8px 11px;font-weight:800;color:#2b0d57" placeholder="${qt==='info'?'Chapter / Slide Title':'Question or Prompt…'}" value="${esc(q.q||'')}" oninput="vcSetPrompt(${idx},this.value)">
+   <div class="vc-meta">
+    <div><label>🏷️ Topic</label><input type="text" placeholder="Topic tag" value="${esc(q.topic||'')}" oninput="vcSetField(${idx},'topic',this.value)"></div>
+    ${qt !== 'info' ? `
+     <div><label>⏱️ Time (s)</label><input type="number" min="5" max="900" placeholder="Default" value="${q.t||''}" oninput="vcSetNum(${idx},'t',this.value,true)"></div>
+     <div><label>🧠 Think (s)</label><input type="number" min="0" max="120" placeholder="0" value="${q.think||''}" oninput="vcSetNum(${idx},'think',this.value,false)"></div>
+     <div><label>💎 Points</label><input type="number" min="0" max="5000" placeholder="Auto" value="${q.pts!==undefined&&q.pts!==null?q.pts:''}" oninput="vcSetPts(${idx},this.value)"></div>
+     ${['mc','tf','multi','text','zoom'].includes(qt) ? `<label class="vc-chk-lbl"><input type="checkbox" class="vc-allok-chk" data-idx="${idx}" onchange="vcSetAllOk(${idx},this.checked)"> All answers OK</label>` : ''}
+    ` : ''}
+   </div>
+   ${bodyHtml}
+   ${branchHtml}
+   ${extraDetails}
+  </div>`;
+ }).join('');
+
+ // Set select .value and checkbox .checked via DOM properties (zero selected/checked attrs in HTML!)
+ listEl.querySelectorAll('.vc-type-sel').forEach(sel=>{
+  const q = visualCards[+sel.dataset.idx];
+  if(q) sel.value = q.type || 'mc';
+ });
+ listEl.querySelectorAll('.vc-scale-cnt').forEach(sel=>{
+  const q = visualCards[+sel.dataset.idx];
+  if(q) sel.value = String((q.a||[]).length || 5);
+ });
+ listEl.querySelectorAll('.vc-allok-chk').forEach(chk=>{
+  const q = visualCards[+chk.dataset.idx];
+  chk.checked = !!(q && q.all_correct);
+ });
+ listEl.querySelectorAll('.vc-partial-chk').forEach(chk=>{
+  const q = visualCards[+chk.dataset.idx];
+  chk.checked = !(q && q.partial === false);
+ });
+ listEl.querySelectorAll('.vc-branch-det').forEach(det=>{
+  const q = visualCards[+det.dataset.idx];
+  if(q && ((q.outcomes && q.outcomes.some(Boolean)) || (q.goto && q.goto.some(x=>x>0)))) det.open = true;
+ });
+ listEl.querySelectorAll('.vc-extra-det').forEach(det=>{
+  const q = visualCards[+det.dataset.idx];
+  if(q && ((q.img && q.type !== 'pin') || q.note || q.quote)) det.open = true;
+ });
+}
+
+function addVisualCard(kind){
+ const card = makeStarterCard(kind);
+ visualCards.push(card);
+ renderVisualCards();
+ syncVisualToText();
+ setTimeout(()=>scrollToVcCard(visualCards.length - 1), 30);
+}
+function vcDupCard(idx){
+ const copy = JSON.parse(JSON.stringify(visualCards[idx] || makeStarterCard()));
+ visualCards.splice(idx + 1, 0, copy);
+ renderVisualCards();
+ syncVisualToText();
+}
+function vcMoveCard(idx, dir){
+ const ni = idx + dir;
+ if(ni < 0 || ni >= visualCards.length) return;
+ const tmp = visualCards[idx];
+ visualCards[idx] = visualCards[ni];
+ visualCards[ni] = tmp;
+ renderVisualCards();
+ syncVisualToText();
+}
+function vcDelCard(idx){
+ if(visualCards.length <= 1) visualCards = [makeStarterCard()];
+ else visualCards.splice(idx, 1);
+ renderVisualCards();
+ syncVisualToText();
+}
+function vcChangeType(idx, newType){
+ const old = visualCards[idx] || {};
+ const base = makeStarterCard(newType);
+ base.q = old.q || '';
+ base.topic = old.topic || '';
+ if(old.t){ base.t = old.t; base.t_custom = !!old.t_custom; }
+ if(old.think) base.think = old.think;
+ if(old.pts !== undefined) base.pts = old.pts;
+ if(old.all_correct) base.all_correct = true;
+ if(old.img) base.img = old.img;
+ if(old.note) base.note = old.note;
+ if(old.quote) base.quote = old.quote;
+ if(old.exhibits) base.exhibits = old.exhibits;
+ if(['mc','multi','poll','rank','order','zoom'].includes(newType) && Array.isArray(old.a) && old.a.length >= 2 && old.type !== 'scale' && old.type !== 'tf'){
+  base.a = old.a.slice(0, newType === 'order' ? 8 : 6);
+  base.c = Math.min(base.a.length - 1, old.c || 0);
+ }
+ visualCards[idx] = normalizeVisualCard(base);
+ renderVisualCards();
+ syncVisualToText();
+}
+function vcSetPrompt(idx, val){
+ if(!visualCards[idx]) return;
+ visualCards[idx].q = val;
+ renderVcNavBar();
+ syncVisualToText();
+}
+function vcSetField(idx, key, val){
+ if(!visualCards[idx]) return;
+ visualCards[idx][key] = val;
+ syncVisualToText();
+}
+function vcSetNum(idx, key, val, markCustom){
+ if(!visualCards[idx]) return;
+ const n = parseInt(val, 10);
+ if(val === '' || isNaN(n)){
+  delete visualCards[idx][key];
+  if(markCustom) delete visualCards[idx].t_custom;
+ } else {
+  visualCards[idx][key] = n;
+  if(markCustom) visualCards[idx].t_custom = true;
+ }
+ syncVisualToText();
+}
+function vcSetPts(idx, val){
+ if(!visualCards[idx]) return;
+ if(val === ''){ delete visualCards[idx].pts; }
+ else {
+  const n = parseInt(val, 10);
+  if(!isNaN(n)) visualCards[idx].pts = Math.max(0, Math.min(5000, n));
+ }
+ syncVisualToText();
+}
+function vcSetAllOk(idx, on){
+ if(!visualCards[idx]) return;
+ if(on) visualCards[idx].all_correct = true;
+ else delete visualCards[idx].all_correct;
+ syncVisualToText();
+}
+function vcSetPartial(idx, on){
+ if(!visualCards[idx]) return;
+ visualCards[idx].partial = !!on;
+ syncVisualToText();
+}
+function vcSetOpt(idx, oi, val){
+ const q = visualCards[idx]; if(!q || !q.a) return;
+ q.a[oi] = val;
+ syncVisualToText();
+}
+function vcSetLens(idx, oi, val){
+ const q = visualCards[idx]; if(!q) return;
+ if(!Array.isArray(q.lenses)) q.lenses = (q.a||[]).map(()=>'');
+ while(q.lenses.length < (q.a||[]).length) q.lenses.push('');
+ q.lenses[oi] = val;
+ syncVisualToText();
+}
+function vcAddOpt(idx){
+ const q = visualCards[idx]; if(!q) return;
+ q.a = q.a || [];
+ const lim = q.type === 'order' ? 8 : 6;
+ if(q.a.length >= lim) return;
+ q.a.push('');
+ renderVisualCards();
+ syncVisualToText();
+}
+function vcDelOpt(idx, oi){
+ const q = visualCards[idx]; if(!q || !q.a) return;
+ q.a.splice(oi, 1);
+ if(Array.isArray(q.lenses)) q.lenses.splice(oi, 1);
+ if(Array.isArray(q.outcomes)) q.outcomes.splice(oi, 1);
+ if(Array.isArray(q.goto)) q.goto.splice(oi, 1);
+ if(Array.isArray(q.correct_multi)){
+  q.correct_multi = q.correct_multi.filter(x=>x!==oi).map(x=>x>oi?x-1:x);
+  if(!q.correct_multi.length) q.correct_multi = [0];
+ }
+ q.c = Math.max(0, Math.min((q.a.length||1)-1, q.c >= oi ? (q.c||0)-1 : (q.c||0)));
+ renderVisualCards();
+ syncVisualToText();
+}
+function vcToggleCorrect(idx, oi){
+ const q = visualCards[idx]; if(!q) return;
+ if(q.type === 'tf' || q.type === 'zoom'){
+  q.c = oi;
+  delete q.correct_multi;
+ } else {
+  let cm = Array.isArray(q.correct_multi) && q.correct_multi.length ? [...q.correct_multi] : [q.c || 0];
+  if(cm.includes(oi)){
+   if(cm.length > 1) cm = cm.filter(x=>x!==oi);
+  } else {
+   cm.push(oi);
+   cm.sort((a,b)=>a-b);
+  }
+  q.c = cm[0] || 0;
+  if(q.type === 'multi' || cm.length >= 2) q.correct_multi = cm;
+  else delete q.correct_multi;
+ }
+ renderVisualCards();
+ syncVisualToText();
+}
+function vcSetPair(idx, pi, side, val){
+ const q = visualCards[idx]; if(!q || !q.pairs || !q.pairs[pi]) return;
+ q.pairs[pi][side] = val;
+ syncVisualToText();
+}
+function vcAddPair(idx){
+ const q = visualCards[idx]; if(!q) return;
+ q.pairs = q.pairs || [];
+ if(q.pairs.length >= 6) return;
+ q.pairs.push({l:'',r:''});
+ renderVisualCards();
+ syncVisualToText();
+}
+function vcDelPair(idx, pi){
+ const q = visualCards[idx]; if(!q || !q.pairs || q.pairs.length <= 2) return;
+ q.pairs.splice(pi, 1);
+ renderVisualCards();
+ syncVisualToText();
+}
+function vcSetSlider(idx, key, val){
+ const q = visualCards[idx]; if(!q) return;
+ q.slider = q.slider || {min:0,max:100,step:1,target:50,margin:5,unit:''};
+ if(key === 'unit') q.slider.unit = val;
+ else {
+  const n = parseFloat(val);
+  if(!isNaN(n)) q.slider[key] = n;
+ }
+ syncVisualToText();
+}
+function vcSetPinImg(idx, val){
+ const q = visualCards[idx]; if(!q) return;
+ q.img = (val || '').trim();
+ renderVisualCards();
+ syncVisualToText();
+}
+function onVcPinClick(ev, idx){
+ const q = visualCards[idx]; if(!q) return;
+ const el = ev.currentTarget;
+ const rect = el.getBoundingClientRect();
+ const x = Math.max(0, Math.min(100, Math.round(((ev.clientX - rect.left) / Math.max(1, rect.width)) * 1000) / 10));
+ const y = Math.max(0, Math.min(100, Math.round(((ev.clientY - rect.top) / Math.max(1, rect.height)) * 1000) / 10));
+ q.pin = q.pin || {x:50,y:50,r:12};
+ q.pin.x = x; q.pin.y = y;
+ const c = document.getElementById('vcPinCirc_' + idx), d = document.getElementById('vcPinDot_' + idx), lb = document.getElementById('vcPinCoord_' + idx);
+ if(c){ c.setAttribute('cx', x); c.setAttribute('cy', y); }
+ if(d){ d.setAttribute('cx', x); d.setAttribute('cy', y); }
+ if(lb) lb.textContent = `(${x}%, ${y}%)`;
+ syncVisualToText();
+}
+function vcSetPinRadius(idx, val){
+ const q = visualCards[idx]; if(!q) return;
+ const r = Math.max(3, Math.min(35, parseFloat(val) || 12));
+ q.pin = q.pin || {x:50,y:50,r:12};
+ q.pin.r = r;
+ const c = document.getElementById('vcPinCirc_' + idx), lb = document.getElementById('vcPinRadLbl_' + idx);
+ if(c) c.setAttribute('r', r);
+ if(lb) lb.textContent = r + '%';
+ syncVisualToText();
+}
+function vcSetScaleCount(idx, cntVal){
+ const q = visualCards[idx]; if(!q) return;
+ const n = Math.max(3, Math.min(7, parseInt(cntVal, 10) || 5));
+ q.a = Array.from({length: n}, (_, i) => String(i + 1));
+ renderVisualCards();
+ syncVisualToText();
+}
+function vcSetScaleLbl(idx, pos, val){
+ const q = visualCards[idx]; if(!q) return;
+ q.scale_labels = q.scale_labels || ['Strongly Disagree','Strongly Agree'];
+ q.scale_labels[pos] = val;
+ syncVisualToText();
+}
+function vcSetOutcome(idx, bi, val){
+ const q = visualCards[idx]; if(!q) return;
+ const len = q.type === 'tf' ? 2 : (q.a||[]).length;
+ if(!Array.isArray(q.outcomes)) q.outcomes = Array(len).fill('');
+ while(q.outcomes.length < len) q.outcomes.push('');
+ q.outcomes[bi] = val;
+ syncVisualToText();
+}
+function vcSetGoto(idx, bi, val){
+ const q = visualCards[idx]; if(!q) return;
+ const len = q.type === 'tf' ? 2 : (q.a||[]).length;
+ if(!Array.isArray(q.goto)) q.goto = Array(len).fill(0);
+ while(q.goto.length < len) q.goto.push(0);
+ q.goto[bi] = Math.max(0, parseInt(val, 10) || 0);
+ syncVisualToText();
+}
+function vcAddRole(idx){
+ const q = visualCards[idx]; if(!q) return;
+ q.roles = q.roles || [];
+ q.roles.push({name:'', text:''});
+ renderVisualCards();
+ syncVisualToText();
+}
+function vcSetRole(idx, ri, key, val){
+ const q = visualCards[idx]; if(!q || !q.roles || !q.roles[ri]) return;
+ q.roles[ri][key] = val;
+ syncVisualToText();
+}
+function vcDelRole(idx, ri){
+ const q = visualCards[idx]; if(!q || !q.roles) return;
+ q.roles.splice(ri, 1);
+ renderVisualCards();
+ syncVisualToText();
+}
+function vcAddExhibit(idx){
+ const q = visualCards[idx]; if(!q) return;
+ q.exhibits = q.exhibits || [];
+ q.exhibits.push({url:'', caption:''});
+ renderVisualCards();
+ syncVisualToText();
+}
+function vcSetExhibit(idx, ei, key, val){
+ const q = visualCards[idx]; if(!q || !q.exhibits || !q.exhibits[ei]) return;
+ q.exhibits[ei][key] = val;
+ syncVisualToText();
+}
+function vcDelExhibit(idx, ei){
+ const q = visualCards[idx]; if(!q || !q.exhibits) return;
+ q.exhibits.splice(ei, 1);
+ renderVisualCards();
+ syncVisualToText();
+}
+
+async function uploadCompressedImg(file){
+ const dataUrl = await new Promise((resolve, reject)=>{
+  const fr = new FileReader();
+  fr.onload = () => resolve(fr.result);
+  fr.onerror = () => reject(new Error('Could not read image file'));
+  fr.readAsDataURL(file);
+ });
+ const img = await new Promise((resolve, reject)=>{
+  const im = new Image();
+  im.onload = () => resolve(im);
+  im.onerror = () => reject(new Error('Invalid image file'));
+  im.src = dataUrl;
+ });
+ const w0 = img.naturalWidth || img.width || 1, h0 = img.naturalHeight || img.height || 1;
+ const scale = Math.min(1, 800 / Math.max(w0, h0));
+ const cw = Math.max(1, Math.round(w0 * scale)), ch = Math.max(1, Math.round(h0 * scale));
+ const canvas = document.createElement('canvas');
+ canvas.width = cw; canvas.height = ch;
+ const ctx = canvas.getContext('2d');
+ ctx.drawImage(img, 0, 0, cw, ch);
+ let mime = 'image/webp';
+ let data = canvas.toDataURL('image/webp', 0.80);
+ if(!data || !data.startsWith('data:image/webp')){
+  mime = 'image/jpeg';
+  data = canvas.toDataURL('image/jpeg', 0.80);
+ }
+ const r = await postPw('/api/upload_img', {data, mime});
+ if(!r || !r.url) throw new Error((r && r.error) || 'Image upload failed');
+ return r.url;
+}
+
+async function onVcImgPick(ev, idx, kind, subIdx){
+ const file = ev.target && ev.target.files && ev.target.files[0];
+ if(!file) return;
+ const errEl = document.getElementById('customErr');
+ if(errEl) errEl.textContent = 'Uploading & compressing image…';
+ try{
+  const url = await uploadCompressedImg(file);
+  if(errEl) errEl.textContent = '';
+  const q = visualCards[idx];
+  if(q){
+   if(kind === 'exhibit' && q.exhibits && q.exhibits[subIdx]) q.exhibits[subIdx].url = url;
+   else q.img = url;
+   renderVisualCards();
+   syncVisualToText();
+  }
+ }catch(e){
+  if(errEl) errEl.textContent = e.message || 'Could not upload image.';
+ }
+ ev.target.value = '';
+}
+
 const _updateAcctLabels0 = updateAcctLabels;
 updateAcctLabels = function(){
  _updateAcctLabels0();
@@ -3185,6 +4605,7 @@ updateAcctLabels = function(){
    ? '(AI is enabled on this server.)'
    : '(Offline mode: builds a structured Case Study draft with chapters, roles, ethical lenses, ranking & open prompt.)';
  }
+ syncBuilderAiUI();
 };
 
 openQuizModal = function(mode){
@@ -3215,24 +4636,31 @@ openQuizModal = function(mode){
  const fl = document.getElementById('folderList');
  if(fl) fl.innerHTML = [...new Set(quizList.map(q=>q.folder).filter(f=>f && f!=='Built-in'))].map(f=>`<option value="${esc(f)}">`).join('');
  updateAcctLabels();
+ syncBuilderAiUI();
  if(typeof renderBuilderPreview === 'function') renderBuilderPreview();
+ syncTextToVisual();
+ setBuilderTab(builderTab);
  if(m) m.classList.add('open');
 };
 
 function insertCaseTpl(kind){
  const tpls = {
   info: `Chapter Title\nType: info\nBody: Write the narrative context or new developments here.\nRole: Stakeholder 1 | Your private perspective and incentives.\nRole: Stakeholder 2 | Your competing constraints and concerns.\nTopic: Ethical Leadership\nNote: Private facilitation prompt for you on the host screen.`,
-  poll: `Decision Point: What action do you take?\nType: poll\nOption A :: Utilitarian (outcomes) lens\nOption B :: Duty & rights lens\nOption C :: Virtue & integrity lens\nOption D :: Care & stakeholder lens\nTopic: Ethical Lenses\nNote: Cold-call one speaker from two different sides.`,
+  poll: `Decision Point: What action do you take?\nType: poll\nOption A :: Utilitarian (outcomes) lens || Immediate stakeholder outcome => 0\nOption B :: Duty & rights lens || Principle-based consequence => 0\nOption C :: Virtue & integrity lens\nOption D :: Care & stakeholder lens\nTopic: Ethical Lenses\nNote: Cold-call one speaker from two different sides.`,
   rank: `Rank these competing priorities from MOST important (#1) to LEAST:\nType: rank\nPreventing harm to stakeholders\nTransparency and honesty\nPsychological safety for truth-tellers\nMeeting external commitments\nShort-term financial targets\nTopic: Competing Values`,
   open: `In 1–2 sentences, write what you will say to your team or board — and why.\nType: open\nTopic: Moral Courage\nNote: Have students vote on the two most persuasive arguments on their phones.`,
+  brainstorm: `Brainstorm up to 3 creative ways the team could mitigate this risk:\nType: brainstorm\nTopic: Creative Problem Solving\nNote: Spotlight top ideas with ⭐ on the projector for class evaluation.`,
+  scale: `How confident are you in leadership's current plan?\nType: scale\nScale: Not Confident at All | Completely Confident\n- 1\n- 2\n- 3\n- 4\n- 5\nTopic: Pulse Check`,
   mc: `Concept Check: Which principle is illustrated here?\nOption A\n*Correct Option B\nOption C\nOption D\nQuote: Brief takeaway shown after answers lock in.\nTopic: Ethical Leadership`
  };
+ syncVisualToTextIfActive();
  const box = document.getElementById('customText');
  if(!box || !tpls[kind]) return;
  box.value = (box.value.trim() ? box.value.trim() + '\n\n' : '') + tpls[kind];
  box.focus();
  box.scrollTop = box.scrollHeight;
  if(typeof renderBuilderPreview === 'function') renderBuilderPreview();
+ syncTextToVisual();
 }
 
 aiGenerate = async function(){
@@ -3254,15 +4682,48 @@ aiGenerate = async function(){
  }
 };
 
+function useWithoutSaving(){
+ syncVisualToTextIfActive();
+ const isC = (quizModalMode === 'case');
+ const title = document.getElementById('customTitle').value.trim() || (isC ? 'Session Case Study' : 'Session Quiz');
+ const raw = document.getElementById('customText').value;
+ try{
+  const qs = parseCustomQuestions(raw);
+  if(!qs.length){
+   document.getElementById('customErr').textContent = 'Add at least one question or slide first.';
+   return;
+  }
+  const savedIsCase = qs.some(x=>['info','poll','rank','open'].includes(x && x.type));
+  const localFile = 'local_' + Date.now() + '.json';
+  const entry = {
+   file: localFile,
+   title: `${title} (${qs.length} Qs)`,
+   count: qs.length,
+   folder: savedIsCase ? 'Case Studies' : 'My Quizzes',
+   tags: ((document.getElementById('customTags')||{}).value||'').split(',').map(x=>x.trim()).filter(Boolean),
+   case: savedIsCase,
+   questions: qs
+  };
+  storeCustomQuizLocal(entry);
+  quizList = mergeQuizLists(quizList);
+  setHostSection(savedIsCase ? 'case' : 'quiz');
+  renderQuizSelect(localFile);
+  closeQuizModal();
+ }catch(e){
+  document.getElementById('customErr').textContent = 'Could not parse slides: ' + e.message;
+ }
+}
+
 saveCustomQuiz = async function(){
+ syncVisualToTextIfActive();
  const isC = (quizModalMode === 'case');
  const title = document.getElementById('customTitle').value.trim() || (isC ? 'Custom Case Study' : 'Custom Quiz');
  const raw = document.getElementById('customText').value;
  try{
   const qs = parseCustomQuestions(raw);
-  const hasCaseSlide = qs.some(x=>['info','poll','rank','open'].includes(x && x.type));
+  const hasCaseSlide = qs.some(x=>['info','poll','rank','open','brainstorm','scale'].includes(x && x.type));
   if(isC && !hasCaseSlide){
-   document.getElementById('customErr').textContent = 'Add at least one Case Study slide (Type: info, poll, rank, or open) — use the "+ Insert slide" buttons above.';
+   document.getElementById('customErr').textContent = 'Add at least one Case Study slide (Type: info, poll, rank, open, brainstorm, or scale) — use the "+ Case Slide" menu above.';
    return;
   }
   const folderVal = ((document.getElementById('customFolder')||{}).value||'').trim() || (isC ? 'Case Studies' : '');
@@ -3327,9 +4788,18 @@ create = async function(){
  const discSec = clampSec('cDiscussTime', 60);
  const rankSec = clampSec('cRankTime', 60);
  const openSec = clampSec('cOpenTime', 120);
+ const brainSec = clampSec('qBrainTime', 45);
+ const scaleSec = clampSec('qScaleTime', 25);
  const cpEl = document.getElementById('cPrevTime');
  const cpParsed = cpEl && cpEl.value !== '' ? parseFloat(cpEl.value) : 5;
  const cPrevSec = Number.isFinite(cpParsed) ? Math.max(0, Math.min(120, cpParsed)) : 5;
+ const thkEl = document.getElementById('qThinkTime');
+ const thkParsed = thkEl && thkEl.value !== '' ? parseFloat(thkEl.value) : 0;
+ const thinkSec = Number.isFinite(thkParsed) ? Math.max(0, Math.min(120, thkParsed)) : 0;
+ const scoringMode = ((document.getElementById('qScoring')||{}).value || 'classic');
+ const consensusOn = !!(document.getElementById('qConsensus') && document.getElementById('qConsensus').checked);
+ const hideBoardOn = !!(document.getElementById('qHideBoard') && document.getElementById('qHideBoard').checked);
+ const stuTtsOn = !!(document.getElementById('qStudentTts') && document.getElementById('qStudentTts').checked);
  const bcnt = parseInt((document.getElementById('qBots')||{}).value, 10) || 0;
  const teams = !!(document.getElementById('qTeams') && document.getElementById('qTeams').checked);
  const ice = !!(document.getElementById('qIce') && document.getElementById('qIce').checked);
@@ -3342,10 +4812,12 @@ create = async function(){
   quiz: qf,
   custom_questions: picked && picked.questions ? picked.questions : null,
   count: null, shuffle: false, qtime: ctm, preview: cPrevSec,
-  case_times: {poll: pollSec, rank: rankSec, open: openSec},
+  think_time: thinkSec, scoring_mode: scoringMode,
+  hide_board: hideBoardOn, allow_tts: stuTtsOn, consensus: consensusOn,
+  case_times: {poll: pollSec, rank: rankSec, open: openSec, brainstorm: brainSec, scale: scaleSec},
   discuss_time: discSec,
   bots: bcnt,
-  teams: teams,
+  teams: teams || consensusOn,
   wager: false, redemption: false, sabotage: false, wheel: false,
   hotseat: false, team_battle: false, tiebreak: false,
   speed: false, dbl: false, steal: false, auto: false,
@@ -3361,6 +4833,8 @@ create = async function(){
  try{ localStorage.setItem('brainrush_host', JSON.stringify({pin, host})); }catch(e){}
  ensureRemoteProbe();
  document.getElementById('remoteBtn').style.display = 'flex';
+ const hbBtn = document.getElementById('hideBoardMenuBtn'); if(hbBtn) hbBtn.style.display = 'flex';
+ const stBtn = document.getElementById('stuTtsMenuBtn'); if(stBtn) stBtn.style.display = 'flex';
  const aq = document.getElementById('addQuizMenuBtn');
  if(aq) aq.style.display = 'none';
  startHostPoll();
@@ -3404,30 +4878,36 @@ function infoScreen(){
 }
 const _answerArea0 = answerArea;
 answerArea = function(){
- if(S.qtype==='poll') return `<div class="grid">${S.answers.map((a,i)=>`<div class="a c${i}"><span>${sh[i]}${esc(a)}</span></div>`).join('')}</div><p style="font-size:1.2em;font-weight:700">🗳️ Vote on your phone — there is no wrong answer</p>`;
- if(S.qtype==='rank') return `<div><div class="oq-title">📊 Rank these on your phone — most important first</div><div class="grid">${S.answers.map((a,i)=>`<div class="a c${i%4}"><span>${'ABCDEF'[i]}. ${esc(a)}</span></div>`).join('')}</div></div>`;
+ if(S.qtype==='poll'){
+  const ans = S.answers||[];
+  return `<div class="grid${ans.length>4?' grid-compact':''}">${ans.map((a,i)=>`<div class="a c${i%8}"><span>${sh[i%sh.length]}${esc(a)}</span></div>`).join('')}</div><p style="font-size:1.2em;font-weight:700">🗳️ Vote on your phone — there is no wrong answer</p>`;
+ }
+ if(S.qtype==='rank'){
+  const ans = S.answers||[];
+  return `<div><div class="oq-title">📊 Rank these on your phone — most important first</div><div class="grid${ans.length>4?' grid-compact':''}">${ans.map((a,i)=>`<div class="a c${i%8}"><span>${LET[i]||i+1}. ${esc(a)}</span></div>`).join('')}</div></div>`;
+ }
  if(S.qtype==='open') return `<div class="textq">✍️ Write your response on your phone<small>1–2 sentences. Responses stay anonymous, then the class votes on the most persuasive.</small></div>`;
  return _answerArea0();
 };
 const _resultArea0 = resultArea;
 resultArea = function(){
- if(!S.case) return _resultArea0();
  const nAct = (S.n_active != null ? S.n_active : S.n);
  if(S.qtype==='poll'){
+  const ans = S.answers || [];
   const tot = Math.max(1, (S.counts||[]).reduce((a,b)=>a+b,0));
-  return `<div class="grid" style="margin-top:10px">${S.answers.map((a,i)=>{
+  return `<div class="grid${ans.length>4?' grid-compact':''}" style="margin-top:10px">${ans.map((a,i)=>{
    const c = (S.counts&&S.counts[i])||0, pct = Math.round(c/tot*100), ln = S.lenses && S.lenses[i];
-   return `<div class="a res c${i}"><div class="a-fill" style="width:${pct}%"></div><span class="a-txt">${sh[i]}${esc(a)}${ln?`<span class="lens">🔎 ${esc(ln)}</span>`:''}</span><span class="a-cnt">${pct}% · ${c}</span></div>`;
+   return `<div class="a res c${i%8}"><div class="a-fill" style="width:${pct}%"></div><span class="a-txt">${sh[i%sh.length]}${esc(a)}${ln?`<span class="lens">🔎 ${esc(ln)}</span>`:''}</span><span class="a-cnt">${pct}% · ${c}</span></div>`;
   }).join('')}</div>`;
  }
  if(S.qtype==='rank'){
   return `<div class="reveal-box"><div class="rb-label">📊 Class ranking (best average position first)</div><ol class="rb-ol">${(S.rank_avg||[]).map(r=>`<li>${esc(r.item)} <small style="opacity:.7">avg position ${r.avg}</small></li>`).join('')}</ol><div class="rb-count">${S.rank_n||0} of ${nAct} students ranked</div></div>`;
  }
- if(S.qtype==='open'){
-  const rs = S.responses || [];
-  return `<div class="resp-grid">${rs.map(r=>`<div class="resp ${r.votes?'voted':''}">“${esc(r.text)}”${r.votes?`<div class="rv">👍 ${r.votes}</div>`:''}</div>`).join('') || '<p>No responses yet.</p>'}</div><p style="opacity:.85">Students: vote for the two most persuasive responses on your phone.</p>`;
+ if(S.qtype==='open' || S.qtype==='brainstorm'){
+  return responsesGridHtml(S.responses || [], S.qtype==='brainstorm' ? '💡 Vote on your favorite brainstorm ideas on your phone!' : 'Students: vote for the two most persuasive responses on your phone.');
  }
- return '';
+ if(S.qtype==='info') return '';
+ return _resultArea0();
 };
 function discussText(){
  if(S.discuss_left == null) return '';
@@ -3436,20 +4916,21 @@ function discussText(){
 window.discussText = discussText;
 const _resultExtras0 = resultExtras;
 resultExtras = function(){
- if(!S.case) return _resultExtras0();
- let h = '';
+ if(!S.case && S.qtype !== 'brainstorm' && S.qtype !== 'scale') return _resultExtras0();
+ let h = sharedResultExtrasHtml();
  if(S.qtype==='poll'){
-  const defs = (S.defenders||[]).length ? `🎤 <b>Defend your side!</b><br>${S.defenders.map(d=>`${esc(d.name)} speaks for <b>${sh[d.side]}${esc(S.answers[d.side])}</b>`).join('<br>')}<br>` : '';
+  const defs = (S.defenders||[]).length ? `🎤 <b>Defend your side!</b><br>${S.defenders.map(d=>`${esc(d.name)} speaks for <b>${sh[d.side%sh.length]}${esc((S.answers||[])[d.side]||'')}</b>`).join('<br>')}<br>` : '';
   if(defs || !IS_AUDIENCE || S.discuss_left != null){
    h += `<div class="defend">${defs}${!defs&&S.discuss_left!=null?'🗣️ <b>Discussion:</b> ':''}<span id="dtimer" style="font-weight:900;font-size:1.3em;color:#ffdf5d">${discussText()}</span> ${discussCtrlHtml('discussSecInp','⏱️ Start Discussion')}</div>`;
   }
- } else if(S.qtype==='rank' || S.qtype==='open'){
+ } else if(S.qtype==='rank' || S.qtype==='open' || S.qtype==='brainstorm' || S.qtype==='scale'){
   if(!IS_AUDIENCE || S.discuss_left != null){
    h += `<div class="defend" style="padding:8px 14px">${S.discuss_left!=null?'🗣️ <b>Discussion:</b> ':''}<span id="dtimer" style="font-weight:900;font-size:1.3em;color:#ffdf5d">${discussText()}</span> ${discussCtrlHtml('discussSecInp','⏱️ Start Debrief Timer')}</div>`;
   }
  }
  return h;
 };
+syncBuilderAiUI();
 async function startDiscuss(sec){
  if(pin && host) await hostCtl('discuss', sec);
 }
@@ -3667,8 +5148,11 @@ window.updatePresBadge = updatePresBadge;
 function qtypeBadge(qt, isCase){
  const map = {
   info: '📖 Case Chapter', poll: '🗳️ Decision Poll', rank: '📊 Priority Ranking', open: '✍️ Open Response',
+  brainstorm: '💡 Brainstorm', scale: '📏 Rating Scale',
   mc: isCase ? '✅ Concept Check' : '✅ Multiple Choice', tf: '✓/✗ True / False',
-  text: '⌨️ Type Answer', order: '🔢 Put in Order', zoom: '🔍 Zoom Picture'
+  multi: '☑️ Multi-Select', match: '🔗 Matching Pairs',
+  text: '⌨️ Type Answer', order: '🔢 Put in Order',
+  slider: '🎚️ Number Slider', pin: '📍 Drop-Pin', zoom: '🔍 Zoom Picture'
  };
  return map[qt] || '❓ Slide';
 }
@@ -3678,6 +5162,8 @@ function renderPresenter(){
  const ph = S.phase || 'lobby';
  const nAct = (S.n_active != null ? S.n_active : (S.n || 0));
  const inPrev = ph === 'question' && (S.preview_left || 0) > 0;
+ const inCons = ph === 'question' && S.consensus_step === 2;
+ const inThink = ph === 'question' && !inPrev && !inCons && (S.think_left || 0) > 0;
  const autoSuffix = S.auto && S.auto_left != null ? `<span id="autoNextLbl"> (${S.auto_left}s)</span>` : '';
  const live = isProjectorLive();
  const liveHtml = live
@@ -3703,7 +5189,7 @@ function renderPresenter(){
  } else if(ph === 'question'){
   nextLbl = S.qtype === 'info' ? '➡️ Continue to Next Slide ➔' : '⏭️ End Timer & Show Results';
  } else if(ph === 'results'){
-  nextLbl = (S.is_last ? '🏆 Show Final Podium' : (S.case ? '➡️ Next Slide ➔' : '🏆 Show Leaderboard')) + autoSuffix;
+  nextLbl = (S.is_last ? '🏆 Show Final Podium' : ((S.case || S.hide_board) ? '➡️ Next Slide ➔' : '🏆 Show Leaderboard')) + autoSuffix;
  } else if(ph === 'board'){
   nextLbl = ((S.index + 1 >= S.total) ? '🏆 Show Final Podium' : '➡️ Next Question ➔') + autoSuffix;
  }
@@ -3715,7 +5201,15 @@ function renderPresenter(){
    ctrlHtml = `<div class="pcon-ctrl"><div style="flex:1"><div style="font-weight:800;color:#ffdf5d;margin-bottom:6px">👀 Reading preview on projector…</div><div class="preview-bar"><div class="preview-fill" id="pf" style="width:${pct}%"></div></div></div><button class="btn-sm" onclick="hostCtl('skip_preview')">⏭️ Open Answers Now</button></div>`;
   } else {
    const sec = Math.ceil(S.left || 0);
-   ctrlHtml = `<div class="pcon-ctrl">
+   const thkRow = inThink ? `<div style="width:100%;display:flex;align-items:center;gap:10px;margin-bottom:6px;padding:6px 10px;border-radius:10px;background:#311b92cc;border:1px solid #b388ff">
+    <div style="flex:1"><div style="font-weight:800;font-size:.88em;color:#e1bee7">🧠 Thinking Time — Choices Shown, Phones Locked (<span id="thkSec">${Math.ceil(S.think_left||0)}</span>s)</div><div class="preview-bar" style="height:7px;margin-top:4px"><div class="think-fill" id="thkf" style="width:${Math.min(100,((S.think_left||0)/Math.max(1,S.think_total||5))*100)}%"></div></div></div>
+    <button class="btn-sm" style="background:#7c4dff" onclick="hostCtl('skip_think')">⏭️ Unlock Answers Now</button>
+   </div>` : '';
+   const consRow = inCons ? `<div style="width:100%;display:flex;align-items:center;gap:10px;margin-bottom:6px;padding:6px 10px;border-radius:10px;background:#004d40cc;border:1px solid #64ffda">
+    <div style="flex:1"><div style="font-weight:800;font-size:.88em;color:#a7ffeb">🤝 Phase 2: Team Consensus (<span id="consSec">${Math.ceil(S.consensus_left||0)}</span>s) · <b id="consVoted">${S.consensus_voted||0}</b> votes locked in</div><div class="preview-bar" style="height:7px;margin-top:4px"><div class="preview-fill" id="consFill" style="width:${Math.min(100,((S.consensus_left||0)/Math.max(1,S.consensus_total||20))*100)}%"></div></div></div>
+    <button class="btn-sm" onclick="hostCtl('add_time',15)">+15s</button>
+   </div>` : '';
+   ctrlHtml = `<div class="pcon-ctrl" style="flex-wrap:wrap">${thkRow}${consRow}
     <div class="timer ${!S.paused&&sec<=5?'urgent':''} ${S.paused?'paused':''}" id="t">${S.paused ? '⏸️ ' + sec : sec}</div>
     <button class="btn-sm" id="pauseBtn" onclick="hostCtl('pause')">${S.paused ? '▶️ Resume' : '⏸️ Pause'}</button>
     <button class="btn-sm" onclick="hostCtl('add_time',-10)" title="Subtract 10 seconds">-10s</button>
@@ -3730,6 +5224,8 @@ function renderPresenter(){
   }
  } else if(ph === 'question' && S.qtype === 'info'){
   ctrlHtml = `<div class="pcon-ctrl"><span style="font-weight:800;color:#ffdf5d">🗣️ Chapter Timer: <span id="dtimer">${discussText()||'Ready'}</span></span>${discussCtrlHtml('pconInfoDiscInp','⏱️ Start Timer')}</div>`;
+ } else if(ph === 'results' && S.can_reconsider){
+  ctrlHtml = `<div class="pcon-ctrl"><button class="btn-sm" onclick="reconsiderVote(30)">🔄 Re-open Vote (Reconsider · 30s)</button><span style="font-size:.84em;opacity:.8">Snapshots initial votes &amp; tracks opinion shift after discussion</span></div>`;
  } else if(ph === 'intro'){
   const ipct = Math.max(0, Math.min(100, ((S.intro_left||0)/(S.intro_total||5))*100));
   ctrlHtml = `<div class="pcon-ctrl"><div style="flex:1"><div class="preview-bar"><div class="preview-fill" id="ib" style="width:${ipct}%"></div></div></div></div>`;
@@ -3745,7 +5241,7 @@ function renderPresenter(){
      <div style="font-size:2.4em;font-weight:900;color:#ffdf5d;letter-spacing:2px;margin:4px 0">PIN: ${esc(pin)}</div>
      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px">
       <button class="btn-sm" onclick="addBots(5)">🤖 +5 ${S.case_game ? 'Simulated Participants' : 'Phantom Players'}</button>
-      <button class="btn-sm" onclick="navigator.clipboard.writeText(location.origin+'/play?pin='+pin)">📋 Copy Join Link</button>
+      <button class="btn-sm" style="background:#26890c;border-color:#7dff6b" onclick="copyJoinLink(this)">📋 Copy Direct Join Link</button>
      </div>
     </div>
    </div>
@@ -3763,6 +5259,8 @@ function renderPresenter(){
    <h2 style="margin:.2em 0">${esc(title)}</h2>`;
  } else if(ph === 'question'){
   const badges = [
+   (S.pts !== null && S.pts !== undefined) ? (S.pts === 0 ? 'Ungraded · 0 pts' : `💎 ${S.pts} pts`) : '',
+   S.all_correct ? '✅ All Answers Accepted' : '',
    S.wheel_mod ? `🎡 ${S.wheel_mod}` : '',
    S.speed ? '⚡ Speed Round' : '',
    S.dbl ? '💥 Double or Nothing' : '',
@@ -3780,22 +5278,52 @@ function renderPresenter(){
   } else if(S.qtype === 'text'){
    detail = `<div class="pcon-note" style="margin-top:10px;background:#0d3b26;color:#fff;border:1px solid #7dff6b">✍️ Players are typing their answers on phones.<br><b style="color:#7dff6b">✅ Answer Key:</b> ${esc(S.host_ans||'')}</div>`;
   } else if(S.qtype === 'order'){
-   detail = `<div class="pcon-opts">${(S.answers||[]).map((a,i)=>`<div class="pcon-opt c${i%4}"><span>${LET[i]}. ${esc(a)}</span></div>`).join('')}</div>
+   detail = `<div class="pcon-opts">${(S.answers||[]).map((a,i)=>`<div class="pcon-opt c${i%8}"><span>${LET[i]||i+1}. ${esc(a)}</span></div>`).join('')}</div>
     ${S.host_ans?`<div style="margin-top:10px;padding:8px 12px;border-radius:10px;background:#0d3b26;border:1px solid #7dff6b;font-weight:700"><span style="color:#7dff6b">✅ Correct Order:</span> ${esc(S.host_ans)}</div>`:''}`;
-  } else if(S.qtype === 'open'){
-   detail = `<div style="margin-top:10px;padding:14px;border-radius:10px;background:#0004;opacity:.9">✍️ Students have <b>${S.qtime||120}s</b> to write 1–2 sentence anonymous responses on their phones. Peer voting opens when you advance to Results.</div>`;
+  } else if(S.qtype === 'match'){
+   detail = `<div class="match-cols" style="margin:8px 0">
+     <div class="match-col"><h4>Left</h4>${(S.match_left||[]).map((x,i)=>`<div class="match-item" style="font-size:.95em;padding:7px 10px">${i+1}. ${esc(x)}</div>`).join('')}</div>
+     <div class="match-col"><h4>Right</h4>${(S.match_right||[]).map((x,i)=>`<div class="match-item" style="font-size:.95em;padding:7px 10px">${LET[i]||i+1}. ${esc(x)}</div>`).join('')}</div>
+    </div>
+    ${S.host_ans?`<div style="margin-top:8px;padding:8px 12px;border-radius:10px;background:#0d3b26;border:1px solid #7dff6b;font-weight:700;font-size:.9em"><span style="color:#7dff6b">✅ Answer Key:</span> ${esc(S.host_ans)}</div>`:''}`;
+  } else if(S.qtype === 'slider'){
+   const cfg = S.slider_cfg || {min:0,max:100,step:1,unit:''};
+   const hsl = S.host_slider || {};
+   const u = esc(cfg.unit||'');
+   detail = `<div style="margin-top:8px;padding:12px;border-radius:10px;background:#0004">🎚️ Range on Projector: <b>${cfg.min}${u} — ${cfg.max}${u}</b> (step ${cfg.step||1}${u})
+    ${hsl.target !== undefined ? `<div style="margin-top:6px;color:#7dff6b;font-weight:800">✅ Private Target: ${hsl.target}${u} (±${hsl.margin||0}${u})</div>` : ''}
+   </div>`;
+  } else if(S.qtype === 'pin'){
+   const hp = S.host_pin || {x:50,y:50,r:12};
+   detail = `<div style="margin-top:8px">
+    ${S.img ? `<div class="pin-stage" style="max-width:340px">
+     <img src="${esc(S.img)}" alt="" style="max-height:190px">
+     <svg class="pin-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+      <circle cx="${hp.x}" cy="${hp.y}" r="${hp.r}" fill="rgba(46,204,113,0.28)" stroke="#7dff6b" stroke-width="1"/>
+      <circle cx="${hp.x}" cy="${hp.y}" r="1.4" fill="#ffdf5d"/>
+     </svg>
+    </div>` : ''}
+    <div style="margin-top:6px;font-size:.86em;color:#7dff6b;font-weight:800">📍 Private Target Preview: (${hp.x}%, ${hp.y}%) · radius ${hp.r}%</div>
+   </div>`;
+  } else if(S.qtype === 'scale'){
+   const lb = S.scale_labels || ['Low','High'];
+   detail = `<div style="font-size:.86em;color:#ffdf5d;font-weight:800;margin:4px 0">⬅️ ${esc(lb[0])} &nbsp;↔&nbsp; ${esc(lb[1])} ➡️</div>
+    <div class="pcon-opts">${(S.answers||[]).map((a,i)=>`<div class="pcon-opt c${i%8}"><span>${i+1}. ${esc(a)}</span></div>`).join('')}</div>`;
+  } else if(S.qtype === 'open' || S.qtype === 'brainstorm'){
+   detail = `<div style="margin-top:10px;padding:14px;border-radius:10px;background:#0004;opacity:.9">${S.qtype==='brainstorm'?'💡 Students submit up to 3 sticky-note ideas on their phones.':'✍️ Students write 1–2 sentence anonymous responses on their phones.'} Peer voting &amp; ⭐ Spotlight controls open on Results.</div>`;
   } else if(S.qtype === 'rank'){
-   detail = `<div class="pcon-opts">${(S.answers||[]).map((a,i)=>`<div class="pcon-opt c${i%4}"><span>${'ABCDEF'[i]}. ${esc(a)}</span></div>`).join('')}</div>`;
+   detail = `<div class="pcon-opts">${(S.answers||[]).map((a,i)=>`<div class="pcon-opt c${i%8}"><span>${LET[i]||i+1}. ${esc(a)}</span></div>`).join('')}</div>`;
   } else {
+   const hcm = Array.isArray(S.host_correct_multi) && S.host_correct_multi.length ? S.host_correct_multi : null;
    detail = `<div class="pcon-opts">${(S.answers||[]).map((a,i)=>{
-    const isKey = (S.host_correct === i);
-    return `<div class="pcon-opt c${i%4}${isKey?' key':''}"><span>${sh[i]}${esc(a)}</span>${isKey?'<span class="pcon-key">✅ Correct</span>':''}</div>`;
+    const isKey = S.all_correct || (hcm ? hcm.includes(i) : (S.host_correct === i));
+    return `<div class="pcon-opt c${i%8}${isKey?' key':''}"><span>${sh[i%sh.length]}${esc(a)}</span>${isKey?'<span class="pcon-key">✅ Correct</span>':''}</div>`;
    }).join('')}</div>`;
   }
   slideBody = `<div class="pcon-lbl"><span>${qtypeBadge(S.qtype, S.case)} · On Extended Screen</span><span>Slide ${(S.index||0)+1} of ${S.total}</span></div>
    ${badges ? `<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px">${badges}</div>` : ''}
    <h2 style="margin:.1em 0 .4em;font-size:1.45em;line-height:1.3">${esc(S.question)}</h2>
-   ${S.img ? `<img src="${esc(S.img)}" alt="" style="max-height:120px;border-radius:8px;background:#fff;margin-bottom:6px">` : ''}
+   ${(S.img && S.qtype !== 'pin') ? `<img src="${esc(S.img)}" alt="" style="max-height:120px;border-radius:8px;background:#fff;margin-bottom:6px">` : ''}
    ${S.qtype !== 'info' ? exhibitsHtml(S.exhibits, false) : ''}
    ${detail}`;
  } else if(ph === 'results'){
@@ -3808,11 +5336,14 @@ function renderPresenter(){
    ${shHtml}${teamStandingsHtml()}${board(S.board||[])}`;
  } else {
   const st = S.stats || {};
+  const cal = st.calibration;
+  const calHtml = (cal && cal.conf_n > 0) ? `<div class="tough-box" style="max-width:none;border-color:#ffdf5d66"><h3 style="color:#ffdf5d">🎯 Confidence Calibration</h3><div class="tough-item">Confident Bets: <b>${cal.conf_pct}% accurate (${cal.conf_ok}/${cal.conf_n})</b> vs Standard Answers: <b>${cal.calm_pct !== null && cal.calm_pct !== undefined ? cal.calm_pct + '%' : 'N/A'}</b></div></div>` : '';
   const pool = quizList.filter(q => S.case_game ? !!q.case : !q.case);
   const qOpts = `<option value="">— Select ${S.case_game ? 'a Case Study' : 'a Quiz'} —</option>` + (pool.length ? pool : quizList).map(q=>`<option value="${esc(q.file)}">${esc(q.title)}</option>`).join('');
   slideBody = `<div class="pcon-lbl"><span>🏆 Final Podium Showing on Extended Screen</span><span>Session Complete</span></div>
    ${st.possible ? `<div class="acc-pill" style="margin-top:0">🎯 Group Accuracy: ${st.accuracy}% (${st.correct}/${st.possible})</div>` : ''}
    ${board((S.board||[]).slice(0,10))}
+   ${calHtml}
    ${topicPanel()}
    <div class="replay-box" style="max-width:none;margin:14px 0 10px">
     <b>🔁 Next ${S.case_game?'Case':'Round'} (Keep Players):</b>
@@ -3843,6 +5374,7 @@ function renderPresenter(){
    ? `<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px">
        <span class="pcon-chip" style="font-size:.82em">${qtypeBadge(un.qtype, un.case)}</span>
        <span class="pcon-chip" style="font-size:.82em">⏱️ ${un.qtime ? un.qtime + 's' : 'Untimed'}</span>
+       ${un.branched ? `<span class="pcon-chip" style="font-size:.82em;background:#651fff88;border:1px solid #b388ff">🔀 Branched</span>` : ''}
        ${un.topic ? `<span class="pcon-chip" style="font-size:.82em">🏷️ ${esc(un.topic)}</span>` : ''}
       </div>
       <div style="font-size:1.08em;font-weight:800;line-height:1.35">${esc(un.q)}</div>`
@@ -3860,10 +5392,14 @@ function renderPresenter(){
   </div>
   ${pendingHtml()}
   <div class="pcon-roster">
-   ${hPlayers.length ? hPlayers.map((p,i)=>`<div class="pcon-p">
-     <span>${i+1}. ${esc((p.avatar?p.avatar+' ':'')+p.name)}${p.bot?' <small style="opacity:.65">🤖</small>':''}</span>
-     <span><b style="color:#ffdf5d;margin-right:6px">${p.score}</b><button title="Remove ${esc(p.name)}" data-n="${esc(p.name)}" onclick="kickPlayer(this.dataset.n)">✖</button></span>
-    </div>`).join('') : '<div style="opacity:.68;font-size:.9em">No players joined yet.</div>'}
+   ${hPlayers.length ? hPlayers.map((p,i)=>{
+    const av = fmtAvatar(p);
+    const scoreTxt = (S.scoring_mode === 'percent' && p.pct != null) ? `${p.pct}% (${p.score})` : p.score;
+    return `<div class="pcon-p">
+     <span>${i+1}. ${av?av+' ':''}${esc(p.name)}${p.bot?' <small style="opacity:.65">🤖</small>':''}</span>
+     <span><b style="color:#ffdf5d;margin-right:6px">${scoreTxt}</b><button title="Remove ${esc(p.name)}" data-n="${esc(p.name)}" onclick="kickPlayer(this.dataset.n)">✖</button></span>
+    </div>`;
+   }).join('') : '<div style="opacity:.68;font-size:.9em">No players joined yet.</div>'}
   </div>
  </div>`;
 
