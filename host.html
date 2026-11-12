@@ -876,10 +876,10 @@ const $ = document.getElementById('app'), sh = ["▲ ","◆ ","● ","■ "];
 
 // --- Hamburger Nav, Dynamic Join QR & Setup Presets ---
 function joinPlayDisplay(){
- return `${location.host || 'localhost:8088'}/play`;
+ return `${location.host || 'localhost:8000'}/play`;
 }
 function joinPlayUrl(p){
- const orig = (location.origin && location.origin !== 'null') ? location.origin : 'http://localhost:8088';
+ const orig = (location.origin && location.origin !== 'null') ? location.origin : 'http://localhost:8000';
  const base = `${orig}/play`;
  const full = p ? `${base}?pin=${encodeURIComponent(p)}` : base;
  return full.length <= 128 ? full : base;
