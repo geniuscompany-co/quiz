@@ -26,21 +26,24 @@ button:active{transform:translateY(2px);box-shadow:0 2px 0 #0000004d,0 4px 10px 
 .btn-sm:active{transform:translateY(1px)}
 
 /* Pre-Game Teacher Workspace Top Bar */
-.ws-bar{position:sticky;top:0;z-index:36;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 136px 8px 16px;background:#14062bcc;border-bottom:1px solid var(--border);backdrop-filter:blur(16px);text-align:left}
+.ws-bar{position:sticky;top:0;z-index:36;min-height:52px;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 136px 8px 16px;background:#14062bcc;border-bottom:1px solid var(--border);backdrop-filter:blur(16px);text-align:left}
 body.in-game .ws-bar,body.is-audience .ws-bar{display:none!important}
-.ws-brand{display:flex;align-items:center;gap:8px;white-space:nowrap}
+.ws-brand{display:flex;align-items:center;gap:8px;white-space:nowrap;flex-shrink:0}
 .ws-brand-badge{display:inline-flex;align-items:center;gap:6px;font-weight:900;font-size:.98em;letter-spacing:-.01em;color:#fff}
 .ws-brand-badge i{font-style:normal;background:linear-gradient(135deg,#ffe066,#ff9800);color:#2b0d57;border-radius:8px;padding:3px 7px;font-size:.86em;box-shadow:0 2px 8px #0005}
 .ws-stor{margin:0;padding:4px 9px;font-size:.74em;border-radius:99px;background:#ffffff1a;border:1px solid #ffffff29;color:#fffd;font-weight:750;box-shadow:none}
-.ws-nav{display:flex;align-items:center;gap:5px;flex-wrap:wrap;justify-content:flex-end}
-.ws-pill{margin:0;padding:5px 10px;font-size:.8em;border-radius:99px;background:#ffffff18;border:1px solid #ffffff28;color:#fff;font-weight:750;box-shadow:none;display:inline-flex;align-items:center;gap:4px;white-space:nowrap}
+.ws-nav{display:flex;align-items:center;gap:5px;flex-wrap:nowrap;justify-content:flex-end;white-space:nowrap;min-width:0}
+body.ws-collapsed .ws-nav{position:absolute;visibility:hidden;pointer-events:none;left:-9999px}
+@media (max-width:1080px){body:not(.ws-measured) .ws-nav{position:absolute;visibility:hidden;pointer-events:none;left:-9999px}}
+.ws-pill{margin:0;padding:5px 10px;font-size:.8em;border-radius:99px;background:#ffffff18;border:1px solid #ffffff28;color:#fff;font-weight:750;box-shadow:none;display:inline-flex;align-items:center;gap:4px;white-space:nowrap;flex-shrink:0}
 .ws-pill:hover{background:#ffffff2c}
 .ws-pill.live{background:#1b5e20cc;border-color:#7dff6b;color:#e8ffe5}
 .ws-pill .ws-sub{font-size:.86em;padding:1px 7px;border-radius:99px;background:#0004;color:var(--gold);font-weight:800}
-@media (max-width:860px){.ws-bar{padding-right:104px}.ws-brand-sub{display:none}}
+@media (max-width:860px){.ws-bar{padding-right:108px}.ws-brand-sub{display:none}}
 
 /* Top-right Settings Menu & Top-left Late-Join Pill */
 .top-bar{position:fixed;top:9px;right:14px;z-index:42}
+body.ws-collapsed:not(.in-game) .menu-btn{background:#220b46ee;border-color:#ffdf5d88}
 body.in-game .top-bar{top:12px;right:16px}
 .late-join{position:fixed;top:12px;left:16px;z-index:38;display:none}
 .late-btn{font-size:.88em;padding:8px 14px;margin:0;background:#120526cc;border:1px solid var(--border-hi);border-radius:99px;color:#fff;cursor:pointer;display:flex;align-items:center;gap:8px;backdrop-filter:blur(10px);box-shadow:0 4px 16px #0006;font-weight:750}
@@ -54,17 +57,21 @@ body.in-game .top-bar{top:12px;right:16px}
 .menu-btn:hover{background:#1b0838ee}
 .menu-dot{width:8px;height:8px;border-radius:50%;background:#7dff6b;display:none}
 .menu-dot.on{display:inline-block}
-.menu-drop{position:absolute;top:46px;right:0;width:272px;max-height:82vh;overflow-y:auto;background:var(--card);border:1px solid var(--border-hi);border-radius:16px;padding:8px;box-shadow:0 16px 44px #000c;display:none;flex-direction:column;gap:3px;text-align:left;backdrop-filter:blur(16px)}
+.menu-drop{position:absolute;top:46px;right:0;width:292px;max-width:calc(100vw - 24px);max-height:82vh;overflow-y:auto;background:var(--card);border:1px solid var(--border-hi);border-radius:16px;padding:8px;box-shadow:0 16px 44px #000c;display:none;flex-direction:column;gap:3px;text-align:left;backdrop-filter:blur(16px)}
 .menu-drop.open{display:flex;animation:pop .16s ease-out}
-.menu-drop button{width:100%;margin:0;padding:9px 12px;font-size:.92em;font-weight:650;background:transparent;border-radius:10px;text-align:left;display:flex;align-items:center;justify-content:space-between;color:#fff;box-shadow:none}
+.menu-drop button{width:100%;margin:0;padding:9px 12px;font-size:.91em;font-weight:650;background:transparent;border-radius:10px;text-align:left;display:flex;align-items:center;justify-content:space-between;gap:8px;color:#fff;box-shadow:none}
 .menu-drop button:hover{background:#fff2}
-.menu-drop button .state{font-size:.8em;padding:2px 8px;border-radius:99px;background:#fff2;color:#fffc}
+.menu-drop button .state{font-size:.78em;padding:2px 8px;border-radius:99px;background:#fff2;color:#fffc;white-space:nowrap;flex-shrink:0}
 .menu-drop button.on .state{background:#26890c;color:#fff;font-weight:800}
 .voice-cfg{background:#0004;border-radius:10px;padding:8px 10px;margin:2px 4px;display:none;flex-direction:column;gap:6px;font-size:.84em}
 .voice-cfg.open{display:flex}
 .voice-cfg label{display:flex;align-items:center;justify-content:space-between;gap:8px;color:#fffd;font-weight:600}
 .voice-cfg select{flex:1;max-width:165px;padding:5px 8px;border-radius:6px;border:0;background:#fff;color:#2b0d57;font-weight:700;font-size:.95em;cursor:pointer}
 .menu-sep{height:1px;background:#fff2;margin:4px 6px}
+.menu-group{display:flex;flex-direction:column;gap:2px}
+.menu-hdr{font-size:.68em;text-transform:uppercase;letter-spacing:1px;font-weight:900;color:var(--gold);opacity:.88;padding:5px 12px 2px}
+body.ws-collapsed:not(.in-game) #menuWsGrp{order:-1;border-bottom:1px solid #fff2;padding-bottom:5px;margin-bottom:3px}
+body.ws-collapsed:not(.in-game) #menuMidSep{display:none}
 .menu-kb{font-size:.75em;opacity:.7;padding:6px 10px 4px;line-height:1.45}
 
 /* Pre-Game Setup Studio */
@@ -78,6 +85,7 @@ body.in-game .top-bar{top:12px;right:16px}
 .setup-card{max-width:860px;margin:0 auto;background:var(--glass);border:1px solid var(--border);border-radius:22px;padding:20px 22px 22px;box-shadow:0 18px 50px #0007;backdrop-filter:blur(14px)}
 .sec-tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;background:#0006;padding:6px;border-radius:14px;margin-bottom:16px;border:1px solid #fff2}
 .sec-tabs button{margin:0;padding:11px 14px;font-size:1.06em;border-radius:10px;background:transparent;color:#ffffffd9;font-weight:800;box-shadow:none;transition:background .14s}
+@media (max-width:480px){.sec-tabs button{font-size:.94em;padding:10px 8px;white-space:nowrap}}
 .sec-tabs button.active{background:linear-gradient(180deg,#ffe57f,#ffd54f);color:#2b0d57;box-shadow:0 4px 14px #0006}
 
 /* Visual Deck Library Picker */
@@ -465,7 +473,7 @@ body.is-presenter-console #metaBar,body.is-presenter-console #lateJoin,body.is-p
   <span class="ws-brand-badge"><i>⚡</i> BrainRush <span class="ws-brand-sub" style="opacity:.7;font-weight:650">Studio</span></span>
   <button type="button" class="ws-stor" onclick="openStorage()" title="View storage status & cloud setup">💾 <span id="wsStorState">Local</span></button>
  </div>
- <nav class="ws-nav">
+ <nav class="ws-nav" id="wsNav">
   <button type="button" class="ws-pill" onclick="openQuizModal()"><span class="quiz-only">➕ Builder</span><span class="case-only">📖 Case Builder</span></button>
   <button type="button" class="ws-pill quiz-only" onclick="openHomework()">📚 Homework</button>
   <button type="button" class="ws-pill quiz-only" onclick="openProgress()">👥 Progress</button>
@@ -488,45 +496,51 @@ body.is-presenter-console #metaBar,body.is-presenter-console #lateJoin,body.is-p
  </div>
 </div>
 <div class="top-bar" id="topNav">
- <button class="menu-btn" onclick="toggleNavMenu(event)" title="Audio, Theme, Accessibility & Host Settings">
-  <span>⚙️</span>
+ <button class="menu-btn" onclick="toggleNavMenu(event)" title="Studio Navigation, Audio, Theme & Host Settings">
+  <span id="navIcon">⚙️</span>
   <span id="navBadge" style="font-size:.8em;font-weight:750">Settings</span>
  </button>
  <div class="menu-drop" id="navMenu">
-  <button id="muteBtn" class="on" onclick="toggleMute()"><span>🔊 Sound Effects</span><span class="state" id="muteState">ON</span></button>
-  <button id="ttsBtn" onclick="toggleTts()"><span>🗣️ Voice Announcer</span><span class="state" id="ttsState">Off</span></button>
-  <div class="voice-cfg" id="voiceCfg" onclick="event.stopPropagation()">
-   <label>🎙️ Voice <select id="voiceSel" onchange="onVoiceChange()"><option value="">System Default</option></select></label>
-   <label>🎭 Style <select id="voiceStyle" onchange="onVoiceChange()">
-    <option value="1.04,1.0">🎙️ Natural Host</option>
-    <option value="1.15,1.18">⚡ Hype Show Host</option>
-    <option value="0.92,0.68">🎬 Movie Trailer</option>
-    <option value="0.96,0.95">🎩 Calm Narrator</option>
-    <option value="1.22,1.65">🐿️ Chipmunk</option>
-    <option value="0.95,0.45">🤖 Robot</option>
-   </select></label>
-  </div>
-  <button id="autoBtn" class="quiz-only" style="display:none" onclick="hostCtl('toggle_auto')"><span>⏭️ Auto-Advance</span><span class="state" id="autoState">Off</span></button>
-  <div id="autoMenuRow" class="voice-cfg quiz-only" style="display:none" onclick="event.stopPropagation()">
-   <label>⏭️ Wait time <span style="display:inline-flex;align-items:center;gap:4px"><input id="menuAutoSec" type="number" min="2" max="120" value="7" style="width:52px;padding:4px 6px;border-radius:6px;border:0;text-align:center;font-weight:800;color:#2b0d57" onchange="if(pin&&host)hostCtl('set_auto_time',parseInt(this.value,10)||7)">s</span></label>
-  </div>
-  <button onclick="cycleTheme()"><span>🎨 Visual Theme</span><span class="state" id="themeState">Purple</span></button>
+  <div class="menu-group" id="menuAudioGrp">
+   <div class="menu-hdr">⚙️ Audio &amp; Display</div>
+   <button id="muteBtn" class="on" onclick="toggleMute()"><span>🔊 Sound Effects</span><span class="state" id="muteState">ON</span></button>
+   <button id="ttsBtn" onclick="toggleTts()"><span>🗣️ Voice Announcer</span><span class="state" id="ttsState">Off</span></button>
+   <div class="voice-cfg" id="voiceCfg" onclick="event.stopPropagation()">
+    <label>🎙️ Voice <select id="voiceSel" onchange="onVoiceChange()"><option value="">System Default</option></select></label>
+    <label>🎭 Style <select id="voiceStyle" onchange="onVoiceChange()">
+     <option value="1.04,1.0">🎙️ Natural Host</option>
+     <option value="1.15,1.18">⚡ Hype Show Host</option>
+     <option value="0.92,0.68">🎬 Movie Trailer</option>
+     <option value="0.96,0.95">🎩 Calm Narrator</option>
+     <option value="1.22,1.65">🐿️ Chipmunk</option>
+     <option value="0.95,0.45">🤖 Robot</option>
+    </select></label>
+   </div>
+   <button id="autoBtn" class="quiz-only" style="display:none" onclick="hostCtl('toggle_auto')"><span>⏭️ Auto-Advance</span><span class="state" id="autoState">Off</span></button>
+   <div id="autoMenuRow" class="voice-cfg quiz-only" style="display:none" onclick="event.stopPropagation()">
+    <label>⏭️ Wait time <span style="display:inline-flex;align-items:center;gap:4px"><input id="menuAutoSec" type="number" min="2" max="120" value="7" style="width:52px;padding:4px 6px;border-radius:6px;border:0;text-align:center;font-weight:800;color:#2b0d57" onchange="if(pin&&host)hostCtl('set_auto_time',parseInt(this.value,10)||7)">s</span></label>
+   </div>
+   <button onclick="cycleTheme()"><span>🎨 Visual Theme</span><span class="state" id="themeState">Purple</span></button>
    <button id="musicBtn" onclick="cycleMusic()"><span>🎵 Background Music</span><span class="state" id="musicState">Classic</span></button>
    <button id="awakeBtn" onclick="toggleAwake()"><span>☀️ Keep Screen Awake</span><span class="state" id="awakeState">ON</span></button>
    <button id="cbBtn" onclick="toggleCb()"><span>👁️ Colorblind-safe Colors</span><span class="state" id="cbState">Off</span></button>
    <button id="hcBtn" onclick="toggleHc()"><span>◐ High Contrast</span><span class="state" id="hcState">Off</span></button>
-  <div class="menu-sep"></div>
-  <button id="presMenuBtn" onclick="closeNavMenu();openPresentationMode()"><span>📽️ Presentation Mode</span><span class="state" id="presMenuState">2nd Screen</span></button>
-  <button id="remoteBtn" onclick="closeNavMenu();openRemoteModal()"><span>📱 Phone Host Remote</span><span class="state" id="remoteMenuState">Open ↗</span></button>
-  <button onclick="closeNavMenu();openAccount()"><span>👤 Teacher Account</span><span class="state" id="acctState">Guest</span></button>
-   <button class="quiz-only" onclick="closeNavMenu();openProgress()"><span>👥 Student Progress</span><span class="state">View</span></button>
-   <button class="quiz-only" onclick="closeNavMenu();openHomework()"><span>📚 Homework</span><span class="state">Assign</span></button>
-   <button onclick="closeNavMenu();openModeration()"><span>🛡️ Moderation</span><span class="state">Live</span></button>
-   <button onclick="closeNavMenu();openStorage()"><span>💾 Saved Storage</span><span class="state" id="storState">…</span></button>
-   <button onclick="closeNavMenu();openHistory()"><span>📈 Results History</span><span class="state">View</span></button>
-   <button onclick="closeNavMenu();openLinks()"><span><span class="quiz-only">🖥️ Spectator &amp; Practice Links</span><span class="case-only">🖥️ Live Spectator Links</span></span><span class="state">Open ↗</span></button>
-   <button onclick="closeNavMenu();openGuide(document.body.classList.contains('sec-case')?'case':undefined)"><span>📖 Feature Guide</span><span class="state">What's what</span></button>
+  </div>
+  <div class="menu-sep" id="menuMidSep"></div>
+  <div class="menu-group" id="menuWsGrp">
+   <div class="menu-hdr">⚡ Studio Navigation</div>
    <button id="addQuizMenuBtn" onclick="closeNavMenu();openQuizModal()"><span><span class="quiz-only">➕ Create / Upload Quiz</span><span class="case-only">📖 Create / Edit Case Study</span></span><span class="state">New</span></button>
+   <button class="quiz-only" onclick="closeNavMenu();openHomework()"><span>📚 Homework</span><span class="state">Assign</span></button>
+   <button class="quiz-only" onclick="closeNavMenu();openProgress()"><span>👥 Student Progress</span><span class="state">View</span></button>
+   <button onclick="closeNavMenu();openHistory()"><span>📈 Results History</span><span class="state">View</span></button>
+   <button id="remoteBtn" onclick="closeNavMenu();openRemoteModal()"><span>📱 Phone Host Remote</span><span class="state" id="remoteMenuState">Open ↗</span></button>
+   <button id="presMenuBtn" onclick="closeNavMenu();openPresentationMode()"><span>📽️ Presentation Mode</span><span class="state" id="presMenuState">2nd Screen</span></button>
+   <button onclick="closeNavMenu();openLinks()"><span><span class="quiz-only">🖥️ Spectator &amp; Practice Links</span><span class="case-only">🖥️ Live Spectator Links</span></span><span class="state">Open ↗</span></button>
+   <button onclick="closeNavMenu();openModeration()"><span>🛡️ Moderation</span><span class="state">Live</span></button>
+   <button onclick="closeNavMenu();openGuide(document.body.classList.contains('sec-case')?'case':undefined)"><span>📖 Feature Guide</span><span class="state">What's what</span></button>
+   <button onclick="closeNavMenu();openAccount()"><span>👤 Teacher Account</span><span class="state" id="acctState">Guest</span></button>
+   <button onclick="closeNavMenu();openStorage()"><span>💾 Saved Storage</span><span class="state" id="storState">…</span></button>
+  </div>
   <div class="menu-sep"></div>
   <div class="menu-kb">⌨️ <b>Shortcuts:</b> [Space/→] Next &middot; [P] Pause &middot; [+/-] ±10s &middot; [N] Note &middot; [M] Mute &middot; [V] Voice</div>
  </div>
@@ -839,6 +853,31 @@ function closeNavMenu(){
  const m = document.getElementById('navMenu');
  if(m) m.classList.remove('open');
 }
+function syncWsNavCollapse(){
+ if(IS_AUDIENCE) return;
+ const bar = document.getElementById('workspaceBar'), brand = bar && bar.querySelector('.ws-brand'), nav = document.getElementById('wsNav');
+ const inGame = !!(pin && S && S.phase);
+ let needCollapse = document.body.classList.contains('ws-collapsed');
+ if(!inGame && bar && brand && nav && bar.clientWidth > 0){
+  const avail = bar.clientWidth - 152 - brand.offsetWidth - 14;
+  needCollapse = nav.scrollWidth > avail;
+  document.body.classList.toggle('ws-collapsed', needCollapse);
+  document.body.classList.add('ws-measured');
+ }
+ const ic = document.getElementById('navIcon'), bd = document.getElementById('navBadge');
+ const asMenu = !inGame && needCollapse;
+ if(ic) ic.textContent = asMenu ? '☰' : '⚙️';
+ if(bd) bd.textContent = asMenu ? 'Menu' : 'Settings';
+}
+window.addEventListener('resize', syncWsNavCollapse);
+if(window.ResizeObserver){
+ const _wsRo = new ResizeObserver(()=>syncWsNavCollapse());
+ const _wb = document.getElementById('workspaceBar'), _wn = document.getElementById('wsNav');
+ if(_wb) _wsRo.observe(_wb);
+ if(_wn) _wsRo.observe(_wn);
+}
+if(document.fonts && document.fonts.ready) document.fonts.ready.then(syncWsNavCollapse);
+requestAnimationFrame(syncWsNavCollapse);
 function toggleLateQr(ev){
  if(ev) ev.stopPropagation();
  const b = document.getElementById('lateQrBox'), s = document.getElementById('lateQrSvg');
@@ -1149,6 +1188,7 @@ function setRemoteStatusUI(paired, phoneLive){
  if(menuBtn) menuBtn.classList.toggle('on', !!phoneLive);
  if(wsBtn) wsBtn.classList.toggle('live', !!phoneLive);
  if(wsSt) wsSt.textContent = phoneLive ? 'Live 🟢' : (paired ? 'Ready' : 'Pair');
+ if(typeof syncWsNavCollapse === 'function') syncWsNavCollapse();
 }
 async function syncRemotePair(active){
  if(IS_AUDIENCE) return null;
@@ -1978,6 +2018,7 @@ function runWheel(){
 let last='';
 function render(){
  document.body.classList.toggle('in-game', !!(pin && S && S.phase));
+ if(typeof syncWsNavCollapse === 'function') syncWsNavCollapse();
  const lj = document.getElementById('lateJoin'), lp = document.getElementById('latePin'), lh = document.getElementById('lateHostLbl');
  if(lj) lj.style.display = (pin && S.phase && S.phase !== 'lobby' && S.phase !== 'final') ? 'block' : 'none';
  if(lp && pin) lp.textContent = pin;
@@ -2647,6 +2688,7 @@ function updateAcctLabels(){
   if(ws) ws.textContent = CFG.storage.persistent ? (CFG.storage.ok ? 'Cloud ✓' : 'Cloud ⚠') : 'Local';
  }
  const h = document.getElementById('aiHint'); if(h) h.textContent = CFG.ai ? '(AI is enabled on this server.)' : '(No AI key on the server: you will get an offline fill-in-the-blank draft from your text.)';
+ if(typeof syncWsNavCollapse === 'function') syncWsNavCollapse();
 }
 
 // --- Account modal ---
@@ -2974,6 +3016,7 @@ function setHostSection(sec){
  }
  renderQuizSelect();
  updateOptSummary();
+ if(typeof syncWsNavCollapse === 'function') syncWsNavCollapse();
 }
 
 renderQuizSelect = function(selectedFile){
@@ -3463,6 +3506,7 @@ function renderPresSetupBar(){
  if(mb) mb.classList.toggle('on', !!window.presenterMode);
  if(wp) wp.classList.toggle('live', !!window.presenterMode);
  if(wps) wps.textContent = window.presenterMode ? (live ? 'Screen 2 🟢' : 'Presenter ON') : 'Dual Screen';
+ if(typeof syncWsNavCollapse === 'function') syncWsNavCollapse();
  if(!bar) return;
  bar.classList.toggle('active', !!window.presenterMode);
  if(window.presenterMode){
