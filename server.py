@@ -838,6 +838,8 @@ def new_game(quiz_file="quiz.json", count=None, shuffle=False, custom_questions=
         "consensus": False, "consensus_step": 0, "consensus_until": 0.0, "consensus_total": 0,
         "consensus_votes": {}, "consensus_res": {},
         "init_counts": {}, "revotes": {}, "branched_qs": [], "visited_qs": [],
+        "chat_enabled": False, "profiles_enabled": False, "play_too_enabled": False,
+        "chat": [], "cseq": 0, "chat_q": [],
     }
     return GAMES[pin]
 
@@ -888,6 +890,7 @@ def replay_game(g, quiz_file="quiz.json", count=None, shuffle=True, custom_quest
     g["revotes"] = {}
     g["branched_qs"] = []
     g["visited_qs"] = []
+    g["chat_q"] = []
     g["phase_entered"] = time.time()
     for p in g["players"].values():
         p["score"] = 0
@@ -1847,6 +1850,10 @@ def advance_game(g):
 def tick(g):
     """Move question -> results when time is up or everyone answered, run bots, and handle auto-advance."""
     now = time.time()
+    if g.get("chat_enabled"):
+        flush_chat(g, now)
+    else:
+        g["chat_q"] = []
     if g["phase"] == "question":
         qi = g["q"]
         q = g["quiz"][qi]
@@ -2039,9 +2046,9 @@ def team_leaderboard(g):
     return out
 
 
-def round_shoutouts(g, rows):
+def round_shoutout_items(g, rows):
     q = g["q"]
-    shouts = []
+    items = []
     fastest = None
     for p in g["players"].values():
         a = p["answers"].get(q)
@@ -2049,7 +2056,11 @@ def round_shoutouts(g, rows):
             if fastest is None or a["time"] < fastest[0]:
                 fastest = (a["time"], p)
     if fastest:
-        shouts.append("⚡ Fastest Finger: %s (%.1fs)" % (ptag(fastest[1]), fastest[0]))
+        items.append({
+            "kind": "fastest",
+            "name": fastest[1]["name"],
+            "text": "⚡ Fastest Finger: %s (%.1fs)" % (ptag(fastest[1]), fastest[0]),
+        })
     if q > 0:
         climber = None
         for r in rows:
@@ -2059,12 +2070,255 @@ def round_shoutouts(g, rows):
         if climber:
             c = climber[1]
             label = ((c["avatar"] + " ") if c.get("avatar") else "") + c["name"]
-            shouts.append("🚀 Biggest Climber: %s (+%d %s)" % (label, climber[0], "spot" if climber[0] == 1 else "spots"))
+            items.append({
+                "kind": "climber",
+                "name": c["name"],
+                "text": "🚀 Biggest Climber: %s (+%d %s)" % (label, climber[0], "spot" if climber[0] == 1 else "spots"),
+            })
     top_streak = max(rows, key=lambda r: r["streak"], default=None)
     if top_streak and top_streak["streak"] >= 2:
         label = ((top_streak["avatar"] + " ") if top_streak.get("avatar") else "") + top_streak["name"]
-        shouts.append("🔥 On Fire: %s (%d in a row!)" % (label, top_streak["streak"]))
-    return shouts[:3]
+        items.append({
+            "kind": "streak",
+            "name": top_streak["name"],
+            "text": "🔥 On Fire: %s (%d in a row!)" % (label, top_streak["streak"]),
+        })
+    return items[:3]
+
+
+def round_shoutouts(g, rows):
+    return [x["text"] for x in round_shoutout_items(g, rows)]
+
+
+CHAT_REACT_SET = ("👍", "😂", "❤️", "🔥", "😮", "👏")
+BOT_CHAT_REPLIES = (
+    "Nice one! 👏", "Let's go!! 🔥", "Watch the scoreboard 👀",
+    "Good luck this round!", "That last question was tricky 😅",
+)
+BOT_HOST_ACK = (
+    "Got it, Host! 😎", "Loud and clear, Host!", "All ears, Host! 👂", "Copy that, Host!",
+)
+
+
+def chat_find(g, msg_id):
+    for m in g.get("chat", []):
+        if m["id"] == msg_id:
+            return m
+    return None
+
+
+def find_tags(g, text):
+    """Names tagged with a backslash, e.g. '\\Ava' or '\\Host'. Longest name wins; max 3 tags."""
+    if "\\" not in text:
+        return []
+    names = sorted([p["name"] for p in g["players"].values()] + ["Host"], key=lambda n: -len(n))
+    found, rest = [], text
+    for n in names:
+        if len(found) >= 3:
+            break
+        if ("\\" + n).lower() not in rest.lower():
+            continue
+        rx = re.compile(r"\\" + re.escape(n) + r"(?![A-Za-z0-9])", re.I)
+        if rx.search(rest):
+            found.append(n)
+            rest = rx.sub(" ", rest)
+    return found
+
+
+def chat_chat_names(g, q):
+    q = (q or "").lower()
+    names = [p["name"] for p in g["players"].values()] + ["Host"]
+    starts = [n for n in names if n.lower().startswith(q)]
+    contains = [n for n in names if q in n.lower() and n not in starts]
+    return (sorted(starts, key=str.lower) + sorted(contains, key=str.lower))[:8]
+
+
+def chat_post(g, name, avatar, text, bot=False, reply_to=None, host=False, pid=None):
+    g["cseq"] = g.get("cseq", 0) + 1
+    msgs = g.setdefault("chat", [])
+    reply = None
+    if reply_to is not None:
+        src = chat_find(g, reply_to)
+        if src:
+            reply = {"id": src["id"], "name": src["name"], "text": src["text"][:50], "host": bool(src.get("host"))}
+    msg = {
+        "id": g["cseq"], "name": name, "avatar": avatar, "text": text,
+        "bot": bool(bot), "host": bool(host), "reply": reply, "r": {},
+        "_pid": pid, "t": time.time(), "tags": find_tags(g, text),
+    }
+    msgs.append(msg)
+    del msgs[:-200]
+    return msg
+
+
+def chat_toggle_react(g, msg_id, key, emoji):
+    m = chat_find(g, msg_id)
+    if not m or emoji not in CHAT_REACT_SET:
+        return False
+    lst = m.setdefault("r", {}).setdefault(emoji, [])
+    if key in lst:
+        lst.remove(key)
+    else:
+        lst.append(key)
+    if not lst:
+        m["r"].pop(emoji, None)
+    return True
+
+
+def chat_view(g, viewer, n):
+    out = []
+    src = g.get("chat", [])
+    if not g.get("chat_enabled"):
+        src = [m for m in src if m.get("host")]
+    for m in src[-n:]:
+        r = m.get("r", {})
+        out.append({
+            "id": m["id"], "name": m["name"], "avatar": m.get("avatar", ""), "text": m["text"],
+            "bot": m.get("bot", False), "host": m.get("host", False), "reply": m.get("reply"),
+            "tags": m.get("tags", []),
+            "r": {e: len(v) for e, v in r.items()},
+            "mine": [e for e, v in r.items() if viewer in v],
+        })
+    return out
+
+
+def chat_queue(g, pid, text, delay, reply_to=None):
+    g.setdefault("chat_q", []).append([time.time() + delay, pid, text, reply_to])
+    del g["chat_q"][:-30]
+
+
+def chat_queue_react(g, pid, msg_id, emoji, delay):
+    g.setdefault("chat_q", []).append([time.time() + delay, pid, None, msg_id, emoji])
+    del g["chat_q"][:-30]
+
+
+def flush_chat(g, now):
+    q = g.get("chat_q")
+    if not q:
+        return
+    keep = []
+    for item in q:
+        if item[0] > now:
+            keep.append(item)
+            continue
+        pid = item[1]
+        p = g["players"].get(pid)
+        if not p:
+            continue
+        if item[2] is None:
+            tgt = chat_find(g, item[3])
+            if tgt and pid not in tgt.get("r", {}).get(item[4], []):
+                chat_toggle_react(g, item[3], pid, item[4])
+        else:
+            reply_to = item[3] if len(item) > 3 else None
+            chat_post(g, p["name"], p.get("avatar", ""), item[2], bot=True, reply_to=reply_to, pid=pid)
+    g["chat_q"] = keep
+
+
+def bots_react_to_chat(g, msg, is_host=False):
+    if not g.get("chat_enabled"):
+        return
+    bots = [(pid, p) for pid, p in g["players"].items() if p.get("bot") and pid != msg.get("_pid")]
+    if not bots:
+        return
+    random.shuffle(bots)
+    for pid, _ in bots[:random.randint(0, min(2, len(bots)))]:
+        chat_queue_react(g, pid, msg["id"], random.choice(CHAT_REACT_SET), random.uniform(1.0, 5.0))
+    if is_host and random.random() < 0.65:
+        bpid, _ = bots[0]
+        chat_queue(g, bpid, random.choice(BOT_HOST_ACK), random.uniform(1.2, 3.8), reply_to=msg["id"])
+    else:
+        tagged_bot = next(((pid, p) for pid, p in bots if p["name"].lower() in [t.lower() for t in msg.get("tags", [])]), None)
+        if tagged_bot:
+            chat_queue(g, tagged_bot[0], "\\%s %s" % (msg["name"], random.choice(BOT_CHAT_REPLIES)),
+                       random.uniform(1.2, 3.6), reply_to=msg["id"])
+        elif random.random() < 0.28:
+            chat_queue(g, bots[0][0], random.choice(BOT_CHAT_REPLIES), random.uniform(1.5, 4.5), reply_to=msg["id"])
+
+
+def ordered_standings_rows(g):
+    """Leaderboard snapshot safe to display in any phase (never leaks mid-question points)."""
+    lb = leaderboard(g)
+    if g["phase"] == "question":
+        if g.get("scoring_mode") == "percent":
+            lb = sorted(lb, key=lambda r: (-r["pct"], -r["prev"]))
+        else:
+            lb = sorted(lb, key=lambda r: -r["prev"])
+        for i, r in enumerate(lb):
+            r["score"] = r["prev"]
+            r["rank"] = i + 1
+    return lb
+
+
+def player_perf_stats(g, p):
+    up_to = (g["q"] - 1) if g["phase"] == "question" else g["q"]
+    valid_qis = {qi for qi in range(max(0, up_to + 1)) if qi < len(g["quiz"]) and not is_unscored_type(g["quiz"][qi])}
+    times = []
+    right = 0
+    answered = 0
+    for qi, a in p.get("answers", {}).items():
+        if qi not in valid_qis or not a or a.get("blank"):
+            continue
+        answered += 1
+        if a.get("correct"):
+            right += 1
+        if a.get("time", 99) < 99 and a.get("choice", -1) != -1:
+            times.append(a["time"])
+    return {
+        "avg_time": round(sum(times) / len(times), 1) if times else None,
+        "fastest": round(min(times), 1) if times else None,
+        "correct": right,
+        "answered": answered,
+    }
+
+
+def standings_view(g):
+    lb = ordered_standings_rows(g)
+    rows = [{
+        "rank": r["rank"], "name": r["name"], "avatar": r.get("avatar", ""),
+        "av_hat": r.get("av_hat", ""), "av_ring": r.get("av_ring", ""),
+        "team_emoji": r.get("team_emoji", ""), "score": r["score"],
+        "pct": r.get("pct", 0), "streak": r.get("streak", 0), "title": r.get("title", ""),
+        "color": r.get("color", ""), "ctag": r.get("ctag", ""),
+    } for r in lb[:30]]
+    return {"rows": rows, "total": len(lb), "scoring_mode": g.get("scoring_mode", "classic")}
+
+
+def profile_view(g, me_pid, name):
+    lb = ordered_standings_rows(g)
+    row = next((r for r in lb if r["name"].lower() == (name or "").strip().lower()), None)
+    if not row:
+        return None
+    tgt_pid, tgt = next(((k, p) for k, p in g["players"].items() if p["name"].lower() == row["name"].lower()), (None, None))
+    if not tgt:
+        return None
+    me = g["players"].get(me_pid) if me_pid else None
+    st = player_perf_stats(g, tgt)
+    up_to = (g["q"] - 1) if g["phase"] == "question" else g["q"]
+    out = {
+        "name": tgt["name"], "avatar": tgt.get("avatar", ""),
+        "av_hat": tgt.get("av_hat", ""), "av_ring": tgt.get("av_ring", ""),
+        "team_emoji": row.get("team_emoji", ""), "title": row.get("title", ""),
+        "rank": row["rank"], "total_players": len(lb),
+        "score": row["score"], "pct": row.get("pct", 0),
+        "streak": calc_streak(tgt, up_to) if up_to >= 0 else 0,
+        "is_me": bool(me and tgt_pid == me_pid),
+        "bot": bool(tgt.get("bot")),
+        **st,
+    }
+    if me and tgt_pid != me_pid:
+        my_row = next((r for r in lb if r["name"].lower() == me["name"].lower()), None)
+        my_score = my_row["score"] if my_row else me.get("score", 0)
+        gap = row["score"] - my_score
+        ms = player_perf_stats(g, me)
+        per = (my_score / ms["correct"]) if ms["correct"] else 0
+        out["gap"] = gap
+        out["answers_to_catch"] = (int(gap / per) + 1) if (gap > 0 and per > 0) else None
+        out["my_rank"] = my_row["rank"] if my_row else None
+        out["my_score"] = my_score
+        out["my_pct"] = my_row.get("pct", 0) if my_row else 0
+        out["my_avg_time"] = ms["avg_time"]
+    return out
 
 
 def final_stats(g):
@@ -2335,6 +2589,10 @@ def view(g, pid=None, host=False):
         "pending_list": [{"name": r["name"], "avatar": r.get("avatar", ""), "av_hat": r.get("av_hat", ""), "av_ring": r.get("av_ring", "")} for r in g.get("pending", {}).values()] if host else [],
         "lobby": [{"name": p["name"], "tag": ptag(p), "avatar": p.get("avatar", ""), "av_hat": p.get("av_hat", ""), "av_ring": p.get("av_ring", ""), "bot": bool(p.get("bot")), "color": p.get("color", ""), "ctag": p.get("ctag", "")} for p in g["players"].values()] if ph == "lobby" else None,
         "reactions": g["reactions"][-25:],
+        "chat": chat_view(g, pid if pid else "host", 200 if host else 40),
+        "chat_enabled": bool(g.get("chat_enabled")),
+        "profiles_enabled": bool(g.get("profiles_enabled")),
+        "play_too_enabled": bool(g.get("play_too_enabled")),
         "teams_enabled": bool(g.get("teams")),
         "consensus_enabled": bool(g.get("consensus")),
         "sabotage_enabled": bool(g.get("sabotage", True)),
@@ -2566,7 +2824,9 @@ def view(g, pid=None, host=False):
         rows = leaderboard(g)
         out["index"] = g["q"]
         out["board"] = rows[:10]
-        out["shoutouts"] = round_shoutouts(g, rows)
+        sh_items = round_shoutout_items(g, rows)
+        out["shoutouts"] = [x["text"] for x in sh_items]
+        out["shoutout_items"] = sh_items
     if ph == "final":
         out["board"] = leaderboard(g)[:10]
         out["stats"] = final_stats(g)
@@ -3027,6 +3287,40 @@ class H(BaseHTTPRequestHandler):
                 if repaired:
                     out["repaired"] = repaired
                 return self.send(out)
+        if path == "/api/names":
+            q = self._q(qs)
+            with LOCK:
+                g = GAMES.get(q.get("pin"))
+                if not g:
+                    return self.send({"names": []})
+                if not g.get("chat_enabled") and q.get("host") != g["host"]:
+                    return self.send({"names": []})
+                return self.send({"names": chat_chat_names(g, q.get("q", ""))})
+        if path == "/api/standings":
+            q = self._q(qs)
+            with LOCK:
+                g = GAMES.get(q.get("pin"))
+                if not g:
+                    return self.send({"error": "Game not found"}, 404)
+                is_host = (q.get("host") == g["host"])
+                allowed = is_host or (bool(g.get("profiles_enabled")) and (not g.get("hide_board") or g["phase"] == "final"))
+                if not allowed:
+                    return self.send({"error": "Standings are turned off for this session"}, 403)
+                return self.send(standings_view(g))
+        if path == "/api/profile":
+            q = self._q(qs)
+            with LOCK:
+                g = GAMES.get(q.get("pin"))
+                if not g:
+                    return self.send({"error": "Game not found"}, 404)
+                is_host = (q.get("host") == g["host"])
+                allowed = is_host or (bool(g.get("profiles_enabled")) and (not g.get("hide_board") or g["phase"] == "final"))
+                if not allowed:
+                    return self.send({"error": "Player profiles are turned off for this session"}, 403)
+                prof = profile_view(g, q.get("pid"), q.get("name", ""))
+                if not prof:
+                    return self.send({"error": "Player not found"}, 404)
+                return self.send(prof)
         files = {
             "/": "host.html", "/host": "host.html", "/present": "host.html",
             "/play": "play.html", "/remote": "remote.html",
@@ -3055,7 +3349,8 @@ class H(BaseHTTPRequestHandler):
                     custom_questions=body.get("custom_questions"),
                     owner=owner_of(body.get("token")),
                 )
-                for k_ in ("speed", "dbl", "steal", "moderate", "hide_board", "allow_tts", "consensus"):
+                for k_ in ("speed", "dbl", "steal", "moderate", "hide_board", "allow_tts", "consensus",
+                           "chat_enabled", "profiles_enabled", "play_too_enabled"):
                     if k_ in body:
                         g[k_] = bool(body[k_])
                 sm_ = str(body.get("scoring_mode") or "").strip().lower()
@@ -3277,6 +3572,14 @@ class H(BaseHTTPRequestHandler):
                     g["hide_board"] = not g.get("hide_board", False)
                 elif act == "toggle_student_tts":
                     g["allow_tts"] = not g.get("allow_tts", False)
+                elif act == "toggle_chat":
+                    g["chat_enabled"] = not g.get("chat_enabled", False)
+                    if not g["chat_enabled"]:
+                        g["chat_q"] = []
+                elif act == "toggle_profiles":
+                    g["profiles_enabled"] = not g.get("profiles_enabled", False)
+                elif act == "toggle_play_too":
+                    g["play_too_enabled"] = not g.get("play_too_enabled", False)
                 elif act == "spotlight":
                     qi_s = g["q"]
                     if qi_s >= 0:
@@ -3425,9 +3728,73 @@ class H(BaseHTTPRequestHandler):
                 return self.send({
                     "ok": True, "auto": g["auto"], "paused": g["paused"],
                     "hide_board": bool(g.get("hide_board")), "allow_tts": bool(g.get("allow_tts")),
+                    "chat_enabled": bool(g.get("chat_enabled")),
+                    "profiles_enabled": bool(g.get("profiles_enabled")),
+                    "play_too_enabled": bool(g.get("play_too_enabled")),
                 })
+            if path == "/api/chat":
+                if not g.get("chat_enabled"):
+                    return self.send({"error": "Live chat is turned off for this session"}, 403)
+                pid_c = body.get("pid")
+                p_c = g["players"].get(pid_c)
+                if not p_c:
+                    return self.send({"error": "Not in game"}, 400)
+                now_c = time.time()
+                if now_c - p_c.get("chat_t", 0) < 1.2:
+                    return self.send({"error": "Slow down a touch!"}, 429)
+                txt_c = re.sub(r"\s+", " ", str(body.get("text") or "")).strip()[:140]
+                if not txt_c:
+                    return self.send({"error": "Empty message"}, 400)
+                if is_profane(txt_c) or re.search(r"(https?:|www\.)", txt_c, re.I):
+                    modlog(g, "blocked chat", "%s: %s" % (p_c["name"], txt_c))
+                    return self.send({"error": "Keep chat classroom-friendly (no links or profanity)."}, 400)
+                p_c["chat_t"] = now_c
+                rep_id = body.get("reply") if body.get("reply") is not None else body.get("reply_to")
+                try:
+                    rep_id = int(rep_id) if rep_id is not None else None
+                except Exception:
+                    rep_id = None
+                msg_c = chat_post(g, p_c["name"], p_c.get("avatar", ""), txt_c, bot=False, reply_to=rep_id, pid=pid_c)
+                bots_react_to_chat(g, msg_c, is_host=False)
+                return self.send({"ok": True, "id": msg_c["id"]})
+            if path == "/api/host_chat":
+                if body.get("host") != g["host"]:
+                    return self.send({"error": "Forbidden"}, 403)
+                txt_h = re.sub(r"\s+", " ", str(body.get("text") or "")).strip()[:160]
+                if not txt_h:
+                    return self.send({"error": "Empty message"}, 400)
+                if is_profane(txt_h) or re.search(r"(https?:|www\.)", txt_h, re.I):
+                    return self.send({"error": "No links or profanity allowed."}, 400)
+                rep_id = body.get("reply") if body.get("reply") is not None else body.get("reply_to")
+                try:
+                    rep_id = int(rep_id) if rep_id is not None else None
+                except Exception:
+                    rep_id = None
+                msg_h = chat_post(g, "Host", "😎", txt_h, bot=False, reply_to=rep_id, host=True, pid="host")
+                bots_react_to_chat(g, msg_h, is_host=True)
+                return self.send({"ok": True, "id": msg_h["id"]})
+            if path == "/api/chat_react":
+                is_hc = (body.get("host") == g["host"])
+                pid_r = body.get("pid")
+                if is_hc:
+                    who_r = "host"
+                elif pid_r and pid_r in g["players"] and g.get("chat_enabled"):
+                    who_r = pid_r
+                else:
+                    return self.send({"error": "Cannot react"}, 403)
+                try:
+                    mid_r = int(body.get("id") if body.get("id") is not None else body.get("msg"))
+                except Exception:
+                    return self.send({"error": "Bad message id"}, 400)
+                em_r = str(body.get("emoji") or "")
+                if not chat_toggle_react(g, mid_r, who_r, em_r):
+                    return self.send({"error": "Invalid reaction"}, 400)
+                return self.send({"ok": True})
             if path == "/api/join":
                 name = (body.get("name") or "").strip()[:24]
+                is_host_join = bool(body.get("host") and body.get("host") == g["host"])
+                if name.lower() == "host":
+                    return self.send({"error": "'Host' is reserved for host broadcasts — pick any nickname!"}, 400)
                 avatar = (body.get("avatar") or "").strip()[:4]
                 av_hat = body.get("av_hat") if body.get("av_hat") in AV_HATS else ""
                 av_ring = body.get("av_ring") if body.get("av_ring") in AV_RINGS else ""
@@ -3440,7 +3807,7 @@ class H(BaseHTTPRequestHandler):
                 reclaim = bool(body.get("reclaim"))
                 if g["phase"] == "final":
                     return self.send({"error": "Game already finished"}, 400)
-                if g.get("roster"):
+                if g.get("roster") and not is_host_join:
                     match = next((r for r in g["roster"] if r.lower() == name.lower()), None)
                     if not match:
                         return self.send({"error": "Pick your name from the class list"}, 400)
@@ -3461,8 +3828,8 @@ class H(BaseHTTPRequestHandler):
                         modlog(g, "blocked name", name)
                         return self.send({"error": "That nickname isn't allowed. Pick another!"}, 400)
                     ex = next(((pid_, p_) for pid_, p_ in g["players"].items() if p_["name"].lower() == name.lower() and not p_.get("bot")), None)
-                    if ex and reclaim:
-                        if time.time() - ex[1].get("seen", 0) < 8:
+                    if ex and (reclaim or is_host_join):
+                        if not is_host_join and time.time() - ex[1].get("seen", 0) < 8:
                             return self.send({"error": "That player is still connected on another device"}, 400)
                         modlog(g, "rejoined", name)
                         return self.send({"pid": ex[0], "team": ex[1].get("team", "")})
@@ -3478,7 +3845,7 @@ class H(BaseHTTPRequestHandler):
                        "color": color, "ctag": ctag, "team": "",
                        "score": 0, "answers": {}, "init_choices": {},
                        "powerups": {}, "wagers": {}, "confident": {}, "don": {}, "seen": time.time()}
-                if g.get("moderate"):
+                if g.get("moderate") and not is_host_join:
                     rec["team_req"] = team_req
                     g.setdefault("pending", {})[pid] = rec
                     return self.send({"pid": pid, "team": "", "pending": True})

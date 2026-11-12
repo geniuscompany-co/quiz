@@ -565,6 +565,54 @@ body.cb .c4{background:#CC79A7}body.cb .c5{background:#56B4E9;color:#111}body.cb
 .vc-sub>summary{list-style:none;cursor:pointer;padding:6px 10px;font-size:.8em;font-weight:750;color:#ffdf5d;display:flex;justify-content:space-between;align-items:center}
 .vc-sub>summary::-webkit-details-marker{display:none}
 .vc-sub-body{padding:8px 10px;border-top:1px solid #ffffff1a;font-size:.84em}
+
+/* #1 Live Chat & Megaphone, #4 Standings & Profiles, #5 Host Play-Along */
+#chatFeed{position:fixed;left:14px;bottom:14px;width:min(380px,38vw);z-index:18;pointer-events:none;display:flex;flex-direction:column;gap:6px;text-align:left}
+#chatFeed div{background:rgba(12,4,28,.86);border:1px solid rgba(255,255,255,.18);border-radius:12px;padding:7px 11px;font-size:1.02em;animation:chatIn .25s ease-out;word-break:break-word;box-shadow:0 6px 18px rgba(0,0,0,.45)}
+#chatFeed b{color:#ffdf5d}
+#chatFeed .hf{background:linear-gradient(135deg,#ffdf5d,#ffb300)!important;color:#2b0d57;font-weight:850}
+#chatFeed .hf b{color:#2b0d57}
+@keyframes chatIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+#hostBannerBig{position:fixed;left:50%;top:72px;transform:translateX(-50%);z-index:58;display:none;max-width:82vw;background:linear-gradient(135deg,#ffdf5d,#ffb300);color:#2b0d57;border-radius:18px;padding:15px 26px;font-weight:900;font-size:1.85em;text-align:center;box-shadow:0 12px 42px rgba(0,0,0,.62);cursor:pointer}
+#hostBannerBig small{display:block;font-size:.42em;letter-spacing:.15em;opacity:.82;margin-bottom:2px}
+#hostChatBtn{position:fixed;right:14px;bottom:18px;z-index:26;background:#ffdf5d;color:#2b0d57;border:0;border-radius:99px;padding:9px 16px;font-weight:850;font-size:.94em;cursor:pointer;box-shadow:0 6px 20px rgba(0,0,0,.45);margin:0}
+#hostChatBtn i{font-style:normal;background:#ff4d6d;color:#fff;border-radius:99px;padding:1px 7px;margin-left:6px;font-size:.86em;display:none}
+#hostPlayBtn{position:fixed;right:148px;bottom:18px;z-index:26;background:#7cf5a8;color:#0b3d22;border:0;border-radius:99px;padding:9px 15px;font-weight:850;font-size:.94em;cursor:pointer;box-shadow:0 6px 20px rgba(0,0,0,.45);margin:0}
+#hostChat{position:fixed;right:14px;bottom:64px;width:min(410px,92vw);height:min(58vh,500px);z-index:28;background:rgba(27,8,64,.97);border:2px solid #ffdf5d;border-radius:16px;display:none;flex-direction:column;overflow:hidden;box-shadow:0 16px 44px rgba(0,0,0,.62);text-align:left}
+#hostChat.open{display:flex}
+#hostChat .hd{padding:10px 12px;font-weight:850;border-bottom:1px solid rgba(255,255,255,.16);display:flex;justify-content:space-between;align-items:center;gap:6px;flex-wrap:wrap}
+#hostChat .hc-pill{margin:0;padding:4px 9px;border-radius:99px;border:1px solid rgba(255,255,255,.28);background:rgba(255,255,255,.12);color:#fff;font-size:.76em;font-weight:800;cursor:pointer;box-shadow:none}
+#hostChat .hc-pill.on{background:#26890c;border-color:#7dff6b}
+#hostChat .lst{flex:1;overflow-y:auto;padding:8px 12px}
+#hostChat .lst>div{padding:5px 0;word-break:break-word;font-size:.94em;border-bottom:1px solid rgba(255,255,255,.08)}
+#hostChat .lst b{color:#ffdf5d}
+#hostChat .lst b.clickable{cursor:pointer;text-decoration:underline dotted}
+#hostChat .lst .bt{opacity:.6;font-size:.82em}
+#hostChat .rq{font-size:.8em;opacity:.76;border-left:3px solid #ffdf5d;padding-left:6px;margin-bottom:2px}
+#hostChat .acts{opacity:.68;margin-left:6px}
+#hostChat .acts a{cursor:pointer;margin-right:8px;text-decoration:none}
+#hostChat .rc{display:inline-block;background:rgba(255,255,255,.14);border-radius:99px;padding:1px 8px;margin:2px 4px 0 0;cursor:pointer;font-size:.88em}
+#hostChat .rc.mine{background:rgba(255,223,93,.32);outline:1px solid #ffdf5d}
+#hostChat .rpick span{cursor:pointer;font-size:1.35em;margin-right:8px}
+#hostChat .hostmsg{background:rgba(255,223,93,.15);border-radius:8px;padding:5px 7px!important}
+#hostChat .tag{background:#ffdf5d;color:#2b0d57;border-radius:6px;padding:0 5px;font-weight:850}
+#hostChat .tagme{background:rgba(255,77,109,.22);border-radius:8px;padding:5px 7px!important;outline:1px solid #ff4d6d}
+#hostTagSug span{background:#ffdf5d;color:#2b0d57;border-radius:99px;padding:4px 10px;font-weight:800;cursor:pointer;font-size:.86em}
+.row.clickable,.shout.clickable{cursor:pointer}
+.row.clickable:hover{outline:1.5px solid rgba(255,223,93,.65)}
+.shout.clickable:hover{background:rgba(255,255,255,.28)}
+#hostProf,#hostPlayModal{position:fixed;inset:0;background:rgba(8,2,22,.8);backdrop-filter:blur(5px);z-index:72;display:none;align-items:center;justify-content:center;padding:14px}
+#hostProf .card{background:#2b0d57;border:2px solid #ffdf5d;border-radius:18px;padding:18px 20px;max-width:440px;width:100%;color:#fff;text-align:left;box-shadow:0 18px 48px rgba(0,0,0,.65)}
+#hostProf h2{margin:0 0 6px;text-align:center}
+#hostProf .hl{background:#ffdf5d;color:#2b0d57;font-weight:850;border-radius:10px;padding:8px 12px;margin:8px 0;text-align:center}
+#hostProf .stat{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.14)}
+#hostProf .stat b{color:#ffdf5d}
+#hostProf button{margin-top:12px;width:100%;padding:10px;border-radius:9px;border:0;background:#ffdf5d;color:#2b0d57;font-weight:850;cursor:pointer}
+#hostPlayModal .card{background:#2b0d57;border:2px solid #7cf5a8;border-radius:18px;padding:18px 20px;max-width:390px;width:100%;color:#fff;text-align:left;box-shadow:0 18px 48px rgba(0,0,0,.65)}
+#hostPlayModal h2{margin:0 0 6px}
+#hostPlayModal input{width:100%;box-sizing:border-box;padding:12px;border-radius:9px;border:0;font-size:1.05em;margin:6px 0 10px;color:#2b0d57;font-weight:750}
+#hostPlayModal .go{display:block;text-align:center;background:#7cf5a8;color:#0b3d22;font-weight:850;border-radius:9px;padding:12px;text-decoration:none;cursor:pointer}
+#hostPlayModal .cl{margin-top:8px;width:100%;padding:10px;border-radius:9px;border:0;background:rgba(255,255,255,.16);color:#fff;font-weight:750;cursor:pointer}
 </style></head><body>
 <button id="fsBtn" onclick="toggleFullscreen()">⛶ Fullscreen (F)</button>
 <header class="ws-bar" id="workspaceBar">
@@ -625,6 +673,9 @@ body.cb .c4{background:#CC79A7}body.cb .c5{background:#56B4E9;color:#111}body.cb
    </div>
    <button id="hideBoardMenuBtn" style="display:none" onclick="hostCtl('toggle_hide_board')"><span>🙈 Hide Leaderboard</span><span class="state" id="hideBoardMenuState">OFF</span></button>
    <button id="stuTtsMenuBtn" style="display:none" onclick="hostCtl('toggle_student_tts')"><span>🔊 Student Read-Aloud</span><span class="state" id="stuTtsMenuState">OFF</span></button>
+   <button id="chatMenuBtn" style="display:none" onclick="hostCtl('toggle_chat')"><span>💬 Live Chat</span><span class="state" id="chatMenuState">OFF</span></button>
+   <button id="profilesMenuBtn" style="display:none" onclick="hostCtl('toggle_profiles')"><span>📊 Standings &amp; Profiles</span><span class="state" id="profilesMenuState">OFF</span></button>
+   <button id="playTooMenuBtn" style="display:none" onclick="hostCtl('toggle_play_too')"><span>🎮 Host Play-Along</span><span class="state" id="playTooMenuState">OFF</span></button>
    <button onclick="cycleTheme()"><span>🎨 Visual Theme</span><span class="state" id="themeState">Purple</span></button>
    <button id="musicBtn" onclick="cycleMusic()"><span>🎵 Background Music</span><span class="state" id="musicState">Classic</span></button>
    <button id="awakeBtn" onclick="toggleAwake()"><span>☀️ Keep Screen Awake</span><span class="state" id="awakeState">ON</span></button>
@@ -652,6 +703,29 @@ body.cb .c4{background:#CC79A7}body.cb .c5{background:#56B4E9;color:#111}body.cb
 </div>
 <canvas id="confetti"></canvas>
 <div id="reactions"></div>
+<div id="chatFeed"></div>
+<div id="hostBannerBig" onclick="this.style.display='none'"></div>
+<button type="button" id="hostPlayBtn" class="aud-hide" style="display:none" onclick="hostPlays()">🎮 Play too</button>
+<button type="button" id="hostChatBtn" class="aud-hide" style="display:none" onclick="toggleHostChat()"><span id="hostChatLbl">📢 Broadcast</span><i id="hostChatDot">0</i></button>
+<div id="hostChat" class="aud-hide">
+ <div class="hd">
+  <span>💬 <span id="hostChatTitle">Host Broadcast</span></span>
+  <span style="display:inline-flex;gap:5px;align-items:center">
+   <button type="button" class="hc-pill" id="hcToggleChatBtn" onclick="hostCtl('toggle_chat')">💬 Student Chat: Off</button>
+   <button type="button" class="hc-pill on" id="hcBotsBtn" onclick="toggleHcBots()">🤖 Bots: ON</button>
+  </span>
+ </div>
+ <div class="lst" id="hostChatList"></div>
+ <div id="hostTagSug" style="display:none;flex-wrap:wrap;gap:6px;padding:4px 12px"></div>
+ <div id="hostReplyBar" style="display:none;padding:4px 12px;font-size:.84em"></div>
+ <div id="hostChatErr" style="color:#ff9b9b;font-size:.82em;padding:0 12px"></div>
+ <div style="display:flex;gap:6px;padding:8px 10px;border-top:1px solid rgba(255,255,255,.18)">
+  <input id="hostChatIn" maxlength="140" oninput="hostTagSuggest()" placeholder="📢 Broadcast announcement banner to all phones…" style="flex:1;padding:9px 10px;border-radius:8px;border:1.5px solid rgba(255,255,255,.32);background:rgba(255,255,255,.12);color:#fff;font-size:.96em;min-width:0;margin:0" onkeydown="if(event.key==='Enter')hostSay()">
+  <button type="button" onclick="hostSay()" style="margin:0;padding:9px 14px;border-radius:8px;border:0;background:#ffdf5d;color:#2b0d57;font-weight:850;cursor:pointer;font-size:.94em">Send</button>
+ </div>
+</div>
+<div id="hostPlayModal" class="aud-hide" onclick="if(event.target===this)this.style.display='none'"></div>
+<div id="hostProf" onclick="if(event.target===this)this.style.display='none'"></div>
 <div class="modal-bg" id="remoteModal">
  <div class="modal" style="max-width:480px;text-align:center">
   <h2>📱 Phone Host Remote</h2>
@@ -993,6 +1067,9 @@ Quote: Paris has been the capital since 987 CE."></textarea>
         <label class="mode-pill"><input id="qRosterOn" type="checkbox" onchange="document.getElementById('rosterRow').style.display=this.checked?'block':'none';updateOptSummary()"> 👥 Class Roster</label>
         <label class="mode-pill"><input id="qHideBoard" type="checkbox"> 🙈 Hide Live Leaderboard</label>
         <label class="mode-pill"><input id="qStudentTts" type="checkbox"> 🔊 Student Read-Aloud</label>
+        <label class="mode-pill"><input id="qChat" type="checkbox"> 💬 Live Chat &amp; Tagging</label>
+        <label class="mode-pill"><input id="qProfiles" type="checkbox"> 📊 Standings &amp; Player Profiles</label>
+        <label class="mode-pill"><input id="qPlayToo" type="checkbox"> 🎮 Host Play-Along</label>
        </div>
        <div id="rosterRow" style="display:none;margin-bottom:8px">
         <label style="display:block;font-size:.82em;font-weight:700;opacity:.85;margin-bottom:4px">👥 Class Roster (one name per line):</label>
@@ -1146,7 +1223,7 @@ function toggleAdvPanel(){
  const acc = document.getElementById('accOptions');
  if(acc) acc.open = !acc.open;
 }
-const GAMEPLAY_OPT_IDS = ['qShuffle','qWager','qRedemp','qSabotage','qWheel','qTeams','qIce','qAuto','qHot','qBattle','qTie','qSpeed','qDbl','qSteal','qConsensus','qHideBoard','qStudentTts'];
+const GAMEPLAY_OPT_IDS = ['qShuffle','qWager','qRedemp','qSabotage','qWheel','qTeams','qIce','qAuto','qHot','qBattle','qTie','qSpeed','qDbl','qSteal','qConsensus','qHideBoard','qStudentTts','qChat','qProfiles','qPlayToo'];
 const QUIZ_PRESETS = {
  clean: [],
  quick: ['qShuffle'],
@@ -1240,7 +1317,7 @@ function updateOptSummary(){
  const nTwist = isC ? 0 : cntChecked(['qWheel','qWager','qRedemp','qHot','qDbl','qSabotage','qSteal','qTie']);
  const nTeam = cntChecked(isC ? ['qTeams','qConsensus','qIce'] : ['qShuffle','qSpeed','qAuto','qTeams','qBattle','qConsensus','qIce']);
  const bots = document.getElementById('qBots');
- const nClass = cntChecked(['qMod','qRosterOn','qHideBoard','qStudentTts']) + ((bots && parseInt(bots.value, 10) > 0) ? 1 : 0);
+ const nClass = cntChecked(['qMod','qRosterOn','qHideBoard','qStudentTts','qChat','qProfiles','qPlayToo']) + ((bots && parseInt(bots.value, 10) > 0) ? 1 : 0);
  const scSel = document.getElementById('qScoring');
  const nScore = (scSel && scSel.value && scSel.value !== 'classic') ? 1 : 0;
  const nThink = (!isC && (parseFloat((document.getElementById('qThinkTime')||{}).value) || 0) > 0) ? 1 : 0;
@@ -2289,6 +2366,9 @@ async function create(){
   icebreaker:ice ? ice.checked : false,
   icebreaker_prompt:icePrompt ? icePrompt.value.trim() : '',
   auto:auto ? auto.checked : false,
+  chat_enabled:!!(document.getElementById('qChat') && document.getElementById('qChat').checked),
+  profiles_enabled:!!(document.getElementById('qProfiles') && document.getElementById('qProfiles').checked),
+  play_too_enabled:!!(document.getElementById('qPlayToo') && document.getElementById('qPlayToo').checked),
   pair_key:(document.getElementById('qRemote') && document.getElementById('qRemote').checked) ? getRemoteKey() : ''
  });
  if(!r || !r.pin){ return; }
@@ -2299,6 +2379,9 @@ async function create(){
  document.getElementById('remoteBtn').style.display = 'flex';
  const hbBtn = document.getElementById('hideBoardMenuBtn'); if(hbBtn) hbBtn.style.display = 'flex';
  const stBtn = document.getElementById('stuTtsMenuBtn'); if(stBtn) stBtn.style.display = 'flex';
+ const chBtn = document.getElementById('chatMenuBtn'); if(chBtn) chBtn.style.display = 'flex';
+ const pfBtn = document.getElementById('profilesMenuBtn'); if(pfBtn) pfBtn.style.display = 'flex';
+ const ptBtn = document.getElementById('playTooMenuBtn'); if(ptBtn) ptBtn.style.display = 'flex';
  const aq = document.getElementById('addQuizMenuBtn');
  if(aq) aq.style.display = 'none';
  startHostPoll();
@@ -2323,6 +2406,257 @@ async function editIcePrompt(){
  const np = window.prompt('Enter new Word Cloud Warm-Up question:', S.prompt || '');
  if(np && np.trim()) await hostCtl('set_prompt', 0, np.trim());
 }
+// --- #1 Live Chat & Megaphone, #4 Standings & Profiles, #5 Host Play-Along ---
+function hEscRx(x){ return x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
+function hFmtText(m){
+ let t = esc(m.text);
+ (m.tags || []).forEach(n => {
+  t = t.replace(new RegExp('\\\\' + hEscRx(esc(n)) + '(?![A-Za-z0-9])', 'gi'), x => `<span class="tag">${x.replace(/^\\\\/, '@')}</span>`);
+ });
+ return t;
+}
+let hTagTimer = null;
+function hostTagSuggest(){
+ const inp = document.getElementById('hostChatIn'), box = document.getElementById('hostTagSug');
+ if(!inp || !box) return;
+ const upto = inp.value.slice(0, inp.selectionStart == null ? inp.value.length : inp.selectionStart);
+ const m = /\\([A-Za-z0-9' .-]{0,24})$/.exec(upto);
+ if(!m){ box.style.display = 'none'; return; }
+ clearTimeout(hTagTimer);
+ hTagTimer = setTimeout(async()=>{
+  const r = await fetch(`/api/names?pin=${encodeURIComponent(pin)}&q=${encodeURIComponent(m[1].trim())}`);
+  if(!r.ok) return;
+  const d = await r.json();
+  box.innerHTML = (d.names || []).filter(n => n !== 'Host').map(n => `<span data-n="${esc(n)}" onclick="hostPickTag(this.dataset.n)">${esc(n)}</span>`).join('');
+  box.style.display = box.innerHTML ? 'flex' : 'none';
+ }, 120);
+}
+function hostPickTag(name){
+ const inp = document.getElementById('hostChatIn');
+ if(!inp) return;
+ const pos = inp.selectionStart == null ? inp.value.length : inp.selectionStart;
+ const before = inp.value.slice(0, pos), after = inp.value.slice(pos);
+ const idx = before.search(/\\[A-Za-z0-9' .-]{0,24}$/);
+ if(idx >= 0) inp.value = before.slice(0, idx) + '\\' + name + ' ' + after;
+ const box = document.getElementById('hostTagSug');
+ if(box) box.style.display = 'none';
+ inp.focus();
+}
+
+async function hostProfile(name, headline){
+ if(!pin || !name) return;
+ let el = document.getElementById('hostProf');
+ if(!el){
+  el = document.createElement('div'); el.id = 'hostProf';
+  el.onclick = e => { if(e.target === el) el.style.display = 'none'; };
+  document.body.appendChild(el);
+ }
+ const hq = (!IS_AUDIENCE && host) ? `&host=${encodeURIComponent(host)}` : '';
+ const r = await fetch(`/api/profile?pin=${encodeURIComponent(pin)}&name=${encodeURIComponent(name)}${hq}`);
+ if(!r.ok) return;
+ const d = await r.json();
+ const spd = d.avg_time != null ? `${d.avg_time}s avg` + (d.fastest != null ? ` (best ${d.fastest}s)` : '') : 'No answers yet';
+ el.innerHTML = `<div class="card"><h2>${esc((d.team_emoji?d.team_emoji+' ':'')+(d.avatar?d.avatar+' ':'')+d.name)}</h2>
+  ${headline ? `<div class="hl">${esc(headline)}</div>` : ''}
+  ${d.title ? `<div style="text-align:center;margin-bottom:6px"><span class="title-pill">${esc(d.title)}</span></div>` : ''}
+  <div class="stat"><span>Rank</span><b>#${d.rank} of ${d.total_players}</b></div>
+  <div class="stat"><span>Points</span><b>${d.score} (${d.pct ?? 0}%)</b></div>
+  <div class="stat"><span>Speed</span><b>${spd}</b></div>
+  <div class="stat"><span>Correct</span><b>${d.correct}/${d.answered}</b></div>
+  <div class="stat"><span>Streak</span><b>🔥 ${d.streak}${d.max_streak > d.streak ? ` (best ${d.max_streak})` : ''}</b></div>
+  <button type="button" onclick="document.getElementById('hostProf').style.display='none'">Close</button></div>`;
+ el.style.display = 'flex';
+}
+
+function hostPlays(){
+ const m = document.getElementById('hostPlayModal');
+ if(!m) return;
+ if(!pin || !host){
+  m.innerHTML = `<div class="card"><h2>🎮 Play too</h2><p>Launch or resume a game first, then you can join as a player.</p><button type="button" class="cl" onclick="document.getElementById('hostPlayModal').style.display='none'">OK</button></div>`;
+  m.style.display = 'flex';
+  return;
+ }
+ let nm = '';
+ try{ nm = localStorage.getItem('brainrush_host_play_name') || ''; }catch(e){}
+ m.innerHTML = `<div class="card"><h2>🎮 Play too</h2>
+  <p style="margin:4px 0 8px;opacity:.88;font-size:.92em;line-height:1.4">Pick your player nickname. Your player screen opens in a new tab with floating <b>🕹 Host controls</b> so you can play along while advancing the game.</p>
+  <input id="hpName" maxlength="16" placeholder="Your nickname" value="${esc(nm)}">
+  <a id="hpGo" class="go" target="_blank" rel="noopener">▶ Open My Player Screen</a>
+  <button type="button" class="cl" onclick="document.getElementById('hostPlayModal').style.display='none'">Cancel</button></div>`;
+ m.style.display = 'flex';
+ const inp = document.getElementById('hpName'), go = document.getElementById('hpGo');
+ const upd = () => {
+  const v = inp.value.trim().slice(0, 16);
+  go.href = v ? `/play?pin=${encodeURIComponent(pin)}&name=${encodeURIComponent(v)}&auto=1&ctl=1#hk=${encodeURIComponent(host)}` : '#';
+  go.style.opacity = v ? '1' : '.5';
+  try{ if(v) localStorage.setItem('brainrush_host_play_name', v); }catch(e){}
+ };
+ inp.oninput = upd; upd();
+ inp.onkeydown = e => { if(e.key === 'Enter' && inp.value.trim()) go.click(); };
+ go.onclick = e => { if(!inp.value.trim()){ e.preventDefault(); inp.focus(); } else { setTimeout(()=>{ m.style.display = 'none'; }, 260); } };
+ inp.focus(); inp.select();
+}
+
+let hostChatAll = [], hostChatUnread = 0, hostChatMaxId = 0, hReply = null, hReactOpen = null, hBannerT = null, hcShowBots = true;
+const H_REACTS = ['👍','😂','❤️','🔥','😮','👏'];
+function toggleHcBots(){
+ hcShowBots = !hcShowBots;
+ const b = document.getElementById('hcBotsBtn');
+ if(b){ b.classList.toggle('on', hcShowBots); b.textContent = hcShowBots ? '🤖 Bots: ON' : '🤖 Bots: Off'; }
+ renderHostChat(true);
+}
+function toggleHostChat(){
+ const el = document.getElementById('hostChat');
+ if(!el) return;
+ el.classList.toggle('open');
+ if(el.classList.contains('open')){
+  hostChatUnread = 0;
+  renderHostChat(true);
+  const inp = document.getElementById('hostChatIn');
+  if(inp) inp.focus();
+ }
+ updateHostChatDot();
+}
+function updateHostChatDot(){
+ const d = document.getElementById('hostChatDot'), el = document.getElementById('hostChat');
+ if(!d || !el) return;
+ const open = el.classList.contains('open');
+ const cnt = S.chat_enabled ? hostChatUnread : 0;
+ d.style.display = (cnt && !open) ? 'inline' : 'none';
+ d.textContent = cnt;
+}
+function hMsgHtml(m){
+ const rq = m.reply ? `<div class="rq">↩ ${esc((m.reply.host?'😎 ':'')+m.reply.name)}: ${esc(m.reply.text)}</div>` : '';
+ const nm = m.host
+  ? `<b>😎 Host</b>`
+  : `<b class="clickable" data-n="${esc(m.name)}" onclick="hostProfile(this.dataset.n)">${esc((m.avatar?m.avatar+' ':'')+m.name)}</b>${m.bot?' <span class="bt">🤖</span>':''}`;
+ const chips = Object.entries(m.r || {}).map(([e,n]) => `<span class="rc ${(m.mine||[]).includes(e)?'mine':''}" onclick="hostReact(${m.id},'${e}')">${e} ${n}</span>`).join('');
+ const pick = hReactOpen === m.id ? `<div class="rpick">${H_REACTS.map(e => `<span onclick="hostReact(${m.id},'${e}')">${e}</span>`).join('')}</div>` : '';
+ return `<div class="${m.host?'hostmsg':''} ${(m.tags||[]).includes('Host')&&!m.host?'tagme':''}">${rq}${nm}: ${hFmtText(m)} <span class="acts"><a onclick="hostStartReply(${m.id})" title="Reply">↩</a><a onclick="hostReactPick(${m.id})" title="React">😀</a></span>${chips?`<div class="rx">${chips}</div>`:''}${pick}</div>`;
+}
+function renderHostChat(force){
+ const el = document.getElementById('hostChat');
+ if(!el || !el.classList.contains('open')) return;
+ const box = document.getElementById('hostChatList');
+ if(!box) return;
+ const atEnd = force || box.scrollTop + box.clientHeight >= box.scrollHeight - 40;
+ const list = hostChatAll.filter(m => hcShowBots || !m.bot || m.host);
+ const sig = JSON.stringify(list.map(m => [m.id, m.r, m.mine])) + '|' + hReactOpen + '|' + (S.chat_enabled ? 1 : 0);
+ if(sig === box.dataset.sig && !force) return;
+ box.dataset.sig = sig;
+ const emptyHint = S.chat_enabled
+  ? '<div style="opacity:.65;padding:6px 0">No messages yet — students can chat from their phones or tag \\Host.</div>'
+  : '<div style="opacity:.75;padding:6px 0">📢 Two-way student chat is currently OFF. Anything you send below drops a gold <b>😎 HOST</b> banner on every phone and the projector!</div>';
+ box.innerHTML = list.map(hMsgHtml).join('') || emptyHint;
+ if(atEnd) box.scrollTop = box.scrollHeight;
+}
+function hostStartReply(id){
+ const m = hostChatAll.find(x => x.id === id);
+ if(!m) return;
+ hReply = {id: m.id, name: m.host ? 'Host' : m.name};
+ updateHReplyBar();
+ const inp = document.getElementById('hostChatIn');
+ if(inp) inp.focus();
+}
+function hostClearReply(){ hReply = null; updateHReplyBar(); }
+function updateHReplyBar(){
+ const el = document.getElementById('hostReplyBar');
+ if(!el) return;
+ el.style.display = hReply ? 'block' : 'none';
+ el.innerHTML = hReply ? `↩ Replying to <b>${esc(hReply.name)}</b> <a onclick="hostClearReply()" style="cursor:pointer;margin-left:4px">✖</a>` : '';
+}
+function hostReactPick(id){ hReactOpen = (hReactOpen === id) ? null : id; renderHostChat(true); }
+async function hostReact(id, emoji){
+ hReactOpen = null;
+ await post('/api/chat_react', {pin, host, msg: id, emoji});
+ await poll();
+}
+async function hostSay(){
+ const inp = document.getElementById('hostChatIn'), err = document.getElementById('hostChatErr');
+ if(!inp) return;
+ const t = inp.value.trim();
+ if(!t) return;
+ try{
+  const r = await fetch('/api/host_chat', {
+   method: 'POST',
+   headers: {'Content-Type': 'application/json'},
+   body: JSON.stringify({pin, host, text: t, reply_to: hReply ? hReply.id : null})
+  });
+  const j = await r.json().catch(() => ({}));
+  if(r.ok){ inp.value = ''; if(err) err.textContent = ''; hostClearReply(); await poll(); }
+  else if(err){ err.textContent = j.error || 'Could not send'; }
+ }catch(e){ if(err) err.textContent = 'Could not send'; }
+}
+function showHostBannerBig(m){
+ const b = document.getElementById('hostBannerBig');
+ if(!b) return;
+ b.innerHTML = `<small>😎 HOST</small><div>${esc(m.text)}</div>`;
+ b.style.display = 'block';
+ clearTimeout(hBannerT);
+ hBannerT = setTimeout(()=>{ b.style.display = 'none'; }, 8000);
+}
+function updateHostChat(list){
+ hostChatAll = Array.isArray(list) ? list : [];
+ const newest = hostChatAll.length ? hostChatAll[hostChatAll.length - 1].id : 0;
+ if(hostChatMaxId && newest > hostChatMaxId && S.chat_enabled){
+  hostChatUnread += hostChatAll.filter(m => m.id > hostChatMaxId && !m.host && (!m.bot || (m.tags || []).includes('Host'))).length;
+ }
+ if(newest > hostChatMaxId) hostChatMaxId = newest;
+ updateHostChatDot();
+ renderHostChat();
+}
+let seenChatId = 0, chatPrimed = false;
+function showChatFeed(list){
+ const feed = document.getElementById('chatFeed');
+ if(!S.chat_enabled && feed) feed.innerHTML = '';
+ if(!Array.isArray(list)) return;
+ list.forEach(m => {
+  if(m.id > seenChatId){
+   seenChatId = m.id;
+   if(!chatPrimed) return;
+   if(m.host) showHostBannerBig(m);
+   if(S.chat_enabled && feed){
+    const el = document.createElement('div');
+    if(m.host) el.className = 'hf';
+    el.innerHTML = `<b>${esc(m.host ? '😎 Host' : ((m.avatar ? m.avatar + ' ' : '') + m.name))}:</b> ${hFmtText(m)}`;
+    feed.appendChild(el);
+    while(feed.children.length > 4) feed.removeChild(feed.firstChild);
+    setTimeout(()=>{ if(el.parentNode) el.remove(); }, 6500);
+   }
+  }
+ });
+ chatPrimed = true;
+}
+function syncLiveFeatureBtns(){
+ const inGame = !!(pin && S && S.phase);
+ const chB = document.getElementById('chatMenuBtn'), chS = document.getElementById('chatMenuState');
+ if(chB){ if(inGame) chB.style.display = 'flex'; chB.classList.toggle('on', !!S.chat_enabled); }
+ if(chS) chS.textContent = S.chat_enabled ? 'ON' : 'OFF';
+ const pfB = document.getElementById('profilesMenuBtn'), pfS = document.getElementById('profilesMenuState');
+ if(pfB){ if(inGame) pfB.style.display = 'flex'; pfB.classList.toggle('on', !!S.profiles_enabled); }
+ if(pfS) pfS.textContent = S.profiles_enabled ? 'ON' : 'OFF';
+ const ptB = document.getElementById('playTooMenuBtn'), ptS = document.getElementById('playTooMenuState');
+ if(ptB){ if(inGame) ptB.style.display = 'flex'; ptB.classList.toggle('on', !!S.play_too_enabled); }
+ if(ptS) ptS.textContent = S.play_too_enabled ? 'ON' : 'OFF';
+ if(!IS_AUDIENCE){
+  const hpBtn = document.getElementById('hostPlayBtn');
+  if(hpBtn) hpBtn.style.display = (inGame && S.play_too_enabled && S.phase !== 'final') ? 'inline-block' : 'none';
+  const hcBtn = document.getElementById('hostChatBtn'), hcLbl = document.getElementById('hostChatLbl'), hcTitle = document.getElementById('hostChatTitle'), hcTgl = document.getElementById('hcToggleChatBtn'), hcBots = document.getElementById('hcBotsBtn'), hcIn = document.getElementById('hostChatIn');
+  if(hcBtn){
+   hcBtn.style.display = inGame ? 'inline-block' : 'none';
+   hcBtn.style.right = '14px';
+   if(hpBtn) hpBtn.style.right = S.chat_enabled ? '130px' : '152px';
+  }
+  if(hcLbl) hcLbl.textContent = S.chat_enabled ? '💬 Chat' : '📢 Broadcast';
+  if(hcTitle) hcTitle.textContent = S.chat_enabled ? 'Live Game Chat' : 'Host Megaphone';
+  if(hcTgl){ hcTgl.classList.toggle('on', !!S.chat_enabled); hcTgl.textContent = S.chat_enabled ? '💬 Student Chat: ON' : '💬 Student Chat: Off'; }
+  if(hcBots) hcBots.style.display = S.chat_enabled ? 'inline-block' : 'none';
+  if(hcIn && document.activeElement !== hcIn){
+   hcIn.placeholder = S.chat_enabled ? '😎 Talk to everyone… type \\ to tag' : '📢 Broadcast announcement banner to all phones…';
+  }
+ }
+}
+
 let busy=false;
 async function next(){ensureAudio();if(busy)return;busy=true;try{await post('/api/next',{pin,host});await poll()}finally{setTimeout(()=>busy=false,500)}}
 async function poll(){
@@ -2338,7 +2672,8 @@ async function poll(){
  const stB = document.getElementById('stuTtsMenuBtn'), stS = document.getElementById('stuTtsMenuState');
  if(stB){ if(pin) stB.style.display = 'flex'; stB.classList.toggle('on', !!S.allow_tts); }
  if(stS) stS.textContent = S.allow_tts ? 'ON' : 'OFF';
- showReactions(S.reactions);handleAudio();render();updateMeta();
+ syncLiveFeatureBtns();
+ showReactions(S.reactions);showChatFeed(S.chat);updateHostChat(S.chat);handleAudio();render();updateMeta();
 }
 
 function handleAudio(){
@@ -2396,13 +2731,15 @@ function teamStandingsHtml(){
 
 function board(b,off=0){
  const isPct = S && S.scoring_mode === 'percent';
+ const click = !!(S && S.profiles_enabled);
  return b.map((x,i)=>{
   const av = fmtAvatar(x);
   const pctBadge = x.pct != null ? `<span class="pct-pill">${x.pct}%</span>` : '';
   const rightMetric = isPct
    ? `<b>${x.pct!=null?x.pct:0}% <small style="opacity:.75">(${x.correct_n||0}/${x.graded_n||0} · ${x.score} pts)</small></b>`
    : `<span>${pctBadge}<b>${x.score}</b></span>`;
-  return `<div class="row"><span>${i+1+off}. ${x.team_emoji?x.team_emoji+' ':''}${av?av+' ':''}${nameHtml(x)}${x.title?`<span class="title-pill">${esc(x.title)}</span>`:''}${x.streak>=2?`<span class="streak">🔥${x.streak}</span>`:''}${x.frozen_next?' ⛄':''}</span>${rightMetric}</div>`;
+  const clickAttr = click ? ` data-n="${esc(x.name)}" onclick="hostProfile(this.dataset.n)"` : '';
+  return `<div class="row${click?' clickable':''}"${clickAttr}><span>${i+1+off}. ${x.team_emoji?x.team_emoji+' ':''}${av?av+' ':''}${nameHtml(x)}${x.title?`<span class="title-pill">${esc(x.title)}</span>`:''}${x.streak>=2?`<span class="streak">🔥${x.streak}</span>`:''}${x.frozen_next?' ⛄':''}</span>${rightMetric}</div>`;
  }).join('');
 }
 
@@ -2410,6 +2747,7 @@ let animDone = -1;
 function animBoard(b, qIdx){
  const H = 41, first = animDone !== qIdx && qIdx > 0;
  const isPct = S && S.scoring_mode === 'percent';
+ const click = !!(S && S.profiles_enabled);
  const prevOrder = [...b].sort((a,c)=>(a.prev_rank||99)-(c.prev_rank||99));
  const prevPos = new Map(prevOrder.map((x,i)=>[x.name, i]));
  const rows = b.map((x,i)=>{
@@ -2427,7 +2765,8 @@ function animBoard(b, qIdx){
   const scoreHtml = isPct
    ? `${gain}<b>${x.pct!=null?x.pct:0}% <small style="opacity:.78">(${x.correct_n||0}/${x.graded_n||0})</small></b> <small style="opacity:.72">· <span class="sc">${sc}</span> pts</small>`
    : `${gain}${x.pct!=null?`<span class="pct-pill">${x.pct}%</span>`:''}<b class="sc">${sc}</b>`;
-  return `<div class="row${x.streak>=5?' onfire':''}" data-idx="${i}" data-prev="${sc}" data-score="${x.score}" data-diff="${diff}" style="transform:translateY(${pIdx*H}px)"><span><b class="rk">${rk}</b>. ${label}${ttl}${streak}${ice}${arrow}</span><span>${scoreHtml}</span></div>`;
+  const clickAttr = click ? ` data-n="${esc(x.name)}" onclick="hostProfile(this.dataset.n)"` : '';
+  return `<div class="row${x.streak>=5?' onfire':''}${click?' clickable':''}"${clickAttr} data-idx="${i}" data-prev="${sc}" data-score="${x.score}" data-diff="${diff}" style="transform:translateY(${pIdx*H}px)"><span><b class="rk">${rk}</b>. ${label}${ttl}${streak}${ice}${arrow}</span><span>${scoreHtml}</span></div>`;
  }).join('');
  if(first){
   animDone = qIdx;
@@ -2583,7 +2922,7 @@ function render(){
  const inThink = S.phase==='question' && !inPrev && !inCons && (S.think_left||0) > 0;
  const k = S.phase==='question'
   ? `q:${S.index}:${inPrev?1:0}:${inThink?1:0}:${S.consensus_step||0}:${window.presenterMode?1:0}:${(S.pending_list||[]).length}:${S.n||0}:${S.discuss_left!=null?1:0}`
-  : JSON.stringify({...S,left:0,qtime:0,answered:0,preview_left:0,think_left:0,consensus_left:0,consensus_voted:0,auto_left:0,intro_left:0,discuss_left:0,_da:S.discuss_left!=null,reactions:null, _pm:!!window.presenterMode});
+  : JSON.stringify({...S,left:0,qtime:0,answered:0,preview_left:0,think_left:0,consensus_left:0,consensus_voted:0,auto_left:0,intro_left:0,discuss_left:0,_da:S.discuss_left!=null,reactions:null,chat:null,_pm:!!window.presenterMode});
  if(k==last){
   const t=document.getElementById('t');
   if(t){
@@ -2807,13 +3146,18 @@ function render(){
    <button class="dock-next" onclick="next()">${S.is_last?'🏆 Final Podium':(S.case||S.hide_board?'Continue ➔':'🏆 Top Players ➔')}${autoSuffix}</button>
   </div>`;
  } else if(S.phase=='board'){
-  const shHtml = (S.shoutouts&&S.shoutouts.length)?`<div class="shouts">${S.shoutouts.map(s=>`<span class="shout">${esc(s)}</span>`).join('')}</div>`:'';
+  const clickProf = !!S.profiles_enabled;
+  const shItems = S.shoutout_items || [];
+  const shHtml = (clickProf && shItems.length)
+   ? `<div class="shouts">${shItems.map(s=>`<span class="shout clickable" data-n="${esc(s.name)}" data-t="${esc(s.text)}" onclick="hostProfile(this.dataset.n,this.dataset.t)">${esc(s.text)} ›</span>`).join('')}</div>`
+   : (S.shoutouts&&S.shoutouts.length) ? `<div class="shouts">${S.shoutouts.map(s=>`<span class="shout">${esc(s)}</span>`).join('')}</div>` : '';
+  const profHint = clickProf ? `<div style="font-size:.82em;opacity:.68;margin:2px 0 4px">Click any player or shout-out badge for live stats</div>` : '';
   $.innerHTML=`<div class="stage-hud">
    <div class="stage-hud-left"><span class="qnum">🏆 Standings</span></div>
    <div class="stage-hud-right"><span class="ans-pill">After Question <b>${S.index+1}</b> of ${S.total}</span></div>
   </div>
   <h1 style="margin:.1em 0 .2em">🏆 Top Players</h1>
-  ${teamStandingsHtml()}${shHtml}${animBoard(S.board,S.index)}
+  ${teamStandingsHtml()}${shHtml}${profHint}${animBoard(S.board,S.index)}
   <div class="host-dock aud-hide">
    <button class="dock-next" onclick="next()">${S.index+1>=S.total?'🏆 Final Podium':'Next Question ➔'}${autoSuffix}</button>
   </div>`;
@@ -3189,6 +3533,9 @@ function enterGame(){
  document.getElementById('remoteBtn').style.display = 'flex';
  const hbBtn = document.getElementById('hideBoardMenuBtn'); if(hbBtn) hbBtn.style.display = 'flex';
  const stBtn = document.getElementById('stuTtsMenuBtn'); if(stBtn) stBtn.style.display = 'flex';
+ const chBtn = document.getElementById('chatMenuBtn'); if(chBtn) chBtn.style.display = 'flex';
+ const pfBtn = document.getElementById('profilesMenuBtn'); if(pfBtn) pfBtn.style.display = 'flex';
+ const ptBtn = document.getElementById('playTooMenuBtn'); if(ptBtn) ptBtn.style.display = 'flex';
  const aq = document.getElementById('addQuizMenuBtn'); if(aq) aq.style.display = 'none';
  startHostPoll();
 }
@@ -3241,6 +3588,10 @@ const GUIDE = [
   ['🤖 Phantom Bot Players', 'Computer players that answer, use power-ups, wager and send reactions. Good for testing or making a small class feel full. You can also add 5 more from the lobby.'],
   ['👥 Class Roster', 'Check 👥 Class Roster in Options to reveal the roster list and paste student names (one per line). Players then pick their name from a dropdown instead of typing a nickname, and a student who loses connection can rejoin under the same name. Names stay saved on this computer while Roster Mode stays off unless checked.'],
   ['📱 Phone Host Remote', 'Check 📱 Phone Host Remote in Options (or copy/open the always-visible link or QR code) to pair your phone before or during a session. You can pick & launch a Quiz or Case Study right from your phone, then advance slides, pause timers, add +10s, and manage bots from anywhere in the room.'],
+  ['💬 Live Chat & Tagging (Opt-In)', 'Optional two-way in-game chat drawer on student phones and projector feed, with threaded replies (↩), emoji reactions, \\Name & \\Host tagging autocomplete, vibrating tag alerts, Top-10 crimson theme, rate-limiting, and profanity/link filtering. Can also be toggled ON/OFF mid-game in ⚙️ Settings.'],
+  ['📢 Host Megaphone Broadcast', 'Use the bottom-right 📢 Broadcast / 💬 Chat button (or Phone Remote) to drop a vibrating gold 😎 HOST banner on every phone and the projector — works as a one-way announcement even when student chat is OFF.'],
+  ['📊 Standings & Player Profiles (Opt-In)', 'Lets students open Top-30 Standings and tap any player for a Head-to-Head comparison card (rank, accuracy, average/fastest speed vs. yours, streak, point gap & answers-to-catch), and makes leaderboard rows & shout-out badges clickable. Automatically suppressed while Hide Live Leaderboard is ON.'],
+  ['🎮 Host Play-Along ("Play too", Opt-In)', 'Shows a 🎮 Play too button during active games so the host can join in a new tab under any nickname with a floating 🕹 Host controls bar (Start/Next, Pause, +10s, Auto-advance, and Chat/Broadcast as Host).'],
   ['🖼️ Logo URL / 🌄 Background URL', 'Use your own logo (shown to you and on players\' join screens) and a custom host-screen background image.']
  ]},
  {id:'scoring', title:'🏆 Scoring Basics', items:[
@@ -4826,6 +5177,9 @@ create = async function(){
   logo: (document.getElementById('qLogo').value||'').trim(),
   icebreaker: ice,
   icebreaker_prompt: icePrompt,
+  chat_enabled: !!(document.getElementById('qChat') && document.getElementById('qChat').checked),
+  profiles_enabled: !!(document.getElementById('qProfiles') && document.getElementById('qProfiles').checked),
+  play_too_enabled: !!(document.getElementById('qPlayToo') && document.getElementById('qPlayToo').checked),
   pair_key: (document.getElementById('qRemote') && document.getElementById('qRemote').checked) ? getRemoteKey() : ''
  });
  if(!r || !r.pin) return;
@@ -4835,6 +5189,9 @@ create = async function(){
  document.getElementById('remoteBtn').style.display = 'flex';
  const hbBtn = document.getElementById('hideBoardMenuBtn'); if(hbBtn) hbBtn.style.display = 'flex';
  const stBtn = document.getElementById('stuTtsMenuBtn'); if(stBtn) stBtn.style.display = 'flex';
+ const chBtn = document.getElementById('chatMenuBtn'); if(chBtn) chBtn.style.display = 'flex';
+ const pfBtn = document.getElementById('profilesMenuBtn'); if(pfBtn) pfBtn.style.display = 'flex';
+ const ptBtn = document.getElementById('playTooMenuBtn'); if(ptBtn) ptBtn.style.display = 'flex';
  const aq = document.getElementById('addQuizMenuBtn');
  if(aq) aq.style.display = 'none';
  startHostPoll();
@@ -5050,6 +5407,7 @@ async function pollAudience(){
   if(S.case_game) document.body.classList.add('sec-case');
   else document.body.classList.remove('sec-case');
   showReactions(S.reactions);
+  showChatFeed(S.chat);
   if(S.phase === 'final' && lastPhase !== 'final') startConfetti();
   lastPhase = S.phase;
   render();
@@ -5396,7 +5754,7 @@ function renderPresenter(){
     const av = fmtAvatar(p);
     const scoreTxt = (S.scoring_mode === 'percent' && p.pct != null) ? `${p.pct}% (${p.score})` : p.score;
     return `<div class="pcon-p">
-     <span>${i+1}. ${av?av+' ':''}${esc(p.name)}${p.bot?' <small style="opacity:.65">🤖</small>':''}</span>
+     <span style="cursor:pointer;text-decoration:underline dotted" title="Inspect live stats for ${esc(p.name)}" data-n="${esc(p.name)}" onclick="hostProfile(this.dataset.n)">${i+1}. ${av?av+' ':''}${esc(p.name)}${p.bot?' <small style="opacity:.65">🤖</small>':''}</span>
      <span><b style="color:#ffdf5d;margin-right:6px">${scoreTxt}</b><button title="Remove ${esc(p.name)}" data-n="${esc(p.name)}" onclick="kickPlayer(this.dataset.n)">✖</button></span>
     </div>`;
    }).join('') : '<div style="opacity:.68;font-size:.9em">No players joined yet.</div>'}

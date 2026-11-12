@@ -993,6 +993,71 @@ body.hc .pu-btn,body.hc .wager-btn,body.hc .conf-btn,body.hc .don-btn{border-col
   .grid button{min-height:84px;padding:8px;font-size:.98em}
   .grid button .sh{width:26px;height:26px;font-size:1.05em}
 }
+body.has-chat{padding-bottom:58px}
+#ov{position:fixed;inset:0;background:rgba(10,3,26,.82);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);z-index:85;display:none;align-items:center;justify-content:center;padding:14px}
+#ov .card{background:linear-gradient(180deg,#2b0d57,#1b0738);border:2px solid var(--gold);border-radius:18px;padding:16px 18px;max-width:430px;width:100%;max-height:82vh;overflow-y:auto;color:#fff;box-shadow:0 16px 44px rgba(0,0,0,.6);text-align:left}
+#ov .card h2{margin:0 0 6px;font-size:1.35rem;text-align:center}
+#ov .strow{display:flex;gap:8px;padding:9px 8px;border-bottom:1px solid rgba(255,255,255,.12);cursor:pointer;align-items:center;border-radius:8px;transition:background .12s}
+#ov .strow:hover{background:rgba(255,255,255,.09)}
+#ov .strow.me{background:rgba(255,223,93,.2);border:1px solid rgba(255,223,93,.45)}
+#ov .strow .nm{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:750}
+#ov .stat{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.12);font-size:.94rem}
+#ov .stat b{color:var(--gold)}
+#ov .gapbox{background:rgba(0,0,0,.34);border:1px solid rgba(255,223,93,.32);border-radius:12px;padding:10px 12px;margin:10px 0;text-align:center;line-height:1.4}
+#ov .ov-btns{display:flex;gap:8px;margin-top:10px}
+#ov button.x{flex:1;padding:10px;border-radius:10px;border:0;background:var(--gold);color:#2b0d57;font-weight:900;cursor:pointer;font-size:.95rem}
+#ov button.x.sec{background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.28)}
+
+#chat{position:fixed;left:0;right:0;bottom:0;z-index:60;background:rgba(27,8,64,.96);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:2px solid var(--gold);font-size:.94em;color:#fff;display:none;padding-bottom:env(safe-area-inset-bottom,0px)}
+#chat .bar{display:flex;align-items:center;gap:8px;padding:9px 14px;cursor:pointer;user-select:none}
+#chat .bar .last{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:.92;text-align:left;font-weight:650}
+#chat .bar .dot{background:#ff4d6d;color:#fff;border-radius:99px;padding:1px 8px;font-weight:900;font-size:.82em;display:none}
+#chat .body{display:none;padding:0 12px 10px;text-align:left}
+#chat.open .body{display:block}
+#chat .msgs{max-height:30vh;overflow-y:auto;margin-bottom:8px}
+#chat .msgs div{padding:3px 0;word-break:break-word}
+#chat .msgs b{color:var(--gold)}
+#chat .msgs b.clickable{cursor:pointer;text-decoration:underline dotted}
+#chat .msgs .m{padding:5px 0;border-bottom:1px solid rgba(255,255,255,.08)}
+#chat .rq{font-size:.8em;opacity:.78;border-left:3px solid var(--gold);padding-left:6px;margin-bottom:2px}
+#chat .acts{opacity:.7;margin-left:6px}
+#chat .acts a{cursor:pointer;margin-right:8px;text-decoration:none}
+#chat .rx{margin-top:3px}
+#chat .rc{display:inline-block;background:rgba(255,255,255,.14);border-radius:99px;padding:1px 8px;margin:2px 4px 0 0;cursor:pointer;font-size:.88em}
+#chat .rc.mine{background:rgba(255,223,93,.32);outline:1px solid var(--gold)}
+#chat .rpick{margin-top:4px}
+#chat .rpick span{cursor:pointer;font-size:1.35em;margin-right:8px}
+#chat .hostmsg{background:rgba(255,223,93,.15);border-radius:8px;padding:5px 7px!important}
+#chat .hostnm{color:#fff!important}
+#chat .row{display:flex;gap:6px}
+#chat input{flex:1;padding:10px 11px;border-radius:9px;border:1.5px solid rgba(255,255,255,.32);background:rgba(255,255,255,.12);color:#fff;font-size:.98em;min-width:0;margin:0}
+#chat button{padding:10px 15px;border-radius:9px;border:0;background:var(--gold);color:#2b0d57;font-weight:900;cursor:pointer;width:auto;margin:0}
+#chat .err{color:#ff9b9b;font-size:.82em;min-height:1.1em;margin-bottom:2px}
+#replyBar{display:none;font-size:.84em;padding:4px 2px;opacity:.92}
+#tagSug{display:none;flex-wrap:wrap;gap:6px;padding:4px 0 6px}
+#tagSug span{background:var(--gold);color:#2b0d57;border-radius:99px;padding:4px 10px;font-weight:800;cursor:pointer;font-size:.86em}
+#chat .tag{background:var(--gold);color:#2b0d57;border-radius:6px;padding:0 5px;font-weight:850}
+#chat .tagme{background:rgba(255,77,109,.22);border-radius:8px;padding:5px 7px!important;outline:1px solid #ff4d6d}
+#chat.top10{background:rgba(143,10,28,.96);border-top-color:#ff4d6d}
+#chat.top10 .bar{background:#c1122b}
+#chat.top10 input{border-color:#ff9aa8}
+
+#hostBanner{position:fixed;left:10px;right:10px;top:56px;z-index:78;display:none;background:linear-gradient(135deg,#ffdf5d,#ffb300);color:#2b0d57;border-radius:14px;padding:12px 15px;font-weight:850;font-size:1.08em;box-shadow:0 8px 26px rgba(0,0,0,.55);animation:hbIn .28s ease-out;text-align:left;cursor:pointer}
+#hostBanner .hb-h{font-size:.76em;letter-spacing:.1em;opacity:.82;font-weight:900;text-transform:uppercase;margin-bottom:2px}
+@keyframes hbIn{from{transform:translateY(-18px);opacity:0}to{transform:none;opacity:1}}
+
+#hcBar{position:fixed;top:54px;left:10px;z-index:65;text-align:left;display:none}
+#hcBar .tg{background:#7cf5a8;color:#0b3d22;border:0;border-radius:99px;padding:6px 13px;font-weight:900;font-size:.84rem;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.4);width:auto;margin:0}
+#hcBar .pn{display:none;margin-top:6px;background:rgba(27,8,64,.97);border:2px solid #7cf5a8;border-radius:14px;padding:10px;width:248px;box-shadow:0 12px 32px rgba(0,0,0,.6)}
+#hcBar.open .pn{display:block}
+#hcBar .pn button{display:block;width:100%;margin:5px 0;padding:9px 10px;border-radius:10px;border:1px solid rgba(255,255,255,.24);background:rgba(255,255,255,.12);color:#fff;font-weight:800;cursor:pointer;font-size:.9em}
+#hcBar .pn button.main{background:#26890c;border-color:#7dff6b;font-size:.98em;padding:11px}
+#hcBar .pn button.on{background:#26890c;border-color:#7dff6b}
+#hcBar .pn label{display:flex;align-items:center;gap:6px;font-size:.84em;margin-top:7px;opacity:.95;font-weight:750;cursor:pointer}
+#hcBar .pn label input{width:auto;margin:0}
+#hcBar .hc-bcast{display:flex;gap:5px;margin-top:7px}
+#hcBar .hc-bcast input{flex:1;min-width:0;margin:0;padding:7px 9px;border-radius:8px;border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.12);color:#fff;font-size:.84em}
+#hcBar .hc-bcast button{width:auto!important;margin:0!important;padding:7px 10px!important;background:var(--gold)!important;color:#2b0d57!important;border:0!important}
 </style></head><body>
 <header id="topHud">
   <div class="hud-inner">
@@ -1002,7 +1067,7 @@ body.hc .pu-btn,body.hc .wager-btn,body.hc .conf-btn,body.hc .don-btn{border-col
     </div>
     <div id="hudMe" class="hud-me"></div>
     <div class="hud-right">
-      <button id="standBtn" class="hud-btn" style="display:none" onclick="toggleStandings()">🏆 Standings</button>
+      <button id="standBtn" class="hud-btn" style="display:none" onclick="openStandings()">🏆 Standings</button>
       <button id="caseBtn" class="hud-btn" onclick="openCaseFile()">📁 Case</button>
     </div>
   </div>
@@ -1013,10 +1078,26 @@ body.hc .pu-btn,body.hc .wager-btn,body.hc .conf-btn,body.hc .don-btn{border-col
   </div>
 </header>
 <div id="caseOv"></div>
+<div id="ov" onclick="if(event.target===this)closeOv()"><div class="card" id="ovCard"></div></div>
+<div id="hcBar"><button class="tg" onclick="document.getElementById('hcBar').classList.toggle('open')">🕹 Host controls</button><div class="pn" id="hcPn"></div></div>
+<div id="hostBanner" onclick="this.style.display='none'"></div>
 <div id="imgOv" onclick="this.style.display='none'"><img id="imgBig" alt=""></div>
 <canvas id="fx"></canvas>
 <div id="toast"></div>
 <main id="app"></main>
+<div id="chat">
+ <div class="bar" onclick="toggleChat()"><span>💬</span><span class="last" id="chatLast">Live Chat</span><span class="dot" id="chatDot">0</span><span id="chatCaret" style="opacity:.75;font-size:.85em">▴</span></div>
+ <div class="body">
+  <div class="msgs" id="chatMsgs"></div>
+  <div id="tagSug"></div>
+  <div id="replyBar"></div>
+  <div class="err" id="chatErr"></div>
+  <div class="row">
+   <input id="chatIn" maxlength="140" oninput="tagSuggest()" placeholder="Say something… type \ to tag someone" onkeydown="if(event.key==='Enter')sendChat()">
+   <button type="button" onclick="sendChat()">Send</button>
+  </div>
+ </div>
+</div>
 <script>
 let pin, pid, S = {}, avatar = '🦊', avHat = '', avRing = '', team = '', custOpen = false, standOpen = false;
 let iceBrokenQ = -1, iceTaps = 0;
@@ -1082,6 +1163,40 @@ function pickTm(t){team=t;document.querySelectorAll('.tm').forEach(el=>el.classL
 
 const urlPin = new URLSearchParams(location.search).get('pin') || '';
 
+// --- Host controls (only when the host opened this tab via "🎮 Play too") ---
+const HOSTCTL = (()=>{ try{
+ const q = new URLSearchParams(location.search);
+ if(q.get('ctl') !== '1') return null;
+ const hk = new URLSearchParams((location.hash||'').replace(/^#/,'')).get('hk');
+ if(hk){
+  const obj = {pin: q.get('pin') || '', host: hk};
+  try{ sessionStorage.setItem('brainrush_host_ctl', JSON.stringify(obj)); }catch(e){}
+  try{ history.replaceState(null, '', location.pathname + location.search); }catch(e){}
+  return obj;
+ }
+ const sh = JSON.parse(sessionStorage.getItem('brainrush_host_ctl') || 'null');
+ if(sh && sh.pin && sh.host && (!q.get('pin') || String(sh.pin) === String(q.get('pin')))) return sh;
+ const h = JSON.parse(localStorage.getItem('brainrush_host') || 'null');
+ return (h && h.pin && h.host) ? h : {missing: true};
+}catch(e){ return {missing: true}; } })();
+function savePlayerSession(obj){
+ try{
+  if(HOSTCTL) sessionStorage.setItem('brainrush_playtoo_session', JSON.stringify(obj));
+  else localStorage.setItem('brainrush_session', JSON.stringify(obj));
+ }catch(e){}
+}
+function readPlayerSession(){
+ try{
+  return JSON.parse((HOSTCTL ? sessionStorage.getItem('brainrush_playtoo_session') : localStorage.getItem('brainrush_session')) || 'null');
+ }catch(e){ return null; }
+}
+function clearPlayerSession(){
+ try{
+  if(HOSTCTL) sessionStorage.removeItem('brainrush_playtoo_session');
+  else localStorage.removeItem('brainrush_session');
+ }catch(e){}
+}
+
 async function checkPinConfig(pinVal){
  try{
   const r = await (await fetch('/api/active' + (pinVal ? '?pin='+encodeURIComponent(pinVal) : ''))).json();
@@ -1093,10 +1208,11 @@ async function checkPinConfig(pinVal){
   if(tmBox) tmBox.style.display = (r && r.teams) ? 'grid' : 'none';
   const nb = document.getElementById('nameBox');
   if(nb){
-   const sig = (r && r.has_roster) ? 'R:' + JSON.stringify(r.roster) : 'T';
+   const useRoster = !!(r && r.has_roster && !(HOSTCTL && !HOSTCTL.missing));
+   const sig = useRoster ? 'R:' + JSON.stringify(r.roster) : 'T';
    if(nb.dataset.sig !== sig){
     nb.dataset.sig = sig;
-    nb.innerHTML = (r && r.has_roster)
+    nb.innerHTML = useRoster
      ? `<select id="n" class="rosterSel" onchange="updateCustPreview()"><option value="">— Pick your name —</option>${(r.roster||[]).map(x=>`<option>${esc(x)}</option>`).join('')}</select>`
      : `<input id="n" placeholder="Your nickname" maxlength="16" value="${esc(lastName)}" oninput="updateCustPreview()" onkeydown="if(event.key==='Enter')join()">`;
    }
@@ -1109,6 +1225,8 @@ let lastName = '', nameColor = '', ctag = '';
 function form(err, canReclaim){
  updHud();
  const savedPin = urlPin || pin || '';
+ const up = new URLSearchParams(location.search);
+ if(up.get('name') && !lastName) lastName = up.get('name').slice(0, 16);
  $.innerHTML=`<div class="brand-head">
    <img class="logo" src="/logo.jpg?v=2" alt="Brainrush!" onerror="this.outerHTML='<div style=&quot;font-size:2em;font-weight:900;margin:2px 0&quot;>🧠 Brainrush!</div>'">
    <h1 class="join-title">Join Live Game</h1>
@@ -1134,6 +1252,14 @@ function form(err, canReclaim){
   </div>`;
  updateCustPreview();
  checkPinConfig(savedPin);
+ if(up.get('auto') === '1' && up.get('name') && !err && !window._autoDone){
+  window._autoDone = true;
+  setTimeout(()=>{
+   const ni = document.getElementById('n');
+   if(ni) ni.value = up.get('name').slice(0, 16);
+   join();
+  }, 260);
+ }
 }
 
 const COLORS = ['#ffffff','#ff6b6b','#ffd166','#7bed9f','#70a1ff','#ff9ff3','#a29bfe','#ffa502','#2ed573','#1e90ff'];
@@ -1171,32 +1297,36 @@ try{
 async function join(reclaim){
   const pEl = document.getElementById('p');
   pin = pEl ? pEl.value.trim() : (pin || '');
-  lastName = (document.getElementById('n')||{}).value || '';
+  lastName = (document.getElementById('n')||{}).value || lastName || '';
   const ct = ((document.getElementById('ctagCustom')||{}).value || ctag || '').slice(0,14);
-  const r = await post('/api/join', {pin, name:lastName, avatar, av_hat:avHat, av_ring:avRing, team, color:nameColor, ctag:ct, reclaim:!!reclaim});
+  const hostKey = (HOSTCTL && !HOSTCTL.missing && (!HOSTCTL.pin || String(HOSTCTL.pin) === String(pin))) ? HOSTCTL.host : '';
+  const r = await post('/api/join', {pin, name:lastName, avatar, av_hat:avHat, av_ring:avRing, team, color:nameColor, ctag:ct, reclaim:!!reclaim, host:hostKey});
   if(!r._httpOk) return form(r.error, r.can_reclaim);
   pid = r.pid;
+  savePlayerSession({pin, pid});
   try{
-   localStorage.setItem('brainrush_session', JSON.stringify({pin, pid}));
    localStorage.setItem('brainrush_cust', JSON.stringify({avatar, av_hat:avHat, av_ring:avRing, color:nameColor, ctag:ct}));
   }catch(e){}
   unlockAudio();
-  poll(); setInterval(poll,600);
+  poll();
+  if(!window._pollTimer) window._pollTimer = setInterval(poll, 600);
 }
 
 async function tryReconnect(){
  try{
-  const raw = localStorage.getItem('brainrush_session');
-  if(!raw) return form();
-  const s = JSON.parse(raw);
-  if(!s.pin || !s.pid) return form();
-  if(urlPin && urlPin !== s.pin) return form();
+  const s = readPlayerSession();
+  if(!s || !s.pin || !s.pid) return form();
+  if(urlPin && String(urlPin) !== String(s.pin)) return form();
+  const up = new URLSearchParams(location.search);
+  const wantName = (up.get('auto') === '1' && up.get('name')) ? up.get('name').trim().toLowerCase() : '';
   const r = await fetch(`/api/state?pin=${s.pin}&pid=${s.pid}`);
   if(!r.ok) return form();
   const st = await r.json();
+  if(wantName && st && st.me && String(st.me.name||'').toLowerCase() !== wantName) return form();
   if(st && (st.me || st.pending) && st.phase !== 'final'){
    pin = s.pin; pid = s.pid; S = st; pollStamp = performance.now();
-   render(); setInterval(poll, 600);
+   showChat(); updateHostCtl(); render();
+   if(!window._pollTimer) window._pollTimer = setInterval(poll, 600);
    return;
   }
  }catch(e){}
@@ -1241,8 +1371,7 @@ function speakQuestion(){
  }catch(e){}
 }
 function toggleStandings(){
- standOpen = !standOpen;
- updHud();
+ openStandings();
 }
 
 function isThinkLocked(){
@@ -1659,20 +1788,10 @@ function updHud(){
  }
  const sb = document.getElementById('standBtn');
  const sd = document.getElementById('standDrawer');
- const showStand = !!(m && S.top3 && S.top3.length && !S.hide_board && S.phase && S.phase !== 'lobby' && S.phase !== 'final');
+ const showStand = !!(m && m.name && S.profiles_enabled && (!S.hide_board || S.phase === 'final') && S.phase);
  if(sb) sb.style.display = showStand ? 'inline-flex' : 'none';
- if(sd){
-  if(showStand && standOpen){
-   sd.classList.add('open');
-   const medals = ['🥇','🥈','🥉'];
-   const isPct = S.scoring_mode === 'percent';
-   sd.innerHTML = `<div style="font-size:.76em;font-weight:900;text-transform:uppercase;letter-spacing:.06em;color:var(--gold);margin-bottom:4px">🏆 Live Standings</div>` +
-    S.top3.map((r, i) => `<div class="stand-row"><span>${medals[i]||'•'} ${esc(r.avatar||'')} ${esc(r.name)}</span><span style="color:var(--gold)">${isPct ? `${r.pct??0}% · ${r.score} pts` : `${r.score} pts (${r.pct??0}%)`}</span></div>`).join('') +
-    `<div class="stand-row me"><span>👤 You (#${m.rank||'—'})</span><span style="color:var(--gold)">${isPct ? `${m.pct??0}% · ${m.score} pts` : `${m.score} pts · ${m.pct??0}%`}</span></div>`;
-  } else {
-   sd.classList.remove('open');
-  }
- }
+ if(!showStand){ const ov = document.getElementById('ov'); if(ov) ov.style.display = 'none'; }
+ if(sd) sd.classList.remove('open');
  updTimerBar();
 }
 
@@ -1830,13 +1949,287 @@ function caseResultPhone(m){
  return `<div class="chip-row"><span class="qnum">Slide ${S.index+1} of ${S.total}</span></div>${S.question?`<div class="q-card" style="margin:6px 0"><p class="q-stem" style="font-size:1rem">${esc(S.question)}</p></div>`:''}${body}${outcomeAndShiftHtml(m)}${partFooter}${reactBar()}`;
 }
 
+// --- #4: Interactive Standings & Head-to-Head Player Profiles ---
+function closeOv(){ const el = document.getElementById('ov'); if(el) el.style.display = 'none'; }
+function showOv(html){
+ const cd = document.getElementById('ovCard'), el = document.getElementById('ov');
+ if(cd) cd.innerHTML = html;
+ if(el) el.style.display = 'flex';
+}
+function canViewProfiles(){
+ return !!(S && S.profiles_enabled && (!S.hide_board || S.phase === 'final'));
+}
+async function openStandings(){
+ if(!canViewProfiles()) return;
+ const r = await fetch(`/api/standings?pin=${encodeURIComponent(pin)}&pid=${encodeURIComponent(pid)}`);
+ if(!r.ok) return;
+ const d = await r.json(), meName = (S && S.me && S.me.name) || '';
+ const isPct = S.scoring_mode === 'percent';
+ showOv(`<h2>🏆 Standings</h2><div style="text-align:center;font-size:.84em;opacity:.8;margin-bottom:8px">Tap any player for head-to-head stats</div>` +
+  (d.rows || []).map(x => `<div class="strow ${x.name===meName?'me':''}" data-n="${esc(x.name)}" onclick="openProfile(this.dataset.n)"><b>#${x.rank}</b><span class="nm">${esc((x.team_emoji?x.team_emoji+' ':'')+(x.avatar?x.avatar+' ':'')+x.name)}</span><span style="font-weight:800;color:var(--gold)">${isPct ? `${x.pct??0}% · ${x.score}` : x.score}</span></div>`).join('') +
+  (d.total > (d.rows||[]).length ? `<div style="opacity:.7;padding:8px;text-align:center">…and ${d.total - d.rows.length} more</div>` : '') +
+  `<div class="ov-btns"><button class="x" onclick="closeOv()">Close</button></div>`);
+}
+async function openProfile(name){
+ if(!canViewProfiles()) return;
+ const r = await fetch(`/api/profile?pin=${encodeURIComponent(pin)}&pid=${encodeURIComponent(pid)}&name=${encodeURIComponent(name)}`);
+ if(!r.ok){ showOv(`<h2>Player unavailable</h2><div class="ov-btns"><button class="x" onclick="closeOv()">Close</button></div>`); return; }
+ const d = await r.json();
+ let gap = '';
+ if(d.is_me) gap = `<div class="gapbox">⭐ That's you!</div>`;
+ else if(S.scoring_mode === 'survey') gap = '';
+ else if(d.gap > 0) gap = `<div class="gapbox">🎯 You're <b>${d.gap} pts</b> behind${d.answers_to_catch ? `<br><small style="opacity:.88">About ${d.answers_to_catch} correct answer${d.answers_to_catch>1?'s':''} at your pace to pass them</small>` : ''}</div>`;
+ else if(d.gap < 0) gap = `<div class="gapbox">👑 You're <b>${-d.gap} pts</b> ahead of them</div>`;
+ else gap = `<div class="gapbox">🤝 Tied with you!</div>`;
+ const spd = d.avg_time != null ? `${d.avg_time}s avg` + (d.fastest != null ? ` (best ${d.fastest}s)` : '') : 'No answers yet';
+ const mine = (!d.is_me && d.my_avg_time != null && d.avg_time != null)
+  ? `<div class="stat"><span>Your speed</span><b>${d.my_avg_time}s avg ${d.my_avg_time < d.avg_time ? "(you're faster)" : d.my_avg_time > d.avg_time ? "(they're faster)" : '(tied)'}</b></div>` : '';
+ showOv(`<h2>${esc((d.team_emoji?d.team_emoji+' ':'')+(d.avatar?d.avatar+' ':'')+d.name)}</h2>
+  ${d.title?`<div style="text-align:center;margin-bottom:6px"><span class="title-badge">${esc(d.title)}</span></div>`:''}
+  <div class="stat"><span>Rank</span><b>#${d.rank} of ${d.total_players}</b></div>
+  <div class="stat"><span>Points</span><b>${d.score} (${d.pct ?? 0}%)</b></div>
+  <div class="stat"><span>Speed</span><b>${spd}</b></div>${mine}
+  <div class="stat"><span>Correct</span><b>${d.correct}/${d.answered}</b></div>
+  <div class="stat"><span>Streak</span><b>🔥 ${d.streak}${d.max_streak > d.streak ? ` (best ${d.max_streak})` : ''}</b></div>
+  ${gap}
+  <div class="ov-btns"><button class="x sec" onclick="openStandings()">← Standings</button><button class="x" onclick="closeOv()">Close</button></div>`);
+}
+
+// --- #1: Tags (\Name & \Host), Replies, Reactions & Host Megaphone Banner ---
+function escRx(x){ return x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
+function fmtText(x){
+ let t = esc(x.text);
+ (x.tags || []).forEach(n => {
+  t = t.replace(new RegExp('\\\\' + escRx(esc(n)) + '(?![A-Za-z0-9])', 'gi'), m => `<span class="tag">${m.replace(/^\\\\/, '@')}</span>`);
+ });
+ return t;
+}
+function iTagged(x){
+ const me = (S && S.me && S.me.name || '').toLowerCase();
+ return !!me && String(x.name || '').toLowerCase() !== me && (x.tags || []).some(t => String(t).toLowerCase() === me);
+}
+let tagTimer = null;
+function tagSuggest(){
+ const inp = document.getElementById('chatIn'), box = document.getElementById('tagSug');
+ if(!inp || !box) return;
+ const upto = inp.value.slice(0, inp.selectionStart == null ? inp.value.length : inp.selectionStart);
+ const m = /\\([A-Za-z0-9' .-]{0,24})$/.exec(upto);
+ if(!m){ box.style.display = 'none'; return; }
+ clearTimeout(tagTimer);
+ tagTimer = setTimeout(async()=>{
+  const r = await fetch(`/api/names?pin=${encodeURIComponent(pin)}&q=${encodeURIComponent(m[1].trim())}`);
+  if(!r.ok) return;
+  const d = await r.json();
+  box.innerHTML = (d.names || []).map(n => `<span data-n="${esc(n)}" onclick="pickTag(this.dataset.n)">${n==='Host'?'😎 ':''}${esc(n)}</span>`).join('');
+  box.style.display = (d.names && d.names.length) ? 'flex' : 'none';
+ }, 120);
+}
+function pickTag(name){
+ const inp = document.getElementById('chatIn');
+ if(!inp) return;
+ const pos = inp.selectionStart == null ? inp.value.length : inp.selectionStart;
+ const before = inp.value.slice(0, pos), after = inp.value.slice(pos);
+ const idx = before.search(/\\[A-Za-z0-9' .-]{0,24}$/);
+ if(idx >= 0) inp.value = before.slice(0, idx) + '\\' + name + ' ' + after;
+ const box = document.getElementById('tagSug');
+ if(box) box.style.display = 'none';
+ inp.focus();
+}
+
+// --- #5: Floating Host Controls ("🎮 Play too" tab only) ---
+let hcAsHost = false;
+async function hcPost(path, body){
+ if(!HOSTCTL || HOSTCTL.missing) return;
+ try{
+  await fetch(path, {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(Object.assign({pin: HOSTCTL.pin || pin, host: HOSTCTL.host}, body || {}))});
+ }catch(e){}
+ poll();
+}
+function hcNext(){ hcPost('/api/next'); }
+function hcCtl(action, sec){ hcPost('/api/host_ctl', {action, sec: sec || 10}); }
+function hcToggleAs(){
+ hcAsHost = !hcAsHost;
+ const i = document.getElementById('chatIn');
+ if(i) i.placeholder = hcAsHost ? '😎 Broadcast as Host…' : 'Say something… type \\ to tag someone';
+ const pn = document.getElementById('hcPn');
+ if(pn) pn.dataset.sig = '';
+ updateHostCtl();
+}
+async function hcBroadcast(){
+ const inp = document.getElementById('hcBcastIn');
+ if(!inp || !inp.value.trim() || !HOSTCTL || HOSTCTL.missing) return;
+ const txt = inp.value.trim();
+ inp.value = '';
+ await hcPost('/api/host_chat', {text: txt});
+}
+function updateHostCtl(){
+ const bar = document.getElementById('hcBar');
+ if(!bar) return;
+ if(!HOSTCTL || !pid || !S || !S.phase){ bar.style.display = 'none'; return; }
+ bar.style.display = 'block';
+ const pn = document.getElementById('hcPn');
+ if(HOSTCTL.missing || (HOSTCTL.pin && String(pin) !== String(HOSTCTL.pin))){
+  pn.innerHTML = '<div style="font-size:.86em;line-height:1.4">Host controls unavailable here. On the host screen, click <b>🎮 Play too</b> again so this tab gets the host key.</div>';
+  return;
+ }
+ const ph = S.phase;
+ let lbl = 'Next ➔';
+ if(ph === 'lobby') lbl = '🚀 Start Game';
+ else if(ph === 'icebreaker') lbl = '🚀 Start Question 1';
+ else if(ph === 'intro') lbl = '⏭️ Skip Intro';
+ else if(ph === 'question') lbl = '⏭️ Skip Timer / Show Results';
+ else if(ph === 'results') lbl = S.is_last ? '🏆 Show Final Podium' : '🏆 Show Leaderboard';
+ else if(ph === 'board') lbl = (S.index + 1 >= S.total) ? '🏆 Final Podium' : '➡️ Next Question';
+ const sig = [ph, lbl, !!S.paused, !!S.auto, !!S.chat_enabled, hcAsHost].join('|');
+ if(pn.dataset.sig === sig) return;
+ pn.dataset.sig = sig;
+ pn.innerHTML = (ph !== 'final' ? `<button type="button" class="main" onclick="hcNext()">${lbl}</button>` : '<div style="text-align:center;font-weight:850;padding:4px 0">🎉 Game Complete</div>')
+  + (ph === 'question' ? `<button type="button" onclick="hcCtl('pause')">${S.paused ? '▶️ Resume' : '⏸️ Pause'}</button><button type="button" onclick="hcCtl('add_time',10)">➕ +10s</button>` : '')
+  + `<button type="button" class="${S.auto ? 'on' : ''}" onclick="hcCtl('toggle_auto')">🔁 Auto-advance: ${S.auto ? 'ON' : 'Off'}</button>`
+  + `<button type="button" class="${S.chat_enabled ? 'on' : ''}" onclick="hcCtl('toggle_chat')">💬 Student Chat: ${S.chat_enabled ? 'ON' : 'Off'}</button>`
+  + (S.chat_enabled
+     ? `<button type="button" class="${hcAsHost ? 'on' : ''}" onclick="hcToggleAs()">😎 Chat as Host: ${hcAsHost ? 'ON' : 'Off'}</button>`
+     : `<div class="hc-bcast"><input id="hcBcastIn" maxlength="120" placeholder="📢 Broadcast banner…" onkeydown="if(event.key==='Enter')hcBroadcast()"><button type="button" onclick="hcBroadcast()">Send</button></div>`);
+}
+
+// --- #1: Live Chat Drawer ---
+let chatSeen = 0, chatUnread = 0, chatInit = false, replyTo = null, reactOpen = null, bannerT = null;
+const CHAT_REACTS = ['👍','😂','❤️','🔥','😮','👏'];
+function toggleChat(){
+ const c = document.getElementById('chat');
+ if(!c) return;
+ c.classList.toggle('open');
+ const cr = document.getElementById('chatCaret');
+ if(cr) cr.textContent = c.classList.contains('open') ? '▾' : '▴';
+ if(c.classList.contains('open')){
+  chatUnread = 0;
+  showChat(true);
+  const m = document.getElementById('chatMsgs');
+  if(m) m.scrollTop = m.scrollHeight;
+ }
+}
+function startReply(id){
+ const m = (S.chat || []).find(x => x.id === id);
+ if(!m) return;
+ replyTo = {id: m.id, name: m.host ? 'Host' : m.name};
+ updateReplyBar();
+ const inp = document.getElementById('chatIn');
+ if(inp) inp.focus();
+}
+function clearReply(){ replyTo = null; updateReplyBar(); }
+function updateReplyBar(){
+ const el = document.getElementById('replyBar');
+ if(!el) return;
+ el.innerHTML = replyTo ? `↩ Replying to <b>${esc(replyTo.name)}</b> <a onclick="clearReply()" style="cursor:pointer;margin-left:4px">✖</a>` : '';
+ el.style.display = replyTo ? 'block' : 'none';
+}
+function toggleReactPick(id){ reactOpen = (reactOpen === id) ? null : id; showChat(true); }
+async function reactMsg(id, emoji){
+ reactOpen = null;
+ await post('/api/chat_react', {pin, pid, msg: id, emoji});
+ poll();
+}
+function showHostBanner(m){
+ const b = document.getElementById('hostBanner');
+ if(!b) return;
+ b.innerHTML = `<div class="hb-h">😎 HOST ANNOUNCEMENT</div><div>${esc(m.text)}</div>`;
+ b.style.display = 'block';
+ try{ navigator.vibrate && navigator.vibrate(120); }catch(e){}
+ clearTimeout(bannerT);
+ bannerT = setTimeout(()=>{ b.style.display = 'none'; }, 7000);
+}
+function showTagBanner(m){
+ const b = document.getElementById('hostBanner');
+ if(!b) return;
+ b.innerHTML = `<div class="hb-h">📣 ${esc(m.name)} TAGGED YOU</div><div>${esc(m.text)}</div>`;
+ b.style.display = 'block';
+ try{ navigator.vibrate && navigator.vibrate([80, 60, 80]); }catch(e){}
+ clearTimeout(bannerT);
+ bannerT = setTimeout(()=>{ b.style.display = 'none'; }, 6000);
+}
+function msgHtml(x){
+ const rq = x.reply ? `<div class="rq">↩ ${esc((x.reply.host?'😎 ':'')+x.reply.name)}: ${esc(x.reply.text)}</div>` : '';
+ const clickable = canViewProfiles();
+ const nm = x.host
+  ? `<b class="hostnm">😎 Host:</b>`
+  : clickable
+    ? `<b class="clickable" data-n="${esc(x.name)}" onclick="openProfile(this.dataset.n)">${esc((x.avatar?x.avatar+' ':'')+x.name)}:</b>`
+    : `<b>${esc((x.avatar?x.avatar+' ':'')+x.name)}:</b>`;
+ const chips = Object.entries(x.r || {}).map(([e,n]) => `<span class="rc ${(x.mine||[]).includes(e)?'mine':''}" onclick="reactMsg(${x.id},'${e}')">${e} ${n}</span>`).join('');
+ const pick = reactOpen === x.id ? `<div class="rpick">${CHAT_REACTS.map(e => `<span onclick="reactMsg(${x.id},'${e}')">${e}</span>`).join('')}</div>` : '';
+ return `<div class="m ${x.host?'hostmsg':''} ${iTagged(x)?'tagme':''}">${rq}${nm} ${fmtText(x)} <span class="acts"><a onclick="startReply(${x.id})" title="Reply">↩</a><a onclick="toggleReactPick(${x.id})" title="React">😀</a></span>${chips?`<div class="rx">${chips}</div>`:''}${pick}</div>`;
+}
+function showChat(force){
+ const c = document.getElementById('chat');
+ if(!c || !S) return;
+ const list = Array.isArray(S.chat) ? S.chat : [];
+ const fresh = list.filter(x => x.id > chatSeen);
+ if(fresh.length){
+  chatSeen = list[list.length - 1].id;
+  if(chatInit){
+   const hm = fresh.filter(x => x.host);
+   if(hm.length) showHostBanner(hm[hm.length - 1]);
+   else if(S.chat_enabled){
+    const tm = fresh.filter(iTagged);
+    if(tm.length) showTagBanner(tm[tm.length - 1]);
+   }
+   if(S.chat_enabled && !c.classList.contains('open')){
+    chatUnread += fresh.filter(x => x.name !== (S.me && S.me.name)).length;
+   }
+  }
+ }
+ chatInit = true;
+ const enabled = !!(pid && S.chat_enabled && (S.me || S.pending));
+ if(!enabled){
+  c.style.display = 'none';
+  c.classList.remove('open');
+  document.body.classList.remove('has-chat');
+  return;
+ }
+ c.style.display = 'block';
+ document.body.classList.add('has-chat');
+ c.classList.toggle('top10', !!(S.me && S.me.rank && S.me.rank <= 10 && !S.hide_board && S.phase !== 'lobby'));
+ const open = c.classList.contains('open');
+ const dot = document.getElementById('chatDot');
+ if(dot){ dot.style.display = (chatUnread && !open) ? 'inline' : 'none'; dot.textContent = chatUnread; }
+ const lastMsg = list[list.length - 1];
+ const lastEl = document.getElementById('chatLast');
+ if(lastEl) lastEl.textContent = lastMsg ? `${lastMsg.host?'😎':(lastMsg.avatar||'')} ${lastMsg.name}: ${lastMsg.text}` : 'Live Chat';
+ if(open){
+  const box = document.getElementById('chatMsgs');
+  if(!box) return;
+  const atEnd = force || box.scrollTop + box.clientHeight >= box.scrollHeight - 30;
+  const sig = JSON.stringify(list.slice(-30).map(x => [x.id, x.r, x.mine])) + '|' + reactOpen + '|' + (canViewProfiles() ? 1 : 0);
+  if(sig !== box.dataset.sig || force){
+   box.dataset.sig = sig;
+   box.innerHTML = list.slice(-30).map(msgHtml).join('') || '<div style="opacity:.65;padding:6px 0">No messages yet — say hi!</div>';
+   if(atEnd) box.scrollTop = box.scrollHeight;
+  }
+ }
+}
+async function sendChat(){
+ const inp = document.getElementById('chatIn'), err = document.getElementById('chatErr');
+ if(!inp) return;
+ const t = inp.value.trim();
+ if(!t) return;
+ const asHost = !!(HOSTCTL && !HOSTCTL.missing && hcAsHost && (!HOSTCTL.pin || String(pin) === String(HOSTCTL.pin)));
+ const r = await fetch(asHost ? '/api/host_chat' : '/api/chat', {
+  method: 'POST',
+  headers: {'Content-Type': 'application/json'},
+  body: JSON.stringify(asHost ? {pin, host: HOSTCTL.host, text: t, reply_to: replyTo ? replyTo.id : null} : {pin, pid, text: t, reply_to: replyTo ? replyTo.id : null})
+ });
+ const j = await r.json().catch(() => ({}));
+ if(r.ok){ inp.value = ''; if(err) err.textContent = ''; clearReply(); poll(); }
+ else if(err){ err.textContent = j.error || 'Could not send'; }
+}
+
 let dead=false;
 async function poll(){
   if(dead) return;
   const r=await fetch(`/api/state?pin=${pin}&pid=${pid}`);
   if(r.status===404){
-   dead=true; try{localStorage.removeItem('brainrush_session')}catch(e){}
-   S={}; updHud();
+   dead=true; clearPlayerSession();
+   S={}; updHud(); showChat(); updateHostCtl();
    $.innerHTML=`<div class="state-card"><div class="state-icon">😴</div><div class="state-title">Session Ended</div><p class="state-sub">This game finished or the host started a new session.</p><button class="go" style="margin-top:10px" onclick="location.reload()">Join a New Game</button></div>`;
    return;
   }
@@ -1844,11 +2237,13 @@ async function poll(){
   S=await r.json();
   pollStamp = performance.now();
   if(S.kicked){
-   dead=true; try{localStorage.removeItem('brainrush_session')}catch(e){}
-   S={}; updHud();
+   dead=true; clearPlayerSession();
+   S={}; updHud(); showChat(); updateHostCtl();
    $.innerHTML=`<div class="state-card no"><div class="state-icon">🚪</div><div class="state-title">Removed from Game</div><button class="go" style="margin-top:12px" onclick="location.reload()">Back to Join</button></div>`;
    return;
   }
+  showChat();
+  updateHostCtl();
   render();
 }
 
@@ -1872,7 +2267,7 @@ function render(){
    ? `q:${S.index}:${S.qtype||''}:${S.revoted?1:0}:${S.allow_tts?1:0}:${S.consensus_step||0}:${inPrev?1:0}:${inThinkSrv?1:0}:${m.answered?1:0}:${m.ideas_sent||0}:${(m.team_split||[]).join(',')}:${m.team_consensus_my??''}:${m.team_consensus_cur??''}:${m.active_2x?1:0}:${m.active_shield?1:0}:${m.active_audience?1:0}:${m.confident?1:0}:${(m.hide||[]).join(',')}:${m.wager_pct??''}:${m.frozen?1:0}:${m.hot?(m.hot.pred===null||m.hot.pred===undefined?'n':m.hot.pred?'y':'x'):''}:${m.spectating?1:0}:${m.don?1:0}`
    : S.phase==='icebreaker' ? `ice:${S.prompt}:${m.word_sent?1:0}`
    : S.phase==='lobby' ? `lobby:${m.name}:${m.team_name}:${m.avatar}:${m.av_hat}:${m.av_ring}`
-   : JSON.stringify({...S,left:0,qtime:0,answered:0,team_board:null,preview_left:0,think_left:0,consensus_left:0,auto_left:0,intro_left:0,reactions:null,n:0,names:null,lobby:null,words:null,word_total:0});
+   : JSON.stringify({...S,left:0,qtime:0,answered:0,team_board:null,preview_left:0,think_left:0,consensus_left:0,auto_left:0,intro_left:0,reactions:null,chat:null,n:0,names:null,lobby:null,words:null,word_total:0});
 
   if(k==last){
    if(S.phase==='lobby'){
@@ -2232,7 +2627,7 @@ function render(){
     ${calibHtml}
     ${missedHtml}
    </div>` : '';
-   $.innerHTML=`${trophyHtml}${repHtml}<div class="join-links"><a class="plink" href="/play" onclick="try{localStorage.removeItem('brainrush_session')}catch(e){}">🔁 Join New Game</a><a class="plink" href="/practice">🧑‍🎓 Solo Practice</a></div>${reactBar()}`;
+   $.innerHTML=`${trophyHtml}${repHtml}<div class="join-links"><a class="plink" href="/play" onclick="clearPlayerSession()">🔁 Join New Game</a><a class="plink" href="/practice">🧑‍🎓 Solo Practice</a></div>${reactBar()}`;
   }
 }
 tryReconnect();
