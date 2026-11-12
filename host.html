@@ -74,62 +74,57 @@ body.ws-collapsed:not(.in-game) #menuWsGrp{order:-1;border-bottom:1px solid #fff
 body.ws-collapsed:not(.in-game) #menuMidSep{display:none}
 .menu-kb{font-size:.75em;opacity:.7;padding:6px 10px 4px;line-height:1.45}
 
-/* Pre-Game Setup Studio */
-.studio-hero{display:flex;align-items:center;justify-content:center;gap:16px;margin:4px auto 14px;flex-wrap:wrap}
-.logo{max-width:205px;width:60%;border-radius:16px;margin:0;display:block;box-shadow:0 8px 24px #0006;border:2px solid #ffffff30}
-.studio-tagline{text-align:left;max-width:360px}
-.studio-tagline b{display:block;font-size:1.18em;color:var(--gold);letter-spacing:-.01em}
-.studio-tagline span{font-size:.9em;opacity:.84;line-height:1.35;display:block;margin-top:2px}
-@media (max-width:640px){.studio-tagline{text-align:center}}
-
-.setup-card{max-width:860px;margin:0 auto;background:var(--glass);border:1px solid var(--border);border-radius:22px;padding:20px 22px 22px;box-shadow:0 18px 50px #0007;backdrop-filter:blur(14px)}
-.sec-tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;background:#0006;padding:6px;border-radius:14px;margin-bottom:16px;border:1px solid #fff2}
-.sec-tabs button{margin:0;padding:11px 14px;font-size:1.06em;border-radius:10px;background:transparent;color:#ffffffd9;font-weight:800;box-shadow:none;transition:background .14s}
+/* Pre-Game Setup Studio (Compact Progressive-Disclosure Card) */
+.logo{max-width:195px;width:54%;border-radius:16px;margin:4px auto 14px;display:block;box-shadow:0 8px 24px #0006;border:2px solid #ffffff30}
+.setup-card{max-width:610px;margin:0 auto;background:var(--glass);border:1px solid var(--border);border-radius:22px;padding:18px 20px 20px;box-shadow:0 18px 50px #0007;backdrop-filter:blur(14px)}
+.sec-tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;background:#0006;padding:5px;border-radius:14px;margin-bottom:14px;border:1px solid #fff2}
+.sec-tabs button{margin:0;padding:10px 14px;font-size:1.03em;border-radius:10px;background:transparent;color:#ffffffd9;font-weight:800;box-shadow:none;transition:background .14s}
 @media (max-width:480px){.sec-tabs button{font-size:.94em;padding:10px 8px;white-space:nowrap}}
 .sec-tabs button.active{background:linear-gradient(180deg,#ffe57f,#ffd54f);color:#2b0d57;box-shadow:0 4px 14px #0006}
 
-/* Visual Deck Library Picker */
-.lib-head{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:8px}
-.lib-search{flex:1;min-width:190px;padding:9px 13px;border-radius:10px;border:1px solid #ffffff30;background:#0005;color:#fff;font-size:.93em;font-weight:650;outline:none}
-.lib-search::placeholder{color:#ffffff88}
-.lib-search:focus{border-color:var(--gold);background:#0007}
-.lib-folders{display:flex;gap:5px;flex-wrap:wrap;align-items:center}
-.f-chip{margin:0;padding:5px 11px;font-size:.78em;border-radius:99px;background:#ffffff17;border:1px solid #ffffff24;color:#fffe;font-weight:750;box-shadow:none}
-.f-chip.active{background:var(--gold);color:#2b0d57;border-color:var(--gold);font-weight:850}
-.deck-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;max-height:224px;overflow-y:auto;padding:3px 2px;margin:8px 0 10px;text-align:left}
-@media (max-width:640px){.deck-grid{grid-template-columns:1fr}}
-.deck-card{background:#ffffff12;border:1.5px solid #ffffff22;border-radius:13px;padding:10px 13px;cursor:pointer;display:flex;flex-direction:column;gap:5px;transition:background .15s,border-color .15s,transform .12s;position:relative}
-.deck-card:hover{background:#ffffff20;border-color:#ffffff48;transform:translateY(-1px)}
-.deck-card.selected{background:linear-gradient(135deg,#26890c55,#1b5e2088);border-color:#7dff6b;box-shadow:0 0 0 1px #7dff6b66,0 6px 18px #0005}
-.deck-card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
-.deck-title{font-weight:800;font-size:.96em;line-height:1.28;color:#fff}
-.deck-cnt{background:#0006;color:var(--gold);padding:2px 8px;border-radius:99px;font-size:.76em;font-weight:850;white-space:nowrap;font-variant-numeric:tabular-nums}
-.deck-meta{display:flex;align-items:center;gap:5px;flex-wrap:wrap;font-size:.74em;opacity:.82}
-.deck-tag{background:#ffffff1c;padding:1px 7px;border-radius:99px;font-weight:700}
-.quiz-row{display:flex;gap:8px;justify-content:center;align-items:center;flex-wrap:wrap;width:100%}
-.quiz-row select{flex:1;min-width:210px;font-size:1em;padding:10px 14px;border-radius:10px;border:0;background:#fff;color:#2b0d57;font-weight:750;cursor:pointer}
-.sel-actions{display:none;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-top:8px;padding:8px 12px;border-radius:11px;background:#7dff6b1c;border:1px solid #7dff6b66;font-size:.86em;text-align:left}
-.sel-actions.show{display:flex}
-.sel-actions b{color:#b9ffaf}
+/* Single Deck Dropdown + Contextual Quick-Menu */
+.quiz-row{display:flex;gap:8px;justify-content:center;align-items:center;flex-wrap:wrap;width:100%;margin-bottom:12px}
+.quiz-row select{flex:1;min-width:190px;font-size:1em;padding:11px 14px;border-radius:11px;border:0;background:#fff;color:#2b0d57;font-weight:800;cursor:pointer}
+.deck-more-wrap{position:relative;display:none}
+.deck-more-wrap.show{display:inline-block}
+.deck-more-btn{margin:0;padding:10px 13px;font-size:.95em;border-radius:11px;background:#ffffff24;border:1px solid var(--border);color:#fff;font-weight:900;box-shadow:none;line-height:1}
+.deck-more-btn:hover{background:#ffffff36}
+.deck-more-drop{position:absolute;top:calc(100% + 6px);right:0;min-width:185px;background:var(--card);border:1px solid var(--border-hi);border-radius:13px;padding:6px;box-shadow:0 14px 36px #000c;display:none;flex-direction:column;gap:2px;z-index:30;text-align:left}
+.deck-more-drop.open{display:flex;animation:pop .14s ease-out}
+.deck-more-drop button{margin:0;padding:8px 11px;font-size:.86em;border-radius:8px;background:transparent;color:#fff;font-weight:700;text-align:left;box-shadow:none;display:flex;align-items:center;gap:7px;white-space:nowrap}
+.deck-more-drop button:hover{background:#fff2}
 
-/* 1-Click Experience Presets */
-.preset-bar{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:12px;padding:9px 12px;border-radius:12px;background:#0004;border:1px solid #fff2;text-align:left}
-.preset-lbl{font-size:.76em;text-transform:uppercase;letter-spacing:.8px;font-weight:850;color:var(--gold);margin-right:4px;white-space:nowrap}
-.preset-btn{margin:0;padding:6px 12px;font-size:.82em;border-radius:99px;background:#ffffff18;border:1px solid #ffffff28;color:#fff;font-weight:750;box-shadow:none}
-.preset-btn:hover{background:#ffffff2b}
-.preset-btn.active{background:linear-gradient(180deg,#ffe57f,#ffd54f);color:#2b0d57;border-color:#ffe57f;font-weight:850}
+/* Collapsible Setup Accordions & Nested Sub-Accordions */
+.acc-list{display:flex;flex-direction:column;gap:8px;text-align:left}
+details.acc-box{background:#ffffff13;border:1px solid #ffffff26;border-radius:13px;overflow:hidden;transition:border-color .15s,background .15s}
+details.acc-box:hover{border-color:#ffffff40}
+details.acc-box[open]{background:#0d031f80;border-color:#ffdf5d77}
+details.acc-box>summary{list-style:none;cursor:pointer;padding:11px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;font-weight:800;font-size:.95em;user-select:none}
+details.acc-box>summary::-webkit-details-marker{display:none}
+.acc-right{display:inline-flex;align-items:center;gap:8px;font-size:.84em;flex-shrink:0}
+.acc-badge{padding:2px 10px;border-radius:99px;background:#ffffff1f;color:#fffd;font-weight:750;font-variant-numeric:tabular-nums;white-space:nowrap}
+.acc-badge.on{background:#26890c;color:#fff;font-weight:850}
+.acc-caret{opacity:.8;transition:transform .18s;display:inline-block;font-size:1.12em;line-height:1}
+details.acc-box[open]>summary .acc-caret{transform:rotate(180deg);color:var(--gold);opacity:1}
+.acc-body{padding:12px 14px 14px;border-top:1px solid #ffffff1c}
 
-.quick-bar{display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;margin-top:12px;padding-top:12px;border-top:1px solid #fff2;font-weight:750;font-size:.98em}
+details.sub-acc{background:#ffffff0d;border:1px solid #ffffff1f;border-radius:10px;margin-top:8px;overflow:hidden}
+details.sub-acc:first-child{margin-top:0}
+details.sub-acc[open]{background:#00000038;border-color:#ffffff36}
+details.sub-acc>summary{list-style:none;cursor:pointer;padding:9px 12px;display:flex;align-items:center;justify-content:space-between;gap:8px;font-weight:750;font-size:.88em;color:#fff;user-select:none}
+details.sub-acc>summary::-webkit-details-marker{display:none}
+.sub-caret{opacity:.78;transition:transform .16s;display:inline-block;font-size:1.08em;line-height:1}
+details.sub-acc[open]>summary .sub-caret{transform:rotate(180deg);color:var(--gold);opacity:1}
+.sub-body{padding:10px 12px 12px;border-top:1px solid #ffffff17}
+
+.preset-sel-row{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:8px;padding:8px 11px;border-radius:10px;background:#0004;border:1px solid #ffffff1f;font-size:.88em;font-weight:800}
+.preset-sel-row select{flex:1;min-width:190px;padding:7px 10px;border-radius:8px;border:0;background:#fff;color:#2b0d57;font-weight:750;font-size:.96em;cursor:pointer}
+
+.quick-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;font-weight:750;font-size:.94em}
 .quick-bar label{display:inline-flex;align-items:center;gap:6px}
-.quick-bar input[type=number],.adv-panel input[type=number]{width:60px;font-size:1em;padding:6px 8px;border-radius:8px;border:0;text-align:center;font-weight:800;color:#2b0d57;background:#fff;font-variant-numeric:tabular-nums}
-.drawer-toggle{background:#ffffff22;border:1px solid #ffffff33;box-shadow:none;font-size:.9em;padding:7px 14px;margin:0;border-radius:99px;font-weight:750;display:inline-flex;align-items:center;gap:6px}
-.drawer-toggle.open{background:#ffffff38;border-color:var(--gold)}
-.adv-panel{display:none;margin-top:14px;padding-top:14px;border-top:1px solid #fff2;text-align:left}
-.adv-panel.open{display:block;animation:slideUp .2s ease-out}
-.adv-sec-title{font-size:.78em;text-transform:uppercase;letter-spacing:.9px;color:var(--gold);font-weight:850;margin:10px 0 7px;display:flex;align-items:center;justify-content:space-between;gap:8px}
-.adv-sec-title:first-child{margin-top:0}
-.mode-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:7px;margin-bottom:10px}
-.mode-pill{display:flex;align-items:center;gap:8px;background:#ffffff12;border:1px solid #ffffff22;padding:8px 11px;border-radius:10px;cursor:pointer;font-size:.9em;font-weight:650;user-select:none;transition:background .15s,border-color .15s}
+.quick-bar input[type=number],.acc-body input[type=number]{width:58px;font-size:.98em;padding:6px 7px;border-radius:8px;border:0;text-align:center;font-weight:800;color:#2b0d57;background:#fff;font-variant-numeric:tabular-nums}
+.mode-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(175px,1fr));gap:7px}
+.mode-pill{display:flex;align-items:center;gap:8px;background:#ffffff12;border:1px solid #ffffff22;padding:8px 10px;border-radius:9px;cursor:pointer;font-size:.88em;font-weight:650;user-select:none;transition:background .15s,border-color .15s}
 .mode-pill:hover{background:#ffffff22}
 .mode-pill:has(input:checked){background:#26890c77;border-color:#7dff6b}
 .mode-pill input[type=checkbox]{width:16px;height:16px;margin:0;cursor:pointer;accent-color:#26890c}
@@ -202,13 +197,9 @@ a.join-link:hover{background:#ffffff2b;text-decoration:underline}
 .host-dock .disc-ctrl{margin-top:0}
 @media (max-width:760px){.host-dock{border-radius:18px;bottom:8px;padding:7px 10px}}
 
-/* Split-Pane Live Visual Quiz/Case Builder */
-.modal.modal-builder{max-width:1140px;padding:20px 24px}
-.builder-split{display:grid;grid-template-columns:minmax(0,1.18fr) minmax(300px,.92fr);gap:18px;align-items:start}
-@media (max-width:880px){.builder-split{grid-template-columns:1fr}}
-.builder-right{background:#0005;border:1px solid #fff3;border-radius:14px;padding:12px 14px;position:sticky;top:0;max-height:70vh;display:flex;flex-direction:column}
-.builder-prev-hd{display:flex;align-items:center;justify-content:space-between;gap:8px;padding-bottom:8px;border-bottom:1px solid #fff2;margin-bottom:8px;font-size:.84em;font-weight:850;color:var(--gold);text-transform:uppercase;letter-spacing:.7px}
-.builder-prev-list{overflow-y:auto;display:flex;flex-direction:column;gap:8px;padding-right:2px;flex:1}
+/* Quiz/Case Builder Modal & Collapsible Slide Preview */
+.modal.modal-builder{max-width:680px;padding:20px 24px}
+.builder-prev-list{max-height:280px;overflow-y:auto;display:flex;flex-direction:column;gap:8px;padding-right:2px}
 .bp-card{background:#ffffff12;border:1px solid #ffffff24;border-radius:11px;padding:9px 11px;font-size:.86em;line-height:1.35}
 .bp-top{display:flex;align-items:center;justify-content:space-between;gap:6px;flex-wrap:wrap;margin-bottom:4px;font-size:.82em}
 .bp-num{font-weight:900;color:var(--gold)}
@@ -408,7 +399,7 @@ body.is-audience .aud-only{display:block}
 .standby-card{max-width:740px;margin:7vh auto 0;background:var(--glass);border:2px solid var(--border-hi);border-radius:26px;padding:40px 32px;box-shadow:0 20px 56px #0008;backdrop-filter:blur(14px)}
 .standby-card h1{font-size:2.7em;margin:.2em 0 .15em}
 .standby-pill{display:inline-block;background:#ffdf5d;color:#2b0d57;font-weight:900;padding:6px 18px;border-radius:99px;font-size:.95em;letter-spacing:.4px}
-.pres-bar{margin-top:14px;padding:11px 14px;border-radius:12px;background:#0005;border:1px solid #fff3;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;text-align:left}
+.pres-bar{margin:0 0 10px;padding:10px 12px;border-radius:11px;background:#0005;border:1px solid #fff3;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;text-align:left}
 .pres-bar.active{background:#0d3b26aa;border-color:#7dff6b99}
 .pres-bar button{margin:0;padding:8px 15px;font-size:.9em;border-radius:99px;box-shadow:none}
 body.is-presenter-console #app{max-width:1240px;text-align:left;padding:16px 20px 34px}
@@ -474,7 +465,7 @@ body.is-presenter-console #metaBar,body.is-presenter-console #lateJoin,body.is-p
   <button type="button" class="ws-stor" onclick="openStorage()" title="View storage status & cloud setup">💾 <span id="wsStorState">Local</span></button>
  </div>
  <nav class="ws-nav" id="wsNav">
-  <button type="button" class="ws-pill" onclick="openQuizModal()"><span class="quiz-only">➕ Builder</span><span class="case-only">📖 Case Builder</span></button>
+  <button type="button" class="ws-pill" onclick="openQuizModal()"><span class="quiz-only"><span style="color:var(--gold);font-weight:900">+</span> Builder</span><span class="case-only">📖 Case Builder</span></button>
   <button type="button" class="ws-pill quiz-only" onclick="openHomework()">📚 Homework</button>
   <button type="button" class="ws-pill quiz-only" onclick="openProgress()">👥 Progress</button>
   <button type="button" class="ws-pill" onclick="openHistory()">📈 History</button>
@@ -564,73 +555,86 @@ body.is-presenter-console #metaBar,body.is-presenter-console #lateJoin,body.is-p
 <div class="modal-bg" id="quizModal">
  <div class="modal modal-builder">
   <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px">
-   <h2 style="margin:0;text-align:left"><span class="quiz-modal-only">➕ Quiz Studio — Create, Edit &amp; Export</span><span class="case-modal-only">📖 Case Study Studio — Create, Edit &amp; Export</span></h2>
+   <h2 style="margin:0;text-align:left"><span class="quiz-modal-only">➕ Quiz Builder</span><span class="case-modal-only">📖 Case Study Builder</span></h2>
    <button type="button" class="close-x" style="float:none" onclick="closeQuizModal()">✕ Close</button>
   </div>
-  <div style="background:#0005;border:1px solid #fff2;padding:10px 12px;border-radius:12px;margin-bottom:14px;display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-   <span style="font-size:.88em;font-weight:750;opacity:.9"><span class="quiz-modal-only">📂 Existing Quiz:</span><span class="case-modal-only">📂 Existing Case:</span></span>
-   <select id="editQuizSel" style="flex:1;min-width:170px;padding:7px 10px;border-radius:8px;border:0;font-weight:700;color:#2b0d57"></select>
-   <button type="button" class="btn-sm" style="margin:0" onclick="loadExistingQuiz()">✏️ Load</button>
-   <button type="button" class="btn-sm" style="margin:0" onclick="duplicateSelectedQuiz()">⧉ Duplicate</button>
-   <button type="button" class="btn-sm" style="margin:0" onclick="exportSelectedQuiz()">📥 Export .json</button>
-   <button type="button" class="btn-sm" style="margin:0;background:#e21b3c99" onclick="deleteSelectedQuiz()">🗑️ Delete</button>
-  </div>
-  <div class="builder-split">
-   <div class="builder-left">
-    <label><b><span class="quiz-modal-only">Quiz Title:</span><span class="case-modal-only">Case Study Title:</span></b></label>
-    <input id="customTitle" placeholder="e.g. Chapter 9 Review">
-    <div class="row2"><div><label><b>Folder (optional):</b></label><input id="customFolder" list="folderList" placeholder="e.g. Math"><datalist id="folderList"></datalist></div>
-    <div><label><b>Tags (comma separated):</b></label><input id="customTags" placeholder="unit 3, fractions"></div></div>
-    <label><b><span class="quiz-modal-only">Upload .json or .csv file (optional):</span><span class="case-modal-only">Upload .json case file (optional):</span></b></label>
-    <input type="file" id="customFile" accept=".json,.csv" onchange="loadCustomFile(event)">
-    <div class="qtools">
-     <button type="button" class="btn-sm quiz-modal-only" style="margin:0" onclick="toggleTool('import')">📋 Import table / Google Sheet</button>
-     <button type="button" class="btn-sm" style="margin:0" onclick="toggleTool('ai')"><span class="quiz-modal-only">✨ AI draft</span><span class="case-modal-only">✨ Draft Case from Scenario / Topic</span></button>
+  <label><b><span class="quiz-modal-only">Quiz Title:</span><span class="case-modal-only">Case Study Title:</span></b></label>
+  <input id="customTitle" placeholder="e.g. Chapter 9 Review">
+  <div style="display:flex;flex-direction:column;gap:7px;margin-bottom:12px">
+   <details class="sub-acc" id="builderExistAcc">
+    <summary><span><span class="quiz-modal-only">📂 Load, Duplicate, Export or Delete Existing Quiz</span><span class="case-modal-only">📂 Load, Duplicate, Export or Delete Existing Case</span></span><span class="sub-caret">▾</span></summary>
+    <div class="sub-body" style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+     <select id="editQuizSel" style="flex:1;min-width:170px;padding:7px 10px;border-radius:8px;border:0;font-weight:700;color:#2b0d57"></select>
+     <button type="button" class="btn-sm" style="margin:0" onclick="loadExistingQuiz()">✏️ Load</button>
+     <button type="button" class="btn-sm" style="margin:0" onclick="duplicateSelectedQuiz()">⧉ Duplicate</button>
+     <button type="button" class="btn-sm" style="margin:0" onclick="exportSelectedQuiz()">📥 Export</button>
+     <button type="button" class="btn-sm" style="margin:0;background:#e21b3c99" onclick="deleteSelectedQuiz()">🗑️ Delete</button>
     </div>
-    <div class="case-tpl-bar case-modal-only">
-     <span style="font-size:.82em;font-weight:800;opacity:.85;align-self:center">Insert slide:</span>
-     <button type="button" onclick="insertCaseTpl('info')">+ 📖 Chapter / Debrief</button>
-     <button type="button" onclick="insertCaseTpl('poll')">+ 🗳️ Decision Poll</button>
-     <button type="button" onclick="insertCaseTpl('rank')">+ 📊 Priority Ranking</button>
-     <button type="button" onclick="insertCaseTpl('open')">+ ✍️ Open Response</button>
-     <button type="button" onclick="insertCaseTpl('mc')">+ ✅ Concept Check</button>
+   </details>
+   <details class="sub-acc" id="builderMetaAcc">
+    <summary><span>🏷️ Folder, Tags &amp; File Upload <span class="quiz-modal-only">(.json / .csv)</span><span class="case-modal-only">(.json)</span></span><span class="sub-caret">▾</span></summary>
+    <div class="sub-body">
+     <div class="row2">
+      <div><label style="font-size:.86em"><b>Folder (optional):</b></label><input id="customFolder" list="folderList" placeholder="e.g. Math" style="margin:4px 0 8px"><datalist id="folderList"></datalist></div>
+      <div><label style="font-size:.86em"><b>Tags (comma separated):</b></label><input id="customTags" placeholder="unit 3, fractions" style="margin:4px 0 8px"></div>
+     </div>
+     <label style="font-size:.86em"><b><span class="quiz-modal-only">Upload .json or .csv file:</span><span class="case-modal-only">Upload .json case file:</span></b></label>
+     <input type="file" id="customFile" accept=".json,.csv" onchange="loadCustomFile(event)" style="margin:4px 0 0">
     </div>
-    <div class="toolbox quiz-modal-only" id="toolImport" style="display:none">
-     <p>Copy rows from Excel or Google Sheets (or a CSV) and paste below. Use a header row such as <code>Question, A, B, C, D, Correct, Topic, Quote, Note</code> (Correct can be A–D, 1–4 or the answer text). Or paste a Google Sheet link that is shared as "Anyone with the link can view".</p>
-     <div style="display:flex;gap:6px"><input id="sheetUrl" placeholder="https://docs.google.com/spreadsheets/d/…" style="margin:0"><button type="button" class="btn-sm" style="margin:0;white-space:nowrap" onclick="importSheet()">Fetch sheet</button></div>
-     <textarea id="tableText" placeholder="Paste table here (tab or comma separated)"></textarea>
+   </details>
+   <details class="sub-acc quiz-modal-only" id="toolImport">
+    <summary><span>📋 Import from Spreadsheet or Google Sheet</span><span class="sub-caret">▾</span></summary>
+    <div class="sub-body">
+     <p style="margin:0 0 6px;font-size:.85em;opacity:.85">Paste rows from Excel/Sheets or a shared Google Sheet link (<code>Question, A, B, C, D, Correct, Topic, Quote, Note</code>).</p>
+     <div style="display:flex;gap:6px;margin-bottom:6px"><input id="sheetUrl" placeholder="https://docs.google.com/spreadsheets/d/…" style="margin:0"><button type="button" class="btn-sm" style="margin:0;white-space:nowrap" onclick="importSheet()">Fetch sheet</button></div>
+     <textarea id="tableText" placeholder="Paste table here (tab or comma separated)" style="min-height:80px;margin:0 0 6px"></textarea>
      <button type="button" class="btn-sm" style="margin:0" onclick="importTable()">Convert to questions ↓</button>
     </div>
-    <div class="toolbox" id="toolAi" style="display:none">
-     <p><span class="quiz-modal-only">Paste a paragraph or article and get a draft quiz to review and edit.</span><span class="case-modal-only">Enter a topic or paste case notes to generate chapters, stakeholder roles, ethical-lens decision polls, a priority ranking, and a peer-voted open prompt.</span> <span id="aiHint"></span></p>
-     <div class="row2"><input id="aiTopic" placeholder="Topic (e.g. Whistleblowing &amp; Safety)" style="margin:0"><input id="aiCount" type="number" min="1" max="25" value="8" style="margin:0"></div>
-     <label class="quiz-modal-only" style="display:flex;align-items:center;gap:6px;margin:4px 0 8px;font-size:.9em;font-weight:700"><input id="aiCase" type="checkbox" style="width:auto;margin:0"> 📖 Build as a Case Study</label>
-     <textarea id="aiText" placeholder="Paste text or case notes here…"></textarea>
+   </details>
+   <details class="sub-acc" id="toolAi" ontoggle="if(this.open)updateAcctLabels()">
+    <summary><span><span class="quiz-modal-only">✨ Generate AI Quiz Draft</span><span class="case-modal-only">✨ Generate Case Draft from Scenario / Topic</span></span><span class="sub-caret">▾</span></summary>
+    <div class="sub-body">
+     <p style="margin:0 0 6px;font-size:.85em;opacity:.85"><span class="quiz-modal-only">Paste an article or notes to generate a draft quiz.</span><span class="case-modal-only">Enter a topic or scenario notes to draft chapters, stakeholder roles, ethical-lens polls, ranking &amp; open response.</span> <span id="aiHint"></span></p>
+     <div class="row2" style="margin-bottom:6px"><input id="aiTopic" placeholder="Topic (e.g. Whistleblowing &amp; Safety)" style="margin:0"><input id="aiCount" type="number" min="1" max="25" value="8" style="margin:0"></div>
+     <label class="quiz-modal-only" style="display:flex;align-items:center;gap:6px;margin:2px 0 6px;font-size:.86em;font-weight:700"><input id="aiCase" type="checkbox" style="width:auto;margin:0"> 📖 Build as a Case Study</label>
+     <textarea id="aiText" placeholder="Paste text or case notes here…" style="min-height:80px;margin:0 0 6px"></textarea>
      <button type="button" class="btn-sm" style="margin:0" onclick="aiGenerate()">✨ Generate draft ↓</button> <span id="aiMsg" style="font-weight:700"></span>
     </div>
-    <label><b><span class="quiz-modal-only">Questions (one per blank-line block, mark correct answer with *):</span><span class="case-modal-only">Case slides (one slide per blank-line block):</span></b></label>
-    <div class="quiz-modal-only" style="font-size:.79em;opacity:.78;margin:2px 0 6px">Extras: <code>Type: tf</code> (<code>*True</code>/<code>*False</code>), <code>Type: text</code>, <code>Type: order</code>, <code>Type: zoom</code> + <code>Image:</code>, per-slide <code>Time: 45</code>, <code>Topic:</code>, <code>Note:</code>, <code>Quote:</code>.</div>
-    <div class="case-modal-only" style="font-size:.79em;opacity:.82;margin:2px 0 6px">Slide types: <code>Type: info</code> (<code>Body:</code>, <code>Role: Title | Brief</code>), <code>Type: poll</code> (<code>Option :: Ethical lens</code>), <code>Type: rank</code>, <code>Type: open</code>, or MCQ (<code>*</code>). Add <code>Time: 90</code>, <code>Exhibit: url | caption</code>, <code>Topic:</code>, or private <code>Note:</code>.</div>
-    <textarea id="customText" oninput="renderBuilderPreview()" placeholder="What is the capital of France?
+   </details>
+  </div>
+  <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:4px">
+   <label style="margin:0"><b><span class="quiz-modal-only">Questions (blank-line separated, mark correct with *):</span><span class="case-modal-only">Case Slides (one slide per blank-line block):</span></b></label>
+   <select id="caseTplSel" class="case-modal-only" onchange="if(this.value){insertCaseTpl(this.value);this.value=''}" style="padding:5px 10px;border-radius:8px;border:0;background:#fff;color:#2b0d57;font-weight:800;font-size:.85em;cursor:pointer">
+    <option value="">➕ Insert Slide Template…</option>
+    <option value="info">📖 Chapter / Narrative Slide</option>
+    <option value="poll">🗳️ Ethical-Lens Decision Poll</option>
+    <option value="rank">📊 Priority Ranking Slide</option>
+    <option value="open">✍️ Open Response + Peer Vote</option>
+    <option value="mc">✅ Scored Concept Check (MCQ)</option>
+   </select>
+  </div>
+  <details class="sub-acc" style="margin:0 0 6px">
+   <summary style="padding:6px 10px;font-size:.8em;opacity:.88"><span>💡 Formatting &amp; Per-Slide Options Cheat Sheet</span><span class="sub-caret">▾</span></summary>
+   <div class="sub-body" style="font-size:.8em;line-height:1.45;opacity:.9">
+    <div class="quiz-modal-only">Question types: <code>Type: tf</code> (<code>*True</code>/<code>*False</code>), <code>Type: text</code>, <code>Type: order</code>, <code>Type: zoom</code> + <code>Image: url</code>. Optional lines: <code>Time: 45</code>, <code>Topic:</code>, private <code>Note:</code>, <code>Quote:</code>.</div>
+    <div class="case-modal-only">Slide types: <code>Type: info</code> (<code>Body:</code>, <code>Role: Title | Brief</code>), <code>Type: poll</code> (<code>Option :: Ethical lens</code>), <code>Type: rank</code>, <code>Type: open</code>, or MCQ (<code>*</code>). Optional lines: <code>Time: 90</code>, <code>Exhibit: url | caption</code>, <code>Topic:</code>, private <code>Note:</code>.</div>
+   </div>
+  </details>
+  <textarea id="customText" oninput="renderBuilderPreview()" placeholder="What is the capital of France?
 Berlin
 *Paris
 Madrid
 Rome
 Image: https://example.com/paris.jpg
 Quote: Paris has been the capital since 987 CE."></textarea>
-    <div id="customErr" style="color:#ff9b9b;font-weight:700;margin-bottom:8px"></div>
-    <div style="display:flex;justify-content:flex-end;gap:10px">
-     <button type="button" class="btn-sec" style="margin:0" onclick="closeQuizModal()">Cancel</button>
-     <button type="button" style="margin:0;font-size:1.05em;padding:10px 24px" onclick="saveCustomQuiz()"><span class="quiz-modal-only">💾 Save Quiz</span><span class="case-modal-only">💾 Save Case Study</span></button>
-    </div>
-   </div>
-   <div class="builder-right">
-    <div class="builder-prev-hd">
-     <span>👁️ Live Slide Preview</span>
-     <span id="builderCountBadge" style="background:#ffffff1f;color:#fff;padding:2px 9px;border-radius:99px;font-size:.88em">0 slides</span>
-    </div>
-    <div class="builder-prev-list" id="builderPreview"></div>
-   </div>
+  <details class="sub-acc" id="builderPrevAcc" style="margin:0 0 10px">
+   <summary><span>👁️ Live Slide Preview</span><span class="acc-right"><span class="acc-badge" id="builderCountBadge">0 slides</span><span class="sub-caret">▾</span></span></summary>
+   <div class="sub-body"><div class="builder-prev-list" id="builderPreview"></div></div>
+  </details>
+  <div id="customErr" style="color:#ff9b9b;font-weight:700;margin-bottom:8px"></div>
+  <div style="display:flex;justify-content:flex-end;gap:10px">
+   <button type="button" class="btn-sec" style="margin:0" onclick="closeQuizModal()">Cancel</button>
+   <button type="button" style="margin:0;font-size:1.05em;padding:10px 24px" onclick="saveCustomQuiz()"><span class="quiz-modal-only">💾 Save Quiz</span><span class="case-modal-only">💾 Save Case Study</span></button>
   </div>
  </div>
 </div>
@@ -683,146 +687,185 @@ Quote: Paris has been the capital since 987 CE."></textarea>
  </div>
 </div>
 <div id="app">
- <div class="studio-hero">
-  <img class="logo" src="/logo.jpg" alt="Brainrush!">
-  <div class="studio-tagline">
-   <b>⚡ Classroom Game Show &amp; Case Studio</b>
-   <span>Pick a deck below, customize timers &amp; game-show twists, and launch on projector or dual screen.</span>
-  </div>
- </div>
+ <img class="logo" src="/logo.jpg" alt="Brainrush!">
  <div class="setup-card">
   <div class="sec-tabs" id="secTabs">
    <button type="button" id="tabQuiz" class="active" onclick="setHostSection('quiz')">🎮 Quizzes</button>
    <button type="button" id="tabCase" onclick="setHostSection('case')">📖 Case Studies</button>
   </div>
-  <div class="lib-head">
-   <input id="deckSearch" class="lib-search" type="search" placeholder="🔍 Filter library by title, folder, or #tag…" oninput="renderDeckGrid()">
-   <div class="lib-folders" id="deckFolders"></div>
-  </div>
-  <div class="deck-grid" id="deckGrid"></div>
   <div class="quiz-row">
    <select id="quizSel" onchange="syncQuizCount()"><option value="">— Select a Quiz —</option></select>
-   <button type="button" class="btn-sec quiz-only" style="margin:0;padding:10px 15px;font-size:.94em;border-radius:10px" onclick="openQuizModal('quiz')">➕ New / Upload Quiz</button>
-   <button type="button" class="btn-sec case-only" style="margin:0;padding:10px 15px;font-size:.94em;border-radius:10px" onclick="openQuizModal('case')">📖 + New / Edit Case</button>
-  </div>
-  <div class="sel-actions" id="selDeckActions">
-   <span>✅ Ready: <b id="selDeckTitle">—</b></span>
-   <span style="display:inline-flex;gap:6px;flex-wrap:wrap">
-    <button type="button" class="btn-sm" style="margin:0;padding:5px 11px;font-size:.82em" onclick="editSelectedDeck()">✏️ Edit</button>
-    <button type="button" class="btn-sm" style="margin:0;padding:5px 11px;font-size:.82em" onclick="dupSelectedDeck()">⧉ Duplicate</button>
-    <button type="button" class="btn-sm quiz-only" style="margin:0;padding:5px 11px;font-size:.82em" onclick="hwSelectedDeck()">📚 Assign Homework</button>
-   </span>
+   <button type="button" class="btn-sec quiz-only" style="margin:0;padding:10px 14px;font-size:.92em;border-radius:11px;white-space:nowrap" onclick="openQuizModal('quiz')"><span style="color:var(--gold);font-weight:900">+</span> New / Edit</button>
+   <button type="button" class="btn-sec case-only" style="margin:0;padding:10px 14px;font-size:.92em;border-radius:11px;white-space:nowrap" onclick="openQuizModal('case')"><span style="color:var(--gold);font-weight:900">+</span> New / Edit</button>
+   <div class="deck-more-wrap" id="deckMoreWrap">
+    <button type="button" class="deck-more-btn" onclick="toggleDeckMore(event)" title="Actions for selected deck">⋯</button>
+    <div class="deck-more-drop" id="deckMoreDrop" onclick="event.stopPropagation()">
+     <button type="button" onclick="closeDeckMore();editSelectedDeck()">✏️ Edit Selected</button>
+     <button type="button" onclick="closeDeckMore();dupSelectedDeck()">⧉ Duplicate</button>
+     <button type="button" class="quiz-only" onclick="closeDeckMore();hwSelectedDeck()">📚 Assign Homework</button>
+    </div>
+   </div>
   </div>
   <div id="caseHint" style="display:none"></div>
-  <div class="case-spec case-only">
-   <b>📖 Case Study Session (<span id="cSlideCnt">—</span> slides in chapter order)</b><br>
-   Uses only Case Study tools: untimed <b>Chapters</b> &amp; phone <b>Case File</b>, private <b>Stakeholder Roles</b>, <b>Ethical-Lens Polls</b> (<span id="cSpecPoll">45</span>s + <span id="cSpecDisc">60</span>s debate timer), <b>Priority Rankings</b> (<span id="cSpecRank">60</span>s), <b>Anonymous Open Responses</b> with peer voting (<span id="cSpecOpen">120</span>s), and optional <b>Concept Checks</b> (<span id="cSpecCheck">20</span>s).
-  </div>
-  <div class="case-timers case-only" oninput="syncCaseTimerSpec()">
-   <div class="case-timers-hd">
-    <span>⏱️ Case Study Timers (Editable Pre-Game &amp; Live)</span>
-    <small>Per-slide override: add <code>Time: 90</code> in editor</small>
-   </div>
-   <div class="case-timers-grid">
-    <label class="ct-item" title="Voting timer on Decision Poll slides"><span>🗳️ Poll</span><span><input id="cPollTime" type="number" min="5" max="900" value="45">s</span></label>
-    <label class="ct-item" title="Default debate / discussion countdown timer"><span>🎤 Discuss</span><span><input id="cDiscussTime" type="number" min="5" max="900" value="60">s</span></label>
-    <label class="ct-item" title="Timer for Priority Ranking slides"><span>📊 Ranking</span><span><input id="cRankTime" type="number" min="5" max="900" value="60">s</span></label>
-    <label class="ct-item" title="Writing timer for Open Response slides"><span>✍️ Writing</span><span><input id="cOpenTime" type="number" min="5" max="900" value="120">s</span></label>
-    <label class="ct-item" title="Timer for scored Concept-Check MCQs"><span>✅ Check</span><span><input id="cTime" type="number" min="5" max="900" value="20">s</span></label>
-    <label class="ct-item" title="Seconds to read the prompt before choices open (0 = instant)"><span>👀 Preview</span><span><input id="cPrevTime" type="number" min="0" max="120" value="5">s</span></label>
-   </div>
-  </div>
-  <div class="preset-bar quiz-only" id="presetBar">
-   <span class="preset-lbl">✨ Vibe Preset:</span>
-   <button type="button" class="preset-btn active" data-preset="clean" onclick="applyPreset('clean')" title="Clean quiz with no extra modifiers">✨ Standard</button>
-   <button type="button" class="preset-btn" data-preset="quick" onclick="applyPreset('quick')" title="Shuffled order for fast comprehension checks">⚡ Quick Check</button>
-   <button type="button" class="preset-btn" data-preset="classic" onclick="applyPreset('classic')" title="Shuffled + Redemption Round + Tiebreaker">🎉 Classic Class</button>
-   <button type="button" class="preset-btn" data-preset="gameshow" onclick="applyPreset('gameshow')" title="Mystery Wheel, Final Boss Wager, Hot Seat, Snowballs, Redemption & Tiebreaker">🎪 Full Game Show</button>
-   <button type="button" class="preset-btn" data-preset="teams" onclick="applyPreset('teams')" title="4-Team Mode + Team Battle discussions + Word Cloud Warm-Up">🤝 Team Showdown</button>
-  </div>
-  <div class="quick-bar">
-   <label class="quiz-only">📝 Questions: <input id="qCount" type="number" min="1" max="200" value="" placeholder="—"> <span id="qMax" style="opacity:.8">/ —</span></label>
-   <label class="quiz-only" title="Seconds players get to answer each question">⏱️ Timer: <input id="qTime" type="number" min="5" max="900" value="15"><span style="opacity:.8">s</span></label>
-   <label class="quiz-only" title="Reading preview before answer buttons open (set 0 for instant)">👀 Preview: <input id="qPrevTime" type="number" min="0" max="120" value="5"><span style="opacity:.8">s</span></label>
-   <button type="button" class="drawer-toggle" id="advBtn" onclick="toggleAdvPanel()">⚙️ Options &amp; Twists <span id="optSummary" style="background:#26890c;padding:2px 8px;border-radius:99px;font-size:.85em">0 active</span> <span id="advCaret">▾</span></button>
-  </div>
-  <div class="adv-panel" id="advPanel" onchange="updateOptSummary()">
-   <div class="adv-sec-title quiz-only"><span>🎪 Game-Show Twists &amp; Power-Ups</span><a href="#" onclick="openGuide('setup');return false" style="color:#ffdf5d;text-transform:none;letter-spacing:0;font-weight:700">📖 What do these do?</a></div>
-   <div class="mode-grid quiz-only">
-    <label class="mode-pill quiz-only"><input id="qWheel" type="checkbox"> 🎡 Mystery Wheel</label>
-    <label class="mode-pill quiz-only"><input id="qWager" type="checkbox"> 🎰 Final Boss Wager</label>
-    <label class="mode-pill quiz-only"><input id="qRedemp" type="checkbox"> 🔄 Redemption Round</label>
-    <label class="mode-pill quiz-only"><input id="qHot" type="checkbox"> 🔥 Hot Seat Rounds</label>
-    <label class="mode-pill quiz-only"><input id="qDbl" type="checkbox"> 💥 Double or Nothing</label>
-    <label class="mode-pill quiz-only"><input id="qSabotage" type="checkbox"> ⛄ Snowballs</label>
-    <label class="mode-pill quiz-only"><input id="qSteal" type="checkbox"> 🕵️ Steal / Swap Power-Up</label>
-    <label class="mode-pill quiz-only"><input id="qTie" type="checkbox"> ⚔️ Sudden-Death Tiebreaker</label>
-   </div>
-   <div class="adv-sec-title"><span class="quiz-only">⏱️ Pacing, Teams &amp; Warm-Up</span><span class="case-only">📖 Case Study Facilitation &amp; Teams</span><a href="#" class="case-only" onclick="openGuide('case');return false" style="color:#ffdf5d;text-transform:none;letter-spacing:0;font-weight:700">📖 How Case Studies work</a></div>
-   <div class="mode-grid">
-    <label class="mode-pill quiz-only"><input id="qShuffle" type="checkbox"> 🎲 Randomize Order</label>
-    <label class="mode-pill quiz-only"><input id="qSpeed" type="checkbox" onchange="document.getElementById('speedTimeRow').style.display=this.checked?'flex':'none';updateOptSummary()"> ⚡ Speed Round (5 rapid Qs)</label>
-    <label class="mode-pill quiz-only"><input id="qAuto" type="checkbox" onchange="document.getElementById('autoTimeRow').style.display=this.checked?'flex':'none';updateOptSummary()"> ⏭️ Auto-Advance</label>
-    <label class="mode-pill"><input id="qTeams" type="checkbox" onchange="if(!this.checked){document.getElementById('qBattle').checked=false;document.getElementById('battleTimeRow').style.display='none'}"> <span class="quiz-only">🛡️ Team Mode</span><span class="case-only">🛡️ Discussion Teams</span></label>
-    <label class="mode-pill quiz-only"><input id="qBattle" type="checkbox" onchange="if(this.checked){document.getElementById('qTeams').checked=true}document.getElementById('battleTimeRow').style.display=this.checked?'flex':'none';updateOptSummary()"> 🤝 Team Battle (every 5th Q)</label>
-    <label class="mode-pill"><input id="qIce" type="checkbox" onchange="document.getElementById('icePromptRow').style.display=this.checked?'block':'none';updateOptSummary()"> 💭 Word Cloud Warm-Up</label>
-   </div>
-   <div id="autoTimeRow" class="mode-trow quiz-only">
-    <span>⏭️ Auto-Advance Wait Timer (Results &amp; Standings):</span>
-    <label><input id="qAutoTime" type="number" min="2" max="120" value="7"> s</label>
-   </div>
-   <div id="battleTimeRow" class="mode-trow quiz-only">
-    <span>🤝 Team Battle Discussion Preview Timer:</span>
-    <label><input id="qTeamTime" type="number" min="0" max="180" value="12"> s</label>
-   </div>
-   <div id="speedTimeRow" class="mode-trow quiz-only">
-    <span>⚡ Speed Round Question Timer:</span>
-    <label><input id="qSpeedTime" type="number" min="3" max="120" value="5"> s</label>
-   </div>
-   <div id="icePromptRow" style="display:none;margin-bottom:12px">
-    <label style="display:block;font-size:.86em;font-weight:700;opacity:.85;margin-bottom:4px">💭 Warm-Up Question:</label>
-    <input id="qIcePrompt" type="text" maxlength="120" value="In one word, how are you feeling about today's quiz?" placeholder="e.g. In one word, what's your favorite food?" style="width:100%;box-sizing:border-box;padding:9px 12px;border-radius:8px;border:0;font-size:.96em;font-weight:600;color:#2b0d57">
-   </div>
-   <div class="adv-sec-title"><span>🏫 Classroom, Roster &amp; Remote</span></div>
-   <div class="mode-grid">
-    <label class="mode-pill"><input id="qMod" type="checkbox"> 🛡️ Approve Names First</label>
-    <label class="mode-pill"><input id="qRosterOn" type="checkbox" onchange="document.getElementById('rosterRow').style.display=this.checked?'block':'none';updateOptSummary()"> 👥 Class Roster</label>
-    <label class="mode-pill"><input id="qRemote" type="checkbox" onchange="onRemoteOptChange()"> 📱 Phone Host Remote</label>
-   </div>
-   <div id="rosterRow" style="display:none;margin-bottom:12px">
-    <label style="display:block;font-size:.86em;font-weight:700;opacity:.85;margin-bottom:4px">👥 Class Roster (one name per line; students pick their name from a list instead of typing one. Saved on this computer.)</label>
-    <textarea id="qRoster" oninput="saveSetup()" placeholder="Ava Johnson&#10;Ben Carter&#10;..." style="width:100%;box-sizing:border-box;padding:9px 12px;border-radius:8px;border:0;color:#2b0d57"></textarea>
-   </div>
-   <div class="remote-box" id="advRemoteBox">
-    <div class="remote-head">
-     <span>📱 Phone Host Remote</span>
-     <span class="remote-status" id="advRemoteStatus">Off — check 📱 Phone Host Remote or copy link to pair</span>
-    </div>
-    <div class="remote-url-row">
-     <input id="advRemoteUrl" type="text" readonly onclick="this.select()" value="">
-     <button type="button" id="advRemoteCopyBtn" onclick="copyRemoteUrl('adv')">📋 Copy</button>
-     <button type="button" onclick="toggleAdvRemoteQr()">🔳 QR</button>
-     <a id="advRemoteOpenLink" class="rbtn" href="/remote" target="_blank" onclick="activateRemoteForOpen()">↗ Open</a>
-    </div>
-    <div class="remote-qr-box" id="advRemoteQrBox">
-     <img id="advRemoteQrImg" style="width:150px;height:150px;border-radius:10px;background:#fff" alt="Remote QR">
-     <div style="flex:1;min-width:180px;font-size:.85em;opacity:.88;line-height:1.45">
-      <b>Scan on your phone</b> to choose &amp; launch a Quiz or Case Study from anywhere in the room, then advance slides, pause timers &amp; manage bots live!
+  <div class="acc-list">
+   <details class="acc-box" id="accTimers">
+    <summary>
+     <span>⏱️ Timers &amp; Pacing</span>
+     <span class="acc-right"><span class="acc-badge" id="timerSummary">15s · 5s preview</span><span class="acc-caret">▾</span></span>
+    </summary>
+    <div class="acc-body">
+     <div class="quick-bar quiz-only" oninput="updateTimerSummary()">
+      <label>📝 Questions: <input id="qCount" type="number" min="1" max="200" value="" placeholder="—"> <span id="qMax" style="opacity:.8">/ —</span></label>
+      <label title="Seconds players get to answer each question">⏱️ Timer: <input id="qTime" type="number" min="5" max="900" value="15"><span style="opacity:.8">s</span></label>
+      <label title="Reading preview before answer buttons open (set 0 for instant)">👀 Preview: <input id="qPrevTime" type="number" min="0" max="120" value="5"><span style="opacity:.8">s</span></label>
+     </div>
+     <div class="case-only" oninput="syncCaseTimerSpec();updateTimerSummary()">
+      <div class="case-timers-grid">
+       <label class="ct-item" title="Voting timer on Decision Poll slides"><span>🗳️ Poll</span><span><input id="cPollTime" type="number" min="5" max="900" value="45">s</span></label>
+       <label class="ct-item" title="Default debate / discussion countdown timer"><span>🎤 Discuss</span><span><input id="cDiscussTime" type="number" min="5" max="900" value="60">s</span></label>
+       <label class="ct-item" title="Timer for Priority Ranking slides"><span>📊 Ranking</span><span><input id="cRankTime" type="number" min="5" max="900" value="60">s</span></label>
+       <label class="ct-item" title="Writing timer for Open Response slides"><span>✍️ Writing</span><span><input id="cOpenTime" type="number" min="5" max="900" value="120">s</span></label>
+       <label class="ct-item" title="Timer for scored Concept-Check MCQs"><span>✅ Check</span><span><input id="cTime" type="number" min="5" max="900" value="20">s</span></label>
+       <label class="ct-item" title="Seconds to read the prompt before choices open (0 = instant)"><span>👀 Preview</span><span><input id="cPrevTime" type="number" min="0" max="120" value="5">s</span></label>
+      </div>
+      <details class="sub-acc" style="margin-top:8px">
+       <summary><span>📖 Slide Flow &amp; Per-Slide Override Info</span><span class="sub-caret">▾</span></summary>
+       <div class="sub-body" style="font-size:.84em;line-height:1.45;opacity:.92">
+        <b><span id="cSlideCnt">—</span> slides in chapter order:</b> untimed <b>Chapters</b> &amp; phone <b>Case File</b>, private <b>Stakeholder Roles</b>, <b>Ethical-Lens Polls</b> (<span id="cSpecPoll">45</span>s + <span id="cSpecDisc">60</span>s debate), <b>Priority Rankings</b> (<span id="cSpecRank">60</span>s), <b>Open Responses</b> (<span id="cSpecOpen">120</span>s), and <b>Concept Checks</b> (<span id="cSpecCheck">20</span>s). Add <code>Time: 90</code> on any slide in the builder to override.
+       </div>
+      </details>
      </div>
     </div>
-   </div>
-   <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">
-    <div><label style="display:block;font-size:.8em;font-weight:700;opacity:.85">🖼️ Logo image URL (optional)</label><input id="qLogo" oninput="saveSetup()" placeholder="https://…/logo.png" style="width:100%;box-sizing:border-box;padding:8px 10px;border-radius:8px;border:0;color:#2b0d57"></div>
-    <div><label style="display:block;font-size:.8em;font-weight:700;opacity:.85">🌄 Host background image URL</label><input id="qBg" oninput="saveSetup()" placeholder="https://…/bg.jpg" style="width:100%;box-sizing:border-box;padding:8px 10px;border-radius:8px;border:0;color:#2b0d57"></div>
-   </div>
-   <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;padding-top:8px;border-top:1px solid #fff2;font-weight:700;font-size:.95em">
-    <label style="display:inline-flex;align-items:center;gap:8px"><span class="quiz-only">🤖 Phantom Bot Players:</span><span class="case-only">🤖 Simulated Participants:</span> <input id="qBots" type="number" min="0" max="30" value="0" oninput="updateOptSummary()"></label>
-    <span class="quiz-only" style="opacity:.68;font-size:.88em">Bots answer &amp; compete alongside live players</span>
-    <span class="case-only" style="opacity:.68;font-size:.88em">Bots vote in polls, rank priorities &amp; submit sample arguments</span>
-   </div>
+   </details>
+
+   <details class="acc-box" id="accOptions">
+    <summary>
+     <span><span class="quiz-only">⚙️ Options &amp; Twists</span><span class="case-only">⚙️ Session Options</span></span>
+     <span class="acc-right"><span class="acc-badge" id="optSummary">0 active</span><span class="acc-caret">▾</span></span>
+    </summary>
+    <div class="acc-body" id="advPanel" onchange="updateOptSummary()">
+     <div class="preset-sel-row quiz-only">
+      <span>✨ Vibe Preset:</span>
+      <select id="presetSel" onchange="if(this.value!=='custom')applyPreset(this.value)">
+       <option value="clean">✨ Standard (No Modifiers)</option>
+       <option value="quick">⚡ Quick Check (Randomized)</option>
+       <option value="classic">🎉 Classic Class (Redemption + Tiebreaker)</option>
+       <option value="gameshow">🎪 Full Game Show (Wheel, Wager, Hot Seat, Snowballs)</option>
+       <option value="teams">🤝 Team Showdown (4 Teams + Battles + Warm-Up)</option>
+       <option value="custom" hidden>🎛️ Custom Combination</option>
+      </select>
+     </div>
+
+     <details class="sub-acc quiz-only" id="subTwists">
+      <summary>
+       <span>🎪 Game-Show Twists &amp; Power-Ups</span>
+       <span class="acc-right"><span class="acc-badge" id="twistSubCnt">0 on</span><span class="sub-caret">▾</span></span>
+      </summary>
+      <div class="sub-body">
+       <div class="mode-grid">
+        <label class="mode-pill"><input id="qWheel" type="checkbox"> 🎡 Mystery Wheel</label>
+        <label class="mode-pill"><input id="qWager" type="checkbox"> 🎰 Final Boss Wager</label>
+        <label class="mode-pill"><input id="qRedemp" type="checkbox"> 🔄 Redemption Round</label>
+        <label class="mode-pill"><input id="qHot" type="checkbox"> 🔥 Hot Seat Rounds</label>
+        <label class="mode-pill"><input id="qDbl" type="checkbox"> 💥 Double or Nothing</label>
+        <label class="mode-pill"><input id="qSabotage" type="checkbox"> ⛄ Snowballs</label>
+        <label class="mode-pill"><input id="qSteal" type="checkbox"> 🕵️ Steal / Swap Power-Up</label>
+        <label class="mode-pill"><input id="qTie" type="checkbox"> ⚔️ Sudden-Death Tiebreaker</label>
+       </div>
+       <div style="text-align:right;margin-top:6px;font-size:.8em"><a href="#" onclick="openGuide('setup');return false" style="color:#ffdf5d;font-weight:700">📖 What do these twists do?</a></div>
+      </div>
+     </details>
+
+     <details class="sub-acc" id="subTeams">
+      <summary>
+       <span><span class="quiz-only">🤝 Pacing, Teams &amp; Warm-Up</span><span class="case-only">🤝 Discussion Teams &amp; Warm-Up</span></span>
+       <span class="acc-right"><span class="acc-badge" id="teamSubCnt">0 on</span><span class="sub-caret">▾</span></span>
+      </summary>
+      <div class="sub-body">
+       <div class="mode-grid">
+        <label class="mode-pill quiz-only"><input id="qShuffle" type="checkbox"> 🎲 Randomize Order</label>
+        <label class="mode-pill quiz-only"><input id="qSpeed" type="checkbox" onchange="document.getElementById('speedTimeRow').style.display=this.checked?'flex':'none';updateOptSummary()"> ⚡ Speed Round (5 rapid Qs)</label>
+        <label class="mode-pill quiz-only"><input id="qAuto" type="checkbox" onchange="document.getElementById('autoTimeRow').style.display=this.checked?'flex':'none';updateOptSummary()"> ⏭️ Auto-Advance</label>
+        <label class="mode-pill"><input id="qTeams" type="checkbox" onchange="if(!this.checked){document.getElementById('qBattle').checked=false;document.getElementById('battleTimeRow').style.display='none'}"> <span class="quiz-only">🛡️ Team Mode</span><span class="case-only">🛡️ Discussion Teams</span></label>
+        <label class="mode-pill quiz-only"><input id="qBattle" type="checkbox" onchange="if(this.checked){document.getElementById('qTeams').checked=true}document.getElementById('battleTimeRow').style.display=this.checked?'flex':'none';updateOptSummary()"> 🤝 Team Battle (every 5th Q)</label>
+        <label class="mode-pill"><input id="qIce" type="checkbox" onchange="document.getElementById('icePromptRow').style.display=this.checked?'block':'none';updateOptSummary()"> 💭 Word Cloud Warm-Up</label>
+       </div>
+       <div id="autoTimeRow" class="mode-trow quiz-only" style="margin-top:8px;margin-bottom:0">
+        <span>⏭️ Auto-Advance Wait Timer:</span>
+        <label><input id="qAutoTime" type="number" min="2" max="120" value="7"> s</label>
+       </div>
+       <div id="battleTimeRow" class="mode-trow quiz-only" style="margin-top:8px;margin-bottom:0">
+        <span>🤝 Team Battle Discussion Preview:</span>
+        <label><input id="qTeamTime" type="number" min="0" max="180" value="12"> s</label>
+       </div>
+       <div id="speedTimeRow" class="mode-trow quiz-only" style="margin-top:8px;margin-bottom:0">
+        <span>⚡ Speed Round Question Timer:</span>
+        <label><input id="qSpeedTime" type="number" min="3" max="120" value="5"> s</label>
+       </div>
+       <div id="icePromptRow" style="display:none;margin-top:8px">
+        <label style="display:block;font-size:.84em;font-weight:700;opacity:.85;margin-bottom:4px">💭 Warm-Up Question:</label>
+        <input id="qIcePrompt" type="text" maxlength="120" value="In one word, how are you feeling about today's quiz?" placeholder="e.g. In one word, what's your favorite food?" style="width:100%;box-sizing:border-box;padding:8px 11px;border-radius:8px;border:0;font-size:.92em;font-weight:600;color:#2b0d57">
+       </div>
+      </div>
+     </details>
+
+     <details class="sub-acc" id="subClass">
+      <summary>
+       <span>🏫 Roster, Bots &amp; Custom Branding</span>
+       <span class="acc-right"><span class="acc-badge" id="classSubCnt">0 on</span><span class="sub-caret">▾</span></span>
+      </summary>
+      <div class="sub-body">
+       <div class="mode-grid" style="margin-bottom:8px">
+        <label class="mode-pill"><input id="qMod" type="checkbox"> 🛡️ Approve Names First</label>
+        <label class="mode-pill"><input id="qRosterOn" type="checkbox" onchange="document.getElementById('rosterRow').style.display=this.checked?'block':'none';updateOptSummary()"> 👥 Class Roster</label>
+       </div>
+       <div id="rosterRow" style="display:none;margin-bottom:8px">
+        <label style="display:block;font-size:.82em;font-weight:700;opacity:.85;margin-bottom:4px">👥 Class Roster (one name per line):</label>
+        <textarea id="qRoster" oninput="saveSetup()" placeholder="Ava Johnson&#10;Ben Carter&#10;..." style="width:100%;box-sizing:border-box;padding:8px 11px;border-radius:8px;border:0;color:#2b0d57"></textarea>
+       </div>
+       <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;padding:7px 10px;background:#0004;border-radius:9px;margin-bottom:8px;font-weight:700;font-size:.9em">
+        <label style="display:inline-flex;align-items:center;gap:8px"><span class="quiz-only">🤖 Phantom Bot Players:</span><span class="case-only">🤖 Simulated Participants:</span> <input id="qBots" type="number" min="0" max="30" value="0" oninput="updateOptSummary()"></label>
+        <span style="opacity:.68;font-size:.84em"><span class="quiz-only">Compete alongside live players</span><span class="case-only">Vote, rank &amp; submit sample arguments</span></span>
+       </div>
+       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        <div><label style="display:block;font-size:.78em;font-weight:700;opacity:.85;margin-bottom:3px">🖼️ Custom Logo URL</label><input id="qLogo" oninput="saveSetup()" placeholder="https://…/logo.png" style="width:100%;box-sizing:border-box;padding:7px 10px;border-radius:8px;border:0;color:#2b0d57"></div>
+        <div><label style="display:block;font-size:.78em;font-weight:700;opacity:.85;margin-bottom:3px">🌄 Background Image URL</label><input id="qBg" oninput="saveSetup()" placeholder="https://…/bg.jpg" style="width:100%;box-sizing:border-box;padding:7px 10px;border-radius:8px;border:0;color:#2b0d57"></div>
+       </div>
+      </div>
+     </details>
+    </div>
+   </details>
+
+   <details class="acc-box" id="accScreens">
+    <summary>
+     <span>📽️ Dual Screen &amp; Phone Remote</span>
+     <span class="acc-right"><span class="acc-badge" id="screenSummary">Standard</span><span class="acc-caret">▾</span></span>
+    </summary>
+    <div class="acc-body" onchange="updateOptSummary()">
+     <div id="presSetupBar" class="pres-bar"></div>
+     <label class="mode-pill" style="margin-bottom:8px"><input id="qRemote" type="checkbox" onchange="onRemoteOptChange()"> 📱 Pair Phone as Host Remote</label>
+     <div class="remote-box" id="advRemoteBox" style="margin-bottom:0">
+      <div class="remote-head">
+       <span>📱 Remote Pairing Link</span>
+       <span class="remote-status" id="advRemoteStatus">Off — check above or copy link to pair</span>
+      </div>
+      <div class="remote-url-row">
+       <input id="advRemoteUrl" type="text" readonly onclick="this.select()" value="">
+       <button type="button" id="advRemoteCopyBtn" onclick="copyRemoteUrl('adv')">📋 Copy</button>
+       <button type="button" onclick="toggleAdvRemoteQr()">🔳 QR</button>
+       <a id="advRemoteOpenLink" class="rbtn" href="/remote" target="_blank" onclick="activateRemoteForOpen()">↗ Open</a>
+      </div>
+      <div class="remote-qr-box" id="advRemoteQrBox">
+       <img id="advRemoteQrImg" style="width:140px;height:140px;border-radius:10px;background:#fff" alt="Remote QR">
+       <div style="flex:1;min-width:170px;font-size:.84em;opacity:.88;line-height:1.42">
+        <b>Scan on your phone</b> to launch a Quiz or Case Study from anywhere in the room and advance slides live.
+       </div>
+      </div>
+     </div>
+    </div>
+   </details>
   </div>
-  <div id="presSetupBar" class="pres-bar"></div>
-  <button id="launchBtn" style="width:100%;margin-top:14px;padding:15px;font-size:1.35em;border-radius:14px" onclick="create()"><span class="quiz-only">🚀 Create Game</span><span class="case-only">📖 Launch Case Study</span></button>
+  <button id="launchBtn" style="width:100%;margin-top:14px;padding:14px;font-size:1.3em;border-radius:13px" onclick="create()"><span class="quiz-only">🚀 Create Game</span><span class="case-only">📖 Launch Case Study</span></button>
  </div>
 </div>
 <script>
@@ -887,18 +930,26 @@ function toggleLateQr(ev){
  }
  if(b) b.classList.toggle('open');
 }
+function toggleDeckMore(ev){
+ if(ev) ev.stopPropagation();
+ const d = document.getElementById('deckMoreDrop');
+ if(d) d.classList.toggle('open');
+}
+function closeDeckMore(){
+ const d = document.getElementById('deckMoreDrop');
+ if(d) d.classList.remove('open');
+}
 window.addEventListener('click', e=>{
  const nav = document.getElementById('topNav');
  if(nav && !nav.contains(e.target)) closeNavMenu();
  const lj = document.getElementById('lateJoin'), lq = document.getElementById('lateQrBox');
  if(lj && lq && !lj.contains(e.target)) lq.classList.remove('open');
+ const dm = document.getElementById('deckMoreWrap');
+ if(dm && !dm.contains(e.target)) closeDeckMore();
 });
 function toggleAdvPanel(){
- const p = document.getElementById('advPanel'), b = document.getElementById('advBtn'), c = document.getElementById('advCaret');
- if(!p) return;
- const open = p.classList.toggle('open');
- if(b) b.classList.toggle('open', open);
- if(c) c.textContent = open ? '▴' : '▾';
+ const acc = document.getElementById('accOptions');
+ if(acc) acc.open = !acc.open;
 }
 const GAMEPLAY_OPT_IDS = ['qShuffle','qWager','qRedemp','qSabotage','qWheel','qTeams','qIce','qAuto','qHot','qBattle','qTie','qSpeed','qDbl','qSteal'];
 const QUIZ_PRESETS = {
@@ -909,14 +960,14 @@ const QUIZ_PRESETS = {
  teams: ['qTeams','qBattle','qIce','qShuffle']
 };
 function syncPresetHighlight(){
- const bar = document.getElementById('presetBar');
- if(!bar) return;
+ const sel = document.getElementById('presetSel');
+ if(!sel) return;
  const activeSet = new Set(GAMEPLAY_OPT_IDS.filter(id=>{ const el = document.getElementById(id); return el && el.checked; }));
- bar.querySelectorAll('.preset-btn').forEach(btn=>{
-  const target = QUIZ_PRESETS[btn.dataset.preset] || [];
-  const match = target.length === activeSet.size && target.every(id => activeSet.has(id));
-  btn.classList.toggle('active', match);
- });
+ let matched = 'custom';
+ for(const [k, target] of Object.entries(QUIZ_PRESETS)){
+  if(target.length === activeSet.size && target.every(id => activeSet.has(id))){ matched = k; break; }
+ }
+ sel.value = matched;
 }
 function applyPreset(name){
  const want = new Set(QUIZ_PRESETS[name] || []);
@@ -930,14 +981,55 @@ function applyPreset(name){
  const ir = document.getElementById('icePromptRow'); if(ir) ir.style.display = want.has('qIce') ? 'block' : 'none';
  updateOptSummary();
 }
+function updateTimerSummary(){
+ const b = document.getElementById('timerSummary');
+ if(!b) return;
+ const isC = (typeof hostSection !== 'undefined' && hostSection === 'case');
+ const sel = document.getElementById('quizSel');
+ const q = (typeof quizList !== 'undefined' ? quizList : []).find(x => x.file === (sel && sel.value));
+ if(isC){
+  const poll = parseInt((document.getElementById('cPollTime')||{}).value, 10) || 45;
+  const disc = parseInt((document.getElementById('cDiscussTime')||{}).value, 10) || 60;
+  b.textContent = q ? `${q.count} slides · Poll ${poll}s` : `Poll ${poll}s · Debate ${disc}s`;
+  b.classList.toggle('on', !!(q || poll !== 45 || disc !== 60));
+ } else {
+  const cnt = parseInt((document.getElementById('qCount')||{}).value, 10) || 0;
+  const tm = parseInt((document.getElementById('qTime')||{}).value, 10) || 15;
+  const pvEl = document.getElementById('qPrevTime');
+  const pv = (pvEl && pvEl.value !== '') ? Math.max(0, parseFloat(pvEl.value) || 0) : 5;
+  b.textContent = cnt > 0 ? `${cnt} Qs · ${tm}s · ${pv}s prev` : `${tm}s · ${pv}s preview`;
+  b.classList.toggle('on', !!(cnt > 0 || tm !== 15 || pv !== 5));
+ }
+}
+function updateScreenSummary(){
+ const b = document.getElementById('screenSummary');
+ if(!b) return;
+ const pres = !!window.presenterMode;
+ const qr = !!(document.getElementById('qRemote') && document.getElementById('qRemote').checked);
+ const pLive = (typeof isProjectorLive === 'function') && isProjectorLive();
+ const rLive = typeof remoteLastLive !== 'undefined' && !!remoteLastLive;
+ if(pres && qr) b.textContent = 'Dual + Remote';
+ else if(pres) b.textContent = pLive ? 'Screen 2 Live' : 'Dual Screen';
+ else if(qr) b.textContent = rLive ? 'Phone Live' : 'Remote Ready';
+ else b.textContent = 'Standard';
+ b.classList.toggle('on', pres || qr);
+}
 function updateOptSummary(){
- const ids = ['qShuffle','qWager','qRedemp','qSabotage','qWheel','qTeams','qIce','qAuto','qHot','qBattle','qTie','qSpeed','qDbl','qSteal','qMod','qRosterOn','qRemote'];
- let n = ids.filter(id=>{const el=document.getElementById(id); return el && el.checked;}).length;
+ const isC = (typeof hostSection !== 'undefined' && hostSection === 'case');
+ const cntChecked = arr => arr.filter(id=>{ const el = document.getElementById(id); return el && el.checked; }).length;
+ const nTwist = isC ? 0 : cntChecked(['qWheel','qWager','qRedemp','qHot','qDbl','qSabotage','qSteal','qTie']);
+ const nTeam = cntChecked(isC ? ['qTeams','qIce'] : ['qShuffle','qSpeed','qAuto','qTeams','qBattle','qIce']);
  const bots = document.getElementById('qBots');
- if(bots && parseInt(bots.value,10) > 0) n++;
+ const nClass = cntChecked(['qMod','qRosterOn']) + ((bots && parseInt(bots.value, 10) > 0) ? 1 : 0);
+ const setSub = (id, n) => { const el = document.getElementById(id); if(el){ el.textContent = `${n} on`; el.classList.toggle('on', n > 0); } };
+ setSub('twistSubCnt', nTwist);
+ setSub('teamSubCnt', nTeam);
+ setSub('classSubCnt', nClass);
+ const total = nTwist + nTeam + nClass;
  const s = document.getElementById('optSummary');
- if(s) s.textContent = `${n} active`;
+ if(s){ s.textContent = `${total} active`; s.classList.toggle('on', total > 0); }
  syncPresetHighlight();
+ updateScreenSummary();
 }
 
 // --- Visual Themes ---
@@ -1188,6 +1280,7 @@ function setRemoteStatusUI(paired, phoneLive){
  if(menuBtn) menuBtn.classList.toggle('on', !!phoneLive);
  if(wsBtn) wsBtn.classList.toggle('live', !!phoneLive);
  if(wsSt) wsSt.textContent = phoneLive ? 'Live 🟢' : (paired ? 'Ready' : 'Pair');
+ if(typeof updateScreenSummary === 'function') updateScreenSummary();
  if(typeof syncWsNavCollapse === 'function') syncWsNavCollapse();
 }
 async function syncRemotePair(active){
@@ -1582,10 +1675,10 @@ function pickDeckCard(file){
 }
 function syncSelectedDeckBar(){
  const sel = document.getElementById('quizSel');
- const bar = document.getElementById('selDeckActions'), ttl = document.getElementById('selDeckTitle');
+ const wrap = document.getElementById('deckMoreWrap');
  const q = quizList.find(x => x.file === (sel && sel.value));
- if(bar) bar.classList.toggle('show', !!q);
- if(ttl && q) ttl.textContent = q.title;
+ if(wrap) wrap.classList.toggle('show', !!q);
+ closeDeckMore();
 }
 function renderDeckGrid(){
  const grid = document.getElementById('deckGrid'), fBox = document.getElementById('deckFolders'), sel = document.getElementById('quizSel');
@@ -2785,8 +2878,8 @@ async function openHistory(){
 // --- Quiz editor tools ---
 function toggleTool(which){
  const i = document.getElementById('toolImport'), a = document.getElementById('toolAi');
- if(which==='import'){ i.style.display = i.style.display==='none' ? 'block' : 'none'; a.style.display = 'none'; }
- else { a.style.display = a.style.display==='none' ? 'block' : 'none'; i.style.display = 'none'; updateAcctLabels(); }
+ if(which==='import'){ if(i) i.open = !i.open; if(a) a.open = false; }
+ else { if(a) a.open = !a.open; if(i) i.open = false; updateAcctLabels(); }
 }
 function appendQuestions(qs){
  const t = document.getElementById('customText');
@@ -3015,6 +3108,7 @@ function setHostSection(sec){
   else if(hostSection === 'quiz' && ip.value.trim() === CASE_ICE_DEFAULT) ip.value = QUIZ_ICE_DEFAULT;
  }
  renderQuizSelect();
+ updateTimerSummary();
  updateOptSummary();
  if(typeof syncWsNavCollapse === 'function') syncWsNavCollapse();
 }
@@ -3055,20 +3149,8 @@ syncQuizCount = function(){
   if(mx) mx.textContent = '/ —';
   if(cs) cs.textContent = '—';
  }
- if(typeof renderDeckGrid === 'function') renderDeckGrid();
+ if(typeof updateTimerSummary === 'function') updateTimerSummary();
  if(typeof syncSelectedDeckBar === 'function') syncSelectedDeckBar();
-};
-
-updateOptSummary = function(){
- const ids = (hostSection === 'case')
-  ? ['qTeams','qIce','qMod','qRosterOn','qRemote']
-  : ['qShuffle','qWager','qRedemp','qSabotage','qWheel','qTeams','qIce','qAuto','qHot','qBattle','qTie','qSpeed','qDbl','qSteal','qMod','qRosterOn','qRemote'];
- let n = ids.filter(id=>{ const el = document.getElementById(id); return el && el.checked; }).length;
- const bots = document.getElementById('qBots');
- if(bots && parseInt(bots.value,10) > 0) n++;
- const s = document.getElementById('optSummary');
- if(s) s.textContent = `${n} active`;
- if(typeof syncPresetHighlight === 'function') syncPresetHighlight();
 };
 
 const CASE_PLACEHOLDER = `Chapter 1: The Dilemma
@@ -3121,8 +3203,10 @@ openQuizModal = function(mode){
  }
  const cf = document.getElementById('customFile');
  if(cf) cf.accept = isC ? '.json' : '.json,.csv';
- const ti = document.getElementById('toolImport');
- if(isC && ti) ti.style.display = 'none';
+ ['builderExistAcc','builderMetaAcc','toolImport','toolAi','builderPrevAcc'].forEach(id=>{
+  const el = document.getElementById(id);
+  if(el) el.open = false;
+ });
  const ct = document.getElementById('customTitle'), fd = document.getElementById('customFolder'), tg = document.getElementById('customTags'), tx = document.getElementById('customText');
  if(ct) ct.placeholder = isC ? 'e.g. Case Study: The CardioWatch Launch' : 'e.g. Chapter 9 Review';
  if(fd) fd.placeholder = isC ? 'Case Studies' : 'e.g. Math';
@@ -3506,6 +3590,7 @@ function renderPresSetupBar(){
  if(mb) mb.classList.toggle('on', !!window.presenterMode);
  if(wp) wp.classList.toggle('live', !!window.presenterMode);
  if(wps) wps.textContent = window.presenterMode ? (live ? 'Screen 2 🟢' : 'Presenter ON') : 'Dual Screen';
+ if(typeof updateScreenSummary === 'function') updateScreenSummary();
  if(typeof syncWsNavCollapse === 'function') syncWsNavCollapse();
  if(!bar) return;
  bar.classList.toggle('active', !!window.presenterMode);
