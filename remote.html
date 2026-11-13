@@ -672,7 +672,105 @@ h2{font-size:1.18em;margin:.2em 0;font-weight:900}
   font-size:.86em;
   line-height:1.35;
 }
+.playtoo-row{display:flex;gap:6px;align-items:stretch;width:100%}
+.playtoo-btn{
+  flex:1;
+  width:100%;
+  padding:11px 14px;
+  border-radius:12px;
+  border:1.5px solid rgba(124,245,168,.75);
+  background:linear-gradient(135deg,#20bf6b,#0fb9b1);
+  color:#072a18;
+  font-weight:900;
+  font-size:.95em;
+  cursor:pointer;
+  box-shadow:0 4px 14px rgba(0,0,0,.32);
+}
+.playtoo-edit{
+  flex:0 0 auto;
+  padding:0 13px;
+  border-radius:12px;
+  border:1.5px solid rgba(124,245,168,.55);
+  background:rgba(124,245,168,.18);
+  color:#fff;
+  font-weight:850;
+  font-size:.95em;
+  cursor:pointer;
+}
+#rPlayModal{
+  position:fixed;
+  inset:0;
+  z-index:80;
+  background:rgba(10,4,26,.78);
+  backdrop-filter:blur(5px);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:16px;
+}
+#rPlayModal.open{display:flex}
+.rpm-box{
+  width:min(380px,100%);
+  background:linear-gradient(180deg,#34126d,#210a47);
+  border:2px solid rgba(124,245,168,.65);
+  border-radius:18px;
+  padding:18px 16px;
+  box-shadow:0 16px 40px rgba(0,0,0,.6);
+  text-align:left;
+}
+.rpm-box h3{margin:0 0 6px;font-size:1.15em;color:#7cf5a8}
+.rpm-box p{margin:0 0 10px;font-size:.86em;line-height:1.4;opacity:.9}
+.rpm-in{
+  width:100%;
+  padding:11px 12px;
+  border-radius:11px;
+  border:2px solid rgba(255,255,255,.28);
+  background:rgba(255,255,255,.12);
+  color:#fff;
+  font-size:1em;
+  font-weight:800;
+  margin-bottom:8px;
+}
+.rpm-in:focus{outline:none;border-color:#7cf5a8}
+.rpm-actions{display:flex;flex-direction:column;gap:8px;margin-top:6px}
+.rpm-go{
+  width:100%;
+  padding:12px;
+  border-radius:12px;
+  border:0;
+  background:linear-gradient(135deg,#7cf5a8,#20bf6b);
+  color:#072a18;
+  font-weight:900;
+  font-size:.98em;
+  cursor:pointer;
+}
+.rpm-sec{
+  width:100%;
+  padding:10px;
+  border-radius:11px;
+  border:1.5px solid rgba(255,255,255,.28);
+  background:rgba(255,255,255,.1);
+  color:#fff;
+  font-weight:800;
+  font-size:.9em;
+  cursor:pointer;
+}
 </style></head><body>
+
+<div id="rPlayModal" onclick="if(event.target===this)closeRemotePlayToo()">
+  <div class="rpm-box">
+    <h3>🎮 Play Too on My Phone</h3>
+    <p>Join as a live player with a floating <b>🕹 Host controls</b> pill so you can answer questions and advance the session from your phone — and hop back to Full Remote anytime.</p>
+    <input id="rPlayName" class="rpm-in" type="text" maxlength="16" placeholder="Your player nickname (e.g. Coach)…" onkeydown="if(event.key==='Enter')goRemotePlayToo(false)">
+    <div style="font-size:.77em;opacity:.78;margin-bottom:6px">Note: <b>"Host"</b> is reserved for megaphone broadcasts.</div>
+    <div id="rPlayErr" class="err-msg" style="margin:4px 0 8px"></div>
+    <div class="rpm-actions">
+      <button type="button" class="rpm-go" onclick="goRemotePlayToo(false)">🚀 Play on My Phone</button>
+      <button type="button" class="rpm-sec" onclick="goRemotePlayToo(true)">↗️ Open Player in New Tab</button>
+      <button type="button" class="rpm-sec" style="opacity:.8" onclick="closeRemotePlayToo()">Cancel</button>
+    </div>
+  </div>
+</div>
 
 <div id="topHud">
   <div class="hud-inner">
@@ -776,6 +874,7 @@ function renderOptsHtml(){
    <label class="opt-pill"><input type="checkbox" id="rAllowTts"> 🔊 Student TTS</label>
    <label class="opt-pill"><input type="checkbox" id="rChat"> 💬 Live Chat</label>
    <label class="opt-pill"><input type="checkbox" id="rProfiles"> 📊 Player Profiles</label>
+   <label class="opt-pill"><input type="checkbox" id="rPlayToo"> 🎮 Play Too</label>
    <label class="opt-pill"><input type="checkbox" id="mMod"> 🛡️ Approve Names</label>
   `;
  }
@@ -788,6 +887,7 @@ function renderOptsHtml(){
   <label class="opt-pill"><input type="checkbox" id="rAllowTts"> 🔊 Student TTS</label>
   <label class="opt-pill"><input type="checkbox" id="rChat"> 💬 Live Chat</label>
   <label class="opt-pill"><input type="checkbox" id="rProfiles"> 📊 Player Profiles</label>
+  <label class="opt-pill"><input type="checkbox" id="rPlayToo"> 🎮 Play Too</label>
   <label class="opt-pill"><input type="checkbox" id="mWager"> 🎰 Final Boss</label>
   <label class="opt-pill"><input type="checkbox" id="mRedemp"> 🔄 Redemption</label>
   <label class="opt-pill"><input type="checkbox" id="mWheel"> 🎡 Mystery Wheel</label>
@@ -910,6 +1010,7 @@ async function launchFromPhone(){
   allow_tts: chk('rAllowTts'),
   chat_enabled: chk('rChat'),
   profiles_enabled: chk('rProfiles'),
+  play_too_enabled: chk('rPlayToo'),
   team_battle: isCase ? false : teamsOn,
   wager: isCase ? false : chk('mWager'),
   redemption: isCase ? false : chk('mRedemp'),
@@ -1027,6 +1128,74 @@ function setRemoteAuto(){
  const el = document.getElementById('rAutoSec');
  const sec = Math.max(2, Math.min(120, parseInt(el && el.value, 10) || 7));
  ctl('set_auto_time', sec);
+}
+function getSavedRemotePlay(){
+ try{
+  const ps = JSON.parse(sessionStorage.getItem('brainrush_playtoo_session') || 'null');
+  const nm = JSON.parse(sessionStorage.getItem('brainrush_remote_play') || 'null');
+  if(nm && String(nm.pin) === String(pin) && nm.name){
+   return {name: nm.name, joined: !!(ps && String(ps.pin) === String(pin) && ps.pid)};
+  }
+ }catch(e){}
+ return null;
+}
+function buildRemotePlayTooUrl(nm){
+ const hash = `#hk=${encodeURIComponent(host)}${rkey ? '&rk=' + encodeURIComponent(rkey) : ''}`;
+ return `/play?pin=${encodeURIComponent(pin)}&name=${encodeURIComponent(nm)}&auto=1&ctl=1&from=remote${hash}`;
+}
+function openRemotePlayToo(){
+ const m = document.getElementById('rPlayModal'), inp = document.getElementById('rPlayName'), err = document.getElementById('rPlayErr');
+ if(!m || !pin || !host) return;
+ if(err){ err.textContent = ''; err.style.display = 'none'; }
+ const sv = getSavedRemotePlay();
+ if(inp){
+  if(sv && sv.name) inp.value = sv.name;
+  else{
+   try{ inp.value = localStorage.getItem('brainrush_host_nick') || ''; }catch(e){}
+  }
+ }
+ m.classList.add('open');
+ setTimeout(() => { if(inp) inp.focus(); }, 60);
+}
+function closeRemotePlayToo(){
+ const m = document.getElementById('rPlayModal');
+ if(m) m.classList.remove('open');
+}
+function goRemotePlayToo(newTab=false){
+ const inp = document.getElementById('rPlayName'), err = document.getElementById('rPlayErr');
+ const nm = (inp && inp.value ? inp.value : '').trim().slice(0, 16);
+ if(!nm){
+  if(err){ err.textContent = 'Enter a player nickname first.'; err.style.display = 'block'; }
+  return;
+ }
+ if(nm.toLowerCase() === 'host'){
+  if(err){ err.textContent = '"Host" is reserved for megaphone broadcasts — pick any nickname!'; err.style.display = 'block'; }
+  return;
+ }
+ try{
+  sessionStorage.setItem('brainrush_remote_play', JSON.stringify({pin, name: nm}));
+  localStorage.setItem('brainrush_host_nick', nm);
+ }catch(e){}
+ const u = buildRemotePlayTooUrl(nm);
+ closeRemotePlayToo();
+ if(newTab){
+  window.open(u, '_blank');
+ } else {
+  location.href = u;
+ }
+}
+function resumeRemotePlayToo(){
+ const sv = getSavedRemotePlay();
+ if(!sv || !sv.name) return openRemotePlayToo();
+ location.href = buildRemotePlayTooUrl(sv.name);
+}
+function remotePlayTooBar(marginStyle='margin-top:10px'){
+ if(!S.play_too_enabled || S.phase === 'final') return '';
+ const sv = getSavedRemotePlay();
+ if(sv && sv.joined){
+  return `<div class="playtoo-row" style="${marginStyle}"><button type="button" class="playtoo-btn" onclick="resumeRemotePlayToo()">🎮 Resume Playing (${esc(sv.name)})</button><button type="button" class="playtoo-edit" onclick="openRemotePlayToo()" title="Nickname / New Tab">⚙️</button></div>`;
+ }
+ return `<div class="playtoo-row" style="${marginStyle}"><button type="button" class="playtoo-btn" onclick="openRemotePlayToo()">🎮 Play too on my phone</button></div>`;
 }
 async function sendRemoteBroadcast(inpId='rBcastIn'){
  const el = document.getElementById(inpId), st = document.getElementById('rBcastMsg');
@@ -1241,7 +1410,7 @@ function render(){
   pin, ph, S.index, S.total, S.qtype || '', isCaseGame ? 1 : 0, S.case ? 1 : 0, S.unscored ? 1 : 0,
   S.is_last ? 1 : 0, startDisabled ? 1 : 0, S.paused ? 1 : 0, S.auto ? 1 : 0,
   S.auto_time || 7, inPrev ? 1 : 0, inThink ? 1 : 0, S.consensus_step || 0,
-  S.hide_board ? 1 : 0, S.allow_tts ? 1 : 0, S.chat_enabled ? 1 : 0, S.profiles_enabled ? 1 : 0, S.scoring_mode || 'classic',
+  S.hide_board ? 1 : 0, S.allow_tts ? 1 : 0, S.chat_enabled ? 1 : 0, S.profiles_enabled ? 1 : 0, S.play_too_enabled ? 1 : 0, S.scoring_mode || 'classic',
   discOn ? 1 : 0, S.discuss_default || 60,
   rkey ? 1 : 0, S.note || '', S.question || '', S.body || '', S.prompt || '',
   JSON.stringify(S.up_next || null),
@@ -1289,7 +1458,9 @@ function render(){
       <button class="ctrl-btn ${S.allow_tts ? 'on' : ''}" onclick="hostCtl('toggle_student_tts')">🔊 Student TTS: ${S.allow_tts ? 'ON' : 'Off'}</button>
       <button class="ctrl-btn ${S.chat_enabled ? 'on' : ''}" onclick="hostCtl('toggle_chat')">💬 Live Chat: ${S.chat_enabled ? 'ON' : 'Off'}</button>
       <button class="ctrl-btn ${S.profiles_enabled ? 'on' : ''}" onclick="hostCtl('toggle_profiles')">📊 Profiles: ${S.profiles_enabled ? 'ON' : 'Off'}</button>
+      <button class="ctrl-btn ${S.play_too_enabled ? 'on' : ''}" onclick="hostCtl('toggle_play_too')">🎮 Play Too: ${S.play_too_enabled ? 'ON' : 'Off'}</button>
      </div>
+     ${remotePlayTooBar('margin-top:10px')}
      <div style="display:flex;gap:6px;margin-top:10px">
       <input id="rBcastInLobby" type="text" maxlength="140" placeholder="📢 Broadcast banner to phones…" style="flex:1;min-width:0;padding:9px 11px;border-radius:10px;border:1.5px solid rgba(255,255,255,.28);background:rgba(255,255,255,.1);color:#fff;font-size:.92em" onkeydown="if(event.key==='Enter')sendRemoteBroadcast('rBcastInLobby')">
       <button class="ctrl-btn" style="flex:0 0 auto;padding:9px 14px;background:#ffdf5d;color:#2b0d57;border:0" onclick="sendRemoteBroadcast('rBcastInLobby')">Send</button>
@@ -1405,6 +1576,7 @@ function render(){
       <button class="ctrl-btn ${S.allow_tts ? 'on' : ''}" onclick="hostCtl('toggle_student_tts')">🔊 Student TTS: ${S.allow_tts ? 'ON' : 'Off'}</button>
       <button class="ctrl-btn ${S.chat_enabled ? 'on' : ''}" onclick="hostCtl('toggle_chat')">💬 Live Chat: ${S.chat_enabled ? 'ON' : 'Off'}</button>
       <button class="ctrl-btn ${S.profiles_enabled ? 'on' : ''}" onclick="hostCtl('toggle_profiles')">📊 Profiles: ${S.profiles_enabled ? 'ON' : 'Off'}</button>
+      <button class="ctrl-btn ${S.play_too_enabled ? 'on' : ''}" onclick="hostCtl('toggle_play_too')">🎮 Play Too: ${S.play_too_enabled ? 'ON' : 'Off'}</button>
       ${!isCaseGame ? `<button class="ctrl-btn ${S.auto ? 'on' : ''}" onclick="ctl('toggle_auto')">⏭️ Auto: ${S.auto ? 'ON' : 'Off'}</button>` : ''}
       <button class="ctrl-btn" onclick="addBots(5)">🤖 +5 Bots</button>
      </div>
@@ -1434,6 +1606,7 @@ function render(){
    <div class="stage-body">
     ${pendHtml}
     ${stageCard}
+    ${ph !== 'lobby' && ph !== 'final' ? remotePlayTooBar('margin-top:0') : ''}
     ${noteHtml}
     ${upNextHtml}
     ${toolsHtml}
