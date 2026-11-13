@@ -1,16 +1,16 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Brainrush! — Solo Practice</title>
+<title>BrainRush — Solo Practice</title>
 <style>
 :root{
-  --bg1:#6827d6;
-  --bg2:#46178f;
-  --bg3:#23094d;
-  --surface:rgba(255,255,255,.11);
-  --border:rgba(255,255,255,.20);
+  --bg1:#2c1957;
+  --bg2:#161224;
+  --bg3:#0e0b18;
+  --surface:rgba(27,22,43,.84);
+  --border:rgba(255,255,255,.14);
   --gold:#ffdf5d;
-  --green:#26890c;
-  --ink:#2b0d57;
+  --green:#16a34a;
+  --ink:#1e1b2e;
   --radius:16px;
   --radius-sm:11px;
 }
@@ -18,7 +18,7 @@
 html,body{margin:0;padding:0;min-height:100vh;min-height:100dvh}
 body{
   font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
-  background:radial-gradient(circle at 50% -12%,var(--bg1) 0%,var(--bg2) 52%,var(--bg3) 100%) fixed;
+  background:radial-gradient(1100px 680px at 54% -12%,var(--bg1) 0%,var(--bg2) 52%,var(--bg3) 100%) fixed;
   color:#fff;
   text-align:center;
   display:flex;
@@ -35,10 +35,134 @@ body.hc .card-panel,body.hc .q-card{background:#111;border:2px solid #fff}
   top:0;
   z-index:55;
   width:100%;
-  background:rgba(22,7,50,.80);
-  backdrop-filter:blur(12px);
-  -webkit-backdrop-filter:blur(12px);
-  border-bottom:1px solid rgba(255,255,255,.14);
+  background:rgba(15,12,26,.88);
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid rgba(255,255,255,.12);
+}
+.hud-brand{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  font-weight:900;
+  font-size:.9em;
+  letter-spacing:-.01em;
+  color:#fff;
+  text-decoration:none;
+  margin-right:2px;
+}
+.hud-bolt{
+  width:22px;height:22px;border-radius:6px;
+  background:linear-gradient(135deg,#facc15,#f97316);
+  color:#1e1b2e;
+  display:inline-flex;align-items:center;justify-content:center;
+  font-size:.78em;font-weight:900;
+  box-shadow:0 2px 8px rgba(250,204,21,.28);
+  flex-shrink:0;
+}
+.studio-hero-pill{
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  padding:5px 13px 5px 7px;
+  border-radius:99px;
+  background:rgba(15,12,26,.65);
+  border:1px solid rgba(255,255,255,.16);
+  font-weight:900;
+  font-size:.86em;
+  letter-spacing:-.01em;
+  margin:0 auto 10px;
+}
+.p-search{
+  display:block;
+  width:100%;
+  padding:9px 12px!important;
+  margin:0 0 8px!important;
+  border-radius:10px!important;
+  border:1px solid rgba(255,255,255,.16)!important;
+  background:rgba(15,12,26,.6)!important;
+  color:#fff!important;
+  text-align:left!important;
+  font-size:.9em!important;
+  font-weight:700!important;
+  box-shadow:none!important;
+}
+.p-deck-list{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  max-height:225px;
+  overflow-y:auto;
+  margin-bottom:10px;
+}
+.p-deck-card{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  padding:10px 12px;
+  border-radius:11px;
+  border:1.5px solid rgba(255,255,255,.13);
+  background:rgba(15,12,26,.55);
+  color:#fff;
+  font-weight:800;
+  font-size:.92em;
+  cursor:pointer;
+  text-align:left;
+  transition:border-color .14s,background .14s;
+}
+.p-deck-card.sel{
+  border-color:var(--gold);
+  background:rgba(255,223,93,.12);
+  box-shadow:0 0 0 1px rgba(255,223,93,.22);
+}
+.p-deck-meta{
+  font-size:.78em;
+  font-weight:850;
+  padding:2px 9px;
+  border-radius:99px;
+  background:rgba(255,255,255,.1);
+  color:var(--gold);
+  white-space:nowrap;
+  flex-shrink:0;
+}
+.p-acc{
+  border:1px solid rgba(255,255,255,.14);
+  background:rgba(15,12,26,.52);
+  border-radius:12px;
+  margin:4px 0 10px;
+  text-align:left;
+  overflow:hidden;
+}
+.p-acc summary{
+  list-style:none;
+  cursor:pointer;
+  padding:10px 13px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  font-weight:850;
+  font-size:.9em;
+  user-select:none;
+}
+.p-acc summary::-webkit-details-marker{display:none}
+.p-acc-badge{
+  font-size:.76em;
+  font-weight:900;
+  padding:3px 9px;
+  border-radius:99px;
+  background:rgba(255,255,255,.11);
+  color:rgba(255,255,255,.88);
+}
+.p-acc-badge.hi{
+  background:rgba(34,197,94,.22);
+  color:#86efac;
+  border:1px solid rgba(74,222,128,.4);
+}
+.p-acc-body{
+  padding:6px 12px 10px;
+  border-top:1px solid rgba(255,255,255,.09);
 }
 .hud-inner{
   max-width:560px;
@@ -228,23 +352,24 @@ input::placeholder{font-weight:650;opacity:.54;font-size:.86em}
 
 button.go{
   width:100%;
-  font-size:1.22em;
+  font-size:1.18em;
   padding:14px 18px;
   border:0;
   border-radius:13px;
-  background:linear-gradient(180deg,#2fa80f,#217a0a);
-  color:#fff;
+  background:linear-gradient(180deg,#22c55e,#16a34a);
+  color:#05210e;
   font-weight:900;
   cursor:pointer;
   margin-top:6px;
-  box-shadow:0 5px 0 #145205,0 8px 20px rgba(0,0,0,.28);
+  box-shadow:0 4px 0 #0d5c2b,0 8px 20px rgba(0,0,0,.34);
   transition:transform .08s,filter .15s;
 }
-button.go:hover{filter:brightness(1.05)}
-button.go:active{transform:translateY(3px);box-shadow:0 2px 0 #145205,0 4px 10px rgba(0,0,0,.24)}
+button.go:hover{filter:brightness(1.04)}
+button.go:active{transform:translateY(3px);box-shadow:0 2px 0 #0d5c2b,0 4px 10px rgba(0,0,0,.24)}
 button.go.blue{
-  background:linear-gradient(180deg,#1e7ae8,#1158b0);
-  box-shadow:0 5px 0 #0a3975,0 8px 18px rgba(0,0,0,.26);
+  background:linear-gradient(180deg,#2563eb,#1d4ed8);
+  color:#fff;
+  box-shadow:0 4px 0 #1e3a8a,0 8px 18px rgba(0,0,0,.28);
 }
 button.sec{
   background:rgba(255,255,255,.14);
@@ -276,17 +401,17 @@ button.sec:active{transform:scale(.97)}
 
 /* --- Question Card & Tactile 2x2 Grid --- */
 .q-card{
-  background:rgba(20,6,46,.52);
-  border:1px solid rgba(255,255,255,.18);
+  background:rgba(15,12,26,.78);
+  border:1px solid rgba(255,255,255,.15);
   border-radius:15px;
   padding:13px 14px;
   margin-bottom:10px;
-  box-shadow:0 6px 20px rgba(0,0,0,.22);
+  box-shadow:0 8px 24px rgba(0,0,0,.28);
 }
 .qnum{
   display:inline-block;
   background:#fff;
-  color:#46178f;
+  color:var(--ink);
   font-weight:900;
   font-size:.8em;
   padding:3px 12px;
@@ -550,11 +675,12 @@ blockquote{
 <div id="topHud">
   <div class="hud-inner">
     <div class="hud-left">
+      <a href="/play" class="hud-brand"><span class="hud-bolt">⚡</span>BrainRush</a>
       <button id="sfxBtn" class="hud-btn" onclick="toggleSfx()" title="Sound effects">🔊</button>
       <button id="a11y" class="hud-btn" onclick="cycleA11y()" title="Colorblind / High-contrast">👁️</button>
     </div>
     <div class="hud-right" id="hudStats">
-      <span class="hud-stats">🧑‍🎓 Solo Practice</span>
+      <span class="hud-stats">🧑‍🎓 Solo Studio</span>
     </div>
   </div>
   <div class="timer-wrap" id="hudTimer" style="display:none">
@@ -689,6 +815,39 @@ function syncHud(){
 }
 
 let quizzes = [], run = null, lastFile = '';
+function selectPracDeck(file){
+  const sel = document.getElementById('qs');
+  if(!sel) return;
+  sel.value = file || '';
+  if(sel.onchange) sel.onchange();
+  document.querySelectorAll('.p-deck-card').forEach(el => {
+    el.classList.toggle('sel', el.dataset.file === file);
+  });
+  const errEl = document.getElementById('pErr');
+  if(errEl && file) errEl.style.display = 'none';
+}
+function filterPracDecks(){
+  const q = ((document.getElementById('pSearch') || {}).value || '').trim().toLowerCase();
+  document.querySelectorAll('.p-deck-card').forEach(el => {
+    const hay = (el.dataset.search || '').toLowerCase();
+    el.style.display = (!q || hay.includes(q)) ? 'flex' : 'none';
+  });
+}
+function updatePracSummary(){
+  const b = document.getElementById('pOptBadge');
+  if(!b) return;
+  const cnt = parseInt((document.getElementById('cnt') || {}).value, 10);
+  const shuf = !!(document.getElementById('pracShuffle') || {}).checked;
+  const tm = !!(document.getElementById('timed') || {}).checked;
+  const sec = parseInt((document.getElementById('pTime') || {}).value, 10) || 20;
+  const parts = [];
+  parts.push((!isNaN(cnt) && cnt > 0) ? `${cnt} Qs` : 'All Qs');
+  if(shuf) parts.push('Shuffled');
+  parts.push(tm ? `${sec}s` : 'Untimed');
+  const custom = (!isNaN(cnt) && cnt > 0) || shuf || tm;
+  b.textContent = parts.join(' · ');
+  b.classList.toggle('hi', custom);
+}
 async function setup(){
   stopTimer();
   stopSpeak();
@@ -697,35 +856,56 @@ async function setup(){
   try{ quizzes = (await (await fetch('/api/quizzes')).json()).quizzes || []; }catch(e){}
   const qPool = quizzes.filter(q => !q.case);
   const list = qPool.length ? qPool : quizzes;
+  const initFile = (lastFile && list.some(q => q.file === lastFile)) ? lastFile : (list[0] ? list[0].file : '');
   $.innerHTML = `
     <div class="card-panel">
-      <img class="logo" src="/logo.jpg" alt="" onerror="this.style.display='none'">
+      <div class="studio-hero-pill"><span class="hud-bolt">⚡</span>BrainRush &middot; Solo Studio</div>
       <h1>🧑‍🎓 Solo Practice</h1>
       <p class="sub">Study at your own pace with instant explanations. Scores stay private on your device.</p>
 
-      <div class="field-lbl"><span>Choose a Quiz</span></div>
-      <select id="qs">
+      <div class="field-lbl"><span>Choose a Deck</span><span>${list.length} available</span></div>
+      <select id="qs" style="display:none">
         <option value="">— Select a Quiz —</option>
         ${list.map(q => {
           const lbl = /\(\d+\s*Qs\)$/i.test(q.title || '') ? q.title : `${q.title} (${q.count} Qs)`;
-          return `<option value="${esc(q.file)}" data-n="${q.count}">${esc(lbl)}</option>`;
+          return `<option value="${esc(q.file)}" data-n="${q.count}" ${q.file === initFile ? 'selected' : ''}>${esc(lbl)}</option>`;
         }).join('')}
       </select>
-
-      <div class="field-lbl"><span>Question Count</span><span style="opacity:.7;text-transform:none;letter-spacing:0">Optional</span></div>
-      <input id="cnt" type="number" min="1" value="" placeholder="How many questions? (blank = all)">
-
-      <div class="timer-opt-row">
-        <label><input type="checkbox" id="pracShuffle"> 🎲 Randomize Question Order</label>
+      ${list.length > 4 ? `<input id="pSearch" class="p-search" type="search" placeholder="🔍 Filter practice decks…" oninput="filterPracDecks()">` : ''}
+      <div class="p-deck-list">
+        ${list.length ? list.map(q => {
+          const chosen = q.file === initFile;
+          const cleanTitle = String(q.title || '').replace(/\s*\(\d+\s*Qs\)$/i, '');
+          const searchStr = `${q.title || ''} ${q.folder || ''} ${(q.tags || []).join(' ')}`;
+          return `<button type="button" class="p-deck-card ${chosen ? 'sel' : ''}" data-file="${esc(q.file)}" data-search="${esc(searchStr)}" onclick="selectPracDeck(this.dataset.file)">
+            <span style="min-width:0;overflow:hidden;text-overflow:ellipsis">🎮 ${esc(cleanTitle)}</span>
+            <span class="p-deck-meta">${q.count || 0} Qs</span>
+          </button>`;
+        }).join('') : `<div style="opacity:.7;padding:12px;font-size:.9em">No practice decks found.</div>`}
       </div>
 
-      <div class="timer-opt-row">
-        <label><input type="checkbox" id="timed"> ⏱️ Countdown timer</label>
-        <span class="timer-sec-box">
-          <input id="pTime" type="number" min="5" max="600" value="20">
-          <span style="font-size:.88em;opacity:.85">sec</span>
-        </span>
-      </div>
+      <details class="p-acc" id="pOptsAcc">
+        <summary>
+          <span>⚙️ Practice Options</span>
+          <span class="p-acc-badge" id="pOptBadge">All Qs · Untimed</span>
+        </summary>
+        <div class="p-acc-body" onchange="updatePracSummary()" oninput="updatePracSummary()">
+          <div class="field-lbl"><span>Question Count</span><span style="opacity:.7;text-transform:none;letter-spacing:0">Optional</span></div>
+          <input id="cnt" type="number" min="1" value="" placeholder="How many questions? (blank = all)">
+
+          <div class="timer-opt-row">
+            <label><input type="checkbox" id="pracShuffle"> 🎲 Randomize Question Order</label>
+          </div>
+
+          <div class="timer-opt-row" style="margin-bottom:2px">
+            <label><input type="checkbox" id="timed"> ⏱️ Countdown timer</label>
+            <span class="timer-sec-box">
+              <input id="pTime" type="number" min="5" max="600" value="20">
+              <span style="font-size:.88em;opacity:.85">sec</span>
+            </span>
+          </div>
+        </div>
+      </details>
 
       <div id="pErr" class="err-banner"></div>
       <button class="go" onclick="start()">▶️ Start Practice</button>
@@ -744,6 +924,7 @@ async function setup(){
       cEl.removeAttribute('max');
       cEl.placeholder = 'How many questions? (blank = all)';
     }
+    updatePracSummary();
   };
   sel.onchange();
 }

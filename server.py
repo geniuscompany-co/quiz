@@ -2534,14 +2534,20 @@ def study_html(g):
         body = ["<p><b>Perfect game!</b> Every question was answered correctly by everyone.</p>"]
     hdr = "\U0001F4D6 Case Debrief Summary" if is_cg else "\U0001F4DA Study Guide"
     sub = "Class decisions, priority rankings, peer-voted arguments, and concept checks." if is_cg else "Questions the class missed most (lowest score first)."
-    return ("<!doctype html><html><head><meta charset='utf-8'><title>%s</title><style>"
-            "body{font-family:system-ui,sans-serif;max-width:760px;margin:24px auto;padding:0 16px;color:#222}"
-            "h1{color:#46178f}.item{border:1px solid #ddd;border-left:6px solid #46178f;border-radius:8px;padding:10px 16px;margin:12px 0;page-break-inside:avoid}"
-            ".pct{font-size:.8em;color:#c2185b;font-weight:700}h3{margin:.3em 0}.ans{color:#1b5e20}.fact{font-style:italic;color:#555;margin-top:6px}"
-            "button{padding:10px 20px;font-size:1em;border-radius:8px;border:0;background:#26890c;color:#fff;font-weight:700;cursor:pointer}"
-            "@media print{button{display:none}}</style></head><body>"
-            "<h1>%s \u2014 %s</h1><p>%s %d participants.</p><button onclick='window.print()'>\U0001F5A8\ufe0f Print / Save as PDF</button>%s</body></html>"
-            % (e(hdr), hdr, e(quiz_title(g)), sub, len(g["players"]), "".join(body))).encode("utf-8")
+    return ("<!doctype html><html><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>%s — BrainRush</title><style>"
+            "body{font-family:system-ui,-apple-system,sans-serif;max-width:780px;margin:0 auto;padding:28px 18px 48px;color:#1e1b2e;background:#f8f7fc;line-height:1.45}"
+            ".br-top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;background:#161224;color:#fff;padding:14px 18px;border-radius:14px;margin-bottom:20px;box-shadow:0 8px 24px rgba(15,12,26,.16)}"
+            ".br-brand{display:inline-flex;align-items:center;gap:8px;font-weight:900;font-size:1.05em;letter-spacing:-.01em}"
+            ".br-bolt{width:26px;height:26px;border-radius:7px;background:linear-gradient(135deg,#facc15,#f97316);color:#1e1b2e;display:inline-flex;align-items:center;justify-content:center;font-size:.85em}"
+            "h1{color:#1e1b2e;margin:.2em 0 .25em;font-size:1.65em;letter-spacing:-.015em}"
+            ".sub{color:#524c69;margin:0 0 18px;font-size:.96em}"
+            ".item{background:#fff;border:1px solid #e4e1f0;border-left:5px solid #7c3aed;border-radius:12px;padding:13px 18px;margin:12px 0;box-shadow:0 2px 8px rgba(30,27,46,.04);page-break-inside:avoid}"
+            ".pct{font-size:.78em;color:#6d28d9;font-weight:800;text-transform:uppercase;letter-spacing:.04em}h3{margin:.32em 0;color:#1e1b2e}.ans{color:#15803d;font-weight:600}.fact{font-style:italic;color:#524c69;margin-top:6px}"
+            "button{padding:9px 18px;font-size:.92em;border-radius:10px;border:0;background:linear-gradient(180deg,#22c55e,#16a34a);color:#05210e;font-weight:900;cursor:pointer;box-shadow:0 3px 0 #0d5c2b}"
+            "@media print{body{background:#fff;padding:0}.br-top button{display:none}.br-top{background:#fff;color:#1e1b2e;border:1px solid #ddd;box-shadow:none;padding:8px 12px}.item{box-shadow:none;border-color:#ccc}}</style></head><body>"
+            "<div class='br-top'><span class='br-brand'><span class='br-bolt'>\u26a1</span>BrainRush &middot; Study Studio</span><button onclick='window.print()'>\U0001F5A8\ufe0f Print / Save PDF</button></div>"
+            "<h1>%s \u2014 %s</h1><p class='sub'>%s <b>%d</b> participant%s.</p>%s</body></html>"
+            % (e(hdr), hdr, e(quiz_title(g)), sub, len(g["players"]), "" if len(g["players"]) == 1 else "s", "".join(body))).encode("utf-8")
 
 
 def spectator_view(g):

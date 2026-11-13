@@ -1,19 +1,19 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Brainrush! — Host Remote</title>
+<title>BrainRush — Host Remote</title>
 <style>
 :root{
-  --bg1:#3b1478;
-  --bg2:#220a4a;
-  --bg3:#120429;
-  --surface:rgba(255,255,255,.09);
-  --surface-hi:rgba(255,255,255,.14);
-  --border:rgba(255,255,255,.18);
+  --bg1:#2c1957;
+  --bg2:#161224;
+  --bg3:#0e0b18;
+  --surface:rgba(27,22,43,.84);
+  --surface-hi:rgba(255,255,255,.12);
+  --border:rgba(255,255,255,.14);
   --gold:#ffdf5d;
-  --green:#26890c;
-  --green-hi:#69f0ae;
-  --blue:#1368ce;
-  --ink:#2b0d57;
+  --green:#16a34a;
+  --green-hi:#4ade80;
+  --blue:#2563eb;
+  --ink:#1e1b2e;
   --radius:16px;
   --radius-sm:11px;
 }
@@ -21,7 +21,7 @@
 html,body{margin:0;padding:0;min-height:100vh;min-height:100dvh}
 body{
   font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
-  background:radial-gradient(circle at 50% -10%,var(--bg1) 0%,var(--bg2) 55%,var(--bg3) 100%) fixed;
+  background:radial-gradient(1100px 680px at 54% -12%,var(--bg1) 0%,var(--bg2) 52%,var(--bg3) 100%) fixed;
   color:#fff;
   display:flex;
   flex-direction:column;
@@ -34,10 +34,29 @@ body{
   position:sticky;
   top:0;
   z-index:50;
-  background:rgba(16,4,38,.84);
+  background:rgba(15,12,26,.90);
   backdrop-filter:blur(14px);
   -webkit-backdrop-filter:blur(14px);
-  border-bottom:1px solid rgba(255,255,255,.14);
+  border-bottom:1px solid rgba(255,255,255,.12);
+}
+.hud-brand{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  font-weight:900;
+  font-size:.9em;
+  letter-spacing:-.01em;
+  color:#fff;
+  text-decoration:none;
+}
+.hud-bolt{
+  width:22px;height:22px;border-radius:6px;
+  background:linear-gradient(135deg,#facc15,#f97316);
+  color:#1e1b2e;
+  display:inline-flex;align-items:center;justify-content:center;
+  font-size:.78em;font-weight:900;
+  box-shadow:0 2px 8px rgba(250,204,21,.28);
+  flex-shrink:0;
 }
 .hud-inner{
   max-width:520px;
@@ -236,17 +255,18 @@ h2{font-size:1.18em;margin:.2em 0;font-weight:900}
 .key-box b{color:#9cffbe}
 
 .note-card{
-  background:linear-gradient(180deg,#fffbeb,#fef08a);
-  color:var(--ink);
+  background:rgba(251,191,36,.12);
+  border:1px solid rgba(251,191,36,.34);
+  color:#fef3c7;
   border-radius:13px;
   padding:11px 14px;
   text-align:left;
   font-size:.93em;
-  line-height:1.4;
+  line-height:1.42;
   font-weight:650;
   box-shadow:0 6px 18px rgba(0,0,0,.22);
 }
-.note-card b{color:#1e0842;font-weight:900}
+.note-card b{color:var(--gold);font-weight:900}
 
 .pend-card{
   background:linear-gradient(135deg,#ffdf5d,#ffc107);
@@ -423,8 +443,9 @@ h2{font-size:1.18em;margin:.2em 0;font-weight:900}
 }
 .ctrl-btn:active{transform:scale(.97)}
 .ctrl-btn.on{
-  background:linear-gradient(180deg,#2fa80f,#217a0a);
-  border-color:rgba(255,255,255,.65);
+  background:linear-gradient(180deg,#22c55e,#16a34a);
+  color:#05210e;
+  border-color:rgba(134,239,172,.75);
 }
 
 .thumb-dock{
@@ -433,10 +454,10 @@ h2{font-size:1.18em;margin:.2em 0;font-weight:900}
   z-index:45;
   margin:auto -12px 0;
   padding:10px 12px calc(12px + env(safe-area-inset-bottom,0px));
-  background:linear-gradient(180deg,rgba(18,4,41,.75) 0%,rgba(18,4,41,.96) 30%);
+  background:linear-gradient(180deg,rgba(15,12,26,.82) 0%,rgba(15,12,26,.97) 30%);
   backdrop-filter:blur(14px);
   -webkit-backdrop-filter:blur(14px);
-  border-top:1px solid rgba(255,255,255,.16);
+  border-top:1px solid rgba(255,255,255,.14);
 }
 .quick-tbar{
   display:grid;
@@ -464,24 +485,26 @@ h2{font-size:1.18em;margin:.2em 0;font-weight:900}
 }
 .big-btn{
   width:100%;
-  font-size:1.24em;
-  padding:16px 14px;
+  font-size:1.18em;
+  padding:15px 14px;
   border:0;
   border-radius:14px;
-  background:linear-gradient(180deg,#2fa80f,#20780a);
-  color:#fff;
+  background:linear-gradient(180deg,#22c55e,#16a34a);
+  color:#05210e;
   font-weight:900;
   cursor:pointer;
-  box-shadow:0 5px 0 #134e04,0 8px 22px rgba(0,0,0,.35);
-  transition:opacity .15s,transform .08s;
+  box-shadow:0 4px 0 #0d5c2b,0 8px 22px rgba(0,0,0,.36);
+  transition:opacity .15s,transform .08s,filter .15s;
   letter-spacing:.01em;
 }
-.big-btn:active{transform:translateY(3px);box-shadow:0 2px 0 #134e04,0 4px 10px rgba(0,0,0,.3)}
+.big-btn:hover:not(:disabled){filter:brightness(1.04)}
+.big-btn:active{transform:translateY(3px);box-shadow:0 2px 0 #0d5c2b,0 4px 10px rgba(0,0,0,.3)}
 .big-btn:disabled{opacity:.42;cursor:not-allowed;transform:none;box-shadow:none}
 .big-btn.sec{
-  background:linear-gradient(180deg,#1e7ae8,#1158b0);
-  box-shadow:0 5px 0 #0a3975,0 8px 20px rgba(0,0,0,.3);
-  font-size:1.08em;
+  background:linear-gradient(180deg,#2563eb,#1d4ed8);
+  color:#fff;
+  box-shadow:0 4px 0 #1e3a8a,0 8px 20px rgba(0,0,0,.3);
+  font-size:1.06em;
   padding:14px;
 }
 
@@ -497,15 +520,16 @@ h2{font-size:1.18em;margin:.2em 0;font-weight:900}
 .launch-card h3{
   margin:0 0 10px;
   text-align:center;
-  font-size:1.06em;
-  color:var(--gold);
+  font-size:1.02em;
+  color:rgba(255,255,255,.92);
   font-weight:900;
 }
 .seg{
   display:grid;
   grid-template-columns:1fr 1fr;
   gap:6px;
-  background:rgba(0,0,0,.36);
+  background:rgba(15,12,26,.65);
+  border:1px solid rgba(255,255,255,.12);
   padding:4px;
   border-radius:11px;
   margin-bottom:10px;
@@ -515,15 +539,105 @@ h2{font-size:1.18em;margin:.2em 0;font-weight:900}
   border:0;
   border-radius:8px;
   background:transparent;
-  color:rgba(255,255,255,.78);
+  color:rgba(255,255,255,.76);
   font-weight:800;
-  font-size:.94em;
+  font-size:.92em;
   cursor:pointer;
 }
 .seg button.active{
-  background:linear-gradient(135deg,#8e24aa,#5e35b1);
+  background:var(--gold);
+  color:var(--ink);
+  font-weight:900;
+  box-shadow:0 2px 10px rgba(0,0,0,.3);
+}
+.r-search{
+  width:100%;
+  padding:9px 12px;
+  border-radius:10px;
+  border:1px solid rgba(255,255,255,.16);
+  background:rgba(15,12,26,.6);
   color:#fff;
-  box-shadow:0 2px 10px rgba(0,0,0,.35);
+  font-size:.88em;
+  font-weight:700;
+  margin-bottom:8px;
+}
+.r-search:focus{outline:none;border-color:var(--gold)}
+.r-deck-list{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  max-height:220px;
+  overflow-y:auto;
+  margin-bottom:10px;
+}
+.r-deck-card{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  padding:10px 12px;
+  border-radius:11px;
+  border:1.5px solid rgba(255,255,255,.13);
+  background:rgba(15,12,26,.55);
+  color:#fff;
+  font-weight:800;
+  font-size:.9em;
+  cursor:pointer;
+  text-align:left;
+  transition:border-color .14s,background .14s;
+}
+.r-deck-card.chosen{
+  border-color:var(--gold);
+  background:rgba(255,223,93,.12);
+  color:#fff;
+  box-shadow:0 0 0 1px rgba(255,223,93,.22);
+}
+.r-deck-meta{
+  font-size:.78em;
+  font-weight:850;
+  padding:2px 8px;
+  border-radius:99px;
+  background:rgba(255,255,255,.1);
+  color:var(--gold);
+  white-space:nowrap;
+  flex-shrink:0;
+}
+.r-acc{
+  border:1px solid rgba(255,255,255,.14);
+  background:rgba(15,12,26,.52);
+  border-radius:12px;
+  margin-bottom:10px;
+  overflow:hidden;
+}
+.r-acc summary{
+  list-style:none;
+  cursor:pointer;
+  padding:11px 13px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  font-weight:850;
+  font-size:.9em;
+  user-select:none;
+}
+.r-acc summary::-webkit-details-marker{display:none}
+.r-acc-badge{
+  font-size:.76em;
+  font-weight:900;
+  padding:3px 9px;
+  border-radius:99px;
+  background:rgba(255,255,255,.11);
+  color:rgba(255,255,255,.86);
+}
+.r-acc-badge.hi{
+  background:rgba(34,197,94,.22);
+  color:#86efac;
+  border:1px solid rgba(74,222,128,.4);
+}
+.r-acc-body{
+  padding:2px 12px 10px;
+  border-top:1px solid rgba(255,255,255,.09);
 }
 .sel{
   width:100%;
@@ -711,8 +825,8 @@ h2{font-size:1.18em;margin:.2em 0;font-weight:900}
 #rPlayModal.open{display:flex}
 .rpm-box{
   width:min(380px,100%);
-  background:linear-gradient(180deg,#34126d,#210a47);
-  border:2px solid rgba(124,245,168,.65);
+  background:#1b162b;
+  border:1.5px solid rgba(74,222,128,.55);
   border-radius:18px;
   padding:18px 16px;
   box-shadow:0 16px 40px rgba(0,0,0,.6);
@@ -775,7 +889,8 @@ h2{font-size:1.18em;margin:.2em 0;font-weight:900}
 <div id="topHud">
   <div class="hud-inner">
     <div class="hud-left" id="hudLeft">
-      <span class="badge muted">🕹️ HOST REMOTE</span>
+      <span class="hud-brand"><span class="hud-bolt">⚡</span>BrainRush</span>
+      <span class="badge muted">🕹️ REMOTE</span>
     </div>
     <button id="awakeBtn" class="awake-pill" onclick="toggleAwake()" title="Keep phone screen awake">☀️ <span id="awakeState">ON</span></button>
   </div>
@@ -821,14 +936,15 @@ function setHudStatus(mode){
  const hl = document.getElementById('hudLeft');
  const pw = document.getElementById('rProgWrap');
  if(!hl) return;
+ const brand = `<span class="hud-brand"><span class="hud-bolt">⚡</span>BrainRush</span>`;
  if(mode === 'standby'){
-  hl.innerHTML = `<span class="badge green">🟢 PAIRED STANDBY</span>`;
+  hl.innerHTML = `${brand}<span class="badge green">🟢 STANDBY</span>`;
   if(pw) pw.style.display = 'none';
  } else if(mode === 'unpaired'){
-  hl.innerHTML = `<span class="badge muted">🕹️ UNPAIRED</span>`;
+  hl.innerHTML = `${brand}<span class="badge muted">🕹️ UNPAIRED</span>`;
   if(pw) pw.style.display = 'none';
  } else if(mode === 'live'){
-  hl.innerHTML = `<span class="badge">🕹️ PIN ${esc(pin)}</span><span class="players-pill">👥 <span id="rPlayers">${S.n || 0} players</span></span>`;
+  hl.innerHTML = `${brand}<span class="badge">PIN ${esc(pin)}</span><span class="players-pill">👥 <span id="rPlayers">${S.n || 0} players</span></span>`;
  }
 }
 
@@ -846,8 +962,28 @@ async function loadQuizzes(){
  }catch(e){ quizzesLoaded = false; }
 }
 
+function selectRemoteDeck(file){
+ const sel = document.getElementById('mQuizSel');
+ if(sel) sel.value = file || '';
+ document.querySelectorAll('.r-deck-card').forEach(el => {
+  el.classList.toggle('chosen', el.dataset.file === file);
+ });
+ const errEl = document.getElementById('mErr');
+ if(errEl && file) errEl.style.display = 'none';
+}
+
+function filterRemoteDecks(){
+ const q = ((document.getElementById('rDeckFilter') || {}).value || '').trim().toLowerCase();
+ document.querySelectorAll('.r-deck-card').forEach(el => {
+  const hay = (el.dataset.search || '').toLowerCase();
+  el.style.display = (!q || hay.includes(q)) ? 'flex' : 'none';
+ });
+}
+
 function populateSelect(){
  const sel = document.getElementById('mQuizSel');
+ const cards = document.getElementById('rDeckCards');
+ const searchWrap = document.getElementById('rSearchWrap');
  if(!sel) return;
  const prev = sel.value;
  const isCase = launchMode === 'case';
@@ -855,7 +991,38 @@ function populateSelect(){
  const list = quizCatalog.filter(q => isCase ? !!q.case : !q.case);
  sel.innerHTML = `<option value="">${ph}</option>` + list.map(q => `<option value="${esc(q.file)}">${esc(q.title)}</option>`).join('');
  if(prev && list.some(q => q.file === prev)) sel.value = prev;
+ else if(list.length) sel.value = list[0].file;
  else sel.value = '';
+ if(searchWrap) searchWrap.style.display = list.length > 4 ? 'block' : 'none';
+ if(cards){
+  if(!list.length){
+   cards.innerHTML = `<div style="opacity:.7;font-size:.86em;text-align:center;padding:12px">Loading ${isCase ? 'case studies' : 'quizzes'}…</div>`;
+  } else {
+   cards.innerHTML = list.map(q => {
+    const chosen = sel.value === q.file;
+    const cleanTitle = String(q.title || '').replace(/\s*\(\d+\s*(?:Qs|slides)\)$/i, '');
+    const cntLbl = q.count ? `${q.count} ${isCase ? 'slides' : 'Qs'}` : (isCase ? 'Case' : 'Quiz');
+    const searchStr = `${q.title || ''} ${q.folder || ''} ${(q.tags || []).join(' ')}`;
+    return `<button type="button" class="r-deck-card ${chosen ? 'chosen' : ''}" data-file="${esc(q.file)}" data-search="${esc(searchStr)}" onclick="selectRemoteDeck(this.dataset.file)">
+     <span style="min-width:0;overflow:hidden;text-overflow:ellipsis">${isCase ? '📖' : '🎮'} ${esc(cleanTitle)}</span>
+     <span class="r-deck-meta">${esc(cntLbl)}</span>
+    </button>`;
+   }).join('');
+  }
+ }
+}
+
+function updateRemoteOptBadge(){
+ const b = document.getElementById('rOptBadge');
+ if(!b) return;
+ let n = 0;
+ document.querySelectorAll('#preOptions input[type=checkbox]:checked').forEach(() => n++);
+ const sc = (document.getElementById('rScoring') || {}).value || '';
+ if(sc && sc !== 'classic') n++;
+ const bots = parseInt((document.getElementById('mBots') || {}).value, 10) || 0;
+ if(bots > 0) n++;
+ b.textContent = n > 0 ? `${n} customized` : 'Standard';
+ b.classList.toggle('hi', n > 0);
 }
 
 function setLaunchMode(m){
@@ -930,8 +1097,8 @@ function renderStandby(){
  $.innerHTML = `
   <div class="stage-body">
    <div class="card" style="text-align:center;padding:14px 16px">
-    <h1>🕹️ Mobile Host Remote</h1>
-    <p class="sub" style="margin-bottom:0">Controls appear automatically when you start on your computer — or launch a session directly from your phone below.</p>
+    <h1>🕹️ Host Studio Remote</h1>
+    <p class="sub" style="margin-bottom:0">Controls appear automatically when you start on your computer — or pick a deck below to launch directly from your phone.</p>
    </div>
    <div class="launch-card">
     <h3>📱 Launch Session from Phone</h3>
@@ -939,32 +1106,43 @@ function renderStandby(){
      <button type="button" class="${launchMode==='quiz'?'active':''}" onclick="setLaunchMode('quiz')">🎮 Quizzes</button>
      <button type="button" class="${launchMode==='case'?'active':''}" onclick="setLaunchMode('case')">📖 Case Studies</button>
     </div>
-    <select id="mQuizSel" class="sel">
+    <select id="mQuizSel" class="sel" style="display:none">
      <option value="">${launchMode==='case'?'— Select a Case Study —':'— Select a Quiz —'}</option>
     </select>
-    <div id="preOptions">
-     <div class="sec-lbl">🏆 Scoring Mode</div>
-     <select id="rScoring" class="sel">
-      <option value="">— Scoring Mode (Default: Classic) —</option>
-      <option value="classic">🏆 Classic (Speed + Accuracy)</option>
-      <option value="accuracy">🎯 Accuracy Only (No Speed Bonus)</option>
-      <option value="percent">📊 Percentage Grade (%)</option>
-      <option value="survey">📋 Unscored Survey / Formative</option>
-     </select>
-     ${renderTimersHtml()}
-     <div class="sec-lbl">✨ Session Options</div>
-     <div class="opt-grid">${renderOptsHtml()}</div>
-     <div class="bots-row">
-      <span>🤖 Practice Bots</span>
-      <input type="number" id="mBots" min="0" max="30" value="0">
-     </div>
+    <div id="rSearchWrap" style="display:none">
+     <input id="rDeckFilter" class="r-search" type="search" placeholder="🔍 Filter library…" oninput="filterRemoteDecks()">
     </div>
+    <div id="rDeckCards" class="r-deck-list"></div>
+    <details class="r-acc" id="rOptsAcc">
+     <summary>
+      <span>⚙️ Timers, Scoring &amp; Modifiers</span>
+      <span class="r-acc-badge" id="rOptBadge">Standard</span>
+     </summary>
+     <div class="r-acc-body" id="preOptions" onchange="updateRemoteOptBadge()" oninput="updateRemoteOptBadge()">
+      <div class="sec-lbl">🏆 Scoring Mode</div>
+      <select id="rScoring" class="sel">
+       <option value="">— Scoring Mode (Default: Classic) —</option>
+       <option value="classic">🏆 Classic (Speed + Accuracy)</option>
+       <option value="accuracy">🎯 Accuracy Only (No Speed Bonus)</option>
+       <option value="percent">📊 Percentage Grade (%)</option>
+       <option value="survey">📋 Unscored Survey / Formative</option>
+      </select>
+      ${renderTimersHtml()}
+      <div class="sec-lbl">✨ Session Modifiers</div>
+      <div class="opt-grid">${renderOptsHtml()}</div>
+      <div class="bots-row">
+       <span>🤖 Practice Bots</span>
+       <input type="number" id="mBots" min="0" max="30" value="0">
+      </div>
+     </div>
+    </details>
     <div id="mErr" class="err-msg"></div>
-    <button type="button" id="mLaunchBtn" class="big-btn" onclick="launchFromPhone()">🚀 Create Session from Phone</button>
+    <button type="button" id="mLaunchBtn" class="big-btn" onclick="launchFromPhone()">🚀 Launch ${launchMode==='case'?'Case Study':'Session'}</button>
    </div>
   </div>
  `;
  populateSelect();
+ updateRemoteOptBadge();
  setAwakeLabel();
  loadQuizzes();
 }
@@ -1712,8 +1890,6 @@ async function pollNow(){
  await pollOnce();
  scheduleNext();
 }
-pollNow();
-
 // ===== Keep screen awake (Screen Wake Lock API) =====
 let wakeLock = null;
 function setAwakeLabel(txt){
@@ -1741,4 +1917,6 @@ function toggleAwake(){
 document.addEventListener('visibilitychange', ()=>{ if(document.visibilityState === 'visible') acquireWake(); });
 ['pointerdown','keydown','touchstart'].forEach(ev=>window.addEventListener(ev, ()=>{ if(!wakeLock) acquireWake(); }, {passive:true}));
 acquireWake();
+
+pollNow();
 </script></body></html>

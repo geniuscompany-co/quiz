@@ -3,48 +3,169 @@
 <title>BrainRush! — Host Studio</title>
 <style>
 :root{
- --bg:radial-gradient(1200px 700px at 50% -8%,#6d28d9 0%,#46178f 48%,#22094a 100%);
- --bg-solid:#2d0e5e;--accent:#26890c;--accent-hi:#2fa811;--gold:#ffdf5d;
- --card:#260d4ef2;--glass:#18073699;--border:#ffffff26;--border-hi:#ffffff47
+ --bg:radial-gradient(1150px 680px at 56% -12%,#2c1957 0%,#161224 52%,#0e0b18 100%);
+ --bg-solid:#13101f;--rail:#0f0c1a;--drawer:#1b162b;--accent:#16a34a;--accent-hi:#22c55e;--gold:#ffdf5d;
+ --card:#1c162ef5;--glass:#1b162bcc;--border:#ffffff1c;--border-hi:#ffffff38
 }
-body.theme-neon{--bg:radial-gradient(1200px 700px at 50% -8%,#24145c 0%,#0f0829 52%,#060312 100%);--bg-solid:#0b061d;--accent:#00b884;--accent-hi:#00d498;--card:#13092bf2;--glass:#0a041ab3}
-body.theme-emerald{--bg:radial-gradient(1200px 700px at 50% -8%,#146b52 0%,#0c4535 52%,#06261d 100%);--bg-solid:#0a3b2d;--accent:#e09200;--accent-hi:#f5a60a;--card:#093024f2;--glass:#051f17b3}
-body.theme-sunset{--bg:linear-gradient(145deg,#6a1b9a 0%,#ad1457 52%,#d84315 100%);--bg-solid:#6a1b9a;--accent:#1565c0;--accent-hi:#1e88e5;--card:#3b0d4af2;--glass:#24062eb3}
+body.theme-purple{--bg:radial-gradient(1200px 700px at 50% -8%,#6d28d9 0%,#46178f 48%,#22094a 100%);--bg-solid:#2d0e5e;--rail:#160730;--drawer:#230b49;--accent:#26890c;--accent-hi:#2fa811;--card:#260d4ef2;--glass:#18073699;--border:#ffffff26;--border-hi:#ffffff47}
+body.theme-neon{--bg:radial-gradient(1200px 700px at 50% -8%,#24145c 0%,#0f0829 52%,#060312 100%);--bg-solid:#0b061d;--rail:#080416;--drawer:#12092a;--accent:#00b884;--accent-hi:#00d498;--card:#13092bf2;--glass:#0a041ab3}
+body.theme-emerald{--bg:radial-gradient(1200px 700px at 50% -8%,#146b52 0%,#0c4535 52%,#06261d 100%);--bg-solid:#0a3b2d;--rail:#051f18;--drawer:#093024;--accent:#e09200;--accent-hi:#f5a60a;--card:#093024f2;--glass:#051f17b3}
+body.theme-sunset{--bg:linear-gradient(145deg,#6a1b9a 0%,#ad1457 52%,#d84315 100%);--bg-solid:#6a1b9a;--rail:#270733;--drawer:#3b0d4a;--accent:#1565c0;--accent-hi:#1e88e5;--card:#3b0d4af2;--glass:#24062eb3}
 *{box-sizing:border-box}
-body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,system-ui,sans-serif;background:var(--bg);background-color:var(--bg-solid);background-attachment:fixed;color:#fff;text-align:center;min-height:100vh;overflow-x:hidden;transition:background .4s;-webkit-font-smoothing:antialiased}
-#app{padding:18px 22px 36px;max-width:940px;margin:auto;position:relative;z-index:2}
-body.in-game #app{max-width:1180px;padding:14px 24px 96px}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,system-ui,sans-serif;background:var(--bg);background-color:var(--bg-solid);background-attachment:fixed;color:#fff;text-align:center;min-height:100vh;overflow-x:hidden;transition:background .35s;-webkit-font-smoothing:antialiased}
+#app{padding:22px 28px 24px;max-width:none;margin:0;flex:1;min-width:0;position:relative;z-index:2;display:flex;flex-direction:column}
+body.in-game #app,body.is-audience #app{display:block;max-width:1180px;margin:auto;padding:14px 24px 96px}
 body.in-game.is-audience #app{padding:18px 28px 28px}
+@media (min-width:1080px){
+ body.in-game.wing-open #liveWingBackdrop{display:none!important}
+ body.in-game.wing-open:not(.is-audience):not(.is-presenter-console) #app{max-width:none;margin:0 356px 0 0;padding:56px 26px 96px}
+ body.in-game.wing-open:not(.is-audience):not(.is-presenter-console) .host-dock{left:calc((100vw - 356px)/2);max-width:calc(100vw - 388px)}
+ body.in-game.wing-open:not(.is-audience):not(.is-presenter-console) .top-bar{right:372px}
+}
 h1{font-size:2.2em;margin:.28em 0;letter-spacing:-.015em;text-shadow:0 3px 14px #0005}
 button{font-family:inherit;font-size:1.18em;padding:12px 28px;border:0;border-radius:12px;background:linear-gradient(180deg,var(--accent-hi),var(--accent));color:#fff;cursor:pointer;margin-top:16px;font-weight:800;box-shadow:0 4px 0 #0000004d,0 8px 20px #0004;transition:transform .1s,filter .15s,box-shadow .15s}
 button:hover{filter:brightness(1.07)}
 button:active{transform:translateY(2px);box-shadow:0 2px 0 #0000004d,0 4px 10px #0004}
-.btn-sec{background:#ffffff24;border:1px solid var(--border);box-shadow:0 4px 12px #0003;font-size:1.02em;padding:10px 20px;margin:10px 5px 0}
-.btn-sec:hover{background:#ffffff33}
-.btn-sm{background:#ffffff24;border:1px solid #ffffff2b;box-shadow:none;font-size:.9em;padding:7px 14px;margin:0 3px;border-radius:99px;font-weight:750}
-.btn-sm:hover{background:#ffffff36}
+.btn-sec{background:#ffffff17;border:1px solid var(--border);box-shadow:0 4px 12px #0003;font-size:1.02em;padding:10px 20px;margin:10px 5px 0}
+.btn-sec:hover{background:#ffffff26}
+.btn-sm{background:#ffffff1c;border:1px solid #ffffff29;box-shadow:none;font-size:.9em;padding:7px 14px;margin:0 3px;border-radius:99px;font-weight:750}
+.btn-sm:hover{background:#ffffff2e}
 .btn-sm:active{transform:translateY(1px)}
 
-/* Pre-Game Teacher Workspace Top Bar */
-.ws-bar{position:sticky;top:0;z-index:36;min-height:52px;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 136px 8px 16px;background:#14062bcc;border-bottom:1px solid var(--border);backdrop-filter:blur(16px);text-align:left}
-body.in-game .ws-bar,body.is-audience .ws-bar{display:none!important}
-.ws-brand{display:flex;align-items:center;gap:8px;white-space:nowrap;flex-shrink:0}
-.ws-brand-badge{display:inline-flex;align-items:center;gap:6px;font-weight:900;font-size:.98em;letter-spacing:-.01em;color:#fff}
-.ws-brand-badge i{font-style:normal;background:linear-gradient(135deg,#ffe066,#ff9800);color:#2b0d57;border-radius:8px;padding:3px 7px;font-size:.86em;box-shadow:0 2px 8px #0005}
-.ws-stor{margin:0;padding:4px 9px;font-size:.74em;border-radius:99px;background:#ffffff1a;border:1px solid #ffffff29;color:#fffd;font-weight:750;box-shadow:none}
-.ws-nav{display:flex;align-items:center;gap:5px;flex-wrap:nowrap;justify-content:flex-end;white-space:nowrap;min-width:0}
-body.ws-collapsed .ws-nav{position:absolute;visibility:hidden;pointer-events:none;left:-9999px}
-@media (max-width:1080px){body:not(.ws-measured) .ws-nav{position:absolute;visibility:hidden;pointer-events:none;left:-9999px}}
-.ws-pill{margin:0;padding:5px 10px;font-size:.8em;border-radius:99px;background:#ffffff18;border:1px solid #ffffff28;color:#fff;font-weight:750;box-shadow:none;display:inline-flex;align-items:center;gap:4px;white-space:nowrap;flex-shrink:0}
-.ws-pill:hover{background:#ffffff2c}
-.ws-pill.live{background:#1b5e20cc;border-color:#7dff6b;color:#e8ffe5}
-.ws-pill .ws-sub{font-size:.86em;padding:1px 7px;border-radius:99px;background:#0004;color:var(--gold);font-weight:800}
-@media (max-width:860px){.ws-bar{padding-right:108px}.ws-brand-sub{display:none}}
+/* Design #2: Teacher Studio Split-Shell (Left Rail + Center Library + Right Slide-Over Inspector) */
+.studio-shell{display:flex;min-height:100vh;align-items:stretch;text-align:left}
+body.in-game .studio-shell,body.is-audience .studio-shell{display:block;text-align:center}
+body.in-game .studio-rail,body.is-audience .studio-rail,
+body.in-game .studio-drawer,body.is-audience .studio-drawer,
+body.in-game .studio-mob-bar,body.is-audience .studio-mob-bar,
+body.in-game #studioRailBackdrop,body.is-audience #studioRailBackdrop,
+body.in-game #studioDrawerBackdrop,body.is-audience #studioDrawerBackdrop{display:none!important}
 
-/* Top-right Settings Menu & Top-left Late-Join Pill */
-.top-bar{position:fixed;top:9px;right:14px;z-index:42}
-body.ws-collapsed:not(.in-game) .menu-btn{background:#220b46ee;border-color:#ffdf5d88}
+.studio-mob-bar{display:none;position:sticky;top:0;z-index:36;height:52px;align-items:center;justify-content:space-between;gap:10px;padding:0 116px 0 12px;background:#0f0c1aeb;border-bottom:1px solid var(--border);backdrop-filter:blur(16px);text-align:left}
+.studio-mob-btn{margin:0;padding:6px 12px;font-size:.86em;border-radius:10px;background:#ffffff14;border:1px solid var(--border);color:#fff;font-weight:800;box-shadow:none;display:inline-flex;align-items:center;gap:6px}
+
+.studio-rail{width:228px;flex-shrink:0;background:var(--rail);border-right:1px solid var(--border);padding:18px 13px 14px;display:flex;flex-direction:column;justify-content:space-between;gap:16px;position:sticky;top:0;height:100vh;overflow-y:auto;z-index:35}
+.rail-brand{display:flex;align-items:center;gap:10px;padding:2px 6px 8px}
+.rail-bolt{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,#facc15,#f97316);color:#2b0d57;display:inline-flex;align-items:center;justify-content:center;font-size:1.12em;font-weight:900;box-shadow:0 4px 12px #0006;flex-shrink:0}
+.rail-brand-title{font-weight:900;font-size:1em;letter-spacing:-.01em;line-height:1.1;color:#fff}
+.rail-brand-sub{font-size:.73em;color:#ffffff85;font-weight:650;margin-top:2px}
+.rail-close-mob{display:none;margin:0 0 0 auto;padding:4px 9px;font-size:.8em;border-radius:8px;background:#ffffff14;border:1px solid var(--border);box-shadow:none}
+.rail-nav{display:flex;flex-direction:column;gap:3px}
+.rail-sec-lbl{font-size:.68em;text-transform:uppercase;letter-spacing:1.1px;color:#ffffff66;font-weight:850;padding:12px 10px 4px}
+.rail-mode-btn{width:100%;margin:0;padding:9px 11px;font-size:.86em;border-radius:11px;background:transparent;border:1px solid transparent;color:#ffffffb8;font-weight:750;box-shadow:none;display:flex;align-items:center;justify-content:space-between;gap:8px;text-align:left;transition:background .14s,color .14s,border-color .14s}
+.rail-mode-btn:hover{background:#ffffff0f;color:#fff}
+.rail-mode-btn.active{background:linear-gradient(135deg,#7c3aed,#6d28d9);border-color:#a78bfa66;color:#fff;font-weight:850;box-shadow:0 6px 16px #0005}
+.rail-cnt{font-size:.82em;padding:1px 8px;border-radius:99px;background:#00000045;color:#fffd;font-weight:800;font-variant-numeric:tabular-nums}
+.rail-mode-btn.active .rail-cnt{background:#00000055;color:var(--gold)}
+.rail-btn{width:100%;margin:0;padding:8px 11px;font-size:.84em;border-radius:10px;background:transparent;border:1px solid transparent;color:#ffffffbf;font-weight:680;box-shadow:none;display:flex;align-items:center;justify-content:space-between;gap:6px;text-align:left;transition:background .14s,color .14s}
+.rail-btn:hover{background:#ffffff12;color:#fff}
+.rail-btn.live{background:#14532d88;border-color:#4ade8077;color:#dcfce7}
+.rail-sub{font-size:.8em;padding:1px 7px;border-radius:99px;background:#ffffff14;color:var(--gold);font-weight:800;white-space:nowrap}
+.rail-btn.live .rail-sub{background:#16a34a;color:#fff}
+.rail-foot{display:flex;align-items:center;justify-content:space-between;gap:6px;padding:8px 9px;border-radius:12px;background:#ffffff0a;border:1px solid var(--border)}
+.rail-foot button{margin:0;padding:5px 8px;font-size:.77em;border-radius:8px;background:transparent;color:#ffffffcc;font-weight:750;box-shadow:none;display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+.rail-foot button:hover{background:#ffffff14;color:#fff}
+.rail-foot .stor-pill{color:#4ade80;font-weight:800}
+
+.studio-backdrop{display:none;position:fixed;inset:0;background:#05030cb3;backdrop-filter:blur(3px);z-index:45}
+.studio-backdrop.open{display:block}
+
+/* Center Clean Library Workspace */
+.studio-workspace{flex:1;display:flex;flex-direction:column;justify-content:space-between;gap:16px;max-width:1040px;width:100%;margin:0 auto}
+.studio-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;flex-wrap:wrap;padding:0 108px 16px 0;border-bottom:1px solid var(--border)}
+body.drawer-open:not(.in-game) .studio-head{padding-right:108px}
+.studio-title-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.studio-title-row h2{margin:0;font-size:1.38em;font-weight:900;letter-spacing:-.015em;color:#fff}
+.studio-sub{margin:4px 0 0;font-size:.84em;color:#ffffff99;font-weight:500}
+.studio-head-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.studio-btn-new{margin:0;padding:8px 14px;font-size:.84em;border-radius:11px;background:#ffffff12;border:1px solid var(--border-hi);color:#fff;font-weight:800;box-shadow:none;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.studio-btn-new:hover{background:#ffffff22}
+.studio-btn-Inspector{margin:0;padding:8px 14px;font-size:.84em;border-radius:11px;background:#ffffff14;border:1px solid var(--border-hi);color:#fff;font-weight:800;box-shadow:none;display:inline-flex;align-items:center;gap:8px;white-space:nowrap;transition:background .15s,color .15s,border-color .15s}
+.studio-btn-Inspector:hover{background:#ffffff24}
+body.drawer-open .studio-btn-Inspector{background:var(--gold);border-color:#fde047;color:#1e1b2e}
+body.drawer-open .studio-btn-Inspector .acc-badge{background:#1e1b2e26;color:#1e1b2e}
+
+.studio-filter-bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:14px}
+.studio-search{flex:1;min-width:220px;padding:9px 13px;border-radius:11px;border:1px solid var(--border);background:#ffffff0d;color:#fff;font-family:inherit;font-size:.88em;font-weight:600;outline:none;transition:border-color .15s,background .15s}
+.studio-search::placeholder{color:#ffffff6e}
+.studio-search:focus{border-color:#a78bfa;background:#ffffff14}
+
+.logo{max-width:180px;border-radius:14px;margin:0 auto 12px;display:block;box-shadow:0 8px 24px #0006;border:2px solid #ffffff30}
+.studio-custom-logo{display:none;height:36px;width:auto;border-radius:9px;border:1px solid var(--border-hi);object-fit:contain;background:#fff}
+
+/* Sticky Bottom Launch Bar */
+.studio-launch-bar{margin-top:auto;padding:14px 18px;border-radius:16px;background:#0f0c1acc;border:1px solid var(--border-hi);backdrop-filter:blur(14px);display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;box-shadow:0 12px 32px #0006;position:sticky;bottom:14px;z-index:20}
+.studio-summary-pills{display:flex;align-items:center;gap:7px;flex-wrap:wrap;font-size:.82em}
+.sum-chip{margin:0;padding:6px 11px;border-radius:9px;background:#ffffff0f;border:1px solid var(--border);color:#ffffffd9;font-size:1em;font-weight:700;box-shadow:none;display:inline-flex;align-items:center;gap:5px;cursor:pointer;white-space:nowrap}
+.sum-chip:hover{background:#ffffff1c;border-color:var(--border-hi)}
+.sum-chip.on{background:#14532d77;border-color:#4ade8077;color:#dcfce7}
+.sum-edit-link{margin:0;padding:5px 8px;background:transparent;border:0;color:var(--gold);font-size:1em;font-weight:800;box-shadow:none;cursor:pointer}
+.sum-edit-link:hover{text-decoration:underline}
+.studio-cta-btn{margin:0;padding:12px 26px;font-size:1.02em;font-weight:900;border-radius:12px;background:linear-gradient(180deg,#22c55e,#16a34a);color:#06210f;box-shadow:0 4px 0 #0d5c2b,0 8px 22px #0006;white-space:nowrap;letter-spacing:-.01em}
+.studio-cta-btn:hover{filter:brightness(1.06)}
+
+/* Slide-Over Right Settings Inspector Drawer */
+.studio-drawer{width:380px;max-width:92vw;flex-shrink:0;background:var(--drawer);border-left:1px solid var(--border-hi);display:none;flex-direction:column;justify-content:space-between;position:sticky;top:0;height:100vh;z-index:48;box-shadow:-16px 0 44px #0009}
+body.drawer-open:not(.in-game):not(.is-audience) .studio-drawer{display:flex;animation:drawerIn .2s cubic-bezier(.22,1,.36,1)}
+@keyframes drawerIn{from{opacity:.5;transform:translateX(26px)}to{opacity:1;transform:translateX(0)}}
+.drawer-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:16px 18px 13px;border-bottom:1px solid var(--border)}
+.drawer-head-title{font-size:.98em;font-weight:900;color:var(--gold);display:flex;align-items:center;gap:7px}
+.drawer-close-btn{margin:0;padding:6px 12px;font-size:.8em;border-radius:9px;background:#ffffff14;border:1px solid var(--border);color:#fff;font-weight:750;box-shadow:none}
+.drawer-close-btn:hover{background:#ffffff24}
+.drawer-body{flex:1;overflow-y:auto;padding:14px 16px;display:flex;flex-direction:column;gap:10px}
+.drawer-foot{padding:12px 16px 15px;border-top:1px solid var(--border);background:#00000029}
+.drawer-done-btn{width:100%;margin:0;padding:10px 16px;font-size:.9em;font-weight:900;border-radius:11px;background:var(--gold);color:#1e1b2e;box-shadow:none}
+.studio-drawer .mode-grid{grid-template-columns:1fr;gap:6px}
+.studio-drawer .quick-bar{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.studio-drawer .quick-bar label{justify-content:space-between;background:#ffffff0d;border:1px solid #ffffff1c;border-radius:9px;padding:7px 9px;font-size:.83em;white-space:nowrap;gap:5px}
+.studio-drawer .quick-bar input{width:46px;padding:4px 5px;font-size:.95em}
+.studio-drawer .case-timers-grid{grid-template-columns:1fr 1fr}
+
+@media (min-width:1120px){
+ body.drawer-open:not(.in-game):not(.is-audience) #studioDrawerBackdrop{display:none!important}
+ body.drawer-open:not(.in-game):not(.is-audience) .top-bar{right:408px}
+}
+@media (max-width:1119px){
+ .studio-drawer{position:fixed;top:0;right:0;bottom:0;height:100vh}
+}
+@media (max-width:860px){
+ .studio-shell{flex-direction:column}
+ .studio-mob-bar{display:flex}
+ .studio-rail{position:fixed;top:0;left:0;bottom:0;height:100vh;z-index:49;transform:translateX(-104%);transition:transform .22s cubic-bezier(.22,1,.36,1);box-shadow:16px 0 44px #000b}
+ body.rail-open .studio-rail{transform:translateX(0)}
+ .rail-close-mob{display:inline-flex}
+ #app{padding:16px 16px 22px}
+ .studio-head{padding-right:0!important}
+}
+
+/* Collapsible Live Private Host Wing (Hidden by default for single-screen projector safety!) */
+.live-wing{position:fixed;top:0;right:0;bottom:0;width:352px;max-width:92vw;background:#161224f7;border-left:1px solid var(--border-hi);backdrop-filter:blur(18px);z-index:46;display:none;flex-direction:column;justify-content:space-between;padding:16px;text-align:left;box-shadow:-16px 0 48px #000b}
+body.in-game.wing-open:not(.is-audience):not(.is-presenter-console) .live-wing{display:flex;animation:drawerIn .2s cubic-bezier(.22,1,.36,1)}
+body.is-presenter-console .live-wing{display:none!important}
+body.wing-open #metaBar{display:none!important}
+.wing-head{display:flex;align-items:center;justify-content:space-between;gap:8px;padding-bottom:11px;border-bottom:1px solid var(--border)}
+.wing-title{font-size:.8em;font-weight:900;text-transform:uppercase;letter-spacing:1px;color:#c4b5fd;display:flex;align-items:center;gap:6px}
+.wing-scroll{flex:1;overflow-y:auto;padding:12px 0;display:flex;flex-direction:column;gap:12px}
+.wing-note-card{background:#fbbf241a;border:1px solid #fcd34d4d;border-radius:13px;padding:12px 14px;font-size:.9em;line-height:1.45;color:#fef3c7}
+.wing-note-card b.wn-lbl{display:flex;align-items:center;justify-content:space-between;gap:6px;color:var(--gold);font-size:.86em;margin-bottom:5px}
+.wing-sec-card{background:#ffffff0c;border:1px solid var(--border);border-radius:13px;padding:11px 13px;font-size:.85em;display:flex;flex-direction:column;gap:8px}
+.wing-sec-lbl{font-size:.76em;font-weight:850;text-transform:uppercase;letter-spacing:.8px;color:#ffffff99;display:flex;align-items:center;justify-content:space-between}
+.wing-btn-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.wing-btn-grid button,.wing-ctl-row button{margin:0;padding:7px 10px;font-size:.88em;border-radius:9px;background:#ffffff14;border:1px solid var(--border);color:#fff;font-weight:750;box-shadow:none}
+.wing-btn-grid button:hover,.wing-ctl-row button:hover{background:#ffffff24}
+.wing-btn-grid button.on{background:#14532dcc;border-color:#4ade80;color:#dcfce7}
+.wing-ctl-row{display:flex;flex-wrap:wrap;gap:6px}
+.wing-next-btn{width:100%;margin:0;padding:13px 16px;border-radius:12px;background:linear-gradient(180deg,#22c55e,#16a34a);color:#05210e;font-size:.96em;font-weight:900;box-shadow:0 4px 0 #0d5c2b}
+.dock-wing-btn{position:relative}
+.dock-wing-btn.active{background:var(--gold)!important;color:#1e1b2e!important;border-color:#fde047!important}
+.wing-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--gold);margin-left:5px;vertical-align:middle;box-shadow:0 0 6px var(--gold)}
+.dock-wing-btn.active .wing-dot{background:#1e1b2e;box-shadow:none}
+
+/* Top-right Audio/Theme Prefs Menu & Top-left Late-Join Pill */
+.top-bar{position:fixed;top:22px;right:28px;z-index:42;transition:right .2s cubic-bezier(.22,1,.36,1)}
 body.in-game .top-bar{top:12px;right:16px}
+@media (max-width:860px){body:not(.in-game) .top-bar{top:8px;right:12px}}
+@media (min-width:861px){body:not(.in-game) #menuWsGrp,body:not(.in-game) #menuMidSep{display:none}}
 .late-join{position:fixed;top:12px;left:16px;z-index:38;display:none}
 .late-btn{font-size:.88em;padding:8px 14px;margin:0;background:#120526cc;border:1px solid var(--border-hi);border-radius:99px;color:#fff;cursor:pointer;display:flex;align-items:center;gap:8px;backdrop-filter:blur(10px);box-shadow:0 4px 16px #0006;font-weight:750}
 .late-btn b{color:var(--gold);font-size:1.12em;letter-spacing:.6px;font-variant-numeric:tabular-nums}
@@ -53,16 +174,17 @@ body.in-game .top-bar{top:12px;right:16px}
 .late-qr svg,.late-qr img{width:152px;height:152px;border-radius:10px;display:block}
 .join-qr-img{background:#fff;border-radius:14px;padding:8px;display:block;box-shadow:0 8px 26px #0006}
 
-.menu-btn{font-size:1.05em;padding:7px 13px;margin:0;background:#120526cc;border:1px solid var(--border-hi);border-radius:99px;color:#fff;cursor:pointer;display:flex;align-items:center;gap:7px;backdrop-filter:blur(10px);box-shadow:0 4px 14px #0005}
-.menu-btn:hover{background:#1b0838ee}
+.menu-btn{font-size:.98em;padding:7px 13px;margin:0;background:#ffffff12;border:1px solid var(--border-hi);border-radius:11px;color:#fff;cursor:pointer;display:flex;align-items:center;gap:6px;backdrop-filter:blur(10px);box-shadow:none}
+body.in-game .menu-btn{background:#120526cc;border-radius:99px;box-shadow:0 4px 14px #0005}
+.menu-btn:hover{background:#ffffff22}
 .menu-dot{width:8px;height:8px;border-radius:50%;background:#7dff6b;display:none}
 .menu-dot.on{display:inline-block}
-.menu-drop{position:absolute;top:46px;right:0;width:292px;max-width:calc(100vw - 24px);max-height:82vh;overflow-y:auto;background:var(--card);border:1px solid var(--border-hi);border-radius:16px;padding:8px;box-shadow:0 16px 44px #000c;display:none;flex-direction:column;gap:3px;text-align:left;backdrop-filter:blur(16px)}
+.menu-drop{position:absolute;top:44px;right:0;width:292px;max-width:calc(100vw - 24px);max-height:82vh;overflow-y:auto;background:var(--card);border:1px solid var(--border-hi);border-radius:16px;padding:8px;box-shadow:0 16px 44px #000c;display:none;flex-direction:column;gap:3px;text-align:left;backdrop-filter:blur(16px)}
 .menu-drop.open{display:flex;animation:pop .16s ease-out}
 .menu-drop button{width:100%;margin:0;padding:9px 12px;font-size:.91em;font-weight:650;background:transparent;border-radius:10px;text-align:left;display:flex;align-items:center;justify-content:space-between;gap:8px;color:#fff;box-shadow:none}
 .menu-drop button:hover{background:#fff2}
 .menu-drop button .state{font-size:.78em;padding:2px 8px;border-radius:99px;background:#fff2;color:#fffc;white-space:nowrap;flex-shrink:0}
-.menu-drop button.on .state{background:#26890c;color:#fff;font-weight:800}
+.menu-drop button.on .state{background:#16a34a;color:#fff;font-weight:800}
 .voice-cfg{background:#0004;border-radius:10px;padding:8px 10px;margin:2px 4px;display:none;flex-direction:column;gap:6px;font-size:.84em}
 .voice-cfg.open{display:flex}
 .voice-cfg label{display:flex;align-items:center;justify-content:space-between;gap:8px;color:#fffd;font-weight:600}
@@ -70,64 +192,46 @@ body.in-game .top-bar{top:12px;right:16px}
 .menu-sep{height:1px;background:#fff2;margin:4px 6px}
 .menu-group{display:flex;flex-direction:column;gap:2px}
 .menu-hdr{font-size:.68em;text-transform:uppercase;letter-spacing:1px;font-weight:900;color:var(--gold);opacity:.88;padding:5px 12px 2px}
-body.ws-collapsed:not(.in-game) #menuWsGrp{order:-1;border-bottom:1px solid #fff2;padding-bottom:5px;margin-bottom:3px}
-body.ws-collapsed:not(.in-game) #menuMidSep{display:none}
 .menu-kb{font-size:.75em;opacity:.7;padding:6px 10px 4px;line-height:1.45}
 
-/* Pre-Game Setup Studio (Compact Progressive-Disclosure Card) */
-.logo{max-width:195px;width:54%;border-radius:16px;margin:4px auto 14px;display:block;box-shadow:0 8px 24px #0006;border:2px solid #ffffff30}
-.setup-card{max-width:610px;margin:0 auto;background:var(--glass);border:1px solid var(--border);border-radius:22px;padding:18px 20px 20px;box-shadow:0 18px 50px #0007;backdrop-filter:blur(14px)}
-.sec-tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;background:#0006;padding:5px;border-radius:14px;margin-bottom:14px;border:1px solid #fff2}
-.sec-tabs button{margin:0;padding:10px 14px;font-size:1.03em;border-radius:10px;background:transparent;color:#ffffffd9;font-weight:800;box-shadow:none;transition:background .14s}
-@media (max-width:480px){.sec-tabs button{font-size:.94em;padding:10px 8px;white-space:nowrap}}
-.sec-tabs button.active{background:linear-gradient(180deg,#ffe57f,#ffd54f);color:#2b0d57;box-shadow:0 4px 14px #0006}
-
-/* Single Deck Dropdown + Contextual Quick-Menu */
-.quiz-row{display:flex;gap:8px;justify-content:center;align-items:center;flex-wrap:wrap;width:100%;margin-bottom:12px}
-.quiz-row select{flex:1;min-width:190px;font-size:1em;padding:11px 14px;border-radius:11px;border:0;background:#fff;color:#2b0d57;font-weight:800;cursor:pointer}
+/* Hidden Legacy Select Sync + Deck Action Helpers */
 .deck-more-wrap{position:relative;display:none}
-.deck-more-wrap.show{display:inline-block}
-.deck-more-btn{margin:0;padding:10px 13px;font-size:.95em;border-radius:11px;background:#ffffff24;border:1px solid var(--border);color:#fff;font-weight:900;box-shadow:none;line-height:1}
-.deck-more-btn:hover{background:#ffffff36}
-.deck-more-drop{position:absolute;top:calc(100% + 6px);right:0;min-width:185px;background:var(--card);border:1px solid var(--border-hi);border-radius:13px;padding:6px;box-shadow:0 14px 36px #000c;display:none;flex-direction:column;gap:2px;z-index:30;text-align:left}
-.deck-more-drop.open{display:flex;animation:pop .14s ease-out}
-.deck-more-drop button{margin:0;padding:8px 11px;font-size:.86em;border-radius:8px;background:transparent;color:#fff;font-weight:700;text-align:left;box-shadow:none;display:flex;align-items:center;gap:7px;white-space:nowrap}
-.deck-more-drop button:hover{background:#fff2}
+.deck-more-drop{display:none}
 
-/* Collapsible Setup Accordions & Nested Sub-Accordions */
-.acc-list{display:flex;flex-direction:column;gap:8px;text-align:left}
-details.acc-box{background:#ffffff13;border:1px solid #ffffff26;border-radius:13px;overflow:hidden;transition:border-color .15s,background .15s}
-details.acc-box:hover{border-color:#ffffff40}
-details.acc-box[open]{background:#0d031f80;border-color:#ffdf5d77}
-details.acc-box>summary{list-style:none;cursor:pointer;padding:11px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;font-weight:800;font-size:.95em;user-select:none}
+/* Collapsible Inspector Accordions & Nested Sub-Accordions */
+.acc-list{display:flex;flex-direction:column;gap:9px;text-align:left}
+details.acc-box{background:#ffffff0a;border:1px solid var(--border);border-radius:13px;overflow:hidden;transition:border-color .15s,background .15s}
+details.acc-box:hover{border-color:#ffffff33}
+details.acc-box[open]{background:#0000002e;border-color:#ffdf5d55}
+details.acc-box>summary{list-style:none;cursor:pointer;padding:11px 13px;display:flex;align-items:center;justify-content:space-between;gap:10px;font-weight:800;font-size:.9em;user-select:none}
 details.acc-box>summary::-webkit-details-marker{display:none}
 .acc-right{display:inline-flex;align-items:center;gap:8px;font-size:.84em;flex-shrink:0}
-.acc-badge{padding:2px 10px;border-radius:99px;background:#ffffff1f;color:#fffd;font-weight:750;font-variant-numeric:tabular-nums;white-space:nowrap}
-.acc-badge.on{background:#26890c;color:#fff;font-weight:850}
-.acc-caret{opacity:.8;transition:transform .18s;display:inline-block;font-size:1.12em;line-height:1}
+.acc-badge{padding:2px 9px;border-radius:99px;background:#ffffff1a;color:#fffd;font-weight:750;font-variant-numeric:tabular-nums;white-space:nowrap;font-size:.88em}
+.acc-badge.on{background:#16a34a;color:#fff;font-weight:850}
+.acc-caret{opacity:.8;transition:transform .18s;display:inline-block;font-size:1.1em;line-height:1}
 details.acc-box[open]>summary .acc-caret{transform:rotate(180deg);color:var(--gold);opacity:1}
-.acc-body{padding:12px 14px 14px;border-top:1px solid #ffffff1c}
+.acc-body{padding:11px 13px 13px;border-top:1px solid #ffffff17}
 
-details.sub-acc{background:#ffffff0d;border:1px solid #ffffff1f;border-radius:10px;margin-top:8px;overflow:hidden}
+details.sub-acc{background:#ffffff08;border:1px solid #ffffff1a;border-radius:10px;margin-top:8px;overflow:hidden}
 details.sub-acc:first-child{margin-top:0}
-details.sub-acc[open]{background:#00000038;border-color:#ffffff36}
-details.sub-acc>summary{list-style:none;cursor:pointer;padding:9px 12px;display:flex;align-items:center;justify-content:space-between;gap:8px;font-weight:750;font-size:.88em;color:#fff;user-select:none}
+details.sub-acc[open]{background:#00000038;border-color:#ffffff30}
+details.sub-acc>summary{list-style:none;cursor:pointer;padding:9px 12px;display:flex;align-items:center;justify-content:space-between;gap:8px;font-weight:750;font-size:.86em;color:#fff;user-select:none}
 details.sub-acc>summary::-webkit-details-marker{display:none}
 .sub-caret{opacity:.78;transition:transform .16s;display:inline-block;font-size:1.08em;line-height:1}
 details.sub-acc[open]>summary .sub-caret{transform:rotate(180deg);color:var(--gold);opacity:1}
-.sub-body{padding:10px 12px 12px;border-top:1px solid #ffffff17}
+.sub-body{padding:10px 11px 11px;border-top:1px solid #ffffff14}
 
-.preset-sel-row{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:8px;padding:8px 11px;border-radius:10px;background:#0004;border:1px solid #ffffff1f;font-size:.88em;font-weight:800}
-.preset-sel-row select{flex:1;min-width:190px;padding:7px 10px;border-radius:8px;border:0;background:#fff;color:#2b0d57;font-weight:750;font-size:.96em;cursor:pointer}
+.preset-sel-row{display:flex;flex-direction:column;align-items:stretch;gap:5px;margin-bottom:8px;padding:8px 10px;border-radius:10px;background:#00000030;border:1px solid #ffffff1a;font-size:.83em;font-weight:800}
+.preset-sel-row select{width:100%;padding:7px 10px;border-radius:8px;border:0;background:#fff;color:#2b0d57;font-weight:750;font-size:.95em;cursor:pointer}
 
-.quick-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;font-weight:750;font-size:.94em}
+.quick-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;font-weight:750;font-size:.92em}
 .quick-bar label{display:inline-flex;align-items:center;gap:6px}
-.quick-bar input[type=number],.acc-body input[type=number]{width:58px;font-size:.98em;padding:6px 7px;border-radius:8px;border:0;text-align:center;font-weight:800;color:#2b0d57;background:#fff;font-variant-numeric:tabular-nums}
+.quick-bar input[type=number],.acc-body input[type=number]{width:54px;font-size:.96em;padding:5px 6px;border-radius:7px;border:0;text-align:center;font-weight:800;color:#2b0d57;background:#fff;font-variant-numeric:tabular-nums}
 .mode-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(175px,1fr));gap:7px}
-.mode-pill{display:flex;align-items:center;gap:8px;background:#ffffff12;border:1px solid #ffffff22;padding:8px 10px;border-radius:9px;cursor:pointer;font-size:.88em;font-weight:650;user-select:none;transition:background .15s,border-color .15s}
-.mode-pill:hover{background:#ffffff22}
-.mode-pill:has(input:checked){background:#26890c77;border-color:#7dff6b}
-.mode-pill input[type=checkbox]{width:16px;height:16px;margin:0;cursor:pointer;accent-color:#26890c}
+.mode-pill{display:flex;align-items:center;gap:8px;background:#ffffff0d;border:1px solid #ffffff1e;padding:8px 10px;border-radius:9px;cursor:pointer;font-size:.86em;font-weight:650;user-select:none;transition:background .15s,border-color .15s}
+.mode-pill:hover{background:#ffffff1a}
+.mode-pill:has(input:checked){background:#15803d66;border-color:#4ade80}
+.mode-pill input[type=checkbox]{width:16px;height:16px;margin:0;cursor:pointer;accent-color:#16a34a}
 
 /* 2-Column Live Lobby */
 .lobby-stage{display:grid;grid-template-columns:310px minmax(0,1fr);gap:20px;align-items:stretch;text-align:left;margin-top:6px}
@@ -152,7 +256,8 @@ a.join-link:hover{background:#ffffff2b;text-decoration:underline}
 @keyframes pop{from{transform:scale(.6);opacity:0}to{transform:scale(1);opacity:1}}
 
 /* Live Question & Results 16:9 Stage */
-@media (max-width:1060px){body.in-game:not(.is-presenter-console) #app{padding-top:56px}}
+@media (max-width:1380px){body.in-game:not(.is-audience):not(.is-presenter-console) #app{padding-top:56px}}
+@media (max-width:1060px){body.in-game.is-audience #app{padding-top:56px}}
 .stage-hud{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;max-width:680px;margin:0 auto 10px;padding:7px 14px;background:#120526b8;border:1px solid var(--border);border-radius:16px;backdrop-filter:blur(10px)}
 .stage-hud-left,.stage-hud-right{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .qnum{display:inline-flex;align-items:center;gap:6px;background:#fff;color:#391078;font-weight:900;font-size:1.12em;padding:6px 18px;border-radius:99px;margin:0;box-shadow:0 4px 12px #0004;font-variant-numeric:tabular-nums}
@@ -471,19 +576,27 @@ body.cb .c4{background:#CC79A7}body.cb .c5{background:#56B4E9;color:#111}body.cb
 .av-wrap .av-hat{position:absolute;top:-.5em;right:-.26em;font-size:.66em;line-height:1;filter:drop-shadow(0 1px 3px #000b);pointer-events:none}
 .av-wrap.av-pod{width:1.34em;height:1.34em;margin-right:0}
 .pct-pill{font-size:.8em;background:#ffffff24;border:1px solid #ffffff38;padding:1px 8px;border-radius:99px;margin-right:7px;font-weight:800;color:#ffdf5d}
-.deck-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;max-height:240px;overflow-y:auto;padding-right:2px}
-@media (max-width:560px){.deck-grid{grid-template-columns:1fr}}
-.deck-card{background:#ffffff12;border:1px solid #ffffff26;border-radius:11px;padding:9px 11px;cursor:pointer;text-align:left;transition:background .15s,border-color .15s}
-.deck-card:hover{background:#ffffff20;border-color:#ffffff45}
-.deck-card.active{background:#26890c66;border-color:#7dff6b;box-shadow:0 0 0 1px #7dff6b}
-.deck-card-top{display:flex;align-items:center;justify-content:space-between;gap:6px;margin-bottom:4px}
-.deck-title{font-weight:850;font-size:.9em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.deck-cnt{font-size:.76em;background:#0005;padding:2px 7px;border-radius:99px;font-weight:800;white-space:nowrap;color:var(--gold)}
-.deck-est{font-size:.75em;background:#ffffff1c;padding:1px 7px;border-radius:99px;font-weight:750;white-space:nowrap}
-.deck-meta{display:flex;align-items:center;gap:5px;flex-wrap:wrap;font-size:.76em;opacity:.88}
-.deck-tag{background:#0005;padding:1px 6px;border-radius:99px}
-.f-chip{margin:0;padding:4px 10px;font-size:.78em;border-radius:99px;background:#ffffff18;border:1px solid #ffffff28;color:#fff;font-weight:750;box-shadow:none}
-.f-chip.active{background:var(--gold);color:#2b0d57;border-color:var(--gold)}
+.deck-grid{display:flex;flex-direction:column;gap:9px;margin-top:12px}
+.deck-card{background:#ffffff0b;border:1px solid var(--border);border-radius:14px;padding:13px 16px;cursor:pointer;text-align:left;display:flex;align-items:center;justify-content:space-between;gap:14px;transition:background .15s,border-color .15s,box-shadow .15s}
+.deck-card:hover{background:#ffffff14;border-color:#ffffff36}
+.deck-card.active{background:#7c3aed30;border-color:#a78bfa;box-shadow:0 6px 22px #0005,0 0 0 1px #a78bfa66}
+.deck-left{display:flex;align-items:center;gap:13px;min-width:0;flex:1}
+.deck-check{width:22px;height:22px;border-radius:50%;border:1.5px solid #ffffff45;display:inline-flex;align-items:center;justify-content:center;font-size:.78em;font-weight:900;flex-shrink:0;color:transparent;transition:background .14s,border-color .14s,color .14s}
+.deck-card.active .deck-check{background:#34d399;border-color:#6ee7b7;color:#052e16}
+.deck-info{min-width:0;flex:1}
+.deck-title{font-weight:800;font-size:.96em;color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.deck-meta{display:flex;align-items:center;gap:7px;flex-wrap:wrap;font-size:.77em;color:#ffffff99;margin-top:3px}
+.deck-tag{background:#00000040;padding:1px 7px;border-radius:6px;color:#d8b4fe;font-weight:650}
+.deck-right{display:flex;align-items:center;gap:7px;flex-shrink:0;flex-wrap:wrap;justify-content:flex-end}
+.deck-acts{display:inline-flex;align-items:center;gap:5px}
+.deck-act-btn{margin:0;padding:5px 10px;font-size:.76em;border-radius:8px;background:#ffffff16;border:1px solid #ffffff2b;color:#fff;font-weight:750;box-shadow:none;white-space:nowrap}
+.deck-act-btn:hover{background:#ffffff2b}
+.deck-cnt{font-size:.79em;background:#00000052;padding:4px 10px;border-radius:9px;font-weight:850;white-space:nowrap;color:var(--gold);font-variant-numeric:tabular-nums}
+.deck-est{font-size:.77em;background:#ffffff12;border:1px solid #ffffff1a;padding:4px 9px;border-radius:9px;font-weight:700;white-space:nowrap;color:#ffffffcc;font-variant-numeric:tabular-nums}
+@media (max-width:620px){.deck-card{flex-direction:column;align-items:stretch;gap:10px}.deck-right{justify-content:space-between;padding-left:35px}}
+.f-chip{margin:0;padding:6px 12px;font-size:.79em;border-radius:99px;background:#ffffff0f;border:1px solid var(--border);color:#ffffffcc;font-weight:750;box-shadow:none}
+.f-chip:hover{background:#ffffff1c;color:#fff}
+.f-chip.active{background:var(--gold);color:#1e1b2e;border-color:var(--gold);font-weight:850}
 
 .pts-badge{display:inline-block;background:#120526d9;border:1.5px solid #ffdf5d99;color:#ffdf5d;font-weight:850;padding:4px 14px;border-radius:99px;font-size:.9em;margin:2px}
 .pts-badge.all-ok{background:#1b5e20dd;border-color:#7dff6b;color:#d7ffd2}
@@ -566,71 +679,65 @@ body.cb .c4{background:#CC79A7}body.cb .c5{background:#56B4E9;color:#111}body.cb
 .vc-sub>summary::-webkit-details-marker{display:none}
 .vc-sub-body{padding:8px 10px;border-top:1px solid #ffffff1a;font-size:.84em}
 
-/* #1 Live Chat & Megaphone, #4 Standings & Profiles, #5 Host Play-Along */
+/* #1 Live Chat & Megaphone, #4 Standings & Profiles, #5 Host Play-Along (Design #2 Studio Styled) */
+@media (min-width:1080px){
+ body.in-game.wing-open:not(.is-audience):not(.is-presenter-console){--wing-shift:356px}
+}
 #chatFeed{position:fixed;left:14px;bottom:14px;width:min(380px,38vw);z-index:18;pointer-events:none;display:flex;flex-direction:column;gap:6px;text-align:left}
-#chatFeed div{background:rgba(12,4,28,.86);border:1px solid rgba(255,255,255,.18);border-radius:12px;padding:7px 11px;font-size:1.02em;animation:chatIn .25s ease-out;word-break:break-word;box-shadow:0 6px 18px rgba(0,0,0,.45)}
-#chatFeed b{color:#ffdf5d}
-#chatFeed .hf{background:linear-gradient(135deg,#ffdf5d,#ffb300)!important;color:#2b0d57;font-weight:850}
-#chatFeed .hf b{color:#2b0d57}
+#chatFeed div{background:rgba(15,12,26,.90);border:1px solid var(--border-hi);border-radius:12px;padding:7px 11px;font-size:1.02em;animation:chatIn .25s ease-out;word-break:break-word;box-shadow:0 6px 18px rgba(0,0,0,.48);backdrop-filter:blur(8px)}
+#chatFeed b{color:var(--gold)}
+#chatFeed .hf{background:linear-gradient(135deg,#ffdf5d,#ffb300)!important;color:#1e1b2e;font-weight:850}
+#chatFeed .hf b{color:#1e1b2e}
 @keyframes chatIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
-#hostBannerBig{position:fixed;left:50%;top:72px;transform:translateX(-50%);z-index:58;display:none;max-width:82vw;background:linear-gradient(135deg,#ffdf5d,#ffb300);color:#2b0d57;border-radius:18px;padding:15px 26px;font-weight:900;font-size:1.85em;text-align:center;box-shadow:0 12px 42px rgba(0,0,0,.62);cursor:pointer}
+#hostBannerBig{position:fixed;left:50%;top:72px;transform:translateX(-50%);z-index:58;display:none;max-width:82vw;background:linear-gradient(135deg,#ffdf5d,#ffb300);color:#1e1b2e;border-radius:18px;padding:15px 26px;font-weight:900;font-size:1.85em;text-align:center;box-shadow:0 12px 42px rgba(0,0,0,.62);cursor:pointer}
 #hostBannerBig small{display:block;font-size:.42em;letter-spacing:.15em;opacity:.82;margin-bottom:2px}
-#hostChatBtn{position:fixed;right:14px;bottom:18px;z-index:26;background:#ffdf5d;color:#2b0d57;border:0;border-radius:99px;padding:9px 16px;font-weight:850;font-size:.94em;cursor:pointer;box-shadow:0 6px 20px rgba(0,0,0,.45);margin:0}
+#hostChatBtn{position:fixed;right:calc(14px + var(--wing-shift,0px));bottom:18px;z-index:26;background:var(--gold);color:#1e1b2e;border:0;border-radius:99px;padding:9px 16px;font-weight:850;font-size:.92em;cursor:pointer;box-shadow:0 6px 20px rgba(0,0,0,.45);margin:0;transition:right .22s ease}
 #hostChatBtn i{font-style:normal;background:#ff4d6d;color:#fff;border-radius:99px;padding:1px 7px;margin-left:6px;font-size:.86em;display:none}
-#hostPlayBtn{position:fixed;right:148px;bottom:18px;z-index:26;background:#7cf5a8;color:#0b3d22;border:0;border-radius:99px;padding:9px 15px;font-weight:850;font-size:.94em;cursor:pointer;box-shadow:0 6px 20px rgba(0,0,0,.45);margin:0}
-#hostChat{position:fixed;right:14px;bottom:64px;width:min(410px,92vw);height:min(58vh,500px);z-index:28;background:rgba(27,8,64,.97);border:2px solid #ffdf5d;border-radius:16px;display:none;flex-direction:column;overflow:hidden;box-shadow:0 16px 44px rgba(0,0,0,.62);text-align:left}
+#hostPlayBtn{position:fixed;right:calc(var(--hp-right,148px) + var(--wing-shift,0px));bottom:18px;z-index:26;background:linear-gradient(180deg,#4ade80,#22c55e);color:#05210e;border:0;border-radius:99px;padding:9px 15px;font-weight:850;font-size:.92em;cursor:pointer;box-shadow:0 6px 20px rgba(0,0,0,.45);margin:0;transition:right .22s ease}
+#hostChat{position:fixed;right:calc(14px + var(--wing-shift,0px));bottom:64px;width:min(410px,92vw);height:min(58vh,500px);z-index:28;background:#1b162bf7;backdrop-filter:blur(16px);border:1.5px solid var(--gold);border-radius:16px;display:none;flex-direction:column;overflow:hidden;box-shadow:0 18px 48px rgba(0,0,0,.65);text-align:left;transition:right .22s ease}
 #hostChat.open{display:flex}
-#hostChat .hd{padding:10px 12px;font-weight:850;border-bottom:1px solid rgba(255,255,255,.16);display:flex;justify-content:space-between;align-items:center;gap:6px;flex-wrap:wrap}
-#hostChat .hc-pill{margin:0;padding:4px 9px;border-radius:99px;border:1px solid rgba(255,255,255,.28);background:rgba(255,255,255,.12);color:#fff;font-size:.76em;font-weight:800;cursor:pointer;box-shadow:none}
-#hostChat .hc-pill.on{background:#26890c;border-color:#7dff6b}
+#hostChat .hd{padding:10px 12px;font-weight:850;background:#0f0c1acc;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;gap:6px;flex-wrap:wrap}
+#hostChat .hc-pill{margin:0;padding:4px 9px;border-radius:99px;border:1px solid var(--border-hi);background:#ffffff12;color:#fff;font-size:.76em;font-weight:800;cursor:pointer;box-shadow:none}
+#hostChat .hc-pill.on{background:#16a34a;border-color:#4ade80;color:#fff}
 #hostChat .lst{flex:1;overflow-y:auto;padding:8px 12px}
 #hostChat .lst>div{padding:5px 0;word-break:break-word;font-size:.94em;border-bottom:1px solid rgba(255,255,255,.08)}
-#hostChat .lst b{color:#ffdf5d}
+#hostChat .lst b{color:var(--gold)}
 #hostChat .lst b.clickable{cursor:pointer;text-decoration:underline dotted}
 #hostChat .lst .bt{opacity:.6;font-size:.82em}
-#hostChat .rq{font-size:.8em;opacity:.76;border-left:3px solid #ffdf5d;padding-left:6px;margin-bottom:2px}
+#hostChat .rq{font-size:.8em;opacity:.76;border-left:3px solid var(--gold);padding-left:6px;margin-bottom:2px}
 #hostChat .acts{opacity:.68;margin-left:6px}
 #hostChat .acts a{cursor:pointer;margin-right:8px;text-decoration:none}
 #hostChat .rc{display:inline-block;background:rgba(255,255,255,.14);border-radius:99px;padding:1px 8px;margin:2px 4px 0 0;cursor:pointer;font-size:.88em}
-#hostChat .rc.mine{background:rgba(255,223,93,.32);outline:1px solid #ffdf5d}
+#hostChat .rc.mine{background:rgba(255,223,93,.32);outline:1px solid var(--gold)}
 #hostChat .rpick span{cursor:pointer;font-size:1.35em;margin-right:8px}
 #hostChat .hostmsg{background:rgba(255,223,93,.15);border-radius:8px;padding:5px 7px!important}
-#hostChat .tag{background:#ffdf5d;color:#2b0d57;border-radius:6px;padding:0 5px;font-weight:850}
+#hostChat .tag{background:var(--gold);color:#1e1b2e;border-radius:6px;padding:0 5px;font-weight:850}
 #hostChat .tagme{background:rgba(255,77,109,.22);border-radius:8px;padding:5px 7px!important;outline:1px solid #ff4d6d}
-#hostTagSug span{background:#ffdf5d;color:#2b0d57;border-radius:99px;padding:4px 10px;font-weight:800;cursor:pointer;font-size:.86em}
+#hostTagSug span{background:var(--gold);color:#1e1b2e;border-radius:99px;padding:4px 10px;font-weight:800;cursor:pointer;font-size:.86em}
 .row.clickable,.shout.clickable{cursor:pointer}
 .row.clickable:hover{outline:1.5px solid rgba(255,223,93,.65)}
 .shout.clickable:hover{background:rgba(255,255,255,.28)}
-#hostProf,#hostPlayModal{position:fixed;inset:0;background:rgba(8,2,22,.8);backdrop-filter:blur(5px);z-index:72;display:none;align-items:center;justify-content:center;padding:14px}
-#hostProf .card{background:#2b0d57;border:2px solid #ffdf5d;border-radius:18px;padding:18px 20px;max-width:440px;width:100%;color:#fff;text-align:left;box-shadow:0 18px 48px rgba(0,0,0,.65)}
+#hostProf,#hostPlayModal{position:fixed;inset:0;background:rgba(10,7,18,.82);backdrop-filter:blur(8px);z-index:72;display:none;align-items:center;justify-content:center;padding:14px}
+#hostProf .card{background:#1b162b;border:1.5px solid var(--gold);border-radius:18px;padding:18px 20px;max-width:440px;width:100%;color:#fff;text-align:left;box-shadow:0 20px 52px rgba(0,0,0,.7)}
 #hostProf h2{margin:0 0 6px;text-align:center}
-#hostProf .hl{background:#ffdf5d;color:#2b0d57;font-weight:850;border-radius:10px;padding:8px 12px;margin:8px 0;text-align:center}
-#hostProf .stat{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.14)}
-#hostProf .stat b{color:#ffdf5d}
-#hostProf button{margin-top:12px;width:100%;padding:10px;border-radius:9px;border:0;background:#ffdf5d;color:#2b0d57;font-weight:850;cursor:pointer}
-#hostPlayModal .card{background:#2b0d57;border:2px solid #7cf5a8;border-radius:18px;padding:18px 20px;max-width:390px;width:100%;color:#fff;text-align:left;box-shadow:0 18px 48px rgba(0,0,0,.65)}
+#hostProf .hl{background:var(--gold);color:#1e1b2e;font-weight:850;border-radius:10px;padding:8px 12px;margin:8px 0;text-align:center}
+#hostProf .stat{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border)}
+#hostProf .stat b{color:var(--gold)}
+#hostProf button{margin-top:12px;width:100%;padding:10px;border-radius:10px;border:0;background:var(--gold);color:#1e1b2e;font-weight:850;cursor:pointer;box-shadow:none}
+#hostPlayModal .card{background:#1b162b;border:1.5px solid #4ade80;border-radius:18px;padding:18px 20px;max-width:390px;width:100%;color:#fff;text-align:left;box-shadow:0 20px 52px rgba(0,0,0,.7)}
 #hostPlayModal h2{margin:0 0 6px}
-#hostPlayModal input{width:100%;box-sizing:border-box;padding:12px;border-radius:9px;border:0;font-size:1.05em;margin:6px 0 10px;color:#2b0d57;font-weight:750}
-#hostPlayModal .go{display:block;text-align:center;background:#7cf5a8;color:#0b3d22;font-weight:850;border-radius:9px;padding:12px;text-decoration:none;cursor:pointer}
-#hostPlayModal .cl{margin-top:8px;width:100%;padding:10px;border-radius:9px;border:0;background:rgba(255,255,255,.16);color:#fff;font-weight:750;cursor:pointer}
+#hostPlayModal input{width:100%;box-sizing:border-box;padding:12px;border-radius:10px;border:0;font-size:1.05em;margin:6px 0 10px;color:#1e1b2e;font-weight:750}
+#hostPlayModal .go{display:block;text-align:center;background:linear-gradient(180deg,#22c55e,#16a34a);color:#05210e;font-weight:900;border-radius:11px;padding:12px;text-decoration:none;cursor:pointer;box-shadow:0 4px 0 #0d5c2b}
+#hostPlayModal .cl{margin-top:10px;width:100%;padding:10px;border-radius:10px;border:1px solid var(--border-hi);background:#ffffff14;color:#fff;font-weight:750;cursor:pointer;box-shadow:none}
 </style></head><body>
 <button id="fsBtn" onclick="toggleFullscreen()">⛶ Fullscreen (F)</button>
-<header class="ws-bar" id="workspaceBar">
- <div class="ws-brand">
-  <span class="ws-brand-badge"><i>⚡</i> BrainRush <span class="ws-brand-sub" style="opacity:.7;font-weight:650">Studio</span></span>
-  <button type="button" class="ws-stor" onclick="openStorage()" title="View storage status & cloud setup">💾 <span id="wsStorState">Local</span></button>
+<header class="studio-mob-bar" id="workspaceBar">
+ <div style="display:flex;align-items:center;gap:9px">
+  <button type="button" class="studio-mob-btn" onclick="toggleMobileRail(true)">☰ Studio</button>
+  <span style="display:inline-flex;align-items:center;gap:6px;font-weight:900;font-size:.95em"><span class="rail-bolt" style="width:26px;height:26px;border-radius:7px;font-size:.9em">⚡</span> BrainRush</span>
  </div>
- <nav class="ws-nav" id="wsNav">
-  <button type="button" class="ws-pill" onclick="openQuizModal()"><span class="quiz-only"><span style="color:var(--gold);font-weight:900">+</span> Builder</span><span class="case-only">📖 Case Builder</span></button>
-  <button type="button" class="ws-pill quiz-only" onclick="openHomework()">📚 Homework</button>
-  <button type="button" class="ws-pill quiz-only" onclick="openProgress()">👥 Progress</button>
-  <button type="button" class="ws-pill" onclick="openHistory()">📈 History</button>
-  <button type="button" class="ws-pill" id="wsRemoteBtn" onclick="openRemoteModal()">📱 Remote <span class="ws-sub" id="wsRemoteState">Pair</span></button>
-  <button type="button" class="ws-pill" id="wsPresBtn" onclick="openPresentationMode()">📽️ <span id="wsPresState">Dual Screen</span></button>
-  <button type="button" class="ws-pill" onclick="openGuide(document.body.classList.contains('sec-case')?'case':undefined)">📖 Guide</button>
-  <button type="button" class="ws-pill" onclick="openAccount()">👤 <span id="wsAcctState">Guest</span></button>
- </nav>
 </header>
+<div class="studio-backdrop" id="studioRailBackdrop" onclick="toggleMobileRail(false)"></div>
 <div class="late-join" id="lateJoin">
  <div style="display:flex;align-items:center;gap:6px">
   <button class="late-btn" onclick="toggleLateQr(event)" title="Click to toggle Auto-PIN QR code for late joiners">
@@ -647,9 +754,9 @@ body.cb .c4{background:#CC79A7}body.cb .c5{background:#56B4E9;color:#111}body.cb
  </div>
 </div>
 <div class="top-bar" id="topNav">
- <button class="menu-btn" onclick="toggleNavMenu(event)" title="Studio Navigation, Audio, Theme & Host Settings">
-  <span id="navIcon">⚙️</span>
-  <span id="navBadge" style="font-size:.8em;font-weight:750">Settings</span>
+ <button class="menu-btn" onclick="toggleNavMenu(event)" title="Audio, Voice Announcer, Theme & Accessibility Preferences">
+  <span id="navIcon">🔊</span>
+  <span id="navBadge" style="font-size:.8em;font-weight:750">Prefs</span>
  </button>
  <div class="menu-drop" id="navMenu">
   <div class="menu-group" id="menuAudioGrp">
@@ -676,7 +783,7 @@ body.cb .c4{background:#CC79A7}body.cb .c5{background:#56B4E9;color:#111}body.cb
    <button id="chatMenuBtn" style="display:none" onclick="hostCtl('toggle_chat')"><span>💬 Live Chat</span><span class="state" id="chatMenuState">OFF</span></button>
    <button id="profilesMenuBtn" style="display:none" onclick="hostCtl('toggle_profiles')"><span>📊 Standings &amp; Profiles</span><span class="state" id="profilesMenuState">OFF</span></button>
    <button id="playTooMenuBtn" style="display:none" onclick="hostCtl('toggle_play_too')"><span>🎮 Host Play-Along</span><span class="state" id="playTooMenuState">OFF</span></button>
-   <button onclick="cycleTheme()"><span>🎨 Visual Theme</span><span class="state" id="themeState">Purple</span></button>
+   <button onclick="cycleTheme()"><span>🎨 Visual Theme</span><span class="state" id="themeState">Studio</span></button>
    <button id="musicBtn" onclick="cycleMusic()"><span>🎵 Background Music</span><span class="state" id="musicState">Classic</span></button>
    <button id="awakeBtn" onclick="toggleAwake()"><span>☀️ Keep Screen Awake</span><span class="state" id="awakeState">ON</span></button>
    <button id="cbBtn" onclick="toggleCb()"><span>👁️ Colorblind-safe Colors</span><span class="state" id="cbState">Off</span></button>
@@ -698,7 +805,7 @@ body.cb .c4{background:#CC79A7}body.cb .c5{background:#56B4E9;color:#111}body.cb
    <button onclick="closeNavMenu();openStorage()"><span>💾 Saved Storage</span><span class="state" id="storState">…</span></button>
   </div>
   <div class="menu-sep"></div>
-  <div class="menu-kb">⌨️ <b>Shortcuts:</b> [Space/→] Next &middot; [P] Pause &middot; [+/-] ±10s &middot; [N] Note &middot; [M] Mute &middot; [V] Voice</div>
+  <div class="menu-kb">⌨️ <b>Shortcuts:</b> [Space/→] Next &middot; [W] Host Wing &middot; [P] Pause &middot; [+/-] ±10s &middot; [N] Note &middot; [M] Mute &middot; [V] Voice</div>
  </div>
 </div>
 <canvas id="confetti"></canvas>
@@ -719,9 +826,9 @@ body.cb .c4{background:#CC79A7}body.cb .c5{background:#56B4E9;color:#111}body.cb
  <div id="hostTagSug" style="display:none;flex-wrap:wrap;gap:6px;padding:4px 12px"></div>
  <div id="hostReplyBar" style="display:none;padding:4px 12px;font-size:.84em"></div>
  <div id="hostChatErr" style="color:#ff9b9b;font-size:.82em;padding:0 12px"></div>
- <div style="display:flex;gap:6px;padding:8px 10px;border-top:1px solid rgba(255,255,255,.18)">
-  <input id="hostChatIn" maxlength="140" oninput="hostTagSuggest()" placeholder="📢 Broadcast announcement banner to all phones…" style="flex:1;padding:9px 10px;border-radius:8px;border:1.5px solid rgba(255,255,255,.32);background:rgba(255,255,255,.12);color:#fff;font-size:.96em;min-width:0;margin:0" onkeydown="if(event.key==='Enter')hostSay()">
-  <button type="button" onclick="hostSay()" style="margin:0;padding:9px 14px;border-radius:8px;border:0;background:#ffdf5d;color:#2b0d57;font-weight:850;cursor:pointer;font-size:.94em">Send</button>
+ <div style="display:flex;gap:6px;padding:8px 10px;border-top:1px solid var(--border);background:#0f0c1a88">
+  <input id="hostChatIn" maxlength="140" oninput="hostTagSuggest()" placeholder="📢 Broadcast announcement banner to all phones…" style="flex:1;padding:9px 10px;border-radius:8px;border:1px solid var(--border-hi);background:#ffffff12;color:#fff;font-size:.95em;min-width:0;margin:0" onkeydown="if(event.key==='Enter')hostSay()">
+  <button type="button" onclick="hostSay()" style="margin:0;padding:9px 14px;border-radius:8px;border:0;background:var(--gold);color:#1e1b2e;font-weight:850;cursor:pointer;font-size:.94em;box-shadow:none">Send</button>
  </div>
 </div>
 <div id="hostPlayModal" class="aud-hide" onclick="if(event.target===this)this.style.display='none'"></div>
@@ -908,51 +1015,131 @@ Quote: Paris has been the capital since 987 CE."></textarea>
   <div style="text-align:center"><button style="margin:10px 0 0;padding:10px 22px;font-size:1.05em" onclick="document.getElementById('linksModal').classList.remove('open')">Done</button></div>
  </div>
 </div>
-<div id="app">
- <img class="logo" src="/logo.jpg" alt="Brainrush!">
- <div class="setup-card">
-  <div class="sec-tabs" id="secTabs">
-   <button type="button" id="tabQuiz" class="active" onclick="setHostSection('quiz')">🎮 Quizzes</button>
-   <button type="button" id="tabCase" onclick="setHostSection('case')">📖 Case Studies</button>
-  </div>
-  <div class="quiz-row">
-   <select id="quizSel" onchange="syncQuizCount()"><option value="">— Select a Quiz —</option></select>
-   <button type="button" class="btn-sec quiz-only" style="margin:0;padding:10px 14px;font-size:.92em;border-radius:11px;white-space:nowrap" onclick="openQuizModal('quiz')"><span style="color:var(--gold);font-weight:900">+</span> New / Edit</button>
-   <button type="button" class="btn-sec case-only" style="margin:0;padding:10px 14px;font-size:.92em;border-radius:11px;white-space:nowrap" onclick="openQuizModal('case')"><span style="color:var(--gold);font-weight:900">+</span> New / Edit</button>
-   <div class="deck-more-wrap" id="deckMoreWrap">
-    <button type="button" class="deck-more-btn" onclick="toggleDeckMore(event)" title="Actions for selected deck">⋯</button>
-    <div class="deck-more-drop" id="deckMoreDrop" onclick="event.stopPropagation()">
-     <button type="button" onclick="closeDeckMore();editSelectedDeck()">✏️ Edit Selected</button>
-     <button type="button" onclick="closeDeckMore();dupSelectedDeck()">⧉ Duplicate</button>
-     <button type="button" class="quiz-only" onclick="closeDeckMore();hwSelectedDeck()">📚 Assign Homework</button>
+<div class="studio-shell" id="studioShell">
+ <aside class="studio-rail" id="studioRail">
+  <div>
+   <div class="rail-brand">
+    <span class="rail-bolt">⚡</span>
+    <div>
+     <div class="rail-brand-title">BrainRush</div>
+     <div class="rail-brand-sub">Teacher Studio</div>
     </div>
+    <button type="button" class="rail-close-mob" onclick="toggleMobileRail(false)">✕</button>
+   </div>
+   <nav class="rail-nav" id="wsNav">
+    <button type="button" id="tabQuiz" class="rail-mode-btn active" onclick="setHostSection('quiz');toggleMobileRail(false)">
+     <span>🎮 Quizzes</span>
+     <span class="rail-cnt" id="railQuizCnt">—</span>
+    </button>
+    <button type="button" id="tabCase" class="rail-mode-btn" onclick="setHostSection('case');toggleMobileRail(false)">
+     <span>📖 Case Studies</span>
+     <span class="rail-cnt" id="railCaseCnt">—</span>
+    </button>
+    <div class="rail-sec-lbl">Classroom</div>
+    <button type="button" class="rail-btn" onclick="toggleMobileRail(false);openQuizModal(hostSection)">
+     <span><span class="quiz-only">➕ Deck Builder</span><span class="case-only">📖 Case Builder</span></span>
+    </button>
+    <button type="button" class="rail-btn quiz-only" onclick="toggleMobileRail(false);openHomework()">
+     <span>📚 Homework</span>
+    </button>
+    <button type="button" class="rail-btn quiz-only" onclick="toggleMobileRail(false);openProgress()">
+     <span>👥 Progress</span>
+    </button>
+    <button type="button" class="rail-btn" onclick="toggleMobileRail(false);openHistory()">
+     <span>📈 History</span>
+    </button>
+    <button type="button" class="rail-btn" id="wsRemoteBtn" onclick="toggleMobileRail(false);openRemoteModal()">
+     <span>📱 Phone Remote</span>
+     <span class="rail-sub" id="wsRemoteState">Pair</span>
+    </button>
+    <button type="button" class="rail-btn" id="wsPresBtn" onclick="toggleMobileRail(false);openPresentationMode()">
+     <span>📽️ Dual Screen</span>
+     <span class="rail-sub" id="wsPresState">Off</span>
+    </button>
+    <button type="button" class="rail-btn" onclick="toggleMobileRail(false);openLinks()">
+     <span><span class="quiz-only">🖥️ Practice &amp; Links</span><span class="case-only">🖥️ Spectator Links</span></span>
+    </button>
+    <button type="button" class="rail-btn" onclick="toggleMobileRail(false);openGuide(document.body.classList.contains('sec-case')?'case':undefined)">
+     <span>📖 Feature Guide</span>
+    </button>
+   </nav>
+  </div>
+  <div class="rail-foot">
+   <button type="button" onclick="toggleMobileRail(false);openAccount()" title="Teacher Account">👤 <span id="wsAcctState">Guest</span></button>
+   <button type="button" class="stor-pill" onclick="toggleMobileRail(false);openStorage()" title="Saved Storage Status">💾 <span id="wsStorState">Local</span></button>
+  </div>
+ </aside>
+
+ <div id="app">
+  <div class="studio-workspace setup-card">
+   <div>
+    <div class="studio-head">
+     <div>
+      <div class="studio-title-row">
+       <img class="logo studio-custom-logo" src="/logo.jpg" alt="Logo">
+       <h2><span class="quiz-only">🎮 Quiz Library</span><span class="case-only">📖 Case Study Library</span></h2>
+       <span class="acc-badge" id="deckBrowserBadge">—</span>
+      </div>
+      <p class="studio-sub">Select a deck below — timers, twists &amp; classroom options stay tucked in the right Settings Drawer.</p>
+     </div>
+     <div class="studio-head-actions">
+      <button type="button" class="studio-btn-new quiz-only" onclick="openQuizModal('quiz')"><span style="color:var(--gold);font-weight:900">+</span> New / Edit</button>
+      <button type="button" class="studio-btn-new case-only" onclick="openQuizModal('case')"><span style="color:var(--gold);font-weight:900">+</span> New / Edit</button>
+      <button type="button" class="studio-btn-Inspector" id="drawerToggleBtn" onclick="toggleStudioDrawer()">
+       <span>⚙️ Session Settings</span>
+       <span class="acc-badge" id="optSummary">0 active</span>
+      </button>
+     </div>
+    </div>
+
+    <!-- Hidden synced select for 100% JS compatibility (zero duplicate dropdown UI!) -->
+    <select id="quizSel" onchange="syncQuizCount()" style="display:none"><option value="">— Select a Quiz —</option></select>
+    <div class="deck-more-wrap" id="deckMoreWrap">
+     <div class="deck-more-drop" id="deckMoreDrop"></div>
+    </div>
+    <div id="caseHint" style="display:none"></div>
+
+    <div class="studio-filter-bar">
+     <input id="deckSearch" class="studio-search" type="text" placeholder="🔍 Filter library by title, folder, or #tag…" oninput="renderDeckCards()">
+     <div id="deckFolders" style="display:flex;gap:6px;flex-wrap:wrap"></div>
+    </div>
+
+    <div class="deck-grid" id="deckGrid"></div>
+   </div>
+
+   <div class="studio-launch-bar">
+    <div class="studio-summary-pills">
+     <button type="button" class="sum-chip" id="timerSummary" onclick="toggleStudioDrawer(true)" title="Click to edit session timers">⏱ <span id="timerSubTxt">15s · 5s preview</span></button>
+     <button type="button" class="sum-chip quiz-only" id="vibeSummaryChip" onclick="toggleStudioDrawer(true)" title="Click to customize vibe preset &amp; twists">✨ <span id="vibeSummaryTxt">Standard (0)</span></button>
+     <button type="button" class="sum-chip" id="screenSummaryChip" onclick="toggleStudioDrawer(true)" title="Click to configure Dual Screen or Phone Remote">📽️ <span id="screenSummary">Standard</span></button>
+     <button type="button" class="sum-edit-link" onclick="toggleStudioDrawer(true)">Edit in drawer →</button>
+    </div>
+    <button id="launchBtn" class="studio-cta-btn" onclick="create()">
+     <span class="quiz-only">🚀 Create Live Game →</span>
+     <span class="case-only">📖 Launch Selected Case →</span>
+    </button>
    </div>
   </div>
-  <div id="caseHint" style="display:none"></div>
-  <div class="acc-list">
-   <details class="acc-box" id="deckBrowserAcc">
-    <summary>
-     <span><span class="quiz-only">📚 Browse Quiz Cards</span><span class="case-only">📚 Browse Case Cards</span></span>
-     <span class="acc-right"><span class="acc-badge" id="deckBrowserBadge">—</span><span class="acc-caret">▾</span></span>
-    </summary>
-    <div class="acc-body">
-     <input id="deckSearch" type="text" placeholder="🔍 Filter by title, folder, or #tag…" oninput="renderDeckCards()" style="margin:0 0 8px;padding:7px 11px;font-size:.88em">
-     <div id="deckFolders" style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px"></div>
-     <div class="deck-grid" id="deckGrid"></div>
-    </div>
-   </details>
+ </div>
 
-   <details class="acc-box" id="accTimers">
+ <div class="studio-backdrop" id="studioDrawerBackdrop" onclick="toggleStudioDrawer(false)"></div>
+ <aside class="studio-drawer" id="studioDrawer">
+  <div class="drawer-head">
+   <span class="drawer-head-title">⚙️ Session Inspector</span>
+   <button type="button" class="drawer-close-btn" onclick="toggleStudioDrawer(false)">✕ Close</button>
+  </div>
+  <div class="drawer-body acc-list">
+   <details class="acc-box" id="accTimers" open>
     <summary>
      <span>⏱️ Timers &amp; Pacing</span>
-     <span class="acc-right"><span class="acc-badge" id="timerSummary"><span id="timerSubTxt">15s · 5s preview</span></span><span class="acc-caret">▾</span></span>
+     <span class="acc-right"><span class="acc-badge" id="drawerTimerBadge">15s</span><span class="acc-caret">▾</span></span>
     </summary>
     <div class="acc-body">
      <div class="quick-bar quiz-only" oninput="updateTimerSummary();updateOptSummary()">
-      <label>📝 Questions: <input id="qCount" type="number" min="1" max="200" value="" placeholder="—"> <span id="qMax" style="opacity:.8">/ —</span></label>
-      <label title="Seconds players get to answer each question">⏱️ Timer: <input id="qTime" type="number" min="5" max="900" value="15"><span style="opacity:.8">s</span></label>
-      <label title="Reading preview before answer buttons open (set 0 for instant)">👀 Preview: <input id="qPrevTime" type="number" min="0" max="120" value="5"><span style="opacity:.8">s</span></label>
-      <label title="Choices shown on screen &amp; phones, but answers locked while students reason">🧠 Thinking Time: <input id="qThinkTime" type="number" min="0" max="120" value="0"><span style="opacity:.8">s</span></label>
+      <label><span>📝 Questions</span><span><input id="qCount" type="number" min="1" max="200" value="" placeholder="—"> <small id="qMax" style="opacity:.75">/ —</small></span></label>
+      <label title="Seconds players get to answer each question"><span>⏱️ Timer</span><span><input id="qTime" type="number" min="5" max="900" value="15"><small style="opacity:.75">s</small></span></label>
+      <label title="Reading preview before answer buttons open (set 0 for instant)"><span>👀 Preview</span><span><input id="qPrevTime" type="number" min="0" max="120" value="5"><small style="opacity:.75">s</small></span></label>
+      <label title="Choices shown on screen &amp; phones, but answers locked while students reason"><span>🧠 Think</span><span><input id="qThinkTime" type="number" min="0" max="120" value="0"><small style="opacity:.75">s</small></span></label>
      </div>
      <div class="case-only" oninput="syncCaseTimerSpec();updateTimerSummary()">
       <div class="case-timers-grid">
@@ -967,7 +1154,7 @@ Quote: Paris has been the capital since 987 CE."></textarea>
       </div>
       <details class="sub-acc" style="margin-top:8px">
        <summary><span>📖 Slide Flow &amp; Per-Slide Override Info</span><span class="sub-caret">▾</span></summary>
-       <div class="sub-body" style="font-size:.84em;line-height:1.45;opacity:.92">
+       <div class="sub-body" style="font-size:.82em;line-height:1.45;opacity:.92">
         <b><span id="cSlideCnt">—</span> slides in chapter order:</b> untimed <b>Chapters</b> &amp; phone <b>Case File</b>, private <b>Stakeholder Roles</b>, <b>Ethical-Lens Polls</b> (<span id="cSpecPoll">45</span>s + <span id="cSpecDisc">60</span>s debate), <b>Priority Rankings</b> (<span id="cSpecRank">60</span>s), <b>Open Responses</b> (<span id="cSpecOpen">120</span>s), and <b>Concept Checks</b> (<span id="cSpecCheck">20</span>s). Add <code>Time: 90</code> on any slide in the builder to override.
        </div>
       </details>
@@ -975,14 +1162,14 @@ Quote: Paris has been the capital since 987 CE."></textarea>
     </div>
    </details>
 
-   <details class="acc-box" id="accOptions">
+   <details class="acc-box" id="accOptions" open>
     <summary>
-     <span><span class="quiz-only">⚙️ Options &amp; Twists</span><span class="case-only">⚙️ Session Options</span></span>
-     <span class="acc-right"><span class="acc-badge" id="optSummary">0 active</span><span class="acc-caret">▾</span></span>
+     <span><span class="quiz-only">✨ Vibe &amp; Modifiers</span><span class="case-only">⚙️ Session Modifiers</span></span>
+     <span class="acc-right"><span class="acc-badge" id="drawerOptBadge">0 active</span><span class="acc-caret">▾</span></span>
     </summary>
     <div class="acc-body" id="advPanel" onchange="updateOptSummary()">
      <div class="preset-sel-row quiz-only">
-      <span>✨ Vibe Preset:</span>
+      <span>✨ Vibe Preset</span>
       <select id="presetSel" onchange="if(this.value!=='custom')applyPreset(this.value)">
        <option value="clean">✨ Standard (No Modifiers)</option>
        <option value="quick">⚡ Quick Check (Randomized)</option>
@@ -993,7 +1180,7 @@ Quote: Paris has been the capital since 987 CE."></textarea>
       </select>
      </div>
      <div class="preset-sel-row">
-      <span>🎯 Scoring Method:</span>
+      <span>🎯 Scoring Method</span>
       <select id="qScoring" onchange="updateOptSummary()">
        <option value="classic">⚡ Classic (Accuracy + Speed + Streaks)</option>
        <option value="accuracy">🎯 Accuracy Only (No Speed Penalty)</option>
@@ -1038,27 +1225,27 @@ Quote: Paris has been the capital since 987 CE."></textarea>
         <label class="mode-pill"><input id="qIce" type="checkbox" onchange="document.getElementById('icePromptRow').style.display=this.checked?'block':'none';updateOptSummary()"> 💭 Word Cloud Warm-Up</label>
        </div>
        <div id="autoTimeRow" class="mode-trow quiz-only" style="margin-top:8px;margin-bottom:0">
-        <span>⏭️ Auto-Advance Wait Timer:</span>
+        <span>⏭️ Auto-Advance Wait:</span>
         <label><input id="qAutoTime" type="number" min="2" max="120" value="7"> s</label>
        </div>
        <div id="battleTimeRow" class="mode-trow quiz-only" style="margin-top:8px;margin-bottom:0">
-        <span>🤝 Team Battle Discussion Preview:</span>
+        <span>🤝 Team Battle Preview:</span>
         <label><input id="qTeamTime" type="number" min="0" max="180" value="12"> s</label>
        </div>
        <div id="speedTimeRow" class="mode-trow quiz-only" style="margin-top:8px;margin-bottom:0">
-        <span>⚡ Speed Round Question Timer:</span>
+        <span>⚡ Speed Round Timer:</span>
         <label><input id="qSpeedTime" type="number" min="3" max="120" value="5"> s</label>
        </div>
        <div id="icePromptRow" style="display:none;margin-top:8px">
-        <label style="display:block;font-size:.84em;font-weight:700;opacity:.85;margin-bottom:4px">💭 Warm-Up Question:</label>
-        <input id="qIcePrompt" type="text" maxlength="120" value="In one word, how are you feeling about today's quiz?" placeholder="e.g. In one word, what's your favorite food?" style="width:100%;box-sizing:border-box;padding:8px 11px;border-radius:8px;border:0;font-size:.92em;font-weight:600;color:#2b0d57">
+        <label style="display:block;font-size:.82em;font-weight:700;opacity:.85;margin-bottom:4px">💭 Warm-Up Question:</label>
+        <input id="qIcePrompt" type="text" maxlength="120" value="In one word, how are you feeling about today's quiz?" placeholder="e.g. In one word, what's your favorite food?" style="width:100%;box-sizing:border-box;padding:8px 11px;border-radius:8px;border:0;font-size:.9em;font-weight:600;color:#2b0d57">
        </div>
       </div>
      </details>
 
      <details class="sub-acc" id="subClass">
       <summary>
-       <span>🏫 Roster, Bots &amp; Custom Branding</span>
+       <span>🏫 Roster, Bots &amp; Branding</span>
        <span class="acc-right"><span class="acc-badge" id="classSubCnt">0 on</span><span class="sub-caret">▾</span></span>
       </summary>
       <div class="sub-body">
@@ -1075,13 +1262,12 @@ Quote: Paris has been the capital since 987 CE."></textarea>
         <label style="display:block;font-size:.82em;font-weight:700;opacity:.85;margin-bottom:4px">👥 Class Roster (one name per line):</label>
         <textarea id="qRoster" oninput="saveSetup()" placeholder="Ava Johnson&#10;Ben Carter&#10;..." style="width:100%;box-sizing:border-box;padding:8px 11px;border-radius:8px;border:0;color:#2b0d57"></textarea>
        </div>
-       <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;padding:7px 10px;background:#0004;border-radius:9px;margin-bottom:8px;font-weight:700;font-size:.9em">
-        <label style="display:inline-flex;align-items:center;gap:8px"><span class="quiz-only">🤖 Phantom Bot Players:</span><span class="case-only">🤖 Simulated Participants:</span> <input id="qBots" type="number" min="0" max="30" value="0" oninput="updateOptSummary()"></label>
-        <span style="opacity:.68;font-size:.84em"><span class="quiz-only">Compete alongside live players</span><span class="case-only">Vote, rank &amp; submit sample arguments</span></span>
+       <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;padding:8px 10px;background:#0004;border-radius:9px;margin-bottom:8px;font-weight:700;font-size:.86em">
+        <label style="display:inline-flex;align-items:center;gap:8px"><span class="quiz-only">🤖 Phantom Bots:</span><span class="case-only">🤖 Simulated Peers:</span> <input id="qBots" type="number" min="0" max="30" value="0" oninput="updateOptSummary()"></label>
        </div>
        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-        <div><label style="display:block;font-size:.78em;font-weight:700;opacity:.85;margin-bottom:3px">🖼️ Custom Logo URL</label><input id="qLogo" oninput="saveSetup()" placeholder="https://…/logo.png" style="width:100%;box-sizing:border-box;padding:7px 10px;border-radius:8px;border:0;color:#2b0d57"></div>
-        <div><label style="display:block;font-size:.78em;font-weight:700;opacity:.85;margin-bottom:3px">🌄 Background Image URL</label><input id="qBg" oninput="saveSetup()" placeholder="https://…/bg.jpg" style="width:100%;box-sizing:border-box;padding:7px 10px;border-radius:8px;border:0;color:#2b0d57"></div>
+        <div><label style="display:block;font-size:.76em;font-weight:700;opacity:.85;margin-bottom:3px">🖼️ Custom Logo URL</label><input id="qLogo" oninput="saveSetup()" placeholder="https://…/logo.png" style="width:100%;box-sizing:border-box;padding:7px 9px;border-radius:8px;border:0;color:#2b0d57;font-size:.86em"></div>
+        <div><label style="display:block;font-size:.76em;font-weight:700;opacity:.85;margin-bottom:3px">🌄 Background URL</label><input id="qBg" oninput="saveSetup()" placeholder="https://…/bg.jpg" style="width:100%;box-sizing:border-box;padding:7px 9px;border-radius:8px;border:0;color:#2b0d57;font-size:.86em"></div>
        </div>
       </div>
      </details>
@@ -1090,8 +1276,8 @@ Quote: Paris has been the capital since 987 CE."></textarea>
 
    <details class="acc-box" id="accScreens">
     <summary>
-     <span>📽️ Dual Screen &amp; Phone Remote</span>
-     <span class="acc-right"><span class="acc-badge" id="screenSummary">Standard</span><span class="acc-caret">▾</span></span>
+     <span>📽️ Classroom Hardware</span>
+     <span class="acc-right"><span class="acc-badge" id="drawerScreenBadge">Standard</span><span class="acc-caret">▾</span></span>
     </summary>
     <div class="acc-body" onchange="updateOptSummary()">
      <div id="presSetupBar" class="pres-bar"></div>
@@ -1108,8 +1294,8 @@ Quote: Paris has been the capital since 987 CE."></textarea>
        <a id="advRemoteOpenLink" class="rbtn" href="/remote" target="_blank" onclick="activateRemoteForOpen()">↗ Open</a>
       </div>
       <div class="remote-qr-box" id="advRemoteQrBox">
-       <img id="advRemoteQrImg" style="width:140px;height:140px;border-radius:10px;background:#fff" alt="Remote QR">
-       <div style="flex:1;min-width:170px;font-size:.84em;opacity:.88;line-height:1.42">
+       <img id="advRemoteQrImg" style="width:132px;height:132px;border-radius:10px;background:#fff" alt="Remote QR">
+       <div style="flex:1;min-width:150px;font-size:.82em;opacity:.88;line-height:1.4">
         <b>Scan on your phone</b> to launch a Quiz or Case Study from anywhere in the room and advance slides live.
        </div>
       </div>
@@ -1117,8 +1303,13 @@ Quote: Paris has been the capital since 987 CE."></textarea>
     </div>
    </details>
   </div>
-  <button id="launchBtn" style="width:100%;margin-top:14px;padding:14px;font-size:1.3em;border-radius:13px" onclick="create()"><span class="quiz-only">🚀 Create Game</span><span class="case-only">📖 Launch Case Study</span></button>
- </div>
+  <div class="drawer-foot">
+   <button type="button" class="drawer-done-btn" onclick="toggleStudioDrawer(false)">✓ Done Configuring</button>
+  </div>
+ </aside>
+
+ <div class="studio-backdrop" id="liveWingBackdrop" onclick="toggleLiveWing(false)"></div>
+ <aside class="live-wing aud-hide" id="liveHostWing"></aside>
 </div>
 <script>
 const IS_AUDIENCE = location.pathname === '/present' || new URLSearchParams(location.search).get('present') === '1';
@@ -1170,28 +1361,64 @@ function closeNavMenu(){
 }
 function syncWsNavCollapse(){
  if(IS_AUDIENCE) return;
- const bar = document.getElementById('workspaceBar'), brand = bar && bar.querySelector('.ws-brand'), nav = document.getElementById('wsNav');
  const inGame = !!(pin && S && S.phase);
- let needCollapse = document.body.classList.contains('ws-collapsed');
- if(!inGame && bar && brand && nav && bar.clientWidth > 0){
-  const avail = bar.clientWidth - 152 - brand.offsetWidth - 14;
-  needCollapse = nav.scrollWidth > avail;
-  document.body.classList.toggle('ws-collapsed', needCollapse);
-  document.body.classList.add('ws-measured');
- }
  const ic = document.getElementById('navIcon'), bd = document.getElementById('navBadge');
- const asMenu = !inGame && needCollapse;
- if(ic) ic.textContent = asMenu ? '☰' : '⚙️';
- if(bd) bd.textContent = asMenu ? 'Menu' : 'Settings';
+ if(ic) ic.textContent = inGame ? '⚙️' : '🔊';
+ if(bd) bd.textContent = inGame ? 'Menu' : 'Prefs';
+ if(inGame){
+  document.body.classList.remove('drawer-open', 'rail-open');
+  const db = document.getElementById('studioDrawerBackdrop'), rb = document.getElementById('studioRailBackdrop');
+  if(db) db.classList.remove('open');
+  if(rb) rb.classList.remove('open');
+ }
 }
-window.addEventListener('resize', syncWsNavCollapse);
-if(window.ResizeObserver){
- const _wsRo = new ResizeObserver(()=>syncWsNavCollapse());
- const _wb = document.getElementById('workspaceBar'), _wn = document.getElementById('wsNav');
- if(_wb) _wsRo.observe(_wb);
- if(_wn) _wsRo.observe(_wn);
+function toggleStudioDrawer(force){
+ if(IS_AUDIENCE || (pin && S && S.phase)) return;
+ const nextOpen = typeof force === 'boolean' ? force : !document.body.classList.contains('drawer-open');
+ document.body.classList.toggle('drawer-open', nextOpen);
+ const db = document.getElementById('studioDrawerBackdrop');
+ if(db) db.classList.toggle('open', nextOpen && window.innerWidth < 1120);
+ if(nextOpen){
+  document.body.classList.remove('rail-open');
+  const rb = document.getElementById('studioRailBackdrop');
+  if(rb) rb.classList.remove('open');
+ }
 }
-if(document.fonts && document.fonts.ready) document.fonts.ready.then(syncWsNavCollapse);
+function toggleMobileRail(force){
+ if(IS_AUDIENCE) return;
+ const nextOpen = typeof force === 'boolean' ? force : !document.body.classList.contains('rail-open');
+ document.body.classList.toggle('rail-open', nextOpen);
+ const rb = document.getElementById('studioRailBackdrop');
+ if(rb) rb.classList.toggle('open', nextOpen && window.innerWidth <= 860);
+ if(nextOpen && window.innerWidth < 1120){
+  document.body.classList.remove('drawer-open');
+  const db = document.getElementById('studioDrawerBackdrop');
+  if(db) db.classList.remove('open');
+ }
+}
+function toggleLiveWing(force){
+ if(IS_AUDIENCE || window.presenterMode || !pin || !S || !S.phase || S.phase === 'final'){
+  document.body.classList.remove('wing-open');
+  const wb0 = document.getElementById('liveWingBackdrop');
+  if(wb0) wb0.classList.remove('open');
+  return;
+ }
+ const nextOpen = typeof force === 'boolean' ? force : !document.body.classList.contains('wing-open');
+ document.body.classList.toggle('wing-open', nextOpen);
+ const wb = document.getElementById('liveWingBackdrop');
+ if(wb) wb.classList.toggle('open', nextOpen && window.innerWidth < 1080);
+ document.querySelectorAll('.dock-wing-btn').forEach(btn => btn.classList.toggle('active', nextOpen));
+ if(typeof updateLiveWing === 'function') updateLiveWing();
+}
+window.addEventListener('resize', ()=>{
+ syncWsNavCollapse();
+ const db = document.getElementById('studioDrawerBackdrop');
+ if(db) db.classList.toggle('open', document.body.classList.contains('drawer-open') && window.innerWidth < 1120);
+ const rb = document.getElementById('studioRailBackdrop');
+ if(rb) rb.classList.toggle('open', document.body.classList.contains('rail-open') && window.innerWidth <= 860);
+ const wb = document.getElementById('liveWingBackdrop');
+ if(wb) wb.classList.toggle('open', document.body.classList.contains('wing-open') && window.innerWidth < 1080);
+});
 requestAnimationFrame(syncWsNavCollapse);
 function toggleLateQr(ev){
  if(ev) ev.stopPropagation();
@@ -1220,8 +1447,9 @@ window.addEventListener('click', e=>{
  if(dm && !dm.contains(e.target)) closeDeckMore();
 });
 function toggleAdvPanel(){
+ toggleStudioDrawer(true);
  const acc = document.getElementById('accOptions');
- if(acc) acc.open = !acc.open;
+ if(acc) acc.open = true;
 }
 const GAMEPLAY_OPT_IDS = ['qShuffle','qWager','qRedemp','qSabotage','qWheel','qTeams','qIce','qAuto','qHot','qBattle','qTie','qSpeed','qDbl','qSteal','qConsensus','qHideBoard','qStudentTts','qChat','qProfiles','qPlayToo'];
 const QUIZ_PRESETS = {
@@ -1231,18 +1459,27 @@ const QUIZ_PRESETS = {
  gameshow: ['qShuffle','qWheel','qWager','qHot','qSabotage','qRedemp','qTie'],
  teams: ['qTeams','qBattle','qIce','qShuffle']
 };
+const PRESET_SHORT_LBL = {
+ clean: 'Standard',
+ quick: 'Quick Check',
+ classic: 'Classic',
+ gameshow: 'Game Show',
+ teams: 'Team Showdown',
+ custom: 'Custom'
+};
 function syncPresetHighlight(){
  const sel = document.getElementById('presetSel');
- if(!sel) return;
+ if(!sel) return 'clean';
  const scSel = document.getElementById('qScoring');
  const thk = parseFloat((document.getElementById('qThinkTime')||{}).value) || 0;
- if((scSel && scSel.value && scSel.value !== 'classic') || thk > 0){ sel.value = 'custom'; return; }
+ if((scSel && scSel.value && scSel.value !== 'classic') || thk > 0){ sel.value = 'custom'; return 'custom'; }
  const activeSet = new Set(GAMEPLAY_OPT_IDS.filter(id=>{ const el = document.getElementById(id); return el && el.checked; }));
  let matched = 'custom';
  for(const [k, target] of Object.entries(QUIZ_PRESETS)){
   if(target.length === activeSet.size && target.every(id => activeSet.has(id))){ matched = k; break; }
  }
  sel.value = matched;
+ return matched;
 }
 function applyPreset(name){
  const want = new Set(QUIZ_PRESETS[name] || []);
@@ -1262,7 +1499,7 @@ function applyPreset(name){
  updateOptSummary();
 }
 function updateTimerSummary(){
- const b = document.getElementById('timerSummary'), sub = document.getElementById('timerSubTxt');
+ const b = document.getElementById('timerSummary'), sub = document.getElementById('timerSubTxt'), db = document.getElementById('drawerTimerBadge');
  if(!b) return;
  const setTxt = t => { if(sub) sub.textContent = t; else b.textContent = t; };
  const isC = (typeof hostSection !== 'undefined' && hostSection === 'case');
@@ -1274,11 +1511,13 @@ function updateTimerSummary(){
   if(q){
    const baseSec = q.est_sec || ((q.count || 1) * 65);
    const estMin = Math.max(1, Math.round((baseSec + (q.count || 1) * ((poll - 45) * 0.35 + (disc - 60) * 0.25)) / 60));
-   setTxt(`${q.count} slides · Poll ${poll}s · ⏱ ~${estMin} min`);
+   setTxt(`${q.count} slides · Poll ${poll}s · ~${estMin}m`);
   } else {
    setTxt(`Poll ${poll}s · Debate ${disc}s`);
   }
-  b.classList.toggle('on', !!(q || poll !== 45 || disc !== 60));
+  const cust = !!(q || poll !== 45 || disc !== 60);
+  b.classList.toggle('on', cust);
+  if(db){ db.textContent = `Poll ${poll}s`; db.classList.toggle('on', poll !== 45 || disc !== 60); }
  } else {
   const cnt = parseInt((document.getElementById('qCount')||{}).value, 10) || 0;
   const tm = parseInt((document.getElementById('qTime')||{}).value, 10) || 15;
@@ -1291,25 +1530,30 @@ function updateTimerSummary(){
    const basePerQ = (q && q.est_sec && q.count) ? (q.est_sec / q.count) : 32;
    const estSec = Math.max(cnt * 8, cnt * (basePerQ + (tm - 15) + (pv - 5) + thk));
    const estMin = Math.max(1, Math.round(estSec / 60));
-   setTxt(`${cnt} Qs · ${tm}s${thkLbl} · ⏱ ~${estMin} min`);
+   setTxt(`${cnt} Qs · ${tm}s${thkLbl} · ~${estMin}m`);
   } else {
    setTxt(`${tm}s · ${pv}s preview${thkLbl}`);
   }
-  b.classList.toggle('on', !!(cnt > 0 || tm !== 15 || pv !== 5 || thk > 0));
+  const cust = !!(cnt > 0 || tm !== 15 || pv !== 5 || thk > 0);
+  b.classList.toggle('on', cust);
+  if(db){ db.textContent = thk > 0 ? `${tm}s + ${thk}s` : `${tm}s`; db.classList.toggle('on', tm !== 15 || pv !== 5 || thk > 0); }
  }
 }
 function updateScreenSummary(){
- const b = document.getElementById('screenSummary');
+ const b = document.getElementById('screenSummary'), chip = document.getElementById('screenSummaryChip'), db = document.getElementById('drawerScreenBadge');
  if(!b) return;
  const pres = !!window.presenterMode;
  const qr = !!(document.getElementById('qRemote') && document.getElementById('qRemote').checked);
  const pLive = (typeof isProjectorLive === 'function') && isProjectorLive();
  const rLive = typeof remoteLastLive !== 'undefined' && !!remoteLastLive;
- if(pres && qr) b.textContent = 'Dual + Remote';
- else if(pres) b.textContent = pLive ? 'Screen 2 Live' : 'Dual Screen';
- else if(qr) b.textContent = rLive ? 'Phone Live' : 'Remote Ready';
- else b.textContent = 'Standard';
+ let lbl = 'Standard';
+ if(pres && qr) lbl = 'Dual + Remote';
+ else if(pres) lbl = pLive ? 'Screen 2 Live' : 'Dual Screen';
+ else if(qr) lbl = rLive ? 'Phone Live' : 'Remote Ready';
+ b.textContent = lbl;
  b.classList.toggle('on', pres || qr);
+ if(chip) chip.classList.toggle('on', pres || qr);
+ if(db){ db.textContent = lbl; db.classList.toggle('on', pres || qr); }
 }
 function updateOptSummary(){
  const isC = (typeof hostSection !== 'undefined' && hostSection === 'case');
@@ -1328,13 +1572,18 @@ function updateOptSummary(){
  const total = nTwist + nTeam + nClass + nScore + nThink;
  const s = document.getElementById('optSummary');
  if(s){ s.textContent = `${total} active`; s.classList.toggle('on', total > 0); }
- syncPresetHighlight();
+ const dob = document.getElementById('drawerOptBadge');
+ if(dob){ dob.textContent = `${total} active`; dob.classList.toggle('on', total > 0); }
+ const matched = syncPresetHighlight();
+ const vt = document.getElementById('vibeSummaryTxt'), vc = document.getElementById('vibeSummaryChip');
+ if(vt) vt.textContent = `${PRESET_SHORT_LBL[matched] || 'Custom'} (${total})`;
+ if(vc) vc.classList.toggle('on', total > 0);
  updateScreenSummary();
 }
 
 // --- Visual Themes ---
-const THEMES = ['', 'theme-neon', 'theme-emerald', 'theme-sunset'];
-const THEME_NAMES = ['Purple', 'Neon', 'Emerald', 'Sunset'];
+const THEMES = ['', 'theme-purple', 'theme-neon', 'theme-emerald', 'theme-sunset'];
+const THEME_NAMES = ['Studio', 'Purple', 'Neon', 'Emerald', 'Sunset'];
 let themeIdx = 0;
 function cycleTheme(){
  themeIdx = (themeIdx + 1) % THEMES.length;
@@ -1405,9 +1654,18 @@ function speak(txt){
 
 // --- Keyboard Shortcuts ---
 window.addEventListener('keydown', e=>{
+ if(e.key === 'Escape'){
+  if(document.querySelector('.modal-bg.open')) return;
+  closeNavMenu();
+  if(document.body.classList.contains('drawer-open')) toggleStudioDrawer(false);
+  if(document.body.classList.contains('rail-open')) toggleMobileRail(false);
+  if(document.body.classList.contains('wing-open')) toggleLiveWing(false);
+  return;
+ }
  if(['INPUT','TEXTAREA','SELECT'].includes((e.target||{}).tagName)) return;
  if(IS_AUDIENCE){ if(e.key==='f' || e.key==='F'){ e.preventDefault(); toggleFullscreen(); } return; }
  if(e.code==='Space' || e.code==='ArrowRight'){ if(pin && S.phase!=='final'){ e.preventDefault(); next(); } }
+ else if(e.key==='w' || e.key==='W'){ if(pin && S.phase && S.phase!=='final' && !window.presenterMode){ e.preventDefault(); toggleLiveWing(); } }
  else if(e.key==='p' || e.key==='P'){ if(pin && S.phase==='question') hostCtl('pause'); }
  else if(e.key==='+' || e.key==='='){ if(pin && S.phase==='question') hostCtl('add_time', 10); }
  else if(e.key==='-' || e.key==='_'){ if(pin && S.phase==='question') hostCtl('add_time', -10); }
@@ -2141,6 +2399,9 @@ function syncSelectedDeckBar(){
 }
 function renderDeckGrid(){
  const grid = document.getElementById('deckGrid'), fBox = document.getElementById('deckFolders'), sel = document.getElementById('quizSel'), bBadge = document.getElementById('deckBrowserBadge');
+ const rq = document.getElementById('railQuizCnt'), rc = document.getElementById('railCaseCnt');
+ if(rq) rq.textContent = quizList.filter(q => !q.case).length;
+ if(rc) rc.textContent = quizList.filter(q => !!q.case).length;
  const wantCase = (typeof hostSection !== 'undefined' && hostSection === 'case');
  const pool = quizList.filter(q => wantCase ? !!q.case : !q.case);
  const cur = sel ? sel.value : '';
@@ -2171,23 +2432,34 @@ function renderDeckGrid(){
   return hay.includes(qStr);
  });
  if(!shown.length){
-  grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:18px 12px;opacity:.78;font-size:.92em;background:#0003;border-radius:12px">
-   ${pool.length ? 'No decks match your filter.' : (wantCase ? 'No case studies yet — click <b>📖 + New / Edit Case</b> above!' : 'No quizzes yet — click <b>➕ New / Edit</b> above!')}
+  grid.innerHTML = `<div style="text-align:center;padding:24px 14px;opacity:.78;font-size:.92em;background:#ffffff08;border:1px dashed var(--border);border-radius:14px">
+   ${pool.length ? 'No decks match your search filter.' : (wantCase ? 'No case studies yet — click <b>+ New / Edit</b> above!' : 'No quizzes yet — click <b>+ New / Edit</b> above!')}
   </div>`;
   return;
  }
  grid.innerHTML = shown.map(q => {
   const cleanTitle = (q.title || '').replace(/\s*\(\d+\s*(?:Qs|slides?)\)\s*$/i, '');
   const f = deckFolderOf(q, wantCase);
-  const tags = (q.tags || []).slice(0, 3).map(t => `<span class="deck-tag">#${esc(t)}</span>`).join('');
+  const tags = (q.tags || []).slice(0, 4).map(t => `<span class="deck-tag">#${esc(t)}</span>`).join('');
   const isSel = cur === q.file;
   const estMin = q.est_min || Math.max(1, Math.round(((q.count || 1) * (q.case ? 65 : 32)) / 60));
   return `<div class="deck-card${isSel?' active':''}" data-file="${esc(q.file)}" onclick="pickDeckCard(this.dataset.file)">
-   <div class="deck-card-top">
-    <span class="deck-title">${q.case ? '📖 ' : '🎮 '}${esc(cleanTitle)}</span>
-    <span style="display:inline-flex;gap:4px;align-items:center;flex-shrink:0"><span class="deck-cnt">${q.count || '—'} ${q.case ? 'slides' : 'Qs'}</span><span class="deck-est">⏱ ~${estMin} min</span></span>
+   <div class="deck-left">
+    <span class="deck-check">${isSel ? '✓' : ''}</span>
+    <div class="deck-info">
+     <div class="deck-title">${esc(cleanTitle)}</div>
+     <div class="deck-meta"><span>📂 ${esc(f)}</span>${tags}</div>
+    </div>
    </div>
-   <div class="deck-meta"><span>📂 ${esc(f)}</span>${tags}${isSel ? '<span style="margin-left:auto;color:#7dff6b;font-weight:850">✓ Active</span>' : ''}</div>
+   <div class="deck-right">
+    ${isSel ? `<span class="deck-acts" onclick="event.stopPropagation()">
+     <button type="button" class="deck-act-btn" onclick="editSelectedDeck()" title="Edit this deck">✏️ Edit</button>
+     <button type="button" class="deck-act-btn" onclick="dupSelectedDeck()" title="Duplicate this deck">⧉ Dup</button>
+     ${q.case ? '' : `<button type="button" class="deck-act-btn" onclick="hwSelectedDeck()" title="Assign as Homework">📚 HW</button>`}
+    </span>` : ''}
+    <span class="deck-cnt">${q.count || '—'} ${q.case ? 'slides' : 'Qs'}</span>
+    <span class="deck-est">⏱ ~${estMin} min</span>
+   </div>
   </div>`;
  }).join('');
 }
@@ -2640,12 +2912,13 @@ function syncLiveFeatureBtns(){
  if(ptS) ptS.textContent = S.play_too_enabled ? 'ON' : 'OFF';
  if(!IS_AUDIENCE){
   const hpBtn = document.getElementById('hostPlayBtn');
-  if(hpBtn) hpBtn.style.display = (inGame && S.play_too_enabled && S.phase !== 'final') ? 'inline-block' : 'none';
+  if(hpBtn){
+   hpBtn.style.display = (inGame && S.play_too_enabled && S.phase !== 'final') ? 'inline-block' : 'none';
+   hpBtn.style.setProperty('--hp-right', S.chat_enabled ? '130px' : '152px');
+  }
   const hcBtn = document.getElementById('hostChatBtn'), hcLbl = document.getElementById('hostChatLbl'), hcTitle = document.getElementById('hostChatTitle'), hcTgl = document.getElementById('hcToggleChatBtn'), hcBots = document.getElementById('hcBotsBtn'), hcIn = document.getElementById('hostChatIn');
   if(hcBtn){
    hcBtn.style.display = inGame ? 'inline-block' : 'none';
-   hcBtn.style.right = '14px';
-   if(hpBtn) hpBtn.style.right = S.chat_enabled ? '130px' : '152px';
   }
   if(hcLbl) hcLbl.textContent = S.chat_enabled ? '💬 Chat' : '📢 Broadcast';
   if(hcTitle) hcTitle.textContent = S.chat_enabled ? 'Live Game Chat' : 'Host Megaphone';
@@ -2904,6 +3177,158 @@ function runWheel(){
   sfxReveal();
  }, 3500);
 }
+function wingBtnHtml(){
+ if(IS_AUDIENCE || window.presenterMode) return '';
+ const open = document.body.classList.contains('wing-open');
+ const hasAlert = !!((S && S.note && (S.phase === 'question' || S.phase === 'results')) || (S && S.pending_list && S.pending_list.length));
+ return `<button type="button" class="btn-sm dock-wing-btn${open?' active':''}" onclick="toggleLiveWing()" title="Toggle Private Host Wing (W)">🎛️ Host Wing${hasAlert?'<span class="wing-dot"></span>':''}</button>`;
+}
+let lastWingKey = '';
+function updateLiveWing(){
+ const wing = document.getElementById('liveHostWing'), wb = document.getElementById('liveWingBackdrop');
+ if(!wing) return;
+ if(IS_AUDIENCE || window.presenterMode || !pin || !S || !S.phase || S.phase === 'final'){
+  if(document.body.classList.contains('wing-open')){
+   document.body.classList.remove('wing-open');
+   if(wb) wb.classList.remove('open');
+  }
+  lastWingKey = '';
+  return;
+ }
+ const isOpen = document.body.classList.contains('wing-open');
+ const hasAlert = !!((S.note && (S.phase === 'question' || S.phase === 'results')) || (S.pending_list && S.pending_list.length));
+ document.querySelectorAll('.dock-wing-btn').forEach(btn => {
+  btn.classList.toggle('active', isOpen);
+  const dot = btn.querySelector('.wing-dot');
+  if(hasAlert && !dot){ const sp = document.createElement('span'); sp.className = 'wing-dot'; btn.appendChild(sp); }
+  else if(!hasAlert && dot){ dot.remove(); }
+ });
+ if(!isOpen) return;
+ const ph = S.phase;
+ const nAct = (S.n_active != null ? S.n_active : (S.n || 0));
+ const inPrev = ph === 'question' && (S.preview_left || 0) > 0;
+ const inCons = ph === 'question' && S.consensus_step === 2;
+ const inThink = ph === 'question' && !inPrev && !inCons && (S.think_left || 0) > 0;
+ const pLive = (typeof isProjectorLive === 'function') && isProjectorLive();
+ const rLive = typeof remoteLastLive !== 'undefined' && !!remoteLastLive;
+ const wk = `${pin}:${ph}:${S.index||0}:${S.qtype||''}:${inPrev?1:0}:${inThink?1:0}:${inCons?1:0}:${S.paused?1:0}:${S.n||0}:${nAct}:${S.hide_board?1:0}:${S.allow_tts?1:0}:${S.chat_enabled?1:0}:${S.profiles_enabled?1:0}:${S.play_too_enabled?1:0}:${S.auto?1:0}:${S.can_reconsider?1:0}:${S.discuss_left!=null?1:0}:${(S.pending_list||[]).map(p=>p.name).join(',')}:${S.note||''}:${S.topic||''}:${S.quote||''}:${pLive?1:0}:${rLive?1:0}:${window.presenterMode?1:0}`;
+
+ let ansLbl = `👥 ${S.n||0} Joined`;
+ if(ph === 'icebreaker') ansLbl = `💬 ${S.word_total||0} Words`;
+ else if(ph === 'question' && S.qtype !== 'info') ansLbl = `📝 ${S.answered||0} / ${nAct} Answered`;
+ else if(ph === 'results' && S.qtype !== 'info') ansLbl = `📊 ${S.answered||0} / ${nAct} Responded`;
+ else if(ph === 'board') ansLbl = `🏆 Top Standings`;
+
+ let tmLbl = ph.toUpperCase();
+ if(ph === 'lobby') tmLbl = 'LOBBY';
+ else if(ph === 'question'){
+  if(S.qtype === 'info') tmLbl = S.discuss_left != null ? `🗣️ ${S.discuss_left}s` : '📖 Chapter';
+  else if(inPrev) tmLbl = `👀 ${Math.ceil(S.preview_left||0)}s Preview`;
+  else if(inThink) tmLbl = `🧠 ${Math.ceil(S.think_left||0)}s Think`;
+  else if(inCons) tmLbl = `🤝 ${Math.ceil(S.consensus_left||0)}s Team`;
+  else tmLbl = S.paused ? `⏸️ ${Math.ceil(S.left||0)}s` : `⏱ ${Math.ceil(S.left||0)}s`;
+ } else if(ph === 'results'){
+  tmLbl = S.discuss_left != null ? `🗣️ ${S.discuss_left}s` : (S.auto && S.auto_left != null ? `⏭️ ${S.auto_left}s` : 'RESULTS');
+ } else if(ph === 'board'){
+  tmLbl = S.auto && S.auto_left != null ? `⏭️ ${S.auto_left}s` : `AFTER #${(S.index||0)+1}`;
+ }
+
+ let nextLbl = 'Next ➔', canNext = true;
+ if(ph === 'lobby'){
+  canNext = (S.n || 0) > 0;
+  nextLbl = canNext ? `🚀 Start ${S.case_game ? 'Case Study' : 'Game'} →` : '⏳ Waiting for 1st Player…';
+ } else if(ph === 'icebreaker'){
+  nextLbl = `▶️ Start ${S.case_game ? 'Slide 1' : 'Question 1'} →`;
+ } else if(ph === 'intro'){
+  nextLbl = '⏭️ Skip Intro →';
+ } else if(ph === 'question'){
+  nextLbl = S.qtype === 'info' ? 'Continue Slide (Space) →' : `⏭️ Reveal ${S.case_game ? 'Votes' : 'Results'} (Space) →`;
+ } else if(ph === 'results'){
+  nextLbl = (S.is_last ? '🏆 Final Podium →' : ((S.case || S.hide_board) ? 'Continue →' : '🏆 Show Standings →')) + (S.auto && S.auto_left != null ? ` (${S.auto_left}s)` : '');
+ } else if(ph === 'board'){
+  nextLbl = ((S.index + 1 >= S.total) ? '🏆 Final Podium →' : 'Next Question (Space) →') + (S.auto && S.auto_left != null ? ` (${S.auto_left}s)` : '');
+ }
+
+ if(wk === lastWingKey){
+  const aEl = document.getElementById('wingAnsPill'), tEl = document.getElementById('wingTimerPill'), nEl = document.getElementById('wingNextBtn');
+  if(aEl) aEl.textContent = ansLbl;
+  if(tEl) tEl.textContent = tmLbl;
+  if(nEl){ nEl.textContent = nextLbl; nEl.disabled = !canNext; }
+  return;
+ }
+ lastWingKey = wk;
+
+ const inSlide = ph === 'question' || ph === 'results';
+ const noteHtml = `<div class="wing-note-card">
+  <b class="wn-lbl"><span>📝 Private Teacher Note</span>${inSlide && S.topic ? `<span style="background:#0004;padding:1px 8px;border-radius:99px;color:#fff;font-size:.88em">🏷️ ${esc(S.topic)}</span>` : ''}</b>
+  <div>${inSlide && S.note ? esc(S.note) : (ph === 'lobby' ? '<span style="opacity:.8">Keep this wing closed on a single mirrored projector, or open it whenever you want private notes &amp; quick controls!</span>' : '<span style="opacity:.7">No private facilitation note on this slide.</span>')}</div>
+  ${ph === 'question' && S.quote ? `<div style="margin-top:7px;padding-top:7px;border-top:1px solid #fcd34d33;font-size:.88em;color:#fde68a">💡 <b>Up next on reveal:</b> ${esc(S.quote)}</div>` : ''}
+ </div>`;
+
+ const pendBlock = (S.pending_list && S.pending_list.length)
+  ? `<div class="wing-sec-card" style="border-color:#fbbf2488;background:#fbbf2414">${pendingHtml()}</div>`
+  : '';
+
+ let paceBtns = '';
+ if(ph === 'lobby'){
+  paceBtns = `<button type="button" onclick="addBots(5)">🤖 +5 ${S.case_game?'Participants':'Bots'}</button>
+   <button type="button" onclick="copyJoinLink(this)">📋 Copy Join Link</button>`;
+ } else if(ph === 'icebreaker'){
+  paceBtns = `<button type="button" onclick="editIcePrompt()">✏️ Edit Warm-Up Prompt</button>`;
+ } else if(ph === 'question' && S.qtype === 'info'){
+  paceBtns = `<button type="button" onclick="startDiscuss(60)">⏱ 60s Timer</button>
+   <button type="button" onclick="startDiscuss(120)">⏱ 120s</button>
+   ${S.discuss_left != null ? `<button type="button" onclick="addDiscuss(30)">+30s</button><button type="button" onclick="startDiscuss(0)">⏹ Clear</button>` : ''}`;
+ } else if(ph === 'question'){
+  if(inPrev){
+   paceBtns = `<button type="button" onclick="hostCtl('skip_preview')">⏭️ Open Answers Now</button>`;
+  } else {
+   paceBtns = `${inThink ? `<button type="button" onclick="hostCtl('skip_think')">⏭️ Unlock Answers</button>` : ''}
+    <button type="button" id="wingPauseBtn" onclick="hostCtl('pause')">${S.paused ? '▶️ Resume' : '⏸️ Pause'}</button>
+    <button type="button" onclick="hostCtl('add_time',-10)">-10s</button>
+    <button type="button" onclick="hostCtl('add_time',15)">+15s</button>
+    <button type="button" onclick="hostCtl('add_time',30)">+30s</button>`;
+  }
+ } else if(ph === 'results'){
+  paceBtns = `${S.can_reconsider ? `<button type="button" onclick="reconsiderVote(30)">🔄 Re-open Vote (30s)</button>` : ''}
+   ${(S.case || S.qtype === 'brainstorm' || S.qtype === 'scale') ? `<button type="button" onclick="startDiscuss(60)">🗣️ 60s Debrief</button>${S.discuss_left != null ? `<button type="button" onclick="addDiscuss(30)">+30s</button><button type="button" onclick="startDiscuss(0)">⏹ Clear</button>` : ''}` : ''}`;
+ }
+
+ wing.innerHTML = `<div>
+   <div class="wing-head">
+    <span class="wing-title">🎛️ Private Host Wing</span>
+    <button type="button" class="drawer-close-btn" onclick="toggleLiveWing(false)">✕ Hide (W)</button>
+   </div>
+   <div class="wing-scroll">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:6px;flex-wrap:wrap;font-size:.8em;font-weight:800">
+     <span style="padding:4px 9px;border-radius:8px;background:#ffffff12;color:var(--gold)">PIN ${esc(pin)}</span>
+     <span id="wingAnsPill" style="padding:4px 9px;border-radius:8px;background:#14532d99;color:#86efac">${esc(ansLbl)}</span>
+     <span id="wingTimerPill" style="padding:4px 9px;border-radius:8px;background:#ffffff12;color:#fff;font-variant-numeric:tabular-nums">${esc(tmLbl)}</span>
+    </div>
+    ${noteHtml}
+    ${pendBlock}
+    ${paceBtns ? `<div class="wing-sec-card"><div class="wing-sec-lbl"><span>⏱️ Live Pacing</span></div><div class="wing-ctl-row">${paceBtns}</div></div>` : ''}
+    <div class="wing-sec-card">
+     <div class="wing-sec-lbl"><span>🎛️ Classroom Controls</span></div>
+     <div class="wing-btn-grid">
+      <button type="button" class="${S.hide_board?'on':''}" onclick="hostCtl('toggle_hide_board')">🙈 ${S.hide_board?'Board Hidden':'Hide Board'}</button>
+      <button type="button" class="${S.allow_tts?'on':''}" onclick="hostCtl('toggle_student_tts')">🔊 ${S.allow_tts?'Read-Aloud ON':'Student TTS'}</button>
+      <button type="button" class="${S.chat_enabled?'on':''}" onclick="hostCtl('toggle_chat')">💬 ${S.chat_enabled?'Chat ON':'Live Chat'}</button>
+      <button type="button" class="${S.profiles_enabled?'on':''}" onclick="hostCtl('toggle_profiles')">📊 ${S.profiles_enabled?'Profiles ON':'Profiles'}</button>
+      <button type="button" class="${rLive?'on':''}" onclick="openRemoteModal()">📱 ${rLive?'Phone Live':'Phone Remote'}</button>
+      <button type="button" class="${window.presenterMode?'on':''}" onclick="openPresentationMode()">📽️ Dual Screen</button>
+      <button type="button" onclick="openModeration()">🛡️ Players (${S.n||0})</button>
+      <button type="button" class="${S.play_too_enabled?'on':''}" onclick="hostCtl('toggle_play_too')">🎮 ${S.play_too_enabled?'Play-Too ON':'Play Too'}</button>
+      ${S.case_game ? `<button type="button" onclick="openLinks()">🖥️ Spectator</button>` : `<button type="button" class="${S.auto?'on':''}" onclick="hostCtl('toggle_auto')">⏭️ Auto: ${S.auto?'ON':'Off'}</button>`}
+      <button type="button" onclick="toggleHostChat()">📢 ${S.chat_enabled?'Open Chat':'Broadcast'}</button>
+     </div>
+    </div>
+   </div>
+  </div>
+  <div style="padding-top:10px;border-top:1px solid var(--border)">
+   <button type="button" id="wingNextBtn" class="wing-next-btn" ${canNext?'':'disabled style="opacity:.55;cursor:not-allowed"'} onclick="next()">${esc(nextLbl)}</button>
+  </div>`;
+}
 let last='';
 function render(){
  document.body.classList.toggle('in-game', !!(pin && S && S.phase));
@@ -2954,10 +3379,12 @@ function render(){
   const dt=document.getElementById('dtimer');
   if(dt && window.discussText) dt.textContent = window.discussText();
   if(window.updatePresBadge) window.updatePresBadge();
+  updateLiveWing();
   return;
  }
  last=k;
  if(!IS_AUDIENCE && window.presenterMode && pin && window.renderPresenter){
+  updateLiveWing();
   window.renderPresenter();
   return;
  }
@@ -2996,6 +3423,7 @@ function render(){
      <div class="lobby-cnt">👥 <b>${S.n}</b> ${S.n===1?'Player':'Players'} Joined</div>
      <div class="lobby-cta aud-hide">
       <button class="btn-sm" onclick="addBots(5)">🤖 +5 ${S.case_game?'Participants':'Bots'}</button>
+      ${wingBtnHtml()}
       ${startCta}
      </div>
      <div class="aud-only" style="font-weight:800;color:var(--gold)">⏳ Waiting for host to start…</div>
@@ -3021,13 +3449,14 @@ function render(){
   <div class="word-cloud">${cloud}</div>
   <div class="host-dock aud-hide">
    <button class="btn-sm" onclick="editIcePrompt()">✏️ Edit Prompt</button>
+   ${wingBtnHtml()}
    <span class="dock-sep"></span>
    <button class="dock-next" onclick="next()">Start ${S.case_game?'Slide 1':'Question 1'} ➔</button>
   </div>`;
  } else if(S.phase=='intro'){
   const ipct = Math.max(0, Math.min(100, ((S.intro_left||0)/(S.intro_total||5))*100));
   const hud = `<div class="stage-hud"><div class="stage-hud-left"><span class="qnum">Question ${S.index+1} <small>of ${S.total}</small></span></div><div class="stage-hud-right"><span class="ans-pill">🎪 Special Round</span></div></div>`;
-  const dock = `<div class="host-dock aud-hide"><button class="dock-next" onclick="next()">⏭️ Skip Intro ➔</button></div>`;
+  const dock = `<div class="host-dock aud-hide">${wingBtnHtml()}<span class="dock-sep"></span><button class="dock-next" onclick="next()">⏭️ Skip Intro ➔</button></div>`;
   if(S.speed && !S.redemption){
    $.innerHTML=`${hud}
    <div class="redemp-screen" style="border-color:#00e5ff"><div class="redemp-big" style="color:#00e5ff">⚡ SPEED ROUND ⚡</div>
@@ -3095,6 +3524,7 @@ function render(){
    </div>
    <div class="host-dock aud-hide">
     <button class="btn-sm" onclick="hostCtl('skip_preview')">⏭️ Open Answers Now</button>
+    ${wingBtnHtml()}
     <span class="dock-sep"></span>
     <button class="dock-next" onclick="next()">Skip ➔</button>
    </div>`;
@@ -3124,6 +3554,7 @@ function render(){
      <input id="liveSecInp" type="number" min="1" max="900" value="${sec}" onkeydown="if(event.key==='Enter')applyLiveTimer('liveSecInp')"><span>s</span>
      <button class="btn-sm" onclick="applyLiveTimer('liveSecInp')">Set</button>
     </span>
+    ${wingBtnHtml()}
     <span class="dock-sep"></span>
     <button class="dock-next" onclick="next()">⏭️ ${S.case_game?'Reveal':'Results'} ➔</button>
    </div>`;
@@ -3142,7 +3573,9 @@ function render(){
    ${S.quote?quoteBox():''}
   </div>
   <div class="host-dock aud-hide">
-   ${S.can_reconsider ? `<button class="btn-sm" onclick="reconsiderVote(30)">🔄 Re-open Vote (Reconsider)</button><span class="dock-sep"></span>` : ''}
+   ${S.can_reconsider ? `<button class="btn-sm" onclick="reconsiderVote(30)">🔄 Re-open Vote (Reconsider)</button>` : ''}
+   ${wingBtnHtml()}
+   <span class="dock-sep"></span>
    <button class="dock-next" onclick="next()">${S.is_last?'🏆 Final Podium':(S.case||S.hide_board?'Continue ➔':'🏆 Top Players ➔')}${autoSuffix}</button>
   </div>`;
  } else if(S.phase=='board'){
@@ -3159,9 +3592,12 @@ function render(){
   <h1 style="margin:.1em 0 .2em">🏆 Top Players</h1>
   ${teamStandingsHtml()}${shHtml}${profHint}${animBoard(S.board,S.index)}
   <div class="host-dock aud-hide">
+   ${wingBtnHtml()}
+   <span class="dock-sep"></span>
    <button class="dock-next" onclick="next()">${S.index+1>=S.total?'🏆 Final Podium':'Next Question ➔'}${autoSuffix}</button>
   </div>`;
  } else $.innerHTML=renderFinal(S.board);
+ updateLiveWing();
 }
 </script>
 <script>
@@ -3451,9 +3887,12 @@ function applyBranding(){
  const bg = (document.getElementById('qBg')||{}).value || localStorage.getItem('brainrush_bg') || '';
  if(/^(https?:\/\/|\/)/.test(bg)){ document.body.style.backgroundImage = `url("${bg.replace(/"/g,'')}")`; document.body.style.backgroundSize='cover'; document.body.style.backgroundAttachment='fixed'; }
  else { document.body.style.backgroundImage=''; }
- const lg = (document.getElementById('qLogo')||{}).value || '';
+ const lg = ((document.getElementById('qLogo')||{}).value || localStorage.getItem('brainrush_logo') || '').trim();
  const img = document.querySelector('#app img.logo');
- if(img && /^(https?:\/\/|\/)/.test(lg)) img.src = lg;
+ if(img){
+  if(/^(https?:\/\/|\/)/.test(lg) && lg !== '/logo.jpg'){ img.src = lg; img.style.display = 'block'; }
+  else { img.style.display = 'none'; }
+ }
 }
 function saveSetup(){
  try{
@@ -3588,7 +4027,7 @@ const GUIDE = [
   ['🤖 Phantom Bot Players', 'Computer players that answer, use power-ups, wager and send reactions. Good for testing or making a small class feel full. You can also add 5 more from the lobby.'],
   ['👥 Class Roster', 'Check 👥 Class Roster in Options to reveal the roster list and paste student names (one per line). Players then pick their name from a dropdown instead of typing a nickname, and a student who loses connection can rejoin under the same name. Names stay saved on this computer while Roster Mode stays off unless checked.'],
   ['📱 Phone Host Remote', 'Check 📱 Phone Host Remote in Options (or copy/open the always-visible link or QR code) to pair your phone before or during a session. You can pick & launch a Quiz or Case Study right from your phone, then advance slides, pause timers, add +10s, and manage bots from anywhere in the room.'],
-  ['💬 Live Chat & Tagging (Opt-In)', 'Optional two-way in-game chat drawer on student phones and projector feed, with threaded replies (↩), emoji reactions, \\Name & \\Host tagging autocomplete, vibrating tag alerts, Top-10 crimson theme, rate-limiting, and profanity/link filtering. Can also be toggled ON/OFF mid-game in ⚙️ Settings.'],
+  ['💬 Live Chat & Tagging (Opt-In)', 'Optional two-way in-game chat drawer on student phones and projector feed, with threaded replies (↩), emoji reactions, \\Name & \\Host tagging autocomplete, vibrating tag alerts, Top-10 crimson theme, rate-limiting, and profanity/link filtering. Can also be toggled ON/OFF mid-game in ⚙️ Menu or 🎛️ Host Wing.'],
   ['📢 Host Megaphone Broadcast', 'Use the bottom-right 📢 Broadcast / 💬 Chat button (or Phone Remote) to drop a vibrating gold 😎 HOST banner on every phone and the projector — works as a one-way announcement even when student chat is OFF.'],
   ['📊 Standings & Player Profiles (Opt-In)', 'Lets students open Top-30 Standings and tap any player for a Head-to-Head comparison card (rank, accuracy, average/fastest speed vs. yours, streak, point gap & answers-to-catch), and makes leaderboard rows & shout-out badges clickable. Automatically suppressed while Hide Live Leaderboard is ON.'],
   ['🎮 Host Play-Along ("Play too", Opt-In)', 'Shows a 🎮 Play too button during active games so the host can join in a new tab under any nickname with a floating 🕹 Host controls bar (Start/Next, Pause, +10s, Auto-advance, and Chat/Broadcast as Host).'],
@@ -3746,6 +4185,7 @@ function updateMeta(){
  if((S.pending_list||[]).length) h += `<button class="mod-btn" onclick="openModeration()">🛡️ ${S.pending_list.length} waiting for approval</button>`;
  if(bar.dataset.k !== h){ bar.dataset.k = h; bar.innerHTML = h; }
  bar.style.display = h ? 'flex' : 'none';
+ if(typeof updateLiveWing === 'function') updateLiveWing();
 }
 window.addEventListener('keydown', e=>{
  if(['INPUT','TEXTAREA','SELECT'].includes((e.target||{}).tagName)) return;
@@ -5229,6 +5669,7 @@ function infoScreen(){
  ${dBanner}
  <div class="host-dock aud-hide">
   ${discussCtrlHtml('infoDiscInp','⏱️ Chapter Timer')}
+  ${wingBtnHtml()}
   <span class="dock-sep"></span>
   <button class="dock-next" onclick="next()">Continue ➔</button>
  </div>`;
@@ -5384,13 +5825,16 @@ function applyPresSync(msg){
 function renderAudienceStandby(){
  if(!IS_AUDIENCE || pin) return;
  if(audPollTimer){ clearInterval(audPollTimer); audPollTimer = null; }
- const lg = (window._presLogo && /^(https?:\/\/|\/)/.test(window._presLogo)) ? window._presLogo : '/logo.jpg';
- const fsBtn = document.fullscreenElement ? '' : `<div style="margin-top:22px"><button onclick="toggleFullscreen()" style="margin:0;padding:14px 28px;font-size:1.15em;border-radius:99px">⛶ Enter Fullscreen (F)</button></div>`;
+ const hasCustomLogo = !!(window._presLogo && /^(https?:\/\/|\/)/.test(window._presLogo) && window._presLogo !== '/logo.jpg');
+ const heroMark = hasCustomLogo
+  ? `<img class="logo" src="${esc(window._presLogo)}" alt="Brainrush!" style="max-width:240px;margin:0 auto 14px;display:block">`
+  : `<div style="display:inline-flex;align-items:center;gap:12px;margin-bottom:14px"><span class="rail-bolt" style="width:46px;height:46px;border-radius:13px;font-size:1.5em">⚡</span><span style="font-size:2em;font-weight:900;letter-spacing:-.02em">BrainRush</span></div>`;
+ const fsBtn = document.fullscreenElement ? '' : `<div style="margin-top:22px"><button onclick="toggleFullscreen()" style="margin:0;padding:13px 28px;font-size:1.08em;border-radius:99px;background:linear-gradient(180deg,#22c55e,#16a34a);color:#05210e;box-shadow:0 4px 0 #0d5c2b,0 8px 20px rgba(0,0,0,.38)">⛶ Enter Fullscreen (F)</button></div>`;
  $.innerHTML = `<div class="standby-card">
-  <img class="logo" src="${esc(lg)}" alt="Brainrush!" style="max-width:260px;margin-top:0">
-  <span class="standby-pill">📽️ EXTENDED DISPLAY READY</span>
-  <h1>Get Ready to Play!</h1>
-  <p style="font-size:1.3em;opacity:.88;max-width:560px;margin:8px auto 0;line-height:1.45">Choose a Quiz or Case Study on your laptop to launch — the Lobby PIN &amp; QR code will appear here automatically.</p>
+  ${heroMark}
+  <div><span class="standby-pill">📽️ EXTENDED DISPLAY READY</span></div>
+  <h1 style="margin:.25em 0 .2em">Get Ready to Play!</h1>
+  <p style="font-size:1.22em;opacity:.88;max-width:560px;margin:8px auto 0;line-height:1.45">Choose a Quiz or Case Study on your laptop to launch — the Lobby PIN &amp; QR code will appear here automatically.</p>
   ${fsBtn}
  </div>`;
 }
@@ -5428,7 +5872,7 @@ function renderPresSetupBar(){
  if(mst) mst.textContent = window.presenterMode ? (live ? 'Live 🟢' : 'Active') : '2nd Screen';
  if(mb) mb.classList.toggle('on', !!window.presenterMode);
  if(wp) wp.classList.toggle('live', !!window.presenterMode);
- if(wps) wps.textContent = window.presenterMode ? (live ? 'Screen 2 🟢' : 'Presenter ON') : 'Dual Screen';
+ if(wps) wps.textContent = window.presenterMode ? (live ? 'Live 🟢' : 'ON') : 'Off';
  if(typeof updateScreenSummary === 'function') updateScreenSummary();
  if(typeof syncWsNavCollapse === 'function') syncWsNavCollapse();
  if(!bar) return;
