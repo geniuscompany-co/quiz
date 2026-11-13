@@ -532,7 +532,10 @@ def list_quizzes(owner="_shared"):
         "quiz_fun_facts.json": "Fun Facts Trivia",
         "quiz_ultimate_silly_trivia.json": "Ultimate Silly Trivia",
     }
-    files = sorted(f for f in os.listdir(ROOT) if f == "quiz.json" or (f.startswith("quiz_") and f.endswith(".json")))
+    hidden = K.builtin_deleted()
+    files = sorted(f for f in os.listdir(ROOT)
+                   if (f == "quiz.json" or (f.startswith("quiz_") and f.endswith(".json")))
+                   and f not in hidden)
     for f in files:
         try:
             with open(os.path.join(ROOT, f)) as fp:
@@ -3150,9 +3153,17 @@ class H(BaseHTTPRequestHandler):
             except Exception as e:
                 self.send({"error": str(e)}, 400)
         elif path == "/api/delete_quiz":
-            f = body.get("file") or ""
-            if f.startswith("uq:") and f.split(":", 2)[1] in (owner, "_shared"):
-                K.uq_delete(f.split(":", 2)[1], f)
+            files_to_del = body.get("files") if isinstance(body.get("files"), list) else [body.get("file") or ""]
+            for f in files_to_del:
+                f = str(f or "").strip()
+                if not f:
+                    continue
+                if f.startswith("uq:"):
+                    parts = f.split(":", 2)
+                    if len(parts) >= 2 and parts[1] in (owner, "_shared"):
+                        K.uq_delete(parts[1], f)
+                elif f == "quiz.json" or (f.startswith("quiz_") and f.endswith(".json")):
+                    K.builtin_delete(f)
             self.send({"ok": True, "quizzes": list_quizzes(owner)})
         elif path == "/api/dup_quiz":
             f = body.get("file") or "quiz.json"

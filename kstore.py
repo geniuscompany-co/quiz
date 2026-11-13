@@ -267,6 +267,22 @@ def uq_delete(owner, qid):
     return False
 
 
+def builtin_deleted():
+    return set(store.get_json("deleted_builtins", []) or [])
+
+
+def builtin_delete(fname):
+    safe = os.path.basename(str(fname or "").strip())
+    if not safe or not safe.endswith(".json"):
+        return False
+    with _lock:
+        cur = list(builtin_deleted())
+        if safe not in cur:
+            cur.append(safe)
+            store.set_json("deleted_builtins", cur)
+    return True
+
+
 def estimate_duration_sec(questions, qtime=15, preview=5):
     tot = 0
     for q in questions or []:

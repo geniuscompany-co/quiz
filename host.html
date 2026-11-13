@@ -588,9 +588,12 @@ body.cb .c4{background:#CC79A7}body.cb .c5{background:#56B4E9;color:#111}body.cb
 .deck-meta{display:flex;align-items:center;gap:7px;flex-wrap:wrap;font-size:.77em;color:#ffffff99;margin-top:3px}
 .deck-tag{background:#00000040;padding:1px 7px;border-radius:6px;color:#d8b4fe;font-weight:650}
 .deck-right{display:flex;align-items:center;gap:7px;flex-shrink:0;flex-wrap:wrap;justify-content:flex-end}
-.deck-acts{display:inline-flex;align-items:center;gap:5px}
+.deck-acts{display:none;align-items:center;gap:5px}
+.deck-card.active .deck-acts,.deck-card:hover .deck-acts{display:inline-flex}
 .deck-act-btn{margin:0;padding:5px 10px;font-size:.76em;border-radius:8px;background:#ffffff16;border:1px solid #ffffff2b;color:#fff;font-weight:750;box-shadow:none;white-space:nowrap}
 .deck-act-btn:hover{background:#ffffff2b}
+.deck-act-btn.del{background:rgba(226,27,60,.22);border-color:rgba(255,138,128,.38);color:#fecdd3;padding:5px 8px}
+.deck-act-btn.del:hover{background:rgba(226,27,60,.45);border-color:rgba(255,138,128,.7);color:#fff}
 .deck-cnt{font-size:.79em;background:#00000052;padding:4px 10px;border-radius:9px;font-weight:850;white-space:nowrap;color:var(--gold);font-variant-numeric:tabular-nums}
 .deck-est{font-size:.77em;background:#ffffff12;border:1px solid #ffffff1a;padding:4px 9px;border-radius:9px;font-weight:700;white-space:nowrap;color:#ffffffcc;font-variant-numeric:tabular-nums}
 @media (max-width:620px){.deck-card{flex-direction:column;align-items:stretch;gap:10px}.deck-right{justify-content:space-between;padding-left:35px}}
@@ -2153,6 +2156,26 @@ async function exportSelectedQuiz(){
  a.download = es.value;
  a.click();
 }
+async function performQuizDelete(file){
+ if(!file) return null;
+ const qObj = quizList.find(x=>x.file===file);
+ const cleanName = qObj ? (qObj.title || '').replace(/\s*\(\d+\s*(?:Qs|slides?)\)\s*$/i, '') : file;
+ if(!confirm(`Delete "${cleanName}"? This cannot be undone.`)) return null;
+ try{
+  const list = getSavedCustomQuizzes().filter(x=>x.file !== file);
+  localStorage.setItem('brainrush_custom_quizzes', JSON.stringify(list));
+  if(!String(file).startsWith('uq:')){
+   const delB = getDeletedBuiltinsLocal();
+   if(!delB.includes(file)){ delB.push(file); localStorage.setItem('brainrush_deleted_builtins', JSON.stringify(delB)); }
+  }
+ }catch(e){}
+ const r = await postPw('/api/delete_quiz', {file});
+ const sel = document.getElementById('quizSel');
+ const prevSel = (sel && sel.value && sel.value !== file) ? sel.value : '';
+ quizList = mergeQuizLists((r && r.quizzes) || quizList.filter(x=>x.file !== file));
+ renderQuizSelect(prevSel);
+ return r;
+}
 async function deleteSelectedQuiz(){
  const es = document.getElementById('editQuizSel');
  if(!es || !es.value){
@@ -2160,20 +2183,8 @@ async function deleteSelectedQuiz(){
   return;
  }
  document.getElementById('customErr').textContent = '';
- const qObj = quizList.find(x=>x.file===es.value);
- const protectedFiles = ['quiz.json','quiz_chapter8.json','quiz_fun_facts.json','quiz_ultimate_silly_trivia.json','quiz_case_ethical_leadership.json'];
- if((qObj && qObj.builtin) || protectedFiles.includes(es.value)){
-  document.getElementById('customErr').textContent = 'Built-in permanent quizzes cannot be deleted.';
-  return;
- }
- try{
-  const list = getSavedCustomQuizzes().filter(x=>x.file !== es.value);
-  localStorage.setItem('brainrush_custom_quizzes', JSON.stringify(list));
- }catch(e){}
- const r = await postPw('/api/delete_quiz', {file: es.value});
- quizList = mergeQuizLists((r && r.quizzes) || []);
- renderQuizSelect();
- openQuizModal();
+ const done = await performQuizDelete(es.value);
+ if(done) openQuizModal((typeof quizModalMode !== 'undefined' && quizModalMode === 'case') ? 'case' : 'quiz');
 }
 function loadCustomFile(ev){
  const f = ev.target.files && ev.target.files[0];
@@ -2361,6 +2372,9 @@ function parseCustomQuestions(raw){
 function getSavedCustomQuizzes(){
  try{ return JSON.parse(localStorage.getItem('brainrush_custom_quizzes') || '[]'); }catch(e){ return []; }
 }
+function getDeletedBuiltinsLocal(){
+ try{ return JSON.parse(localStorage.getItem('brainrush_deleted_builtins') || '[]'); }catch(e){ return []; }
+}
 function storeCustomQuizLocal(item){
  try{
   const list = getSavedCustomQuizzes().filter(x=>x.file !== item.file);
@@ -2369,9 +2383,10 @@ function storeCustomQuizLocal(item){
  }catch(e){}
 }
 function mergeQuizLists(serverList){
+ const delSet = new Set(getDeletedBuiltinsLocal());
  const map = new Map();
- (serverList||[]).forEach(q=>map.set(q.file, q));
- getSavedCustomQuizzes().forEach(q=>{ if(!map.has(q.file)) map.set(q.file, q); else map.get(q.file).questions = q.questions; });
+ (serverList||[]).forEach(q=>{ if(!delSet.has(q.file)) map.set(q.file, q); });
+ getSavedCustomQuizzes().forEach(q=>{ if(!delSet.has(q.file)){ if(!map.has(q.file)) map.set(q.file, q); else map.get(q.file).questions = q.questions; } });
  return Array.from(map.values());
 }
 
@@ -2452,11 +2467,12 @@ function renderDeckGrid(){
     </div>
    </div>
    <div class="deck-right">
-    ${isSel ? `<span class="deck-acts" onclick="event.stopPropagation()">
-     <button type="button" class="deck-act-btn" onclick="editSelectedDeck()" title="Edit this deck">✏️ Edit</button>
-     <button type="button" class="deck-act-btn" onclick="dupSelectedDeck()" title="Duplicate this deck">⧉ Dup</button>
-     ${q.case ? '' : `<button type="button" class="deck-act-btn" onclick="hwSelectedDeck()" title="Assign as Homework">📚 HW</button>`}
-    </span>` : ''}
+    <span class="deck-acts" onclick="event.stopPropagation()">
+     <button type="button" class="deck-act-btn" onclick="editSelectedDeck(this.closest('.deck-card').dataset.file)" title="Edit this deck">✏️ Edit</button>
+     <button type="button" class="deck-act-btn" onclick="dupSelectedDeck(this.closest('.deck-card').dataset.file)" title="Duplicate this deck">⧉ Dup</button>
+     ${q.case ? '' : `<button type="button" class="deck-act-btn" onclick="hwSelectedDeck(this.closest('.deck-card').dataset.file)" title="Assign as Homework">📚 HW</button>`}
+     <button type="button" class="deck-act-btn del" onclick="deleteDeckCard(this.closest('.deck-card').dataset.file)" title="Delete this deck">🗑️</button>
+    </span>
     <span class="deck-cnt">${q.count || '—'} ${q.case ? 'slides' : 'Qs'}</span>
     <span class="deck-est">⏱ ~${estMin} min</span>
    </div>
@@ -2465,26 +2481,28 @@ function renderDeckGrid(){
 }
 const renderDeckCards = renderDeckGrid;
 window.renderDeckCards = renderDeckGrid;
-async function editSelectedDeck(){
+async function editSelectedDeck(fileOpt){
  const sel = document.getElementById('quizSel');
- if(!sel || !sel.value) return;
- const f = sel.value;
+ const f = fileOpt || (sel && sel.value) || '';
+ if(!f) return;
+ if(sel && sel.value !== f){ sel.value = f; syncQuizCount(); }
  openQuizModal((typeof hostSection !== 'undefined' && hostSection === 'case') ? 'case' : 'quiz');
  const es = document.getElementById('editQuizSel');
  if(es){ es.value = f; await loadExistingQuiz(); }
 }
-async function dupSelectedDeck(){
+async function dupSelectedDeck(fileOpt){
  const sel = document.getElementById('quizSel');
- if(!sel || !sel.value) return;
- const r = await postPw('/api/dup_quiz', {file: sel.value});
+ const f = fileOpt || (sel && sel.value) || '';
+ if(!f) return;
+ const r = await postPw('/api/dup_quiz', {file: f});
  if(r && r.file){
   quizList = mergeQuizLists(r.quizzes || quizList);
   renderQuizSelect(r.file);
  }
 }
-async function hwSelectedDeck(){
+async function hwSelectedDeck(fileOpt){
  const sel = document.getElementById('quizSel');
- const f = sel ? sel.value : '';
+ const f = fileOpt || (sel ? sel.value : '');
  const q = quizList.find(x => x.file === f);
  await openHomework();
  const hq = document.getElementById('hwQuiz'), ht = document.getElementById('hwTitle'), hc = document.getElementById('hwCount');
@@ -2493,6 +2511,12 @@ async function hwSelectedDeck(){
   if(ht && q && !ht.value) ht.value = (q.title || '').replace(/\s*\(\d+\s*Qs\)$/i, '');
   if(hc && q) hc.value = q.count || '';
  }
+}
+async function deleteDeckCard(fileOpt){
+ const sel = document.getElementById('quizSel');
+ const f = fileOpt || (sel && sel.value) || '';
+ if(!f) return;
+ await performQuizDelete(f);
 }
 
 function renderQuizSelect(selectedFile){
@@ -2560,8 +2584,15 @@ function syncQuizCount(){
 }
 (async()=>{
  try{
-  const r = await (await fetch('/api/quizzes?token='+encodeURIComponent(localStorage.getItem('brainrush_token')||''))).json();
-  quizList = mergeQuizLists((r && r.quizzes) || []);
+  const tok = localStorage.getItem('brainrush_token') || '';
+  const r = await (await fetch('/api/quizzes?token='+encodeURIComponent(tok))).json();
+  const srv = (r && r.quizzes) || [];
+  const delB = getDeletedBuiltinsLocal();
+  const stale = srv.filter(q => delB.includes(q.file)).map(q => q.file);
+  if(stale.length){
+   fetch('/api/delete_quiz', {method:'POST', body:JSON.stringify({files: stale, token: tok, password: sessionStorage.getItem('brainrush_pw')||''})}).catch(()=>{});
+  }
+  quizList = mergeQuizLists(srv);
   renderQuizSelect();
  }catch(e){
   quizList = mergeQuizLists([]);
