@@ -69,7 +69,17 @@ body.in-game #studioDrawerBackdrop,body.is-audience #studioDrawerBackdrop{displa
 .rail-course-lbl{flex:1;min-width:0;line-height:1.25;overflow-wrap:anywhere;word-break:break-word;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .rail-course-cnt{font-size:.82em;padding:1px 6px;border-radius:99px;background:#00000045;color:#fffc;font-weight:800;flex-shrink:0;font-variant-numeric:tabular-nums}
 .rail-course-item.active .rail-course-cnt{background:#16a34a;color:#fff}
-.course-lib-bar{margin-top:12px;padding:10px 13px;border-radius:13px;background:linear-gradient(135deg,#14532d52,#1e1b4b66);border:1px solid #4ade8059;display:flex;flex-direction:column;gap:9px}
+.course-subtabs{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:12px}
+.course-subtab{margin:0;padding:6px 12px;font-size:.8em;border-radius:99px;background:#ffffff10;border:1px solid #ffffff22;color:#ffffffcc;font-weight:750;box-shadow:none;display:inline-flex;align-items:center;gap:6px;cursor:pointer;max-width:300px;transition:background .14s,border-color .14s,color .14s}
+.course-subtab:hover{background:#ffffff1d;color:#fff}
+.course-subtab.active{background:linear-gradient(135deg,#16a34a,#15803d);border-color:#86efacaa;color:#fff;font-weight:850;box-shadow:0 4px 12px #0005}
+.course-subtab.main-tab.active{background:linear-gradient(135deg,#7c3aed,#6d28d9);border-color:#c4b5fdaa;color:#fff}
+.course-subtab-lbl{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.course-subtab-cnt{font-size:.84em;padding:1px 6px;border-radius:99px;background:#00000040;color:#fffd;font-weight:800;flex-shrink:0;font-variant-numeric:tabular-nums}
+.course-subtab.active .course-subtab-cnt{background:#0000004d;color:#fff}
+.course-subtab-manage{margin:0;padding:5px 10px;font-size:.77em;border-radius:99px;background:transparent;border:1px dashed #ffffff33;color:#ffffffa8;font-weight:750;box-shadow:none;cursor:pointer;white-space:nowrap}
+.course-subtab-manage:hover{background:#ffffff12;color:#fff;border-color:#ffffff55}
+.course-lib-bar{margin-top:10px;padding:10px 13px;border-radius:13px;background:linear-gradient(135deg,#14532d52,#1e1b4b66);border:1px solid #4ade8059;display:flex;flex-direction:column;gap:9px}
 .course-lib-top{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
 .course-lib-title{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:.9em;font-weight:850;color:#dcfce7;min-width:0}
 .course-lib-acts{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
@@ -80,8 +90,9 @@ body.in-game #studioDrawerBackdrop,body.is-audience #studioDrawerBackdrop{displa
 .rail-mode-btn{width:100%;margin:0;padding:9px 11px;font-size:.86em;border-radius:11px;background:transparent;border:1px solid transparent;color:#ffffffb8;font-weight:750;box-shadow:none;display:flex;align-items:center;justify-content:space-between;gap:8px;text-align:left;transition:background .14s,color .14s,border-color .14s}
 .rail-mode-btn:hover{background:#ffffff0f;color:#fff}
 .rail-mode-btn.active{background:linear-gradient(135deg,#7c3aed,#6d28d9);border-color:#a78bfa66;color:#fff;font-weight:850;box-shadow:0 6px 16px #0005}
+.rail-mode-btn.sec-parent{background:#7c3aed29;border-color:#a78bfa55;color:#ede9fe;font-weight:800}
 .rail-cnt{font-size:.82em;padding:1px 8px;border-radius:99px;background:#00000045;color:#fffd;font-weight:800;font-variant-numeric:tabular-nums}
-.rail-mode-btn.active .rail-cnt{background:#00000055;color:var(--gold)}
+.rail-mode-btn.active .rail-cnt,.rail-mode-btn.sec-parent .rail-cnt{background:#00000055;color:var(--gold)}
 .rail-btn{width:100%;margin:0;padding:8px 11px;font-size:.84em;border-radius:10px;background:transparent;border:1px solid transparent;color:#ffffffbf;font-weight:680;box-shadow:none;display:flex;align-items:center;justify-content:space-between;gap:6px;text-align:left;transition:background .14s,color .14s}
 .rail-btn:hover{background:#ffffff12;color:#fff}
 .rail-btn.live{background:#14532d88;border-color:#4ade8077;color:#dcfce7}
@@ -1068,20 +1079,21 @@ Quote: Paris has been the capital since 987 CE."></textarea>
    </div>
    <div id="railActiveCourseBox" class="rail-active-course" style="display:none"></div>
    <nav class="rail-nav" id="wsNav">
-    <button type="button" id="tabQuiz" class="rail-mode-btn active" onclick="setHostSection('quiz');toggleMobileRail(false)">
+    <button type="button" id="tabQuiz" class="rail-mode-btn active" onclick="openMainLibrary('quiz');toggleMobileRail(false)" title="Open Main Quiz Library (all quizzes)">
      <span>🎮 Quizzes</span>
      <span class="rail-cnt" id="railQuizCnt">—</span>
     </button>
-    <button type="button" id="tabCase" class="rail-mode-btn" onclick="setHostSection('case');toggleMobileRail(false)">
+    <div id="railQuizCoursesSub" class="rail-sub-list" style="display:none"></div>
+    <button type="button" id="tabCase" class="rail-mode-btn" onclick="openMainLibrary('case');toggleMobileRail(false)" title="Open Main Case Study Library (all case studies)">
      <span>📖 Case Studies</span>
      <span class="rail-cnt" id="railCaseCnt">—</span>
     </button>
+    <div id="railCaseCoursesSub" class="rail-sub-list" style="display:none"></div>
     <div class="rail-sec-lbl">Classroom</div>
     <button type="button" class="rail-btn" id="wsCanvasBtn" onclick="toggleMobileRail(false);openCanvasModal('hub')">
      <span>🎓 Courses</span>
      <span class="rail-sub" id="wsCanvasState">Connect</span>
     </button>
-    <div id="railCoursesSub" class="rail-sub-list" style="display:none"></div>
     <button type="button" class="rail-btn" onclick="toggleMobileRail(false);openQuizModal(hostSection)">
      <span><span class="quiz-only">➕ Deck Builder</span><span class="case-only">📖 Case Builder</span></span>
     </button>
@@ -1123,7 +1135,7 @@ Quote: Paris has been the capital since 987 CE."></textarea>
      <div>
       <div class="studio-title-row">
        <img class="logo studio-custom-logo" src="/logo.jpg" alt="Logo">
-       <h2><span class="quiz-only">🎮 Quiz Library</span><span class="case-only">📖 Case Study Library</span></h2>
+       <h2><span class="quiz-only" id="quizLibHdr">🎮 Quiz Library</span><span class="case-only" id="caseLibHdr">📖 Case Study Library</span></h2>
        <span class="acc-badge" id="deckBrowserBadge">—</span>
       </div>
       <p class="studio-sub">Select a deck below — timers, twists &amp; classroom options stay tucked in the right Settings Drawer.</p>
@@ -1144,6 +1156,7 @@ Quote: Paris has been the capital since 987 CE."></textarea>
      <div class="deck-more-drop" id="deckMoreDrop"></div>
     </div>
     <div id="caseHint" style="display:none"></div>
+    <div id="courseSubTabs" class="course-subtabs" style="display:none"></div>
     <div id="courseLibBar" style="display:none"></div>
 
     <div class="studio-filter-bar">
@@ -2572,28 +2585,34 @@ function populateBuilderCourseSelect(prefCourses){
  });
  if(!known.length){
   row.style.display = 'none';
-  sel.innerHTML = `<option value="">— All Courses (General Library) —</option>`;
+  sel.innerHTML = `<option value="">— Main Library Only (No Specific Course) —</option>`;
   sel.value = '';
   return;
  }
  row.style.display = 'flex';
  const cfg = readCourseCfgSafe();
  const defIds = new Set((Array.isArray(cfg.defaultCourses) ? cfg.defaultCourses : []).map(d => String(d.id)));
- sel.innerHTML = `<option value="">— All Courses (General Library) —</option>` + known.map(c => {
+ const multiOpt = (editingQuizFile && prefList.length > 1)
+  ? `<option value="__KEEP_MULTI__">🎓 Assigned to ${prefList.length} courses (keep current)</option>`
+  : '';
+ sel.innerHTML = `<option value="">— Main Library Only (No Specific Course) —</option>` + multiOpt + known.map(c => {
   const star = defIds.has(String(c.id)) ? '⭐ ' : '';
   return `<option value="${esc(c.id)}">${star}${esc(formatCourseDisplayName(c))}</option>`;
  }).join('');
- const chosen = prefList.length ? prefList[0] : (getActiveCourseFilter() || String(cfg.courseId || ''));
- sel.value = (chosen && known.some(c => String(c.id) === String(chosen))) ? String(chosen) : '';
+ if(editingQuizFile){
+  if(prefList.length > 1) sel.value = '__KEEP_MULTI__';
+  else if(prefList.length === 1 && known.some(c => String(c.id) === String(prefList[0]))) sel.value = String(prefList[0]);
+  else sel.value = '';
+ } else {
+  const activeSub = getActiveCourseFilter();
+  sel.value = (activeSub && known.some(c => String(c.id) === String(activeSub))) ? String(activeSub) : '';
+ }
 }
 function readBuilderCoursesToSave(){
  const sel = document.getElementById('customCourseSel');
  const picked = String((sel && sel.value) || '').trim();
  if(!picked) return [];
- if(editingQuizFile){
-  const prev = getDeckCourses(editingQuizFile);
-  return cleanCourseIdList([picked].concat(prev));
- }
+ if(picked === '__KEEP_MULTI__' && editingQuizFile) return getDeckCourses(editingQuizFile);
  return [picked];
 }
 
@@ -2648,11 +2667,16 @@ function syncSelectedDeckBar(){
  closeDeckMore();
 }
 function renderDeckGrid(){
- const grid = document.getElementById('deckGrid'), fBox = document.getElementById('deckFolders'), sel = document.getElementById('quizSel'), bBadge = document.getElementById('deckBrowserBadge'), cBar = document.getElementById('courseLibBar');
+ const grid = document.getElementById('deckGrid'), fBox = document.getElementById('deckFolders'), sel = document.getElementById('quizSel'), bBadge = document.getElementById('deckBrowserBadge'), cTabs = document.getElementById('courseSubTabs'), cBar = document.getElementById('courseLibBar');
  const rq = document.getElementById('railQuizCnt'), rc = document.getElementById('railCaseCnt');
+ const qHdr = document.getElementById('quizLibHdr'), cHdr = document.getElementById('caseLibHdr');
  const activeCid = getActiveCourseFilter();
- if(rq) rq.textContent = quizList.filter(q => !q.case && deckBelongsToCourse(q, activeCid)).length;
- if(rc) rc.textContent = quizList.filter(q => !!q.case && deckBelongsToCourse(q, activeCid)).length;
+ const allQuizzesCnt = quizList.filter(q => !q.case).length;
+ const allCasesCnt = quizList.filter(q => !!q.case).length;
+ if(rq) rq.textContent = allQuizzesCnt;
+ if(rc) rc.textContent = allCasesCnt;
+ if(qHdr) qHdr.textContent = activeCid ? '🎮 Course Quiz Library' : '🎮 Quiz Library';
+ if(cHdr) cHdr.textContent = activeCid ? '📖 Course Case Library' : '📖 Case Study Library';
  if(typeof renderRailCoursesUI === 'function') renderRailCoursesUI();
  const wantCase = (typeof hostSection !== 'undefined' && hostSection === 'case');
  const fullModePool = quizList.filter(q => wantCase ? !!q.case : !q.case);
@@ -2670,6 +2694,30 @@ function renderDeckGrid(){
    bBadge.classList.remove('on');
   }
  }
+ if(cTabs){
+  const cfgC = readCourseCfgSafe();
+  const tabCourses = Array.isArray(cfgC.defaultCourses) ? cfgC.defaultCourses.filter(d => d && d.id).map(d => Object.assign({}, d)) : [];
+  if(activeCid && !tabCourses.some(d => String(d.id) === activeCid)){
+   tabCourses.push({id: activeCid, name: formatCourseDisplayName(activeCid), code: ''});
+  }
+  if(tabCourses.length){
+   cTabs.style.display = 'flex';
+   const mainLbl = wantCase ? '📚 Main Case Library' : '📚 Main Quiz Library';
+   const mainBtn = `<button type="button" class="course-subtab main-tab${!activeCid ? ' active' : ''}" onclick="clearActiveCourseFilter()" title="View full ${wantCase ? 'Case Study' : 'Quiz'} Library (including unassigned items)"><span class="course-subtab-lbl">${mainLbl}</span><span class="course-subtab-cnt">${fullModePool.length}</span></button>`;
+   const subBtns = tabCourses.map(d => {
+    const cid = String(d.id);
+    const fullName = formatCourseDisplayName(d);
+    const shortLbl = fullName.length > 34 ? (fullName.slice(0, 33) + '…') : fullName;
+    const cnt = fullModePool.filter(q => deckBelongsToCourse(q, cid)).length;
+    return `<button type="button" class="course-subtab${activeCid === cid ? ' active' : ''}" data-cid="${esc(cid)}" onclick="selectSidebarCourse(this.dataset.cid, '${wantCase ? 'case' : 'quiz'}')" title="${esc(fullName)} — View ${wantCase ? 'Case Study' : 'Quiz'} subset"><span class="course-subtab-lbl">🎓 ${esc(shortLbl)}</span><span class="course-subtab-cnt">${cnt}</span></button>`;
+   }).join('');
+   const manageBtn = `<button type="button" class="course-subtab-manage" onclick="openCanvasModal('hub')" title="Manage Default Courses &amp; Canvas Sync">⚙️ Courses</button>`;
+   cTabs.innerHTML = mainBtn + subBtns + manageBtn;
+  } else {
+   cTabs.style.display = 'none';
+   cTabs.innerHTML = '';
+  }
+ }
  if(cBar){
   if(activeCid){
    const cname = formatCourseDisplayName(activeCid);
@@ -2677,18 +2725,18 @@ function renderDeckGrid(){
    cBar.style.display = 'flex';
    cBar.className = 'course-lib-bar';
    cBar.innerHTML = `<div class="course-lib-top">
-     <div class="course-lib-title"><span>🎓 <b>${esc(cname)}</b></span><span class="acc-badge on">${pool.length} ${wantCase ? (pool.length===1?'case':'cases') : (pool.length===1?'quiz':'quizzes')}</span></div>
+     <div class="course-lib-title"><span>🎓 <b>${esc(cname)}</b></span><span class="acc-badge on">${pool.length} ${wantCase ? (pool.length===1?'case':'cases') : (pool.length===1?'quiz':'quizzes')} in subset</span></div>
      <div class="course-lib-acts">
-      ${unlinkedPool.length ? `<button type="button" class="btn-sm" style="margin:0;padding:5px 10px;font-size:.78em;background:${showAddCourseDecks?'#26890c':'#ffffff1c'}" onclick="toggleCourseAddDrawer()">➕ Add Existing (${unlinkedPool.length})</button>` : ''}
-      <button type="button" class="btn-sm" style="margin:0;padding:5px 10px;font-size:.78em;background:#ffffff1c" onclick="clearActiveCourseFilter()" title="View all decks across all courses">📚 All Decks</button>
+      ${unlinkedPool.length ? `<button type="button" class="btn-sm" style="margin:0;padding:5px 10px;font-size:.78em;background:${showAddCourseDecks?'#26890c':'#ffffff1c'}" onclick="toggleCourseAddDrawer()">➕ Assign from Main Library (${unlinkedPool.length})</button>` : ''}
+      <button type="button" class="btn-sm" style="margin:0;padding:5px 10px;font-size:.78em;background:#ffffff1c" onclick="clearActiveCourseFilter()" title="Return to Main ${wantCase ? 'Case Study' : 'Quiz'} Library">← Main Library</button>
      </div>
     </div>` + (showAddNow && unlinkedPool.length ? `<div class="course-add-drawer">
-     <div style="font-size:.76em;font-weight:800;color:#ffdf5d;opacity:.92">Click <b>+ Add</b> to include an existing ${wantCase ? 'case study' : 'quiz'} in ${esc(cname)}:</div>
+     <div style="font-size:.76em;font-weight:800;color:#ffdf5d;opacity:.92">Click <b>+ Assign</b> to include an existing ${wantCase ? 'case study' : 'quiz'} from your Main Library in ${esc(cname)} (it stays in the Main Library too):</div>
      ${unlinkedPool.map(uq => {
       const ut = (uq.title || '').replace(/\s*\(\d+\s*(?:Qs|slides?)\)\s*$/i, '');
       return `<div class="course-add-row">
        <span style="font-weight:750;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(ut)} <small style="opacity:.7">(${uq.count || 0} ${uq.case?'slides':'Qs'})</small></span>
-       <button type="button" class="btn-sm" style="margin:0;padding:4px 10px;font-size:.76em;background:#26890c;border-color:#7dff6b;white-space:nowrap" data-f="${esc(uq.file)}" onclick="toggleDeckInCourse(this.dataset.f, '${esc(activeCid)}')">+ Add</button>
+       <button type="button" class="btn-sm" style="margin:0;padding:4px 10px;font-size:.76em;background:#26890c;border-color:#7dff6b;white-space:nowrap" data-f="${esc(uq.file)}" onclick="toggleDeckInCourse(this.dataset.f, '${esc(activeCid)}')">+ Assign</button>
       </div>`;
      }).join('')}
     </div>` : '');
@@ -2716,7 +2764,7 @@ function renderDeckGrid(){
   const emptyMsg = pool.length
    ? 'No decks match your search filter.'
    : (activeCid
-      ? `No ${wantCase ? 'case studies' : 'quizzes'} linked to <b>${esc(formatCourseDisplayName(activeCid))}</b> yet — click <b>+ New / Edit</b> above to build one for this course${unlinkedPool.length ? ', or click <b>+ Add</b> above to link an existing deck!' : '!'}`
+      ? `No ${wantCase ? 'case studies' : 'quizzes'} assigned to <b>${esc(formatCourseDisplayName(activeCid))}</b> yet — click <b>+ New / Edit</b> above to create one for this course${unlinkedPool.length ? ', or click <b>+ Assign</b> above to include one from your Main Library!' : '!'}`
       : (wantCase ? 'No case studies yet — click <b>+ New / Edit</b> above!' : 'No quizzes yet — click <b>+ New / Edit</b> above!'));
   grid.innerHTML = `<div style="text-align:center;padding:24px 14px;opacity:.84;font-size:.92em;background:#ffffff08;border:1px dashed var(--border);border-radius:14px">${emptyMsg}</div>`;
   return;
@@ -4918,14 +4966,30 @@ mergeQuizLists = function(serverList){
  return out;
 };
 
+function openMainLibrary(sec){
+ showAddCourseDecks = false;
+ openDeckCourseMenuFile = '';
+ if(typeof saveCanvasCfg === 'function' && getActiveCourseFilter()){
+  saveCanvasCfg({activeCourseFilter: ''});
+ }
+ setHostSection(sec);
+}
+
 function setHostSection(sec){
  hostSection = (sec === 'case') ? 'case' : 'quiz';
  deckFolderFilter = 'ALL';
  try{ localStorage.setItem('brainrush_section', hostSection); }catch(e){}
  document.body.classList.toggle('sec-case', hostSection === 'case');
+ const activeCid = getActiveCourseFilter();
  const tq = document.getElementById('tabQuiz'), tc = document.getElementById('tabCase');
- if(tq) tq.classList.toggle('active', hostSection === 'quiz');
- if(tc) tc.classList.toggle('active', hostSection === 'case');
+ if(tq){
+  tq.classList.toggle('active', hostSection === 'quiz' && !activeCid);
+  tq.classList.toggle('sec-parent', hostSection === 'quiz' && !!activeCid);
+ }
+ if(tc){
+  tc.classList.toggle('active', hostSection === 'case' && !activeCid);
+  tc.classList.toggle('sec-parent', hostSection === 'case' && !!activeCid);
+ }
  const ip = document.getElementById('qIcePrompt');
  if(ip){
   if(hostSection === 'case' && ip.value.trim() === QUIZ_ICE_DEFAULT) ip.value = CASE_ICE_DEFAULT;
@@ -5831,6 +5895,10 @@ function useWithoutSaving(){
   };
   storeCustomQuizLocal(entry);
   if(coursesVal.length) setDeckCourses(localFile, coursesVal, true);
+  const curFilter = getActiveCourseFilter();
+  if(curFilter && !coursesVal.includes(curFilter) && typeof saveCanvasCfg === 'function'){
+   saveCanvasCfg({activeCourseFilter: coursesVal[0] || ''});
+  }
   quizList = mergeQuizLists(quizList);
   setHostSection(savedIsCase ? 'case' : 'quiz');
   renderQuizSelect(localFile);
@@ -5870,6 +5938,10 @@ saveCustomQuiz = async function(){
    questions: savedQuestions
   });
   setDeckCourses(r.file, coursesVal, true);
+  const curFilter = getActiveCourseFilter();
+  if(curFilter && !coursesVal.includes(curFilter) && typeof saveCanvasCfg === 'function'){
+   saveCanvasCfg({activeCourseFilter: coursesVal[0] || ''});
+  }
   quizList = mergeQuizLists(r.quizzes || quizList);
   setHostSection(savedIsCase ? 'case' : 'quiz');
   renderQuizSelect(r.file);
@@ -6823,7 +6895,8 @@ function addDefaultCanvasCourse(cid){
  });
  saveCanvasCfg({defaultCourses: defs});
  populateCanvasCoursesDom();
- setCvStatus(`⭐ Saved <b>${esc(c.name || c.code)}</b> to your Default Courses for 1-click access!`, false);
+ if(typeof renderDeckGrid === 'function') renderDeckGrid();
+ setCvStatus(`⭐ Saved <b>${esc(c.name || c.code)}</b> to Default Courses! It now appears as a subset under Quizzes &amp; Case Studies.`, false);
 }
 function removeDefaultCanvasCourse(cid){
  const targetId = String(cid || '');
@@ -6837,7 +6910,7 @@ function removeDefaultCanvasCourse(cid){
  }
  saveCanvasCfg(patch);
  populateCanvasCoursesDom();
- if(patch.activeCourseFilter === '' && typeof renderQuizSelect === 'function'){
+ if(typeof renderQuizSelect === 'function'){
   renderQuizSelect((document.getElementById('quizSel') || {}).value || '');
  }
  if(removed){
@@ -6853,11 +6926,12 @@ function toggleDefaultCanvasCourse(cid){
  if(isDefaultCanvasCourse(targetId)) removeDefaultCanvasCourse(targetId);
  else addDefaultCanvasCourse(targetId);
 }
-async function selectSidebarCourse(cid){
+async function selectSidebarCourse(cid, secOpt){
  const targetId = String(cid || '').trim();
  if(!targetId) return;
  showAddCourseDecks = false;
  openDeckCourseMenuFile = '';
+ const wantSec = (secOpt === 'case' || secOpt === 'quiz') ? secOpt : ((typeof hostSection !== 'undefined' && hostSection === 'case') ? 'case' : 'quiz');
  const c = cvCourses.find(x => String(x.id) === targetId) || getDefaultCanvasCourses().find(x => String(x.id) === targetId);
  const cfgPrev = loadCanvasCfg();
  saveCanvasCfg({
@@ -6868,10 +6942,11 @@ async function selectSidebarCourse(cid){
  });
  if(typeof toggleMobileRail === 'function') toggleMobileRail(false);
  closeCanvasModal();
- if(typeof setHostSection === 'function' && hostSection !== 'quiz'){
-  setHostSection('quiz');
- } else if(typeof renderQuizSelect === 'function'){
-  renderQuizSelect();
+ if(typeof setHostSection === 'function' && hostSection !== wantSec){
+  setHostSection(wantSec);
+ } else {
+  if(typeof setHostSection === 'function') setHostSection(wantSec);
+  else if(typeof renderQuizSelect === 'function') renderQuizSelect();
  }
  const cfg = loadCanvasCfg();
  if(cfg.baseUrl && cfg.token){
@@ -6884,51 +6959,83 @@ function clearActiveCourseFilter(){
  openDeckCourseMenuFile = '';
  saveCanvasCfg({activeCourseFilter: ''});
  if(typeof toggleMobileRail === 'function') toggleMobileRail(false);
- if(typeof renderQuizSelect === 'function'){
+ if(typeof setHostSection === 'function'){
+  const sel = document.getElementById('quizSel');
+  const prevVal = sel ? sel.value : '';
+  setHostSection((typeof hostSection !== 'undefined' && hostSection === 'case') ? 'case' : 'quiz');
+  if(prevVal && typeof renderQuizSelect === 'function') renderQuizSelect(prevVal);
+ } else if(typeof renderQuizSelect === 'function'){
   const sel = document.getElementById('quizSel');
   renderQuizSelect(sel ? sel.value : '');
  }
 }
 function renderRailCoursesUI(){
  const topBox = document.getElementById('railActiveCourseBox');
- const subBox = document.getElementById('railCoursesSub');
+ const quizSubBox = document.getElementById('railQuizCoursesSub');
+ const caseSubBox = document.getElementById('railCaseCoursesSub');
+ const tq = document.getElementById('tabQuiz'), tc = document.getElementById('tabCase');
  const cfg = loadCanvasCfg();
  const defs = getDefaultCanvasCourses();
  const activeFilterCid = String(cfg.activeCourseFilter || '').trim();
  const dispCid = activeFilterCid || String(cfg.courseId || '').trim();
+ const isCaseSec = (typeof hostSection !== 'undefined' && hostSection === 'case');
+ if(tq){
+  tq.classList.toggle('active', !isCaseSec && !activeFilterCid);
+  tq.classList.toggle('sec-parent', !isCaseSec && !!activeFilterCid);
+ }
+ if(tc){
+  tc.classList.toggle('active', isCaseSec && !activeFilterCid);
+  tc.classList.toggle('sec-parent', isCaseSec && !!activeFilterCid);
+ }
  if(topBox){
   if(dispCid){
    const cname = formatCourseDisplayName(dispCid);
    topBox.style.display = 'flex';
+   const modeWord = isCaseSec ? 'Case' : 'Quiz';
    topBox.innerHTML = `<div class="rail-ac-top">` +
-    `<span>🎓 ${activeFilterCid ? 'Course Library' : 'Active Course'}</span>` +
-    (activeFilterCid ? `<button type="button" class="rail-ac-reset" onclick="clearActiveCourseFilter()" title="Show all decks across courses">All Decks</button>` : '') +
+    `<span>🎓 ${activeFilterCid ? (modeWord + ' Subset') : 'Active Course'}</span>` +
+    (activeFilterCid
+     ? `<button type="button" class="rail-ac-reset" onclick="clearActiveCourseFilter()" title="Return to Main ${modeWord} Library">Main Library</button>`
+     : `<button type="button" class="rail-ac-reset" data-cid="${esc(dispCid)}" onclick="selectSidebarCourse(this.dataset.cid, '${isCaseSec ? 'case' : 'quiz'}')" title="Open ${esc(cname)} ${modeWord} subset">Subset →</button>`) +
    `</div>` +
-   `<button type="button" class="rail-ac-name" data-cid="${esc(dispCid)}" onclick="selectSidebarCourse(this.dataset.cid)" title="View quiz library for ${esc(cname)}">${esc(cname)}</button>`;
+   `<button type="button" class="rail-ac-name" data-cid="${esc(dispCid)}" onclick="selectSidebarCourse(this.dataset.cid, '${isCaseSec ? 'case' : 'quiz'}')" title="Open ${modeWord} sub-library for ${esc(cname)}">${esc(cname)}</button>`;
   } else {
    topBox.style.display = 'none';
    topBox.innerHTML = '';
   }
  }
- if(subBox){
+ const buildSubList = (forCase) => {
+  const secKey = forCase ? 'case' : 'quiz';
+  const secActive = forCase ? isCaseSec : !isCaseSec;
+  return defs.map(d => {
+   const cid = String(d.id);
+   const isAct = secActive && activeFilterCid === cid;
+   const lbl = formatCourseDisplayName(d);
+   const nDecks = (typeof quizList !== 'undefined' && Array.isArray(quizList))
+    ? quizList.filter(q => (forCase ? !!q.case : !q.case) && deckBelongsToCourse(q, cid)).length
+    : 0;
+   return `<button type="button" class="rail-course-item${isAct ? ' active' : ''}" data-cid="${esc(cid)}" onclick="selectSidebarCourse(this.dataset.cid, '${secKey}')" title="${esc(lbl)} — View ${forCase ? 'Case Study' : 'Quiz'} sub-library">` +
+    `<span class="rail-course-lbl">${esc(lbl)}</span>` +
+    `<span class="rail-course-cnt">${nDecks}</span>` +
+   `</button>`;
+  }).join('');
+ };
+ if(quizSubBox){
   if(defs.length){
-   subBox.style.display = 'flex';
-   const itemsHtml = defs.map(d => {
-    const cid = String(d.id);
-    const isAct = activeFilterCid === cid;
-    const lbl = formatCourseDisplayName(d);
-    const nDecks = (typeof quizList !== 'undefined' && Array.isArray(quizList)) ? quizList.filter(q => !q.case && deckBelongsToCourse(q, cid)).length : 0;
-    return `<button type="button" class="rail-course-item${isAct ? ' active' : ''}" data-cid="${esc(cid)}" onclick="selectSidebarCourse(this.dataset.cid)" title="${esc(lbl)} — Click to view course quiz library">` +
-     `<span class="rail-course-lbl">${esc(lbl)}</span>` +
-     `<span class="rail-course-cnt">${nDecks}</span>` +
-    `</button>`;
-   }).join('');
-   const allCnt = (typeof quizList !== 'undefined' && Array.isArray(quizList)) ? quizList.filter(q => !q.case).length : 0;
-   const allBtn = `<button type="button" class="rail-course-item${!activeFilterCid ? ' active' : ''}" onclick="clearActiveCourseFilter()" title="Show all quizzes across all courses"><span class="rail-course-lbl">📚 All Quizzes</span><span class="rail-course-cnt">${allCnt}</span></button>`;
-   subBox.innerHTML = itemsHtml + allBtn;
+   quizSubBox.style.display = 'flex';
+   quizSubBox.innerHTML = buildSubList(false);
   } else {
-   subBox.style.display = 'none';
-   subBox.innerHTML = '';
+   quizSubBox.style.display = 'none';
+   quizSubBox.innerHTML = '';
+  }
+ }
+ if(caseSubBox){
+  if(defs.length){
+   caseSubBox.style.display = 'flex';
+   caseSubBox.innerHTML = buildSubList(true);
+  } else {
+   caseSubBox.style.display = 'none';
+   caseSubBox.innerHTML = '';
   }
  }
 }
@@ -8190,7 +8297,7 @@ function downloadCanvasGradebookCsv(){
 (function(){
  const teachSec = (typeof GUIDE !== 'undefined') && GUIDE.find(g => g.id === 'teach');
  if(teachSec){
-  teachSec.items.unshift(['🎓 Courses (Canvas LMS & Course Quiz Libraries)', 'Connect your Canvas URL + Personal Access Token (or import a Canvas Gradebook CSV), pin your active classes as Default Courses so they appear under 🎓 Courses in the sidebar, click any course to open its dedicated Quiz Library, customize student display names or First/Last formats, and push Quiz, Case Study, or Homework grades straight into Canvas.']);
+  teachSec.items.unshift(['🎓 Courses & Course Sub-Libraries', 'Main 🎮 Quizzes and 📖 Case Studies always hold all items (including ones not tied to any course). Pin active classes as Default Courses in 🎓 Courses to show them as indented sub-libraries under both 🎮 Quizzes and 📖 Case Studies (plus quick course sub-tabs at the top of each library), customize student display names or First/Last formats, and push grades to Canvas.']);
  }
  updateCanvasBadges();
 })();
