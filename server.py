@@ -555,6 +555,15 @@ def list_quizzes(owner="_shared"):
             pass
     owners = ["_shared"] + ([owner] if owner != "_shared" else [])
     items += K.uq_list(owners)
+    dc_map = {}
+    for o in owners:
+        dc_map.update(K.deck_courses_map(o))
+    for it in items:
+        fid = it.get("file")
+        if fid in dc_map:
+            it["courses"] = dc_map[fid]
+        elif "courses" not in it:
+            it["courses"] = []
     return items
 
 
@@ -793,11 +802,11 @@ def clean_questions(questions):
     return cleaned
 
 
-def save_custom_quiz(title, questions, owner="_shared", folder="", tags=None):
+def save_custom_quiz(title, questions, owner="_shared", folder="", tags=None, courses=None):
     cleaned = clean_questions(questions)
     if not cleaned:
         raise ValueError("No valid questions provided")
-    qid = K.uq_save(owner, title or "Custom Quiz", cleaned, folder, tags)
+    qid = K.uq_save(owner, title or "Custom Quiz", cleaned, folder, tags, courses=courses)
     return qid, len(cleaned), cleaned
 
 
@@ -3208,7 +3217,7 @@ class H(BaseHTTPRequestHandler):
                 )
                 self.send({"error": err}, 400) if err else self.send(res)
             return True
-        gated = ("/api/upload_quiz", "/api/delete_quiz", "/api/dup_quiz", "/api/history_clear", "/api/ai_quiz",
+        gated = ("/api/upload_quiz", "/api/delete_quiz", "/api/dup_quiz", "/api/deck_courses", "/api/history_clear", "/api/ai_quiz",
                  "/api/import_sheet", "/api/hw_create", "/api/upload_img")
         if path not in gated:
             return False
@@ -3223,11 +3232,19 @@ class H(BaseHTTPRequestHandler):
             self.send({"error": err}, 400) if err else self.send({"ok": True, "url": url})
         elif path == "/api/upload_quiz":
             try:
+                in_courses = body.get("courses") if isinstance(body.get("courses"), list) else None
                 fname, cnt, cleaned = save_custom_quiz(body.get("title"), body.get("questions") or [], owner,
-                                                       body.get("folder", ""), body.get("tags") or [])
+                                                       body.get("folder", ""), body.get("tags") or [], courses=in_courses)
                 self.send({"ok": True, "file": fname, "count": cnt, "questions": cleaned, "quizzes": list_quizzes(owner)})
             except Exception as e:
                 self.send({"error": str(e)}, 400)
+        elif path == "/api/deck_courses":
+            f = str(body.get("file") or "").strip()
+            if not f:
+                self.send({"error": "Missing deck file"}, 400)
+            else:
+                saved = K.deck_courses_set(owner, f, body.get("courses") if isinstance(body.get("courses"), list) else [])
+                self.send({"ok": True, "file": f, "courses": saved, "quizzes": list_quizzes(owner)})
         elif path == "/api/delete_quiz":
             files_to_del = body.get("files") if isinstance(body.get("files"), list) else [body.get("file") or ""]
             for f in files_to_del:
@@ -3245,8 +3262,12 @@ class H(BaseHTTPRequestHandler):
             f = body.get("file") or "quiz.json"
             src = next((x for x in list_quizzes(owner) if x["file"] == f), None)
             title = re.sub(r"\s*\(\d+ Qs\)$", "", src["title"]) if src else "Quiz"
+            src_courses = list((src or {}).get("courses") or [])
+            extra_cid = str(body.get("course_id") or "").strip()
+            if extra_cid and extra_cid not in src_courses:
+                src_courses.append(extra_cid)
             try:
-                fname, cnt, cleaned = save_custom_quiz("Copy of " + title, load_quiz(f), owner, (src or {}).get("folder", "") if src and not src.get("builtin") else "", (src or {}).get("tags", []))
+                fname, cnt, cleaned = save_custom_quiz("Copy of " + title, load_quiz(f), owner, (src or {}).get("folder", "") if src and not src.get("builtin") else "", (src or {}).get("tags", []), courses=src_courses)
                 self.send({"ok": True, "file": fname, "count": cnt, "quizzes": list_quizzes(owner)})
             except Exception as e:
                 self.send({"error": str(e)}, 400)

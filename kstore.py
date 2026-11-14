@@ -234,18 +234,68 @@ def has_accounts():
 
 
 # ---------------------------------------------------------------- User quizzes
+def _clean_course_ids(courses):
+    out = []
+    for c in (courses or []):
+        s = str(c or "").strip()[:40]
+        if s and s not in out:
+            out.append(s)
+        if len(out) >= 24:
+            break
+    return out
+
+
 def uq_load(owner):
     return store.get_json("uq:" + owner, {})
 
 
-def uq_save(owner, title, questions, folder="", tags=None, qid=None):
+def deck_courses_map(owner):
+    raw = store.get_json("deckcourses:" + owner, {}) or {}
+    if not isinstance(raw, dict):
+        return {}
+    return {str(k): _clean_course_ids(v) for k, v in raw.items() if isinstance(v, list)}
+
+
+def deck_courses_set(owner, file_id, courses):
+    fid = str(file_id or "").strip()[:120]
+    if not fid:
+        return []
+    cleaned = _clean_course_ids(courses)
+    with _lock:
+        dc = store.get_json("deckcourses:" + owner, {}) or {}
+        if not isinstance(dc, dict):
+            dc = {}
+        dc[fid] = cleaned
+        store.set_json("deckcourses:" + owner, dc)
+        if fid.startswith("uq:"):
+            parts = fid.split(":", 2)
+            q_owner = parts[1] if len(parts) >= 2 else owner
+            if q_owner in (owner, "_shared"):
+                d = uq_load(q_owner)
+                if fid in d and isinstance(d[fid], dict):
+                    d[fid]["courses"] = cleaned
+                    store.set_json("uq:" + q_owner, d)
+    return cleaned
+
+
+def uq_save(owner, title, questions, folder="", tags=None, qid=None, courses=None):
     slug = re.sub(r"[^a-z0-9]+", "_", (title or "quiz").lower()).strip("_") or "quiz"
     qid = qid or "uq:%s:%s" % (owner, slug)
     with _lock:
         d = uq_load(owner)
-        d[qid] = {"title": title, "folder": (folder or "").strip()[:40], "tags": [str(t).strip()[:24] for t in (tags or []) if str(t).strip()][:8],
+        prev_courses = (d.get(qid) or {}).get("courses", []) if isinstance(d.get(qid), dict) else []
+        final_courses = _clean_course_ids(courses) if courses is not None else _clean_course_ids(prev_courses)
+        d[qid] = {"title": title, "folder": (folder or "").strip()[:40],
+                  "tags": [str(t).strip()[:24] for t in (tags or []) if str(t).strip()][:8],
+                  "courses": final_courses,
                   "questions": questions, "updated": int(time.time())}
         store.set_json("uq:" + owner, d)
+        if courses is not None:
+            dc = store.get_json("deckcourses:" + owner, {}) or {}
+            if not isinstance(dc, dict):
+                dc = {}
+            dc[qid] = final_courses
+            store.set_json("deckcourses:" + owner, dc)
     return qid
 
 
@@ -313,7 +363,9 @@ def uq_list(owners):
             qs = v.get("questions") or []
             es = estimate_duration_sec(qs)
             items.append({"file": qid, "title": "%s (%d Qs)" % (v["title"], len(qs)), "count": len(qs),
-                          "folder": v.get("folder") or "My Quizzes", "tags": v.get("tags", []), "owner": o, "user": True,
+                          "folder": v.get("folder") or "My Quizzes", "tags": v.get("tags", []),
+                          "courses": _clean_course_ids(v.get("courses") or []),
+                          "owner": o, "user": True,
                           "case": any(x.get("type") in ("poll", "open", "rank", "info") for x in qs),
                           "est_sec": es, "est_min": max(1, int(round(es / 60.0)))})
     return items

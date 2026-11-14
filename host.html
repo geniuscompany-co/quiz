@@ -44,14 +44,39 @@ body.in-game #studioDrawerBackdrop,body.is-audience #studioDrawerBackdrop{displa
 .studio-mob-bar{display:none;position:sticky;top:0;z-index:36;height:52px;align-items:center;justify-content:space-between;gap:10px;padding:0 116px 0 12px;background:#0f0c1aeb;border-bottom:1px solid var(--border);backdrop-filter:blur(16px);text-align:left}
 .studio-mob-btn{margin:0;padding:6px 12px;font-size:.86em;border-radius:10px;background:#ffffff14;border:1px solid var(--border);color:#fff;font-weight:800;box-shadow:none;display:inline-flex;align-items:center;gap:6px}
 
-.studio-rail{width:228px;flex-shrink:0;background:var(--rail);border-right:1px solid var(--border);padding:18px 13px 14px;display:flex;flex-direction:column;justify-content:space-between;gap:16px;position:sticky;top:0;height:100vh;overflow-y:auto;z-index:35}
+.studio-rail{width:228px;flex-shrink:0;background:var(--rail);border-right:1px solid var(--border);padding:18px 13px 14px;display:flex;flex-direction:column;justify-content:space-between;gap:16px;position:sticky;top:0;height:100vh;max-height:100vh;min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#ffffff3b transparent;z-index:35}
+.studio-rail::-webkit-scrollbar,.drawer-body::-webkit-scrollbar,.wing-scroll::-webkit-scrollbar{width:7px}
+.studio-rail::-webkit-scrollbar-track,.drawer-body::-webkit-scrollbar-track,.wing-scroll::-webkit-scrollbar-track{background:transparent}
+.studio-rail::-webkit-scrollbar-thumb,.drawer-body::-webkit-scrollbar-thumb,.wing-scroll::-webkit-scrollbar-thumb{background:#ffffff3b;border-radius:99px}
+.studio-rail::-webkit-scrollbar-thumb:hover,.drawer-body::-webkit-scrollbar-thumb:hover,.wing-scroll::-webkit-scrollbar-thumb:hover{background:#ffffff66}
 .rail-brand{display:flex;align-items:center;gap:10px;padding:2px 6px 8px}
 .rail-bolt{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,#facc15,#f97316);color:#2b0d57;display:inline-flex;align-items:center;justify-content:center;font-size:1.12em;font-weight:900;box-shadow:0 4px 12px #0006;flex-shrink:0}
 .rail-brand-title{font-weight:900;font-size:1em;letter-spacing:-.01em;line-height:1.1;color:#fff}
 .rail-brand-sub{font-size:.73em;color:#ffffff85;font-weight:650;margin-top:2px}
 .rail-close-mob{display:none;margin:0 0 0 auto;padding:4px 9px;font-size:.8em;border-radius:8px;background:#ffffff14;border:1px solid var(--border);box-shadow:none}
-.rail-nav{display:flex;flex-direction:column;gap:3px}
+.rail-active-course{margin:2px 2px 10px;padding:8px 10px;border-radius:11px;background:linear-gradient(135deg,#14532d6e,#1e1b4b80);border:1px solid #4ade8066;display:flex;flex-direction:column;gap:4px;min-width:0}
+.rail-ac-top{display:flex;align-items:center;justify-content:space-between;gap:6px;font-size:.66em;text-transform:uppercase;letter-spacing:.9px;font-weight:900;color:#86efac}
+.rail-ac-reset{margin:0;padding:2px 7px;font-size:1em;border-radius:99px;background:#ffffff1c;border:1px solid #ffffff30;color:#fff;font-weight:800;box-shadow:none;cursor:pointer;text-transform:none;letter-spacing:0;white-space:nowrap}
+.rail-ac-reset:hover{background:#ffffff30}
+.rail-ac-name{margin:0;padding:0;background:transparent;border:0;box-shadow:none;text-align:left;font-size:.79em;font-weight:800;line-height:1.3;color:#fff;cursor:pointer;overflow-wrap:anywhere;word-break:break-word;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.rail-ac-name:hover{color:var(--gold)}
+.rail-nav{display:flex;flex-direction:column;gap:3px;min-width:0}
 .rail-sec-lbl{font-size:.68em;text-transform:uppercase;letter-spacing:1.1px;color:#ffffff66;font-weight:850;padding:12px 10px 4px}
+.rail-sub-list{display:flex;flex-direction:column;gap:2px;margin:1px 0 5px 11px;padding-left:8px;border-left:2px solid #ffffff22;min-width:0}
+.rail-course-item{width:100%;margin:0;padding:6px 8px;font-size:.77em;border-radius:8px;background:transparent;border:1px solid transparent;color:#ffffffb8;font-weight:700;box-shadow:none;display:flex;align-items:center;justify-content:space-between;gap:6px;text-align:left;min-width:0;cursor:pointer;transition:background .14s,color .14s,border-color .14s}
+.rail-course-item:hover{background:#ffffff12;color:#fff}
+.rail-course-item.active{background:#14532d99;border-color:#4ade8088;color:#dcfce7;font-weight:850}
+.rail-course-lbl{flex:1;min-width:0;line-height:1.25;overflow-wrap:anywhere;word-break:break-word;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.rail-course-cnt{font-size:.82em;padding:1px 6px;border-radius:99px;background:#00000045;color:#fffc;font-weight:800;flex-shrink:0;font-variant-numeric:tabular-nums}
+.rail-course-item.active .rail-course-cnt{background:#16a34a;color:#fff}
+.course-lib-bar{margin-top:12px;padding:10px 13px;border-radius:13px;background:linear-gradient(135deg,#14532d52,#1e1b4b66);border:1px solid #4ade8059;display:flex;flex-direction:column;gap:9px}
+.course-lib-top{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.course-lib-title{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:.9em;font-weight:850;color:#dcfce7;min-width:0}
+.course-lib-acts{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.course-add-drawer{padding:10px 11px;border-radius:10px;background:#090517bf;border:1px solid #ffffff24;display:flex;flex-direction:column;gap:6px;max-height:220px;overflow-y:auto}
+.course-add-row{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:5px 8px;border-radius:8px;background:#ffffff0a;font-size:.83em}
+.course-add-row:hover{background:#ffffff14}
+.deck-course-pop{width:100%;margin-top:7px;padding:8px 10px;border-radius:9px;background:#090517d9;border:1px solid #ffdf5d55;display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:.78em}
 .rail-mode-btn{width:100%;margin:0;padding:9px 11px;font-size:.86em;border-radius:11px;background:transparent;border:1px solid transparent;color:#ffffffb8;font-weight:750;box-shadow:none;display:flex;align-items:center;justify-content:space-between;gap:8px;text-align:left;transition:background .14s,color .14s,border-color .14s}
 .rail-mode-btn:hover{background:#ffffff0f;color:#fff}
 .rail-mode-btn.active{background:linear-gradient(135deg,#7c3aed,#6d28d9);border-color:#a78bfa66;color:#fff;font-weight:850;box-shadow:0 6px 16px #0005}
@@ -105,15 +130,15 @@ body.drawer-open .studio-btn-Inspector .acc-badge{background:#1e1b2e26;color:#1e
 .studio-cta-btn:hover{filter:brightness(1.06)}
 
 /* Slide-Over Right Settings Inspector Drawer */
-.studio-drawer{width:380px;max-width:92vw;flex-shrink:0;background:var(--drawer);border-left:1px solid var(--border-hi);display:none;flex-direction:column;justify-content:space-between;position:sticky;top:0;height:100vh;z-index:48;box-shadow:-16px 0 44px #0009}
+.studio-drawer{width:380px;max-width:92vw;flex-shrink:0;background:var(--drawer);border-left:1px solid var(--border-hi);display:none;flex-direction:column;justify-content:space-between;position:sticky;top:0;height:100vh;max-height:100vh;overflow:hidden;z-index:48;box-shadow:-16px 0 44px #0009}
 body.drawer-open:not(.in-game):not(.is-audience) .studio-drawer{display:flex;animation:drawerIn .2s cubic-bezier(.22,1,.36,1)}
 @keyframes drawerIn{from{opacity:.5;transform:translateX(26px)}to{opacity:1;transform:translateX(0)}}
-.drawer-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:16px 18px 13px;border-bottom:1px solid var(--border)}
+.drawer-head{flex-shrink:0;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:16px 18px 13px;border-bottom:1px solid var(--border)}
 .drawer-head-title{font-size:.98em;font-weight:900;color:var(--gold);display:flex;align-items:center;gap:7px}
 .drawer-close-btn{margin:0;padding:6px 12px;font-size:.8em;border-radius:9px;background:#ffffff14;border:1px solid var(--border);color:#fff;font-weight:750;box-shadow:none}
 .drawer-close-btn:hover{background:#ffffff24}
-.drawer-body{flex:1;overflow-y:auto;padding:14px 16px;display:flex;flex-direction:column;gap:10px}
-.drawer-foot{padding:12px 16px 15px;border-top:1px solid var(--border);background:#00000029}
+.drawer-body{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#ffffff3b transparent;padding:14px 16px 20px;display:flex;flex-direction:column;gap:10px}
+.drawer-foot{flex-shrink:0;padding:12px 16px 15px;border-top:1px solid var(--border);background:#00000029}
 .drawer-done-btn{width:100%;margin:0;padding:10px 16px;font-size:.9em;font-weight:900;border-radius:11px;background:var(--gold);color:#1e1b2e;box-shadow:none}
 .studio-drawer .mode-grid{grid-template-columns:1fr;gap:6px}
 .studio-drawer .quick-bar{display:grid;grid-template-columns:1fr 1fr;gap:8px}
@@ -139,16 +164,16 @@ body.drawer-open:not(.in-game):not(.is-audience) .studio-drawer{display:flex;ani
 }
 
 /* Collapsible Live Private Host Wing (Hidden by default for single-screen projector safety!) */
-.live-wing{position:fixed;top:0;right:0;bottom:0;width:352px;max-width:92vw;background:#161224f7;border-left:1px solid var(--border-hi);backdrop-filter:blur(18px);z-index:46;display:none;flex-direction:column;justify-content:space-between;padding:16px;text-align:left;box-shadow:-16px 0 48px #000b}
+.live-wing{position:fixed;top:0;right:0;bottom:0;width:352px;max-width:92vw;max-height:100vh;overflow:hidden;background:#161224f7;border-left:1px solid var(--border-hi);backdrop-filter:blur(18px);z-index:46;display:none;flex-direction:column;justify-content:space-between;padding:16px;text-align:left;box-shadow:-16px 0 48px #000b}
 body.in-game.wing-open:not(.is-audience):not(.is-presenter-console) .live-wing{display:flex;animation:drawerIn .2s cubic-bezier(.22,1,.36,1)}
 body.is-presenter-console .live-wing{display:none!important}
 body.wing-open #metaBar{display:none!important}
-.wing-head{display:flex;align-items:center;justify-content:space-between;gap:8px;padding-bottom:11px;border-bottom:1px solid var(--border)}
+.wing-head{flex-shrink:0;display:flex;align-items:center;justify-content:space-between;gap:8px;padding-bottom:11px;border-bottom:1px solid var(--border)}
 .wing-title{font-size:.8em;font-weight:900;text-transform:uppercase;letter-spacing:1px;color:#c4b5fd;display:flex;align-items:center;gap:6px}
-.wing-scroll{flex:1;overflow-y:auto;padding:12px 0;display:flex;flex-direction:column;gap:12px}
-.wing-note-card{background:#fbbf241a;border:1px solid #fcd34d4d;border-radius:13px;padding:12px 14px;font-size:.9em;line-height:1.45;color:#fef3c7}
+.wing-scroll{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#ffffff3b transparent;padding:12px 0;display:flex;flex-direction:column;gap:12px}
+.wing-note-card{flex-shrink:0;background:#fbbf241a;border:1px solid #fcd34d4d;border-radius:13px;padding:12px 14px;font-size:.9em;line-height:1.45;color:#fef3c7}
 .wing-note-card b.wn-lbl{display:flex;align-items:center;justify-content:space-between;gap:6px;color:var(--gold);font-size:.86em;margin-bottom:5px}
-.wing-sec-card{background:#ffffff0c;border:1px solid var(--border);border-radius:13px;padding:11px 13px;font-size:.85em;display:flex;flex-direction:column;gap:8px}
+.wing-sec-card{flex-shrink:0;background:#ffffff0c;border:1px solid var(--border);border-radius:13px;padding:11px 13px;font-size:.85em;display:flex;flex-direction:column;gap:8px}
 .wing-sec-lbl{font-size:.76em;font-weight:850;text-transform:uppercase;letter-spacing:.8px;color:#ffffff99;display:flex;align-items:center;justify-content:space-between}
 .wing-btn-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
 .wing-btn-grid button,.wing-ctl-row button{margin:0;padding:7px 10px;font-size:.88em;border-radius:9px;background:#ffffff14;border:1px solid var(--border);color:#fff;font-weight:750;box-shadow:none}
@@ -200,7 +225,7 @@ body.in-game .menu-btn{background:#120526cc;border-radius:99px;box-shadow:0 4px 
 
 /* Collapsible Inspector Accordions & Nested Sub-Accordions */
 .acc-list{display:flex;flex-direction:column;gap:9px;text-align:left}
-details.acc-box{background:#ffffff0a;border:1px solid var(--border);border-radius:13px;overflow:hidden;transition:border-color .15s,background .15s}
+details.acc-box{flex-shrink:0;background:#ffffff0a;border:1px solid var(--border);border-radius:13px;overflow:hidden;transition:border-color .15s,background .15s}
 details.acc-box:hover{border-color:#ffffff33}
 details.acc-box[open]{background:#0000002e;border-color:#ffdf5d55}
 details.acc-box>summary{list-style:none;cursor:pointer;padding:11px 13px;display:flex;align-items:center;justify-content:space-between;gap:10px;font-weight:800;font-size:.9em;user-select:none}
@@ -212,7 +237,7 @@ details.acc-box>summary::-webkit-details-marker{display:none}
 details.acc-box[open]>summary .acc-caret{transform:rotate(180deg);color:var(--gold);opacity:1}
 .acc-body{padding:11px 13px 13px;border-top:1px solid #ffffff17}
 
-details.sub-acc{background:#ffffff08;border:1px solid #ffffff1a;border-radius:10px;margin-top:8px;overflow:hidden}
+details.sub-acc{flex-shrink:0;background:#ffffff08;border:1px solid #ffffff1a;border-radius:10px;margin-top:8px;overflow:hidden}
 details.sub-acc:first-child{margin-top:0}
 details.sub-acc[open]{background:#00000038;border-color:#ffffff30}
 details.sub-acc>summary{list-style:none;cursor:pointer;padding:9px 12px;display:flex;align-items:center;justify-content:space-between;gap:8px;font-weight:750;font-size:.86em;color:#fff;user-select:none}
@@ -795,14 +820,14 @@ body.cb .c4{background:#CC79A7}body.cb .c5{background:#56B4E9;color:#111}body.cb
   <div class="menu-sep" id="menuMidSep"></div>
   <div class="menu-group" id="menuWsGrp">
    <div class="menu-hdr">⚡ Studio Navigation</div>
+   <button onclick="closeNavMenu();openCanvasModal('hub')"><span>🎓 Courses</span><span class="state" id="canvasMenuState">Connect</span></button>
    <button id="addQuizMenuBtn" onclick="closeNavMenu();openQuizModal()"><span><span class="quiz-only">➕ Create / Upload Quiz</span><span class="case-only">📖 Create / Edit Case Study</span></span><span class="state">New</span></button>
    <button class="quiz-only" onclick="closeNavMenu();openHomework()"><span>📚 Homework</span><span class="state">Assign</span></button>
    <button class="quiz-only" onclick="closeNavMenu();openProgress()"><span>👥 Student Progress</span><span class="state">View</span></button>
    <button onclick="closeNavMenu();openHistory()"><span>📈 Results History</span><span class="state">View</span></button>
-   <button onclick="closeNavMenu();openCanvasModal('hub')"><span>🎓 Canvas</span><span class="state" id="canvasMenuState">Sync</span></button>
-   <button id="remoteBtn" onclick="closeNavMenu();openRemoteModal()"><span>📱 Phone Host Remote</span><span class="state" id="remoteMenuState">Open ↗</span></button>
+   <button id="remoteBtn" onclick="closeNavMenu();openRemoteModal()"><span>📱 Remote</span><span class="state" id="remoteMenuState">Open ↗</span></button>
    <button id="presMenuBtn" onclick="closeNavMenu();openPresentationMode()"><span>📽️ Presentation Mode</span><span class="state" id="presMenuState">2nd Screen</span></button>
-   <button onclick="closeNavMenu();openLinks()"><span><span class="quiz-only">🖥️ Spectator &amp; Practice Links</span><span class="case-only">🖥️ Live Spectator Links</span></span><span class="state">Open ↗</span></button>
+   <button onclick="closeNavMenu();openLinks()"><span>🖥️ Modes</span><span class="state">Open ↗</span></button>
    <button onclick="closeNavMenu();openModeration()"><span>🛡️ Moderation</span><span class="state">Live</span></button>
    <button onclick="closeNavMenu();openGuide(document.body.classList.contains('sec-case')?'case':undefined)"><span>📖 Feature Guide</span><span class="state">What's what</span></button>
    <button onclick="closeNavMenu();openAccount()"><span>👤 Teacher Account</span><span class="state" id="acctState">Guest</span></button>
@@ -839,7 +864,7 @@ body.cb .c4{background:#CC79A7}body.cb .c5{background:#56B4E9;color:#111}body.cb
 <div id="hostProf" onclick="if(event.target===this)this.style.display='none'"></div>
 <div class="modal-bg" id="remoteModal">
  <div class="modal" style="max-width:480px;text-align:center">
-  <h2>📱 Phone Host Remote</h2>
+  <h2>📱 Remote</h2>
   <p style="margin:6px 0 10px;opacity:.9;font-size:.95em">Scan or open on your phone to pick &amp; launch a session pre-game, or control slides, timers &amp; bots from anywhere in the room:</p>
   <div style="margin:8px 0"><span class="remote-status wait" id="remoteModalStatus">🟡 Waiting for phone…</span></div>
   <div style="margin:12px auto"><img id="remoteModalQr" style="width:170px;height:170px;border-radius:12px;background:#fff;padding:6px;box-shadow:0 6px 20px #0006" alt="Remote QR"></div>
@@ -862,6 +887,10 @@ body.cb .c4{background:#CC79A7}body.cb .c5{background:#56B4E9;color:#111}body.cb
   </div>
   <label><b><span class="quiz-modal-only">Quiz Title:</span><span class="case-modal-only">Case Study Title:</span></b></label>
   <input id="customTitle" placeholder="e.g. Chapter 9 Review">
+  <div id="builderCourseRow" style="display:none;align-items:center;gap:8px;margin:-2px 0 9px;padding:7px 10px;border-radius:9px;background:#ffffff0f;border:1px solid #ffffff24">
+   <label for="customCourseSel" style="margin:0;font-size:.84em;font-weight:800;color:#ffdf5d;white-space:nowrap">🎓 Course:</label>
+   <select id="customCourseSel" style="flex:1;min-width:0;padding:6px 9px;border-radius:7px;border:0;background:#fff;color:#2b0d57;font-weight:750;font-size:.86em;margin:0"><option value="">— All Courses (General Library) —</option></select>
+  </div>
   <div style="display:flex;flex-direction:column;gap:7px;margin-bottom:10px">
    <details class="sub-acc" id="builderExistAcc">
     <summary><span><span class="quiz-modal-only">📂 Load, Duplicate, Export or Delete Existing Quiz</span><span class="case-modal-only">📂 Load, Duplicate, Export or Delete Existing Case</span></span><span class="sub-caret">▾</span></summary>
@@ -1015,28 +1044,29 @@ Quote: Paris has been the capital since 987 CE."></textarea>
 <div class="modal-bg aud-hide" id="canvasModal">
  <div class="modal" style="max-width:860px;text-align:left">
   <button class="close-x" onclick="closeCanvasModal()">✕ Close</button>
-  <h2 style="margin-top:0">🎓 Canvas</h2>
+  <h2 style="margin-top:0">🎓 Courses</h2>
   <div id="canvasModalBody"></div>
  </div>
 </div>
 <div class="modal-bg" id="linksModal">
  <div class="modal" style="max-width:560px">
-  <h2>🖥️ Extra Screens &amp; Links</h2>
+  <h2>🖥️ Modes</h2>
   <div id="linksBody"></div>
   <div style="text-align:center"><button style="margin:10px 0 0;padding:10px 22px;font-size:1.05em" onclick="document.getElementById('linksModal').classList.remove('open')">Done</button></div>
  </div>
 </div>
 <div class="studio-shell" id="studioShell">
  <aside class="studio-rail" id="studioRail">
-  <div>
+  <div style="min-width:0">
    <div class="rail-brand">
     <span class="rail-bolt">⚡</span>
-    <div>
+    <div style="min-width:0">
      <div class="rail-brand-title">BrainRush</div>
      <div class="rail-brand-sub">Teacher Studio</div>
     </div>
     <button type="button" class="rail-close-mob" onclick="toggleMobileRail(false)">✕</button>
    </div>
+   <div id="railActiveCourseBox" class="rail-active-course" style="display:none"></div>
    <nav class="rail-nav" id="wsNav">
     <button type="button" id="tabQuiz" class="rail-mode-btn active" onclick="setHostSection('quiz');toggleMobileRail(false)">
      <span>🎮 Quizzes</span>
@@ -1047,6 +1077,11 @@ Quote: Paris has been the capital since 987 CE."></textarea>
      <span class="rail-cnt" id="railCaseCnt">—</span>
     </button>
     <div class="rail-sec-lbl">Classroom</div>
+    <button type="button" class="rail-btn" id="wsCanvasBtn" onclick="toggleMobileRail(false);openCanvasModal('hub')">
+     <span>🎓 Courses</span>
+     <span class="rail-sub" id="wsCanvasState">Connect</span>
+    </button>
+    <div id="railCoursesSub" class="rail-sub-list" style="display:none"></div>
     <button type="button" class="rail-btn" onclick="toggleMobileRail(false);openQuizModal(hostSection)">
      <span><span class="quiz-only">➕ Deck Builder</span><span class="case-only">📖 Case Builder</span></span>
     </button>
@@ -1059,12 +1094,8 @@ Quote: Paris has been the capital since 987 CE."></textarea>
     <button type="button" class="rail-btn" onclick="toggleMobileRail(false);openHistory()">
      <span>📈 History</span>
     </button>
-    <button type="button" class="rail-btn" id="wsCanvasBtn" onclick="toggleMobileRail(false);openCanvasModal('hub')">
-     <span>🎓 Canvas</span>
-     <span class="rail-sub" id="wsCanvasState">Connect</span>
-    </button>
     <button type="button" class="rail-btn" id="wsRemoteBtn" onclick="toggleMobileRail(false);openRemoteModal()">
-     <span>📱 Phone Remote</span>
+     <span>📱 Remote</span>
      <span class="rail-sub" id="wsRemoteState">Pair</span>
     </button>
     <button type="button" class="rail-btn" id="wsPresBtn" onclick="toggleMobileRail(false);openPresentationMode()">
@@ -1072,7 +1103,7 @@ Quote: Paris has been the capital since 987 CE."></textarea>
      <span class="rail-sub" id="wsPresState">Off</span>
     </button>
     <button type="button" class="rail-btn" onclick="toggleMobileRail(false);openLinks()">
-     <span><span class="quiz-only">🖥️ Practice &amp; Links</span><span class="case-only">🖥️ Spectator Links</span></span>
+     <span>🖥️ Modes</span>
     </button>
     <button type="button" class="rail-btn" onclick="toggleMobileRail(false);openGuide(document.body.classList.contains('sec-case')?'case':undefined)">
      <span>📖 Feature Guide</span>
@@ -1113,6 +1144,7 @@ Quote: Paris has been the capital since 987 CE."></textarea>
      <div class="deck-more-drop" id="deckMoreDrop"></div>
     </div>
     <div id="caseHint" style="display:none"></div>
+    <div id="courseLibBar" style="display:none"></div>
 
     <div class="studio-filter-bar">
      <input id="deckSearch" class="studio-search" type="text" placeholder="🔍 Filter library by title, folder, or #tag…" oninput="renderDeckCards()">
@@ -1126,7 +1158,7 @@ Quote: Paris has been the capital since 987 CE."></textarea>
     <div class="studio-summary-pills">
      <button type="button" class="sum-chip" id="timerSummary" onclick="toggleStudioDrawer(true)" title="Click to edit session timers">⏱ <span id="timerSubTxt">15s · 5s preview</span></button>
      <button type="button" class="sum-chip quiz-only" id="vibeSummaryChip" onclick="toggleStudioDrawer(true)" title="Click to customize vibe preset &amp; twists">✨ <span id="vibeSummaryTxt">Standard (0)</span></button>
-     <button type="button" class="sum-chip" id="screenSummaryChip" onclick="toggleStudioDrawer(true)" title="Click to configure Dual Screen or Phone Remote">📽️ <span id="screenSummary">Standard</span></button>
+     <button type="button" class="sum-chip" id="screenSummaryChip" onclick="toggleStudioDrawer(true)" title="Click to configure Dual Screen or Remote">📽️ <span id="screenSummary">Standard</span></button>
      <button type="button" class="sum-edit-link" onclick="toggleStudioDrawer(true)">Edit in drawer →</button>
     </div>
     <button id="launchBtn" class="studio-cta-btn" onclick="create()">
@@ -1277,17 +1309,17 @@ Quote: Paris has been the capital since 987 CE."></textarea>
         <div style="display:flex;align-items:center;justify-content:space-between;gap:6px;flex-wrap:wrap;margin-bottom:5px">
          <label style="font-size:.82em;font-weight:700;opacity:.85">👥 Class Roster (one name per line):</label>
          <span style="display:inline-flex;gap:5px;flex-wrap:wrap">
-          <button type="button" class="btn-sm" style="margin:0;padding:4px 9px;font-size:.76em;background:#1976d2" onclick="openCanvasModal('hub')">🎓 Pull from Canvas</button>
+          <button type="button" class="btn-sm" style="margin:0;padding:4px 9px;font-size:.76em;background:#1976d2" onclick="openCanvasModal('hub')">🎓 Pull from Courses</button>
           <button type="button" class="btn-sm" style="margin:0;padding:4px 9px;font-size:.76em;background:#ffffff1f" onclick="openCanvasModal('edit_names')">✏️ Edit Names</button>
-          <label class="btn-sm" style="margin:0;padding:4px 9px;font-size:.76em;cursor:pointer;background:#ffffff1f">📂 Canvas CSV<input type="file" accept=".csv" style="display:none" onchange="onRosterCsvUpload(event)"></label>
+          <label class="btn-sm" style="margin:0;padding:4px 9px;font-size:.76em;cursor:pointer;background:#ffffff1f">📂 CSV<input type="file" accept=".csv" style="display:none" onchange="onRosterCsvUpload(event)"></label>
          </span>
         </div>
         <textarea id="qRoster" oninput="saveSetup();if(typeof syncCanvasRosterBadge==='function')syncCanvasRosterBadge()" onchange="if(typeof syncRosterBoxAliases==='function')syncRosterBoxAliases()" placeholder="Ava Johnson&#10;Ben Carter&#10;..." style="width:100%;box-sizing:border-box;padding:8px 11px;border-radius:8px;border:0;color:#2b0d57"></textarea>
         <div id="canvasRosterBadge" style="font-size:.77em;color:#7cf5a8;margin-top:3px"></div>
        </div>
        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-bottom:6px;font-size:.8em">
-        <span style="opacity:.82">🎓 Sync roster &amp; grades with Canvas:</span>
-        <button type="button" class="btn-sm" style="margin:0;padding:4px 10px;font-size:.82em;background:#1565c0;border-color:#90caf9" onclick="openCanvasModal('hub')">🎓 Canvas Roster / CSV</button>
+        <span style="opacity:.82">🎓 Sync course roster &amp; grades:</span>
+        <button type="button" class="btn-sm" style="margin:0;padding:4px 10px;font-size:.82em;background:#1565c0;border-color:#90caf9" onclick="openCanvasModal('hub')">🎓 Courses</button>
        </div>
        <div id="canvasQuickDefaults" style="display:none;margin-bottom:8px"></div>
        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;padding:8px 10px;background:#0004;border-radius:9px;margin-bottom:8px;font-weight:700;font-size:.86em">
@@ -1854,7 +1886,7 @@ function setRemoteStatusUI(paired, phoneLive){
  const wsBtn = document.getElementById('wsRemoteBtn');
  const wsSt = document.getElementById('wsRemoteState');
  const txt = !paired
-  ? 'Off — check 📱 Phone Host Remote or copy link to pair'
+  ? 'Off — check 📱 Remote or copy link to pair'
   : (phoneLive ? '🟢 Phone Connected!' : '🟡 Waiting for phone…');
  const cls = !paired ? 'remote-status' : (phoneLive ? 'remote-status live' : 'remote-status wait');
  if(advSt){ advSt.textContent = txt; advSt.className = cls; }
@@ -2157,12 +2189,14 @@ async function loadExistingQuiz(){
   return;
  }
  document.getElementById('customErr').textContent = '';
+ editingQuizFile = es.value;
  const qObj = quizList.find(x=>x.file===es.value);
  const qs = await fetchQuizQuestions(es.value);
  document.getElementById('customTitle').value = qObj ? qObj.title.replace(/\s*\(\d+\s*(?:Qs|slides?)\)$/i,'') : es.value;
  const fd = document.getElementById('customFolder'), tg = document.getElementById('customTags');
  if(fd) fd.value = (qObj && qObj.folder && qObj.folder !== 'Built-in') ? qObj.folder : '';
  if(tg) tg.value = (qObj && Array.isArray(qObj.tags)) ? qObj.tags.join(', ') : '';
+ if(typeof populateBuilderCourseSelect === 'function') populateBuilderCourseSelect(getDeckCourses(qObj || es.value));
  document.getElementById('customText').value = formatQuestionsBlock(qs);
  renderBuilderPreview();
  if(typeof syncTextToVisual === 'function') syncTextToVisual();
@@ -2407,11 +2441,187 @@ function storeCustomQuizLocal(item){
   localStorage.setItem('brainrush_custom_quizzes', JSON.stringify(list));
  }catch(e){}
 }
+let editingQuizFile = '';
+let showAddCourseDecks = false;
+let openDeckCourseMenuFile = '';
+
+function cleanCourseIdList(arr){
+ const out = [];
+ (Array.isArray(arr) ? arr : []).forEach(c => {
+  const s = String(c == null ? '' : c).trim().slice(0, 40);
+  if(s && !out.includes(s)) out.push(s);
+ });
+ return out;
+}
+function loadLocalDeckCourses(){
+ try{
+  const raw = JSON.parse(localStorage.getItem('brainrush_deck_courses') || '{}') || {};
+  return (raw && typeof raw === 'object') ? raw : {};
+ }catch(e){ return {}; }
+}
+function saveLocalDeckCourses(map){
+ try{ localStorage.setItem('brainrush_deck_courses', JSON.stringify(map || {})); }catch(e){}
+}
+function getDeckCourses(qOrFile){
+ const f = typeof qOrFile === 'string' ? qOrFile : ((qOrFile && qOrFile.file) || '');
+ if(!f) return [];
+ const locMap = loadLocalDeckCourses();
+ if(Object.prototype.hasOwnProperty.call(locMap, f)) return cleanCourseIdList(locMap[f]);
+ const qObj = (typeof qOrFile === 'object' && qOrFile) ? qOrFile : quizList.find(x => x.file === f);
+ return cleanCourseIdList((qObj && qObj.courses) || []);
+}
+function deckBelongsToCourse(q, courseId){
+ const cid = String(courseId || '').trim();
+ if(!cid) return true;
+ return getDeckCourses(q).includes(cid);
+}
+function setDeckCourses(file, courseIds, skipServer=false){
+ const f = String(file || '').trim();
+ if(!f) return [];
+ const cleaned = cleanCourseIdList(courseIds);
+ const locMap = loadLocalDeckCourses();
+ locMap[f] = cleaned;
+ saveLocalDeckCourses(locMap);
+ const qObj = quizList.find(x => x.file === f);
+ if(qObj) qObj.courses = cleaned;
+ try{
+  const locQ = getSavedCustomQuizzes();
+  const idx = locQ.findIndex(x => x.file === f);
+  if(idx >= 0){ locQ[idx].courses = cleaned; localStorage.setItem('brainrush_custom_quizzes', JSON.stringify(locQ)); }
+ }catch(e){}
+ if(!skipServer && !f.startsWith('local_')){
+  const tok = localStorage.getItem('brainrush_token') || '';
+  const pw = sessionStorage.getItem('brainrush_pw') || '';
+  fetch('/api/deck_courses', {method:'POST', body:JSON.stringify({file: f, courses: cleaned, token: tok, password: pw})}).catch(()=>{});
+ }
+ const sel = document.getElementById('quizSel');
+ renderQuizSelect(sel ? sel.value : '');
+ if(typeof renderRailCoursesUI === 'function') renderRailCoursesUI();
+ return cleaned;
+}
+function toggleDeckInCourse(file, courseId){
+ const cid = String(courseId || '').trim();
+ if(!file || !cid) return;
+ const cur = getDeckCourses(file);
+ const next = cur.includes(cid) ? cur.filter(x => x !== cid) : cur.concat([cid]);
+ setDeckCourses(file, next);
+}
+function toggleDeckCoursePicker(file){
+ openDeckCourseMenuFile = (openDeckCourseMenuFile === file) ? '' : String(file || '');
+ renderDeckGrid();
+}
+function toggleCourseAddDrawer(){
+ showAddCourseDecks = !showAddCourseDecks;
+ renderDeckGrid();
+}
+function readCourseCfgSafe(){
+ try{ return JSON.parse(localStorage.getItem('brainrush_canvas_cfg') || '{}') || {}; }catch(e){ return {}; }
+}
+function getActiveCourseFilter(){
+ const cfg = readCourseCfgSafe();
+ return String(cfg.activeCourseFilter || '').trim();
+}
+function getAllKnownCoursesSafe(){
+ const cfg = readCourseCfgSafe();
+ const defs = Array.isArray(cfg.defaultCourses) ? cfg.defaultCourses.filter(d => d && d.id) : [];
+ let cached = [];
+ if(typeof cvCourses !== 'undefined' && Array.isArray(cvCourses) && cvCourses.length) cached = cvCourses;
+ else { try{ cached = JSON.parse(localStorage.getItem('brainrush_canvas_courses_cache') || '[]') || []; }catch(e){} }
+ const map = new Map();
+ defs.forEach(d => map.set(String(d.id), d));
+ cached.forEach(c => { if(c && c.id && !map.has(String(c.id))) map.set(String(c.id), c); else if(c && c.id) map.set(String(c.id), Object.assign({}, map.get(String(c.id)), c)); });
+ if(cfg.courseId && !map.has(String(cfg.courseId))){
+  map.set(String(cfg.courseId), {id: String(cfg.courseId), name: cfg.courseName || cfg.courseCode || ('Course ' + cfg.courseId), code: cfg.courseCode || ''});
+ }
+ return Array.from(map.values());
+}
+function getCourseInfoById(cid){
+ const id = String(cid || '').trim();
+ if(!id) return null;
+ return getAllKnownCoursesSafe().find(c => String(c.id) === id) || null;
+}
+function formatCourseDisplayName(cOrId){
+ const c = (typeof cOrId === 'object' && cOrId) ? cOrId : getCourseInfoById(cOrId);
+ if(!c){
+  const cfg = readCourseCfgSafe();
+  if(cOrId && String(cfg.courseId || '') === String(cOrId)){
+   return cfg.courseName || cfg.courseCode || ('Course ' + cOrId);
+  }
+  return cOrId ? ('Course ' + cOrId) : '';
+ }
+ const code = String(c.code || '').trim();
+ const name = String(c.name || '').trim();
+ if(code && name){
+  const cl = code.toLowerCase(), nl = name.toLowerCase();
+  if(cl === nl || cl.includes(nl.slice(0, Math.min(14, nl.length))) || code.length > 22) return code;
+  if(nl.includes(cl)) return name;
+  return `${code} — ${name}`;
+ }
+ return name || code || ('Course ' + c.id);
+}
+function populateBuilderCourseSelect(prefCourses){
+ const row = document.getElementById('builderCourseRow');
+ const sel = document.getElementById('customCourseSel');
+ if(!row || !sel) return;
+ const known = getAllKnownCoursesSafe();
+ const prefList = cleanCourseIdList(prefCourses);
+ prefList.forEach(cid => {
+  if(!known.some(c => String(c.id) === cid)){
+   known.push({id: cid, name: formatCourseDisplayName(cid), code: ''});
+  }
+ });
+ if(!known.length){
+  row.style.display = 'none';
+  sel.innerHTML = `<option value="">— All Courses (General Library) —</option>`;
+  sel.value = '';
+  return;
+ }
+ row.style.display = 'flex';
+ const cfg = readCourseCfgSafe();
+ const defIds = new Set((Array.isArray(cfg.defaultCourses) ? cfg.defaultCourses : []).map(d => String(d.id)));
+ sel.innerHTML = `<option value="">— All Courses (General Library) —</option>` + known.map(c => {
+  const star = defIds.has(String(c.id)) ? '⭐ ' : '';
+  return `<option value="${esc(c.id)}">${star}${esc(formatCourseDisplayName(c))}</option>`;
+ }).join('');
+ const chosen = prefList.length ? prefList[0] : (getActiveCourseFilter() || String(cfg.courseId || ''));
+ sel.value = (chosen && known.some(c => String(c.id) === String(chosen))) ? String(chosen) : '';
+}
+function readBuilderCoursesToSave(){
+ const sel = document.getElementById('customCourseSel');
+ const picked = String((sel && sel.value) || '').trim();
+ if(!picked) return [];
+ if(editingQuizFile){
+  const prev = getDeckCourses(editingQuizFile);
+  return cleanCourseIdList([picked].concat(prev));
+ }
+ return [picked];
+}
+
 function mergeQuizLists(serverList){
  const delSet = new Set(getDeletedBuiltinsLocal());
+ const locCourseMap = loadLocalDeckCourses();
  const map = new Map();
- (serverList||[]).forEach(q=>{ if(!delSet.has(q.file)) map.set(q.file, q); });
- getSavedCustomQuizzes().forEach(q=>{ if(!delSet.has(q.file)){ if(!map.has(q.file)) map.set(q.file, q); else map.get(q.file).questions = q.questions; } });
+ (serverList||[]).forEach(q=>{
+  if(!delSet.has(q.file)){
+   const serverCourses = cleanCourseIdList(q.courses || []);
+   if(serverCourses.length && !Object.prototype.hasOwnProperty.call(locCourseMap, q.file)){
+    locCourseMap[q.file] = serverCourses;
+   }
+   q.courses = Object.prototype.hasOwnProperty.call(locCourseMap, q.file) ? cleanCourseIdList(locCourseMap[q.file]) : serverCourses;
+   map.set(q.file, q);
+  }
+ });
+ getSavedCustomQuizzes().forEach(q=>{
+  if(!delSet.has(q.file)){
+   if(!map.has(q.file)){
+    q.courses = Object.prototype.hasOwnProperty.call(locCourseMap, q.file) ? cleanCourseIdList(locCourseMap[q.file]) : cleanCourseIdList(q.courses || []);
+    map.set(q.file, q);
+   } else {
+    map.get(q.file).questions = q.questions;
+   }
+  }
+ });
+ saveLocalDeckCourses(locCourseMap);
  return Array.from(map.values());
 }
 
@@ -2438,12 +2648,16 @@ function syncSelectedDeckBar(){
  closeDeckMore();
 }
 function renderDeckGrid(){
- const grid = document.getElementById('deckGrid'), fBox = document.getElementById('deckFolders'), sel = document.getElementById('quizSel'), bBadge = document.getElementById('deckBrowserBadge');
+ const grid = document.getElementById('deckGrid'), fBox = document.getElementById('deckFolders'), sel = document.getElementById('quizSel'), bBadge = document.getElementById('deckBrowserBadge'), cBar = document.getElementById('courseLibBar');
  const rq = document.getElementById('railQuizCnt'), rc = document.getElementById('railCaseCnt');
- if(rq) rq.textContent = quizList.filter(q => !q.case).length;
- if(rc) rc.textContent = quizList.filter(q => !!q.case).length;
+ const activeCid = getActiveCourseFilter();
+ if(rq) rq.textContent = quizList.filter(q => !q.case && deckBelongsToCourse(q, activeCid)).length;
+ if(rc) rc.textContent = quizList.filter(q => !!q.case && deckBelongsToCourse(q, activeCid)).length;
+ if(typeof renderRailCoursesUI === 'function') renderRailCoursesUI();
  const wantCase = (typeof hostSection !== 'undefined' && hostSection === 'case');
- const pool = quizList.filter(q => wantCase ? !!q.case : !q.case);
+ const fullModePool = quizList.filter(q => wantCase ? !!q.case : !q.case);
+ const pool = activeCid ? fullModePool.filter(q => deckBelongsToCourse(q, activeCid)) : fullModePool;
+ const unlinkedPool = activeCid ? fullModePool.filter(q => !deckBelongsToCourse(q, activeCid)) : [];
  const cur = sel ? sel.value : '';
  const pickedQ = pool.find(q => q.file === cur);
  if(bBadge){
@@ -2454,6 +2668,33 @@ function renderDeckGrid(){
   } else {
    bBadge.textContent = `${pool.length} ${wantCase ? (pool.length===1?'case':'cases') : (pool.length===1?'deck':'decks')}`;
    bBadge.classList.remove('on');
+  }
+ }
+ if(cBar){
+  if(activeCid){
+   const cname = formatCourseDisplayName(activeCid);
+   const showAddNow = showAddCourseDecks || (!pool.length && unlinkedPool.length > 0);
+   cBar.style.display = 'flex';
+   cBar.className = 'course-lib-bar';
+   cBar.innerHTML = `<div class="course-lib-top">
+     <div class="course-lib-title"><span>🎓 <b>${esc(cname)}</b></span><span class="acc-badge on">${pool.length} ${wantCase ? (pool.length===1?'case':'cases') : (pool.length===1?'quiz':'quizzes')}</span></div>
+     <div class="course-lib-acts">
+      ${unlinkedPool.length ? `<button type="button" class="btn-sm" style="margin:0;padding:5px 10px;font-size:.78em;background:${showAddCourseDecks?'#26890c':'#ffffff1c'}" onclick="toggleCourseAddDrawer()">➕ Add Existing (${unlinkedPool.length})</button>` : ''}
+      <button type="button" class="btn-sm" style="margin:0;padding:5px 10px;font-size:.78em;background:#ffffff1c" onclick="clearActiveCourseFilter()" title="View all decks across all courses">📚 All Decks</button>
+     </div>
+    </div>` + (showAddNow && unlinkedPool.length ? `<div class="course-add-drawer">
+     <div style="font-size:.76em;font-weight:800;color:#ffdf5d;opacity:.92">Click <b>+ Add</b> to include an existing ${wantCase ? 'case study' : 'quiz'} in ${esc(cname)}:</div>
+     ${unlinkedPool.map(uq => {
+      const ut = (uq.title || '').replace(/\s*\(\d+\s*(?:Qs|slides?)\)\s*$/i, '');
+      return `<div class="course-add-row">
+       <span style="font-weight:750;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(ut)} <small style="opacity:.7">(${uq.count || 0} ${uq.case?'slides':'Qs'})</small></span>
+       <button type="button" class="btn-sm" style="margin:0;padding:4px 10px;font-size:.76em;background:#26890c;border-color:#7dff6b;white-space:nowrap" data-f="${esc(uq.file)}" onclick="toggleDeckInCourse(this.dataset.f, '${esc(activeCid)}')">+ Add</button>
+      </div>`;
+     }).join('')}
+    </div>` : '');
+  } else {
+   cBar.style.display = 'none';
+   cBar.innerHTML = '';
   }
  }
  if(!grid) return;
@@ -2472,27 +2713,52 @@ function renderDeckGrid(){
   return hay.includes(qStr);
  });
  if(!shown.length){
-  grid.innerHTML = `<div style="text-align:center;padding:24px 14px;opacity:.78;font-size:.92em;background:#ffffff08;border:1px dashed var(--border);border-radius:14px">
-   ${pool.length ? 'No decks match your search filter.' : (wantCase ? 'No case studies yet — click <b>+ New / Edit</b> above!' : 'No quizzes yet — click <b>+ New / Edit</b> above!')}
-  </div>`;
+  const emptyMsg = pool.length
+   ? 'No decks match your search filter.'
+   : (activeCid
+      ? `No ${wantCase ? 'case studies' : 'quizzes'} linked to <b>${esc(formatCourseDisplayName(activeCid))}</b> yet — click <b>+ New / Edit</b> above to build one for this course${unlinkedPool.length ? ', or click <b>+ Add</b> above to link an existing deck!' : '!'}`
+      : (wantCase ? 'No case studies yet — click <b>+ New / Edit</b> above!' : 'No quizzes yet — click <b>+ New / Edit</b> above!'));
+  grid.innerHTML = `<div style="text-align:center;padding:24px 14px;opacity:.84;font-size:.92em;background:#ffffff08;border:1px dashed var(--border);border-radius:14px">${emptyMsg}</div>`;
   return;
  }
+ const knownCourses = getAllKnownCoursesSafe();
  grid.innerHTML = shown.map(q => {
   const cleanTitle = (q.title || '').replace(/\s*\(\d+\s*(?:Qs|slides?)\)\s*$/i, '');
   const f = deckFolderOf(q, wantCase);
   const tags = (q.tags || []).slice(0, 4).map(t => `<span class="deck-tag">#${esc(t)}</span>`).join('');
+  const qCids = getDeckCourses(q);
+  const cPills = (!activeCid && qCids.length)
+   ? qCids.slice(0, 2).map(cid => {
+      const lbl = formatCourseDisplayName(cid);
+      const shortC = lbl.length > 26 ? (lbl.slice(0, 25) + '…') : lbl;
+      return `<span class="deck-tag" style="background:#14532d99;border-color:#4ade8066;color:#bbf7d0" title="${esc(lbl)}">🎓 ${esc(shortC)}</span>`;
+     }).join('') + (qCids.length > 2 ? `<span class="deck-tag">+${qCids.length - 2}</span>` : '')
+   : '';
   const isSel = cur === q.file;
   const estMin = q.est_min || Math.max(1, Math.round(((q.count || 1) * (q.case ? 65 : 32)) / 60));
-  return `<div class="deck-card${isSel?' active':''}" data-file="${esc(q.file)}" onclick="pickDeckCard(this.dataset.file)">
+  const menuOpen = (openDeckCourseMenuFile === q.file) && knownCourses.length > 0;
+  const coursePopHtml = menuOpen ? `<div class="deck-course-pop" onclick="event.stopPropagation()">
+   <span style="font-weight:850;color:#ffdf5d">🎓 Courses:</span>
+   ${knownCourses.slice(0, 12).map(c => {
+    const linked = qCids.includes(String(c.id));
+    const clbl = formatCourseDisplayName(c);
+    const shortL = clbl.length > 34 ? (clbl.slice(0, 33) + '…') : clbl;
+    return `<button type="button" class="btn-sm" style="margin:0;padding:3px 8px;font-size:.94em;background:${linked?'#26890c':'#ffffff18'};border-color:${linked?'#7dff6b':'#ffffff30'}" data-f="${esc(q.file)}" data-cid="${esc(c.id)}" onclick="toggleDeckInCourse(this.dataset.f, this.dataset.cid)" title="${esc(clbl)}">${linked ? '✓ ' : '+ '}${esc(shortL)}</button>`;
+   }).join('')}
+   <button type="button" class="btn-sm" style="margin:0 0 0 auto;padding:2px 7px;font-size:.9em;background:transparent" onclick="toggleDeckCoursePicker('')">✕</button>
+  </div>` : '';
+  return `<div class="deck-card${isSel?' active':''}" style="flex-wrap:wrap" data-file="${esc(q.file)}" onclick="pickDeckCard(this.dataset.file)">
    <div class="deck-left">
     <span class="deck-check">${isSel ? '✓' : ''}</span>
     <div class="deck-info">
      <div class="deck-title">${esc(cleanTitle)}</div>
-     <div class="deck-meta"><span>📂 ${esc(f)}</span>${tags}</div>
+     <div class="deck-meta"><span>📂 ${esc(f)}</span>${cPills}${tags}</div>
     </div>
    </div>
    <div class="deck-right">
     <span class="deck-acts" onclick="event.stopPropagation()">
+     ${knownCourses.length ? `<button type="button" class="deck-act-btn" onclick="toggleDeckCoursePicker(this.closest('.deck-card').dataset.file)" title="Assign or change courses for this deck">🎓${qCids.length ? ' ' + qCids.length : ''}</button>` : ''}
+     ${activeCid ? `<button type="button" class="deck-act-btn" onclick="toggleDeckInCourse(this.closest('.deck-card').dataset.file, '${esc(activeCid)}')" title="Remove from this course (keeps deck in All Decks)">✕ Unlink</button>` : ''}
      <button type="button" class="deck-act-btn" onclick="editSelectedDeck(this.closest('.deck-card').dataset.file)" title="Edit this deck">✏️ Edit</button>
      <button type="button" class="deck-act-btn" onclick="dupSelectedDeck(this.closest('.deck-card').dataset.file)" title="Duplicate this deck">⧉ Dup</button>
      ${q.case ? '' : `<button type="button" class="deck-act-btn" onclick="hwSelectedDeck(this.closest('.deck-card').dataset.file)" title="Assign as Homework">📚 HW</button>`}
@@ -2501,6 +2767,7 @@ function renderDeckGrid(){
     <span class="deck-cnt">${q.count || '—'} ${q.case ? 'slides' : 'Qs'}</span>
     <span class="deck-est">⏱ ~${estMin} min</span>
    </div>
+   ${coursePopHtml}
   </div>`;
  }).join('');
 }
@@ -2519,9 +2786,12 @@ async function dupSelectedDeck(fileOpt){
  const sel = document.getElementById('quizSel');
  const f = fileOpt || (sel && sel.value) || '';
  if(!f) return;
- const r = await postPw('/api/dup_quiz', {file: f});
+ const activeCid = getActiveCourseFilter();
+ const r = await postPw('/api/dup_quiz', {file: f, course_id: activeCid});
  if(r && r.file){
+  const mergedCourses = cleanCourseIdList(getDeckCourses(f).concat(activeCid ? [activeCid] : []));
   quizList = mergeQuizLists(r.quizzes || quizList);
+  if(mergedCourses.length) setDeckCourses(r.file, mergedCourses, true);
   renderQuizSelect(r.file);
  }
 }
@@ -3207,7 +3477,7 @@ function renderFinal(b){
   <button class="fb-new" onclick="newGame()">🏠 New ${S.case_game?'Session':'Game'} <small>(new PIN)</small></button>
   <a href="/api/study?pin=${pin}" target="_blank"><button class="fb-sec">${S.case_game?'📄 Case Debrief Summary':'📄 Study Guide'}</button></a>
   <a href="/api/export?pin=${pin}" download="brainrush_${pin}_results.csv"><button class="fb-sec">📥 CSV</button></a>
-  <button class="fb-sec aud-hide" style="background:#1565c0;border-color:#90caf9" onclick="openCanvasModal('game')">🎓 Canvas</button>
+  <button class="fb-sec aud-hide" style="background:#1565c0;border-color:#90caf9" onclick="openCanvasModal('game')">🎓 Courses</button>
  </div>`;
 }
 
@@ -3373,11 +3643,11 @@ function updateLiveWing(){
       <button type="button" class="${S.allow_tts?'on':''}" onclick="hostCtl('toggle_student_tts')">🔊 ${S.allow_tts?'Read-Aloud ON':'Student TTS'}</button>
       <button type="button" class="${S.chat_enabled?'on':''}" onclick="hostCtl('toggle_chat')">💬 ${S.chat_enabled?'Chat ON':'Live Chat'}</button>
       <button type="button" class="${S.profiles_enabled?'on':''}" onclick="hostCtl('toggle_profiles')">📊 ${S.profiles_enabled?'Profiles ON':'Profiles'}</button>
-      <button type="button" class="${rLive?'on':''}" onclick="openRemoteModal()">📱 ${rLive?'Phone Live':'Phone Remote'}</button>
+      <button type="button" class="${rLive?'on':''}" onclick="openRemoteModal()">📱 ${rLive?'Remote Live':'Remote'}</button>
       <button type="button" class="${window.presenterMode?'on':''}" onclick="openPresentationMode()">📽️ Dual Screen</button>
       <button type="button" onclick="openModeration()">🛡️ Players (${S.n||0})</button>
       <button type="button" class="${S.play_too_enabled?'on':''}" onclick="hostCtl('toggle_play_too')">🎮 ${S.play_too_enabled?'Play-Too ON':'Play Too'}</button>
-      ${S.case_game ? `<button type="button" onclick="openLinks()">🖥️ Spectator</button>` : `<button type="button" class="${S.auto?'on':''}" onclick="hostCtl('toggle_auto')">⏭️ Auto: ${S.auto?'ON':'Off'}</button>`}
+      ${S.case_game ? `<button type="button" onclick="openLinks()">🖥️ Modes</button>` : `<button type="button" class="${S.auto?'on':''}" onclick="hostCtl('toggle_auto')">⏭️ Auto: ${S.auto?'ON':'Off'}</button>`}
       <button type="button" onclick="toggleHostChat()">📢 ${S.chat_enabled?'Open Chat':'Broadcast'}</button>
      </div>
     </div>
@@ -4084,9 +4354,9 @@ const GUIDE = [
   ['⚔️ Sudden-Death Tiebreaker', 'If the top players tie at the end, an extra question is played only by the tied players; fastest correct answer wins by 1 point.'],
   ['🤖 Phantom Bot Players', 'Computer players that answer, use power-ups, wager and send reactions. Good for testing or making a small class feel full. You can also add 5 more from the lobby.'],
   ['👥 Class Roster', 'Check 👥 Class Roster in Options to reveal the roster list and paste student names (one per line). Players then pick their name from a dropdown instead of typing a nickname, and a student who loses connection can rejoin under the same name. Names stay saved on this computer while Roster Mode stays off unless checked.'],
-  ['📱 Phone Host Remote', 'Check 📱 Phone Host Remote in Options (or copy/open the always-visible link or QR code) to pair your phone before or during a session. You can pick & launch a Quiz or Case Study right from your phone, then advance slides, pause timers, add +10s, and manage bots from anywhere in the room.'],
+  ['📱 Remote', 'Check 📱 Pair Phone as Host Remote in Session Settings (or open 📱 Remote from the sidebar) to pair your phone before or during a session. You can pick & launch a Quiz or Case Study right from your phone, then advance slides, pause timers, add +10s, and manage bots from anywhere in the room.'],
   ['💬 Live Chat & Tagging (Opt-In)', 'Optional two-way in-game chat drawer on student phones and projector feed, with threaded replies (↩), emoji reactions, \\Name & \\Host tagging autocomplete, vibrating tag alerts, Top-10 crimson theme, rate-limiting, and profanity/link filtering. Can also be toggled ON/OFF mid-game in ⚙️ Menu or 🎛️ Host Wing.'],
-  ['📢 Host Megaphone Broadcast', 'Use the bottom-right 📢 Broadcast / 💬 Chat button (or Phone Remote) to drop a vibrating gold 😎 HOST banner on every phone and the projector — works as a one-way announcement even when student chat is OFF.'],
+  ['📢 Host Megaphone Broadcast', 'Use the bottom-right 📢 Broadcast / 💬 Chat button (or 📱 Remote) to drop a vibrating gold 😎 HOST banner on every phone and the projector — works as a one-way announcement even when student chat is OFF.'],
   ['📊 Standings & Player Profiles (Opt-In)', 'Lets students open Top-30 Standings and tap any player for a Head-to-Head comparison card (rank, accuracy, average/fastest speed vs. yours, streak, point gap & answers-to-catch), and makes leaderboard rows & shout-out badges clickable. Automatically suppressed while Hide Live Leaderboard is ON.'],
   ['🎮 Host Play-Along ("Play too", Opt-In)', 'Shows a 🎮 Play too button during active games so the host can join in a new tab under any nickname with a floating 🕹 Host controls bar (Start/Next, Pause, +10s, Auto-advance, and Chat/Broadcast as Host).'],
   ['🖼️ Logo URL / 🌄 Background URL', 'Use your own logo (shown to you and on players\' join screens) and a custom host-screen background image.']
@@ -4131,9 +4401,9 @@ const GUIDE = [
   ['☰ Menu – Visual Theme', 'Cycles through Purple, Neon, Emerald and Sunset themes.'],
   ['☰ Menu – Background Music', 'Cycles Classic, Chill, Upbeat or Off for background music (sound effects stay on).'],
   ['☰ Menu – Colorblind / High Contrast', 'Switches to a colorblind-safe answer palette, or a high-contrast display.'],
-  ['☰ Menu – Phone Host Remote', 'Available both before and during a game: shows your paired phone remote link, QR code, and live connection status so you can launch or control the session from your phone (next, pause, +10s, bots).'],
+  ['☰ Menu – Remote', 'Available both before and during a game: shows your paired phone remote link, QR code, and live connection status so you can launch or control the session from your phone (next, pause, +10s, bots).'],
   ['☰ Menu – Results History', 'Saved summaries of past games, a "topics to reteach" list and CSV export. May reset if the server restarts, so export what you need.'],
-  ['☰ Menu – Spectator & Practice Links', 'Links for a second-screen leaderboard / word cloud and the student practice page.'],
+  ['☰ Menu – Modes', 'Links for a second-screen leaderboard / word cloud, extended projector view, and the student practice page.'],
   ['☰ Menu – Create / Upload Quiz', 'Build a quiz by typing or uploading, or load an existing quiz to edit, export as .json or delete.'],
   ['☀️ Keep Screen Awake', 'On by default: asks your browser not to let this computer dim or sleep while the host page is open and visible, so you can run the quiz from your phone remote. Toggle it in the menu. It stops working if you switch to another tab, minimize the window, or close the laptop lid.'],
   ['⏸️ Pause / -10s / +10s / +30s / Set / Skip', 'During a question or case slide: pause the clock, skip the reading preview early, subtract or add seconds, type an exact countdown and click Set, or skip to results.'],
@@ -4154,7 +4424,7 @@ const GUIDE = [
  {id:'screens', title:'🖥️ Other Screens', items:[
   ['/spectator', 'A second-screen view with the live leaderboard and word cloud. Add ?mode=board or ?mode=cloud for just one. Standings hide the current question\'s results until it ends.'],
   ['/practice', 'Students study alone with any quiz: instant feedback, a score, an optional customizable countdown timer and a review of missed questions. Nothing is shared with the class.'],
-  ['/remote', 'The phone host remote — pair via Options → 📱 Phone Host Remote or ☰ Menu → Phone Host Remote to pick & launch a session pre-game and control slides live.'],
+  ['/remote', 'The phone host remote — pair via Session Settings or 📱 Remote to pick & launch a session pre-game and control slides live.'],
   ['👁️ Phone accessibility button', 'On the join screen and in-game, cycles normal, colorblind and high-contrast colors.']
  ]}
 ];
@@ -4583,7 +4853,7 @@ async function hwResults(id){
  hwView = r;
  box.innerHTML = `<h3>📊 ${esc(r.title)}</h3><table class="mt"><tr><th>Student</th><th>Status</th><th>Score</th><th>Correct</th></tr>${r.rows.map(x=>`<tr><td>${esc(x.name)}</td><td>${x.done?'✅ finished':'⏳ '+x.answered+'/'+r.questions}</td><td>${x.score}</td><td>${x.correct}/${r.questions} (${x.pct}%)</td></tr>`).join('')}${r.missing.map(n=>`<tr><td>${esc(n)}</td><td colspan="3" style="color:#ff9b9b">not started</td></tr>`).join('')}</table>
   ${r.hardest.length?`<h4>Hardest questions</h4>${r.hardest.map(h=>`<div class="hist-q"><span>${esc(h.q)}</span><b>${h.pct}%</b></div>`).join('')}`:''}
-  <button class="btn-sm" style="margin:8px 0 0" onclick="exportHw()">📥 Export CSV</button> <button class="btn-sm" style="margin:8px 0 0;background:#1565c0;border-color:#90caf9" onclick="openCanvasModal('hw')">🎓 Canvas</button> <button class="btn-sm" style="margin:8px 0 0" onclick="hwResults('${id}')">🔄 Refresh</button>`;
+  <button class="btn-sm" style="margin:8px 0 0" onclick="exportHw()">📥 Export CSV</button> <button class="btn-sm" style="margin:8px 0 0;background:#1565c0;border-color:#90caf9" onclick="openCanvasModal('hw')">🎓 Courses</button> <button class="btn-sm" style="margin:8px 0 0" onclick="hwResults('${id}')">🔄 Refresh</button>`;
  box.scrollIntoView({behavior:'smooth'});
 }
 function exportHw(){
@@ -4671,7 +4941,8 @@ renderQuizSelect = function(selectedFile){
  const sel = document.getElementById('quizSel');
  if(!sel) return;
  const wantCase = (hostSection === 'case');
- const filtered = quizList.filter(q => wantCase ? !!q.case : !q.case);
+ const activeCid = getActiveCourseFilter();
+ const filtered = quizList.filter(q => (wantCase ? !!q.case : !q.case) && deckBelongsToCourse(q, activeCid));
  if(!filtered.length){
   sel.innerHTML = `<option value="">${wantCase ? 'No case studies yet — click "+ New / Edit Case"' : 'No quizzes found'}</option>`;
   sel.value = '';
@@ -5461,6 +5732,7 @@ updateAcctLabels = function(){
 openQuizModal = function(mode){
  if(mode === 'case' || mode === 'quiz') quizModalMode = mode;
  else quizModalMode = (hostSection === 'case') ? 'case' : 'quiz';
+ editingQuizFile = '';
  const m = document.getElementById('quizModal');
  const isC = (quizModalMode === 'case');
  if(m) m.classList.toggle('only-case', isC);
@@ -5485,6 +5757,7 @@ openQuizModal = function(mode){
  if(tx) tx.placeholder = isC ? CASE_PLACEHOLDER : QUIZ_PLACEHOLDER;
  const fl = document.getElementById('folderList');
  if(fl) fl.innerHTML = [...new Set(quizList.map(q=>q.folder).filter(f=>f && f!=='Built-in'))].map(f=>`<option value="${esc(f)}">`).join('');
+ populateBuilderCourseSelect([]);
  updateAcctLabels();
  syncBuilderAiUI();
  if(typeof renderBuilderPreview === 'function') renderBuilderPreview();
@@ -5545,16 +5818,19 @@ function useWithoutSaving(){
   }
   const savedIsCase = qs.some(x=>['info','poll','rank','open'].includes(x && x.type));
   const localFile = 'local_' + Date.now() + '.json';
+  const coursesVal = readBuilderCoursesToSave();
   const entry = {
    file: localFile,
    title: `${title} (${qs.length} Qs)`,
    count: qs.length,
    folder: savedIsCase ? 'Case Studies' : 'My Quizzes',
    tags: ((document.getElementById('customTags')||{}).value||'').split(',').map(x=>x.trim()).filter(Boolean),
+   courses: coursesVal,
    case: savedIsCase,
    questions: qs
   };
   storeCustomQuizLocal(entry);
+  if(coursesVal.length) setDeckCourses(localFile, coursesVal, true);
   quizList = mergeQuizLists(quizList);
   setHostSection(savedIsCase ? 'case' : 'quiz');
   renderQuizSelect(localFile);
@@ -5578,7 +5854,8 @@ saveCustomQuiz = async function(){
   }
   const folderVal = ((document.getElementById('customFolder')||{}).value||'').trim() || (isC ? 'Case Studies' : '');
   const tagsVal = ((document.getElementById('customTags')||{}).value||'').split(',').map(x=>x.trim()).filter(Boolean);
-  const r = await postPw('/api/upload_quiz', {title, questions: qs, folder: folderVal, tags: tagsVal});
+  const coursesVal = readBuilderCoursesToSave();
+  const r = await postPw('/api/upload_quiz', {title, questions: qs, folder: folderVal, tags: tagsVal, courses: coursesVal});
   if(r.error){ document.getElementById('customErr').textContent = r.error; return; }
   const savedQuestions = r.questions || qs;
   const savedIsCase = savedQuestions.some(x=>['info','poll','rank','open'].includes(x && x.type));
@@ -5588,9 +5865,11 @@ saveCustomQuiz = async function(){
    count: r.count,
    folder: folderVal || (savedIsCase ? 'Case Studies' : 'My Quizzes'),
    tags: tagsVal,
+   courses: coursesVal,
    case: savedIsCase,
    questions: savedQuestions
   });
+  setDeckCourses(r.file, coursesVal, true);
   quizList = mergeQuizLists(r.quizzes || quizList);
   setHostSection(savedIsCase ? 'case' : 'quiz');
   renderQuizSelect(r.file);
@@ -5607,9 +5886,12 @@ duplicateSelectedQuiz = async function(){
   return;
  }
  document.getElementById('customErr').textContent = '';
- const r = await postPw('/api/dup_quiz', {file: es.value});
+ const activeCid = getActiveCourseFilter();
+ const r = await postPw('/api/dup_quiz', {file: es.value, course_id: activeCid});
  if(r.error){ document.getElementById('customErr').textContent = r.error; return; }
+ const mergedCourses = cleanCourseIdList(getDeckCourses(es.value).concat(activeCid ? [activeCid] : []));
  quizList = mergeQuizLists(r.quizzes || quizList);
+ if(mergedCourses.length) setDeckCourses(r.file, mergedCourses, true);
  renderQuizSelect(r.file);
  openQuizModal(quizModalMode);
  const es2 = document.getElementById('editQuizSel');
@@ -6217,6 +6499,7 @@ function renderPresenter(){
     <button class="btn-sm" style="background:#1368ce;padding:10px 18px" onclick="newGame()">🏠 New ${S.case_game?'Session':'Game'} (New PIN)</button>
     <a href="/api/study?pin=${pin}" target="_blank"><button class="btn-sm" style="padding:10px 18px">${S.case_game?'📄 Case Debrief Summary':'📄 Study Guide'}</button></a>
     <a href="/api/export?pin=${pin}" download="brainrush_${pin}_results.csv"><button class="btn-sm" style="padding:10px 18px">📥 Export CSV</button></a>
+    <button class="btn-sm" style="background:#1565c0;border-color:#90caf9;padding:10px 18px" onclick="openCanvasModal('game')">🎓 Courses</button>
    </div>`;
  }
 
@@ -6548,8 +6831,15 @@ function removeDefaultCanvasCourse(cid){
  const defs = getDefaultCanvasCourses();
  const removed = defs.find(d => String(d.id) === targetId);
  const next = defs.filter(d => String(d.id) !== targetId);
- saveCanvasCfg({defaultCourses: next});
+ const patch = {defaultCourses: next};
+ if(String(loadCanvasCfg().activeCourseFilter || '') === targetId){
+  patch.activeCourseFilter = '';
+ }
+ saveCanvasCfg(patch);
  populateCanvasCoursesDom();
+ if(patch.activeCourseFilter === '' && typeof renderQuizSelect === 'function'){
+  renderQuizSelect((document.getElementById('quizSel') || {}).value || '');
+ }
  if(removed){
   setCvStatus(`Removed <b>${esc(removed.name || removed.code)}</b> from Default Courses.`, false);
  }
@@ -6563,11 +6853,94 @@ function toggleDefaultCanvasCourse(cid){
  if(isDefaultCanvasCourse(targetId)) removeDefaultCanvasCourse(targetId);
  else addDefaultCanvasCourse(targetId);
 }
+async function selectSidebarCourse(cid){
+ const targetId = String(cid || '').trim();
+ if(!targetId) return;
+ showAddCourseDecks = false;
+ openDeckCourseMenuFile = '';
+ const c = cvCourses.find(x => String(x.id) === targetId) || getDefaultCanvasCourses().find(x => String(x.id) === targetId);
+ const cfgPrev = loadCanvasCfg();
+ saveCanvasCfg({
+  courseId: targetId,
+  courseName: c ? (c.name || '') : (String(cfgPrev.courseId || '') === targetId ? (cfgPrev.courseName || '') : ''),
+  courseCode: c ? (c.code || '') : (String(cfgPrev.courseId || '') === targetId ? (cfgPrev.courseCode || '') : ''),
+  activeCourseFilter: targetId
+ });
+ if(typeof toggleMobileRail === 'function') toggleMobileRail(false);
+ closeCanvasModal();
+ if(typeof setHostSection === 'function' && hostSection !== 'quiz'){
+  setHostSection('quiz');
+ } else if(typeof renderQuizSelect === 'function'){
+  renderQuizSelect();
+ }
+ const cfg = loadCanvasCfg();
+ if(cfg.baseUrl && cfg.token){
+  await loadCanvasCourseDetails(targetId, true);
+  syncRosterBoxIfActive(loadStoredCanvasRoster());
+ }
+}
+function clearActiveCourseFilter(){
+ showAddCourseDecks = false;
+ openDeckCourseMenuFile = '';
+ saveCanvasCfg({activeCourseFilter: ''});
+ if(typeof toggleMobileRail === 'function') toggleMobileRail(false);
+ if(typeof renderQuizSelect === 'function'){
+  const sel = document.getElementById('quizSel');
+  renderQuizSelect(sel ? sel.value : '');
+ }
+}
+function renderRailCoursesUI(){
+ const topBox = document.getElementById('railActiveCourseBox');
+ const subBox = document.getElementById('railCoursesSub');
+ const cfg = loadCanvasCfg();
+ const defs = getDefaultCanvasCourses();
+ const activeFilterCid = String(cfg.activeCourseFilter || '').trim();
+ const dispCid = activeFilterCid || String(cfg.courseId || '').trim();
+ if(topBox){
+  if(dispCid){
+   const cname = formatCourseDisplayName(dispCid);
+   topBox.style.display = 'flex';
+   topBox.innerHTML = `<div class="rail-ac-top">` +
+    `<span>🎓 ${activeFilterCid ? 'Course Library' : 'Active Course'}</span>` +
+    (activeFilterCid ? `<button type="button" class="rail-ac-reset" onclick="clearActiveCourseFilter()" title="Show all decks across courses">All Decks</button>` : '') +
+   `</div>` +
+   `<button type="button" class="rail-ac-name" data-cid="${esc(dispCid)}" onclick="selectSidebarCourse(this.dataset.cid)" title="View quiz library for ${esc(cname)}">${esc(cname)}</button>`;
+  } else {
+   topBox.style.display = 'none';
+   topBox.innerHTML = '';
+  }
+ }
+ if(subBox){
+  if(defs.length){
+   subBox.style.display = 'flex';
+   const itemsHtml = defs.map(d => {
+    const cid = String(d.id);
+    const isAct = activeFilterCid === cid;
+    const lbl = formatCourseDisplayName(d);
+    const nDecks = (typeof quizList !== 'undefined' && Array.isArray(quizList)) ? quizList.filter(q => !q.case && deckBelongsToCourse(q, cid)).length : 0;
+    return `<button type="button" class="rail-course-item${isAct ? ' active' : ''}" data-cid="${esc(cid)}" onclick="selectSidebarCourse(this.dataset.cid)" title="${esc(lbl)} — Click to view course quiz library">` +
+     `<span class="rail-course-lbl">${esc(lbl)}</span>` +
+     `<span class="rail-course-cnt">${nDecks}</span>` +
+    `</button>`;
+   }).join('');
+   const allCnt = (typeof quizList !== 'undefined' && Array.isArray(quizList)) ? quizList.filter(q => !q.case).length : 0;
+   const allBtn = `<button type="button" class="rail-course-item${!activeFilterCid ? ' active' : ''}" onclick="clearActiveCourseFilter()" title="Show all quizzes across all courses"><span class="rail-course-lbl">📚 All Quizzes</span><span class="rail-course-cnt">${allCnt}</span></button>`;
+   subBox.innerHTML = itemsHtml + allBtn;
+  } else {
+   subBox.style.display = 'none';
+   subBox.innerHTML = '';
+  }
+ }
+}
 async function selectDefaultCanvasCourse(cid, pullRosterNow=false){
  const targetId = String(cid || '');
  if(!targetId) return;
  const c = cvCourses.find(x => String(x.id) === targetId) || getDefaultCanvasCourses().find(x => String(x.id) === targetId);
- saveCanvasCfg({courseId: targetId, courseCode: c ? (c.code || String(c.name || '').slice(0, 12)) : ''});
+ saveCanvasCfg({
+  courseId: targetId,
+  courseName: c ? (c.name || '') : '',
+  courseCode: c ? (c.code || String(c.name || '')) : ''
+ });
  const sel = document.getElementById('cvCourseSel');
  if(sel) sel.value = targetId;
  populateCanvasCoursesDom();
@@ -6844,9 +7217,19 @@ function updateCanvasBadges(){
  const st1 = document.getElementById('wsCanvasState');
  const st2 = document.getElementById('canvasMenuState');
  const linked = !!(cfg.baseUrl && cfg.token);
- const lbl = linked ? (cfg.courseCode || 'Ready') : (loadStoredCanvasRoster().length ? 'CSV' : 'Connect');
- if(st1){ st1.textContent = lbl; st1.style.color = linked ? '#7cf5a8' : ''; }
- if(st2){ st2.textContent = lbl; }
+ const hasCsv = !linked && loadStoredCanvasRoster().length > 0;
+ if(st1){
+  if(linked){
+   st1.style.display = 'none';
+   st1.textContent = '';
+  } else {
+   st1.style.display = '';
+   st1.textContent = hasCsv ? 'CSV' : 'Connect';
+   st1.style.color = '';
+  }
+ }
+ if(st2){ st2.textContent = linked ? 'Synced ✓' : (hasCsv ? 'CSV' : 'Connect'); }
+ renderRailCoursesUI();
  syncCanvasRosterBadge();
  renderSetupQuickDefaults();
 }
@@ -7329,13 +7712,18 @@ function clearCanvasCredentials(){
  cvCourseQuery = '';
  cvAssignments = [];
  updateCanvasBadges();
+ if(typeof renderQuizSelect === 'function') renderQuizSelect();
  renderCanvasModal();
  setCvStatus('Cleared saved Canvas token from this browser.', false);
 }
 
 async function onCanvasCoursePick(courseId){
  const c = getSortedCanvasCourses().find(x => String(x.id) === String(courseId));
- saveCanvasCfg({courseId: courseId || '', courseCode: c ? (c.code || String(c.name || '').slice(0, 12)) : ''});
+ saveCanvasCfg({
+  courseId: courseId || '',
+  courseName: c ? (c.name || '') : '',
+  courseCode: c ? (c.code || String(c.name || '')) : ''
+ });
  populateCanvasCoursesDom();
  if(!courseId) return;
  await loadCanvasCourseDetails(courseId, false);
@@ -7802,7 +8190,7 @@ function downloadCanvasGradebookCsv(){
 (function(){
  const teachSec = (typeof GUIDE !== 'undefined') && GUIDE.find(g => g.id === 'teach');
  if(teachSec){
-  teachSec.items.unshift(['🎓 Canvas', 'Connect your Canvas URL + Personal Access Token (or import a Canvas Gradebook CSV) to pull your enrolled student roster in 1 click, customize student display names or choose First/Last name formats, and push Quiz, Case Study, or Homework grades straight into Canvas Assignments & SpeedGrader.']);
+  teachSec.items.unshift(['🎓 Courses (Canvas LMS & Course Quiz Libraries)', 'Connect your Canvas URL + Personal Access Token (or import a Canvas Gradebook CSV), pin your active classes as Default Courses so they appear under 🎓 Courses in the sidebar, click any course to open its dedicated Quiz Library, customize student display names or First/Last formats, and push Quiz, Case Study, or Homework grades straight into Canvas.']);
  }
  updateCanvasBadges();
 })();
