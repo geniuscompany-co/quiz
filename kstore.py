@@ -1076,7 +1076,7 @@ def canvas_api(base_url, token, method="GET", path="/api/v1/users/self", payload
     acc = []
     pages = 0
     cur_url = url
-    while cur_url and pages < 15:
+    while cur_url and pages < 30:
         pages += 1
         req = urllib.request.Request(cur_url, data=data_bytes if pages == 1 else None, headers=headers, method=method)
         try:
@@ -1137,6 +1137,7 @@ def canvas_list_courses(base_url, token):
             "name": str(c.get("name") or c.get("course_code") or ("Course " + cid)).strip(),
             "code": str(c.get("course_code") or "").strip(),
             "term": str(term_nm or "").strip(),
+            "start_at": str(c.get("start_at") or c.get("created_at") or "")[:10],
             "students": c.get("total_students"),
             "workflow_state": c.get("workflow_state") or "",
         })

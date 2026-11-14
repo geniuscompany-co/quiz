@@ -1284,10 +1284,11 @@ Quote: Paris has been the capital since 987 CE."></textarea>
         <textarea id="qRoster" oninput="saveSetup();if(typeof syncCanvasRosterBadge==='function')syncCanvasRosterBadge()" placeholder="Ava Johnson&#10;Ben Carter&#10;..." style="width:100%;box-sizing:border-box;padding:8px 11px;border-radius:8px;border:0;color:#2b0d57"></textarea>
         <div id="canvasRosterBadge" style="font-size:.77em;color:#7cf5a8;margin-top:3px"></div>
        </div>
-       <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-bottom:8px;font-size:.8em">
+       <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-bottom:6px;font-size:.8em">
         <span style="opacity:.82">🎓 Sync roster &amp; grades with Canvas:</span>
         <button type="button" class="btn-sm" style="margin:0;padding:4px 10px;font-size:.82em;background:#1565c0;border-color:#90caf9" onclick="openCanvasModal('hub')">🎓 Canvas Roster / CSV</button>
        </div>
+       <div id="canvasQuickDefaults" style="display:none;margin-bottom:8px"></div>
        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;padding:8px 10px;background:#0004;border-radius:9px;margin-bottom:8px;font-weight:700;font-size:.86em">
         <label style="display:inline-flex;align-items:center;gap:8px"><span class="quiz-only">🤖 Phantom Bots:</span><span class="case-only">🤖 Simulated Peers:</span> <input id="qBots" type="number" min="0" max="30" value="0" oninput="updateOptSummary()"></label>
        </div>
@@ -6418,14 +6419,49 @@ window.addEventListener('storage', ev => {
 .cv-status.ok{display:block;background:rgba(32,191,107,.2);border:1px solid rgba(124,245,168,.6);color:#c8ffdf}
 .cv-status.err{display:block;background:rgba(226,27,60,.24);border:1px solid rgba(255,138,128,.6);color:#ffcdd2}
 .cv-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:10px}
+.cv-def-box{background:#0b061ba6;border:1px solid #ffdf5d40;border-radius:10px;padding:9px 11px;margin-bottom:10px}
+.cv-def-hd{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;font-size:.77em;font-weight:850;text-transform:uppercase;letter-spacing:.04em;color:#ffdf5d;margin-bottom:6px}
+.cv-def-pills{display:flex;flex-wrap:wrap;gap:6px}
+.cv-def-chip{display:inline-flex;align-items:stretch;border-radius:99px;border:1.5px solid #ffffff30;background:#ffffff14;overflow:hidden;transition:border-color .14s,background .14s,box-shadow .14s}
+.cv-def-chip.active{border-color:#7dff6b;background:#26890c66;box-shadow:0 0 10px rgba(125,255,107,.28)}
+.cv-def-main{margin:0;padding:5px 10px 5px 11px;font-size:.82em;font-weight:800;background:transparent;color:#fff;border:0;box-shadow:none;cursor:pointer;display:inline-flex;align-items:center;gap:5px;text-align:left;max-width:290px}
+.cv-def-main span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cv-def-main:hover{background:#ffffff18}
+.cv-def-del{margin:0;padding:5px 9px 5px 7px;font-size:.78em;font-weight:900;background:#0000002b;color:#ffb4b4;border:0;border-left:1px solid #ffffff22;box-shadow:none;cursor:pointer;line-height:1}
+.cv-def-del:hover{background:#e21b3ccc;color:#fff}
+.cv-search-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:7px}
+.cv-search-in-wrap{position:relative;flex:1;min-width:210px;display:flex;align-items:center}
+.cv-search-in-wrap input{padding-right:30px}
+.cv-search-clr{position:absolute;right:6px;margin:0;padding:2px 7px;font-size:.8em;border-radius:99px;background:#2b0d5722;color:#2b0d57;border:0;box-shadow:none;cursor:pointer;font-weight:900;display:none}
+.cv-search-clr:hover{background:#2b0d5744}
+.cv-search-results{max-height:185px;overflow-y:auto;border-radius:9px;border:1px solid #ffffff29;background:#090517d9;margin-bottom:9px;display:none}
+.cv-sr-item{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:7px 10px;border-bottom:1px solid #ffffff14;font-size:.84em}
+.cv-sr-item:last-child{border-bottom:0}
+.cv-sr-item.active{background:#1976d238}
+.cv-sr-pick{flex:1;min-width:0;margin:0;padding:0;background:transparent;border:0;box-shadow:none;color:#fff;text-align:left;cursor:pointer;font-weight:750}
+.cv-sr-pick:hover .cv-sr-title{color:#ffdf5d;text-decoration:underline}
+.cv-sr-title{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cv-sr-meta{display:block;font-size:.84em;opacity:.75;font-weight:650;margin-top:1px}
+.cv-sr-star{margin:0;padding:4px 9px;font-size:.78em;border-radius:99px;background:#ffffff18;color:#ffdf5d;border:1px solid #ffdf5d55;box-shadow:none;cursor:pointer;white-space:nowrap;font-weight:800}
+.cv-sr-star.pinned{background:#ffdf5d2e;border-color:#ffdf5d;color:#fff5b8}
+.cv-sr-star:hover{background:#ffdf5d44}
 </style>
 <script>
 // ===== Canvas LMS Integration (Direct REST API + Canvas Gradebook CSV Sync) =====
 let cvModalMode = 'hub';
 let cvCourses = [];
+let cvCourseQuery = '';
 let cvAssignments = [];
 let cvSessionData = null;
 let cvManualMap = {}; // lower(playerName) -> canvasStudentId
+
+function loadCachedCanvasCourses(){
+ try{ return JSON.parse(localStorage.getItem('brainrush_canvas_courses_cache') || '[]') || []; }catch(e){ return []; }
+}
+function saveCachedCanvasCourses(list){
+ try{ localStorage.setItem('brainrush_canvas_courses_cache', JSON.stringify(list || [])); }catch(e){}
+}
+cvCourses = loadCachedCanvasCourses();
 
 function loadCanvasCfg(){
  try{ return JSON.parse(localStorage.getItem('brainrush_canvas_cfg') || '{}') || {}; }catch(e){ return {}; }
@@ -6435,6 +6471,169 @@ function saveCanvasCfg(patch){
  try{ localStorage.setItem('brainrush_canvas_cfg', JSON.stringify(cur)); }catch(e){}
  updateCanvasBadges();
  return cur;
+}
+function getDefaultCanvasCourses(){
+ const cfg = loadCanvasCfg();
+ const raw = Array.isArray(cfg.defaultCourses) ? cfg.defaultCourses : [];
+ return raw.filter(d => d && d.id);
+}
+function isDefaultCanvasCourse(cid){
+ if(!cid) return false;
+ return getDefaultCanvasCourses().some(d => String(d.id) === String(cid));
+}
+function formatCourseShortLabel(c){
+ if(!c) return 'Course';
+ if(c.code && c.term) return `${c.code} · ${c.term}`;
+ if(c.code) return c.code;
+ return String(c.name || ('Course ' + c.id)).slice(0, 32);
+}
+function syncDefaultCoursesMetadata(courses){
+ const defs = getDefaultCanvasCourses();
+ if(!defs.length || !Array.isArray(courses) || !courses.length) return;
+ const byId = new Map(courses.map(c => [String(c.id), c]));
+ let changed = false;
+ const next = defs.map(d => {
+  const fresh = byId.get(String(d.id));
+  if(!fresh) return d;
+  changed = true;
+  return {
+   id: String(fresh.id),
+   name: fresh.name || d.name || '',
+   code: fresh.code || d.code || '',
+   term: fresh.term || d.term || '',
+   students: fresh.students != null ? fresh.students : d.students
+  };
+ });
+ if(changed) saveCanvasCfg({defaultCourses: next});
+}
+function addDefaultCanvasCourse(cid){
+ const targetId = String(cid || (document.getElementById('cvCourseSel') || {}).value || loadCanvasCfg().courseId || '');
+ if(!targetId){
+  setCvStatus('Select a Canvas course first to save it as a Default Course.', true);
+  return;
+ }
+ const defs = getDefaultCanvasCourses();
+ if(defs.some(d => String(d.id) === targetId)) return;
+ const c = cvCourses.find(x => String(x.id) === targetId) || {id: targetId, name: 'Course ' + targetId, code: '', term: ''};
+ defs.push({
+  id: String(c.id),
+  name: c.name || ('Course ' + c.id),
+  code: c.code || '',
+  term: c.term || '',
+  students: c.students != null ? c.students : null
+ });
+ saveCanvasCfg({defaultCourses: defs});
+ populateCanvasCoursesDom();
+ setCvStatus(`⭐ Saved <b>${esc(c.name || c.code)}</b> to your Default Courses for 1-click access!`, false);
+}
+function removeDefaultCanvasCourse(cid){
+ const targetId = String(cid || '');
+ if(!targetId) return;
+ const defs = getDefaultCanvasCourses();
+ const removed = defs.find(d => String(d.id) === targetId);
+ const next = defs.filter(d => String(d.id) !== targetId);
+ saveCanvasCfg({defaultCourses: next});
+ populateCanvasCoursesDom();
+ if(removed){
+  setCvStatus(`Removed <b>${esc(removed.name || removed.code)}</b> from Default Courses.`, false);
+ }
+}
+function toggleDefaultCanvasCourse(cid){
+ const targetId = String(cid || (document.getElementById('cvCourseSel') || {}).value || loadCanvasCfg().courseId || '');
+ if(!targetId){
+  setCvStatus('Select a Canvas course first to add it to Default Courses.', true);
+  return;
+ }
+ if(isDefaultCanvasCourse(targetId)) removeDefaultCanvasCourse(targetId);
+ else addDefaultCanvasCourse(targetId);
+}
+async function selectDefaultCanvasCourse(cid, pullRosterNow=false){
+ const targetId = String(cid || '');
+ if(!targetId) return;
+ const c = cvCourses.find(x => String(x.id) === targetId) || getDefaultCanvasCourses().find(x => String(x.id) === targetId);
+ saveCanvasCfg({courseId: targetId, courseCode: c ? (c.code || String(c.name || '').slice(0, 12)) : ''});
+ const sel = document.getElementById('cvCourseSel');
+ if(sel) sel.value = targetId;
+ populateCanvasCoursesDom();
+ if(pullRosterNow){
+  const cfg = loadCanvasCfg();
+  if(!cfg.baseUrl || !cfg.token){ openCanvasModal('hub'); return; }
+  const r = await canvasApiPost('/api/canvas/roster', {base_url: cfg.baseUrl, canvas_token: cfg.token, course_id: targetId});
+  if(r && Array.isArray(r.students) && r.students.length){
+   applyStudentsToRosterBox(r.students);
+   const b = document.getElementById('canvasRosterBadge');
+   if(b) b.textContent = `✅ Pulled ${r.students.length} students from ${c ? (c.code || c.name) : 'Canvas'}!`;
+  } else {
+   openCanvasModal('hub');
+   if(r && r.error) setCvStatus(esc(r.error), true);
+  }
+  return;
+ }
+ await loadCanvasCourseDetails(targetId, false);
+}
+function getSortedCanvasCourses(){
+ const defIds = new Set(getDefaultCanvasCourses().map(d => String(d.id)));
+ const list = [...cvCourses];
+ // Ensure any saved default course appears even if cache hasn't been synced yet
+ getDefaultCanvasCourses().forEach(d => {
+  if(!list.some(c => String(c.id) === String(d.id))){
+   list.push(Object.assign({}, d));
+  }
+ });
+ list.sort((a, b) => {
+  const ap = defIds.has(String(a.id)) ? 1 : 0;
+  const bp = defIds.has(String(b.id)) ? 1 : 0;
+  if(ap !== bp) return bp - ap;
+  const na = /^\d+$/.test(String(a.id)) ? Number(a.id) : 0;
+  const nb = /^\d+$/.test(String(b.id)) ? Number(b.id) : 0;
+  if(na !== nb) return nb - na; // newest Canvas courses first!
+  return String(a.name || '').localeCompare(String(b.name || ''));
+ });
+ return list;
+}
+function getFilteredCanvasCourses(){
+ const sorted = getSortedCanvasCourses();
+ const q = String(cvCourseQuery || '').toLowerCase().trim();
+ if(!q) return sorted;
+ const tokens = q.split(/\s+/).filter(Boolean);
+ return sorted.filter(c => {
+  const hay = `${c.name || ''} ${c.code || ''} ${c.term || ''} ${c.start_at || ''} ${c.id || ''}`.toLowerCase();
+  return tokens.every(t => hay.includes(t));
+ });
+}
+function onCanvasCourseSearch(val){
+ cvCourseQuery = String(val || '');
+ const clr = document.getElementById('cvCourseSearchClr');
+ if(clr) clr.style.display = cvCourseQuery.trim() ? 'inline-block' : 'none';
+ populateCanvasCoursesDom();
+}
+function clearCanvasCourseSearch(){
+ cvCourseQuery = '';
+ const inp = document.getElementById('cvCourseSearch');
+ if(inp){ inp.value = ''; inp.focus(); }
+ const clr = document.getElementById('cvCourseSearchClr');
+ if(clr) clr.style.display = 'none';
+ populateCanvasCoursesDom();
+}
+function renderSetupQuickDefaults(){
+ const box = document.getElementById('canvasQuickDefaults');
+ if(!box) return;
+ const cfg = loadCanvasCfg();
+ const defs = getDefaultCanvasCourses();
+ if(!defs.length || !cfg.baseUrl || !cfg.token){
+  box.style.display = 'none';
+  box.innerHTML = '';
+  return;
+ }
+ box.style.display = 'block';
+ box.innerHTML = `<div style="font-size:.74em;font-weight:800;color:#ffdf5d;margin-bottom:4px;opacity:.92">⭐ Default Canvas Courses (1-Click Pull Roster):</div>` +
+  `<div style="display:flex;flex-wrap:wrap;gap:5px">` +
+  defs.map(d => {
+   const isAct = String(cfg.courseId || '') === String(d.id);
+   const lbl = formatCourseShortLabel(d);
+   return `<button type="button" class="btn-sm" style="margin:0;padding:4px 9px;font-size:.75em;background:${isAct?'#26890c':'#ffffff1c'};border-color:${isAct?'#7dff6b':'#ffffff36'}" onclick="selectDefaultCanvasCourse('${esc(d.id)}', true)" title="Pull student roster from ${esc(d.name)}">⭐ ${esc(lbl)}</button>`;
+  }).join('') +
+  `</div>`;
 }
 function loadStoredCanvasRoster(){
  try{ return JSON.parse(localStorage.getItem('brainrush_canvas_roster') || '[]') || []; }catch(e){ return []; }
@@ -6502,6 +6701,7 @@ function updateCanvasBadges(){
  if(st1){ st1.textContent = lbl; st1.style.color = linked ? '#7cf5a8' : ''; }
  if(st2){ st2.textContent = lbl; }
  syncCanvasRosterBadge();
+ renderSetupQuickDefaults();
 }
 
 async function canvasApiPost(path, payload){
@@ -6681,12 +6881,28 @@ function renderCanvasModal(){
 
   <div class="cv-card">
    <h3><span>📚 Canvas Course &amp; Student Roster</span><span id="cvRosterCntBadge" style="font-size:.8em;color:#7cf5a8;font-weight:750"></span></h3>
+
+   <div id="cvDefaultsWrap" class="cv-def-box"></div>
+
+   <div class="cv-search-row">
+    <div class="cv-search-in-wrap">
+     <input id="cvCourseSearch" class="cv-in" type="text" placeholder="🔍 Search courses by name, code, term, or year…" value="${esc(cvCourseQuery)}" oninput="onCanvasCourseSearch(this.value)">
+     <button type="button" id="cvCourseSearchClr" class="cv-search-clr" style="display:${cvCourseQuery.trim()?'inline-block':'none'}" onclick="clearCanvasCourseSearch()" title="Clear search">✕</button>
+    </div>
+    <span id="cvCourseMatchCnt" style="font-size:.78em;font-weight:800;opacity:.86;white-space:nowrap"></span>
+    ${(cfg.baseUrl && cfg.token) ? `<button type="button" class="btn-sm" style="margin:0;padding:7px 11px;font-size:.79em;background:#ffffff1c" onclick="connectCanvasApi(false)" title="Re-fetch full course list from Canvas">🔄 Sync Courses</button>` : ''}
+   </div>
+   <div id="cvCourseSearchResults" class="cv-search-results"></div>
+
    <div class="cv-grid2">
     <div>
      <label class="cv-lbl">Active Canvas Course</label>
-     <select id="cvCourseSel" class="cv-sel" onchange="onCanvasCoursePick(this.value)">
-      <option value="">— Select a Canvas Course —</option>
-     </select>
+     <div style="display:flex;gap:6px;align-items:stretch">
+      <select id="cvCourseSel" class="cv-sel" style="flex:1;min-width:0" onchange="onCanvasCoursePick(this.value)">
+       <option value="">— Select a Canvas Course —</option>
+      </select>
+      <button type="button" id="cvPinBtn" class="btn-sm" style="margin:0;padding:0 11px;font-size:.8em;white-space:nowrap;background:#ffffff1c;border-color:#ffdf5d77;color:#ffdf5d" onclick="toggleDefaultCanvasCourse()" title="Add or remove this course from your Default Courses">⭐ Save Default</button>
+     </div>
     </div>
     <div>
      <label class="cv-lbl">Roster Name Format in Brainrush</label>
@@ -6763,19 +6979,123 @@ function renderCanvasModal(){
 function populateCanvasCoursesDom(){
  const sel = document.getElementById('cvCourseSel');
  const badge = document.getElementById('cvRosterCntBadge');
+ const defWrap = document.getElementById('cvDefaultsWrap');
+ const matchCnt = document.getElementById('cvCourseMatchCnt');
+ const srBox = document.getElementById('cvCourseSearchResults');
+ const pinBtn = document.getElementById('cvPinBtn');
  const cfg = loadCanvasCfg();
  const stored = loadStoredCanvasRoster();
+ const defs = getDefaultCanvasCourses();
+ const allCourses = getSortedCanvasCourses();
+ const filtered = getFilteredCanvasCourses();
+ const qTrim = String(cvCourseQuery || '').trim();
+
  if(badge){
   badge.textContent = stored.length ? `✓ ${stored.length} Canvas students loaded` : '';
  }
- if(!sel) return;
- sel.innerHTML = `<option value="">— Select a Canvas Course —</option>` + cvCourses.map(c => {
-  const meta = [c.code, c.term, (c.students != null ? `${c.students} stu` : '')].filter(Boolean).join(' · ');
-  return `<option value="${esc(c.id)}">${esc(c.name)}${meta ? ` (${esc(meta)})` : ''}</option>`;
- }).join('');
- if(cfg.courseId && cvCourses.some(c => String(c.id) === String(cfg.courseId))){
-  sel.value = String(cfg.courseId);
+
+ // 1. Render Default Courses bar (1-click switch + X delete button)
+ if(defWrap){
+  if(defs.length){
+   defWrap.innerHTML =
+    `<div class="cv-def-hd"><span>⭐ Default Courses (${defs.length}) — Click to Switch</span><span style="text-transform:none;letter-spacing:0;opacity:.78;font-weight:650">Click ✕ when concluding a class</span></div>` +
+    `<div class="cv-def-pills">` +
+    defs.map(d => {
+     const isAct = String(cfg.courseId || '') === String(d.id);
+     const sub = [d.code, d.term].filter(Boolean).join(' · ');
+     const label = sub ? `${d.name} (${sub})` : d.name;
+     const shortLbl = d.code ? `${d.code} — ${d.name}` : d.name;
+     return `<span class="cv-def-chip${isAct ? ' active' : ''}">` +
+      `<button type="button" class="cv-def-main" onclick="selectDefaultCanvasCourse('${esc(d.id)}')" title="${esc(label)}">${isAct ? '✅' : '⭐'} <span>${esc(shortLbl)}</span></button>` +
+      `<button type="button" class="cv-def-del" onclick="removeDefaultCanvasCourse('${esc(d.id)}')" title="Remove ${esc(d.name)} from Default Courses">✕</button>` +
+      `</span>`;
+    }).join('') +
+    `</div>`;
+  } else {
+   defWrap.innerHTML =
+    `<div class="cv-def-hd" style="margin-bottom:2px"><span>⭐ Default Courses</span></div>` +
+    `<div style="font-size:.8em;opacity:.82;line-height:1.35">No default courses saved yet. Search or pick your active classes below and click <b>⭐ Save Default</b> so they appear here as 1-click buttons.</div>`;
+  }
  }
+
+ // 2. Render course match count & Quick-Pick search results list
+ if(matchCnt){
+  if(!allCourses.length) matchCnt.textContent = '';
+  else if(qTrim) matchCnt.textContent = `${filtered.length} of ${allCourses.length} courses`;
+  else matchCnt.textContent = `${allCourses.length} courses`;
+ }
+ if(srBox){
+  if(qTrim && allCourses.length){
+   srBox.style.display = 'block';
+   if(!filtered.length){
+    srBox.innerHTML = `<div style="padding:10px 12px;font-size:.84em;opacity:.8">No Canvas courses matched "<b>${esc(qTrim)}</b>".</div>`;
+   } else {
+    srBox.innerHTML = filtered.slice(0, 25).map(c => {
+     const isAct = String(cfg.courseId || '') === String(c.id);
+     const pinned = isDefaultCanvasCourse(c.id);
+     const meta = [c.code, c.term, (c.students != null ? `${c.students} students` : '')].filter(Boolean).join(' · ');
+     return `<div class="cv-sr-item${isAct ? ' active' : ''}">` +
+      `<button type="button" class="cv-sr-pick" onclick="selectCourseFromSearch('${esc(c.id)}')">` +
+       `<span class="cv-sr-title">${isAct ? '✅ ' : ''}${esc(c.name)}</span>` +
+       (meta ? `<span class="cv-sr-meta">${esc(meta)}</span>` : '') +
+      `</button>` +
+      `<button type="button" class="cv-sr-star${pinned ? ' pinned' : ''}" onclick="toggleDefaultCanvasCourse('${esc(c.id)}')" title="${pinned ? 'Remove from Default Courses' : 'Add to Default Courses'}">${pinned ? '★ Default' : '☆ Save Default'}</button>` +
+     `</div>`;
+    }).join('') + (filtered.length > 25 ? `<div style="padding:6px 10px;font-size:.78em;opacity:.72;text-align:center">Showing top 25 of ${filtered.length} matches — type more keywords to narrow further</div>` : '');
+   }
+  } else {
+   srBox.style.display = 'none';
+   srBox.innerHTML = '';
+  }
+ }
+
+ // 3. Populate Active Canvas Course <select> (keep currently active course available even if search filters others)
+ if(sel){
+  const listForSel = [...filtered];
+  if(cfg.courseId && !listForSel.some(c => String(c.id) === String(cfg.courseId))){
+   const curObj = allCourses.find(c => String(c.id) === String(cfg.courseId));
+   if(curObj) listForSel.unshift(curObj);
+  }
+  const defSet = new Set(defs.map(d => String(d.id)));
+  const topLabel = qTrim ? `— ${filtered.length} matching course${filtered.length===1?'':'s'} —` : `— Select a Canvas Course (${allCourses.length || 0}) —`;
+  sel.innerHTML = `<option value="">${esc(topLabel)}</option>` + listForSel.map(c => {
+   const star = defSet.has(String(c.id)) ? '⭐ ' : '';
+   const meta = [c.code, c.term, (c.students != null ? `${c.students} stu` : '')].filter(Boolean).join(' · ');
+   return `<option value="${esc(c.id)}">${star}${esc(c.name)}${meta ? ` (${esc(meta)})` : ''}</option>`;
+  }).join('');
+  if(cfg.courseId && listForSel.some(c => String(c.id) === String(cfg.courseId))){
+   sel.value = String(cfg.courseId);
+  }
+ }
+
+ // 4. Update Pin / Default toggle button state for active selection
+ if(pinBtn){
+  const activeId = (sel && sel.value) || cfg.courseId || '';
+  const pinned = activeId && isDefaultCanvasCourse(activeId);
+  pinBtn.disabled = !activeId;
+  pinBtn.style.opacity = activeId ? '1' : '.5';
+  if(pinned){
+   pinBtn.innerHTML = '★ Default · ✕';
+   pinBtn.style.background = '#ffdf5d2b';
+   pinBtn.style.borderColor = '#ffdf5d';
+   pinBtn.title = 'Click to remove this course from your Default Courses';
+  } else {
+   pinBtn.innerHTML = '⭐ Save Default';
+   pinBtn.style.background = '#ffffff1c';
+   pinBtn.style.borderColor = '#ffdf5d77';
+   pinBtn.title = 'Click to pin this course to your 1-click Default Courses bar';
+  }
+ }
+ renderSetupQuickDefaults();
+}
+
+async function selectCourseFromSearch(courseId){
+ cvCourseQuery = '';
+ const inp = document.getElementById('cvCourseSearch');
+ if(inp) inp.value = '';
+ const clr = document.getElementById('cvCourseSearchClr');
+ if(clr) clr.style.display = 'none';
+ await onCanvasCoursePick(courseId);
 }
 
 function populateCanvasAssignmentsDom(){
@@ -6824,18 +7144,24 @@ async function connectCanvasApi(silent=false){
   return;
  }
  cvCourses = r.courses || [];
+ saveCachedCanvasCourses(cvCourses);
+ syncDefaultCoursesMetadata(cvCourses);
  const nextCfg = saveCanvasCfg({baseUrl: r.base_url || baseUrl, token, userName: r.user || 'Instructor'});
  if(uEl && r.base_url) uEl.value = r.base_url;
  populateCanvasCoursesDom();
- if(!silent) setCvStatus(`✅ Connected as <b>${esc(r.user)}</b> — found <b>${cvCourses.length}</b> course${cvCourses.length===1?'':'s'}.`, false);
+ if(!silent) setCvStatus(`✅ Connected as <b>${esc(r.user)}</b> — synced <b>${cvCourses.length}</b> course${cvCourses.length===1?'':'s'}.`, false);
  if(nextCfg.courseId && cvCourses.some(c => String(c.id) === String(nextCfg.courseId))){
   await loadCanvasCourseDetails(nextCfg.courseId, true);
  }
 }
 
 function clearCanvasCredentials(){
- try{ localStorage.removeItem('brainrush_canvas_cfg'); }catch(e){}
+ try{
+  localStorage.removeItem('brainrush_canvas_cfg');
+  localStorage.removeItem('brainrush_canvas_courses_cache');
+ }catch(e){}
  cvCourses = [];
+ cvCourseQuery = '';
  cvAssignments = [];
  updateCanvasBadges();
  renderCanvasModal();
@@ -6843,8 +7169,9 @@ function clearCanvasCredentials(){
 }
 
 async function onCanvasCoursePick(courseId){
- const c = cvCourses.find(x => String(x.id) === String(courseId));
- saveCanvasCfg({courseId: courseId || '', courseCode: c ? (c.code || c.name.slice(0, 12)) : ''});
+ const c = getSortedCanvasCourses().find(x => String(x.id) === String(courseId));
+ saveCanvasCfg({courseId: courseId || '', courseCode: c ? (c.code || String(c.name || '').slice(0, 12)) : ''});
+ populateCanvasCoursesDom();
  if(!courseId) return;
  await loadCanvasCourseDetails(courseId, false);
 }
