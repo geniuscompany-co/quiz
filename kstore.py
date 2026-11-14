@@ -920,10 +920,12 @@ def clean_canvas_roster(items):
         if key in seen:
             continue
         seen.add(key)
+        disp = re.sub(r"\s+", " ", str(it.get("display_name") or "")).strip()[:48]
         out.append({
             "id": cid,
             "name": nm,
             "sortable_name": sn,
+            "display_name": disp,
             "sis_user_id": str(it.get("sis_user_id") or "").strip()[:48],
             "sis_login_id": str(it.get("sis_login_id") or "").strip()[:64],
             "section": str(it.get("section") or "").strip()[:80],

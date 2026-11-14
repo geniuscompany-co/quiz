@@ -799,7 +799,7 @@ body.cb .c4{background:#CC79A7}body.cb .c5{background:#56B4E9;color:#111}body.cb
    <button class="quiz-only" onclick="closeNavMenu();openHomework()"><span>📚 Homework</span><span class="state">Assign</span></button>
    <button class="quiz-only" onclick="closeNavMenu();openProgress()"><span>👥 Student Progress</span><span class="state">View</span></button>
    <button onclick="closeNavMenu();openHistory()"><span>📈 Results History</span><span class="state">View</span></button>
-   <button onclick="closeNavMenu();openCanvasModal('hub')"><span>🎓 Canvas LMS Sync</span><span class="state" id="canvasMenuState">Sync</span></button>
+   <button onclick="closeNavMenu();openCanvasModal('hub')"><span>🎓 Canvas</span><span class="state" id="canvasMenuState">Sync</span></button>
    <button id="remoteBtn" onclick="closeNavMenu();openRemoteModal()"><span>📱 Phone Host Remote</span><span class="state" id="remoteMenuState">Open ↗</span></button>
    <button id="presMenuBtn" onclick="closeNavMenu();openPresentationMode()"><span>📽️ Presentation Mode</span><span class="state" id="presMenuState">2nd Screen</span></button>
    <button onclick="closeNavMenu();openLinks()"><span><span class="quiz-only">🖥️ Spectator &amp; Practice Links</span><span class="case-only">🖥️ Live Spectator Links</span></span><span class="state">Open ↗</span></button>
@@ -1015,7 +1015,7 @@ Quote: Paris has been the capital since 987 CE."></textarea>
 <div class="modal-bg aud-hide" id="canvasModal">
  <div class="modal" style="max-width:860px;text-align:left">
   <button class="close-x" onclick="closeCanvasModal()">✕ Close</button>
-  <h2 style="margin-top:0">🎓 Canvas LMS Sync</h2>
+  <h2 style="margin-top:0">🎓 Canvas</h2>
   <div id="canvasModalBody"></div>
  </div>
 </div>
@@ -1060,7 +1060,7 @@ Quote: Paris has been the capital since 987 CE."></textarea>
      <span>📈 History</span>
     </button>
     <button type="button" class="rail-btn" id="wsCanvasBtn" onclick="toggleMobileRail(false);openCanvasModal('hub')">
-     <span>🎓 Canvas LMS</span>
+     <span>🎓 Canvas</span>
      <span class="rail-sub" id="wsCanvasState">Connect</span>
     </button>
     <button type="button" class="rail-btn" id="wsRemoteBtn" onclick="toggleMobileRail(false);openRemoteModal()">
@@ -1278,10 +1278,11 @@ Quote: Paris has been the capital since 987 CE."></textarea>
          <label style="font-size:.82em;font-weight:700;opacity:.85">👥 Class Roster (one name per line):</label>
          <span style="display:inline-flex;gap:5px;flex-wrap:wrap">
           <button type="button" class="btn-sm" style="margin:0;padding:4px 9px;font-size:.76em;background:#1976d2" onclick="openCanvasModal('hub')">🎓 Pull from Canvas</button>
+          <button type="button" class="btn-sm" style="margin:0;padding:4px 9px;font-size:.76em;background:#ffffff1f" onclick="openCanvasModal('edit_names')">✏️ Edit Names</button>
           <label class="btn-sm" style="margin:0;padding:4px 9px;font-size:.76em;cursor:pointer;background:#ffffff1f">📂 Canvas CSV<input type="file" accept=".csv" style="display:none" onchange="onRosterCsvUpload(event)"></label>
          </span>
         </div>
-        <textarea id="qRoster" oninput="saveSetup();if(typeof syncCanvasRosterBadge==='function')syncCanvasRosterBadge()" placeholder="Ava Johnson&#10;Ben Carter&#10;..." style="width:100%;box-sizing:border-box;padding:8px 11px;border-radius:8px;border:0;color:#2b0d57"></textarea>
+        <textarea id="qRoster" oninput="saveSetup();if(typeof syncCanvasRosterBadge==='function')syncCanvasRosterBadge()" onchange="if(typeof syncRosterBoxAliases==='function')syncRosterBoxAliases()" placeholder="Ava Johnson&#10;Ben Carter&#10;..." style="width:100%;box-sizing:border-box;padding:8px 11px;border-radius:8px;border:0;color:#2b0d57"></textarea>
         <div id="canvasRosterBadge" style="font-size:.77em;color:#7cf5a8;margin-top:3px"></div>
        </div>
        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-bottom:6px;font-size:.8em">
@@ -4582,7 +4583,7 @@ async function hwResults(id){
  hwView = r;
  box.innerHTML = `<h3>📊 ${esc(r.title)}</h3><table class="mt"><tr><th>Student</th><th>Status</th><th>Score</th><th>Correct</th></tr>${r.rows.map(x=>`<tr><td>${esc(x.name)}</td><td>${x.done?'✅ finished':'⏳ '+x.answered+'/'+r.questions}</td><td>${x.score}</td><td>${x.correct}/${r.questions} (${x.pct}%)</td></tr>`).join('')}${r.missing.map(n=>`<tr><td>${esc(n)}</td><td colspan="3" style="color:#ff9b9b">not started</td></tr>`).join('')}</table>
   ${r.hardest.length?`<h4>Hardest questions</h4>${r.hardest.map(h=>`<div class="hist-q"><span>${esc(h.q)}</span><b>${h.pct}%</b></div>`).join('')}`:''}
-  <button class="btn-sm" style="margin:8px 0 0" onclick="exportHw()">📥 Export CSV</button> <button class="btn-sm" style="margin:8px 0 0;background:#1565c0;border-color:#90caf9" onclick="openCanvasModal('hw')">🎓 Canvas Sync</button> <button class="btn-sm" style="margin:8px 0 0" onclick="hwResults('${id}')">🔄 Refresh</button>`;
+  <button class="btn-sm" style="margin:8px 0 0" onclick="exportHw()">📥 Export CSV</button> <button class="btn-sm" style="margin:8px 0 0;background:#1565c0;border-color:#90caf9" onclick="openCanvasModal('hw')">🎓 Canvas</button> <button class="btn-sm" style="margin:8px 0 0" onclick="hwResults('${id}')">🔄 Refresh</button>`;
  box.scrollIntoView({behavior:'smooth'});
 }
 function exportHw(){
@@ -6445,12 +6446,27 @@ window.addEventListener('storage', ev => {
 .cv-sr-star{margin:0;padding:4px 9px;font-size:.78em;border-radius:99px;background:#ffffff18;color:#ffdf5d;border:1px solid #ffdf5d55;box-shadow:none;cursor:pointer;white-space:nowrap;font-weight:800}
 .cv-sr-star.pinned{background:#ffdf5d2e;border-color:#ffdf5d;color:#fff5b8}
 .cv-sr-star:hover{background:#ffdf5d44}
+.cv-stu-ed{margin-top:10px;background:#0a051ad4;border:1px solid #ffffff26;border-radius:10px;padding:9px 11px}
+.cv-stu-ed summary{cursor:pointer;font-weight:850;font-size:.86em;color:#ffdf5d;display:flex;align-items:center;justify-content:space-between;gap:8px;list-style:none}
+.cv-stu-ed summary::-webkit-details-marker{display:none}
+.cv-stu-list{max-height:225px;overflow-y:auto;border:1px solid #ffffff1f;border-radius:8px;background:#070312b8;margin-top:7px}
+.cv-stu-row{display:grid;grid-template-columns:minmax(130px,1fr) minmax(150px,1.15fr);gap:8px;align-items:center;padding:6px 9px;border-bottom:1px solid #ffffff12;font-size:.83em}
+@media(max-width:560px){.cv-stu-row{grid-template-columns:1fr}}
+.cv-stu-row:last-child{border-bottom:0}
+.cv-stu-orig{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:750}
+.cv-stu-orig small{display:block;font-size:.82em;opacity:.68;font-weight:600;overflow:hidden;text-overflow:ellipsis}
+.cv-stu-edit-cell{display:flex;align-items:center;gap:5px}
+.cv-stu-in{flex:1;min-width:0;box-sizing:border-box;padding:6px 9px;border-radius:7px;border:1.5px solid #ffffff2e;background:#fff;color:#2b0d57;font-weight:800;font-size:.94em;margin:0}
+.cv-stu-in.custom{background:#fff8db;border-color:#ffdf5d}
+.cv-stu-rst{margin:0;padding:5px 8px;font-size:.78em;border-radius:7px;background:#ffffff1f;color:#ffdf5d;border:1px solid #ffdf5d55;box-shadow:none;cursor:pointer;font-weight:850;white-space:nowrap}
+.cv-stu-rst:hover{background:#ffdf5d38}
 </style>
 <script>
-// ===== Canvas LMS Integration (Direct REST API + Canvas Gradebook CSV Sync) =====
+// ===== Canvas Integration (Direct REST API + Canvas Gradebook CSV Sync) =====
 let cvModalMode = 'hub';
 let cvCourses = [];
 let cvCourseQuery = '';
+let cvStudentQuery = '';
 let cvAssignments = [];
 let cvSessionData = null;
 let cvManualMap = {}; // lower(playerName) -> canvasStudentId
@@ -6638,9 +6654,110 @@ function renderSetupQuickDefaults(){
 function loadStoredCanvasRoster(){
  try{ return JSON.parse(localStorage.getItem('brainrush_canvas_roster') || '[]') || []; }catch(e){ return []; }
 }
-function saveStoredCanvasRoster(list){
- try{ localStorage.setItem('brainrush_canvas_roster', JSON.stringify(list || [])); }catch(e){}
+function loadStudentAliases(){
+ try{ return JSON.parse(localStorage.getItem('brainrush_canvas_aliases') || '{}') || {}; }catch(e){ return {}; }
+}
+function saveStudentAliases(map){
+ try{ localStorage.setItem('brainrush_canvas_aliases', JSON.stringify(map || {})); }catch(e){}
+}
+function studentAliasKey(s){
+ if(!s) return '';
+ return s.id ? ('id:' + String(s.id)) : ('nm:' + normStudentKey(s.name || s.sortable_name || ''));
+}
+function getStudentAlias(s){
+ const k = studentAliasKey(s);
+ if(!k) return '';
+ const map = loadStudentAliases();
+ return String(map[k] || '').trim();
+}
+function extractFirstAndLast(s){
+ const sn = String((s && s.sortable_name) || '').trim();
+ const nm = String((s && s.name) || '').trim();
+ if(sn.includes(',')){
+  const parts = sn.split(',');
+  const last = (parts[0] || '').trim();
+  const given = parts.slice(1).join(' ').trim();
+  const first = (given.split(/\s+/)[0] || given).trim();
+  return {first: first || nm, last: last || nm, given: given || first || nm};
+ }
+ const parts = nm.split(/\s+/).filter(Boolean);
+ if(parts.length >= 2){
+  return {first: parts[0], last: parts[parts.length - 1], given: parts.slice(0, -1).join(' ')};
+ }
+ const solo = parts[0] || sn || '';
+ return {first: solo, last: solo, given: solo};
+}
+function getCurrentNameFmt(){
+ const sel = document.getElementById('cvNameFmt');
+ if(sel && sel.value) return sel.value;
+ return loadCanvasCfg().nameFmt || 'first_last';
+}
+function computeStudentDisplayEntries(students, fmtOverride){
+ const fmt = fmtOverride || getCurrentNameFmt();
+ const aliases = loadStudentAliases();
+ const list = Array.isArray(students) ? students : [];
+ const prelim = list.map(s => {
+  const ak = studentAliasKey(s);
+  const custom = String(aliases[ak] || '').trim().slice(0, 48);
+  const fl = extractFirstAndLast(s);
+  let base = '';
+  if(fmt === 'sortable'){
+   base = s.sortable_name || sortableFromName(s.name);
+  } else if(fmt === 'first'){
+   base = fl.first || s.name || firstLastFromSortable(s.sortable_name);
+  } else if(fmt === 'last'){
+   base = fl.last || s.name || firstLastFromSortable(s.sortable_name);
+  } else {
+   base = s.name || firstLastFromSortable(s.sortable_name);
+  }
+  base = String(base || '').trim().slice(0, 48);
+  return {student: s, aliasKey: ak, custom, isCustom: !!custom, base, fl};
+ });
+ // Disambiguate duplicate non-custom names when First Name Only or Last Name Only collides
+ const baseCounts = {};
+ prelim.forEach(e => {
+  const chosen = e.isCustom ? e.custom : e.base;
+  const k = normStudentKey(chosen);
+  if(k) baseCounts[k] = (baseCounts[k] || 0) + 1;
+ });
+ const step1 = prelim.map(e => {
+  if(e.isCustom) return Object.assign({}, e, {display_name: e.custom});
+  const k = normStudentKey(e.base);
+  if((baseCounts[k] || 0) <= 1) return Object.assign({}, e, {display_name: e.base});
+  let disamb = e.base;
+  if(fmt === 'first' && e.fl.last && normStudentKey(e.fl.last) !== normStudentKey(e.fl.first)){
+   disamb = `${e.fl.first} ${e.fl.last[0]}.`;
+  } else if(fmt === 'last' && e.fl.first && normStudentKey(e.fl.last) !== normStudentKey(e.fl.first)){
+   disamb = `${e.fl.last}, ${e.fl.first[0]}.`;
+  }
+  return Object.assign({}, e, {display_name: disamb.slice(0, 48)});
+ });
+ // Second pass in case two students share both first name AND last initial (e.g. Ava Johnson & Ava Jones)
+ const step1Counts = {};
+ step1.forEach(e => {
+  const k = normStudentKey(e.display_name);
+  if(k) step1Counts[k] = (step1Counts[k] || 0) + 1;
+ });
+ return step1.map(e => {
+  if(e.isCustom) return e;
+  const k = normStudentKey(e.display_name);
+  if((step1Counts[k] || 0) <= 1) return e;
+  const full = fmt === 'last'
+   ? (e.student.sortable_name || sortableFromName(e.student.name))
+   : (e.student.name || firstLastFromSortable(e.student.sortable_name));
+  return Object.assign({}, e, {display_name: String(full || e.display_name).slice(0, 48)});
+ });
+}
+function enrichStudentsWithDisplayNames(students, fmtOverride){
+ return computeStudentDisplayEntries(students, fmtOverride).map(e =>
+  Object.assign({}, e.student, {display_name: e.display_name})
+ );
+}
+function saveStoredCanvasRoster(list, fmtOverride){
+ const enriched = enrichStudentsWithDisplayNames(list || [], fmtOverride);
+ try{ localStorage.setItem('brainrush_canvas_roster', JSON.stringify(enriched)); }catch(e){}
  syncCanvasRosterBadge();
+ return enriched;
 }
 function normStudentKey(s){
  return String(s || '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
@@ -6662,19 +6779,23 @@ function sortableFromName(s){
  if(parts.length >= 2) return `${parts[parts.length - 1]}, ${parts.slice(0, -1).join(' ')}`;
  return raw;
 }
+function studentMatchesRosterLine(st, lineSet){
+ const alias = getStudentAlias(st);
+ return (st.display_name && lineSet.has(normStudentKey(st.display_name))) ||
+  (alias && lineSet.has(normStudentKey(alias))) ||
+  lineSet.has(normStudentKey(st.name)) ||
+  lineSet.has(normStudentKey(st.sortable_name)) ||
+  lineSet.has(normStudentKey(firstLastFromSortable(st.sortable_name)));
+}
 function getActiveCanvasRoster(){
- const stored = loadStoredCanvasRoster();
+ const stored = enrichStudentsWithDisplayNames(loadStoredCanvasRoster());
  if(!stored.length) return [];
  const rosterEl = document.getElementById('qRoster');
  const lines = ((rosterEl ? rosterEl.value : (localStorage.getItem('brainrush_roster') || '')) || '')
   .split('\n').map(x => x.trim()).filter(Boolean);
  if(!lines.length) return stored;
  const lineSet = new Set(lines.map(normStudentKey));
- const matched = stored.filter(st =>
-  lineSet.has(normStudentKey(st.name)) ||
-  lineSet.has(normStudentKey(st.sortable_name)) ||
-  lineSet.has(normStudentKey(firstLastFromSortable(st.sortable_name)))
- );
+ const matched = stored.filter(st => studentMatchesRosterLine(st, lineSet));
  return matched.length ? matched : stored;
 }
 function syncCanvasRosterBadge(){
@@ -6685,12 +6806,38 @@ function syncCanvasRosterBadge(){
  const lines = ((rEl && rEl.value) || '').split('\n').map(x => x.trim()).filter(Boolean);
  if(!stored.length || !lines.length){ el.textContent = ''; return; }
  const lineSet = new Set(lines.map(normStudentKey));
- const nLinked = stored.filter(st =>
-  lineSet.has(normStudentKey(st.name)) ||
-  lineSet.has(normStudentKey(st.sortable_name)) ||
-  lineSet.has(normStudentKey(firstLastFromSortable(st.sortable_name)))
- ).length;
+ const nLinked = stored.filter(st => studentMatchesRosterLine(st, lineSet)).length;
  el.textContent = nLinked > 0 ? `🔗 ${nLinked} student${nLinked===1?'':'s'} linked with Canvas Gradebook IDs` : '';
+}
+function syncRosterBoxAliases(){
+ const stored = loadStoredCanvasRoster();
+ const rEl = document.getElementById('qRoster');
+ if(!rEl || stored.length < 2) return;
+ const lines = (rEl.value || '').split('\n').map(x => x.replace(/\s+/g, ' ').trim()).filter(Boolean);
+ if(lines.length !== stored.length) return;
+ const entries = computeStudentDisplayEntries(stored);
+ let exactPos = 0;
+ entries.forEach((e, idx) => {
+  const lk = normStudentKey(lines[idx]);
+  if(lk === normStudentKey(e.display_name) || lk === normStudentKey(e.base) || lk === normStudentKey(e.student.name)){
+   exactPos++;
+  }
+ });
+ if(exactPos < Math.ceil(stored.length * 0.5)) return;
+ const aliases = loadStudentAliases();
+ let changed = false;
+ entries.forEach((e, idx) => {
+  const edited = lines[idx].slice(0, 48);
+  if(edited && normStudentKey(edited) !== normStudentKey(e.display_name)){
+   if(normStudentKey(edited) === normStudentKey(e.base)) delete aliases[e.aliasKey];
+   else aliases[e.aliasKey] = edited;
+   changed = true;
+  }
+ });
+ if(changed){
+  saveStudentAliases(aliases);
+  saveStoredCanvasRoster(stored);
+ }
 }
 function updateCanvasBadges(){
  const cfg = loadCanvasCfg();
@@ -6755,7 +6902,15 @@ function matchPlayerToCanvas(playerName, students){
   const found = students.find(s => (s.id || s.name) === want);
   if(found) return found;
  }
- // 1. Exact full name / sortable_name / login_id match
+ // 1. Exact edited display_name / custom alias match (e.g. "Billy" -> "William Zhang")
+ for(const s of students){
+  const alias = getStudentAlias(s);
+  if((s.display_name && normStudentKey(s.display_name) === pKey) ||
+     (alias && normStudentKey(alias) === pKey)){
+   return s;
+  }
+ }
+ // 2. Exact full name / sortable_name / login_id match
  for(const s of students){
   if(normStudentKey(s.name) === pKey ||
      normStudentKey(s.sortable_name) === pKey ||
@@ -6764,24 +6919,24 @@ function matchPlayerToCanvas(playerName, students){
    return s;
   }
  }
- // 2. Unique "First L" or "First" match
+ // 3. Unique "First L", "Last F", "First", or "Last" match
  const pParts = pKey.split(' ').filter(Boolean);
  if(pParts.length >= 1){
   const pFirst = pParts[0];
   const pLastInit = pParts.length >= 2 ? pParts[pParts.length - 1][0] : '';
   if(pLastInit){
    const mInit = students.filter(s => {
-    const fl = normStudentKey(firstLastFromSortable(s.sortable_name || s.name)).split(' ').filter(Boolean);
-    return fl.length >= 2 && fl[0] === pFirst && fl[fl.length - 1][0] === pLastInit;
+    const fl = extractFirstAndLast(s);
+    const fn = normStudentKey(fl.first), ln = normStudentKey(fl.last);
+    return (fn === pFirst && ln && ln[0] === pLastInit) || (ln === pFirst && fn && fn[0] === pLastInit);
    });
    if(mInit.length === 1) return mInit[0];
   }
   if(pParts.length === 1){
-   const mFirst = students.filter(s => {
-    const fl = normStudentKey(firstLastFromSortable(s.sortable_name || s.name)).split(' ').filter(Boolean);
-    return fl.length >= 1 && fl[0] === pFirst;
-   });
+   const mFirst = students.filter(s => normStudentKey(extractFirstAndLast(s).first) === pFirst);
    if(mFirst.length === 1) return mFirst[0];
+   const mLast = students.filter(s => normStudentKey(extractFirstAndLast(s).last) === pFirst);
+   if(mLast.length === 1) return mLast[0];
   }
  }
  return null;
@@ -6824,9 +6979,9 @@ async function openCanvasModal(mode='hub'){
  const body = document.getElementById('canvasModalBody');
  if(!m || !body) return;
  m.classList.add('open');
- body.innerHTML = '<div style="padding:16px;text-align:center;opacity:.85">Loading Canvas sync…</div>';
+ body.innerHTML = '<div style="padding:16px;text-align:center;opacity:.85">Loading Canvas…</div>';
 
- if(mode === 'game' || (mode === 'hub' && typeof pin !== 'undefined' && pin && typeof host !== 'undefined' && host)){
+ if(mode === 'game' || ((mode === 'hub' || mode === 'edit_names') && typeof pin !== 'undefined' && pin && typeof host !== 'undefined' && host)){
   try{
    const r = await fetch(`/api/canvas/session_summary?pin=${encodeURIComponent(pin)}&host=${encodeURIComponent(host)}`);
    if(r.ok) cvSessionData = await r.json();
@@ -6836,6 +6991,10 @@ async function openCanvasModal(mode='hub'){
  const cfg = loadCanvasCfg();
  if(cfg.baseUrl && cfg.token && !cvCourses.length){
   await connectCanvasApi(true);
+ }
+ if(mode === 'edit_names'){
+  const ed = document.getElementById('cvStuEdDetails');
+  if(ed){ ed.open = true; ed.scrollIntoView({behavior: 'smooth', block: 'nearest'}); }
  }
 }
 
@@ -6905,10 +7064,12 @@ function renderCanvasModal(){
      </div>
     </div>
     <div>
-     <label class="cv-lbl">Roster Name Format in Brainrush</label>
-     <select id="cvNameFmt" class="cv-sel">
+     <label class="cv-lbl">Student Name Format in Brainrush</label>
+     <select id="cvNameFmt" class="cv-sel" onchange="onCanvasNameFmtChange(this.value)">
       <option value="first_last">First Last (e.g. Ava Johnson)</option>
       <option value="sortable">Last, First (e.g. Johnson, Ava)</option>
+      <option value="first">First Name Only (e.g. Ava)</option>
+      <option value="last">Last Name Only (e.g. Johnson)</option>
      </select>
     </div>
    </div>
@@ -6916,7 +7077,8 @@ function renderCanvasModal(){
     <button type="button" class="btn-sm" style="margin:0;background:#26890c;border-color:#7dff6b" onclick="pullCanvasRosterToSetup()">📥 Load Course Roster into Brainrush</button>
     <label class="btn-sm" style="margin:0;cursor:pointer;background:#ffffff1c">📂 Or Upload Canvas Gradebook CSV<input type="file" accept=".csv" style="display:none" onchange="onRosterCsvUpload(event, true)"></label>
    </div>
-   <div style="font-size:.79em;opacity:.8;margin-top:6px">Loading a roster pre-links each student's Canvas ID so students pick their real name from a dropdown when joining — or upload an exported Canvas Gradebook CSV with zero API token needed.</div>
+   <div id="cvStudentEditorBox"></div>
+   <div style="font-size:.79em;opacity:.8;margin-top:6px">Students select their name from this list when joining — edit any student's preferred name above and Brainrush keeps their Canvas Gradebook ID linked automatically.</div>
   </div>
 
   ${showGradeSec ? `
@@ -6967,7 +7129,10 @@ function renderCanvasModal(){
   </div>` : ''}
  `;
 
+ const fmtSel = document.getElementById('cvNameFmt');
+ if(fmtSel) fmtSel.value = cfg.nameFmt || 'first_last';
  populateCanvasCoursesDom();
+ renderStudentNameEditor();
  populateCanvasAssignmentsDom();
  const ruleEl = document.getElementById('cvRule');
  if(ruleEl && sess){
@@ -7192,6 +7357,7 @@ async function loadCanvasCourseDetails(courseId, silent=false){
   populateCanvasAssignmentsDom();
  }
  populateCanvasCoursesDom();
+ renderStudentNameEditor();
  refreshCanvasPreview();
  if(!silent){
   if(rRos && rRos.error) setCvStatus(esc(rRos.error), true);
@@ -7199,9 +7365,152 @@ async function loadCanvasCourseDetails(courseId, silent=false){
  }
 }
 
+function syncRosterBoxIfActive(students){
+ const rChk = document.getElementById('qRosterOn');
+ const rEl = document.getElementById('qRoster');
+ if(!rChk || !rChk.checked || !rEl) return;
+ const entries = computeStudentDisplayEntries(students || loadStoredCanvasRoster());
+ if(!entries.length) return;
+ const names = entries.map(e => e.display_name).filter(Boolean);
+ rEl.value = names.join('\n');
+ try{ localStorage.setItem('brainrush_roster', names.join('\n')); }catch(e){}
+ if(typeof saveSetup === 'function') saveSetup();
+ syncCanvasRosterBadge();
+}
+
+function onCanvasNameFmtChange(fmt){
+ saveCanvasCfg({nameFmt: fmt || 'first_last'});
+ const stored = loadStoredCanvasRoster();
+ if(stored.length){
+  const enriched = saveStoredCanvasRoster(stored, fmt);
+  syncRosterBoxIfActive(enriched);
+ }
+ renderStudentNameEditor();
+ refreshCanvasPreview();
+}
+
+function onStudentEditorFilter(val){
+ cvStudentQuery = String(val || '');
+ renderStudentNameEditorListOnly();
+}
+
+function onEditStudentDisplayName(aliasKey, rawVal){
+ if(!aliasKey) return;
+ const val = String(rawVal || '').replace(/\s+/g, ' ').trim().slice(0, 48);
+ const aliases = loadStudentAliases();
+ const stored = loadStoredCanvasRoster();
+ const entry = computeStudentDisplayEntries(stored).find(e => e.aliasKey === aliasKey);
+ if(!val || (entry && val === entry.base)){
+  delete aliases[aliasKey];
+ } else {
+  aliases[aliasKey] = val;
+ }
+ saveStudentAliases(aliases);
+ const enriched = saveStoredCanvasRoster(stored);
+ syncRosterBoxIfActive(enriched);
+ renderStudentNameEditorListOnly();
+ updateStudentEditorHeaderCount();
+ refreshCanvasPreview();
+}
+
+function resetStudentDisplayName(aliasKey){
+ if(!aliasKey) return;
+ const aliases = loadStudentAliases();
+ delete aliases[aliasKey];
+ saveStudentAliases(aliases);
+ const enriched = saveStoredCanvasRoster(loadStoredCanvasRoster());
+ syncRosterBoxIfActive(enriched);
+ renderStudentNameEditorListOnly();
+ updateStudentEditorHeaderCount();
+ refreshCanvasPreview();
+}
+
+function resetAllStudentDisplayNames(){
+ const stored = loadStoredCanvasRoster();
+ const aliases = loadStudentAliases();
+ stored.forEach(s => { delete aliases[studentAliasKey(s)]; });
+ saveStudentAliases(aliases);
+ const enriched = saveStoredCanvasRoster(stored);
+ syncRosterBoxIfActive(enriched);
+ renderStudentNameEditor();
+ refreshCanvasPreview();
+ setCvStatus('Reset custom nicknames for this roster back to the selected Name Format.', false);
+}
+
+function updateStudentEditorHeaderCount(){
+ const badge = document.getElementById('cvStuEdCntBadge');
+ const rstAll = document.getElementById('cvStuRstAllBtn');
+ const entries = computeStudentDisplayEntries(loadStoredCanvasRoster());
+ const nCustom = entries.filter(e => e.isCustom).length;
+ if(badge){
+  badge.textContent = nCustom > 0 ? `✎ ${nCustom} custom name${nCustom===1?'':'s'}` : 'Click any name to customize';
+ }
+ if(rstAll){
+  rstAll.style.display = nCustom > 0 ? 'inline-block' : 'none';
+ }
+}
+
+function renderStudentNameEditorListOnly(){
+ const listEl = document.getElementById('cvStuEdList');
+ if(!listEl) return;
+ const stored = loadStoredCanvasRoster();
+ const entries = computeStudentDisplayEntries(stored);
+ const q = String(cvStudentQuery || '').toLowerCase().trim();
+ const filtered = q ? entries.filter(e => {
+  const hay = `${e.student.name || ''} ${e.student.sortable_name || ''} ${e.display_name || ''}`.toLowerCase();
+  return hay.includes(q);
+ }) : entries;
+ if(!filtered.length){
+  listEl.innerHTML = `<div style="padding:10px;font-size:.82em;opacity:.78;text-align:center">No students match "${esc(cvStudentQuery)}".</div>`;
+  return;
+ }
+ listEl.innerHTML = filtered.map(e => {
+  const s = e.student;
+  const sub = (s.sortable_name && s.sortable_name !== s.name) ? s.sortable_name : (s.sis_login_id || '');
+  return `<div class="cv-stu-row">` +
+   `<div class="cv-stu-orig" title="${esc(s.name)}">${esc(s.name)}${sub ? `<small>${esc(sub)}</small>` : ''}</div>` +
+   `<div class="cv-stu-edit-cell">` +
+    `<input type="text" class="cv-stu-in${e.isCustom ? ' custom' : ''}" maxlength="48" value="${esc(e.display_name)}" data-akey="${esc(e.aliasKey)}" onchange="onEditStudentDisplayName(this.dataset.akey, this.value)" onkeydown="if(event.key==='Enter'){event.preventDefault();this.blur()}" title="Name shown to student when joining in Brainrush">` +
+    (e.isCustom ? `<button type="button" class="cv-stu-rst" data-akey="${esc(e.aliasKey)}" onclick="resetStudentDisplayName(this.dataset.akey)" title="Reset to default format (${esc(e.base)})">↺</button>` : '') +
+   `</div>` +
+  `</div>`;
+ }).join('');
+}
+
+function renderStudentNameEditor(){
+ const wrap = document.getElementById('cvStudentEditorBox');
+ if(!wrap) return;
+ const stored = loadStoredCanvasRoster();
+ if(!stored.length){
+  wrap.innerHTML = '';
+  return;
+ }
+ const prevDetails = document.getElementById('cvStuEdDetails');
+ const shouldOpen = prevDetails ? prevDetails.open : (cvModalMode === 'edit_names');
+ const entries = computeStudentDisplayEntries(stored);
+ const nCustom = entries.filter(e => e.isCustom).length;
+ wrap.innerHTML = `
+  <details class="cv-stu-ed" id="cvStuEdDetails" ${shouldOpen ? 'open' : ''}>
+   <summary>
+    <span>✏️ Edit Student Names Shown in Brainrush (${stored.length})</span>
+    <span id="cvStuEdCntBadge" style="font-size:.86em;color:${nCustom > 0 ? '#7cf5a8' : '#ffffffbf'};font-weight:750">${nCustom > 0 ? `✎ ${nCustom} custom name${nCustom===1?'':'s'}` : 'Click to customize preferred names ▾'}</span>
+   </summary>
+   <div style="margin-top:8px">
+    <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+     <input type="text" class="cv-in" style="flex:1;min-width:180px;padding:6px 10px;font-size:.85em" placeholder="🔍 Filter student to edit preferred name…" value="${esc(cvStudentQuery)}" oninput="onStudentEditorFilter(this.value)">
+     <button type="button" id="cvStuRstAllBtn" class="btn-sm" style="margin:0;padding:6px 10px;font-size:.76em;background:#ffffff1c;display:${nCustom > 0 ? 'inline-block' : 'none'}" onclick="resetAllStudentDisplayNames()">↺ Reset Custom Names</button>
+    </div>
+    <div id="cvStuEdList" class="cv-stu-list"></div>
+   </div>
+  </details>`;
+ renderStudentNameEditorListOnly();
+}
+
 function applyStudentsToRosterBox(students){
- const fmt = (document.getElementById('cvNameFmt') || {}).value || 'first_last';
- const names = students.map(s => fmt === 'sortable' ? (s.sortable_name || sortableFromName(s.name)) : (s.name || firstLastFromSortable(s.sortable_name)));
+ const fmt = getCurrentNameFmt();
+ saveCanvasCfg({nameFmt: fmt});
+ const enriched = saveStoredCanvasRoster(students, fmt);
+ const names = enriched.map(s => s.display_name || s.name).filter(Boolean);
  const rEl = document.getElementById('qRoster');
  const rChk = document.getElementById('qRosterOn');
  const rRow = document.getElementById('rosterRow');
@@ -7209,7 +7518,7 @@ function applyStudentsToRosterBox(students){
  if(rChk) rChk.checked = true;
  if(rRow) rRow.style.display = 'block';
  try{ localStorage.setItem('brainrush_roster', names.join('\n')); }catch(e){}
- saveStoredCanvasRoster(students);
+ renderStudentNameEditor();
  if(typeof saveSetup === 'function') saveSetup();
  if(typeof updateOptSummary === 'function') updateOptSummary();
 }
@@ -7493,7 +7802,7 @@ function downloadCanvasGradebookCsv(){
 (function(){
  const teachSec = (typeof GUIDE !== 'undefined') && GUIDE.find(g => g.id === 'teach');
  if(teachSec){
-  teachSec.items.unshift(['🎓 Canvas LMS Sync', 'Connect your Canvas URL + Personal Access Token (or import a Canvas Gradebook CSV) to pull your enrolled student roster in 1 click, then push Quiz, Case Study, or Homework grades straight into Canvas Assignments & SpeedGrader — or download a Canvas-formatted Gradebook CSV.']);
+  teachSec.items.unshift(['🎓 Canvas', 'Connect your Canvas URL + Personal Access Token (or import a Canvas Gradebook CSV) to pull your enrolled student roster in 1 click, customize student display names or choose First/Last name formats, and push Quiz, Case Study, or Homework grades straight into Canvas Assignments & SpeedGrader.']);
  }
  updateCanvasBadges();
 })();
