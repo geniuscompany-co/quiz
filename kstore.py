@@ -1,6 +1,6 @@
 """Storage, accounts, quiz library, progress, homework and AI helpers for Brainrush!
 Standard library only. Uses local files, plus an optional Upstash Redis REST database for durable storage."""
-import base64, hashlib, hmac, json, os, queue, random, re, secrets, threading, time, zlib
+import base64, csv, hashlib, hmac, io, ipaddress, json, os, queue, random, re, secrets, socket, threading, time, zlib
 import urllib.error, urllib.parse, urllib.request
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
@@ -422,10 +422,12 @@ def progress_report(owner):
 
 
 # ---------------------------------------------------------------- Homework
-def hw_create(owner, title, questions, deadline, roster):
+def hw_create(owner, title, questions, deadline, roster, canvas_roster=None):
     hid = "".join(random.choice("abcdefghjkmnpqrstuvwxyz23456789") for _ in range(6))
     doc = {"id": hid, "owner": owner, "title": (title or "Homework")[:60], "created": int(time.time()),
-           "deadline": int(deadline or 0), "roster": roster or [], "questions": questions, "subs": {}}
+           "deadline": int(deadline or 0), "roster": roster or [],
+           "canvas_roster": clean_canvas_roster(canvas_roster) if canvas_roster else [],
+           "questions": questions, "subs": {}}
     store.set_json("hw:" + hid, doc)
     with _lock:
         lst = store.get_json("hwlist:" + owner, [])
@@ -465,7 +467,7 @@ def hw_perm(doc, name, i, n):
 
 
 def hw_start(doc, name):
-    name = re.sub(r"\s+", " ", str(name or "")).strip()[:24]
+    name = re.sub(r"\s+", " ", str(name or "")).strip()[:48]
     if not name:
         return None, "Enter your name"
     if doc.get("roster"):
@@ -688,8 +690,10 @@ def hw_results(doc):
     rows = []
     n = len(doc["questions"])
     for s in doc["subs"].values():
+        missed_nums = [qi + 1 for qi, a in enumerate(s.get("answers", [])) if not a.get("ok")]
         rows.append({"name": s["name"], "done": bool(s.get("done")), "answered": len(s["answers"]), "correct": s["correct"],
-                     "pct": round(100.0 * s["correct"] / n) if n else 0, "score": s["score"], "finished": s.get("finished", 0)})
+                     "pct": round(100.0 * s["correct"] / n) if n else 0, "score": s["score"], "finished": s.get("finished", 0),
+                     "missed_nums": missed_nums})
     rows.sort(key=lambda r: (-int(r["done"]), -r["pct"], r["name"].lower()))
     missing = [r for r in doc.get("roster", []) if r.lower() not in doc["subs"]]
     qmiss = []
@@ -699,7 +703,9 @@ def hw_results(doc):
         if tot:
             qmiss.append({"q": q["q"], "pct": round(100.0 * (tot - bad) / tot), "n": tot})
     qmiss.sort(key=lambda r: r["pct"])
-    return {"title": doc["title"], "deadline": doc["deadline"], "questions": n, "rows": rows, "missing": missing, "hardest": qmiss[:5]}
+    return {"id": doc["id"], "title": doc["title"], "deadline": doc["deadline"], "questions": n,
+            "rows": rows, "missing": missing, "hardest": qmiss[:5],
+            "canvas_roster": doc.get("canvas_roster") or []}
 
 
 # ---------------------------------------------------------------- Import / AI
@@ -872,3 +878,454 @@ def ai_generate(text, topic, count, mode="quiz"):
     if not qs:
         return None, "Could not find enough usable sentences. Paste a longer passage."
     return qs, "Offline draft (fill-in-the-blank from your text). Add a GEMINI_API_KEY on the server for full AI questions."
+
+
+# ---------------------------------------------------------------- Canvas LMS Integration
+def _first_last_from_sortable(sortable):
+    s = re.sub(r"\s+", " ", str(sortable or "")).strip()
+    if "," in s:
+        last, _, first = s.partition(",")
+        full = ("%s %s" % (first.strip(), last.strip())).strip()
+        if full:
+            return full
+    return s
+
+
+def _sortable_from_name(name):
+    s = re.sub(r"\s+", " ", str(name or "")).strip()
+    if "," in s:
+        return s
+    parts = s.split(" ")
+    if len(parts) >= 2:
+        return "%s, %s" % (parts[-1], " ".join(parts[:-1]))
+    return s
+
+
+def clean_canvas_roster(items):
+    out = []
+    seen = set()
+    for it in (items or [])[:400]:
+        if not isinstance(it, dict):
+            continue
+        cid = str(it.get("id") or "").strip()[:32]
+        nm = re.sub(r"\s+", " ", str(it.get("name") or "")).strip()[:48]
+        sn = re.sub(r"\s+", " ", str(it.get("sortable_name") or "")).strip()[:60]
+        if not nm and sn:
+            nm = _first_last_from_sortable(sn)[:48]
+        if not sn and nm:
+            sn = _sortable_from_name(nm)[:60]
+        if not nm:
+            continue
+        key = (cid or nm.lower())
+        if key in seen:
+            continue
+        seen.add(key)
+        out.append({
+            "id": cid,
+            "name": nm,
+            "sortable_name": sn,
+            "sis_user_id": str(it.get("sis_user_id") or "").strip()[:48],
+            "sis_login_id": str(it.get("sis_login_id") or "").strip()[:64],
+            "section": str(it.get("section") or "").strip()[:80],
+        })
+    return out
+
+
+def parse_canvas_gradebook_csv(csv_text):
+    raw = str(csv_text or "").lstrip("\ufeff").strip()
+    if not raw:
+        return None, "CSV file is empty."
+    reader = list(csv.reader(io.StringIO(raw)))
+    if len(reader) < 2:
+        return None, "CSV needs a header row and at least one student row."
+    hdr = [str(h or "").strip() for h in reader[0]]
+    hdr_low = [h.lower() for h in hdr]
+
+    def col_idx(*names):
+        for n in names:
+            if n in hdr_low:
+                return hdr_low.index(n)
+        return -1
+
+    i_stu = col_idx("student", "name", "student name", "full name")
+    i_id = col_idx("id", "canvas user id", "user id")
+    i_sis_u = col_idx("sis user id")
+    i_sis_l = col_idx("sis login id", "login id")
+    i_sec = col_idx("section", "section name")
+    if i_stu < 0:
+        return None, "Could not find a 'Student' column in this CSV. Export the Gradebook CSV directly from Canvas (Grades -> Export)."
+
+    students = []
+    for row in reader[1:]:
+        if i_stu >= len(row):
+            continue
+        stu_raw = re.sub(r"\s+", " ", str(row[i_stu] or "")).strip()
+        if not stu_raw:
+            continue
+        low = stu_raw.lower()
+        if low in ("points possible", "manual posting") or low.startswith("points possible"):
+            continue
+        if low in ("student, test", "test student"):
+            continue
+        cid = str(row[i_id] if 0 <= i_id < len(row) else "").strip()
+        if cid.endswith(".0") and cid[:-2].isdigit():
+            cid = cid[:-2]
+        sis_u = str(row[i_sis_u] if 0 <= i_sis_u < len(row) else "").strip()
+        sis_l = str(row[i_sis_l] if 0 <= i_sis_l < len(row) else "").strip()
+        sec = str(row[i_sec] if 0 <= i_sec < len(row) else "").strip()
+        disp = _first_last_from_sortable(stu_raw)[:48]
+        sort_nm = stu_raw[:60] if "," in stu_raw else _sortable_from_name(stu_raw)[:60]
+        students.append({
+            "id": cid,
+            "name": disp,
+            "sortable_name": sort_nm,
+            "sis_user_id": sis_u,
+            "sis_login_id": sis_l,
+            "section": sec,
+        })
+    cleaned = clean_canvas_roster(students)
+    if not cleaned:
+        return None, "No student rows found in CSV."
+    return cleaned, None
+
+
+def normalize_canvas_url(raw_url):
+    u = str(raw_url or "").strip()
+    if not u:
+        return None, "Enter your school's Canvas URL (e.g. https://yourschool.instructure.com)."
+    if not re.match(r"^https?://", u, re.I):
+        u = "https://" + u
+    p = urllib.parse.urlparse(u)
+    scheme = (p.scheme or "").lower()
+    host = (p.hostname or "").lower().strip()
+    port = p.port
+    if not host:
+        return None, "Invalid Canvas URL."
+    allow_local = (os.environ.get("BRAINRUSH_ALLOW_LOCAL_CANVAS") == "1")
+    if scheme != "https" and not (allow_local and scheme == "http" and host in ("127.0.0.1", "localhost")):
+        return None, "Canvas URL must use https://."
+    if not allow_local:
+        if host in ("localhost", "0.0.0.0") or host.endswith(".local") or host.endswith(".internal"):
+            return None, "Canvas URL must be a public Canvas domain."
+        try:
+            infos = socket.getaddrinfo(host, port or 443, proto=socket.IPPROTO_TCP)
+            for info in infos:
+                ip = ipaddress.ip_address(info[4][0])
+                if ip.is_private or ip.is_loopback or ip.is_link_local or ip.is_multicast or ip.is_reserved:
+                    return None, "Canvas URL cannot point to a private or internal network address."
+        except socket.gaierror:
+            return None, "Could not resolve Canvas domain '%s' — check the spelling." % host
+        except Exception:
+            pass
+    netloc = "%s:%d" % (host, port) if port else host
+    return "%s://%s" % (scheme, netloc), None
+
+
+def _canvas_next_link(link_hdr):
+    if not link_hdr:
+        return None
+    for part in str(link_hdr).split(","):
+        m = re.search(r'<([^>]+)>\s*;\s*rel="next"', part)
+        if m:
+            return m.group(1)
+    return None
+
+
+def _canvas_err_msg(code, raw_bytes):
+    detail = ""
+    try:
+        j = json.loads((raw_bytes or b"").decode("utf-8", "replace"))
+        if isinstance(j, dict):
+            errs = j.get("errors")
+            if isinstance(errs, list) and errs:
+                e0 = errs[0]
+                detail = e0.get("message") if isinstance(e0, dict) else str(e0)
+            elif isinstance(errs, dict):
+                detail = "; ".join("%s: %s" % (k, v) for k, v in errs.items())
+            elif j.get("message"):
+                detail = str(j["message"])
+    except Exception:
+        pass
+    if code == 401:
+        return "Canvas rejected the Access Token (401). Check that the token is copied completely and hasn't expired."
+    if code == 403:
+        return "Canvas denied permission (403)%s. Make sure your account has Teacher/TA access in this course." % ((" — " + detail) if detail else "")
+    if code == 404:
+        return "Canvas resource not found (404)%s. Check your Canvas URL and selected course." % ((" — " + detail) if detail else "")
+    return "Canvas API error (%s)%s" % (code, (": " + detail) if detail else "")
+
+
+def canvas_api(base_url, token, method="GET", path="/api/v1/users/self", payload=None, paginate=False):
+    clean_base, err = normalize_canvas_url(base_url)
+    if err:
+        return None, err
+    tok = str(token or "").strip()
+    if not tok or len(tok) < 8:
+        return None, "Enter your Canvas Personal Access Token."
+    url = path if path.startswith("http://") or path.startswith("https://") else (clean_base + path)
+    headers = {
+        "Authorization": "Bearer " + tok,
+        "Accept": "application/json",
+        "User-Agent": "Brainrush-CanvasSync/1.0",
+    }
+    data_bytes = None
+    if payload is not None:
+        data_bytes = json.dumps(payload).encode("utf-8")
+        headers["Content-Type"] = "application/json"
+
+    acc = []
+    pages = 0
+    cur_url = url
+    while cur_url and pages < 15:
+        pages += 1
+        req = urllib.request.Request(cur_url, data=data_bytes if pages == 1 else None, headers=headers, method=method)
+        try:
+            with urllib.request.urlopen(req, timeout=18) as resp:
+                raw = resp.read()
+                link_hdr = resp.headers.get("Link", "")
+                parsed = json.loads(raw.decode("utf-8", "replace")) if raw else {}
+        except urllib.error.HTTPError as e:
+            return None, _canvas_err_msg(e.code, e.read())
+        except Exception as e:
+            return None, "Could not reach Canvas (%s)." % e
+        if not paginate or not isinstance(parsed, list):
+            return parsed, None
+        acc.extend(parsed)
+        next_u = _canvas_next_link(link_hdr)
+        if next_u and next_u.startswith(clean_base):
+            cur_url = next_u
+        else:
+            break
+    return acc, None
+
+
+def canvas_list_courses(base_url, token):
+    clean_base, err = normalize_canvas_url(base_url)
+    if err:
+        return None, err
+    me, err = canvas_api(clean_base, token, "GET", "/api/v1/users/self")
+    if err:
+        return None, err
+    courses, err = canvas_api(
+        clean_base, token, "GET",
+        "/api/v1/courses?enrollment_state=active&state[]=available&state[]=unpublished&include[]=total_students&include[]=term&per_page=100",
+        paginate=True,
+    )
+    if err:
+        return None, err
+    instructor_roles = {"teacher", "ta", "designer", "teacherenrollment", "taenrollment", "designerenrollment"}
+    out = []
+    seen = set()
+    for c in (courses or []):
+        if not isinstance(c, dict) or not c.get("id") or c.get("access_restricted_by_date"):
+            continue
+        enrolls = c.get("enrollments") or []
+        if enrolls:
+            has_role = any(
+                str(e.get("type") or "").lower() in instructor_roles or str(e.get("role") or "").lower() in instructor_roles
+                for e in enrolls if isinstance(e, dict)
+            )
+            if not has_role:
+                continue
+        cid = str(c["id"])
+        if cid in seen:
+            continue
+        seen.add(cid)
+        term_nm = (c.get("term") or {}).get("name") if isinstance(c.get("term"), dict) else ""
+        out.append({
+            "id": cid,
+            "name": str(c.get("name") or c.get("course_code") or ("Course " + cid)).strip(),
+            "code": str(c.get("course_code") or "").strip(),
+            "term": str(term_nm or "").strip(),
+            "students": c.get("total_students"),
+            "workflow_state": c.get("workflow_state") or "",
+        })
+    if not out:
+        fallback, ferr = canvas_api(clean_base, token, "GET", "/api/v1/courses?enrollment_type=teacher&per_page=100", paginate=True)
+        if not ferr and isinstance(fallback, list):
+            for c in fallback:
+                if isinstance(c, dict) and c.get("id") and str(c["id"]) not in seen:
+                    cid = str(c["id"])
+                    seen.add(cid)
+                    out.append({
+                        "id": cid,
+                        "name": str(c.get("name") or c.get("course_code") or ("Course " + cid)).strip(),
+                        "code": str(c.get("course_code") or "").strip(),
+                        "term": "",
+                        "students": c.get("total_students"),
+                        "workflow_state": c.get("workflow_state") or "",
+                    })
+    return {
+        "ok": True,
+        "base_url": clean_base,
+        "user": str((me or {}).get("name") or "Instructor"),
+        "courses": out,
+    }, None
+
+
+def canvas_get_roster(base_url, token, course_id):
+    cid = re.sub(r"[^0-9]", "", str(course_id or ""))
+    if not cid:
+        return None, "Select a Canvas course first."
+    users, err = canvas_api(
+        base_url, token, "GET",
+        "/api/v1/courses/%s/users?enrollment_type[]=student&enrollment_state[]=active&include[]=enrollments&per_page=100" % cid,
+        paginate=True,
+    )
+    if err:
+        return None, err
+    raw_list = []
+    for u in (users or []):
+        if not isinstance(u, dict) or not u.get("id"):
+            continue
+        nm = str(u.get("name") or "").strip()
+        sn = str(u.get("sortable_name") or "").strip()
+        if nm.lower() == "test student" or sn.lower() == "student, test":
+            continue
+        sec = ""
+        for e in (u.get("enrollments") or []):
+            if isinstance(e, dict) and e.get("course_section_id"):
+                sec = str(e.get("sis_section_id") or e.get("course_section_id") or "")
+                break
+        raw_list.append({
+            "id": str(u["id"]),
+            "name": nm or _first_last_from_sortable(sn),
+            "sortable_name": sn or _sortable_from_name(nm),
+            "sis_user_id": str(u.get("sis_user_id") or ""),
+            "sis_login_id": str(u.get("login_id") or ""),
+            "section": sec,
+        })
+    cleaned = clean_canvas_roster(raw_list)
+    cleaned.sort(key=lambda x: (x.get("sortable_name") or x["name"]).lower())
+    return {"ok": True, "course_id": cid, "students": cleaned}, None
+
+
+def canvas_list_assignments(base_url, token, course_id):
+    cid = re.sub(r"[^0-9]", "", str(course_id or ""))
+    if not cid:
+        return None, "Select a Canvas course first."
+    assns, err = canvas_api(
+        base_url, token, "GET",
+        "/api/v1/courses/%s/assignments?per_page=100" % cid,
+        paginate=True,
+    )
+    if err:
+        return None, err
+    out = []
+    for a in (assns or []):
+        if not isinstance(a, dict) or not a.get("id"):
+            continue
+        out.append({
+            "id": str(a["id"]),
+            "name": str(a.get("name") or ("Assignment %s" % a["id"])).strip(),
+            "points_possible": a.get("points_possible"),
+            "published": bool(a.get("published")),
+            "html_url": str(a.get("html_url") or ""),
+        })
+    return {"ok": True, "course_id": cid, "assignments": out}, None
+
+
+def canvas_push_grades(base_url, token, course_id, mode, assignment_id, assignment_name, points_possible, publish, grades):
+    clean_base, err = normalize_canvas_url(base_url)
+    if err:
+        return None, err
+    cid = re.sub(r"[^0-9]", "", str(course_id or ""))
+    if not cid:
+        return None, "Select a Canvas course first."
+    if not isinstance(grades, list) or not grades:
+        return None, "No matched student grades to send. Load your Canvas course roster or link student names first."
+    try:
+        pts = round(max(0.0, min(10000.0, float(points_possible))), 2)
+    except Exception:
+        pts = 10.0
+
+    grade_data = {}
+    for g in grades[:500]:
+        if not isinstance(g, dict):
+            continue
+        uid = re.sub(r"[^0-9]", "", str(g.get("user_id") or ""))
+        if not uid:
+            continue
+        try:
+            sc = round(float(g.get("score", 0)), 2)
+        except Exception:
+            continue
+        entry = {"posted_grade": ("%g" % sc) if sc == int(sc) else ("%.2f" % sc).rstrip("0").rstrip(".")}
+        cmt = str(g.get("comment") or "").strip()[:500]
+        if cmt:
+            entry["text_comment"] = cmt
+        grade_data[uid] = entry
+
+    if not grade_data:
+        return None, "None of the selected rows have a Canvas numeric User ID."
+
+    html_url = ""
+    if str(mode or "new") == "existing":
+        aid = re.sub(r"[^0-9]", "", str(assignment_id or ""))
+        if not aid:
+            return None, "Select an existing Canvas assignment first."
+        aname = str(assignment_name or ("Assignment " + aid)).strip()
+        html_url = "%s/courses/%s/gradebook" % (clean_base, cid)
+    else:
+        aname = str(assignment_name or "Brainrush Session").strip()[:120] or "Brainrush Session"
+        created, cerr = canvas_api(
+            clean_base, token, "POST",
+            "/api/v1/courses/%s/assignments" % cid,
+            payload={
+                "assignment": {
+                    "name": aname,
+                    "points_possible": pts,
+                    "grading_type": "points",
+                    "submission_types": ["none"],
+                    "published": bool(publish),
+                }
+            },
+        )
+        if cerr:
+            return None, cerr
+        aid = str((created or {}).get("id") or "")
+        if not aid:
+            return None, "Canvas did not return a new assignment ID."
+        html_url = str((created or {}).get("html_url") or ("%s/courses/%s/assignments/%s" % (clean_base, cid, aid)))
+
+    _, berr = canvas_api(
+        clean_base, token, "POST",
+        "/api/v1/courses/%s/assignments/%s/submissions/update_grades" % (cid, aid),
+        payload={"grade_data": grade_data},
+    )
+    if berr:
+        # Fallback to individual submission PUTs if bulk endpoint is restricted
+        pushed = 0
+        last_err = berr
+        for uid, entry in grade_data.items():
+            sub_payload = {"submission": {"posted_grade": entry["posted_grade"]}}
+            if entry.get("text_comment"):
+                sub_payload["comment"] = {"text_comment": entry["text_comment"]}
+            _, perr = canvas_api(
+                clean_base, token, "PUT",
+                "/api/v1/courses/%s/assignments/%s/submissions/%s" % (cid, aid, uid),
+                payload=sub_payload,
+            )
+            if perr:
+                last_err = perr
+            else:
+                pushed += 1
+        if pushed == 0:
+            return None, last_err
+        return {
+            "ok": True,
+            "assignment_id": aid,
+            "assignment_name": aname,
+            "points_possible": pts,
+            "pushed": pushed,
+            "html_url": html_url,
+        }, None
+
+    return {
+        "ok": True,
+        "assignment_id": aid,
+        "assignment_name": aname,
+        "points_possible": pts,
+        "pushed": len(grade_data),
+        "html_url": html_url,
+    }, None

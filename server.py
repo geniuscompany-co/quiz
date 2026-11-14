@@ -830,7 +830,7 @@ def new_game(quiz_file="quiz.json", count=None, shuffle=False, custom_questions=
         "words": [],
         "wheel": True, "wheel_mods": {}, "robin_stolen": {},
         "hotseat": True, "team_battle": True, "tiebreak": True,
-        "roster": [], "banned": [], "logo": "", "bank": bank, "quiz_file": quiz_file,
+        "roster": [], "canvas_roster": [], "banned": [], "logo": "", "bank": bank, "quiz_file": quiz_file,
         "created": time.time(), "shuf": {}, "match_shuf": {}, "hot": {}, "team_results": {}, "team_prompts": {},
         "owner": owner, "n_base": len(quiz), "speed": False, "dbl": False, "steal": False, "moderate": False,
         "pending": {}, "modlog": [],
@@ -2449,6 +2449,45 @@ def export_csv(g):
     return buf.getvalue().encode("utf-8")
 
 
+def canvas_session_summary(g):
+    g_qis = gradable_qis(g)
+    n_grad = len(g_qis)
+    act_qis = [qi for qi, q in enumerate(g["quiz"]) if qtype_of(q) != "info" and not q.get("tiebreak")]
+    n_act = len(act_qis)
+    humans = [p for p in g["players"].values() if not p.get("bot")]
+    max_sc = max([p.get("score", 0) for p in humans] or [0])
+    players = []
+    for p in sorted(humans, key=lambda x: (-x.get("score", 0), x["name"].lower())):
+        ans_map = p.get("answers") or {}
+        answered = sum(1 for qi in act_qis if ans_map.get(qi) and not ans_map[qi].get("blank"))
+        cor = sum(1 for qi in g_qis if (ans_map.get(qi) or {}).get("correct"))
+        missed = [qi + 1 for qi in g_qis if not (ans_map.get(qi) or {}).get("correct")]
+        pct = round(100.0 * cor / n_grad) if n_grad > 0 else (round(100.0 * answered / n_act) if n_act > 0 else 100)
+        players.append({
+            "name": p["name"],
+            "score": p.get("score", 0),
+            "answered": answered,
+            "active_total": n_act,
+            "correct": cor,
+            "gradable": n_grad,
+            "pct": pct,
+            "missed_nums": missed,
+        })
+    return {
+        "ok": True,
+        "pin": g["pin"],
+        "title": quiz_title(g),
+        "case_game": any(is_case_type(x) for x in g["quiz"]),
+        "gradable_count": n_grad,
+        "active_count": n_act,
+        "max_score": max_sc,
+        "scoring_mode": g.get("scoring_mode", "classic"),
+        "roster": list(g.get("roster") or []),
+        "canvas_roster": list(g.get("canvas_roster") or []),
+        "players": players,
+    }
+
+
 def study_html(g):
     n_p = max(1, len(g["players"]))
     e = html.escape
@@ -3075,6 +3114,14 @@ class H(BaseHTTPRequestHandler):
                 topics = sorted(({"topic": d["topic"], "avg": round(d["sum"] / d["n"]), "n": d["n"]} for d in tagg.values() if d["n"]), key=lambda r: r["avg"])
                 self.send({"games": list(reversed(hist))[:50], "reteach": [r for r in reteach if r["avg"] < 85][:12], "topics": topics})
             return True
+        if path == "/api/canvas/session_summary":
+            with LOCK:
+                g = GAMES.get(q.get("pin"))
+                if not g or q.get("host") != g["host"]:
+                    self.send({"error": "Forbidden"}, 403)
+                    return True
+                self.send(canvas_session_summary(g))
+            return True
         if path == "/api/moderation":
             with LOCK:
                 g = GAMES.get(q.get("pin"))
@@ -3131,6 +3178,35 @@ class H(BaseHTTPRequestHandler):
             sub = d["subs"][key]
             ans["question"] = None if sub["done"] else K.hw_question(d, sub)
             self.send(ans)
+            return True
+        if path in ("/api/canvas/parse_csv", "/api/canvas/courses", "/api/canvas/roster", "/api/canvas/assignments", "/api/canvas/push"):
+            pin_c = str(body.get("pin") or "")
+            host_c = str(body.get("host") or "")
+            with LOCK:
+                g_c = GAMES.get(pin_c) if pin_c else None
+                host_ok = bool(g_c and host_c and g_c.get("host") == host_c)
+            if not (host_ok or authed(tok, body.get("password"))):
+                self.send({"error": "Host login required", "need_pw": True}, 403)
+                return True
+            if path == "/api/canvas/parse_csv":
+                students, err = K.parse_canvas_gradebook_csv(body.get("csv", ""))
+                self.send({"error": err}, 400) if err else self.send({"ok": True, "students": students})
+            elif path == "/api/canvas/courses":
+                res, err = K.canvas_list_courses(body.get("base_url"), body.get("canvas_token"))
+                self.send({"error": err}, 400) if err else self.send(res)
+            elif path == "/api/canvas/roster":
+                res, err = K.canvas_get_roster(body.get("base_url"), body.get("canvas_token"), body.get("course_id"))
+                self.send({"error": err}, 400) if err else self.send(res)
+            elif path == "/api/canvas/assignments":
+                res, err = K.canvas_list_assignments(body.get("base_url"), body.get("canvas_token"), body.get("course_id"))
+                self.send({"error": err}, 400) if err else self.send(res)
+            elif path == "/api/canvas/push":
+                res, err = K.canvas_push_grades(
+                    body.get("base_url"), body.get("canvas_token"), body.get("course_id"),
+                    body.get("mode", "new"), body.get("assignment_id"), body.get("assignment_name"),
+                    body.get("points_possible", 10), bool(body.get("publish")), body.get("grades") or [],
+                )
+                self.send({"error": err}, 400) if err else self.send(res)
             return True
         gated = ("/api/upload_quiz", "/api/delete_quiz", "/api/dup_quiz", "/api/history_clear", "/api/ai_quiz",
                  "/api/import_sheet", "/api/hw_create", "/api/upload_img")
@@ -3199,11 +3275,12 @@ class H(BaseHTTPRequestHandler):
                 k = len(bank)
             qs_ = random.sample(bank, k) if (body.get("shuffle", True) or k < len(bank)) else bank
             roster = []
-            for r_ in (body.get("roster") or [])[:120]:
-                r_ = re.sub(r"\s+", " ", str(r_)).strip()[:24]
+            for r_ in (body.get("roster") or [])[:300]:
+                r_ = re.sub(r"\s+", " ", str(r_)).strip()[:48]
                 if r_ and r_ not in roster:
                     roster.append(r_)
-            doc = K.hw_create(owner, str(body.get("title") or "Homework"), qs_, body.get("deadline") or 0, roster)
+            doc = K.hw_create(owner, str(body.get("title") or "Homework"), qs_, body.get("deadline") or 0, roster,
+                              canvas_roster=body.get("canvas_roster"))
             self.send({"ok": True, "id": doc["id"], "questions": len(qs_)})
         return True
 
@@ -3436,11 +3513,13 @@ class H(BaseHTTPRequestHandler):
                         g[k_] = bool(body[k_])
                 if isinstance(body.get("roster"), list):
                     seen_ = set()
-                    for r_ in body["roster"][:120]:
-                        r_ = re.sub(r"\s+", " ", str(r_)).strip()[:24]
+                    for r_ in body["roster"][:300]:
+                        r_ = re.sub(r"\s+", " ", str(r_)).strip()[:48]
                         if r_ and r_.lower() not in seen_:
                             seen_.add(r_.lower())
                             g["roster"].append(r_)
+                if isinstance(body.get("canvas_roster"), list):
+                    g["canvas_roster"] = K.clean_canvas_roster(body["canvas_roster"])
                 if body.get("logo"):
                     g["logo"] = clean_url(body["logo"])
                 if "icebreaker" in body:
@@ -3808,7 +3887,7 @@ class H(BaseHTTPRequestHandler):
                     return self.send({"error": "Invalid reaction"}, 400)
                 return self.send({"ok": True})
             if path == "/api/join":
-                name = (body.get("name") or "").strip()[:24]
+                name = (body.get("name") or "").strip()[:48]
                 is_host_join = bool(body.get("host") and body.get("host") == g["host"])
                 if name.lower() == "host":
                     return self.send({"error": "'Host' is reserved for host broadcasts — pick any nickname!"}, 400)

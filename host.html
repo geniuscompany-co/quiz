@@ -799,6 +799,7 @@ body.cb .c4{background:#CC79A7}body.cb .c5{background:#56B4E9;color:#111}body.cb
    <button class="quiz-only" onclick="closeNavMenu();openHomework()"><span>📚 Homework</span><span class="state">Assign</span></button>
    <button class="quiz-only" onclick="closeNavMenu();openProgress()"><span>👥 Student Progress</span><span class="state">View</span></button>
    <button onclick="closeNavMenu();openHistory()"><span>📈 Results History</span><span class="state">View</span></button>
+   <button onclick="closeNavMenu();openCanvasModal('hub')"><span>🎓 Canvas LMS Sync</span><span class="state" id="canvasMenuState">Sync</span></button>
    <button id="remoteBtn" onclick="closeNavMenu();openRemoteModal()"><span>📱 Phone Host Remote</span><span class="state" id="remoteMenuState">Open ↗</span></button>
    <button id="presMenuBtn" onclick="closeNavMenu();openPresentationMode()"><span>📽️ Presentation Mode</span><span class="state" id="presMenuState">2nd Screen</span></button>
    <button onclick="closeNavMenu();openLinks()"><span><span class="quiz-only">🖥️ Spectator &amp; Practice Links</span><span class="case-only">🖥️ Live Spectator Links</span></span><span class="state">Open ↗</span></button>
@@ -1011,6 +1012,13 @@ Quote: Paris has been the capital since 987 CE."></textarea>
   </div>
  </div>
 </div>
+<div class="modal-bg aud-hide" id="canvasModal">
+ <div class="modal" style="max-width:860px;text-align:left">
+  <button class="close-x" onclick="closeCanvasModal()">✕ Close</button>
+  <h2 style="margin-top:0">🎓 Canvas LMS Sync</h2>
+  <div id="canvasModalBody"></div>
+ </div>
+</div>
 <div class="modal-bg" id="linksModal">
  <div class="modal" style="max-width:560px">
   <h2>🖥️ Extra Screens &amp; Links</h2>
@@ -1050,6 +1058,10 @@ Quote: Paris has been the capital since 987 CE."></textarea>
     </button>
     <button type="button" class="rail-btn" onclick="toggleMobileRail(false);openHistory()">
      <span>📈 History</span>
+    </button>
+    <button type="button" class="rail-btn" id="wsCanvasBtn" onclick="toggleMobileRail(false);openCanvasModal('hub')">
+     <span>🎓 Canvas LMS</span>
+     <span class="rail-sub" id="wsCanvasState">Connect</span>
     </button>
     <button type="button" class="rail-btn" id="wsRemoteBtn" onclick="toggleMobileRail(false);openRemoteModal()">
      <span>📱 Phone Remote</span>
@@ -1262,8 +1274,19 @@ Quote: Paris has been the capital since 987 CE."></textarea>
         <label class="mode-pill"><input id="qPlayToo" type="checkbox"> 🎮 Host Play-Along</label>
        </div>
        <div id="rosterRow" style="display:none;margin-bottom:8px">
-        <label style="display:block;font-size:.82em;font-weight:700;opacity:.85;margin-bottom:4px">👥 Class Roster (one name per line):</label>
-        <textarea id="qRoster" oninput="saveSetup()" placeholder="Ava Johnson&#10;Ben Carter&#10;..." style="width:100%;box-sizing:border-box;padding:8px 11px;border-radius:8px;border:0;color:#2b0d57"></textarea>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:6px;flex-wrap:wrap;margin-bottom:5px">
+         <label style="font-size:.82em;font-weight:700;opacity:.85">👥 Class Roster (one name per line):</label>
+         <span style="display:inline-flex;gap:5px;flex-wrap:wrap">
+          <button type="button" class="btn-sm" style="margin:0;padding:4px 9px;font-size:.76em;background:#1976d2" onclick="openCanvasModal('hub')">🎓 Pull from Canvas</button>
+          <label class="btn-sm" style="margin:0;padding:4px 9px;font-size:.76em;cursor:pointer;background:#ffffff1f">📂 Canvas CSV<input type="file" accept=".csv" style="display:none" onchange="onRosterCsvUpload(event)"></label>
+         </span>
+        </div>
+        <textarea id="qRoster" oninput="saveSetup();if(typeof syncCanvasRosterBadge==='function')syncCanvasRosterBadge()" placeholder="Ava Johnson&#10;Ben Carter&#10;..." style="width:100%;box-sizing:border-box;padding:8px 11px;border-radius:8px;border:0;color:#2b0d57"></textarea>
+        <div id="canvasRosterBadge" style="font-size:.77em;color:#7cf5a8;margin-top:3px"></div>
+       </div>
+       <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-bottom:8px;font-size:.8em">
+        <span style="opacity:.82">🎓 Sync roster &amp; grades with Canvas:</span>
+        <button type="button" class="btn-sm" style="margin:0;padding:4px 10px;font-size:.82em;background:#1565c0;border-color:#90caf9" onclick="openCanvasModal('hub')">🎓 Canvas Roster / CSV</button>
        </div>
        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;padding:8px 10px;background:#0004;border-radius:9px;margin-bottom:8px;font-weight:700;font-size:.86em">
         <label style="display:inline-flex;align-items:center;gap:8px"><span class="quiz-only">🤖 Phantom Bots:</span><span class="case-only">🤖 Simulated Peers:</span> <input id="qBots" type="number" min="0" max="30" value="0" oninput="updateOptSummary()"></label>
@@ -2665,6 +2688,7 @@ async function create(){
   steal:(document.getElementById('qSteal')||{}).checked||false,
   moderate:(document.getElementById('qMod')||{}).checked||false,
   roster:(document.getElementById('qRosterOn') && document.getElementById('qRosterOn').checked) ? (document.getElementById('qRoster').value||'').split('\n').map(x=>x.trim()).filter(Boolean) : [],
+  canvas_roster:(document.getElementById('qRosterOn') && document.getElementById('qRosterOn').checked && typeof getActiveCanvasRoster === 'function') ? getActiveCanvasRoster() : [],
   logo:(document.getElementById('qLogo').value||'').trim(),
   icebreaker:ice ? ice.checked : false,
   icebreaker_prompt:icePrompt ? icePrompt.value.trim() : '',
@@ -3181,6 +3205,7 @@ function renderFinal(b){
   <button class="fb-new" onclick="newGame()">🏠 New ${S.case_game?'Session':'Game'} <small>(new PIN)</small></button>
   <a href="/api/study?pin=${pin}" target="_blank"><button class="fb-sec">${S.case_game?'📄 Case Debrief Summary':'📄 Study Guide'}</button></a>
   <a href="/api/export?pin=${pin}" download="brainrush_${pin}_results.csv"><button class="fb-sec">📥 CSV</button></a>
+  <button class="fb-sec aud-hide" style="background:#1565c0;border-color:#90caf9" onclick="openCanvasModal('game')">🎓 Canvas</button>
  </div>`;
 }
 
@@ -4538,10 +4563,11 @@ async function createHomework(){
  const picked = quizList.find(x=>x.file===file);
  const rosterRaw = document.getElementById('qRoster') ? document.getElementById('qRoster').value : (localStorage.getItem('brainrush_roster') || '');
  const roster = document.getElementById('hwRoster').checked ? (rosterRaw||'').split('\n').map(x=>x.trim()).filter(Boolean) : [];
+ const canvas_roster = (document.getElementById('hwRoster').checked && typeof getActiveCanvasRoster === 'function') ? getActiveCanvasRoster() : [];
  const dv = document.getElementById('hwDeadline').value;
  const r = await postPw('/api/hw_create', {quiz:file, custom_questions: picked && picked.questions ? picked.questions : null,
   title: document.getElementById('hwTitle').value || 'Homework', count: parseInt(document.getElementById('hwCount').value,10)||null,
-  deadline: dv ? Math.floor(new Date(dv).getTime()/1000) : 0, roster, shuffle:true});
+  deadline: dv ? Math.floor(new Date(dv).getTime()/1000) : 0, roster, canvas_roster, shuffle:true});
  const m = document.getElementById('hwMsg');
  if(r.error){ m.textContent = r.error; return; }
  const link = location.origin + '/hw?id=' + r.id;
@@ -4555,7 +4581,7 @@ async function hwResults(id){
  hwView = r;
  box.innerHTML = `<h3>📊 ${esc(r.title)}</h3><table class="mt"><tr><th>Student</th><th>Status</th><th>Score</th><th>Correct</th></tr>${r.rows.map(x=>`<tr><td>${esc(x.name)}</td><td>${x.done?'✅ finished':'⏳ '+x.answered+'/'+r.questions}</td><td>${x.score}</td><td>${x.correct}/${r.questions} (${x.pct}%)</td></tr>`).join('')}${r.missing.map(n=>`<tr><td>${esc(n)}</td><td colspan="3" style="color:#ff9b9b">not started</td></tr>`).join('')}</table>
   ${r.hardest.length?`<h4>Hardest questions</h4>${r.hardest.map(h=>`<div class="hist-q"><span>${esc(h.q)}</span><b>${h.pct}%</b></div>`).join('')}`:''}
-  <button class="btn-sm" style="margin:8px 0 0" onclick="exportHw()">📥 Export CSV</button> <button class="btn-sm" style="margin:8px 0 0" onclick="hwResults('${id}')">🔄 Refresh</button>`;
+  <button class="btn-sm" style="margin:8px 0 0" onclick="exportHw()">📥 Export CSV</button> <button class="btn-sm" style="margin:8px 0 0;background:#1565c0;border-color:#90caf9" onclick="openCanvasModal('hw')">🎓 Canvas Sync</button> <button class="btn-sm" style="margin:8px 0 0" onclick="hwResults('${id}')">🔄 Refresh</button>`;
  box.scrollIntoView({behavior:'smooth'});
 }
 function exportHw(){
@@ -5645,6 +5671,7 @@ create = async function(){
   speed: false, dbl: false, steal: false, auto: false,
   moderate: mod,
   roster: (document.getElementById('qRosterOn') && document.getElementById('qRosterOn').checked) ? (document.getElementById('qRoster').value||'').split('\n').map(x=>x.trim()).filter(Boolean) : [],
+  canvas_roster: (document.getElementById('qRosterOn') && document.getElementById('qRosterOn').checked && typeof getActiveCanvasRoster === 'function') ? getActiveCanvasRoster() : [],
   logo: (document.getElementById('qLogo').value||'').trim(),
   icebreaker: ice,
   icebreaker_prompt: icePrompt,
@@ -6369,5 +6396,778 @@ window.addEventListener('storage', ev => {
   renderPresSetupBar();
   setInterval(()=>{ renderPresSetupBar(); updatePresBadge(); }, 2000);
  }
+})();
+</script>
+<style>
+.cv-card{background:#ffffff0d;border:1px solid #ffffff26;border-radius:13px;padding:13px 15px;margin-bottom:12px}
+.cv-card h3{margin:0 0 8px;font-size:1.02em;color:#ffdf5d;display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.cv-grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:640px){.cv-grid2{grid-template-columns:1fr}}
+.cv-lbl{display:block;font-size:.78em;font-weight:800;text-transform:uppercase;letter-spacing:.04em;opacity:.86;margin:4px 0 4px}
+.cv-in,.cv-sel{width:100%;box-sizing:border-box;padding:9px 11px;border-radius:9px;border:1.5px solid #ffffff2b;background:#fff;color:#2b0d57;font-weight:750;font-size:.92em;margin:0}
+.cv-chk-row{display:flex;flex-direction:column;gap:6px;margin:10px 0 4px}
+.cv-chk{display:flex;align-items:center;gap:8px;font-size:.86em;font-weight:700;cursor:pointer}
+.cv-chk input{width:16px;height:16px;margin:0;accent-color:#1976d2}
+.cv-tbl-wrap{max-height:270px;overflow:auto;border-radius:10px;border:1px solid #ffffff22;background:#0a061888;margin-top:8px}
+.cv-tbl{width:100%;border-collapse:collapse;font-size:.85em}
+.cv-tbl th{position:sticky;top:0;background:#1f1147;color:#ffdf5d;text-align:left;padding:7px 9px;font-weight:850;border-bottom:1px solid #ffffff26}
+.cv-tbl td{padding:6px 9px;border-bottom:1px solid #ffffff14;vertical-align:middle}
+.cv-ok{color:#7cf5a8;font-weight:800}
+.cv-warn{color:#ffd166;font-weight:750}
+.cv-status{padding:9px 12px;border-radius:10px;font-size:.88em;font-weight:750;margin:8px 0;display:none}
+.cv-status.ok{display:block;background:rgba(32,191,107,.2);border:1px solid rgba(124,245,168,.6);color:#c8ffdf}
+.cv-status.err{display:block;background:rgba(226,27,60,.24);border:1px solid rgba(255,138,128,.6);color:#ffcdd2}
+.cv-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:10px}
+</style>
+<script>
+// ===== Canvas LMS Integration (Direct REST API + Canvas Gradebook CSV Sync) =====
+let cvModalMode = 'hub';
+let cvCourses = [];
+let cvAssignments = [];
+let cvSessionData = null;
+let cvManualMap = {}; // lower(playerName) -> canvasStudentId
+
+function loadCanvasCfg(){
+ try{ return JSON.parse(localStorage.getItem('brainrush_canvas_cfg') || '{}') || {}; }catch(e){ return {}; }
+}
+function saveCanvasCfg(patch){
+ const cur = Object.assign(loadCanvasCfg(), patch || {});
+ try{ localStorage.setItem('brainrush_canvas_cfg', JSON.stringify(cur)); }catch(e){}
+ updateCanvasBadges();
+ return cur;
+}
+function loadStoredCanvasRoster(){
+ try{ return JSON.parse(localStorage.getItem('brainrush_canvas_roster') || '[]') || []; }catch(e){ return []; }
+}
+function saveStoredCanvasRoster(list){
+ try{ localStorage.setItem('brainrush_canvas_roster', JSON.stringify(list || [])); }catch(e){}
+ syncCanvasRosterBadge();
+}
+function normStudentKey(s){
+ return String(s || '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+}
+function firstLastFromSortable(s){
+ const raw = String(s || '').trim();
+ if(raw.includes(',')){
+  const parts = raw.split(',');
+  const last = (parts[0] || '').trim();
+  const first = parts.slice(1).join(' ').trim();
+  if(first && last) return `${first} ${last}`;
+ }
+ return raw;
+}
+function sortableFromName(s){
+ const raw = String(s || '').trim();
+ if(raw.includes(',')) return raw;
+ const parts = raw.split(/\s+/).filter(Boolean);
+ if(parts.length >= 2) return `${parts[parts.length - 1]}, ${parts.slice(0, -1).join(' ')}`;
+ return raw;
+}
+function getActiveCanvasRoster(){
+ const stored = loadStoredCanvasRoster();
+ if(!stored.length) return [];
+ const rosterEl = document.getElementById('qRoster');
+ const lines = ((rosterEl ? rosterEl.value : (localStorage.getItem('brainrush_roster') || '')) || '')
+  .split('\n').map(x => x.trim()).filter(Boolean);
+ if(!lines.length) return stored;
+ const lineSet = new Set(lines.map(normStudentKey));
+ const matched = stored.filter(st =>
+  lineSet.has(normStudentKey(st.name)) ||
+  lineSet.has(normStudentKey(st.sortable_name)) ||
+  lineSet.has(normStudentKey(firstLastFromSortable(st.sortable_name)))
+ );
+ return matched.length ? matched : stored;
+}
+function syncCanvasRosterBadge(){
+ const el = document.getElementById('canvasRosterBadge');
+ if(!el) return;
+ const stored = loadStoredCanvasRoster();
+ const rEl = document.getElementById('qRoster');
+ const lines = ((rEl && rEl.value) || '').split('\n').map(x => x.trim()).filter(Boolean);
+ if(!stored.length || !lines.length){ el.textContent = ''; return; }
+ const lineSet = new Set(lines.map(normStudentKey));
+ const nLinked = stored.filter(st =>
+  lineSet.has(normStudentKey(st.name)) ||
+  lineSet.has(normStudentKey(st.sortable_name)) ||
+  lineSet.has(normStudentKey(firstLastFromSortable(st.sortable_name)))
+ ).length;
+ el.textContent = nLinked > 0 ? `🔗 ${nLinked} student${nLinked===1?'':'s'} linked with Canvas Gradebook IDs` : '';
+}
+function updateCanvasBadges(){
+ const cfg = loadCanvasCfg();
+ const st1 = document.getElementById('wsCanvasState');
+ const st2 = document.getElementById('canvasMenuState');
+ const linked = !!(cfg.baseUrl && cfg.token);
+ const lbl = linked ? (cfg.courseCode || 'Ready') : (loadStoredCanvasRoster().length ? 'CSV' : 'Connect');
+ if(st1){ st1.textContent = lbl; st1.style.color = linked ? '#7cf5a8' : ''; }
+ if(st2){ st2.textContent = lbl; }
+ syncCanvasRosterBadge();
+}
+
+async function canvasApiPost(path, payload){
+ const body = Object.assign({
+  token: localStorage.getItem('brainrush_token') || '',
+  password: sessionStorage.getItem('brainrush_pw') || '',
+  pin: (typeof pin !== 'undefined' && pin) ? pin : '',
+  host: (typeof host !== 'undefined' && host) ? host : ''
+ }, payload || {});
+ let r = await post(path, body);
+ if(r && r.need_pw && typeof askPw === 'function'){
+  const pw = await askPw();
+  if(!pw) return r;
+  body.password = pw;
+  r = await post(path, body);
+ }
+ return r;
+}
+
+function setCvStatus(msg, isErr){
+ const box = document.getElementById('cvStatus');
+ if(!box) return;
+ if(!msg){ box.className = 'cv-status'; box.innerHTML = ''; return; }
+ box.className = 'cv-status ' + (isErr ? 'err' : 'ok');
+ box.innerHTML = msg;
+}
+
+function closeCanvasModal(){
+ const m = document.getElementById('canvasModal');
+ if(m) m.classList.remove('open');
+}
+
+function getEffectiveCanvasStudents(){
+ const stored = loadStoredCanvasRoster();
+ const sessRos = (cvSessionData && Array.isArray(cvSessionData.canvas_roster)) ? cvSessionData.canvas_roster : [];
+ const map = new Map();
+ [...sessRos, ...stored].forEach(s => {
+  if(!s || (!s.id && !s.name)) return;
+  const k = s.id ? ('id:' + s.id) : ('nm:' + normStudentKey(s.name));
+  map.set(k, s);
+ });
+ return Array.from(map.values());
+}
+
+function matchPlayerToCanvas(playerName, students){
+ const pKey = normStudentKey(playerName);
+ if(!pKey || !students || !students.length) return null;
+ if(Object.prototype.hasOwnProperty.call(cvManualMap, pKey)){
+  const want = cvManualMap[pKey];
+  if(want === '__NONE__') return null;
+  const found = students.find(s => (s.id || s.name) === want);
+  if(found) return found;
+ }
+ // 1. Exact full name / sortable_name / login_id match
+ for(const s of students){
+  if(normStudentKey(s.name) === pKey ||
+     normStudentKey(s.sortable_name) === pKey ||
+     normStudentKey(firstLastFromSortable(s.sortable_name)) === pKey ||
+     (s.sis_login_id && normStudentKey(s.sis_login_id) === pKey)){
+   return s;
+  }
+ }
+ // 2. Unique "First L" or "First" match
+ const pParts = pKey.split(' ').filter(Boolean);
+ if(pParts.length >= 1){
+  const pFirst = pParts[0];
+  const pLastInit = pParts.length >= 2 ? pParts[pParts.length - 1][0] : '';
+  if(pLastInit){
+   const mInit = students.filter(s => {
+    const fl = normStudentKey(firstLastFromSortable(s.sortable_name || s.name)).split(' ').filter(Boolean);
+    return fl.length >= 2 && fl[0] === pFirst && fl[fl.length - 1][0] === pLastInit;
+   });
+   if(mInit.length === 1) return mInit[0];
+  }
+  if(pParts.length === 1){
+   const mFirst = students.filter(s => {
+    const fl = normStudentKey(firstLastFromSortable(s.sortable_name || s.name)).split(' ').filter(Boolean);
+    return fl.length >= 1 && fl[0] === pFirst;
+   });
+   if(mFirst.length === 1) return mFirst[0];
+  }
+ }
+ return null;
+}
+
+function buildNormalizedSession(mode){
+ if(mode === 'hw' && typeof hwView !== 'undefined' && hwView){
+  const nQ = hwView.questions || 0;
+  const maxSc = Math.max(0, ...(hwView.rows || []).map(r => r.score || 0));
+  return {
+   kind: 'hw',
+   title: hwView.title || 'Brainrush Homework',
+   gradable_count: nQ,
+   active_count: nQ,
+   max_score: maxSc,
+   canvas_roster: hwView.canvas_roster || [],
+   players: (hwView.rows || []).map(r => ({
+    name: r.name,
+    score: r.score || 0,
+    answered: r.answered || 0,
+    active_total: nQ,
+    correct: r.correct || 0,
+    gradable: nQ,
+    pct: r.pct || 0,
+    done: !!r.done,
+    missed_nums: r.missed_nums || []
+   }))
+  };
+ }
+ if(cvSessionData && cvSessionData.ok){
+  return Object.assign({kind: 'game'}, cvSessionData);
+ }
+ return null;
+}
+
+async function openCanvasModal(mode='hub'){
+ if(IS_AUDIENCE) return;
+ cvModalMode = mode;
+ const m = document.getElementById('canvasModal');
+ const body = document.getElementById('canvasModalBody');
+ if(!m || !body) return;
+ m.classList.add('open');
+ body.innerHTML = '<div style="padding:16px;text-align:center;opacity:.85">Loading Canvas sync…</div>';
+
+ if(mode === 'game' || (mode === 'hub' && typeof pin !== 'undefined' && pin && typeof host !== 'undefined' && host)){
+  try{
+   const r = await fetch(`/api/canvas/session_summary?pin=${encodeURIComponent(pin)}&host=${encodeURIComponent(host)}`);
+   if(r.ok) cvSessionData = await r.json();
+  }catch(e){}
+ }
+ renderCanvasModal();
+ const cfg = loadCanvasCfg();
+ if(cfg.baseUrl && cfg.token && !cvCourses.length){
+  await connectCanvasApi(true);
+ }
+}
+
+function renderCanvasModal(){
+ const body = document.getElementById('canvasModalBody');
+ if(!body) return;
+ const cfg = loadCanvasCfg();
+ const sess = buildNormalizedSession(cvModalMode === 'hw' ? 'hw' : 'game');
+ const showGradeSec = (cvModalMode === 'game' || cvModalMode === 'hw' || !!sess);
+ const connected = !!(cfg.baseUrl && cfg.token && cfg.userName);
+
+ body.innerHTML = `
+  <div id="cvStatus" class="cv-status"></div>
+
+  <details class="cv-card" id="cvConnAcc" ${connected && showGradeSec ? '' : 'open'}>
+   <summary style="cursor:pointer;font-weight:850;color:#ffdf5d;display:flex;align-items:center;justify-content:space-between;gap:8px;list-style:none">
+    <span>🔌 Canvas API Connection ${connected ? `<small style="color:#7cf5a8;font-weight:750">· Connected as ${esc(cfg.userName)}</small>` : '<small style="opacity:.78;font-weight:650">· Personal Access Token</small>'}</span>
+    <span style="font-size:.82em;opacity:.8">▾</span>
+   </summary>
+   <div style="margin-top:10px">
+    <p style="margin:0 0 8px;font-size:.84em;opacity:.88;line-height:1.4">
+     In Canvas, open <b>Account → Settings → + New Access Token</b>, then paste your school's Canvas URL and token below. Your token stays in this browser's local storage.
+    </p>
+    <div class="cv-grid2">
+     <div>
+      <label class="cv-lbl">Canvas Domain URL</label>
+      <input id="cvBaseUrl" class="cv-in" type="text" placeholder="https://yourschool.instructure.com" value="${esc(cfg.baseUrl || '')}">
+     </div>
+     <div>
+      <label class="cv-lbl">Personal Access Token</label>
+      <div style="display:flex;gap:5px">
+       <input id="cvToken" class="cv-in" type="password" placeholder="Paste Canvas Access Token…" value="${esc(cfg.token || '')}">
+       <button type="button" class="btn-sm" style="margin:0;padding:0 10px" onclick="const i=document.getElementById('cvToken');if(i)i.type=i.type==='password'?'text':'password'" title="Show / Hide Token">👁️</button>
+      </div>
+     </div>
+    </div>
+    <div class="cv-actions">
+     <button type="button" class="btn-sm" style="margin:0;background:#1976d2;border-color:#90caf9" onclick="connectCanvasApi(false)">🔌 Connect &amp; Load Courses</button>
+     ${(cfg.baseUrl || cfg.token) ? `<button type="button" class="btn-sm" style="margin:0;background:#ffffff1a" onclick="clearCanvasCredentials()">🗑️ Forget Token</button>` : ''}
+    </div>
+   </div>
+  </details>
+
+  <div class="cv-card">
+   <h3><span>📚 Canvas Course &amp; Student Roster</span><span id="cvRosterCntBadge" style="font-size:.8em;color:#7cf5a8;font-weight:750"></span></h3>
+   <div class="cv-grid2">
+    <div>
+     <label class="cv-lbl">Active Canvas Course</label>
+     <select id="cvCourseSel" class="cv-sel" onchange="onCanvasCoursePick(this.value)">
+      <option value="">— Select a Canvas Course —</option>
+     </select>
+    </div>
+    <div>
+     <label class="cv-lbl">Roster Name Format in Brainrush</label>
+     <select id="cvNameFmt" class="cv-sel">
+      <option value="first_last">First Last (e.g. Ava Johnson)</option>
+      <option value="sortable">Last, First (e.g. Johnson, Ava)</option>
+     </select>
+    </div>
+   </div>
+   <div class="cv-actions">
+    <button type="button" class="btn-sm" style="margin:0;background:#26890c;border-color:#7dff6b" onclick="pullCanvasRosterToSetup()">📥 Load Course Roster into Brainrush</button>
+    <label class="btn-sm" style="margin:0;cursor:pointer;background:#ffffff1c">📂 Or Upload Canvas Gradebook CSV<input type="file" accept=".csv" style="display:none" onchange="onRosterCsvUpload(event, true)"></label>
+   </div>
+   <div style="font-size:.79em;opacity:.8;margin-top:6px">Loading a roster pre-links each student's Canvas ID so students pick their real name from a dropdown when joining — or upload an exported Canvas Gradebook CSV with zero API token needed.</div>
+  </div>
+
+  ${showGradeSec ? `
+  <div class="cv-card" id="cvGradeCard">
+   <h3>
+    <span>🚀 Sync Grades: ${esc(sess ? sess.title : 'Session')}</span>
+    <span id="cvMatchSummary" style="font-size:.8em;color:#ffdf5d"></span>
+   </h3>
+   <div class="cv-grid2">
+    <div>
+     <label class="cv-lbl">Grading Formula</label>
+     <select id="cvRule" class="cv-sel" onchange="refreshCanvasPreview()">
+      <option value="accuracy">🎯 Accuracy % (Correct ÷ Gradable × Points)</option>
+      <option value="participation">✋ Participation Credit (100% for Participating)</option>
+      <option value="blended">⚖️ Blended (50% Participation + 50% Accuracy)</option>
+      <option value="scaled">🏆 Scaled Game Score (Top Player = 100%)</option>
+     </select>
+    </div>
+    <div>
+     <label class="cv-lbl">Points Possible</label>
+     <input id="cvPts" class="cv-in" type="number" min="0" max="1000" step="0.5" value="10" oninput="refreshCanvasPreview()">
+    </div>
+   </div>
+   <div class="cv-grid2" style="margin-top:8px">
+    <div>
+     <label class="cv-lbl">Canvas Assignment Destination</label>
+     <select id="cvAssnMode" class="cv-sel" onchange="onCanvasAssnModeChange()">
+      <option value="new">➕ Create New Assignment in Canvas</option>
+      <option value="existing">📌 Update Existing Canvas Assignment</option>
+     </select>
+    </div>
+    <div id="cvAssnTargetBox">
+     <label class="cv-lbl" id="cvAssnTargetLbl">New Assignment Name</label>
+     <input id="cvAssnName" class="cv-in" type="text" maxlength="120" value="${esc('Brainrush: ' + (sess ? sess.title : 'Session'))}" oninput="refreshCanvasPreview()">
+     <select id="cvAssnSel" class="cv-sel" style="display:none" onchange="onCanvasExistingAssnPick()"></select>
+    </div>
+   </div>
+   <div class="cv-chk-row">
+    <label class="cv-chk"><input type="checkbox" id="cvPublish"> Publish new assignment immediately in Canvas (leave unchecked to review unpublished in Canvas first)</label>
+    <label class="cv-chk"><input type="checkbox" id="cvZeroMissing" onchange="refreshCanvasPreview()"> Assign 0 to absent / unsubmitted Canvas roster students</label>
+    <label class="cv-chk"><input type="checkbox" id="cvComments"> Attach Brainrush breakdown (accuracy, points &amp; missed Qs) as a SpeedGrader comment</label>
+   </div>
+   <div id="cvPreviewWrap" class="cv-tbl-wrap"></div>
+   <div class="cv-actions" style="margin-top:12px">
+    <button type="button" id="cvPushBtn" class="btn-sm" style="margin:0;padding:10px 18px;font-size:.96em;background:linear-gradient(135deg,#1e88e5,#1565c0);border-color:#90caf9" onclick="pushGradesToCanvas()">🚀 Push Grades to Canvas API</button>
+    <button type="button" class="btn-sm" style="margin:0;padding:10px 16px;font-size:.94em;background:#26890c;border-color:#7dff6b" onclick="downloadCanvasGradebookCsv()">📥 Download Canvas Gradebook CSV</button>
+   </div>
+  </div>` : ''}
+ `;
+
+ populateCanvasCoursesDom();
+ populateCanvasAssignmentsDom();
+ const ruleEl = document.getElementById('cvRule');
+ if(ruleEl && sess){
+  ruleEl.value = (sess.gradable_count > 0) ? 'accuracy' : 'participation';
+ }
+ refreshCanvasPreview();
+}
+
+function populateCanvasCoursesDom(){
+ const sel = document.getElementById('cvCourseSel');
+ const badge = document.getElementById('cvRosterCntBadge');
+ const cfg = loadCanvasCfg();
+ const stored = loadStoredCanvasRoster();
+ if(badge){
+  badge.textContent = stored.length ? `✓ ${stored.length} Canvas students loaded` : '';
+ }
+ if(!sel) return;
+ sel.innerHTML = `<option value="">— Select a Canvas Course —</option>` + cvCourses.map(c => {
+  const meta = [c.code, c.term, (c.students != null ? `${c.students} stu` : '')].filter(Boolean).join(' · ');
+  return `<option value="${esc(c.id)}">${esc(c.name)}${meta ? ` (${esc(meta)})` : ''}</option>`;
+ }).join('');
+ if(cfg.courseId && cvCourses.some(c => String(c.id) === String(cfg.courseId))){
+  sel.value = String(cfg.courseId);
+ }
+}
+
+function populateCanvasAssignmentsDom(){
+ const sel = document.getElementById('cvAssnSel');
+ if(!sel) return;
+ sel.innerHTML = `<option value="">— Select Existing Assignment —</option>` + cvAssignments.map(a =>
+  `<option value="${esc(a.id)}">${esc(a.name)}${a.points_possible != null ? ` (${a.points_possible} pts)` : ''}${a.published ? '' : ' [Unpublished]'}</option>`
+ ).join('');
+}
+
+function onCanvasAssnModeChange(){
+ const mode = (document.getElementById('cvAssnMode') || {}).value || 'new';
+ const nm = document.getElementById('cvAssnName'), sel = document.getElementById('cvAssnSel'), lbl = document.getElementById('cvAssnTargetLbl');
+ if(lbl) lbl.textContent = mode === 'existing' ? 'Existing Canvas Assignment' : 'New Assignment Name';
+ if(nm) nm.style.display = mode === 'existing' ? 'none' : '';
+ if(sel) sel.style.display = mode === 'existing' ? '' : 'none';
+ if(mode === 'existing' && !cvAssignments.length){
+  const cfg = loadCanvasCfg();
+  if(cfg.courseId) loadCanvasCourseDetails(cfg.courseId);
+ }
+}
+
+function onCanvasExistingAssnPick(){
+ const sel = document.getElementById('cvAssnSel');
+ const pts = document.getElementById('cvPts');
+ const a = cvAssignments.find(x => String(x.id) === String(sel && sel.value));
+ if(a && a.points_possible != null && pts){
+  pts.value = a.points_possible;
+ }
+ refreshCanvasPreview();
+}
+
+async function connectCanvasApi(silent=false){
+ const uEl = document.getElementById('cvBaseUrl'), tEl = document.getElementById('cvToken');
+ const cfg = loadCanvasCfg();
+ const baseUrl = (uEl ? uEl.value : cfg.baseUrl || '').trim();
+ const token = (tEl ? tEl.value : cfg.token || '').trim();
+ if(!baseUrl || !token){
+  if(!silent) setCvStatus('Enter both your Canvas URL and Personal Access Token first.', true);
+  return;
+ }
+ if(!silent) setCvStatus('Connecting to Canvas…', false);
+ const r = await canvasApiPost('/api/canvas/courses', {base_url: baseUrl, canvas_token: token});
+ if(!r || r.error){
+  if(!silent) setCvStatus(esc((r && r.error) || 'Could not connect to Canvas.'), true);
+  return;
+ }
+ cvCourses = r.courses || [];
+ const nextCfg = saveCanvasCfg({baseUrl: r.base_url || baseUrl, token, userName: r.user || 'Instructor'});
+ if(uEl && r.base_url) uEl.value = r.base_url;
+ populateCanvasCoursesDom();
+ if(!silent) setCvStatus(`✅ Connected as <b>${esc(r.user)}</b> — found <b>${cvCourses.length}</b> course${cvCourses.length===1?'':'s'}.`, false);
+ if(nextCfg.courseId && cvCourses.some(c => String(c.id) === String(nextCfg.courseId))){
+  await loadCanvasCourseDetails(nextCfg.courseId, true);
+ }
+}
+
+function clearCanvasCredentials(){
+ try{ localStorage.removeItem('brainrush_canvas_cfg'); }catch(e){}
+ cvCourses = [];
+ cvAssignments = [];
+ updateCanvasBadges();
+ renderCanvasModal();
+ setCvStatus('Cleared saved Canvas token from this browser.', false);
+}
+
+async function onCanvasCoursePick(courseId){
+ const c = cvCourses.find(x => String(x.id) === String(courseId));
+ saveCanvasCfg({courseId: courseId || '', courseCode: c ? (c.code || c.name.slice(0, 12)) : ''});
+ if(!courseId) return;
+ await loadCanvasCourseDetails(courseId, false);
+}
+
+async function loadCanvasCourseDetails(courseId, silent=false){
+ const cfg = loadCanvasCfg();
+ if(!cfg.baseUrl || !cfg.token || !courseId) return;
+ if(!silent) setCvStatus('Loading enrolled students & assignments from Canvas…', false);
+ const [rRos, rAssn] = await Promise.all([
+  canvasApiPost('/api/canvas/roster', {base_url: cfg.baseUrl, canvas_token: cfg.token, course_id: courseId}),
+  canvasApiPost('/api/canvas/assignments', {base_url: cfg.baseUrl, canvas_token: cfg.token, course_id: courseId})
+ ]);
+ if(rRos && rRos.students){
+  saveStoredCanvasRoster(rRos.students);
+ }
+ if(rAssn && rAssn.assignments){
+  cvAssignments = rAssn.assignments;
+  populateCanvasAssignmentsDom();
+ }
+ populateCanvasCoursesDom();
+ refreshCanvasPreview();
+ if(!silent){
+  if(rRos && rRos.error) setCvStatus(esc(rRos.error), true);
+  else setCvStatus(`✅ Loaded <b>${(rRos && rRos.students ? rRos.students.length : 0)}</b> active students from Canvas.`, false);
+ }
+}
+
+function applyStudentsToRosterBox(students){
+ const fmt = (document.getElementById('cvNameFmt') || {}).value || 'first_last';
+ const names = students.map(s => fmt === 'sortable' ? (s.sortable_name || sortableFromName(s.name)) : (s.name || firstLastFromSortable(s.sortable_name)));
+ const rEl = document.getElementById('qRoster');
+ const rChk = document.getElementById('qRosterOn');
+ const rRow = document.getElementById('rosterRow');
+ if(rEl) rEl.value = names.join('\n');
+ if(rChk) rChk.checked = true;
+ if(rRow) rRow.style.display = 'block';
+ try{ localStorage.setItem('brainrush_roster', names.join('\n')); }catch(e){}
+ saveStoredCanvasRoster(students);
+ if(typeof saveSetup === 'function') saveSetup();
+ if(typeof updateOptSummary === 'function') updateOptSummary();
+}
+
+async function pullCanvasRosterToSetup(){
+ const cfg = loadCanvasCfg();
+ const sel = document.getElementById('cvCourseSel');
+ const cid = (sel && sel.value) || cfg.courseId || '';
+ if(!cfg.baseUrl || !cfg.token){
+  setCvStatus('Connect your Canvas URL & Access Token above first (or upload a Canvas Gradebook CSV).', true);
+  return;
+ }
+ if(!cid){
+  setCvStatus('Select a Canvas Course from the dropdown first.', true);
+  return;
+ }
+ setCvStatus('Pulling enrolled students from Canvas…', false);
+ const r = await canvasApiPost('/api/canvas/roster', {base_url: cfg.baseUrl, canvas_token: cfg.token, course_id: cid});
+ if(!r || r.error){
+  setCvStatus(esc((r && r.error) || 'Could not load course roster.'), true);
+  return;
+ }
+ if(!r.students || !r.students.length){
+  setCvStatus('That Canvas course currently has 0 active enrolled students.', true);
+  return;
+ }
+ applyStudentsToRosterBox(r.students);
+ populateCanvasCoursesDom();
+ refreshCanvasPreview();
+ setCvStatus(`✅ Loaded <b>${r.students.length}</b> Canvas students into Class Roster and enabled Roster Mode!`, false);
+}
+
+async function onRosterCsvUpload(ev, fromModal=false){
+ const file = ev && ev.target && ev.target.files && ev.target.files[0];
+ if(!file) return;
+ const txt = await file.text();
+ ev.target.value = '';
+ const r = await canvasApiPost('/api/canvas/parse_csv', {csv: txt});
+ if(!r || r.error){
+  if(fromModal) setCvStatus(esc((r && r.error) || 'Could not parse CSV.'), true);
+  else alert((r && r.error) || 'Could not parse Canvas CSV.');
+  return;
+ }
+ applyStudentsToRosterBox(r.students || []);
+ populateCanvasCoursesDom();
+ refreshCanvasPreview();
+ if(fromModal){
+  setCvStatus(`✅ Imported <b>${r.students.length}</b> students (with Canvas IDs) from Gradebook CSV into Class Roster!`, false);
+ }
+}
+
+function calcPlayerCanvasGrade(p, sess, rule, pts, maxScore){
+ let ratio = 0;
+ const hasPart = (p.answered || 0) > 0 || (p.score || 0) > 0;
+ const accRatio = (p.gradable > 0) ? ((p.correct || 0) / p.gradable) : (hasPart ? 1 : 0);
+ if(rule === 'participation'){
+  ratio = hasPart ? 1 : 0;
+ } else if(rule === 'blended'){
+  ratio = (hasPart ? 0.5 : 0) + 0.5 * accRatio;
+ } else if(rule === 'scaled'){
+  ratio = maxScore > 0 ? Math.min(1, (p.score || 0) / maxScore) : (hasPart ? 1 : 0);
+ } else {
+  ratio = accRatio;
+ }
+ return Math.round(ratio * pts * 100) / 100;
+}
+
+function buildPlayerComment(p, sess){
+ const parts = [`Brainrush (${sess.title})`];
+ if(p.gradable > 0){
+  parts.push(`${p.correct}/${p.gradable} correct (${p.pct}%)`);
+ } else if(p.active_total > 0){
+  parts.push(`Participated in ${p.answered}/${p.active_total} prompts`);
+ }
+ if(p.score) parts.push(`${p.score} pts`);
+ if(p.missed_nums && p.missed_nums.length){
+  parts.push(`Missed Q${p.missed_nums.slice(0, 10).join(', Q')}`);
+ }
+ return parts.join(' · ');
+}
+
+function onManualCanvasMap(playerName, val){
+ cvManualMap[normStudentKey(playerName)] = val;
+ refreshCanvasPreview();
+}
+
+function computeCanvasSyncRows(){
+ const sess = buildNormalizedSession(cvModalMode === 'hw' ? 'hw' : 'game');
+ if(!sess) return null;
+ const students = getEffectiveCanvasStudents();
+ const rule = (document.getElementById('cvRule') || {}).value || (sess.gradable_count > 0 ? 'accuracy' : 'participation');
+ const ptsParsed = parseFloat((document.getElementById('cvPts') || {}).value);
+ const pts = Number.isFinite(ptsParsed) ? Math.max(0, ptsParsed) : 10;
+ const zeroMissing = !!(document.getElementById('cvZeroMissing') && document.getElementById('cvZeroMissing').checked);
+ const includeCmt = !!(document.getElementById('cvComments') && document.getElementById('cvComments').checked);
+ const usedIds = new Set();
+
+ const playerRows = (sess.players || []).map(p => {
+  const matched = matchPlayerToCanvas(p.name, students);
+  if(matched) usedIds.add(matched.id || matched.name);
+  const grade = calcPlayerCanvasGrade(p, sess, rule, pts, sess.max_score || 0);
+  return {
+   kind: 'player',
+   player: p,
+   matched,
+   grade,
+   comment: includeCmt ? buildPlayerComment(p, sess) : ''
+  };
+ });
+
+ const absentRows = [];
+ if(zeroMissing && students.length){
+  students.forEach(s => {
+   const key = s.id || s.name;
+   if(!usedIds.has(key)){
+    absentRows.push({
+     kind: 'absent',
+     player: null,
+     matched: s,
+     grade: 0,
+     comment: includeCmt ? `Brainrush (${sess.title}) · Did not participate` : ''
+    });
+   }
+  });
+ }
+ return {sess, students, pts, rule, playerRows, absentRows};
+}
+
+function refreshCanvasPreview(){
+ const wrap = document.getElementById('cvPreviewWrap');
+ const sumEl = document.getElementById('cvMatchSummary');
+ if(!wrap) return;
+ const data = computeCanvasSyncRows();
+ if(!data){
+  wrap.innerHTML = '<div style="padding:12px;opacity:.8">Run a live session or open Homework Results to preview grades.</div>';
+  return;
+ }
+ const {sess, students, pts, playerRows, absentRows} = data;
+ const matchedCnt = playerRows.filter(r => r.matched && r.matched.id).length;
+ const csvReadyCnt = playerRows.filter(r => r.matched).length;
+ if(sumEl){
+  sumEl.textContent = students.length
+   ? `${csvReadyCnt}/${playerRows.length} matched${absentRows.length ? ` · +${absentRows.length} absent (0)` : ''}`
+   : `${playerRows.length} participant${playerRows.length===1?'':'s'} (connect Canvas or upload CSV to link IDs)`;
+ }
+ if(!playerRows.length && !absentRows.length){
+  wrap.innerHTML = '<div style="padding:12px;opacity:.8">No student submissions in this session yet.</div>';
+  return;
+ }
+ const stuOpts = (selKey) => `<option value="__NONE__">— Unlinked (skip) —</option>` + students.map(s => {
+  const k = s.id || s.name;
+  return `<option value="${esc(k)}"${k===selKey?' data-sel="1"':''}>${esc(s.name)}${s.id ? ` (#${esc(s.id)})` : ''}</option>`;
+ }).join('');
+
+ wrap.innerHTML = `<table class="cv-tbl">
+  <thead><tr><th>Brainrush Player</th><th>Session Result</th><th>Canvas Student</th><th style="text-align:right">Grade (/ ${pts})</th></tr></thead>
+  <tbody>
+   ${playerRows.map((r, idx) => {
+    const p = r.player;
+    const perf = p.gradable > 0 ? `${p.correct}/${p.gradable} (${p.pct}%)` : `Answered ${p.answered}/${p.active_total || p.answered}`;
+    const selKey = r.matched ? (r.matched.id || r.matched.name) : '__NONE__';
+    const matchCell = students.length
+     ? `<select class="cv-sel cv-map-sel" data-pname="${esc(p.name)}" data-selkey="${esc(selKey)}" style="padding:5px 7px;font-size:.86em" onchange="onManualCanvasMap(this.dataset.pname, this.value)">${stuOpts(selKey)}</select>`
+     : `<span class="cv-warn">Load course or CSV above</span>`;
+    return `<tr>
+     <td><b>${esc(p.name)}</b></td>
+     <td>${esc(perf)}</td>
+     <td>${matchCell}</td>
+     <td style="text-align:right"><b class="${r.matched ? 'cv-ok' : 'cv-warn'}">${r.grade}</b></td>
+    </tr>`;
+   }).join('')}
+   ${absentRows.map(r => `<tr>
+    <td style="opacity:.7"><i>— Absent —</i></td>
+    <td style="opacity:.7">No submission</td>
+    <td>${esc(r.matched.name)}${r.matched.id ? ` <small style="opacity:.75">(#${esc(r.matched.id)})</small>` : ''}</td>
+    <td style="text-align:right"><b class="cv-warn">0</b></td>
+   </tr>`).join('')}
+  </tbody>
+ </table>`;
+ wrap.querySelectorAll('.cv-map-sel').forEach(sel => {
+  if(sel.dataset.selkey) sel.value = sel.dataset.selkey;
+ });
+ const pushBtn = document.getElementById('cvPushBtn');
+ if(pushBtn){
+  pushBtn.textContent = matchedCnt > 0
+   ? `🚀 Push ${matchedCnt + absentRows.filter(a=>a.matched&&a.matched.id).length} Grade${(matchedCnt + absentRows.length)===1?'':'s'} to Canvas`
+   : '🚀 Push Grades to Canvas API';
+ }
+}
+
+async function pushGradesToCanvas(){
+ const cfg = loadCanvasCfg();
+ const courseSel = document.getElementById('cvCourseSel');
+ const cid = (courseSel && courseSel.value) || cfg.courseId || '';
+ if(!cfg.baseUrl || !cfg.token){
+  setCvStatus('Connect your Canvas URL & Access Token at the top of this window first (or use "Download Canvas Gradebook CSV").', true);
+  return;
+ }
+ if(!cid){
+  setCvStatus('Select your target Canvas Course first.', true);
+  return;
+ }
+ const data = computeCanvasSyncRows();
+ if(!data) return;
+ const allRows = [...data.playerRows, ...data.absentRows].filter(r => r.matched && r.matched.id);
+ if(!allRows.length){
+  setCvStatus('No players are linked to a Canvas numeric User ID yet. Select your Canvas course above so Brainrush can match students!', true);
+  return;
+ }
+ const mode = (document.getElementById('cvAssnMode') || {}).value || 'new';
+ const assnId = (document.getElementById('cvAssnSel') || {}).value || '';
+ const assnEx = cvAssignments.find(a => String(a.id) === String(assnId));
+ const assnName = mode === 'existing'
+  ? (assnEx ? assnEx.name : '')
+  : (((document.getElementById('cvAssnName') || {}).value || '').trim() || ('Brainrush: ' + data.sess.title));
+ const publish = !!(document.getElementById('cvPublish') && document.getElementById('cvPublish').checked);
+
+ const btn = document.getElementById('cvPushBtn');
+ if(btn) btn.disabled = true;
+ setCvStatus('Pushing grades to Canvas…', false);
+ try{
+  const r = await canvasApiPost('/api/canvas/push', {
+   base_url: cfg.baseUrl,
+   canvas_token: cfg.token,
+   course_id: cid,
+   mode,
+   assignment_id: assnId,
+   assignment_name: assnName,
+   points_possible: data.pts,
+   publish,
+   grades: allRows.map(x => ({user_id: x.matched.id, score: x.grade, comment: x.comment || ''}))
+  });
+  if(!r || r.error){
+   setCvStatus(esc((r && r.error) || 'Canvas grade push failed.'), true);
+   return;
+  }
+  const openLink = r.html_url ? ` · <a href="${esc(r.html_url)}" target="_blank" rel="noopener" style="color:#ffdf5d;font-weight:900;text-decoration:underline">↗ Open in Canvas</a>` : '';
+  setCvStatus(`✅ Pushed <b>${r.pushed}</b> student grade${r.pushed===1?'':'s'} to <b>${esc(r.assignment_name)}</b>!${openLink}`, false);
+  await loadCanvasCourseDetails(cid, true);
+ }finally{
+  if(btn) btn.disabled = false;
+ }
+}
+
+function downloadCanvasGradebookCsv(){
+ const data = computeCanvasSyncRows();
+ if(!data) return;
+ const mode = (document.getElementById('cvAssnMode') || {}).value || 'new';
+ const assnId = (document.getElementById('cvAssnSel') || {}).value || '';
+ const assnEx = cvAssignments.find(a => String(a.id) === String(assnId));
+ const colTitle = mode === 'existing' && assnEx
+  ? `${assnEx.name} (${assnEx.id})`
+  : ((((document.getElementById('cvAssnName') || {}).value || '').trim()) || ('Brainrush: ' + data.sess.title));
+
+ const csvRows = [
+  ['Student', 'ID', 'SIS User ID', 'SIS Login ID', 'Section', colTitle],
+  ['    Points Possible', '', '', '', '', String(data.pts)]
+ ];
+ const all = [...data.playerRows, ...data.absentRows];
+ all.forEach(r => {
+  const m = r.matched;
+  const stuCell = m ? (m.sortable_name || sortableFromName(m.name)) : sortableFromName(r.player ? r.player.name : '');
+  csvRows.push([
+   stuCell,
+   m ? (m.id || '') : '',
+   m ? (m.sis_user_id || '') : '',
+   m ? (m.sis_login_id || '') : '',
+   m ? (m.section || '') : '',
+   String(r.grade)
+  ]);
+ });
+ const csvTxt = csvRows.map(row => row.map(c => '"' + String(c == null ? '' : c).replace(/"/g, '""') + '"').join(',')).join('\r\n');
+ const a = document.createElement('a');
+ a.href = URL.createObjectURL(new Blob([csvTxt], {type: 'text/csv;charset=utf-8'}));
+ const slug = String(data.sess.title || 'session').toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '') || 'session';
+ a.download = `canvas_gradebook_${slug}.csv`;
+ a.click();
+ setCvStatus('📥 Downloaded Canvas-formatted Gradebook CSV! In Canvas, go to <b>Grades → Actions → Import</b> and drop this file in.', false);
+}
+
+(function(){
+ const teachSec = (typeof GUIDE !== 'undefined') && GUIDE.find(g => g.id === 'teach');
+ if(teachSec){
+  teachSec.items.unshift(['🎓 Canvas LMS Sync', 'Connect your Canvas URL + Personal Access Token (or import a Canvas Gradebook CSV) to pull your enrolled student roster in 1 click, then push Quiz, Case Study, or Homework grades straight into Canvas Assignments & SpeedGrader — or download a Canvas-formatted Gradebook CSV.']);
+ }
+ updateCanvasBadges();
 })();
 </script></body></html>

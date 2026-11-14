@@ -718,7 +718,7 @@ function welcome(err){
       <div class="field-lbl"><span>${info.roster.length ? 'Select Your Name' : 'Your Name'}</span></div>
       ${info.roster.length
         ? `<select id="nm"><option value="">— Pick your name —</option>${info.roster.map(x => `<option>${esc(x)}</option>`).join('')}</select>`
-        : `<input type="text" id="nm" placeholder="Enter your full name…" maxlength="24" onkeydown="if(event.key==='Enter')begin(this.value)">`
+        : `<input type="text" id="nm" placeholder="Enter your full name…" maxlength="48" onkeydown="if(event.key==='Enter')begin(this.value)">`
       }
       ${err ? `<div class="err">${esc(err)}</div>` : ''}
       <button class="go" onclick="begin(document.getElementById('nm').value)">▶️ Start Assignment</button>
