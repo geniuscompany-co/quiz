@@ -285,8 +285,38 @@ AV_HATS = {"", "👑", "🎩", "🎓", "🧢", "🤠", "🕶️", "🎧", "⛑�
 AV_RINGS = {"", "gold", "neon", "fire", "ice", "rainbow", "violet", "#ffd54f", "#7dff6b", "#40c4ff", "#ff6eb4", "#b388ff", "#ff6d00", "#ff5252", "#ffffff"}
 
 
+def env_host_pw():
+    return os.environ.get("HOST_PASSWORD") or os.environ.get("HOST_PW") or HOST_PW or ""
+
+
+def pw_source():
+    if env_host_pw():
+        return "env"
+    if K.host_pw_has():
+        return "app"
+    return ""
+
+
+def has_any_pw():
+    return bool(env_host_pw()) or K.host_pw_has()
+
+
 def pw_ok(val):
-    return (not HOST_PW) or hmac.compare_digest(str(val or ""), HOST_PW)
+    if not has_any_pw():
+        return True
+    s = str(val or "")
+    if not s:
+        return False
+    epw = env_host_pw()
+    if epw and hmac.compare_digest(s, epw):
+        return True
+    if K.host_pw_has() and K.host_pw_verify(s):
+        return True
+    return False
+
+
+def host_lock_required():
+    return bool(has_any_pw() or REQUIRE_LOGIN or os.environ.get("REQUIRE_LOGIN") == "1" or K.has_accounts())
 
 
 def data_path(name):
@@ -419,15 +449,21 @@ NAME_COLORS = {"#ff6b6b", "#ffd166", "#7bed9f", "#70a1ff", "#ff9ff3", "#a29bfe",
 
 
 def authed(token, pw):
-    if HOST_PW:
-        return bool(K.check_token(token)) or pw_ok(pw)
-    if REQUIRE_LOGIN:
-        return bool(K.check_token(token))
+    u = K.check_token(token)
+    if u:
+        if u == "__host__":
+            return has_any_pw() or not host_lock_required()
+        return True
+    if has_any_pw() and pw_ok(pw):
+        return True
+    if host_lock_required():
+        return False
     return True
 
 
 def owner_of(token):
-    return K.check_token(token) or "_shared"
+    u = K.check_token(token)
+    return "_shared" if (not u or u == "__host__") else u
 
 
 def speed_start(g):
@@ -3072,8 +3108,26 @@ class H(BaseHTTPRequestHandler):
         tok = q.get("token", "")
         owner = owner_of(tok)
         if path == "/api/config":
-            self.send({"pw": bool(HOST_PW), "login_required": bool(HOST_PW or REQUIRE_LOGIN), "accounts": K.has_accounts(),
-                       "ai": bool(os.environ.get("GEMINI_API_KEY")), "storage": K.store.status(), "user": K.check_token(tok)})
+            raw_u = K.check_token(tok)
+            real_u = None if raw_u == "__host__" else raw_u
+            pw_arg = q.get("pw", "")
+            is_auth = authed(tok, pw_arg)
+            has_pw = has_any_pw()
+            locked = host_lock_required()
+            unlocked_by = "account" if real_u else ("password" if (is_auth and has_pw) else ("open" if not locked else ""))
+            self.send({
+                "pw": has_pw,
+                "pw_source": pw_source(),
+                "login_required": locked,
+                "authed": is_auth,
+                "unlocked_by": unlocked_by,
+                "accounts": K.has_accounts(),
+                "account_count": K.account_count(),
+                "signup_code_required": bool(os.environ.get("SIGNUP_CODE") or has_pw),
+                "ai": bool(os.environ.get("GEMINI_API_KEY")),
+                "storage": K.store.status(),
+                "user": real_u,
+            })
             return True
         if path == "/api/storage":
             self.send(K.store.status())
@@ -3148,9 +3202,30 @@ class H(BaseHTTPRequestHandler):
     def store_post(self, path, body):
         tok = body.get("token", "")
         owner = owner_of(tok)
+        if path == "/api/host_unlock":
+            pw_in = str(body.get("password") or "")
+            if not has_any_pw():
+                self.send({"error": "No host password has been set yet"}, 400)
+            elif not pw_ok(pw_in):
+                self.send({"error": "Incorrect host password"}, 403)
+            else:
+                self.send({"ok": True, "host_token": K.make_token("__host__"), "pw_source": pw_source()})
+            return True
+        if path == "/api/host_password":
+            if host_lock_required() and not authed(tok, body.get("current_password")):
+                self.send({"error": "Current host password or teacher sign-in required", "need_pw": True}, 403)
+                return True
+            new_pw = str(body.get("new_password") or "")
+            err = K.host_pw_set(new_pw)
+            if err:
+                self.send({"error": err}, 400)
+            else:
+                htok = K.make_token("__host__") if K.host_pw_has() else ""
+                self.send({"ok": True, "pw": has_any_pw(), "pw_source": pw_source(), "host_token": htok})
+            return True
         if path in ("/api/register", "/api/login"):
             if path == "/api/register":
-                user, err = K.register(body.get("username"), body.get("password"), body.get("code"))
+                user, err = K.register(body.get("username"), body.get("password"), body.get("code"), caller_token=tok)
             else:
                 user = K.login(body.get("username"), body.get("password"))
                 err = None if user else "Wrong username or password"
@@ -3436,8 +3511,11 @@ class H(BaseHTTPRequestHandler):
                 if not prof:
                     return self.send({"error": "Player not found"}, 404)
                 return self.send(prof)
+        if path == "/":
+            dest = "/play" + ("?" + qs if qs else "")
+            return self.send(b"", code=302, ctype="text/plain", extra_headers={"Location": dest})
         files = {
-            "/": "host.html", "/host": "host.html", "/present": "host.html",
+            "/host": "host.html", "/present": "host.html",
             "/play": "play.html", "/remote": "remote.html",
             "/practice": "practice.html", "/spectator": "spectator.html", "/hw": "homework.html",
             "/logo.jpg": "logo.jpg",

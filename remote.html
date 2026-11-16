@@ -952,7 +952,7 @@ async function loadQuizzes(){
  if(quizzesLoaded) return;
  quizzesLoaded = true;
  try{
-  const tok = localStorage.getItem('brainrush_token') || '';
+  const tok = localStorage.getItem('brainrush_token') || localStorage.getItem('brainrush_host_tok') || '';
   const r = await fetch('/api/quizzes?token=' + encodeURIComponent(tok));
   if(r.ok){
    const d = await r.json();
@@ -1202,7 +1202,7 @@ async function launchFromPhone(){
   steal: false,
   auto: false,
   bots: bots,
-  token: localStorage.getItem('brainrush_token') || '',
+  token: localStorage.getItem('brainrush_token') || localStorage.getItem('brainrush_host_tok') || '',
   password: sessionStorage.getItem('brainrush_pw') || ''
  };
  if(isCase){

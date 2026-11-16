@@ -98,7 +98,21 @@ body.in-game #studioDrawerBackdrop,body.is-audience #studioDrawerBackdrop{displa
 .rail-foot{display:flex;align-items:center;justify-content:space-between;gap:6px;padding:8px 9px;border-radius:12px;background:#ffffff0a;border:1px solid var(--border)}
 .rail-foot button{margin:0;padding:5px 8px;font-size:.77em;border-radius:8px;background:transparent;color:#ffffffcc;font-weight:750;box-shadow:none;display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
 .rail-foot button:hover{background:#ffffff14;color:#fff}
+.rail-foot button.sec-ok{color:#86efac;font-weight:850}
+.rail-foot button.sec-open{color:#fcd34d;font-weight:850}
 .rail-foot .stor-pill{color:#4ade80;font-weight:800}
+body.host-booting:not(.is-audience) .studio-shell,body.host-booting:not(.is-audience) .top-bar{opacity:0;pointer-events:none}
+body.host-locked:not(.is-audience) .studio-shell,body.host-locked:not(.is-audience) .top-bar,body.host-locked:not(.is-audience) .modal-bg{display:none!important}
+#hostLockGate{position:fixed;inset:0;z-index:95;background:var(--bg);display:none;align-items:center;justify-content:center;padding:20px;overflow-y:auto}
+body.host-locked:not(.is-audience) #hostLockGate{display:flex}
+.host-lock-card{width:100%;max-width:440px;background:var(--card);border:1.5px solid var(--border-hi);border-radius:22px;padding:28px 26px;text-align:left;box-shadow:0 24px 64px #000d;display:flex;flex-direction:column;gap:14px}
+.host-lock-card input{width:100%;box-sizing:border-box;padding:11px 13px;border-radius:10px;border:1px solid #ffffff30;background:#0e091cd9;color:#fff;font-family:inherit;font-size:.98em;margin:4px 0 8px}
+.host-lock-card input:focus{outline:none;border-color:#a78bfa;background:#150f29}
+.sec-stat-box{padding:12px 14px;border-radius:13px;font-size:.88em;line-height:1.45;display:flex;flex-direction:column;gap:5px}
+.sec-stat-box.locked{background:#14532d66;border:1px solid #4ade8088;color:#dcfce7}
+.sec-stat-box.unlocked{background:#78350f66;border:1px solid #fbbf2488;color:#fef3c7}
+.sec-card-sec{margin-top:12px;padding:13px 14px;border-radius:13px;background:#ffffff0a;border:1px solid var(--border);display:flex;flex-direction:column;gap:7px}
+.sec-card-sec h3{margin:0;font-size:.92em;color:var(--gold);display:flex;align-items:center;justify-content:space-between;gap:8px}
 
 .studio-backdrop{display:none;position:fixed;inset:0;background:#05030cb3;backdrop-filter:blur(3px);z-index:45}
 .studio-backdrop.open{display:block}
@@ -838,7 +852,7 @@ body.cb .c4{background:#CC79A7}body.cb .c5{background:#56B4E9;color:#111}body.cb
    <button onclick="closeNavMenu();openLinks()"><span>🖥️ Modes</span><span class="state">Open ↗</span></button>
    <button onclick="closeNavMenu();openModeration()"><span>🛡️ Moderation</span><span class="state">Live</span></button>
    <button onclick="closeNavMenu();openGuide(document.body.classList.contains('sec-case')?'case':undefined)"><span>📖 Feature Guide</span><span class="state">What's what</span></button>
-   <button onclick="closeNavMenu();openAccount()"><span>👤 Teacher Account</span><span class="state" id="acctState">Guest</span></button>
+   <button onclick="closeNavMenu();openAccount()"><span>🔒 Host Security &amp; Account</span><span class="state" id="acctState">…</span></button>
    <button onclick="closeNavMenu();openStorage()"><span>💾 Saved Storage</span><span class="state" id="storState">…</span></button>
   </div>
   <div class="menu-sep"></div>
@@ -1008,9 +1022,10 @@ Quote: Paris has been the capital since 987 CE."></textarea>
   </div>
  </div>
 </div>
-<div class="modal-bg" id="acctModal"><div class="modal" style="max-width:440px">
-  <h2>👤 Teacher Account</h2><div id="acctBody"></div>
-  <div style="text-align:center"><button style="margin:12px 0 0;padding:10px 22px;font-size:1.05em" onclick="document.getElementById('acctModal').classList.remove('open')">Close</button></div>
+<div class="modal-bg" id="acctModal"><div class="modal" style="max-width:520px">
+  <button class="close-x" onclick="document.getElementById('acctModal').classList.remove('open')">✕ Close</button>
+  <h2>🔒 Host Security &amp; Account</h2><div id="acctBody"></div>
+  <div style="text-align:center"><button style="margin:12px 0 0;padding:10px 22px;font-size:1.05em" onclick="document.getElementById('acctModal').classList.remove('open')">Done</button></div>
 </div></div>
 <div class="modal-bg" id="storModal"><div class="modal" style="max-width:640px">
   <h2>💾 Saved Storage</h2><div id="storBody"></div>
@@ -1063,6 +1078,7 @@ Quote: Paris has been the capital since 987 CE."></textarea>
   <div style="text-align:center"><button style="margin:10px 0 0;padding:10px 22px;font-size:1.05em" onclick="document.getElementById('linksModal').classList.remove('open')">Done</button></div>
  </div>
 </div>
+<div id="hostLockGate" class="aud-hide"></div>
 <div class="studio-shell" id="studioShell">
  <aside class="studio-rail" id="studioRail">
   <div style="min-width:0">
@@ -1125,7 +1141,7 @@ Quote: Paris has been the capital since 987 CE."></textarea>
    </nav>
   </div>
   <div class="rail-foot">
-   <button type="button" onclick="toggleMobileRail(false);openAccount()" title="Teacher Account">👤 <span id="wsAcctState">Guest</span></button>
+   <button type="button" id="wsAcctBtn" onclick="toggleMobileRail(false);openAccount()" title="Host Password &amp; Teacher Account"><span id="wsAcctIcon">🔓</span> <span id="wsAcctState">Checking…</span></button>
    <button type="button" class="stor-pill" onclick="toggleMobileRail(false);openStorage()" title="Saved Storage Status">💾 <span id="wsStorState">Local</span></button>
   </div>
  </aside>
@@ -1388,6 +1404,7 @@ Quote: Paris has been the capital since 987 CE."></textarea>
 <script>
 const IS_AUDIENCE = location.pathname === '/present' || new URLSearchParams(location.search).get('present') === '1';
 if(IS_AUDIENCE){ document.body.classList.add('is-audience'); document.title = 'Brainrush! — Presentation Screen'; }
+else { document.body.classList.add('host-booting'); setTimeout(() => document.body.classList.remove('host-booting'), 2500); }
 let pin, host, S = {};
 const $ = document.getElementById('app'), sh = ["▲ ","◆ ","● ","■ ","★ ","⬢ ","✦ ","❖ "];
 
@@ -2504,7 +2521,7 @@ function setDeckCourses(file, courseIds, skipServer=false){
   if(idx >= 0){ locQ[idx].courses = cleaned; localStorage.setItem('brainrush_custom_quizzes', JSON.stringify(locQ)); }
  }catch(e){}
  if(!skipServer && !f.startsWith('local_')){
-  const tok = localStorage.getItem('brainrush_token') || '';
+  const tok = localStorage.getItem('brainrush_token') || localStorage.getItem('brainrush_host_tok') || '';
   const pw = sessionStorage.getItem('brainrush_pw') || '';
   fetch('/api/deck_courses', {method:'POST', body:JSON.stringify({file: f, courses: cleaned, token: tok, password: pw})}).catch(()=>{});
  }
@@ -2908,7 +2925,7 @@ function syncQuizCount(){
 }
 (async()=>{
  try{
-  const tok = localStorage.getItem('brainrush_token') || '';
+  const tok = localStorage.getItem('brainrush_token') || localStorage.getItem('brainrush_host_tok') || '';
   const r = await (await fetch('/api/quizzes?token='+encodeURIComponent(tok))).json();
   const srv = (r && r.quizzes) || [];
   const delB = getDeletedBuiltinsLocal();
@@ -4507,7 +4524,7 @@ acquireWake();
 <script>
 // ===== Round 3 features: accounts, library, moderation, progress, homework =====
 let CFG = {};
-function getToken(){ return localStorage.getItem('brainrush_token') || ''; }
+function getToken(){ return localStorage.getItem('brainrush_token') || localStorage.getItem('brainrush_host_tok') || ''; }
 function getUser(){ return localStorage.getItem('brainrush_user') || ''; }
 function nameHtml(x){
  const c = x.color && /^#[0-9a-f]{3,8}$/i.test(x.color);
@@ -4584,16 +4601,127 @@ async function refreshQuizzes(sel){
 }
 async function loadConfig(){
  try{
-  CFG = await (await fetch('/api/config?token=' + encodeURIComponent(getToken()))).json();
-  if(CFG.user) localStorage.setItem('brainrush_user', CFG.user);
-  else if(getToken()){ localStorage.removeItem('brainrush_token'); localStorage.removeItem('brainrush_user'); refreshQuizzes(); }
+  const pw = sessionStorage.getItem('brainrush_pw') || '';
+  CFG = await (await fetch('/api/config?token=' + encodeURIComponent(getToken()) + '&pw=' + encodeURIComponent(pw))).json();
+  if(CFG.user){
+   localStorage.setItem('brainrush_user', CFG.user);
+  } else {
+   if(localStorage.getItem('brainrush_token') || localStorage.getItem('brainrush_user')){
+    localStorage.removeItem('brainrush_token');
+    localStorage.removeItem('brainrush_user');
+    refreshQuizzes();
+   }
+   if(!CFG.authed && localStorage.getItem('brainrush_host_tok')){
+    localStorage.removeItem('brainrush_host_tok');
+   }
+  }
  }catch(e){}
+ document.body.classList.remove('host-booting');
+ syncHostLockGate();
  updateAcctLabels();
 }
+function syncHostLockGate(){
+ const gate = document.getElementById('hostLockGate');
+ const mustLock = !IS_AUDIENCE && !!CFG.login_required && !CFG.authed && !(pin && host);
+ document.body.classList.toggle('host-locked', mustLock);
+ if(!gate || !mustLock) return;
+ const showPw = !!CFG.pw;
+ const showAcct = !!CFG.accounts || !showPw;
+ gate.innerHTML = `<div class="host-lock-card">
+  <div style="display:flex;align-items:center;gap:11px">
+   <span class="rail-bolt" style="width:40px;height:40px;font-size:1.25em">⚡</span>
+   <div>
+    <div style="font-size:1.22em;font-weight:900;color:#fff">🔒 Host Studio Locked</div>
+    <div style="font-size:.82em;opacity:.8">Teacher password or account required to open <b>/host</b></div>
+   </div>
+  </div>
+  <a href="/play" style="display:flex;align-items:center;justify-content:center;gap:6px;padding:10px 14px;border-radius:11px;background:#14532d99;border:1px solid #4ade8088;color:#dcfce7;font-weight:850;font-size:.88em;text-decoration:none">🎮 I'm a Student — Go to Join Screen (/play) →</a>
+  ${showPw ? `<div style="border-top:1px solid var(--border);padding-top:12px">
+   <label style="font-size:.83em;font-weight:850;color:var(--gold);display:block">🔑 Enter Host Password</label>
+   <input id="hlPw" type="password" placeholder="Host password" autocomplete="current-password" onkeydown="if(event.key==='Enter')unlockWithHostPw()">
+   <button type="button" style="width:100%;margin:0;padding:11px 16px;font-size:.96em;background:linear-gradient(180deg,#22c55e,#16a34a);color:#05210e;font-weight:900" onclick="unlockWithHostPw()">🔓 Unlock Host Studio →</button>
+  </div>` : ''}
+  ${showAcct ? `<div style="border-top:1px solid var(--border);padding-top:12px">
+   <label style="font-size:.83em;font-weight:850;color:#c4b5fd;display:block">${showPw ? 'Or Sign In with Teacher Account' : '👤 Teacher Account Sign In'}</label>
+   <input id="hlUser" placeholder="Username" autocomplete="username" onkeydown="if(event.key==='Enter')unlockWithAcct()">
+   <input id="hlPass" type="password" placeholder="Password" autocomplete="current-password" onkeydown="if(event.key==='Enter')unlockWithAcct()">
+   <button type="button" class="btn-sec" style="width:100%;margin:0;padding:10px 16px;font-size:.92em" onclick="unlockWithAcct()">Sign In →</button>
+  </div>` : ''}
+  <div id="hlMsg" style="min-height:18px;font-size:.86em;font-weight:800;color:#ff9b9b;text-align:center"></div>
+ </div>`;
+ setTimeout(() => {
+  const inp = document.getElementById(showPw ? 'hlPw' : 'hlUser');
+  if(inp) inp.focus();
+ }, 40);
+}
+async function unlockWithHostPw(){
+ const inp = document.getElementById('hlPw');
+ const msg = document.getElementById('hlMsg');
+ const pw = (inp && inp.value) || '';
+ if(!pw){ if(msg) msg.textContent = 'Enter your host password first.'; return; }
+ if(msg){ msg.style.color = '#ffdf5d'; msg.textContent = 'Verifying…'; }
+ const r = await post('/api/host_unlock', {password: pw});
+ if(r && r.ok){
+  sessionStorage.setItem('brainrush_pw', pw);
+  if(r.host_token) localStorage.setItem('brainrush_host_tok', r.host_token);
+  await loadConfig();
+  await refreshQuizzes();
+ } else {
+  if(msg){ msg.style.color = '#ff9b9b'; msg.textContent = (r && r.error) || 'Incorrect host password.'; }
+ }
+}
+async function unlockWithAcct(){
+ const u = ((document.getElementById('hlUser')||{}).value || '').trim();
+ const p = (document.getElementById('hlPass')||{}).value || '';
+ const msg = document.getElementById('hlMsg');
+ if(!u || !p){ if(msg) msg.textContent = 'Enter both username and password.'; return; }
+ if(msg){ msg.style.color = '#ffdf5d'; msg.textContent = 'Signing in…'; }
+ const r = await post('/api/login', {username: u, password: p});
+ if(r && r.token){
+  localStorage.setItem('brainrush_token', r.token);
+  localStorage.setItem('brainrush_user', r.user);
+  await loadConfig();
+  await refreshQuizzes();
+ } else {
+  if(msg){ msg.style.color = '#ff9b9b'; msg.textContent = (r && r.error) || 'Wrong username or password.'; }
+ }
+}
+function lockHostBrowser(){
+ localStorage.removeItem('brainrush_token');
+ localStorage.removeItem('brainrush_user');
+ localStorage.removeItem('brainrush_host_tok');
+ sessionStorage.removeItem('brainrush_pw');
+ document.getElementById('acctModal').classList.remove('open');
+ loadConfig();
+}
 function updateAcctLabels(){
- const u = getUser() || 'Guest';
- const a = document.getElementById('acctState'); if(a) a.textContent = u;
- const wa = document.getElementById('wsAcctState'); if(wa) wa.textContent = u;
+ const u = getUser();
+ const locked = !!CFG.login_required;
+ const a = document.getElementById('acctState');
+ const wa = document.getElementById('wsAcctState');
+ const wi = document.getElementById('wsAcctIcon');
+ const wb = document.getElementById('wsAcctBtn');
+ if(u){
+  if(a) a.textContent = '🔒 ' + u;
+  if(wa) wa.textContent = u;
+  if(wi) wi.textContent = '🔒';
+ } else if(locked && CFG.authed){
+  if(a) a.textContent = '🔒 Protected';
+  if(wa) wa.textContent = 'Protected';
+  if(wi) wi.textContent = '🔒';
+ } else if(locked){
+  if(a) a.textContent = '🔒 Locked';
+  if(wa) wa.textContent = 'Locked';
+  if(wi) wi.textContent = '🔒';
+ } else {
+  if(a) a.textContent = '🔓 Open';
+  if(wa) wa.textContent = 'Unprotected';
+  if(wi) wi.textContent = '🔓';
+ }
+ if(wb){
+  wb.classList.toggle('sec-ok', locked);
+  wb.classList.toggle('sec-open', !locked);
+ }
  const s = document.getElementById('storState'), ws = document.getElementById('wsStorState');
  if(CFG.storage){
   const st = CFG.storage.persistent ? (CFG.storage.ok ? 'Cloud ✓' : 'Cloud ⚠') : 'Local only';
@@ -4604,25 +4732,116 @@ function updateAcctLabels(){
  if(typeof syncWsNavCollapse === 'function') syncWsNavCollapse();
 }
 
-// --- Account modal ---
-function openAccount(msg){
+// --- Host Security & Account modal ---
+async function openAccount(msg, isGood=false){
+ await loadConfig();
  const b = document.getElementById('acctBody');
  const u = getUser();
- b.innerHTML = u ? `<p>Signed in as <b>${esc(u)}</b>.</p><p style="opacity:.85;font-size:.92em">Your quizzes, game history, student progress and homework are saved under this account.</p><button class="btn-sec" style="margin:0" onclick="signOut()">Sign out</button>`
-  : `<p style="opacity:.85;font-size:.92em">Sign in to keep your own quizzes, history, student progress and homework separate from other teachers.${CFG.login_required?' <b>Login is required on this server.</b>':''}</p>
-   <input id="acUser" placeholder="Username" autocomplete="username"><input id="acPass" type="password" placeholder="Password (6+ characters)" autocomplete="current-password">
-   <input id="acCode" placeholder="Teacher signup code (only when creating an account)">
-   <div style="display:flex;gap:8px"><button style="margin:0;flex:1" onclick="acctDo('login')">Sign in</button><button class="btn-sec" style="margin:0;flex:1" onclick="acctDo('register')">Create account</button></div>
-   <div id="acMsg" style="margin-top:8px;font-weight:700;color:#ffb3b3">${esc(msg||'')}</div>`;
+ const locked = !!CFG.login_required;
+ const isCloud = !!(CFG.storage && CFG.storage.persistent);
+ const pwLine = CFG.pw_source === 'env'
+  ? `✅ <b>Host Password:</b> Active via Render <code>HOST_PASSWORD</code> (permanent across deploys)`
+  : (CFG.pw_source === 'app'
+     ? `✅ <b>Host Password:</b> Active (set in-app${isCloud ? ', saved in Cloud ✓' : ' — local disk; also set <code>HOST_PASSWORD</code> in Render Environment so redeploys never reset it'})`
+     : `⚪ <b>Host Password:</b> Not set`);
+ const acctCnt = Number(CFG.account_count || 0);
+ const acctLine = u
+  ? `✅ <b>Teacher Account:</b> Signed in as <b>${esc(u)}</b>`
+  : (acctCnt > 0
+     ? `⚪ <b>Teacher Account:</b> Not signed in (${acctCnt} account${acctCnt===1?'':'s'} registered on server)`
+     : `⚪ <b>Teacher Account:</b> None created yet (0 accounts on server)`);
+ b.innerHTML = `
+  <div class="sec-stat-box ${locked ? 'locked' : 'unlocked'}">
+   <div style="font-size:1.02em;font-weight:900">${locked ? '🔒 /host is PROTECTED from students' : '🔓 /host is currently UNPROTECTED'}</div>
+   <div>${pwLine}</div>
+   <div>${acctLine}</div>
+   ${locked && CFG.authed ? `<div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:4px;padding-top:6px;border-top:1px solid #ffffff22">
+    <span>🟢 This browser is unlocked</span>
+    <button type="button" class="btn-sm" style="margin:0;padding:4px 10px;font-size:.82em;background:#e21b3ccc" onclick="lockHostBrowser()">🔒 Lock Browser Now (Test)</button>
+   </div>` : ''}
+  </div>
+  ${msg ? `<div style="margin-top:10px;padding:8px 11px;border-radius:9px;font-size:.88em;font-weight:800;background:${isGood?'#14532d88':'#7f1d1d88'};border:1px solid ${isGood?'#4ade8088':'#f8717188'};color:${isGood?'#dcfce7':'#fecaca'}">${esc(msg)}</div>` : ''}
+  <div class="sec-card-sec">
+   <h3><span>🔑 Host Password</span><small style="font-weight:700;opacity:.75">${CFG.pw ? 'Active' : 'Quickest way to lock /host'}</small></h3>
+   ${CFG.pw_source === 'env'
+    ? `<div style="font-size:.85em;opacity:.9">Managed via <code>HOST_PASSWORD</code> in your Render dashboard Environment tab. Students cannot enter <b>/host</b> without it.</div>
+       <div style="display:flex;gap:6px;align-items:center">
+        <input id="testEnvPwInp" type="password" placeholder="Type password to test if it matches…" style="margin:0;flex:1">
+        <button type="button" class="btn-sm" style="margin:0;padding:9px 13px;white-space:nowrap" onclick="verifyHostPwInline()">✓ Test</button>
+       </div>`
+    : `<div style="font-size:.84em;opacity:.86">Set a password right here to immediately lock <b>/host</b> with a full-screen password gate.${!isCloud ? ' <i>(Tip: for permanent protection that survives Render redeploys, also add <code>HOST_PASSWORD</code> under Render → Environment.)</i>' : ''}</div>
+       ${CFG.pw ? `<input id="curHostPwInp" type="password" placeholder="Current host password (skip if signed into account)" style="margin:2px 0">` : ''}
+       <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+        <input id="newHostPwInp" type="password" placeholder="${CFG.pw ? 'New host password (4+ chars)' : 'Choose a host password (4+ chars)'}" style="margin:0;flex:1;min-width:180px">
+        <button type="button" style="margin:0;padding:9px 14px;font-size:.88em;background:#16a34a;white-space:nowrap" onclick="saveInAppHostPw(false)">💾 ${CFG.pw ? 'Update' : 'Set Password'}</button>
+        ${CFG.pw ? `<button type="button" class="btn-sec" style="margin:0;padding:9px 11px;font-size:.84em;background:#e21b3c88" onclick="saveInAppHostPw(true)">Remove</button>` : ''}
+       </div>`}
+  </div>
+  <div class="sec-card-sec">
+   <h3><span>👤 Teacher Account</span><small style="font-weight:700;opacity:.75">${u ? 'Signed in' : 'Optional per-teacher workspace'}</small></h3>
+   ${u
+    ? `<div style="font-size:.88em">Signed in as <b>${esc(u)}</b>. Your custom quizzes, history, student progress, and homework stay under this account.</div>
+       <div><button type="button" class="btn-sec" style="margin:0;padding:7px 14px;font-size:.86em" onclick="signOut()">Sign Out of ${esc(u)}</button></div>`
+    : `<div style="font-size:.84em;opacity:.86">Create or sign in to a Teacher Account (creating an account also locks <b>/host</b> from students).</div>
+       <input id="acUser" placeholder="Username (3+ characters)" autocomplete="username" style="margin:2px 0">
+       <input id="acPass" type="password" placeholder="Password (6+ characters)" autocomplete="current-password" style="margin:2px 0">
+       ${CFG.signup_code_required ? `<input id="acCode" type="password" placeholder="Current Host Password / Signup Code (required to create account)" style="margin:2px 0">` : `<input id="acCode" type="hidden" value="">`}
+       <div style="display:flex;gap:8px;margin-top:2px">
+        <button type="button" style="margin:0;flex:1;padding:9px 12px;font-size:.9em" onclick="acctDo('login')">Sign In</button>
+        <button type="button" class="btn-sec" style="margin:0;flex:1;padding:9px 12px;font-size:.9em" onclick="acctDo('register')">Create Account</button>
+       </div>`}
+  </div>`;
  document.getElementById('acctModal').classList.add('open');
 }
-async function acctDo(kind){
- const r = await post('/api/' + kind, {username: document.getElementById('acUser').value, password: document.getElementById('acPass').value, code: document.getElementById('acCode').value});
- if(r.error){ document.getElementById('acMsg').textContent = r.error; return; }
- localStorage.setItem('brainrush_token', r.token); localStorage.setItem('brainrush_user', r.user);
- await loadConfig(); await refreshQuizzes(); openAccount();
+async function verifyHostPwInline(){
+ const pw = ((document.getElementById('testEnvPwInp')||{}).value || '');
+ const r = await post('/api/host_unlock', {password: pw});
+ if(r && r.ok){
+  sessionStorage.setItem('brainrush_pw', pw);
+  if(r.host_token) localStorage.setItem('brainrush_host_tok', r.host_token);
+  openAccount('✅ Password verified! Matches your server HOST_PASSWORD.', true);
+ } else {
+  openAccount((r && r.error) || '❌ That password did not match.', false);
+ }
 }
-function signOut(){ localStorage.removeItem('brainrush_token'); localStorage.removeItem('brainrush_user'); loadConfig(); refreshQuizzes(); openAccount(); }
+async function saveInAppHostPw(clearIt){
+ const curPw = ((document.getElementById('curHostPwInp')||{}).value || sessionStorage.getItem('brainrush_pw') || '');
+ const newPw = clearIt ? '' : ((document.getElementById('newHostPwInp')||{}).value || '');
+ if(!clearIt && newPw.length < 4){ openAccount('Host password needs at least 4 characters.', false); return; }
+ const r = await post('/api/host_password', {token: getToken(), current_password: curPw, new_password: newPw});
+ if(r && r.ok){
+  if(clearIt){
+   localStorage.removeItem('brainrush_host_tok');
+   sessionStorage.removeItem('brainrush_pw');
+   await loadConfig();
+   openAccount('Host password removed.', true);
+  } else {
+   sessionStorage.setItem('brainrush_pw', newPw);
+   if(r.host_token) localStorage.setItem('brainrush_host_tok', r.host_token);
+   await loadConfig();
+   openAccount('✅ Host password saved! /host is now locked to students.', true);
+  }
+ } else {
+  openAccount((r && r.error) || 'Could not update host password.', false);
+ }
+}
+async function acctDo(kind){
+ const u = ((document.getElementById('acUser')||{}).value || '').trim();
+ const p = (document.getElementById('acPass')||{}).value || '';
+ const c = (document.getElementById('acCode')||{}).value || sessionStorage.getItem('brainrush_pw') || '';
+ const r = await post('/api/' + kind, {username: u, password: p, code: c, token: getToken()});
+ if(r.error){ openAccount(r.error, false); return; }
+ localStorage.setItem('brainrush_token', r.token); localStorage.setItem('brainrush_user', r.user);
+ await loadConfig(); await refreshQuizzes();
+ openAccount(kind === 'register' ? `✅ Account "${r.user}" created and signed in! /host is now protected.` : `✅ Signed in as "${r.user}"!`, true);
+}
+async function signOut(){
+ localStorage.removeItem('brainrush_token');
+ localStorage.removeItem('brainrush_user');
+ await loadConfig();
+ await refreshQuizzes();
+ if(!document.body.classList.contains('host-locked')) openAccount('Signed out of Teacher Account.', true);
+}
 
 // --- Storage modal ---
 function openStorage(){
@@ -7328,7 +7547,7 @@ function updateCanvasBadges(){
 
 async function canvasApiPost(path, payload){
  const body = Object.assign({
-  token: localStorage.getItem('brainrush_token') || '',
+  token: (typeof getToken === 'function' ? getToken() : (localStorage.getItem('brainrush_token') || '')),
   password: sessionStorage.getItem('brainrush_pw') || '',
   pin: (typeof pin !== 'undefined' && pin) ? pin : '',
   host: (typeof host !== 'undefined' && host) ? host : ''

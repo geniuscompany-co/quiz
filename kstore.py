@@ -186,13 +186,54 @@ def _hash(pw, salt):
     return hashlib.pbkdf2_hmac("sha256", pw.encode(), bytes.fromhex(salt), 100000).hex()
 
 
-def register(username, password, code=""):
+def host_pw_has():
+    rec = store.get_json("host_pw", {})
+    return bool(isinstance(rec, dict) and rec.get("salt") and rec.get("hash"))
+
+
+def host_pw_verify(pw):
+    s = str(pw or "")
+    if not s:
+        return False
+    rec = store.get_json("host_pw", {})
+    if not isinstance(rec, dict) or not rec.get("salt") or not rec.get("hash"):
+        return False
+    return hmac.compare_digest(rec["hash"], _hash(s, rec["salt"]))
+
+
+def host_pw_set(new_pw):
+    s = str(new_pw or "")
+    with _lock:
+        if not s:
+            store.set_json("host_pw", {})
+            return None
+        if len(s) < 4:
+            return "Host password needs at least 4 characters"
+        salt = secrets.token_hex(16)
+        store.set_json("host_pw", {"salt": salt, "hash": _hash(s, salt), "updated": int(time.time())})
+    return None
+
+
+def account_count():
+    accts = store.get_json("accounts", {})
+    return len(accts) if isinstance(accts, dict) else 0
+
+
+def register(username, password, code="", caller_token=""):
     username = re.sub(r"[^A-Za-z0-9_.-]", "", str(username or ""))[:24]
     if len(username) < 3 or len(str(password or "")) < 6:
         return None, "Username needs 3+ characters and password 6+ characters"
-    need = os.environ.get("SIGNUP_CODE") or os.environ.get("HOST_PASSWORD") or ""
-    if need and not hmac.compare_digest(str(code or ""), need):
-        return None, "Teacher signup code required (ask the server admin)"
+    caller_ok = bool(check_token(caller_token))
+    if not caller_ok:
+        need = os.environ.get("SIGNUP_CODE") or os.environ.get("HOST_PASSWORD") or os.environ.get("HOST_PW") or ""
+        if need:
+            if not hmac.compare_digest(str(code or ""), need):
+                return None, "Teacher signup code or Host Password required"
+        elif host_pw_has():
+            if not host_pw_verify(code):
+                return None, "Host Password required in signup code field to create an account"
+        elif account_count() > 0:
+            return None, "Host login required before creating additional accounts"
     with _lock:
         accts = store.get_json("accounts", {})
         if username.lower() in accts:
