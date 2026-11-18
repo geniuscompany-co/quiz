@@ -324,6 +324,77 @@ def deck_order_set(owner, order):
     return out
 
 
+ALLOWED_SETTING_KEYS = {
+    "qCount", "qTime", "qPrevTime", "qThinkTime", "qTeamTime", "qSpeedTime", "qAutoTime", "qBots",
+    "cPollTime", "cDiscussTime", "cRankTime", "cOpenTime", "qBrainTime", "qScaleTime", "cTime", "cPrevTime",
+    "qScoring", "qIcePrompt",
+    "qShuffle", "qShuffleAns", "qWheel", "qWager", "qRedemp", "qHot", "qDbl", "qSabotage", "qSteal", "qTie",
+    "qSpeed", "qAuto", "qTeams", "qBattle", "qConsensus", "qIce",
+    "qMod", "qRosterOn", "qHideBoard", "qStudentTts", "qChat", "qProfiles", "qPlayToo",
+}
+
+
+def _clean_settings_dict(cfg):
+    if not isinstance(cfg, dict):
+        return {}
+    out = {}
+    for k, v in cfg.items():
+        ks = str(k or "").strip()
+        if ks not in ALLOWED_SETTING_KEYS:
+            continue
+        if isinstance(v, bool):
+            out[ks] = v
+        elif isinstance(v, (int, float)):
+            out[ks] = v
+        elif isinstance(v, str):
+            out[ks] = v.strip()[:160]
+    return out
+
+
+def host_settings_get(owner):
+    raw = store.get_json("hostsettings:" + owner, {}) or {}
+    if not isinstance(raw, dict):
+        return {}
+    return _clean_settings_dict(raw)
+
+
+def host_settings_set(owner, cfg):
+    cleaned = _clean_settings_dict(cfg)
+    with _lock:
+        store.set_json("hostsettings:" + owner, cleaned)
+    return cleaned
+
+
+def deck_settings_map(owner):
+    raw = store.get_json("decksettings:" + owner, {}) or {}
+    if not isinstance(raw, dict):
+        return {}
+    out = {}
+    for k, v in raw.items():
+        if isinstance(v, dict):
+            c = _clean_settings_dict(v)
+            if c:
+                out[str(k)[:120]] = c
+    return out
+
+
+def deck_settings_set(owner, file_id, cfg):
+    fid = str(file_id or "").strip()[:120]
+    if not fid:
+        return {}
+    cleaned = _clean_settings_dict(cfg)
+    with _lock:
+        ds = store.get_json("decksettings:" + owner, {}) or {}
+        if not isinstance(ds, dict):
+            ds = {}
+        if cleaned:
+            ds[fid] = cleaned
+        else:
+            ds.pop(fid, None)
+        store.set_json("decksettings:" + owner, ds)
+    return cleaned
+
+
 def deck_courses_set(owner, file_id, courses):
     fid = str(file_id or "").strip()[:120]
     if not fid:

@@ -948,6 +948,7 @@ function setHudStatus(mode){
  }
 }
 
+let remoteGlobalSettings = {};
 async function loadQuizzes(){
  if(quizzesLoaded) return;
  quizzesLoaded = true;
@@ -957,9 +958,54 @@ async function loadQuizzes(){
   if(r.ok){
    const d = await r.json();
    quizCatalog = d.quizzes || [];
+   remoteGlobalSettings = d.host_settings || {};
    populateSelect();
   }
  }catch(e){ quizzesLoaded = false; }
+}
+
+function applyRemoteDeckSettings(file){
+ const qObj = quizCatalog.find(x => x.file === file);
+ const cfg = Object.assign({
+  qTime:15, qPrevTime:5, qThinkTime:0, qBots:0,
+  cPollTime:45, cDiscussTime:60, cRankTime:60, cOpenTime:120, qBrainTime:90, qScaleTime:25, cTime:20, cPrevTime:5,
+  qScoring:'classic',
+  qShuffle:false, qShuffleAns:true, qIce:false, qTeams:false, qConsensus:false,
+  qHideBoard:false, qStudentTts:false, qChat:false, qProfiles:false, qPlayToo:false,
+  qWager:false, qRedemp:false, qWheel:false, qHot:false, qTie:false, qMod:false
+ }, remoteGlobalSettings || {}, (qObj && qObj.settings) || {});
+ const setVal = (id, v) => { const el = document.getElementById(id); if(el && v !== undefined && v !== null) el.value = v; };
+ const setChk = (id, v) => { const el = document.getElementById(id); if(el && typeof v === 'boolean') el.checked = v; };
+ setVal('rScoring', cfg.qScoring || 'classic');
+ setVal('mQTime', cfg.qTime);
+ setVal('mPrevTime', cfg.qPrevTime);
+ setVal('rThinkTime', cfg.qThinkTime);
+ setVal('mPollTime', cfg.cPollTime);
+ setVal('mDiscTime', cfg.cDiscussTime);
+ setVal('mRankTime', cfg.cRankTime);
+ setVal('mOpenTime', cfg.cOpenTime);
+ setVal('mBrainTime', cfg.qBrainTime);
+ setVal('mScaleTime', cfg.qScaleTime);
+ setVal('mCheckTime', cfg.cTime);
+ setVal('mCasePrev', cfg.cPrevTime);
+ setVal('mBots', cfg.qBots);
+ setChk('mShuf', cfg.qShuffle);
+ setChk('mShufAns', cfg.qShuffleAns);
+ setChk('mIce', cfg.qIce);
+ setChk('mTeams', cfg.qTeams);
+ setChk('rConsensus', cfg.qConsensus);
+ setChk('rHideBoard', cfg.qHideBoard);
+ setChk('rAllowTts', cfg.qStudentTts);
+ setChk('rChat', cfg.qChat);
+ setChk('rProfiles', cfg.qProfiles);
+ setChk('rPlayToo', cfg.qPlayToo);
+ setChk('mWager', cfg.qWager);
+ setChk('mRedemp', cfg.qRedemp);
+ setChk('mWheel', cfg.qWheel);
+ setChk('mHot', cfg.qHot);
+ setChk('mTie', cfg.qTie);
+ setChk('mMod', cfg.qMod);
+ updateRemoteOptBadge();
 }
 
 function selectRemoteDeck(file){
@@ -970,6 +1016,7 @@ function selectRemoteDeck(file){
  });
  const errEl = document.getElementById('mErr');
  if(errEl && file) errEl.style.display = 'none';
+ applyRemoteDeckSettings(file);
 }
 
 function filterRemoteDecks(){
@@ -1010,6 +1057,7 @@ function populateSelect(){
    }).join('');
   }
  }
+ applyRemoteDeckSettings(sel.value);
 }
 
 function updateRemoteOptBadge(){

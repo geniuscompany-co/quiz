@@ -592,15 +592,18 @@ def list_quizzes(owner="_shared"):
             pass
     owners = ["_shared"] + ([owner] if owner != "_shared" else [])
     items += K.uq_list(owners)
-    dc_map = {}
+    dc_map, ds_map = {}, {}
     for o in owners:
         dc_map.update(K.deck_courses_map(o))
+        ds_map.update(K.deck_settings_map(o))
     for it in items:
         fid = it.get("file")
         if fid in dc_map:
             it["courses"] = dc_map[fid]
         elif "courses" not in it:
             it["courses"] = []
+        if fid in ds_map:
+            it["settings"] = ds_map[fid]
     ord_list = K.deck_order_list(owner) or (K.deck_order_list("_shared") if owner != "_shared" else [])
     if ord_list:
         pos = {f: i for i, f in enumerate(ord_list)}
@@ -3176,7 +3179,10 @@ class H(BaseHTTPRequestHandler):
             self.send(K.store.status())
             return True
         if path == "/api/quizzes":
-            self.send({"quizzes": list_quizzes(owner)})
+            self.send({
+                "quizzes": list_quizzes(owner),
+                "host_settings": K.host_settings_get(owner) or (K.host_settings_get("_shared") if owner != "_shared" else {}),
+            })
             return True
         if path == "/api/quiz_data":
             qs_ = [dict((k, v) for k, v in x.items() if k != "note") for x in load_quiz(q.get("file") or "quiz.json")]
@@ -3335,7 +3341,7 @@ class H(BaseHTTPRequestHandler):
                 )
                 self.send({"error": err}, 400) if err else self.send(res)
             return True
-        gated = ("/api/upload_quiz", "/api/delete_quiz", "/api/dup_quiz", "/api/deck_courses", "/api/deck_order", "/api/history_clear", "/api/ai_quiz",
+        gated = ("/api/upload_quiz", "/api/delete_quiz", "/api/dup_quiz", "/api/deck_courses", "/api/deck_order", "/api/deck_settings", "/api/host_settings", "/api/history_clear", "/api/ai_quiz",
                  "/api/import_sheet", "/api/hw_create", "/api/upload_img")
         if path not in gated:
             return False
@@ -3367,6 +3373,16 @@ class H(BaseHTTPRequestHandler):
             order_in = body.get("order") if isinstance(body.get("order"), list) else []
             saved = K.deck_order_set(owner, order_in)
             self.send({"ok": True, "order": saved, "quizzes": list_quizzes(owner)})
+        elif path == "/api/deck_settings":
+            f = str(body.get("file") or "").strip()
+            if not f:
+                self.send({"error": "Missing deck file"}, 400)
+            else:
+                saved = K.deck_settings_set(owner, f, body.get("settings") if isinstance(body.get("settings"), dict) else {})
+                self.send({"ok": True, "file": f, "settings": saved, "quizzes": list_quizzes(owner)})
+        elif path == "/api/host_settings":
+            saved = K.host_settings_set(owner, body.get("settings") if isinstance(body.get("settings"), dict) else {})
+            self.send({"ok": True, "settings": saved})
         elif path == "/api/delete_quiz":
             files_to_del = body.get("files") if isinstance(body.get("files"), list) else [body.get("file") or ""]
             for f in files_to_del:
@@ -3390,6 +3406,8 @@ class H(BaseHTTPRequestHandler):
                 src_courses.append(extra_cid)
             try:
                 fname, cnt, cleaned = save_custom_quiz("Copy of " + title, load_quiz(f), owner, (src or {}).get("folder", "") if src and not src.get("builtin") else "", (src or {}).get("tags", []), courses=src_courses)
+                if src and isinstance(src.get("settings"), dict) and src["settings"]:
+                    K.deck_settings_set(owner, fname, src["settings"])
                 self.send({"ok": True, "file": fname, "count": cnt, "quizzes": list_quizzes(owner)})
             except Exception as e:
                 self.send({"error": str(e)}, 400)

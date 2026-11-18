@@ -1214,6 +1214,7 @@ Quote: Paris has been the capital since 987 CE."></textarea>
    <span class="drawer-head-title">⚙️ Session Inspector</span>
    <button type="button" class="drawer-close-btn" onclick="toggleStudioDrawer(false)">✕ Close</button>
   </div>
+  <div id="drawerSaveScopeBar" style="flex-shrink:0;padding:8px 16px;background:#090517b3;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;font-size:.76em"></div>
   <div class="drawer-body acc-list">
    <details class="acc-box" id="accTimers" open>
     <summary>
@@ -1221,13 +1222,13 @@ Quote: Paris has been the capital since 987 CE."></textarea>
      <span class="acc-right"><span class="acc-badge" id="drawerTimerBadge">15s</span><span class="acc-caret">▾</span></span>
     </summary>
     <div class="acc-body">
-     <div class="quick-bar quiz-only" oninput="updateTimerSummary();updateOptSummary()">
+     <div class="quick-bar quiz-only" oninput="updateTimerSummary();updateOptSummary();if(typeof onInspectorSettingChange==='function')onInspectorSettingChange()">
       <label><span>📝 Questions</span><span><input id="qCount" type="number" min="1" max="200" value="" placeholder="—"> <small id="qMax" style="opacity:.75">/ —</small></span></label>
       <label title="Seconds players get to answer each question"><span>⏱️ Timer</span><span><input id="qTime" type="number" min="5" max="900" value="15"><small style="opacity:.75">s</small></span></label>
       <label title="Reading preview before answer buttons open (set 0 for instant)"><span>👀 Preview</span><span><input id="qPrevTime" type="number" min="0" max="120" value="5"><small style="opacity:.75">s</small></span></label>
       <label title="Choices shown on screen &amp; phones, but answers locked while students reason"><span>🧠 Think</span><span><input id="qThinkTime" type="number" min="0" max="120" value="0"><small style="opacity:.75">s</small></span></label>
      </div>
-     <div class="case-only" oninput="syncCaseTimerSpec();updateTimerSummary()">
+     <div class="case-only" oninput="syncCaseTimerSpec();updateTimerSummary();if(typeof onInspectorSettingChange==='function')onInspectorSettingChange()">
       <div class="case-timers-grid">
        <label class="ct-item" title="Voting timer on Decision Poll slides"><span>🗳️ Poll</span><span><input id="cPollTime" type="number" min="5" max="900" value="45">s</span></label>
        <label class="ct-item" title="Default debate / discussion countdown timer"><span>🎤 Discuss</span><span><input id="cDiscussTime" type="number" min="5" max="900" value="60">s</span></label>
@@ -1253,7 +1254,7 @@ Quote: Paris has been the capital since 987 CE."></textarea>
      <span><span class="quiz-only">✨ Vibe &amp; Modifiers</span><span class="case-only">⚙️ Session Modifiers</span></span>
      <span class="acc-right"><span class="acc-badge" id="drawerOptBadge">0 active</span><span class="acc-caret">▾</span></span>
     </summary>
-    <div class="acc-body" id="advPanel" onchange="updateOptSummary()">
+    <div class="acc-body" id="advPanel" onchange="updateOptSummary();if(typeof onInspectorSettingChange==='function')onInspectorSettingChange()" oninput="if(typeof onInspectorSettingChange==='function')onInspectorSettingChange()">
      <div class="preset-sel-row quiz-only">
       <span>✨ Vibe Preset</span>
       <select id="presetSel" onchange="if(this.value!=='custom')applyPreset(this.value)">
@@ -1600,6 +1601,7 @@ function applyPreset(name){
  const ir = document.getElementById('icePromptRow'); if(ir) ir.style.display = want.has('qIce') ? 'block' : 'none';
  updateTimerSummary();
  updateOptSummary();
+ if(typeof onInspectorSettingChange === 'function') onInspectorSettingChange();
 }
 function updateTimerSummary(){
  const b = document.getElementById('timerSummary'), sub = document.getElementById('timerSubTxt'), db = document.getElementById('drawerTimerBadge');
@@ -2685,9 +2687,199 @@ function persistCurrentQuizOrder(){
  fetch('/api/deck_order', {method:'POST', body:JSON.stringify({order: serverOrder, token: tok, password: pw})}).catch(()=>{});
 }
 
+const SAVED_SETTING_DEFAULTS = {
+ qTime: 15, qPrevTime: 5, qThinkTime: 0, qTeamTime: 12, qSpeedTime: 5, qAutoTime: 7, qBots: 0,
+ cPollTime: 45, cDiscussTime: 60, cRankTime: 60, cOpenTime: 120, qBrainTime: 45, qScaleTime: 25, cTime: 20, cPrevTime: 5,
+ qScoring: 'classic', qIcePrompt: "In one word, how are you feeling about today's quiz?",
+ qShuffle: false, qShuffleAns: true, qWheel: false, qWager: false, qRedemp: false, qHot: false, qDbl: false, qSabotage: false, qSteal: false, qTie: false,
+ qSpeed: false, qAuto: false, qTeams: false, qBattle: false, qConsensus: false, qIce: false,
+ qMod: false, qRosterOn: false, qHideBoard: false, qStudentTts: false, qChat: false, qProfiles: false, qPlayToo: false
+};
+const SAVED_BOOL_KEYS = [
+ 'qShuffle','qShuffleAns','qWheel','qWager','qRedemp','qHot','qDbl','qSabotage','qSteal','qTie',
+ 'qSpeed','qAuto','qTeams','qBattle','qConsensus','qIce',
+ 'qMod','qRosterOn','qHideBoard','qStudentTts','qChat','qProfiles','qPlayToo'
+];
+const SAVED_NUM_KEYS = [
+ 'qTime','qPrevTime','qThinkTime','qTeamTime','qSpeedTime','qAutoTime','qBots',
+ 'cPollTime','cDiscussTime','cRankTime','cOpenTime','qBrainTime','qScaleTime','cTime','cPrevTime'
+];
+let _applyingSettingsGuard = false;
+let _lastAppliedDeckFile = null;
+let _saveHostSettingsTimer = null;
+let _saveDeckSettingsTimer = null;
+
+function loadLocalGlobalSettings(){
+ try{
+  const raw = JSON.parse(localStorage.getItem('brainrush_global_settings') || '{}') || {};
+  return (raw && typeof raw === 'object') ? raw : {};
+ }catch(e){ return {}; }
+}
+function saveLocalGlobalSettings(cfg){
+ try{ localStorage.setItem('brainrush_global_settings', JSON.stringify(cfg || {})); }catch(e){}
+}
+function loadLocalDeckSettingsMap(){
+ try{
+  const raw = JSON.parse(localStorage.getItem('brainrush_deck_settings') || '{}') || {};
+  return (raw && typeof raw === 'object') ? raw : {};
+ }catch(e){ return {}; }
+}
+function saveLocalDeckSettingsMap(map){
+ try{ localStorage.setItem('brainrush_deck_settings', JSON.stringify(map || {})); }catch(e){}
+}
+function getDeckSavedSettings(qOrFile){
+ const f = typeof qOrFile === 'string' ? qOrFile : ((qOrFile && qOrFile.file) || '');
+ if(!f) return null;
+ const locMap = loadLocalDeckSettingsMap();
+ if(locMap[f] && typeof locMap[f] === 'object' && Object.keys(locMap[f]).length) return locMap[f];
+ const qObj = (typeof qOrFile === 'object' && qOrFile) ? qOrFile : quizList.find(x => x.file === f);
+ if(qObj && qObj.settings && typeof qObj.settings === 'object' && Object.keys(qObj.settings).length) return qObj.settings;
+ return null;
+}
+function readInspectorSettingsFromDom(includeCount=true){
+ const out = {};
+ if(includeCount){
+  const cntEl = document.getElementById('qCount');
+  const cv = cntEl ? parseInt(cntEl.value, 10) : NaN;
+  if(!isNaN(cv) && cv > 0) out.qCount = cv;
+ }
+ SAVED_NUM_KEYS.forEach(k => {
+  const el = document.getElementById(k);
+  if(el && el.value !== ''){
+   const v = parseFloat(el.value);
+   if(Number.isFinite(v)) out[k] = v;
+  }
+ });
+ const scEl = document.getElementById('qScoring');
+ if(scEl && scEl.value) out.qScoring = scEl.value;
+ const ipEl = document.getElementById('qIcePrompt');
+ if(ipEl && ipEl.value.trim()) out.qIcePrompt = ipEl.value.trim();
+ SAVED_BOOL_KEYS.forEach(k => {
+  const el = document.getElementById(k);
+  if(el) out[k] = !!el.checked;
+ });
+ return out;
+}
+function applyInspectorSettingsToDom(cfg, selectedQ){
+ _applyingSettingsGuard = true;
+ try{
+  const merged = Object.assign({}, SAVED_SETTING_DEFAULTS, loadLocalGlobalSettings(), cfg || {});
+  SAVED_NUM_KEYS.forEach(k => {
+   const el = document.getElementById(k);
+   if(el && merged[k] !== undefined && merged[k] !== null) el.value = merged[k];
+  });
+  const scEl = document.getElementById('qScoring');
+  if(scEl && merged.qScoring) scEl.value = merged.qScoring;
+  const ipEl = document.getElementById('qIcePrompt');
+  if(ipEl && merged.qIcePrompt) ipEl.value = merged.qIcePrompt;
+  SAVED_BOOL_KEYS.forEach(k => {
+   const el = document.getElementById(k);
+   if(el && typeof merged[k] === 'boolean') el.checked = merged[k];
+  });
+  const cntEl = document.getElementById('qCount');
+  if(cntEl && selectedQ){
+   const maxC = selectedQ.count || 1;
+   cntEl.max = maxC;
+   const savedCnt = (cfg && cfg.qCount) ? parseInt(cfg.qCount, 10) : NaN;
+   cntEl.value = (!isNaN(savedCnt) && savedCnt >= 1 && savedCnt <= maxC) ? savedCnt : maxC;
+  }
+  const ar = document.getElementById('autoTimeRow'); if(ar) ar.style.display = merged.qAuto ? 'flex' : 'none';
+  const br = document.getElementById('battleTimeRow'); if(br) br.style.display = merged.qBattle ? 'flex' : 'none';
+  const sr = document.getElementById('speedTimeRow'); if(sr) sr.style.display = merged.qSpeed ? 'flex' : 'none';
+  const ir = document.getElementById('icePromptRow'); if(ir) ir.style.display = merged.qIce ? 'block' : 'none';
+  const rr = document.getElementById('rosterRow'); if(rr) rr.style.display = merged.qRosterOn ? 'block' : 'none';
+  if(typeof syncCaseTimerSpec === 'function') syncCaseTimerSpec();
+  if(typeof updateTimerSummary === 'function') updateTimerSummary();
+  if(typeof updateOptSummary === 'function') updateOptSummary();
+ }finally{
+  _applyingSettingsGuard = false;
+ }
+}
+function persistGlobalSettingsDebounced(cfg){
+ saveLocalGlobalSettings(cfg);
+ clearTimeout(_saveHostSettingsTimer);
+ _saveHostSettingsTimer = setTimeout(() => {
+  const tok = localStorage.getItem('brainrush_token') || localStorage.getItem('brainrush_host_tok') || '';
+  const pw = sessionStorage.getItem('brainrush_pw') || '';
+  fetch('/api/host_settings', {method:'POST', body:JSON.stringify({settings: cfg, token: tok, password: pw})}).catch(()=>{});
+ }, 350);
+}
+function persistDeckSettingsDebounced(file, cfg){
+ const f = String(file || '').trim();
+ if(!f) return;
+ const locMap = loadLocalDeckSettingsMap();
+ if(cfg && Object.keys(cfg).length){
+  locMap[f] = cfg;
+ } else {
+  delete locMap[f];
+ }
+ saveLocalDeckSettingsMap(locMap);
+ const qObj = quizList.find(x => x.file === f);
+ if(qObj) qObj.settings = (cfg && Object.keys(cfg).length) ? cfg : undefined;
+ if(f.startsWith('local_')) return;
+ clearTimeout(_saveDeckSettingsTimer);
+ _saveDeckSettingsTimer = setTimeout(() => {
+  const tok = localStorage.getItem('brainrush_token') || localStorage.getItem('brainrush_host_tok') || '';
+  const pw = sessionStorage.getItem('brainrush_pw') || '';
+  fetch('/api/deck_settings', {method:'POST', body:JSON.stringify({file: f, settings: cfg || {}, token: tok, password: pw})}).catch(()=>{});
+ }, 350);
+}
+function renderDrawerSaveScopeBar(){
+ const bar = document.getElementById('drawerSaveScopeBar');
+ if(!bar) return;
+ const sel = document.getElementById('quizSel');
+ const f = sel ? sel.value : '';
+ const q = f ? quizList.find(x => x.file === f) : null;
+ const hasCustom = !!(q && getDeckSavedSettings(q));
+ if(q){
+  const cleanTitle = (q.title || '').replace(/\s*\(\d+\s*(?:Qs|slides?)\)\s*$/i, '');
+  const shortT = cleanTitle.length > 26 ? (cleanTitle.slice(0, 25) + '…') : cleanTitle;
+  bar.innerHTML = `<span style="color:#dcfce7;font-weight:750">💾 Auto-saved for <b>${esc(shortT)}</b> &amp; defaults</span>
+   <span style="display:inline-flex;gap:5px;align-items:center">
+    ${hasCustom ? `<button type="button" class="btn-sm" style="margin:0;padding:3px 8px;font-size:.92em;background:#ffffff18" onclick="clearDeckSavedSettings('${esc(q.file)}')" title="Reset this deck to your global default settings">↺ Reset Deck</button>` : ''}
+   </span>`;
+ } else {
+  bar.innerHTML = `<span style="color:#ffdf5d;font-weight:750">💾 Changes auto-save as your <b>Global Default Settings</b></span>
+   <button type="button" class="btn-sm" style="margin:0;padding:3px 8px;font-size:.92em;background:#ffffff18" onclick="resetGlobalSavedSettings()" title="Reset all settings back to factory defaults">↺ Reset Defaults</button>`;
+ }
+}
+function onInspectorSettingChange(){
+ if(_applyingSettingsGuard) return;
+ const sel = document.getElementById('quizSel');
+ const f = sel ? sel.value : '';
+ const globalCfg = readInspectorSettingsFromDom(false);
+ persistGlobalSettingsDebounced(globalCfg);
+ if(f){
+  const deckCfg = readInspectorSettingsFromDom(true);
+  persistDeckSettingsDebounced(f, deckCfg);
+ }
+ renderDrawerSaveScopeBar();
+ renderDeckGrid();
+}
+function clearDeckSavedSettings(file){
+ const f = String(file || '').trim();
+ if(!f) return;
+ persistDeckSettingsDebounced(f, {});
+ const q = quizList.find(x => x.file === f);
+ applyInspectorSettingsToDom({}, q);
+ renderDrawerSaveScopeBar();
+ renderDeckGrid();
+}
+function resetGlobalSavedSettings(){
+ persistGlobalSettingsDebounced(SAVED_SETTING_DEFAULTS);
+ const sel = document.getElementById('quizSel');
+ const f = sel ? sel.value : '';
+ if(f) persistDeckSettingsDebounced(f, {});
+ const q = f ? quizList.find(x => x.file === f) : null;
+ applyInspectorSettingsToDom(SAVED_SETTING_DEFAULTS, q);
+ renderDrawerSaveScopeBar();
+ renderDeckGrid();
+}
+
 function mergeQuizLists(serverList){
  const delSet = new Set(getDeletedBuiltinsLocal());
  const locCourseMap = loadLocalDeckCourses();
+ const locSettingsMap = loadLocalDeckSettingsMap();
  const map = new Map();
  (serverList||[]).forEach(q=>{
   if(!delSet.has(q.file)){
@@ -2696,6 +2888,12 @@ function mergeQuizLists(serverList){
     locCourseMap[q.file] = serverCourses;
    }
    q.courses = Object.prototype.hasOwnProperty.call(locCourseMap, q.file) ? cleanCourseIdList(locCourseMap[q.file]) : serverCourses;
+   if(q.settings && typeof q.settings === 'object' && Object.keys(q.settings).length && !Object.prototype.hasOwnProperty.call(locSettingsMap, q.file)){
+    locSettingsMap[q.file] = q.settings;
+   }
+   if(locSettingsMap[q.file] && Object.keys(locSettingsMap[q.file]).length){
+    q.settings = locSettingsMap[q.file];
+   }
    map.set(q.file, q);
   }
  });
@@ -2703,6 +2901,7 @@ function mergeQuizLists(serverList){
   if(!delSet.has(q.file)){
    if(!map.has(q.file)){
     q.courses = Object.prototype.hasOwnProperty.call(locCourseMap, q.file) ? cleanCourseIdList(locCourseMap[q.file]) : cleanCourseIdList(q.courses || []);
+    if(locSettingsMap[q.file] && Object.keys(locSettingsMap[q.file]).length) q.settings = locSettingsMap[q.file];
     map.set(q.file, q);
    } else {
     map.get(q.file).questions = q.questions;
@@ -2710,6 +2909,7 @@ function mergeQuizLists(serverList){
   }
  });
  saveLocalDeckCourses(locCourseMap);
+ saveLocalDeckSettingsMap(locSettingsMap);
  return applyDeckOrderToList(Array.from(map.values()));
 }
 
@@ -2833,6 +3033,7 @@ function renderDeckGrid(){
      }).join('') + (qCids.length > 2 ? `<span class="deck-tag">+${qCids.length - 2}</span>` : '')
    : '';
   const isSel = cur === q.file;
+  const hasSavedSet = !!getDeckSavedSettings(q);
   const estMin = q.est_min || Math.max(1, Math.round(((q.count || 1) * (q.case ? 65 : 32)) / 60));
   const menuOpen = (openDeckCourseMenuFile === q.file) && knownCourses.length > 0;
   const coursePopHtml = menuOpen ? `<div class="deck-course-pop" onclick="event.stopPropagation()">
@@ -2851,7 +3052,7 @@ function renderDeckGrid(){
     <span class="deck-check">${isSel ? '✓' : ''}</span>
     <div class="deck-info">
      <div class="deck-title">${esc(cleanTitle)}</div>
-     <div class="deck-meta"><span>📂 ${esc(f)}</span>${cPills}${tags}</div>
+     <div class="deck-meta"><span>📂 ${esc(f)}</span>${hasSavedSet ? `<span class="deck-tag" style="background:#3b0764cc;border:1px solid #c084fc66;color:#e9d5ff" title="Has saved quiz settings (timers, scoring &amp; modifiers)">⚙️ Saved setup</span>` : ''}${cPills}${tags}</div>
     </div>
    </div>
    <div class="deck-right">
@@ -2973,11 +3174,13 @@ async function dupSelectedDeck(fileOpt){
  const f = fileOpt || (sel && sel.value) || '';
  if(!f) return;
  const activeCid = getActiveCourseFilter();
+ const srcSettings = getDeckSavedSettings(f);
  const r = await postPw('/api/dup_quiz', {file: f, course_id: activeCid});
  if(r && r.file){
   const mergedCourses = cleanCourseIdList(getDeckCourses(f).concat(activeCid ? [activeCid] : []));
   quizList = mergeQuizLists(r.quizzes || quizList);
   if(mergedCourses.length) setDeckCourses(r.file, mergedCourses, true);
+  if(srcSettings) persistDeckSettingsDebounced(r.file, srcSettings);
   renderQuizSelect(r.file);
  }
 }
@@ -3067,6 +3270,10 @@ function syncQuizCount(){
  try{
   const tok = localStorage.getItem('brainrush_token') || localStorage.getItem('brainrush_host_tok') || '';
   const r = await (await fetch('/api/quizzes?token='+encodeURIComponent(tok))).json();
+  if(r && r.host_settings && typeof r.host_settings === 'object' && Object.keys(r.host_settings).length){
+   const curLocal = loadLocalGlobalSettings();
+   if(!Object.keys(curLocal).length) saveLocalGlobalSettings(r.host_settings);
+  }
   const srv = (r && r.quizzes) || [];
   const delB = getDeletedBuiltinsLocal();
   const stale = srv.filter(q => delB.includes(q.file)).map(q => q.file);
@@ -4428,6 +4635,10 @@ function loadSetup(){
   document.getElementById('qLogo').value = localStorage.getItem('brainrush_logo') || '';
   document.getElementById('qBg').value = localStorage.getItem('brainrush_bg') || '';
  }catch(e){}
+ const sel = document.getElementById('quizSel');
+ const q = sel && sel.value ? quizList.find(x => x.file === sel.value) : null;
+ applyInspectorSettingsToDom(q ? (getDeckSavedSettings(q) || {}) : {}, q);
+ renderDrawerSaveScopeBar();
  applyBranding();
 }
 
@@ -4531,6 +4742,7 @@ function discardGame(btn){ localStorage.removeItem('brainrush_host'); btn.closes
 // ===== Feature Guide =====
 const GUIDE = [
  {id:'setup', title:'⚙️ Game Setup Options (All Opt-In)', items:[
+  ['💾 Auto-Saved Global & Per-Quiz Settings', 'Every change you make in the ⚙️ Session Inspector automatically saves as your Global Default Settings, and when a quiz or case study is selected, it also saves a per-deck setup override (indicated by the ⚙️ Saved setup badge on the card). Selecting that deck again automatically restores its saved timers, scoring method, and modifiers—or click "↺ Reset Deck" in the Inspector to revert it to your defaults.'],
   ['📝 Questions', 'How many questions to play (fills automatically once you pick a quiz). Picks a random set from the quiz if you choose fewer than the total.'],
   ['⏱️ Timer', 'Seconds players get to answer each question (default 15). A 5-second reading period comes first, with answers hidden.'],
   ['🎲 Randomize Order', 'Shuffles the question order every game.'],
@@ -4744,7 +4956,15 @@ async function authGet(path){
  return r.json();
 }
 async function refreshQuizzes(sel){
- try{ const r = await (await fetch('/api/quizzes?token=' + encodeURIComponent(getToken()))).json(); quizList = mergeQuizLists(r.quizzes || []); renderQuizSelect(sel); }catch(e){}
+ try{
+  const r = await (await fetch('/api/quizzes?token=' + encodeURIComponent(getToken()))).json();
+  if(r && r.host_settings && typeof r.host_settings === 'object' && Object.keys(r.host_settings).length){
+   saveLocalGlobalSettings(r.host_settings);
+  }
+  quizList = mergeQuizLists(r.quizzes || []);
+  _lastAppliedDeckFile = null;
+  renderQuizSelect(sel);
+ }catch(e){}
 }
 async function loadConfig(){
  try{
@@ -5375,17 +5595,31 @@ renderQuizSelect = function(selectedFile){
 
 syncQuizCount = function(){
  const sel = document.getElementById('quizSel');
- const q = quizList.find(x=>x.file===(sel&&sel.value));
+ const f = (sel && sel.value) || '';
+ const q = quizList.find(x=>x.file===f);
  const inp = document.getElementById('qCount'), mx = document.getElementById('qMax'), cs = document.getElementById('cSlideCnt');
+ const deckChanged = (_lastAppliedDeckFile !== f);
+ _lastAppliedDeckFile = f;
  if(q){
-  if(inp){ inp.max = q.count; inp.value = q.count; }
+  if(inp) inp.max = q.count;
   if(mx) mx.textContent = '/ ' + q.count;
   if(cs) cs.textContent = q.count;
+  if(deckChanged){
+   applyInspectorSettingsToDom(getDeckSavedSettings(q) || {}, q);
+  } else if(inp && (!inp.value || parseInt(inp.value, 10) > q.count)){
+   const ds = getDeckSavedSettings(q);
+   const savedCnt = (ds && ds.qCount) ? parseInt(ds.qCount, 10) : NaN;
+   inp.value = (!isNaN(savedCnt) && savedCnt >= 1 && savedCnt <= q.count) ? savedCnt : q.count;
+  }
  } else {
   if(inp){ inp.value = ''; inp.placeholder = '—'; }
   if(mx) mx.textContent = '/ —';
   if(cs) cs.textContent = '—';
+  if(deckChanged){
+   applyInspectorSettingsToDom({}, null);
+  }
  }
+ if(typeof renderDrawerSaveScopeBar === 'function') renderDrawerSaveScopeBar();
  if(typeof updateTimerSummary === 'function') updateTimerSummary();
  if(typeof syncSelectedDeckBar === 'function') syncSelectedDeckBar();
  if(typeof renderDeckGrid === 'function') renderDeckGrid();
