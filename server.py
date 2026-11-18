@@ -601,6 +601,10 @@ def list_quizzes(owner="_shared"):
             it["courses"] = dc_map[fid]
         elif "courses" not in it:
             it["courses"] = []
+    ord_list = K.deck_order_list(owner) or (K.deck_order_list("_shared") if owner != "_shared" else [])
+    if ord_list:
+        pos = {f: i for i, f in enumerate(ord_list)}
+        items.sort(key=lambda x: pos.get(x.get("file"), len(ord_list) + 1000))
     return items
 
 
@@ -3331,7 +3335,7 @@ class H(BaseHTTPRequestHandler):
                 )
                 self.send({"error": err}, 400) if err else self.send(res)
             return True
-        gated = ("/api/upload_quiz", "/api/delete_quiz", "/api/dup_quiz", "/api/deck_courses", "/api/history_clear", "/api/ai_quiz",
+        gated = ("/api/upload_quiz", "/api/delete_quiz", "/api/dup_quiz", "/api/deck_courses", "/api/deck_order", "/api/history_clear", "/api/ai_quiz",
                  "/api/import_sheet", "/api/hw_create", "/api/upload_img")
         if path not in gated:
             return False
@@ -3359,6 +3363,10 @@ class H(BaseHTTPRequestHandler):
             else:
                 saved = K.deck_courses_set(owner, f, body.get("courses") if isinstance(body.get("courses"), list) else [])
                 self.send({"ok": True, "file": f, "courses": saved, "quizzes": list_quizzes(owner)})
+        elif path == "/api/deck_order":
+            order_in = body.get("order") if isinstance(body.get("order"), list) else []
+            saved = K.deck_order_set(owner, order_in)
+            self.send({"ok": True, "order": saved, "quizzes": list_quizzes(owner)})
         elif path == "/api/delete_quiz":
             files_to_del = body.get("files") if isinstance(body.get("files"), list) else [body.get("file") or ""]
             for f in files_to_del:

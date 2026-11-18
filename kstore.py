@@ -297,6 +297,33 @@ def deck_courses_map(owner):
     return {str(k): _clean_course_ids(v) for k, v in raw.items() if isinstance(v, list)}
 
 
+def deck_order_list(owner):
+    raw = store.get_json("deckorder:" + owner, []) or []
+    if not isinstance(raw, list):
+        return []
+    out = []
+    for f in raw:
+        s = str(f or "").strip()[:120]
+        if s and s not in out:
+            out.append(s)
+        if len(out) >= 500:
+            break
+    return out
+
+
+def deck_order_set(owner, order):
+    out = []
+    for f in (order or []):
+        s = str(f or "").strip()[:120]
+        if s and s not in out:
+            out.append(s)
+        if len(out) >= 500:
+            break
+    with _lock:
+        store.set_json("deckorder:" + owner, out)
+    return out
+
+
 def deck_courses_set(owner, file_id, courses):
     fid = str(file_id or "").strip()[:120]
     if not fid:

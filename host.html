@@ -624,9 +624,18 @@ body.cb .c4{background:#CC79A7}body.cb .c5{background:#56B4E9;color:#111}body.cb
 .av-wrap.av-pod{width:1.34em;height:1.34em;margin-right:0}
 .pct-pill{font-size:.8em;background:#ffffff24;border:1px solid #ffffff38;padding:1px 8px;border-radius:99px;margin-right:7px;font-weight:800;color:#ffdf5d}
 .deck-grid{display:flex;flex-direction:column;gap:9px;margin-top:12px}
-.deck-card{background:#ffffff0b;border:1px solid var(--border);border-radius:14px;padding:13px 16px;cursor:pointer;text-align:left;display:flex;align-items:center;justify-content:space-between;gap:14px;transition:background .15s,border-color .15s,box-shadow .15s}
+.deck-card{background:#ffffff0b;border:1px solid var(--border);border-radius:14px;padding:13px 16px;cursor:pointer;text-align:left;display:flex;align-items:center;justify-content:space-between;gap:14px;transition:background .15s,border-color .15s,box-shadow .15s,opacity .15s,transform .15s}
 .deck-card:hover{background:#ffffff14;border-color:#ffffff36}
 .deck-card.active{background:#7c3aed30;border-color:#a78bfa;box-shadow:0 6px 22px #0005,0 0 0 1px #a78bfa66}
+.deck-card.dragging{opacity:.42;transform:scale(.99)}
+.deck-card.drag-over-top{box-shadow:0 -3px 0 0 var(--gold),0 6px 22px #0005}
+.deck-card.drag-over-bot{box-shadow:0 3px 0 0 var(--gold),0 6px 22px #0005}
+.deck-grip{cursor:grab;color:#ffffff52;font-size:1.05em;line-height:1;padding:3px 4px;border-radius:6px;user-select:none;flex-shrink:0;transition:color .14s,background .14s}
+.deck-card:hover .deck-grip{color:#ffffffaa}
+.deck-grip:hover{color:var(--gold)!important;background:#ffffff18}
+.deck-grip:active{cursor:grabbing}
+.deck-act-btn.move{padding:5px 7px;font-size:.74em}
+.deck-act-btn.move[disabled]{opacity:.3;cursor:default;pointer-events:none}
 .deck-left{display:flex;align-items:center;gap:13px;min-width:0;flex:1}
 .deck-check{width:22px;height:22px;border-radius:50%;border:1.5px solid #ffffff45;display:inline-flex;align-items:center;justify-content:center;font-size:.78em;font-weight:900;flex-shrink:0;color:transparent;transition:background .14s,border-color .14s,color .14s}
 .deck-card.active .deck-check{background:#34d399;border-color:#6ee7b7;color:#052e16}
@@ -2642,6 +2651,40 @@ function readBuilderCoursesToSave(){
  return [picked];
 }
 
+function loadLocalDeckOrder(){
+ try{
+  const raw = JSON.parse(localStorage.getItem('brainrush_deck_order') || '[]');
+  return Array.isArray(raw) ? raw.map(x => String(x || '').trim()).filter(Boolean) : [];
+ }catch(e){ return []; }
+}
+function saveLocalDeckOrder(arr){
+ const out = [];
+ (Array.isArray(arr) ? arr : []).forEach(x => {
+  const s = String(x || '').trim();
+  if(s && !out.includes(s)) out.push(s);
+ });
+ try{ localStorage.setItem('brainrush_deck_order', JSON.stringify(out)); }catch(e){}
+ return out;
+}
+function applyDeckOrderToList(list){
+ const ord = loadLocalDeckOrder();
+ if(!ord.length) return list;
+ const pos = {};
+ ord.forEach((f, idx) => { pos[f] = idx; });
+ return list.slice().sort((a, b) => {
+  const pa = Object.prototype.hasOwnProperty.call(pos, a.file) ? pos[a.file] : (ord.length + 1000);
+  const pb = Object.prototype.hasOwnProperty.call(pos, b.file) ? pos[b.file] : (ord.length + 1000);
+  return pa - pb;
+ });
+}
+function persistCurrentQuizOrder(){
+ const order = saveLocalDeckOrder(quizList.map(q => q.file));
+ const serverOrder = order.filter(f => !f.startsWith('local_'));
+ const tok = localStorage.getItem('brainrush_token') || localStorage.getItem('brainrush_host_tok') || '';
+ const pw = sessionStorage.getItem('brainrush_pw') || '';
+ fetch('/api/deck_order', {method:'POST', body:JSON.stringify({order: serverOrder, token: tok, password: pw})}).catch(()=>{});
+}
+
 function mergeQuizLists(serverList){
  const delSet = new Set(getDeletedBuiltinsLocal());
  const locCourseMap = loadLocalDeckCourses();
@@ -2667,7 +2710,7 @@ function mergeQuizLists(serverList){
   }
  });
  saveLocalDeckCourses(locCourseMap);
- return Array.from(map.values());
+ return applyDeckOrderToList(Array.from(map.values()));
 }
 
 // --- Interactive Deck Library Picker & Quick Actions ---
@@ -2776,7 +2819,8 @@ function renderDeckGrid(){
   return;
  }
  const knownCourses = getAllKnownCoursesSafe();
- grid.innerHTML = shown.map(q => {
+ const canReorder = shown.length > 1;
+ grid.innerHTML = shown.map((q, sIdx) => {
   const cleanTitle = (q.title || '').replace(/\s*\(\d+\s*(?:Qs|slides?)\)\s*$/i, '');
   const f = deckFolderOf(q, wantCase);
   const tags = (q.tags || []).slice(0, 4).map(t => `<span class="deck-tag">#${esc(t)}</span>`).join('');
@@ -2801,8 +2845,9 @@ function renderDeckGrid(){
    }).join('')}
    <button type="button" class="btn-sm" style="margin:0 0 0 auto;padding:2px 7px;font-size:.9em;background:transparent" onclick="toggleDeckCoursePicker('')">✕</button>
   </div>` : '';
-  return `<div class="deck-card${isSel?' active':''}" style="flex-wrap:wrap" data-file="${esc(q.file)}" onclick="pickDeckCard(this.dataset.file)">
+  return `<div class="deck-card${isSel?' active':''}" style="flex-wrap:wrap" data-file="${esc(q.file)}" ${canReorder ? `draggable="true" ondragstart="onDeckDragStart(event,this.dataset.file)" ondragover="onDeckDragOver(event,this)" ondragleave="onDeckDragLeave(this)" ondrop="onDeckDrop(event,this.dataset.file)" ondragend="onDeckDragEnd()"` : ''} onclick="pickDeckCard(this.dataset.file)">
    <div class="deck-left">
+    ${canReorder ? `<span class="deck-grip" title="Drag to reorder in library" onclick="event.stopPropagation()">⋮⋮</span>` : ''}
     <span class="deck-check">${isSel ? '✓' : ''}</span>
     <div class="deck-info">
      <div class="deck-title">${esc(cleanTitle)}</div>
@@ -2811,6 +2856,7 @@ function renderDeckGrid(){
    </div>
    <div class="deck-right">
     <span class="deck-acts" onclick="event.stopPropagation()">
+     ${canReorder ? `<button type="button" class="deck-act-btn move" ${sIdx===0?'disabled':''} onclick="moveDeckStep(this.closest('.deck-card').dataset.file, -1)" title="Move up">↑</button><button type="button" class="deck-act-btn move" ${sIdx===shown.length-1?'disabled':''} onclick="moveDeckStep(this.closest('.deck-card').dataset.file, 1)" title="Move down">↓</button>` : ''}
      ${knownCourses.length ? `<button type="button" class="deck-act-btn" onclick="toggleDeckCoursePicker(this.closest('.deck-card').dataset.file)" title="Assign or change courses for this deck">🎓${qCids.length ? ' ' + qCids.length : ''}</button>` : ''}
      ${activeCid ? `<button type="button" class="deck-act-btn" onclick="toggleDeckInCourse(this.closest('.deck-card').dataset.file, '${esc(activeCid)}')" title="Remove from this course (keeps deck in All Decks)">✕ Unlink</button>` : ''}
      <button type="button" class="deck-act-btn" onclick="editSelectedDeck(this.closest('.deck-card').dataset.file)" title="Edit this deck">✏️ Edit</button>
@@ -2827,6 +2873,92 @@ function renderDeckGrid(){
 }
 const renderDeckCards = renderDeckGrid;
 window.renderDeckCards = renderDeckGrid;
+
+let draggingDeckFile = '';
+function getCurrentlyShownDeckFiles(){
+ const wantCase = (typeof hostSection !== 'undefined' && hostSection === 'case');
+ const activeCid = getActiveCourseFilter();
+ const fullModePool = quizList.filter(q => wantCase ? !!q.case : !q.case);
+ const pool = activeCid ? fullModePool.filter(q => deckBelongsToCourse(q, activeCid)) : fullModePool;
+ const qStr = ((document.getElementById('deckSearch') || {}).value || '').toLowerCase().trim();
+ return pool.filter(q => {
+  const f = deckFolderOf(q, wantCase);
+  if(deckFolderFilter !== 'ALL' && f !== deckFolderFilter) return false;
+  if(!qStr) return true;
+  const hay = `${q.title} ${f} ${(q.tags||[]).map(t=>'#'+t).join(' ')}`.toLowerCase();
+  return hay.includes(qStr);
+ }).map(q => q.file);
+}
+function moveDeckRelative(srcFile, targetFile, placeAfter){
+ if(!srcFile || !targetFile || srcFile === targetFile) return;
+ const fromIdx = quizList.findIndex(q => q.file === srcFile);
+ if(fromIdx < 0) return;
+ const [moved] = quizList.splice(fromIdx, 1);
+ const toIdx = quizList.findIndex(q => q.file === targetFile);
+ if(toIdx < 0){
+  quizList.push(moved);
+ } else {
+  quizList.splice(placeAfter ? toIdx + 1 : toIdx, 0, moved);
+ }
+ persistCurrentQuizOrder();
+ const sel = document.getElementById('quizSel');
+ renderQuizSelect(sel ? sel.value : '');
+}
+function moveDeckStep(file, dir){
+ const shownFiles = getCurrentlyShownDeckFiles();
+ const idx = shownFiles.indexOf(file);
+ const targetIdx = idx + (dir < 0 ? -1 : 1);
+ if(idx < 0 || targetIdx < 0 || targetIdx >= shownFiles.length) return;
+ moveDeckRelative(file, shownFiles[targetIdx], dir > 0);
+}
+function onDeckDragStart(ev, file){
+ draggingDeckFile = String(file || '');
+ if(ev.dataTransfer){
+  ev.dataTransfer.effectAllowed = 'move';
+  try{ ev.dataTransfer.setData('text/plain', draggingDeckFile); }catch(e){}
+ }
+ const card = ev.currentTarget;
+ if(card) setTimeout(() => card.classList.add('dragging'), 0);
+}
+function onDeckDragOver(ev, cardEl){
+ if(!draggingDeckFile || !cardEl) return;
+ const overFile = cardEl.dataset.file;
+ if(!overFile || overFile === draggingDeckFile) return;
+ ev.preventDefault();
+ if(ev.dataTransfer) ev.dataTransfer.dropEffect = 'move';
+ const rect = cardEl.getBoundingClientRect();
+ const after = (ev.clientY - rect.top) > (rect.height / 2);
+ cardEl.classList.toggle('drag-over-top', !after);
+ cardEl.classList.toggle('drag-over-bot', after);
+}
+function onDeckDragLeave(cardEl){
+ if(cardEl) cardEl.classList.remove('drag-over-top', 'drag-over-bot');
+}
+function onDeckDrop(ev, targetFile){
+ ev.preventDefault();
+ ev.stopPropagation();
+ const cardEl = ev.currentTarget;
+ let after = false;
+ if(cardEl){
+  const rect = cardEl.getBoundingClientRect();
+  after = (ev.clientY - rect.top) > (rect.height / 2);
+  cardEl.classList.remove('drag-over-top', 'drag-over-bot');
+ }
+ const src = draggingDeckFile || (ev.dataTransfer && ev.dataTransfer.getData('text/plain')) || '';
+ draggingDeckFile = '';
+ document.querySelectorAll('.deck-card.dragging,.deck-card.drag-over-top,.deck-card.drag-over-bot').forEach(el => {
+  el.classList.remove('dragging', 'drag-over-top', 'drag-over-bot');
+ });
+ if(src && targetFile && src !== targetFile){
+  moveDeckRelative(src, targetFile, after);
+ }
+}
+function onDeckDragEnd(){
+ draggingDeckFile = '';
+ document.querySelectorAll('.deck-card.dragging,.deck-card.drag-over-top,.deck-card.drag-over-bot').forEach(el => {
+  el.classList.remove('dragging', 'drag-over-top', 'drag-over-bot');
+ });
+}
 async function editSelectedDeck(fileOpt){
  const sel = document.getElementById('quizSel');
  const f = fileOpt || (sel && sel.value) || '';
@@ -5138,6 +5270,7 @@ function exportHw(){
   ['🛡️ Approve Names First', 'New students wait on a "waiting for approval" screen until you approve their name (✓/✕ in the lobby or the Moderation window). Rejected names are blocked.']
  );
  GUIDE.push({id:'library', title:'📚 Quiz Library & Content Tools', items:[
+  ['↕️ Reorder & Organize Library', 'Drag any Quiz or Case Study card by its left ⋮⋮ handle (or click the ↑ / ↓ buttons on the card) to arrange your library in any order you like. Your custom order is saved automatically across reloads and devices.'],
   ['Folders and tags', 'In ➕ Create / Upload Quiz, give a quiz a Folder and Tags. The quiz picker groups quizzes by folder.'],
   ['⧉ Duplicate', 'Copies any quiz (including built-in ones) to your library so you can edit the copy.'],
   ['📋 Import table / Google Sheet', 'Paste rows copied from Excel or Sheets, or a public Google Sheet link. Use a header row like Question, A, B, C, D, Correct, Topic, Quote, Note. Correct can be A–D, 1–4 or the answer text.'],
