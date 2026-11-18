@@ -1016,7 +1016,9 @@ function updateRemoteOptBadge(){
  const b = document.getElementById('rOptBadge');
  if(!b) return;
  let n = 0;
- document.querySelectorAll('#preOptions input[type=checkbox]:checked').forEach(() => n++);
+ document.querySelectorAll('#preOptions input[type=checkbox]:checked').forEach(el => { if(el.id !== 'mShufAns') n++; });
+ const sa = document.getElementById('mShufAns');
+ if(sa && !sa.checked) n++;
  const sc = (document.getElementById('rScoring') || {}).value || '';
  if(sc && sc !== 'classic') n++;
  const bots = parseInt((document.getElementById('mBots') || {}).value, 10) || 0;
@@ -1034,6 +1036,7 @@ function setLaunchMode(m){
 function renderOptsHtml(){
  if(launchMode === 'case'){
   return `
+   <label class="opt-pill"><input type="checkbox" id="mShufAns"> 🔀 Shuffle A/B/C/D</label>
    <label class="opt-pill"><input type="checkbox" id="mIce"> 💭 Word Cloud</label>
    <label class="opt-pill"><input type="checkbox" id="mTeams"> 🛡️ Teams</label>
    <label class="opt-pill"><input type="checkbox" id="rConsensus"> 🤝 Team Consensus</label>
@@ -1047,6 +1050,7 @@ function renderOptsHtml(){
  }
  return `
   <label class="opt-pill"><input type="checkbox" id="mShuf"> 🎲 Shuffle Qs</label>
+  <label class="opt-pill"><input type="checkbox" id="mShufAns"> 🔀 Shuffle A/B/C/D</label>
   <label class="opt-pill"><input type="checkbox" id="mIce"> 💭 Word Cloud</label>
   <label class="opt-pill"><input type="checkbox" id="mTeams"> 🛡️ Team Mode</label>
   <label class="opt-pill"><input type="checkbox" id="rConsensus"> 🤝 Team Consensus</label>
@@ -1142,6 +1146,8 @@ function renderStandby(){
   </div>
  `;
  populateSelect();
+ const sa = document.getElementById('mShufAns');
+ if(sa) sa.checked = true;
  updateRemoteOptBadge();
  setAwakeLabel();
  loadQuizzes();
@@ -1173,6 +1179,7 @@ async function launchFromPhone(){
  const teamsOn = chk('mTeams') || consensusOn;
  const scSel = document.getElementById('rScoring');
  const scoringMode = (scSel && scSel.value) ? scSel.value : 'classic';
+ const saEl = document.getElementById('mShufAns');
  const payload = {
   quiz: qf,
   pair_key: rkey,
@@ -1181,6 +1188,7 @@ async function launchFromPhone(){
   preview: isCase ? numVal('mCasePrev', 5, 0, 120) : numVal('mPrevTime', 5, 0, 120),
   think_time: numVal('rThinkTime', 0, 0, 120),
   shuffle: isCase ? false : chk('mShuf'),
+  shuffle_answers: saEl ? saEl.checked : true,
   icebreaker: chk('mIce'),
   teams: teamsOn,
   consensus: consensusOn,

@@ -1,6 +1,6 @@
 import json, sys, urllib.request, urllib.error
 
-B = sys.argv[1] if len(sys.argv) > 1 else "http://localhost:8000"
+B = sys.argv[1] if len(sys.argv) > 1 else "http://localhost:8080"
 
 
 def call(path, body=None):
@@ -19,7 +19,7 @@ def check(cond, msg):
         sys.exit(1)
 
 
-s, g = call("/api/create", {})
+s, g = call("/api/create", {"wheel": False, "wager": False, "hotseat": False, "team_battle": False, "tiebreak": False})
 pin, host = g["pin"], g["host"]
 check(s == 200 and len(pin) == 6, "create game")
 ids = {}
@@ -36,7 +36,8 @@ quiz = json.load(open(__file__.replace("test_game.py", "quiz.json")))
 for qi in range(len(quiz)):
     st = call("/api/state?pin=%s&pid=%s" % (pin, ids["Ann"]))[1]
     check(st["phase"] == "question" and st["index"] == qi, "question %d showing" % (qi + 1))
-    c = quiz[qi]["c"]
+    correct_txt = quiz[qi]["a"][quiz[qi]["c"]]
+    c = st["answers"].index(correct_txt)
     call("/api/answer", {"pin": pin, "pid": ids["Ann"], "choice": c})
     check(call("/api/answer", {"pin": pin, "pid": ids["Ann"], "choice": c})[0] == 400, "double answer rejected")
     call("/api/answer", {"pin": pin, "pid": ids["Bob"], "choice": (c + 1) % 4})

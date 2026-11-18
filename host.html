@@ -1294,6 +1294,7 @@ Quote: Paris has been the capital since 987 CE."></textarea>
       <div class="sub-body">
        <div class="mode-grid">
         <label class="mode-pill quiz-only"><input id="qShuffle" type="checkbox"> 🎲 Randomize Order</label>
+        <label class="mode-pill"><input id="qShuffleAns" type="checkbox"> 🔀 Shuffle A/B/C/D Choices</label>
         <label class="mode-pill quiz-only"><input id="qSpeed" type="checkbox" onchange="document.getElementById('speedTimeRow').style.display=this.checked?'flex':'none';updateOptSummary()"> ⚡ Speed Round (5 rapid Qs)</label>
         <label class="mode-pill quiz-only"><input id="qAuto" type="checkbox" onchange="document.getElementById('autoTimeRow').style.display=this.checked?'flex':'none';updateOptSummary()"> ⏭️ Auto-Advance</label>
         <label class="mode-pill"><input id="qTeams" type="checkbox" onchange="if(!this.checked){document.getElementById('qBattle').checked=false;document.getElementById('qConsensus').checked=false;document.getElementById('battleTimeRow').style.display='none'}"> <span class="quiz-only">🛡️ Team Mode</span><span class="case-only">🛡️ Discussion Teams</span></label>
@@ -1578,6 +1579,8 @@ function applyPreset(name){
   const el = document.getElementById(id);
   if(el) el.checked = want.has(id);
  });
+ const sa = document.getElementById('qShuffleAns');
+ if(sa) sa.checked = true;
  if(name === 'clean'){
   const scSel = document.getElementById('qScoring'); if(scSel) scSel.value = 'classic';
   const thkEl = document.getElementById('qThinkTime'); if(thkEl) thkEl.value = '0';
@@ -2308,7 +2311,12 @@ function parseCustomQuestions(raw){
   return s.split('\n').map(l=>l.trim()).filter(Boolean).map(line=>{
    const p = line.split(',').map(x=>x.trim());
    if(p.length < 5 || p[0].toLowerCase()==='question') return null;
-   return {q:p[0], a:p.slice(1,5), c:Math.max(0, (parseInt(p[5],10)||1)-1), quote:p[6]||''};
+   const ans = p.slice(1,5), cv = p[5] || '';
+   let cIdx = 0;
+   if(/^[a-d]$/i.test(cv)) cIdx = cv.toUpperCase().charCodeAt(0) - 65;
+   else if(/^[1-4]$/.test(cv)) cIdx = parseInt(cv,10) - 1;
+   else { const k = ans.findIndex(x=>x.toLowerCase()===cv.toLowerCase()); if(k>=0) cIdx = k; }
+   return {q:p[0], a:ans, c:cIdx, quote:p[6]||''};
   }).filter(Boolean);
  }
  return blocks.map(b=>{
@@ -2951,6 +2959,7 @@ async function create(){
  ensureAudio();sfxJoin();
  const inp = document.getElementById('qCount');
  const shuf = document.getElementById('qShuffle');
+ const shufAns = document.getElementById('qShuffleAns');
  const tm = document.getElementById('qTime');
  const bots = document.getElementById('qBots');
  const teams = document.getElementById('qTeams');
@@ -2982,10 +2991,11 @@ async function create(){
  const scoringMode = ((document.getElementById('qScoring')||{}).value || 'classic');
  const clampCt = (id, defV) => Math.max(5, Math.min(900, parseInt((document.getElementById(id)||{}).value, 10) || defV));
  window._lastShuffle = shuf ? shuf.checked : false;
+ window._lastShuffleAns = shufAns ? shufAns.checked : true;
  window.lastGame={file:qf,count:cnt}; try{ localStorage.setItem('brainrush_last', JSON.stringify(window.lastGame)); }catch(e){}
  const r=await postPw('/api/create',{
   quiz:qf, custom_questions: picked && picked.questions ? picked.questions : null,
-  count:cnt, shuffle:shuf ? shuf.checked : false, qtime:qtm, preview:prevSec,
+  count:cnt, shuffle:shuf ? shuf.checked : false, shuffle_answers: shufAns ? shufAns.checked : true, qtime:qtm, preview:prevSec,
   think_time:thinkSec, scoring_mode:scoringMode,
   hide_board:hideBoardOn, allow_tts:stuTtsOn, consensus:consensusOn,
   case_times:{
@@ -3463,11 +3473,13 @@ async function replayRound(){
  const cnt = isCase ? null : (inp ? (parseInt(inp.value,10) || null) : null);
  const shufEl = document.getElementById('qShuffle');
  const shufOn = shufEl ? shufEl.checked : !!window._lastShuffle;
+ const shufAnsEl = document.getElementById('qShuffleAns');
+ const shufAnsOn = shufAnsEl ? shufAnsEl.checked : (window._lastShuffleAns !== undefined ? !!window._lastShuffleAns : true);
  podiumShown = false;
  animDone = -1;
  await post('/api/replay',{
   pin, host, quiz: qf,
-  count: cnt, shuffle: !isCase && shufOn,
+  count: cnt, shuffle: !isCase && shufOn, shuffle_answers: shufAnsOn,
   custom_questions: picked && picked.questions ? picked.questions : null
  });
  await poll();
@@ -4277,6 +4289,8 @@ function saveSetup(){
  applyBranding();
 }
 function loadSetup(){
+ const sa = document.getElementById('qShuffleAns');
+ if(sa) sa.checked = true;
  try{
   document.getElementById('qRoster').value = localStorage.getItem('brainrush_roster') || '';
   document.getElementById('qLogo').value = localStorage.getItem('brainrush_logo') || '';
@@ -4388,6 +4402,7 @@ const GUIDE = [
   ['📝 Questions', 'How many questions to play (fills automatically once you pick a quiz). Picks a random set from the quiz if you choose fewer than the total.'],
   ['⏱️ Timer', 'Seconds players get to answer each question (default 15). A 5-second reading period comes first, with answers hidden.'],
   ['🎲 Randomize Order', 'Shuffles the question order every game.'],
+  ['🔀 Shuffle A/B/C/D Choices', 'On by default: randomizes the A/B/C/D answer positions on multiple-choice questions every game (even if you always put *Correct Answer on the first line in the builder). Uncheck if your questions reference fixed letters like "Both A and B".'],
   ['🎰 Final Boss Wager', 'The last regular question lets players risk 0%, 50% or 100% of their score (minimum stake 500) for a big swing instead of plain double points.'],
   ['🔄 Redemption Round', 'After the last question, the question the class missed most comes back for DOUBLE points, introduced by a full-screen REDEMPTION announcement.'],
   ['⛄ Snowballs', 'Once per game, a player with 200+ points can spend 200 to throw a snowball at the leader. The leader is frozen on the next question and must tap 5 times to shake off the snow before answering.'],
@@ -6209,13 +6224,15 @@ create = async function(){
  const ice = !!(document.getElementById('qIce') && document.getElementById('qIce').checked);
  const icePrompt = ((document.getElementById('qIcePrompt')||{}).value || '').trim();
  const mod = !!(document.getElementById('qMod') && document.getElementById('qMod').checked);
+ const shufAns = document.getElementById('qShuffleAns');
  window._lastShuffle = false;
+ window._lastShuffleAns = shufAns ? shufAns.checked : true;
  window.lastGame = {file: qf, count: null, case: true};
  try{ localStorage.setItem('brainrush_last', JSON.stringify(window.lastGame)); }catch(e){}
  const r = await postPw('/api/create', {
   quiz: qf,
   custom_questions: picked && picked.questions ? picked.questions : null,
-  count: null, shuffle: false, qtime: ctm, preview: cPrevSec,
+  count: null, shuffle: false, shuffle_answers: shufAns ? shufAns.checked : true, qtime: ctm, preview: cPrevSec,
   think_time: thinkSec, scoring_mode: scoringMode,
   hide_board: hideBoardOn, allow_tts: stuTtsOn, consensus: consensusOn,
   case_times: {poll: pollSec, rank: rankSec, open: openSec, brainstorm: brainSec, scale: scaleSec},

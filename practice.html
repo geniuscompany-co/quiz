@@ -838,13 +838,16 @@ function updatePracSummary(){
   if(!b) return;
   const cnt = parseInt((document.getElementById('cnt') || {}).value, 10);
   const shuf = !!(document.getElementById('pracShuffle') || {}).checked;
+  const saEl = document.getElementById('pracShuffleAns');
+  const shufAns = saEl ? saEl.checked : true;
   const tm = !!(document.getElementById('timed') || {}).checked;
   const sec = parseInt((document.getElementById('pTime') || {}).value, 10) || 20;
   const parts = [];
   parts.push((!isNaN(cnt) && cnt > 0) ? `${cnt} Qs` : 'All Qs');
   if(shuf) parts.push('Shuffled');
+  if(!shufAns) parts.push('Fixed A/B/C/D');
   parts.push(tm ? `${sec}s` : 'Untimed');
-  const custom = (!isNaN(cnt) && cnt > 0) || shuf || tm;
+  const custom = (!isNaN(cnt) && cnt > 0) || shuf || !shufAns || tm;
   b.textContent = parts.join(' · ');
   b.classList.toggle('hi', custom);
 }
@@ -897,6 +900,10 @@ async function setup(){
             <label><input type="checkbox" id="pracShuffle"> 🎲 Randomize Question Order</label>
           </div>
 
+          <div class="timer-opt-row">
+            <label><input type="checkbox" id="pracShuffleAns"> 🔀 Shuffle A/B/C/D Choices</label>
+          </div>
+
           <div class="timer-opt-row" style="margin-bottom:2px">
             <label><input type="checkbox" id="timed"> ⏱️ Countdown timer</label>
             <span class="timer-sec-box">
@@ -912,7 +919,10 @@ async function setup(){
     </div>
     <div><a class="plink" href="/play">🎮 Back to Live Game</a></div>
   `;
+  const saEl = document.getElementById('pracShuffleAns');
+  if(saEl) saEl.checked = true;
   const sel = document.getElementById('qs');
+  if(sel && initFile) sel.value = initFile;
   sel.onchange = () => {
     const opt = sel.selectedOptions[0];
     const n = opt && opt.dataset ? opt.dataset.n : '';
@@ -929,12 +939,41 @@ async function setup(){
   sel.onchange();
 }
 
+function shufflePracticeQuestionOptions(q){
+  const out = Object.assign({}, q);
+  const t = qtype(out);
+  const ans = Array.isArray(out.a) ? out.a.slice() : [];
+  if(!['mc','multi','zoom'].includes(t) || ans.length < 2) return out;
+  const n = ans.length;
+  const perm = [...Array(n).keys()];
+  for(let k = 0; k < 8; k++){
+    for(let i = n - 1; i > 0; i--){
+      const j = Math.floor(Math.random() * (i + 1));
+      [perm[i], perm[j]] = [perm[j], perm[i]];
+    }
+    if(perm.some((v, idx) => v !== idx)) break;
+  }
+  const inv = {};
+  perm.forEach((oldIdx, newIdx) => { inv[oldIdx] = newIdx; });
+  out.a = perm.map(i => ans[i]);
+  if(Array.isArray(out.aimg) && out.aimg.length === n) out.aimg = perm.map(i => out.aimg[i]);
+  if(Array.isArray(out.correct_multi) && out.correct_multi.length){
+    const cm = out.correct_multi.filter(i => i in inv).map(i => inv[i]).sort((a,b) => a - b);
+    out.correct_multi = cm;
+    out.c = cm.length ? cm[0] : (inv[out.c || 0] || 0);
+  } else {
+    out.c = inv[out.c || 0] || 0;
+  }
+  return out;
+}
+
 async function start(customQs){
   stopSpeak();
   let qs = customQs;
   let timed = run ? run.timed : false;
   let tMax = run ? run.tMax : 20;
   let shuffle = run ? !!run.shuffle : false;
+  let shuffleAns = run && run.shuffleAns !== undefined ? !!run.shuffleAns : true;
   if(!qs){
     const sel = document.getElementById('qs');
     const file = sel ? sel.value : lastFile;
@@ -951,6 +990,8 @@ async function start(customQs){
     timed = tmEl ? tmEl.checked : timed;
     const shufEl = document.getElementById('pracShuffle');
     shuffle = shufEl ? shufEl.checked : shuffle;
+    const shufAnsEl = document.getElementById('pracShuffleAns');
+    shuffleAns = shufAnsEl ? shufAnsEl.checked : true;
     const ptEl = document.getElementById('pTime');
     tMax = Math.max(5, Math.min(600, parseInt(ptEl ? ptEl.value : tMax, 10) || 20));
     const r = await (await fetch('/api/quiz_data?file=' + encodeURIComponent(file))).json();
@@ -962,15 +1003,18 @@ async function start(customQs){
       }
     }
     if(!isNaN(rawCnt) && rawCnt > 0) qs = qs.slice(0, rawCnt);
+    if(shuffleAns) qs = qs.map(shufflePracticeQuestionOptions);
     if(!qs.length){
       if(errEl){ errEl.textContent = 'This deck has no gradable practice questions.'; errEl.style.display = 'block'; }
       return;
     }
+  } else if(shuffleAns){
+    qs = qs.map(shufflePracticeQuestionOptions);
   }
   if(!qs.length) return;
   run = {
     qs, i:0, score:0, streak:0, best:0, right:0, creditSum:0,
-    missed:[], missedQ:[], timed, tMax, shuffle, t:tMax, timer:null,
+    missed:[], missedQ:[], timed, tMax, shuffle, shuffleAns, t:tMax, timer:null,
     sel:[], perm:null, matchPerm:null, matchPairs:[], matchLeft:0,
     sliderVal:0, pinXY:null, done:false
   };

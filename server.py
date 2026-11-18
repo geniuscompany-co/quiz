@@ -847,7 +847,38 @@ def save_custom_quiz(title, questions, owner="_shared", folder="", tags=None, co
     return qid, len(cleaned), cleaned
 
 
-def new_game(quiz_file="quiz.json", count=None, shuffle=False, custom_questions=None, owner="_shared"):
+def shuffle_question_options(q):
+    out = dict(q)
+    qt = qtype_of(out)
+    ans = list(out.get("a") or [])
+    if qt not in ("mc", "multi", "zoom") or len(ans) < 2:
+        return out
+    n = len(ans)
+    perm = list(range(n))
+    for _ in range(8):
+        random.shuffle(perm)
+        if perm != list(range(n)):
+            break
+    inv = {old_i: new_i for new_i, old_i in enumerate(perm)}
+    out["a"] = [ans[i] for i in perm]
+    if isinstance(out.get("aimg"), list) and len(out["aimg"]) == n:
+        out["aimg"] = [out["aimg"][i] for i in perm]
+    if isinstance(out.get("outcomes"), list) and len(out["outcomes"]) == n:
+        out["outcomes"] = [out["outcomes"][i] for i in perm]
+    if isinstance(out.get("goto"), list) and len(out["goto"]) == n:
+        out["goto"] = [out["goto"][i] for i in perm]
+    if isinstance(out.get("lenses"), list) and len(out["lenses"]) == n:
+        out["lenses"] = [out["lenses"][i] for i in perm]
+    if isinstance(out.get("correct_multi"), list) and out["correct_multi"]:
+        cm = sorted(inv[i] for i in out["correct_multi"] if i in inv)
+        out["correct_multi"] = cm
+        out["c"] = cm[0] if cm else inv.get(out.get("c", 0), 0)
+    else:
+        out["c"] = inv.get(out.get("c", 0), 0)
+    return out
+
+
+def new_game(quiz_file="quiz.json", count=None, shuffle=False, shuffle_answers=True, custom_questions=None, owner="_shared"):
     while True:
         pin = str(random.randint(100000, 999999))
         if pin not in GAMES:
@@ -866,7 +897,9 @@ def new_game(quiz_file="quiz.json", count=None, shuffle=False, custom_questions=
     elif k < len(bank) or shuffle:
         quiz = [dict(x) for x in random.sample(bank, k)]
     else:
-        quiz = bank
+        quiz = [dict(x) for x in bank]
+    if shuffle_answers:
+        quiz = [shuffle_question_options(x) for x in quiz]
     GAMES[pin] = {
         "pin": pin, "host": "h%08x" % random.getrandbits(32), "quiz": quiz,
         "phase": "lobby", "q": -1, "start": 0, "preview": PREVIEW_TIME, "think_time": 0.0, "players": {},
@@ -889,11 +922,12 @@ def new_game(quiz_file="quiz.json", count=None, shuffle=False, custom_questions=
         "init_counts": {}, "revotes": {}, "branched_qs": [], "visited_qs": [],
         "chat_enabled": False, "profiles_enabled": False, "play_too_enabled": False,
         "chat": [], "cseq": 0, "chat_q": [],
+        "shuffle_answers": bool(shuffle_answers),
     }
     return GAMES[pin]
 
 
-def replay_game(g, quiz_file="quiz.json", count=None, shuffle=True, custom_questions=None):
+def replay_game(g, quiz_file="quiz.json", count=None, shuffle=True, shuffle_answers=None, custom_questions=None):
     cleaned_custom = clean_questions(custom_questions) if custom_questions else []
     bank = cleaned_custom if cleaned_custom else [dict(x) for x in load_quiz(quiz_file)]
     if count is not None:
@@ -908,7 +942,11 @@ def replay_game(g, quiz_file="quiz.json", count=None, shuffle=True, custom_quest
     elif k < len(bank) or shuffle:
         g["quiz"] = [dict(x) for x in random.sample(bank, k)]
     else:
-        g["quiz"] = bank
+        g["quiz"] = [dict(x) for x in bank]
+    shuf_ans = g.get("shuffle_answers", True) if shuffle_answers is None else bool(shuffle_answers)
+    g["shuffle_answers"] = shuf_ans
+    if shuf_ans:
+        g["quiz"] = [shuffle_question_options(x) for x in g["quiz"]]
     g["phase"] = "lobby"
     g["q"] = -1
     g["start"] = 0
@@ -3370,7 +3408,9 @@ class H(BaseHTTPRequestHandler):
                 k = max(1, min(len(bank), int(body.get("count") or len(bank))))
             except Exception:
                 k = len(bank)
-            qs_ = random.sample(bank, k) if (body.get("shuffle", True) or k < len(bank)) else bank
+            qs_ = random.sample(bank, k) if (body.get("shuffle", True) or k < len(bank)) else [dict(x) for x in bank]
+            if body.get("shuffle_answers", True):
+                qs_ = [shuffle_question_options(x) for x in qs_]
             roster = []
             for r_ in (body.get("roster") or [])[:300]:
                 r_ = re.sub(r"\s+", " ", str(r_)).strip()[:48]
@@ -3540,6 +3580,7 @@ class H(BaseHTTPRequestHandler):
                     body.get("quiz") or "quiz.json",
                     body.get("count"),
                     bool(body.get("shuffle")),
+                    shuffle_answers=True if body.get("shuffle_answers") is None else bool(body.get("shuffle_answers")),
                     custom_questions=body.get("custom_questions"),
                     owner=owner_of(body.get("token")),
                 )
@@ -3749,6 +3790,7 @@ class H(BaseHTTPRequestHandler):
                     body.get("quiz") or "quiz.json",
                     body.get("count"),
                     bool(body.get("shuffle", True)),
+                    shuffle_answers=body.get("shuffle_answers"),
                     custom_questions=body.get("custom_questions"),
                 )
                 return self.send({"ok": True, "pin": g["pin"]})
