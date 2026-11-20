@@ -788,6 +788,24 @@ body.cb .c4{background:#CC79A7}body.cb .c5{background:#56B4E9;color:#111}body.cb
 #hostPlayModal input{width:100%;box-sizing:border-box;padding:12px;border-radius:10px;border:0;font-size:1.05em;margin:6px 0 10px;color:#1e1b2e;font-weight:750}
 #hostPlayModal .go{display:block;text-align:center;background:linear-gradient(180deg,#22c55e,#16a34a);color:#05210e;font-weight:900;border-radius:11px;padding:12px;text-decoration:none;cursor:pointer;box-shadow:0 4px 0 #0d5c2b}
 #hostPlayModal .cl{margin-top:10px;width:100%;padding:10px;border-radius:10px;border:1px solid var(--border-hi);background:#ffffff14;color:#fff;font-weight:750;cursor:pointer;box-shadow:none}
+/* Live Session Dual-View Switcher Bar (Host Studio <-> Live Game Screen) */
+.live-view-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;background:linear-gradient(135deg,#13092bea,#14532d99);border:1.5px solid #4ade8099;border-radius:15px;padding:10px 14px;margin:0 auto 14px;width:100%;max-width:1040px;box-shadow:0 12px 32px rgba(0,0,0,.45);backdrop-filter:blur(14px);text-align:left;position:sticky;top:10px;z-index:34}
+body.in-game .live-view-bar{max-width:1180px;padding-right:108px}
+@media (max-width:860px){body.in-game .live-view-bar{padding-right:14px}}
+.lvb-toggle-grp{display:inline-flex;align-items:center;background:#090517cc;border:1px solid #ffffff2b;border-radius:11px;padding:3px;gap:3px}
+.lvb-tab{margin:0;padding:7px 14px;font-size:.86em;font-weight:850;border-radius:8px;background:transparent;border:0;color:#ffffffb8;box-shadow:none;cursor:pointer;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;transition:background .15s,color .15s}
+.lvb-tab:hover{color:#fff;background:#ffffff12}
+.lvb-tab.active{background:linear-gradient(135deg,#7c3aed,#6d28d9);color:#fff;box-shadow:0 4px 12px rgba(0,0,0,.45)}
+.lvb-meta{display:flex;align-items:center;gap:7px;flex-wrap:wrap;font-size:.84em;font-weight:800}
+.lvb-pill{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:99px;background:#ffffff17;border:1px solid #ffffff29;color:#fff;font-variant-numeric:tabular-nums;white-space:nowrap}
+.lvb-pill b{color:var(--gold)}
+.lvb-pill.live-dot{background:#14532dcc;border-color:#4ade80;color:#bbf7d0}
+.lvb-acts{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-left:auto}
+.lvb-acts button{margin:0;padding:7px 13px;font-size:.84em;border-radius:10px;font-weight:850;box-shadow:none;white-space:nowrap}
+.lvb-btn-proj{background:#ffffff1a;border:1px solid #ffffff38;color:#fff}
+.lvb-btn-proj:hover{background:#ffffff2b}
+.lvb-btn-proj.on{background:#14532dcc;border-color:#7dff6b;color:#dcfce7}
+.lvb-btn-next{background:linear-gradient(180deg,#22c55e,#16a34a);color:#05210e;box-shadow:0 3px 0 #0d5c2b!important}
 </style></head><body>
 <button id="fsBtn" onclick="toggleFullscreen()">⛶ Fullscreen (F)</button>
 <header class="studio-mob-bar" id="workspaceBar">
@@ -1156,7 +1174,8 @@ Quote: Paris has been the capital since 987 CE."></textarea>
  </aside>
 
  <div id="app">
-  <div class="studio-workspace setup-card">
+  <div id="liveViewSwitchBar" class="live-view-bar aud-hide" style="display:none"></div>
+  <div id="hostStudioView" class="studio-workspace setup-card">
    <div>
     <div class="studio-head">
      <div>
@@ -1200,12 +1219,16 @@ Quote: Paris has been the capital since 987 CE."></textarea>
      <button type="button" class="sum-chip" id="screenSummaryChip" onclick="toggleStudioDrawer(true)" title="Click to configure Dual Screen or Remote">📽️ <span id="screenSummary">Standard</span></button>
      <button type="button" class="sum-edit-link" onclick="toggleStudioDrawer(true)">Edit in drawer →</button>
     </div>
-    <button id="launchBtn" class="studio-cta-btn" onclick="create()">
-     <span class="quiz-only">🚀 Create Live Game →</span>
-     <span class="case-only">📖 Launch Selected Case →</span>
-    </button>
+    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+     <button type="button" id="studioViewGameBtn" class="btn-sec" style="display:none;margin:0;padding:11px 18px;font-size:.94em;border-radius:12px;background:#7c3aed;border-color:#c4b5fd;color:#fff;font-weight:850" onclick="setHostViewMode('game')">🎮 View Active Game →</button>
+     <button id="launchBtn" class="studio-cta-btn" onclick="create()">
+      <span class="quiz-only">🚀 Create Live Game →</span>
+      <span class="case-only">📖 Launch Selected Case →</span>
+     </button>
+    </div>
    </div>
   </div>
+  <div id="liveGameStage" style="display:none"></div>
  </div>
 
  <div class="studio-backdrop" id="studioDrawerBackdrop" onclick="toggleStudioDrawer(false)"></div>
@@ -1417,7 +1440,122 @@ const IS_AUDIENCE = location.pathname === '/present' || new URLSearchParams(loca
 if(IS_AUDIENCE){ document.body.classList.add('is-audience'); document.title = 'Brainrush! — Presentation Screen'; }
 else { document.body.classList.add('host-booting'); setTimeout(() => document.body.classList.remove('host-booting'), 2500); }
 let pin, host, S = {};
-const $ = document.getElementById('app'), sh = ["▲ ","◆ ","● ","■ ","★ ","⬢ ","✦ ","❖ "];
+let hostViewMode = IS_AUDIENCE ? 'game' : 'studio';
+const $ = document.getElementById('liveGameStage') || document.getElementById('app'), sh = ["▲ ","◆ ","● ","■ ","★ ","⬢ ","✦ ","❖ "];
+if(IS_AUDIENCE){
+ const hsv0 = document.getElementById('hostStudioView');
+ if(hsv0) hsv0.style.display = 'none';
+ if($) $.style.display = 'block';
+}
+
+function setHostViewMode(mode){
+ if(IS_AUDIENCE){
+  hostViewMode = 'game';
+ } else {
+  hostViewMode = (mode === 'game') ? 'game' : 'studio';
+ }
+ syncHostViewLayout();
+ if(pin && S && S.phase){
+  render();
+  if(typeof updateMeta === 'function') updateMeta();
+  if(typeof syncLiveFeatureBtns === 'function') syncLiveFeatureBtns();
+ }
+}
+window.setHostViewMode = setHostViewMode;
+
+function syncHostViewLayout(){
+ const hasGame = !!(pin && S && S.phase);
+ const showGame = IS_AUDIENCE || (hasGame && hostViewMode === 'game');
+ const studioEl = document.getElementById('hostStudioView');
+ const stageEl = document.getElementById('liveGameStage');
+ const viewGameBtn = document.getElementById('studioViewGameBtn');
+ if(studioEl) studioEl.style.display = showGame ? 'none' : '';
+ if(stageEl) stageEl.style.display = showGame ? 'block' : 'none';
+ if(viewGameBtn) viewGameBtn.style.display = (!IS_AUDIENCE && hasGame) ? 'inline-flex' : 'none';
+ document.body.classList.toggle('in-game', showGame);
+ document.body.classList.toggle('is-presenter-console', !!(!IS_AUDIENCE && showGame && window.presenterMode && pin));
+ if(!showGame){
+  document.body.classList.remove('wing-open');
+  const wb = document.getElementById('liveWingBackdrop');
+  if(wb) wb.classList.remove('open');
+ }
+ updateLiveViewSwitchBar();
+}
+
+let _lastLvbSig = '';
+function updateLiveViewSwitchBar(){
+ const bar = document.getElementById('liveViewSwitchBar');
+ if(!bar) return;
+ if(IS_AUDIENCE || !pin || !S || !S.phase){
+  bar.style.display = 'none';
+  _lastLvbSig = '';
+  return;
+ }
+ bar.style.display = 'flex';
+ const ph = S.phase || 'lobby';
+ const nAct = (S.n_active != null ? S.n_active : (S.n || 0));
+ const inPrev = ph === 'question' && (S.preview_left || 0) > 0;
+ const inCons = ph === 'question' && S.consensus_step === 2;
+ const inThink = ph === 'question' && !inPrev && !inCons && (S.think_left || 0) > 0;
+ const pLive = (typeof isProjectorLive === 'function') && isProjectorLive();
+
+ let phaseTxt = 'Lobby';
+ if(ph === 'icebreaker') phaseTxt = '💭 Warm-Up Cloud';
+ else if(ph === 'intro') phaseTxt = `🎪 Intro ${(S.index||0)+1}/${S.total||0}`;
+ else if(ph === 'question'){
+  const sl = `${S.case_game?'Slide':'Q'} ${(S.index||0)+1}/${S.total||0}`;
+  if(S.qtype === 'info') phaseTxt = `📖 ${sl}`;
+  else if(inPrev) phaseTxt = `👀 ${sl} · Preview ${Math.ceil(S.preview_left||0)}s`;
+  else if(inThink) phaseTxt = `🧠 ${sl} · Think ${Math.ceil(S.think_left||0)}s`;
+  else if(inCons) phaseTxt = `🤝 ${sl} · Team ${Math.ceil(S.consensus_left||0)}s`;
+  else phaseTxt = `⏱ ${sl} · ${S.paused?'⏸ ':''}${Math.ceil(S.left||0)}s (${S.answered||0}/${nAct})`;
+ } else if(ph === 'results'){
+  phaseTxt = `📊 Results ${(S.index||0)+1}/${S.total||0}`;
+ } else if(ph === 'board'){
+  phaseTxt = `🏆 Standings ${(S.index||0)+1}/${S.total||0}`;
+ } else if(ph === 'final'){
+  phaseTxt = '🏆 Final Podium';
+ }
+
+ let nextLbl = 'Next ➔', canNext = true;
+ if(ph === 'lobby'){
+  canNext = (S.n || 0) > 0;
+  nextLbl = canNext ? `🚀 Start ${S.case_game ? 'Case' : 'Game'} ➔` : '⏳ Waiting for Players…';
+ } else if(ph === 'icebreaker'){
+  nextLbl = `▶️ Start ${S.case_game ? 'Slide 1' : 'Q1'} ➔`;
+ } else if(ph === 'intro'){
+  nextLbl = '⏭️ Skip Intro ➔';
+ } else if(ph === 'question'){
+  nextLbl = S.qtype === 'info' ? '➡️ Next Slide ➔' : '⏭️ Reveal Results ➔';
+ } else if(ph === 'results'){
+  nextLbl = S.is_last ? '🏆 Final Podium ➔' : ((S.case || S.hide_board) ? '➡️ Next Slide ➔' : '🏆 Standings ➔');
+ } else if(ph === 'board'){
+  nextLbl = ((S.index + 1 >= S.total) ? '🏆 Final Podium ➔' : '➡️ Next Question ➔');
+ }
+
+ const sig = `${hostViewMode}|${pin}|${ph}|${S.index||0}|${S.n||0}|${nAct}|${pLive?1:0}|${canNext?1:0}|${nextLbl}|${!!window.presenterMode}`;
+ if(sig === _lastLvbSig){
+  const phEl = document.getElementById('lvbPhasePill');
+  if(phEl) phEl.textContent = phaseTxt;
+  return;
+ }
+ _lastLvbSig = sig;
+ bar.innerHTML = `<div class="lvb-toggle-grp" role="tablist" aria-label="Switch between Host Studio and Live Game Screen">
+   <button type="button" class="lvb-tab${hostViewMode==='studio'?' active':''}" onclick="setHostViewMode('studio')" title="Stay on Host Studio (quizzes, builder, courses &amp; settings) without interrupting the live game">🎛️ Host Studio</button>
+   <button type="button" class="lvb-tab${hostViewMode==='game'?' active':''}" onclick="setHostViewMode('game')" title="View the active game screen / presenter console here on /host">🎮 Live Game Screen</button>
+  </div>
+  <div class="lvb-meta">
+   <span class="lvb-pill live-dot">🟢 PIN <b>${esc(pin)}</b></span>
+   <span class="lvb-pill">👥 <b>${S.n||0}</b> ${S.n===1?'Player':'Players'}</span>
+   <span class="lvb-pill" id="lvbPhasePill">${esc(phaseTxt)}</span>
+  </div>
+  <div class="lvb-acts">
+   ${ph === 'lobby' ? `<button type="button" class="lvb-btn-proj" onclick="addBots(5)" title="Add 5 practice bots to test or start immediately">🤖 +5 Bots</button>` : ''}
+   <button type="button" class="lvb-btn-proj" onclick="copyJoinLink(this)" title="Copy student /play join link">📋 Copy /play Link</button>
+   <button type="button" class="lvb-btn-proj${pLive?' on':''}" onclick="openProjectedGameScreen()" title="Open or focus the projected game screen (/present) for the classroom projector">${pLive ? '🟢 Projected Screen Live ↗' : '📽️ Project Game Screen ↗'}</button>
+   ${ph !== 'final' ? `<button type="button" class="lvb-btn-next" ${canNext?'onclick="next()"':'disabled style="opacity:.55;cursor:not-allowed"'}>${esc(nextLbl)}</button>` : ''}
+  </div>`;
+}
 
 // --- Hamburger Nav, Dynamic Join QR, Avatar Layers & Setup Presets ---
 function joinPlayDisplay(){
@@ -1463,11 +1601,11 @@ function closeNavMenu(){
 }
 function syncWsNavCollapse(){
  if(IS_AUDIENCE) return;
- const inGame = !!(pin && S && S.phase);
+ const inGameView = !!(pin && S && S.phase && hostViewMode === 'game');
  const ic = document.getElementById('navIcon'), bd = document.getElementById('navBadge');
- if(ic) ic.textContent = inGame ? '⚙️' : '🔊';
- if(bd) bd.textContent = inGame ? 'Menu' : 'Prefs';
- if(inGame){
+ if(ic) ic.textContent = inGameView ? '⚙️' : '🔊';
+ if(bd) bd.textContent = inGameView ? 'Menu' : 'Prefs';
+ if(inGameView){
   document.body.classList.remove('drawer-open', 'rail-open');
   const db = document.getElementById('studioDrawerBackdrop'), rb = document.getElementById('studioRailBackdrop');
   if(db) db.classList.remove('open');
@@ -1475,7 +1613,7 @@ function syncWsNavCollapse(){
  }
 }
 function toggleStudioDrawer(force){
- if(IS_AUDIENCE || (pin && S && S.phase)) return;
+ if(IS_AUDIENCE || (pin && S && S.phase && hostViewMode === 'game')) return;
  const nextOpen = typeof force === 'boolean' ? force : !document.body.classList.contains('drawer-open');
  document.body.classList.toggle('drawer-open', nextOpen);
  const db = document.getElementById('studioDrawerBackdrop');
@@ -1499,7 +1637,7 @@ function toggleMobileRail(force){
  }
 }
 function toggleLiveWing(force){
- if(IS_AUDIENCE || window.presenterMode || !pin || !S || !S.phase || S.phase === 'final'){
+ if(IS_AUDIENCE || hostViewMode !== 'game' || window.presenterMode || !pin || !S || !S.phase || S.phase === 'final'){
   document.body.classList.remove('wing-open');
   const wb0 = document.getElementById('liveWingBackdrop');
   if(wb0) wb0.classList.remove('open');
@@ -3378,6 +3516,8 @@ async function create(){
  const ptBtn = document.getElementById('playTooMenuBtn'); if(ptBtn) ptBtn.style.display = 'flex';
  const aq = document.getElementById('addQuizMenuBtn');
  if(aq) aq.style.display = 'none';
+ hostViewMode = 'studio';
+ syncHostViewLayout();
  startHostPoll();
 }
 window.startGame = function(){ return create(); };
@@ -3633,14 +3773,19 @@ function syncLiveFeatureBtns(){
  if(ptB){ if(inGame) ptB.style.display = 'flex'; ptB.classList.toggle('on', !!S.play_too_enabled); }
  if(ptS) ptS.textContent = S.play_too_enabled ? 'ON' : 'OFF';
  if(!IS_AUDIENCE){
+  const showGameView = hostViewMode === 'game';
   const hpBtn = document.getElementById('hostPlayBtn');
   if(hpBtn){
-   hpBtn.style.display = (inGame && S.play_too_enabled && S.phase !== 'final') ? 'inline-block' : 'none';
+   hpBtn.style.display = (inGame && showGameView && S.play_too_enabled && S.phase !== 'final') ? 'inline-block' : 'none';
    hpBtn.style.setProperty('--hp-right', S.chat_enabled ? '130px' : '152px');
   }
   const hcBtn = document.getElementById('hostChatBtn'), hcLbl = document.getElementById('hostChatLbl'), hcTitle = document.getElementById('hostChatTitle'), hcTgl = document.getElementById('hcToggleChatBtn'), hcBots = document.getElementById('hcBotsBtn'), hcIn = document.getElementById('hostChatIn');
   if(hcBtn){
-   hcBtn.style.display = inGame ? 'inline-block' : 'none';
+   hcBtn.style.display = (inGame && showGameView) ? 'inline-block' : 'none';
+  }
+  if(!showGameView){
+   const hcBox = document.getElementById('hostChat');
+   if(hcBox) hcBox.classList.remove('open');
   }
   if(hcLbl) hcLbl.textContent = S.chat_enabled ? '💬 Chat' : '📢 Broadcast';
   if(hcTitle) hcTitle.textContent = S.chat_enabled ? 'Live Game Chat' : 'Host Megaphone';
@@ -3912,7 +4057,7 @@ let lastWingKey = '';
 function updateLiveWing(){
  const wing = document.getElementById('liveHostWing'), wb = document.getElementById('liveWingBackdrop');
  if(!wing) return;
- if(IS_AUDIENCE || window.presenterMode || !pin || !S || !S.phase || S.phase === 'final'){
+ if(IS_AUDIENCE || hostViewMode !== 'game' || window.presenterMode || !pin || !S || !S.phase || S.phase === 'final'){
   if(document.body.classList.contains('wing-open')){
    document.body.classList.remove('wing-open');
    if(wb) wb.classList.remove('open');
@@ -4056,10 +4201,11 @@ function updateLiveWing(){
 }
 let last='';
 function render(){
- document.body.classList.toggle('in-game', !!(pin && S && S.phase));
+ syncHostViewLayout();
  if(typeof syncWsNavCollapse === 'function') syncWsNavCollapse();
+ const showGameView = IS_AUDIENCE || hostViewMode === 'game';
  const lj = document.getElementById('lateJoin'), lp = document.getElementById('latePin'), lh = document.getElementById('lateHostLbl');
- if(lj) lj.style.display = (pin && S.phase && S.phase !== 'lobby' && S.phase !== 'final') ? 'block' : 'none';
+ if(lj) lj.style.display = (showGameView && pin && S.phase && S.phase !== 'lobby' && S.phase !== 'final') ? 'block' : 'none';
  if(lp && pin) lp.textContent = pin;
  if(lh) lh.textContent = joinPlayDisplay();
  const lqb = document.getElementById('lateQrBox'), lqs = document.getElementById('lateQrSvg');
@@ -4729,6 +4875,7 @@ function enterGame(){
 })();
 function resumeGame(){
  const sv = window._resumeSaved;
+ document.querySelectorAll('.resume-card').forEach(el => el.remove());
  pin = sv.pin; host = sv.host;
  ensureAudio();
  if(pin && host && document.getElementById('qRemote') && document.getElementById('qRemote').checked){
@@ -4911,11 +5058,12 @@ function updateMeta(){
  let bar = document.getElementById('metaBar');
  if(!bar){ bar = document.createElement('div'); bar.id = 'metaBar'; document.body.appendChild(bar); }
  if(S.index !== noteQ){ noteQ = S.index; noteOpen = false; }
- const inQ = S.phase === 'question' || S.phase === 'results';
+ const showGameView = IS_AUDIENCE || hostViewMode === 'game';
+ const inQ = showGameView && (S.phase === 'question' || S.phase === 'results');
  let h = '';
  if(inQ && S.topic) h += `<span class="topic-chip">🏷️ ${esc(S.topic)}</span>`;
  if(inQ && S.note) h += `<button class="note-btn" onclick="toggleNote()">📝 ${noteOpen?'Hide':'Show'} teacher note (N)</button>${noteOpen?`<div class="note-box">${esc(S.note)}</div>`:''}`;
- if((S.pending_list||[]).length) h += `<button class="mod-btn" onclick="openModeration()">🛡️ ${S.pending_list.length} waiting for approval</button>`;
+ if(showGameView && (S.pending_list||[]).length) h += `<button class="mod-btn" onclick="openModeration()">🛡️ ${S.pending_list.length} waiting for approval</button>`;
  if(bar.dataset.k !== h){ bar.dataset.k = h; bar.innerHTML = h; }
  bar.style.display = h ? 'flex' : 'none';
  if(typeof updateLiveWing === 'function') updateLiveWing();
@@ -6632,6 +6780,8 @@ create = async function(){
  const ptBtn = document.getElementById('playTooMenuBtn'); if(ptBtn) ptBtn.style.display = 'flex';
  const aq = document.getElementById('addQuizMenuBtn');
  if(aq) aq.style.display = 'none';
+ hostViewMode = 'studio';
+ syncHostViewLayout();
  startHostPoll();
 };
 
@@ -6906,6 +7056,25 @@ function setPresenterMode(on){
  if(pin && S && S.phase){ render(); updateMeta(); }
 }
 
+let _cachedProjFeat = 'popup=yes,width=1280,height=800';
+function openProjectedGameScreen(){
+ if(IS_AUDIENCE) return;
+ const url = '/present' + (pin ? '?pin=' + encodeURIComponent(pin) : '');
+ if(projWin && !projWin.closed){
+  try{ projWin.focus(); }catch(e){}
+  broadcastPresSync();
+  renderPresSetupBar();
+  updateLiveViewSwitchBar();
+  return;
+ }
+ try{
+  projWin = window.open(url, 'brainrush_projector', _cachedProjFeat);
+ }catch(e){}
+ setTimeout(broadcastPresSync, 250);
+ setTimeout(() => { renderPresSetupBar(); updateLiveViewSwitchBar(); }, 350);
+}
+window.openProjectedGameScreen = openProjectedGameScreen;
+
 async function openPresentationMode(){
  if(IS_AUDIENCE) return;
  setPresenterMode(true);
@@ -6914,21 +7083,23 @@ async function openPresentationMode(){
   try{ projWin.focus(); }catch(e){}
   broadcastPresSync();
   renderPresSetupBar();
+  updateLiveViewSwitchBar();
   return;
  }
- let feat = 'popup=yes,width=1280,height=800';
+ let feat = _cachedProjFeat;
  if('getScreenDetails' in window){
   try{
    const details = await window.getScreenDetails();
    const ext = details.screens.find(s => s !== details.currentScreen) || details.screens.find(s => !s.isPrimary);
    if(ext){
     feat = `popup=yes,left=${ext.availLeft},top=${ext.availTop},width=${ext.availWidth},height=${ext.availHeight}`;
+    _cachedProjFeat = feat;
    }
   }catch(e){}
  }
  projWin = window.open(url, 'brainrush_projector', feat);
  setTimeout(broadcastPresSync, 250);
- setTimeout(renderPresSetupBar, 350);
+ setTimeout(() => { renderPresSetupBar(); updateLiveViewSwitchBar(); }, 350);
 }
 
 function updatePresBadge(){
@@ -7241,15 +7412,24 @@ window.renderPresenter = renderPresenter;
 // Wire host lifecycle & appearance changes to sync with Extended Screen
 const _createPres = create;
 create = async function(){
+ const sel = document.getElementById('quizSel');
+ const qf = sel ? sel.value : '';
+ if(qf && !IS_AUDIENCE && !isProjectorLive()){
+  try{
+   projWin = window.open('/present', 'brainrush_projector', _cachedProjFeat);
+  }catch(e){}
+ }
  await _createPres();
  if(pin){
-  if(window.presenterMode) document.body.classList.add('is-presenter-console');
+  syncHostViewLayout();
   broadcastPresSync();
+  setTimeout(broadcastPresSync, 280);
  }
 };
 const _enterGamePres = enterGame;
 enterGame = function(){
- if(window.presenterMode && pin) document.body.classList.add('is-presenter-console');
+ hostViewMode = 'studio';
+ syncHostViewLayout();
  _enterGamePres();
  broadcastPresSync();
 };
@@ -7312,6 +7492,7 @@ window.addEventListener('storage', ev => {
 (function(){
  const hostSec = GUIDE.find(g => g.id === 'host');
  if(hostSec){
+  hostSec.items.unshift(['🎛️ Host Studio ↔ 🎮 Live Game Screen Toggle', 'When you create a game, /host stays put on the Host Studio while automatically launching and syncing the projected game screen (/present). Use the top toggle bar at any time to switch back and forth between 🎛️ Host Studio and 🎮 Live Game Screen without interrupting or impacting the active game!']);
   hostSec.items.unshift(['📽️ Presentation Mode (Extended Screen)', 'Like PowerPoint Presenter View: opens a clean, button-free Audience window (/present) for your extended monitor or projector while turning your laptop into a private Presenter Console with Teacher Notes, Answer Key, Up-Next preview, timers, and live player moderation.']);
  }
  const scrSec = GUIDE.find(g => g.id === 'screens');
