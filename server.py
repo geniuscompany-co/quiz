@@ -3578,7 +3578,7 @@ class H(BaseHTTPRequestHandler):
                 if not prof:
                     return self.send({"error": "Player not found"}, 404)
                 return self.send(prof)
-        if path == "/":
+        if path in ("/", "/brainrush"):
             dest = "/play" + ("?" + qs if qs else "")
             return self.send(b"", code=302, ctype="text/plain", extra_headers={"Location": dest})
         files = {

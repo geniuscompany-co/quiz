@@ -448,8 +448,8 @@ function cloud(S){
 }
 
 function render(S){
-  const joinUrl = `${location.host || 'plw.me'}/play`;
-  const joinFull = `${location.origin && location.origin !== 'null' ? location.origin : 'https://plw.me'}/play?pin=${encodeURIComponent(S.pin)}`;
+  const joinUrl = 'plw.me/brainrush';
+  const joinFull = 'https://plw.me/brainrush';
   const qrSrc = `/api/qr?text=${encodeURIComponent(joinFull)}`;
 
   const pb = document.getElementById('phaseBadge');
