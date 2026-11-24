@@ -353,7 +353,6 @@ main.both{grid-template-columns:1.08fr .92fr}
   </div>
   <div class="hd-right">
     <div id="hd"></div>
-    <button id="a11y" class="util-btn" onclick="cycleA11y()" title="Colorblind / High-contrast">👁️</button>
     <button id="awakeBtn" class="util-btn" onclick="toggleAwake()" title="Keep display awake">☀️ <span id="awakeState">ON</span></button>
   </div>
 </header>
@@ -365,23 +364,8 @@ const q = new URLSearchParams(location.search), mode = q.get('mode') || 'both';
 let pin = q.get('pin') || '', lastKey = '';
 function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
 
-function applyA11y(){
-  let a = 'off';
-  try{ a = localStorage.getItem('brainrush_a11y') || 'off'; }catch(e){}
-  document.body.classList.toggle('cb', a === 'cb');
-  document.body.classList.toggle('hc', a === 'hc');
-  const b = document.getElementById('a11y');
-  if(b) b.textContent = a === 'cb' ? '👁️ CB' : a === 'hc' ? '👁️ HC' : '👁️';
-}
-function cycleA11y(){
-  const o = ['off','cb','hc'];
-  let a = 'off';
-  try{ a = localStorage.getItem('brainrush_a11y') || 'off'; }catch(e){}
-  const nx = o[(o.indexOf(a) + 1) % 3];
-  try{ localStorage.setItem('brainrush_a11y', nx); }catch(e){}
-  applyA11y();
-}
-applyA11y();
+try{ localStorage.removeItem('brainrush_a11y'); }catch(e){}
+document.body.classList.remove('cb','hc');
 
 const cols = ['#e21b3c','#1368ce','#d89e00','#26890c','#8e24aa','#00897b'];
 const cbCols = ['#D55E00','#0072B2','#CC79A7','#009E73','#56B4E9','#E69F00'];

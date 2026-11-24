@@ -1104,7 +1104,6 @@ body.has-chat{padding-bottom:58px}
     <div class="hud-left">
       <span class="hud-brand"><span class="rail-bolt">⚡</span><span class="hb-txt">BrainRush</span></span>
       <button id="sfxBtn" class="hud-btn" onclick="toggleSfx()" title="Sound Effects">🔊</button>
-      <button id="a11y" class="hud-btn" onclick="cycleA11y()" title="Accessibility Display Mode">👁️</button>
     </div>
     <div id="hudMe" class="hud-me"></div>
     <div class="hud-right">
@@ -1649,11 +1648,9 @@ function hotHtml(m){
 }
 
 function applyA11y(){
- const a=localStorage.getItem('brainrush_a11y')||'off';
- document.body.classList.toggle('cb',a==='cb'); document.body.classList.toggle('hc',a==='hc');
- const b=document.getElementById('a11y'); if(b) b.textContent = a==='cb' ? '👁️ CB' : a==='hc' ? '👁️ HC' : '👁️';
+ try{ localStorage.removeItem('brainrush_a11y'); }catch(e){}
+ document.body.classList.remove('cb','hc');
 }
-function cycleA11y(){ const o=['off','cb','hc']; const a=localStorage.getItem('brainrush_a11y')||'off'; localStorage.setItem('brainrush_a11y', o[(o.indexOf(a)+1)%3]); applyA11y(); }
 applyA11y();
 
 let lastReact=0;

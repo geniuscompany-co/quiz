@@ -863,8 +863,6 @@ body.in-game .live-view-bar{max-width:1180px;padding-right:108px}
    <button onclick="cycleTheme()"><span>🎨 Visual Theme</span><span class="state" id="themeState">Studio</span></button>
    <button id="musicBtn" onclick="cycleMusic()"><span>🎵 Background Music</span><span class="state" id="musicState">Classic</span></button>
    <button id="awakeBtn" onclick="toggleAwake()"><span>☀️ Keep Screen Awake</span><span class="state" id="awakeState">ON</span></button>
-   <button id="cbBtn" onclick="toggleCb()"><span>👁️ Colorblind-safe Colors</span><span class="state" id="cbState">Off</span></button>
-   <button id="hcBtn" onclick="toggleHc()"><span>◐ High Contrast</span><span class="state" id="hcState">Off</span></button>
   </div>
   <div class="menu-sep" id="menuMidSep"></div>
   <div class="menu-group" id="menuWsGrp">
@@ -4921,15 +4919,11 @@ function cycleTheme(){
 
 // --- Accessibility ---
 function applyA11y(){
- const cb = localStorage.getItem('brainrush_cb')==='1', hc = localStorage.getItem('brainrush_hc')==='1';
- document.body.classList.toggle('cb', cb); document.body.classList.toggle('hc', hc);
- const a = document.getElementById('cbState'), b = document.getElementById('hcState');
- if(a) a.textContent = cb ? 'ON' : 'Off'; if(b) b.textContent = hc ? 'ON' : 'Off';
- const cbB = document.getElementById('cbBtn'), hcB = document.getElementById('hcBtn');
- if(cbB) cbB.classList.toggle('on', cb); if(hcB) hcB.classList.toggle('on', hc);
+ try{ localStorage.removeItem('brainrush_cb'); localStorage.removeItem('brainrush_hc'); }catch(e){}
+ document.body.classList.remove('cb','hc');
 }
-function toggleCb(){ localStorage.setItem('brainrush_cb', localStorage.getItem('brainrush_cb')==='1' ? '0' : '1'); applyA11y(); }
-function toggleHc(){ localStorage.setItem('brainrush_hc', localStorage.getItem('brainrush_hc')==='1' ? '0' : '1'); applyA11y(); }
+function toggleCb(){}
+function toggleHc(){}
 
 // --- Music styles ---
 const MUSIC_NAMES = {classic:'Classic', chill:'Chill', upbeat:'Upbeat', off:'Off'};
@@ -5174,7 +5168,6 @@ const GUIDE = [
   ['☰ Menu – Auto-Advance', 'Live toggle for automatic advancing.'],
   ['☰ Menu – Visual Theme', 'Cycles through Purple, Neon, Emerald and Sunset themes.'],
   ['☰ Menu – Background Music', 'Cycles Classic, Chill, Upbeat or Off for background music (sound effects stay on).'],
-  ['☰ Menu – Colorblind / High Contrast', 'Switches to a colorblind-safe answer palette, or a high-contrast display.'],
   ['☰ Menu – Remote', 'Available both before and during a game: shows your paired phone remote link, QR code, and live connection status so you can launch or control the session from your phone (next, pause, +10s, bots).'],
   ['☰ Menu – Results History', 'Saved summaries of past games, a "topics to reteach" list and CSV export. May reset if the server restarts, so export what you need.'],
   ['☰ Menu – Modes', 'Links for a second-screen leaderboard / word cloud, extended projector view, and the student practice page.'],
@@ -5198,8 +5191,7 @@ const GUIDE = [
  {id:'screens', title:'🖥️ Other Screens', items:[
   ['/spectator', 'A second-screen view with the live leaderboard and word cloud. Add ?mode=board or ?mode=cloud for just one. Standings hide the current question\'s results until it ends.'],
   ['/practice', 'Solo Practice: open to anyone at /practice with the ENTR 101 Comprehensive Test (all 10 chapters) preloaded and ready to practice! Includes Chapter filtering, full Timers & Pacing (Questions, Timer, Reading Preview, Thinking Time), Student Read-Aloud, Percentage Grading, Accuracy by Chapter, Tough Ones Recap (Most Missed), and a printable Study Guide of missed questions.'],
-  ['/remote', 'The phone host remote — pair via Session Settings or 📱 Remote to pick & launch a session pre-game and control slides live.'],
-  ['👁️ Phone accessibility button', 'On the join screen and in-game, cycles normal, colorblind and high-contrast colors.']
+  ['/remote', 'The phone host remote — pair via Session Settings or 📱 Remote to pick & launch a session pre-game and control slides live.']
  ]}
 ];
 function openGuide(sec){
