@@ -603,13 +603,24 @@ def list_quizzes(owner="_shared"):
                 q = data.get("questions", [])
                 title = data.get("title") or f[5:-5].replace("_", " ").title()
                 def_folder = data.get("folder") or builtin_folders.get(f) or "Built-in"
+                def_tags = [str(t).strip()[:24] for t in (data.get("tags") or []) if str(t).strip()][:12]
             else:
                 q = data
                 title = labels.get(f) or f[5:-5].replace("_", " ").title()
                 def_folder = builtin_folders.get(f) or "Built-in"
+                def_tags = []
             if isinstance(q, list) and q:
+                if not def_tags and f in builtin_folders:
+                    seen_ch = []
+                    for q_it in q:
+                        if isinstance(q_it, dict) and q_it.get("topic"):
+                            m_ch = re.match(r"^(Chapter\s+\d+)", str(q_it["topic"]).strip(), re.I)
+                            ch_lbl = m_ch.group(1).title() if m_ch else str(q_it["topic"]).strip()[:24]
+                            if ch_lbl and ch_lbl not in seen_ch:
+                                seen_ch.append(ch_lbl)
+                    def_tags = seen_ch[:12]
                 es = K.estimate_duration_sec(q)
-                items.append({"file": f, "title": "%s (%d Qs)" % (title, len(q)), "count": len(q), "folder": def_folder, "tags": [], "builtin": True,
+                items.append({"file": f, "title": "%s (%d Qs)" % (title, len(q)), "count": len(q), "folder": def_folder, "tags": def_tags, "builtin": True,
                               "case": any(isinstance(x, dict) and x.get("type") in CASE_TYPES for x in q),
                               "est_sec": es, "est_min": max(1, int(round(es / 60.0)))})
         except Exception:
@@ -857,7 +868,7 @@ def clean_questions(questions):
             if rl:
                 item["roles"] = rl
         if q.get("topic"):
-            item["topic"] = str(q["topic"]).strip()[:40]
+            item["topic"] = str(q["topic"]).strip()[:80]
         if q.get("note"):
             item["note"] = str(q["note"]).strip()[:400]
         if q.get("quote"):
@@ -2502,12 +2513,20 @@ def player_report(g, p):
     cor = 0
     times = []
     missed = []
+    topic_map = {}
     g_qis = gradable_qis(g)
     total_q = len(g_qis)
     for qi in g_qis:
         q = g["quiz"][qi]
         a = p["answers"].get(qi)
-        if a and a.get("correct"):
+        tp = (q.get("topic") or "").strip()
+        is_ok = bool(a and a.get("correct"))
+        if tp:
+            t_rec = topic_map.setdefault(tp, [0, 0])
+            t_rec[1] += 1
+            if is_ok:
+                t_rec[0] += 1
+        if is_ok:
             cor += 1
             if "time" in a:
                 times.append(a["time"])
@@ -2520,13 +2539,20 @@ def player_report(g, p):
                 your_ans = "No answer"
             missed.append({
                 "num": qi + 1, "q": q["q"], "correct_ans": ans_text(q), "your_ans": your_ans,
+                "topic": tp, "quote": q.get("quote") or "", "src": q.get("src") or "",
             })
+    topics = sorted(
+        ({"topic": k, "correct": v[0], "total": v[1], "pct": round(100.0 * v[0] / max(1, v[1]))}
+         for k, v in topic_map.items() if v[1] > 0),
+        key=lambda x: (x["pct"], -x["total"], x["topic"])
+    )
     return {
         "correct": cor, "total": total_q,
         "accuracy": round(100.0 * cor / max(1, total_q)),
         "fastest": round(min(times), 1) if times else None,
         "max_streak": calc_max_streak(p, len(g["quiz"])),
         "missed": missed,
+        "topics": topics,
         "calibration": calc_calibration(g, [p], g_qis),
     }
 
@@ -2677,6 +2703,18 @@ def study_html(g):
                     "Standard answers: <b>%s</b>.</p></div>" % (
                         cal["conf_pct"] or 0, cal["conf_ok"], cal["conf_n"],
                         ("%d%% (%d/%d)" % (cal["calm_pct"], cal["calm_ok"], cal["calm_n"])) if cal["calm_n"] else "N/A"))
+    t_stats = topic_stats(g)
+    if t_stats:
+        t_rows = "".join(
+            "<div style='margin:7px 0'><div style='display:flex;justify-content:space-between;font-weight:700;font-size:.94em'>"
+            "<span>🏷️ %s</span><span>%d%% (%d/%d)</span></div>"
+            "<div style='height:8px;background:#e4e1f0;border-radius:99px;overflow:hidden;margin-top:3px'>"
+            "<div style='width:%d%%;height:100%%;background:%s'></div></div></div>"
+            % (e(t["topic"]), t["pct"], t["cor"], t["total"], t["pct"],
+               "#ef4444" if t["pct"] < 60 else ("#f59e0b" if t["pct"] < 80 else "#16a34a"))
+            for t in t_stats
+        )
+        body.append("<div class='item'><div class='pct'>📚 Chapters / Topics to Study More</div>%s</div>" % t_rows)
     rows = []
     for qi in g_qis:
         q = g["quiz"][qi]
@@ -2688,14 +2726,16 @@ def study_html(g):
     for pct, qi, q in rows:
         extra = ""
         if q.get("quote"):
-            extra = "<div class='fact'>%s</div>" % e(q["quote"])
+            src_lbl = (" — %s" % e(q["src"])) if q.get("src") else ""
+            extra = "<div class='fact'>“%s”%s</div>" % (e(q["quote"]), src_lbl)
         if q.get("outcomes"):
             outs_html = "".join("<li><b>%s:</b> %s</li>" % (e(q["a"][i]), e(tx))
                                 for i, tx in enumerate(q["outcomes"]) if i < len(q["a"]) and tx)
             if outs_html:
                 extra += "<ul class='fact'>%s</ul>" % outs_html
-        body.append("<div class='item'><div class='pct'>%s%d%% got this right</div><h3>%s</h3><div class='ans'>Answer: <b>%s</b></div>%s</div>"
-                    % ("✅ Concept Check · " if is_cg else "", pct, e(q["q"]), e(ans_text(q)), extra))
+        tp_lbl = ("🏷️ %s · " % e(q["topic"])) if q.get("topic") else ""
+        body.append("<div class='item'><div class='pct'>%s%s%d%% got this right</div><h3>%s</h3><div class='ans'>Answer: <b>%s</b></div>%s</div>"
+                    % ("✅ Concept Check · " if is_cg else "", tp_lbl, pct, e(q["q"]), e(ans_text(q)), extra))
     if not body:
         body = ["<p><b>Perfect game!</b> Every question was answered correctly by everyone.</p>"]
     hdr = "\U0001F4D6 Case Debrief Summary" if is_cg else "\U0001F4DA Study Guide"
@@ -3232,13 +3272,10 @@ class H(BaseHTTPRequestHandler):
                 if not target_file:
                     self.send({"error": "Invalid or expired practice link."}, 403)
                     return True
-            elif file_in and not host_lock_required() or authed(tok, q.get("pw", "")):
-                target_file = file_in or "quiz.json"
             elif file_in:
                 target_file = file_in
             else:
-                self.send({"error": "Use a practice link shared by your instructor."}, 403)
-                return True
+                target_file = "quiz_entr101_master150.json"
             meta = next((x for x in list_quizzes(owner) if x.get("file") == target_file), None)
             if not meta and target_file.startswith("uq:"):
                 parts = target_file.split(":", 2)
@@ -3246,7 +3283,7 @@ class H(BaseHTTPRequestHandler):
                     meta = next((x for x in list_quizzes(parts[1]) if x.get("file") == target_file), None)
             raw_qs = load_quiz(target_file)
             qs_ = [dict((k, v) for k, v in x.items() if k != "note") for x in raw_qs]
-            title_ = re.sub(r"\s*\(\d+\s*(?:Qs|slides?)\)\s*$", "", (meta or {}).get("title") or "Practice Quiz", flags=re.I)
+            title_ = re.sub(r"\s*\(\d+\s*(?:Qs|slides?)\)\s*$", "", (meta or {}).get("title") or "ENTR 101: Comprehensive Master Review (All 10 Chapters)", flags=re.I)
             self.send({
                 "file": target_file,
                 "title": title_,
@@ -3360,8 +3397,9 @@ class H(BaseHTTPRequestHandler):
                 return True
             d = K.hw_get(d["id"])
             sub = d["subs"][sub["name"].lower()]
+            extra_hw = K.hw_summary(d, sub) if sub["done"] else {}
             self.send({"name": sub["name"], "done": sub["done"], "answered": len(sub["answers"]), "score": sub["score"], "correct": sub["correct"],
-                       "n": len(d["questions"]), "title": d["title"], "question": None if sub["done"] else K.hw_question(d, sub)})
+                       "n": len(d["questions"]), "title": d["title"], "question": None if sub["done"] else K.hw_question(d, sub), **extra_hw})
             return True
         if path == "/api/hw_answer":
             d = K.hw_get(body.get("id", ""))

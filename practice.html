@@ -998,19 +998,7 @@ function saveStudentCustomQuizzes(list){
 }
 function selectPracticeSource(id){
   selectedDeckId = id;
-  document.querySelectorAll('.p-deck-card').forEach(el => {
-    el.classList.toggle('sel', el.dataset.id === id);
-  });
-  const active = getActivePracticeDeck();
-  const n = active ? (active.questions || []).length : 0;
-  const cEl = document.getElementById('cnt');
-  const mEl = document.getElementById('pMaxCnt');
-  if(cEl){
-    if(n){ cEl.max = n; if(!cEl.value || parseInt(cEl.value,10) > n) cEl.value = n; }
-    else { cEl.removeAttribute('max'); }
-  }
-  if(mEl) mEl.textContent = '/ ' + (n || '—');
-  updatePracSummary();
+  setup();
 }
 function getActivePracticeDeck(){
   const stuList = getStudentCustomQuizzes();
@@ -1029,8 +1017,15 @@ function updatePracSummary(){
   const b = document.getElementById('pOptBadge');
   if(!b) return;
   const active = getActivePracticeDeck();
-  const maxN = active ? (active.questions || []).length : 0;
-  const cnt = parseInt((document.getElementById('cnt') || {}).value, 10);
+  const tfEl = document.getElementById('pracTopicFilter');
+  const tfVal = tfEl ? tfEl.value : '';
+  const pool = active ? (active.questions || []).filter(q => !tfVal || String((q && q.topic) || '').trim() === tfVal) : [];
+  const maxN = pool.length;
+  const maxEl = document.getElementById('pMaxCnt');
+  if(maxEl) maxEl.textContent = '/ ' + (maxN || '—');
+  const cntEl = document.getElementById('cnt');
+  if(cntEl && maxN > 0) cntEl.max = maxN;
+  const cnt = parseInt((cntEl || {}).value, 10);
   const tm = !!(document.getElementById('timed') || {}).checked;
   const sec = Math.max(5, Math.min(900, parseInt((document.getElementById('pTime') || {}).value, 10) || 15));
   const prev = Math.max(0, Math.min(120, parseFloat((document.getElementById('pPrevTime') || {}).value) || 0));
@@ -1046,6 +1041,7 @@ function updatePracSummary(){
   }
   const parts = [];
   parts.push((!isNaN(cnt) && cnt > 0 && (!maxN || cnt < maxN)) ? `${cnt}/${maxN} Qs` : `All ${maxN || ''} Qs`.trim());
+  if(tfVal) parts.push(tfVal.replace(/^Chapter\s+(\d+).*/i, 'Ch $1'));
   parts.push(tm ? `${sec}s timer` : 'Untimed');
   if(prev > 0) parts.push(`${prev}s preview`);
   if(thk > 0) parts.push(`${thk}s think`);
@@ -1056,21 +1052,34 @@ function updatePracSummary(){
   b.classList.toggle('hi', true);
 }
 
+function onPracTopicFilterChange(){
+  const active = getActivePracticeDeck();
+  const tfEl = document.getElementById('pracTopicFilter');
+  const tfVal = tfEl ? tfEl.value : '';
+  const pool = active ? (active.questions || []).filter(q => !tfVal || String((q && q.topic) || '').trim() === tfVal) : [];
+  const cntEl = document.getElementById('cnt');
+  if(cntEl){
+    cntEl.max = pool.length || 1;
+    cntEl.value = pool.length || '';
+  }
+  updatePracSummary();
+}
+
 async function fetchAssignedQuiz(){
   if(lockedQuiz) return lockedQuiz;
-  if(!PRAC_KEY && !PRAC_FILE) return null;
+  const targetFile = PRAC_FILE || 'quiz_entr101_master150.json';
   const qUrl = PRAC_KEY
     ? '/api/quiz_data?k=' + encodeURIComponent(PRAC_KEY)
-    : '/api/quiz_data?file=' + encodeURIComponent(PRAC_FILE);
+    : '/api/quiz_data?file=' + encodeURIComponent(targetFile);
   try{
     const res = await fetch(qUrl);
     const data = await res.json();
-    if(!res.ok || data.error) return {error: data.error || 'Invalid or expired practice link.'};
+    if(!res.ok || data.error) return {error: data.error || 'Could not load practice quiz.'};
     const gradable = (data.questions || []).filter(q => !['poll','open','rank','info','scale','brainstorm'].includes(q.type));
     lockedQuiz = {
       id: 'assigned',
-      file: data.file || PRAC_FILE,
-      title: String(data.title || 'Practice Quiz').replace(/\s*\(\d+\s*(?:Qs|slides?)\)\s*$/i, ''),
+      file: data.file || targetFile,
+      title: String(data.title || 'ENTR 101: Comprehensive Master Review (All 10 Chapters)').replace(/\s*\(\d+\s*(?:Qs|slides?)\)\s*$/i, ''),
       questions: gradable,
       count: gradable.length
     };
@@ -1096,12 +1105,19 @@ async function setup(){
   }
   const active = getActivePracticeDeck();
   const n = active ? (active.questions || []).length : 0;
+  const deckTopics = [];
+  if(active && Array.isArray(active.questions)){
+    active.questions.forEach(q => {
+      const tp = String((q && q.topic) || '').trim();
+      if(tp && !deckTopics.includes(tp)) deckTopics.push(tp);
+    });
+  }
 
   let deckCardsHtml = '';
   if(hasAssigned){
     const sel = (active && active.id === 'assigned');
     deckCardsHtml += `<div class="p-deck-card ${sel ? 'sel' : ''}" data-id="assigned" onclick="selectPracticeSource('assigned')">
-      <span style="min-width:0;overflow:hidden;text-overflow:ellipsis">🎓 ${esc(qInfo.title)} <small style="opacity:.75">(Instructor Link)</small></span>
+      <span style="min-width:0;overflow:hidden;text-overflow:ellipsis">🎓 ${esc(qInfo.title)}</span>
       <span class="p-deck-meta">${qInfo.count || 0} Qs</span>
     </div>`;
   }
@@ -1120,7 +1136,7 @@ async function setup(){
   if(!active){
     const msg = (qInfo && qInfo.error)
       ? qInfo.error
-      : 'Open a single-quiz practice link from your instructor, or create your own custom practice quiz below to start studying!';
+      : 'Create your own custom practice quiz below to start studying!';
     $.innerHTML = `
       <div class="card-panel">
         <div class="studio-hero-pill"><span class="hud-bolt">⚡</span>BrainRush &middot; Solo Studio</div>
@@ -1140,7 +1156,7 @@ async function setup(){
       <p class="sub">Study at your own pace with Percentage Grading, Read-Aloud, Topic Accuracy, and a Printable Study Guide.</p>
 
       <div class="field-lbl">
-        <span>${hasAssigned && stuList.length ? 'Assigned &amp; Custom Quizzes' : (hasAssigned ? 'Assigned Practice Quiz' : 'My Custom Practice Quizzes')}</span>
+        <span>${hasAssigned && stuList.length ? 'Comprehensive Test &amp; My Custom Quizzes' : (hasAssigned ? 'Practice Quiz' : 'My Custom Practice Quizzes')}</span>
         <button type="button" class="hud-btn" style="padding:3px 10px;font-size:.95em;background:rgba(124,58,237,.45);border-color:#c4b5fd;text-transform:none;letter-spacing:0" onclick="openStuBuilder()">➕ Create My Own Quiz</button>
       </div>
       <div class="p-deck-list">${deckCardsHtml}</div>
@@ -1185,6 +1201,16 @@ async function setup(){
           <div class="timer-opt-row" style="margin-bottom:2px">
             <label><input type="checkbox" id="pracShuffleAns"> 🔀 Shuffle A/B/C/D Choices</label>
           </div>
+          ${deckTopics.length > 1 ? `<div class="timer-opt-row" style="margin-top:8px;flex-direction:column;align-items:stretch;gap:4px">
+            <span style="font-size:.82em;font-weight:850;color:var(--gold)">🏷️ Filter by Chapter / Topic (Optional)</span>
+            <select id="pracTopicFilter" onchange="onPracTopicFilterChange()" style="margin:0">
+              <option value="">All Chapters / Topics (${n} Qs)</option>
+              ${deckTopics.map(tp => {
+                const c = (active.questions || []).filter(q => String((q && q.topic) || '').trim() === tp).length;
+                return `<option value="${esc(tp)}">🏷️ ${esc(tp)} (${c} Qs)</option>`;
+              }).join('')}
+            </select>
+          </div>` : ''}
         </div>
       </details>
 
@@ -1267,7 +1293,9 @@ async function start(customQs){
     prevMax = Math.max(0, Math.min(120, parseFloat(pvEl && pvEl.value !== '' ? pvEl.value : prevMax) || 0));
     const thEl = document.getElementById('pThinkTime');
     thinkMax = Math.max(0, Math.min(120, parseFloat(thEl && thEl.value !== '' ? thEl.value : thinkMax) || 0));
-    qs = (active.questions || []).slice();
+    const tfEl = document.getElementById('pracTopicFilter');
+    const tfVal = tfEl ? tfEl.value : '';
+    qs = (active.questions || []).filter(q => !tfVal || String((q && q.topic) || '').trim() === tfVal);
     if(shuffle){
       for(let i = qs.length - 1; i > 0; i--){
         const j = Math.floor(Math.random() * (i + 1));
@@ -1846,6 +1874,25 @@ function retryMissed(){
   start(run.missedQ.slice());
 }
 
+function practiceWeakTopics(){
+  if(!run) return;
+  const weakSet = new Set(buildTopicStatsList().filter(t => t.pct < 80).map(t => t.topic));
+  if(!weakSet.size) return;
+  const active = getActivePracticeDeck();
+  const basePool = (active && Array.isArray(active.questions) && active.questions.length) ? active.questions : (run.qs || []);
+  const subset = basePool.filter(q => weakSet.has(String((q && q.topic) || '').trim()));
+  if(subset.length) start(subset.slice());
+}
+
+function practiceSingleTopic(topicName){
+  const tp = String(topicName || '').trim();
+  if(!tp) return;
+  const active = getActivePracticeDeck();
+  const basePool = (active && Array.isArray(active.questions) && active.questions.length) ? active.questions : ((run && run.qs) || []);
+  const subset = basePool.filter(q => String((q && q.topic) || '').trim() === tp);
+  if(subset.length) start(subset.slice());
+}
+
 function buildTopicStatsList(){
   if(!run || !run.topics) return [];
   return Object.entries(run.topics)
@@ -1935,15 +1982,25 @@ function finish(){
   const pct = Math.round(100 * run.creditSum / Math.max(1, run.qs.length));
   if(pct >= 80) confettiBurst();
   const topics = buildTopicStatsList();
+  const weakTopics = topics.filter(t => t.pct < 80);
   const topicBoxHtml = topics.length ? `<div class="review-box">
-    <h3>📊 Accuracy by Topic</h3>
-    ${topics.map(t => `<div class="missed">
-      <div style="display:flex;justify-content:space-between;align-items:center;font-weight:850">
+    <h3>📚 Chapters to Study More (Accuracy by Chapter)</h3>
+    ${weakTopics.length
+      ? `<div style="font-size:.86em;color:#ffdf5d;margin:-2px 0 8px;font-weight:800">🎯 Priority chapters to review: <b>${weakTopics.slice(0,3).map(t => esc(t.topic)).join(' · ')}</b></div>`
+      : `<div style="font-size:.86em;color:#7dff6b;margin:-2px 0 8px;font-weight:800">🌟 Awesome! You scored 80%+ across every chapter tested.</div>`}
+    ${topics.map(t => {
+      const badge = t.pct < 60 ? '⚠️ Study More' : (t.pct < 80 ? '👍 Review' : '🌟 Mastered');
+      return `<div class="missed">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;font-weight:850;flex-wrap:wrap">
         <span>🏷️ ${esc(t.topic)}</span>
-        <span style="color:${t.pct<60?'#ff9b9b':t.pct<80?'#ffdf5d':'#7dff6b'}">${t.pct}% <small style="opacity:.78">(${t.exact}/${t.n})</small></span>
+        <span style="display:inline-flex;align-items:center;gap:8px">
+          <span style="color:${t.pct<60?'#ff9b9b':t.pct<80?'#ffdf5d':'#7dff6b'}">${t.pct}% <small style="opacity:.82">(${t.exact}/${t.n}) · ${badge}</small></span>
+          <button type="button" class="hud-btn" style="padding:2px 8px;font-size:.75em" data-tp="${esc(t.topic)}" onclick="practiceSingleTopic(this.dataset.tp)">🎯 Drill Chapter</button>
+        </span>
       </div>
       <div class="tbar"><i style="width:${t.pct}%;background:${t.pct<60?'#ff5252':t.pct<80?'#ffb300':'#69f0ae'}"></i></div>
-    </div>`).join('')}
+    </div>`;
+    }).join('')}
   </div>` : '';
 
   const toughList = (run.missed || []).slice().sort((a,b) => (a.pct || 0) - (b.pct || 0) || a.index - b.index);
@@ -1975,6 +2032,7 @@ function finish(){
         <button class="sec" style="flex:1;margin:0;padding:13px 14px" onclick="openPracticeStudyGuide(false)">📚 Full Quiz Study Guide</button>
       </div>
       ${run.missedQ.length ? `<button class="go blue" style="margin-top:10px" onclick="retryMissed()">🎯 Retry ${run.missedQ.length} Missed Question${run.missedQ.length === 1 ? '' : 's'}</button>` : ''}
+      ${weakTopics.length ? `<button class="go" style="margin-top:8px;background:linear-gradient(180deg,#a855f7,#7c3aed);color:#fff;box-shadow:0 4px 0 #581c87" onclick="practiceWeakTopics()">📚 Practice Weak Chapters (&lt;80% · ${weakTopics.length} Chapter${weakTopics.length === 1 ? '' : 's'})</button>` : ''}
       <button class="go" onclick="start()">🔁 Practice Full Quiz Again</button>
       <button class="sec" onclick="setup()">⚙️ Change Practice Options / Quizzes</button>
     </div>
