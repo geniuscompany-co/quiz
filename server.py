@@ -892,11 +892,39 @@ def clean_questions(questions):
     return cleaned
 
 
-def save_custom_quiz(title, questions, owner="_shared", folder="", tags=None, courses=None):
+def save_custom_quiz(title, questions, owner="_shared", folder="", tags=None, courses=None, file_id=None):
     cleaned = clean_questions(questions)
     if not cleaned:
         raise ValueError("No valid questions provided")
-    qid = K.uq_save(owner, title or "Custom Quiz", cleaned, folder, tags, courses=courses)
+    fid = str(file_id or "").strip()
+    if fid and (fid == "quiz.json" or (fid.startswith("quiz_") and fid.endswith(".json"))):
+        safe = os.path.basename(fid)
+        p = os.path.join(ROOT, safe)
+        if os.path.exists(p):
+            try:
+                with open(p, "r", encoding="utf-8") as fp:
+                    old_data = json.load(fp)
+            except Exception:
+                old_data = []
+            with open(p, "w", encoding="utf-8") as fp:
+                if isinstance(old_data, dict):
+                    old_data["title"] = title or old_data.get("title") or "Quiz"
+                    if folder:
+                        old_data["folder"] = folder
+                    if tags is not None:
+                        old_data["tags"] = [str(t).strip()[:24] for t in (tags or []) if str(t).strip()][:12]
+                    old_data["questions"] = cleaned
+                    json.dump(old_data, fp, indent=2, ensure_ascii=False)
+                else:
+                    json.dump(cleaned, fp, indent=2, ensure_ascii=False)
+                fp.write("\n")
+            if folder:
+                K.deck_folder_set(owner, safe, folder)
+            if courses is not None:
+                K.deck_courses_set(owner, safe, courses)
+            return safe, len(cleaned), cleaned
+    qid_target = fid if fid.startswith("uq:") else None
+    qid = K.uq_save(owner, title or "Custom Quiz", cleaned, folder, tags, qid=qid_target, courses=courses)
     return qid, len(cleaned), cleaned
 
 
@@ -3464,8 +3492,9 @@ class H(BaseHTTPRequestHandler):
         elif path == "/api/upload_quiz":
             try:
                 in_courses = body.get("courses") if isinstance(body.get("courses"), list) else None
+                in_file = str(body.get("file") or "").strip() or None
                 fname, cnt, cleaned = save_custom_quiz(body.get("title"), body.get("questions") or [], owner,
-                                                       body.get("folder", ""), body.get("tags") or [], courses=in_courses)
+                                                       body.get("folder", ""), body.get("tags") or [], courses=in_courses, file_id=in_file)
                 self.send({"ok": True, "file": fname, "count": cnt, "questions": cleaned, "quizzes": list_quizzes(owner)})
             except Exception as e:
                 self.send({"error": str(e)}, 400)

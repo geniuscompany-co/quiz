@@ -927,16 +927,18 @@ body.in-game .live-view-bar{max-width:1180px;padding-right:108px}
  <div class="modal modal-builder">
   <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:10px">
    <h2 style="margin:0;text-align:left"><span class="quiz-modal-only">➕ Quiz Builder</span><span class="case-modal-only">📖 Case Study Builder</span></h2>
-   <div style="display:flex;align-items:center;gap:6px">
+   <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+    <span id="builderAutosaveStatus" style="font-size:.78em;font-weight:850;padding:4px 10px;border-radius:99px;background:rgba(34,197,94,.18);border:1px solid rgba(74,222,128,.4);color:#86efac">💾 Auto-Save Ready</span>
     <button type="button" class="btn-sm" id="aiToggleBtn" style="margin:0" onclick="toggleBuilderAi()">✨ AI Tools: ON</button>
     <button type="button" class="close-x" style="float:none" onclick="closeQuizModal()">✕ Close</button>
    </div>
   </div>
+  <div id="builderDraftRecoverBar" style="display:none;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin:0 0 10px;padding:9px 12px;border-radius:10px;background:rgba(250,204,21,.16);border:1.5px solid rgba(250,204,21,.55);font-size:.86em;font-weight:800"></div>
   <label><b><span class="quiz-modal-only">Quiz Title:</span><span class="case-modal-only">Case Study Title:</span></b></label>
-  <input id="customTitle" placeholder="e.g. Chapter 9 Review">
+  <input id="customTitle" placeholder="e.g. Chapter 9 Review" oninput="if(typeof triggerBuilderAutosave==='function')triggerBuilderAutosave()">
   <div id="builderCourseRow" style="display:none;align-items:center;gap:8px;margin:-2px 0 9px;padding:7px 10px;border-radius:9px;background:#ffffff0f;border:1px solid #ffffff24">
    <label for="customCourseSel" style="margin:0;font-size:.84em;font-weight:800;color:#ffdf5d;white-space:nowrap">🎓 Course:</label>
-   <select id="customCourseSel" style="flex:1;min-width:0;padding:6px 9px;border-radius:7px;border:0;background:#fff;color:#2b0d57;font-weight:750;font-size:.86em;margin:0"><option value="">— All Courses (General Library) —</option></select>
+   <select id="customCourseSel" onchange="if(typeof triggerBuilderAutosave==='function')triggerBuilderAutosave()" style="flex:1;min-width:0;padding:6px 9px;border-radius:7px;border:0;background:#fff;color:#2b0d57;font-weight:750;font-size:.86em;margin:0"><option value="">— All Courses (General Library) —</option></select>
   </div>
   <div style="display:flex;flex-direction:column;gap:7px;margin-bottom:10px">
    <details class="sub-acc" id="builderExistAcc">
@@ -953,8 +955,8 @@ body.in-game .live-view-bar{max-width:1180px;padding-right:108px}
     <summary><span>🏷️ Folder, Tags &amp; File Upload <span class="quiz-modal-only">(.json / .csv)</span><span class="case-modal-only">(.json)</span></span><span class="sub-caret">▾</span></summary>
     <div class="sub-body">
      <div class="row2">
-      <div><label style="font-size:.86em"><b>Folder (optional):</b></label><input id="customFolder" list="folderList" placeholder="e.g. Math" style="margin:4px 0 8px"><datalist id="folderList"></datalist></div>
-      <div><label style="font-size:.86em"><b>Tags (comma separated):</b></label><input id="customTags" placeholder="unit 3, fractions" style="margin:4px 0 8px"></div>
+      <div><label style="font-size:.86em"><b>Folder (optional):</b></label><input id="customFolder" list="folderList" placeholder="e.g. Math" style="margin:4px 0 8px" oninput="if(typeof triggerBuilderAutosave==='function')triggerBuilderAutosave()"><datalist id="folderList"></datalist></div>
+      <div><label style="font-size:.86em"><b>Tags (comma separated):</b></label><input id="customTags" placeholder="unit 3, fractions" style="margin:4px 0 8px" oninput="if(typeof triggerBuilderAutosave==='function')triggerBuilderAutosave()"></div>
      </div>
      <label style="font-size:.86em"><b><span class="quiz-modal-only">Upload .json or .csv file:</span><span class="case-modal-only">Upload .json case file:</span></b></label>
      <input type="file" id="customFile" accept=".json,.csv" onchange="loadCustomFile(event)" style="margin:4px 0 0">
@@ -1027,7 +1029,7 @@ body.in-game .live-view-bar{max-width:1180px;padding-right:108px}
      <div class="case-modal-only">Slide types: <code>Type: info|poll|rank|open|brainstorm|scale</code> or MCQ (<code>*</code>). Option extras: <code>Option :: Lens || Consequence =&gt; 5</code> (branch to slide #5). Optional lines: <code>Time: 90</code>, <code>Think: 10</code>, <code>Exhibit: url | caption</code>, <code>Topic:</code>, private <code>Note:</code>.</div>
     </div>
    </details>
-   <textarea id="customText" oninput="renderBuilderPreview()" placeholder="What is the capital of France?
+   <textarea id="customText" oninput="renderBuilderPreview();if(typeof triggerBuilderAutosave==='function')triggerBuilderAutosave()" placeholder="What is the capital of France?
 Berlin
 *Paris
 Madrid
@@ -3638,6 +3640,25 @@ function syncQuizCount(){
   if(stale.length){
    fetch('/api/delete_quiz', {method:'POST', body:JSON.stringify({files: stale, token: tok, password: sessionStorage.getItem('brainrush_pw')||''})}).catch(()=>{});
   }
+  const srvFiles = new Set(srv.map(q => q.file));
+  getSavedCustomQuizzes().forEach(lq => {
+   if(lq && lq.file && !lq.file.startsWith('local_') && !srvFiles.has(lq.file) && Array.isArray(lq.questions) && lq.questions.length){
+    const cleanT = (lq.title || 'Custom Quiz').replace(/\s*\(\d+\s*(?:Qs|slides?)\)\s*$/i, '');
+    fetch('/api/upload_quiz', {
+     method: 'POST',
+     body: JSON.stringify({
+      file: lq.file,
+      title: cleanT,
+      questions: lq.questions,
+      folder: lq.folder || '',
+      tags: lq.tags || [],
+      courses: lq.courses || [],
+      token: tok,
+      password: sessionStorage.getItem('brainrush_pw') || ''
+     })
+    }).catch(()=>{});
+   }
+  });
   quizList = mergeQuizLists(srv);
   renderQuizSelect();
  }catch(e){
@@ -6143,6 +6164,7 @@ function syncVisualToText(){
  const nonEmpty = visualCards.filter(hasPlayableCardContent);
  ta.value = nonEmpty.length ? formatQuestionsBlock(visualCards) : '';
  if(typeof renderBuilderPreview === 'function') renderBuilderPreview();
+ if(typeof triggerBuilderAutosave === 'function') triggerBuilderAutosave();
 }
 
 function syncVisualToTextIfActive(){
@@ -6742,41 +6764,308 @@ updateAcctLabels = function(){
  syncBuilderAiUI();
 };
 
-openQuizModal = function(mode){
- if(mode === 'case' || mode === 'quiz') quizModalMode = mode;
- else quizModalMode = (hostSection === 'case') ? 'case' : 'quiz';
- editingQuizFile = '';
- const m = document.getElementById('quizModal');
- const isC = (quizModalMode === 'case');
- if(m) m.classList.toggle('only-case', isC);
- const es = document.getElementById('editQuizSel');
- const list = quizList.filter(q => isC ? !!q.case : !q.case);
- if(es){
-  es.innerHTML = list.length
-   ? `<option value="">— Select existing ${isC ? 'case' : 'quiz'} —</option>` + list.map(q=>`<option value="${esc(q.file)}">${esc(q.title)}</option>`).join('')
-   : `<option value="">${isC ? '(No saved cases yet)' : '(No saved quizzes yet)'}</option>`;
-  es.value = '';
+let _builderAutosaveGuard = false;
+let _builderServerSaveTimer = null;
+let _builderKeepaliveTimer = null;
+const BUILDER_DRAFT_KEY_PREFIX = 'brainrush_builder_draft_';
+
+function getBuilderDraftKey(fileId){
+ const f = String(fileId || editingQuizFile || '').trim();
+ return BUILDER_DRAFT_KEY_PREFIX + (f || ('__new_' + (quizModalMode || 'quiz')));
+}
+
+function setBuilderAutosaveBadge(txt, tone){
+ const el = document.getElementById('builderAutosaveStatus');
+ if(!el) return;
+ el.textContent = txt;
+ if(tone === 'saving'){
+  el.style.background = 'rgba(250,204,21,.18)';
+  el.style.borderColor = 'rgba(250,204,21,.5)';
+  el.style.color = '#fde047';
+ } else if(tone === 'warn'){
+  el.style.background = 'rgba(249,115,22,.22)';
+  el.style.borderColor = 'rgba(251,146,60,.55)';
+  el.style.color = '#fed7aa';
+ } else {
+  el.style.background = 'rgba(34,197,94,.18)';
+  el.style.borderColor = 'rgba(74,222,128,.45)';
+  el.style.color = '#86efac';
  }
- const cf = document.getElementById('customFile');
- if(cf) cf.accept = isC ? '.json' : '.json,.csv';
- ['builderExistAcc','builderMetaAcc','toolImport','toolAi','builderPrevAcc'].forEach(id=>{
-  const el = document.getElementById(id);
-  if(el) el.open = false;
- });
- const ct = document.getElementById('customTitle'), fd = document.getElementById('customFolder'), tg = document.getElementById('customTags'), tx = document.getElementById('customText');
- if(ct) ct.placeholder = isC ? 'e.g. Case Study: The CardioWatch Launch' : 'e.g. Chapter 9 Review';
- if(fd) fd.placeholder = isC ? 'Case Studies' : 'e.g. Math';
- if(tg) tg.placeholder = isC ? 'ethical leadership, whistleblowing' : 'unit 3, fractions';
- if(tx) tx.placeholder = isC ? CASE_PLACEHOLDER : QUIZ_PLACEHOLDER;
- const fl = document.getElementById('folderList');
- if(fl) fl.innerHTML = getAllKnownFolders().filter(f=>f && f!=='Built-in').map(f=>`<option value="${esc(f)}">`).join('');
- populateBuilderCourseSelect([]);
- updateAcctLabels();
- syncBuilderAiUI();
- if(typeof renderBuilderPreview === 'function') renderBuilderPreview();
- syncTextToVisual();
- setBuilderTab(builderTab);
- if(m) m.classList.add('open');
+}
+
+function readBuilderSnapshot(){
+ const title = ((document.getElementById('customTitle') || {}).value || '').trim();
+ const folder = cleanFolderNameStr(((document.getElementById('customFolder') || {}).value || ''));
+ const tags = ((document.getElementById('customTags') || {}).value || '').split(',').map(x => x.trim()).filter(Boolean);
+ const courses = readBuilderCoursesToSave();
+ const raw = ((document.getElementById('customText') || {}).value || '');
+ return {
+  file: editingQuizFile || '',
+  mode: quizModalMode || 'quiz',
+  title,
+  folder,
+  tags,
+  courses,
+  raw,
+  cards: JSON.parse(JSON.stringify(visualCards || [])),
+  ts: Date.now()
+ };
+}
+
+function loadBuilderDraftSnapshot(fileId){
+ try{
+  const raw = localStorage.getItem(getBuilderDraftKey(fileId));
+  if(!raw) return null;
+  const d = JSON.parse(raw);
+  return (d && typeof d === 'object' && (d.raw || (Array.isArray(d.cards) && d.cards.length))) ? d : null;
+ }catch(e){ return null; }
+}
+
+function clearBuilderDraftSnapshot(fileId){
+ try{ localStorage.removeItem(getBuilderDraftKey(fileId)); }catch(e){}
+ const bar = document.getElementById('builderDraftRecoverBar');
+ if(bar){ bar.style.display = 'none'; bar.innerHTML = ''; }
+}
+
+function hideBuilderRecoverBar(){
+ const bar = document.getElementById('builderDraftRecoverBar');
+ if(bar){ bar.style.display = 'none'; bar.innerHTML = ''; }
+}
+
+function showBuilderRecoverBanner(draft, label){
+ const bar = document.getElementById('builderDraftRecoverBar');
+ if(!bar || !draft) return;
+ const when = draft.ts ? new Date(draft.ts).toLocaleTimeString([], {hour:'numeric', minute:'2-digit', second:'2-digit'}) : 'recently';
+ window._pendingBuilderDraft = draft;
+ bar.style.display = 'flex';
+ bar.innerHTML = `<span>⚡ Unsaved auto-saved edits found for <b>${esc(label || draft.title || 'this quiz')}</b> (saved at ${esc(when)}).</span>
+  <span style="display:inline-flex;gap:6px">
+   <button type="button" class="btn-sm" style="margin:0;padding:4px 11px;background:#16a34a;border-color:#86efac" onclick="applyRecoveredBuilderDraft()">✓ Restore My Edits</button>
+   <button type="button" class="btn-sm" style="margin:0;padding:4px 10px;background:#ffffff1c" onclick="discardRecoveredBuilderDraft()">✕ Discard Draft</button>
+  </span>`;
+}
+
+function applyRecoveredBuilderDraft(){
+ const d = window._pendingBuilderDraft;
+ if(!d) return;
+ _builderAutosaveGuard = true;
+ try{
+  if(d.file) editingQuizFile = d.file;
+  const ct = document.getElementById('customTitle'), fd = document.getElementById('customFolder'), tg = document.getElementById('customTags'), tx = document.getElementById('customText');
+  if(ct && d.title) ct.value = d.title;
+  if(fd && d.folder !== undefined) fd.value = d.folder;
+  if(tg && Array.isArray(d.tags)) tg.value = d.tags.join(', ');
+  if(Array.isArray(d.courses) && typeof populateBuilderCourseSelect === 'function') populateBuilderCourseSelect(d.courses);
+  if(Array.isArray(d.cards) && d.cards.length && d.cards.some(hasPlayableCardContent)){
+   visualCards = d.cards.map(normalizeVisualCard);
+   if(tx) tx.value = formatQuestionsBlock(visualCards);
+   renderVisualCards();
+  } else if(tx && d.raw){
+   tx.value = d.raw;
+   syncTextToVisual();
+  }
+  if(typeof renderBuilderPreview === 'function') renderBuilderPreview();
+ }finally{
+  _builderAutosaveGuard = false;
+ }
+ hideBuilderRecoverBar();
+ setBuilderAutosaveBadge('💾 Draft Restored — Auto-Saving…', 'saving');
+ triggerBuilderAutosave();
+}
+
+function discardRecoveredBuilderDraft(){
+ const d = window._pendingBuilderDraft;
+ window._pendingBuilderDraft = null;
+ clearBuilderDraftSnapshot(d ? d.file : editingQuizFile);
+}
+
+function startBuilderKeepalive(){
+ stopBuilderKeepalive();
+ _builderKeepaliveTimer = setInterval(()=>{
+  const m = document.getElementById('quizModal');
+  if(!m || !m.classList.contains('open')){ stopBuilderKeepalive(); return; }
+  fetch('/api/storage', {cache:'no-store'}).catch(()=>{});
+ }, 25000);
+}
+
+function stopBuilderKeepalive(){
+ if(_builderKeepaliveTimer){
+  clearInterval(_builderKeepaliveTimer);
+  _builderKeepaliveTimer = null;
+ }
+}
+
+function triggerBuilderAutosave(){
+ if(_builderAutosaveGuard) return;
+ const m = document.getElementById('quizModal');
+ if(!m || !m.classList.contains('open')) return;
+ const snap = readBuilderSnapshot();
+ const hasContent = !!(snap.raw.trim() || snap.title.trim() || (snap.cards && snap.cards.some(hasPlayableCardContent)));
+ if(!hasContent) return;
+ try{
+  localStorage.setItem(getBuilderDraftKey(editingQuizFile), JSON.stringify(snap));
+  localStorage.setItem(BUILDER_DRAFT_KEY_PREFIX + '__latest', JSON.stringify(snap));
+ }catch(e){}
+ let parsedQs = [];
+ try{ parsedQs = parseCustomQuestions(snap.raw); }catch(e){}
+ if(parsedQs.length && (editingQuizFile || snap.title)){
+  const isC = (quizModalMode === 'case');
+  const tClean = snap.title || (isC ? 'Custom Case Study' : 'Custom Quiz');
+  const savedIsCase = parsedQs.some(x=>['info','poll','rank','open'].includes(x && x.type));
+  const targetFile = editingQuizFile || ('local_autosave_' + (isC ? 'case' : 'quiz') + '.json');
+  storeCustomQuizLocal({
+   file: targetFile,
+   title: `${tClean} (${parsedQs.length} Qs)`,
+   count: parsedQs.length,
+   folder: snap.folder || (savedIsCase ? 'Case Studies' : 'My Quizzes'),
+   tags: snap.tags,
+   courses: snap.courses,
+   case: savedIsCase,
+   questions: parsedQs
+  });
+  const qInList = quizList.find(x => x.file === targetFile);
+  if(qInList){
+   qInList.questions = parsedQs;
+   qInList.count = parsedQs.length;
+   qInList.title = `${tClean} (${parsedQs.length} Qs)`;
+  }
+ }
+ const nowLbl = new Date().toLocaleTimeString([], {hour:'numeric', minute:'2-digit', second:'2-digit'});
+ setBuilderAutosaveBadge(`💾 Draft Saved (${nowLbl})`, 'saving');
+ clearTimeout(_builderServerSaveTimer);
+ _builderServerSaveTimer = setTimeout(() => runBuilderServerAutosave(snap, parsedQs), 2500);
+}
+
+async function runBuilderServerAutosave(snap, parsedQs){
+ const m = document.getElementById('quizModal');
+ if(!m || !m.classList.contains('open')) return;
+ if(!parsedQs || !parsedQs.length) return;
+ const isC = (quizModalMode === 'case');
+ const hasCaseSlide = parsedQs.some(x=>['info','poll','rank','open','brainstorm','scale'].includes(x && x.type));
+ if(isC && !hasCaseSlide) return;
+ const title = snap.title || (editingQuizFile ? ((quizList.find(x=>x.file===editingQuizFile)||{}).title||'').replace(/\s*\(\d+\s*(?:Qs|slides?)\)\s*$/i,'') : '');
+ if(!title) return;
+ const folderVal = snap.folder || ((deckFolderFilter && !['ALL','Built-in','My Quizzes','Case Studies','Saved on this device'].includes(deckFolderFilter)) ? deckFolderFilter : (isC ? 'Case Studies' : ''));
+ try{
+  const r = await postPw('/api/upload_quiz', {
+   file: editingQuizFile || '',
+   title,
+   questions: parsedQs,
+   folder: folderVal,
+   tags: snap.tags,
+   courses: snap.courses
+  });
+  if(r && r.ok && r.file){
+   const prevFile = editingQuizFile;
+   editingQuizFile = r.file;
+   if(prevFile !== r.file) clearBuilderDraftSnapshot(prevFile);
+   const savedQuestions = r.questions || parsedQs;
+   const savedIsCase = savedQuestions.some(x=>['info','poll','rank','open'].includes(x && x.type));
+   storeCustomQuizLocal({
+    file: r.file,
+    title: `${title} (${r.count} Qs)`,
+    count: r.count,
+    folder: folderVal || (savedIsCase ? 'Case Studies' : 'My Quizzes'),
+    tags: snap.tags,
+    courses: snap.courses,
+    case: savedIsCase,
+    questions: savedQuestions
+   });
+   quizList = mergeQuizLists(r.quizzes || quizList);
+   const es = document.getElementById('editQuizSel');
+   if(es && es.value !== r.file){
+    const list = quizList.filter(q => isC ? !!q.case : !q.case);
+    es.innerHTML = `<option value="">— Select existing ${isC ? 'case' : 'quiz'} —</option>` + list.map(q=>`<option value="${esc(q.file)}">${esc(q.title)}</option>`).join('');
+    es.value = r.file;
+   }
+   const sel = document.getElementById('quizSel');
+   renderQuizSelect((sel && sel.value) || r.file);
+   const nowLbl = new Date().toLocaleTimeString([], {hour:'numeric', minute:'2-digit', second:'2-digit'});
+   setBuilderAutosaveBadge(`✓ Auto-Saved (${nowLbl})`, 'ok');
+  } else {
+   const nowLbl = new Date().toLocaleTimeString([], {hour:'numeric', minute:'2-digit', second:'2-digit'});
+   setBuilderAutosaveBadge(`💾 Saved on Device (${nowLbl})`, 'warn');
+  }
+ }catch(e){
+  const nowLbl = new Date().toLocaleTimeString([], {hour:'numeric', minute:'2-digit', second:'2-digit'});
+  setBuilderAutosaveBadge(`💾 Saved on Device (${nowLbl})`, 'warn');
+ }
+}
+
+const _loadExistingQuiz0 = loadExistingQuiz;
+loadExistingQuiz = async function(){
+ _builderAutosaveGuard = true;
+ try{
+  await _loadExistingQuiz0();
+ }finally{
+  _builderAutosaveGuard = false;
+ }
+ hideBuilderRecoverBar();
+ setBuilderAutosaveBadge('✓ Loaded — Auto-Save Active', 'ok');
+ const draft = loadBuilderDraftSnapshot(editingQuizFile);
+ const curRaw = ((document.getElementById('customText') || {}).value || '').trim();
+ if(draft && draft.raw && draft.raw.trim() && draft.raw.trim() !== curRaw){
+  const qObj = quizList.find(x => x.file === editingQuizFile);
+  const cleanName = qObj ? (qObj.title || '').replace(/\s*\(\d+\s*(?:Qs|slides?)\)\s*$/i, '') : draft.title;
+  showBuilderRecoverBanner(draft, cleanName);
+ }
+};
+
+closeQuizModal = function(){
+ clearTimeout(_builderServerSaveTimer);
+ stopBuilderKeepalive();
+ hideBuilderRecoverBar();
+ document.getElementById('quizModal').classList.remove('open');
+ document.getElementById('customErr').textContent = '';
+};
+
+openQuizModal = function(mode){
+ _builderAutosaveGuard = true;
+ try{
+  if(mode === 'case' || mode === 'quiz') quizModalMode = mode;
+  else quizModalMode = (hostSection === 'case') ? 'case' : 'quiz';
+  editingQuizFile = '';
+  const m = document.getElementById('quizModal');
+  const isC = (quizModalMode === 'case');
+  if(m) m.classList.toggle('only-case', isC);
+  const es = document.getElementById('editQuizSel');
+  const list = quizList.filter(q => isC ? !!q.case : !q.case);
+  if(es){
+   es.innerHTML = list.length
+    ? `<option value="">— Select existing ${isC ? 'case' : 'quiz'} —</option>` + list.map(q=>`<option value="${esc(q.file)}">${esc(q.title)}</option>`).join('')
+    : `<option value="">${isC ? '(No saved cases yet)' : '(No saved quizzes yet)'}</option>`;
+   es.value = '';
+  }
+  const cf = document.getElementById('customFile');
+  if(cf) cf.accept = isC ? '.json' : '.json,.csv';
+  ['builderExistAcc','builderMetaAcc','toolImport','toolAi','builderPrevAcc'].forEach(id=>{
+   const el = document.getElementById(id);
+   if(el) el.open = false;
+  });
+  const ct = document.getElementById('customTitle'), fd = document.getElementById('customFolder'), tg = document.getElementById('customTags'), tx = document.getElementById('customText');
+  if(ct){ ct.value = ''; ct.placeholder = isC ? 'e.g. Case Study: The CardioWatch Launch' : 'e.g. Chapter 9 Review'; }
+  if(fd){ fd.value = ''; fd.placeholder = isC ? 'Case Studies' : 'e.g. Math'; }
+  if(tg){ tg.value = ''; tg.placeholder = isC ? 'ethical leadership, whistleblowing' : 'unit 3, fractions'; }
+  if(tx){ tx.value = ''; tx.placeholder = isC ? CASE_PLACEHOLDER : QUIZ_PLACEHOLDER; }
+  const fl = document.getElementById('folderList');
+  if(fl) fl.innerHTML = getAllKnownFolders().filter(f=>f && f!=='Built-in').map(f=>`<option value="${esc(f)}">`).join('');
+  populateBuilderCourseSelect([]);
+  updateAcctLabels();
+  syncBuilderAiUI();
+  if(typeof renderBuilderPreview === 'function') renderBuilderPreview();
+  syncTextToVisual();
+  setBuilderTab(builderTab);
+  hideBuilderRecoverBar();
+  setBuilderAutosaveBadge('💾 Auto-Save Ready', 'ok');
+  const newDraft = loadBuilderDraftSnapshot('');
+  if(newDraft && newDraft.raw && newDraft.raw.trim()){
+   showBuilderRecoverBanner(newDraft, newDraft.title || (isC ? 'Unsaved Case Study Draft' : 'Unsaved Quiz Draft'));
+  }
+  if(m) m.classList.add('open');
+  startBuilderKeepalive();
+ }finally{
+  _builderAutosaveGuard = false;
+ }
 };
 
 function insertCaseTpl(kind){
@@ -6876,8 +7165,12 @@ saveCustomQuiz = async function(){
   }
   const tagsVal = ((document.getElementById('customTags')||{}).value||'').split(',').map(x=>x.trim()).filter(Boolean);
   const coursesVal = readBuilderCoursesToSave();
-  const r = await postPw('/api/upload_quiz', {title, questions: qs, folder: folderVal, tags: tagsVal, courses: coursesVal});
+  clearTimeout(_builderServerSaveTimer);
+  const r = await postPw('/api/upload_quiz', {file: editingQuizFile || '', title, questions: qs, folder: folderVal, tags: tagsVal, courses: coursesVal});
   if(r.error){ document.getElementById('customErr').textContent = r.error; return; }
+  clearBuilderDraftSnapshot(editingQuizFile);
+  clearBuilderDraftSnapshot(r.file);
+  clearBuilderDraftSnapshot('');
   const savedQuestions = r.questions || qs;
   const savedIsCase = savedQuestions.some(x=>['info','poll','rank','open'].includes(x && x.type));
   storeCustomQuizLocal({
