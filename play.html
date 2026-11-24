@@ -2399,6 +2399,7 @@ function render(){
    const typePillMap = {poll:'🗳️ Decision Poll', rank:'📊 Priority Rank', open:'✍️ Open Prompt', scale:'📏 Rating Scale', brainstorm:'💡 Brainstorm', multi:'☑️ Multi-Select', match:'🔗 Match Pairs', slider:'🎯 Estimate', pin:'📍 Pin on Image'};
    const chips = [
     `<span class="qnum">${(S.case||S.unscored)?'Slide':'Q'} ${S.index+1}/${S.total}</span>`,
+    S.topic ? `<span class="title-badge">🏷️ ${esc(S.topic)}</span>` : '',
     typePillMap[t] ? `<span class="wheel-pill">${typePillMap[t]}</span>` : '',
     (S.pts != null && Number(S.pts) !== 1000 && !S.unscored) ? `<span class="title-badge">⭐ ${S.pts} pts</span>` : '',
     S.speed ? `<span class="speed-pill">⚡ ${S.qtime||S.speed_time||5}s Speed</span>` : '',
@@ -2627,7 +2628,7 @@ function render(){
        ? `Accuracy so far: <span style="color:var(--gold)">${m.pct??0}%</span>`
        : `Total Score: <span style="color:var(--gold)">${m.score}</span> (${m.pct??0}%)${(!S.hide_board && m.rank)?` &middot; Rank #${m.rank}`:''}`;
 
-    $.innerHTML=`<div class="chip-row" style="margin-bottom:6px"><span class="qnum">Question ${S.index+1} of ${S.total}</span></div>
+    $.innerHTML=`<div class="chip-row" style="margin-bottom:6px"><span class="qnum">Question ${S.index+1} of ${S.total}</span>${S.topic?`<span class="title-badge">🏷️ ${esc(S.topic)}</span>`:''}</div>
      ${S.question?`<div class="q-card" style="margin-bottom:8px"><p class="q-stem" style="font-size:.98rem">${esc(S.question)}</p></div>`:''}
      <div class="state-card ${cardCls}" style="margin:0">
       <div class="state-icon">${iconTxt}</div>
@@ -2678,7 +2679,26 @@ function render(){
    const calibHtml = (cal && cal.conf_n > 0)
     ? `<div class="calib-card">🎯 <b>Confidence Calibration:</b> Confident bets: <b>${cal.conf_pct}% right</b> (${cal.conf_ok}/${cal.conf_n}) &middot; Calm answers: <b>${cal.calm_pct != null ? cal.calm_pct + '%' : '—'}</b></div>`
     : '';
-   const missedHtml = (rep.missed && rep.missed.length) ? `<div style="margin-top:6px"><b>📝 Questions to Review:</b>${rep.missed.map(x=>`<div class="missed-item"><b>Q${x.num}:</b> ${esc(x.q)}<br><span style="color:#ff9b9b">You: ${esc(x.your_ans)}</span> &middot; <span style="color:#7dff6b">✅ ${esc(x.correct_ans)}</span></div>`).join('')}</div>` : `<div style="text-align:center;color:#7dff6b;font-weight:850;padding:4px 0">🌟 Perfect Score! Every question right!</div>`;
+   const topicsList = Array.isArray(rep.topics) ? rep.topics : [];
+   const weakChs = topicsList.filter(t => t.pct < 80);
+   const topicsHtml = topicsList.length ? `<div style="margin-top:8px">
+    <b>📚 Chapters to Study More (Accuracy by Chapter):</b>
+    ${weakChs.length ? `<div style="font-size:.82em;color:#ffd180;margin:3px 0 6px;font-weight:750">🎯 Focus your study time on: <b>${weakChs.slice(0,3).map(t=>esc(t.topic)).join(' · ')}</b></div>` : `<div style="font-size:.82em;color:#7dff6b;margin:3px 0 6px;font-weight:750">🌟 Strong mastery across every chapter tested!</div>`}
+    ${topicsList.map(t => {
+     const col = t.pct < 60 ? '#ff6b6b' : (t.pct < 80 ? '#ffdf5d' : '#7dff6b');
+     const statusLbl = t.pct < 60 ? '⚠️ Study More' : (t.pct < 80 ? '👍 Review' : '🌟 Mastered');
+     return `<div class="missed-item" style="margin:5px 0;padding:8px 10px;border-left:4px solid ${col}">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;font-weight:850;font-size:.9em">
+       <span>🏷️ ${esc(t.topic)}</span>
+       <span style="color:${col};white-space:nowrap">${t.pct}% (${t.correct}/${t.total}) · ${statusLbl}</span>
+      </div>
+      <div style="height:6px;background:rgba(255,255,255,.13);border-radius:99px;overflow:hidden;margin-top:5px">
+       <div style="width:${t.pct}%;height:100%;background:${col}"></div>
+      </div>
+     </div>`;
+    }).join('')}
+   </div>` : '';
+   const missedHtml = (rep.missed && rep.missed.length) ? `<div style="margin-top:8px"><b>📝 Questions to Review:</b>${rep.missed.map(x=>`<div class="missed-item"><b>Q${x.num}${x.topic?` · <span style="color:var(--gold)">🏷️ ${esc(x.topic)}</span>`:''}:</b> ${esc(x.q)}<br><span style="color:#ff9b9b">You: ${esc(x.your_ans)}</span> &middot; <span style="color:#7dff6b">✅ ${esc(x.correct_ans)}</span>${x.quote?`<div style="font-size:.83em;opacity:.85;margin-top:3px;font-style:italic">💡 “${esc(x.quote)}”${x.src?' — '+esc(x.src):''}</div>`:''}</div>`).join('')}</div>` : `<div style="text-align:center;color:#7dff6b;font-weight:850;padding:4px 0">🌟 Perfect Score! Every question right!</div>`;
    const repHtml = rep.total ? `<div class="report-card">
     <div style="text-align:center;margin-bottom:10px"><span class="title-badge" style="font-size:1.05em;padding:5px 14px">📊 Final Grade: ${accVal}%</span></div>
     <div class="report-stats">
@@ -2687,6 +2707,7 @@ function render(){
      <div class="stat-pill"><b>${rep.fastest!=null?rep.fastest+'s':'—'}</b>Fastest</div>
     </div>
     ${calibHtml}
+    ${topicsHtml}
     ${missedHtml}
    </div>` : '';
    $.innerHTML=`${trophyHtml}${repHtml}<div class="join-links"><a class="plink" href="/play" onclick="clearPlayerSession()">🔁 Join New Game</a><a class="plink" href="/practice">🧑‍🎓 Solo Practice</a></div>${reactBar()}`;

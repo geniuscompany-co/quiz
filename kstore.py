@@ -875,7 +875,8 @@ def hw_question(doc, sub):
     q = doc["questions"][i]
     t = q.get("type") or "mc"
     a = q.get("a", [])
-    out = {"i": i, "n": len(doc["questions"]), "q": q["q"], "type": t, "qtype": t, "pts": q.get("pts"), "a": a, "img": q.get("img"), "aimg": q.get("aimg")}
+    out = {"i": i, "n": len(doc["questions"]), "q": q["q"], "type": t, "qtype": t, "pts": q.get("pts"),
+           "topic": q.get("topic") or "", "a": a, "img": q.get("img"), "aimg": q.get("aimg")}
     if t == "order":
         p = hw_perm(doc, sub["name"], i, len(a))
         out["a"] = [q["a"][k] for k in p]
@@ -891,6 +892,39 @@ def hw_question(doc, sub):
         sl = q["slider"]
         out["slider_cfg"] = {"min": sl["min"], "max": sl["max"], "step": sl["step"], "unit": sl.get("unit", "")}
     return out
+
+
+def hw_summary(doc, sub):
+    topic_map = {}
+    missed = []
+    qs = doc.get("questions") or []
+    for qi, a in enumerate(sub.get("answers") or []):
+        if qi >= len(qs):
+            break
+        q = qs[qi]
+        tp = (q.get("topic") or "").strip()
+        is_ok = bool(a.get("ok"))
+        if tp:
+            rec = topic_map.setdefault(tp, [0, 0])
+            rec[1] += 1
+            if is_ok:
+                rec[0] += 1
+        if not is_ok:
+            missed.append({
+                "num": qi + 1,
+                "q": q.get("q") or "",
+                "your_ans": a.get("given") or "No answer",
+                "correct_ans": hw_ans_text(q),
+                "topic": tp,
+                "quote": q.get("quote") or "",
+                "src": q.get("src") or "",
+            })
+    topics = sorted(
+        ({"topic": k, "correct": v[0], "total": v[1], "pct": round(100.0 * v[0] / max(1, v[1]))}
+         for k, v in topic_map.items() if v[1] > 0),
+        key=lambda x: (x["pct"], -x["total"], x["topic"])
+    )
+    return {"topics": topics, "missed": missed}
 
 
 def _norm(x):
@@ -1021,9 +1055,11 @@ def hw_answer(doc, sub_key, body):
         store.set_json("hw:" + d["id"], d)
         ans_extra = {"pin_target": q.get("pin")} if t == "pin" else {}
         ans = {"ok": ok, "partial": (not ok and credit > 0), "answer": hw_ans_text(q),
-               "quote": q.get("quote", ""), "done": sub["done"], "score": sub["score"], "correct": sub["correct"], "n": len(d["questions"]), **ans_extra}
+               "quote": q.get("quote", ""), "src": q.get("src", ""), "topic": q.get("topic", ""),
+               "done": sub["done"], "score": sub["score"], "correct": sub["correct"], "n": len(d["questions"]), **ans_extra}
     if ans["done"]:
         try:
+            ans.update(hw_summary(d, sub))
             topics = {}
             for qi, a in enumerate(sub["answers"]):
                 tp = d["questions"][qi].get("topic")

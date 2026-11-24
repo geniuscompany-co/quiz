@@ -802,7 +802,7 @@ function show(){
   $.innerHTML = `
     <div class="q-card">
       <div class="q-top-row">
-        <span class="qnum">Question ${q.i+1} of ${q.n}</span>
+        <span class="qnum">Question ${q.i+1} of ${q.n}${q.topic ? ' · 🏷️ ' + esc(q.topic) : ''}</span>
         <button type="button" class="tts-btn" id="ttsBtn" onclick="readAloud()">🔊 Read Aloud</button>
       </div>
       <div class="q">${esc(q.q)}</div>
@@ -1025,6 +1025,36 @@ function finish(r){
   syncHud(null, 0);
   const pct = Math.round(100 * r.correct / Math.max(1, r.n));
   if(pct >= 80) confettiBurst();
+  const topics = Array.isArray(r.topics) ? r.topics : [];
+  const weakChs = topics.filter(t => t.pct < 80);
+  const topicsHtml = topics.length ? `<div style="text-align:left;background:rgba(12,9,24,.55);border:1px solid rgba(255,255,255,.15);border-radius:14px;padding:12px 14px;margin:10px 0">
+    <div style="font-weight:900;font-size:.95em;margin-bottom:4px">📚 Chapters to Study More (Accuracy by Chapter)</div>
+    ${weakChs.length
+      ? `<div style="font-size:.83em;color:#ffd180;margin-bottom:8px;font-weight:750">🎯 Focus your study time on: <b>${weakChs.slice(0,3).map(t=>esc(t.topic)).join(' · ')}</b></div>`
+      : `<div style="font-size:.83em;color:#69f0ae;margin-bottom:8px;font-weight:750">🌟 Great mastery across every chapter tested!</div>`}
+    ${topics.map(t => {
+      const col = t.pct < 60 ? '#ff6b6b' : (t.pct < 80 ? '#ffdf5d' : '#69f0ae');
+      const badge = t.pct < 60 ? '⚠️ Study More' : (t.pct < 80 ? '👍 Review' : '🌟 Mastered');
+      return `<div style="background:rgba(255,255,255,.06);border-left:4px solid ${col};border-radius:9px;padding:8px 10px;margin:6px 0">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;font-weight:850;font-size:.88em">
+          <span>🏷️ ${esc(t.topic)}</span>
+          <span style="color:${col};white-space:nowrap">${t.pct}% (${t.correct}/${t.total}) · ${badge}</span>
+        </div>
+        <div style="height:6px;background:rgba(255,255,255,.13);border-radius:99px;overflow:hidden;margin-top:5px">
+          <div style="width:${t.pct}%;height:100%;background:${col}"></div>
+        </div>
+      </div>`;
+    }).join('')}
+  </div>` : '';
+  const missed = Array.isArray(r.missed) ? r.missed : [];
+  const missedHtml = missed.length ? `<div style="text-align:left;background:rgba(12,9,24,.55);border:1px solid rgba(255,255,255,.15);border-radius:14px;padding:12px 14px;margin:10px 0">
+    <div style="font-weight:900;font-size:.95em;margin-bottom:6px">📝 Questions to Review (${missed.length})</div>
+    ${missed.map(m => `<div style="background:rgba(255,255,255,.06);border-left:4px solid #ff6b6b;border-radius:9px;padding:8px 10px;margin:6px 0;font-size:.88em">
+      <b>Q${m.num}${m.topic ? ` · <span style="color:var(--gold)">🏷️ ${esc(m.topic)}</span>` : ''}:</b> ${esc(m.q)}<br>
+      <span style="color:#ff9b9b">You: ${esc(m.your_ans)}</span> &middot; <span style="color:#69f0ae">✅ ${esc(m.correct_ans)}</span>
+      ${m.quote ? `<div style="font-size:.84em;opacity:.85;margin-top:3px;font-style:italic">💡 “${esc(m.quote)}”${m.src ? ' — ' + esc(m.src) : ''}</div>` : ''}
+    </div>`).join('')}
+  </div>` : '';
   $.innerHTML = `
     <div class="card-panel">
       <div style="font-size:3.1em;line-height:1">${pct >= 90 ? '🏆' : pct >= 70 ? '🎉' : '💪'}</div>
@@ -1037,6 +1067,8 @@ function finish(r){
         <div class="stat"><b>${pct}%</b>Percentage Grade (${r.correct}/${r.n})</div>
         <div class="stat"><b>⭐ ${r.score}</b>Total Points</div>
       </div>
+      ${topicsHtml}
+      ${missedHtml}
       <p style="opacity:.84;font-size:.92em;margin:6px 0 4px">Your score has been recorded. You may safely close this page.</p>
       <a class="plink" href="/practice">🧑‍🎓 Practice More Quizzes →</a>
     </div>
