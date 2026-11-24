@@ -752,36 +752,77 @@ blockquote{
   align-items:center;
   justify-content:space-between;
   gap:10px;
-  padding:12px 14px;
+  padding:13px 14px;
   border-radius:13px;
-  border:1.5px solid rgba(255,223,93,.55);
-  background:linear-gradient(135deg,rgba(255,223,93,.15),rgba(124,58,237,.18));
+  border:2px solid rgba(255,255,255,.18);
+  background:rgba(15,12,26,.6);
   color:#fff;
   text-align:left;
-  margin-bottom:14px;
-  box-shadow:0 4px 16px rgba(0,0,0,.22);
+  margin-bottom:12px;
+  cursor:pointer;
+  user-select:none;
+  transition:border-color .15s,background .15s,box-shadow .15s,transform .08s;
+}
+.p-hero-card:hover{
+  border-color:rgba(255,223,93,.45);
+}
+.p-hero-card:active{
+  transform:scale(.99);
+}
+.p-hero-card.sel{
+  border-color:var(--gold);
+  background:linear-gradient(135deg,rgba(255,223,93,.18),rgba(124,58,237,.22));
+  box-shadow:0 0 0 1px rgba(255,223,93,.28),0 4px 16px rgba(0,0,0,.22);
+}
+.p-hero-chk{
+  width:24px;
+  height:24px;
+  border-radius:50%;
+  border:2px solid rgba(255,255,255,.35);
+  background:rgba(0,0,0,.25);
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  font-size:.82em;
+  font-weight:900;
+  color:transparent;
+  flex-shrink:0;
+  transition:all .15s;
+}
+.p-hero-card.sel .p-hero-chk{
+  border-color:var(--gold);
+  background:var(--gold);
+  color:var(--ink);
 }
 .p-hero-title{font-weight:900;font-size:.98em;line-height:1.25}
 .p-hero-sub{font-size:.78em;opacity:.82;font-weight:700;margin-top:2px}
-.p-sec-box{
+.p-acc{
   background:rgba(15,12,26,.52);
   border:1px solid rgba(255,255,255,.13);
   border-radius:13px;
-  padding:11px 12px;
-  margin-bottom:10px;
+  margin:0 0 9px;
   text-align:left;
+  overflow:hidden;
 }
-.p-sec-hdr{
+.p-acc summary{
+  list-style:none;
+  cursor:pointer;
+  padding:11px 13px;
   display:flex;
   align-items:center;
   justify-content:space-between;
   gap:8px;
-  font-size:.78em;
+  font-size:.82em;
   font-weight:900;
   text-transform:uppercase;
   letter-spacing:.05em;
   color:var(--gold);
-  margin-bottom:7px;
+  user-select:none;
+}
+.p-acc summary::-webkit-details-marker{display:none}
+.p-acc-body{
+  padding:8px 12px 12px;
+  border-top:1px solid rgba(255,255,255,.09);
 }
 .p-toggle-grid{
   display:grid;
@@ -813,9 +854,7 @@ blockquote{
       <a href="/play" class="hud-brand"><span class="hud-bolt">⚡</span>BrainRush</a>
       <button id="sfxBtn" class="hud-btn" onclick="toggleSfx()" title="Sound effects">🔊</button>
     </div>
-    <div class="hud-right" id="hudStats">
-      <span class="hud-stats">🧑‍🎓 Solo Practice</span>
-    </div>
+    <div class="hud-right" id="hudStats"></div>
   </div>
   <div class="timer-wrap" id="hudTimer" style="display:none">
     <div class="bar"><i id="tb" style="width:100%"></i></div>
@@ -926,7 +965,7 @@ function syncHud(){
   const hs = document.getElementById('hudStats');
   const ht = document.getElementById('hudTimer');
   if(!run || run.i >= run.qs.length){
-    if(hs) hs.innerHTML = `<span class="hud-stats">🧑‍🎓 Solo Practice</span>`;
+    if(hs) hs.innerHTML = '';
     if(ht) ht.style.display = 'none';
     return;
   }
@@ -939,7 +978,7 @@ function syncHud(){
   if(ht) ht.style.display = showMainTimer ? 'flex' : 'none';
 }
 
-let run = null, lockedQuiz = null;
+let run = null, lockedQuiz = null, quizSelected = false;
 const PRAC_PARAMS = new URLSearchParams(location.search);
 const PRAC_KEY = (PRAC_PARAMS.get('k') || '').trim();
 const PRAC_FILE = (PRAC_PARAMS.get('quiz') || PRAC_PARAMS.get('file') || '').trim();
@@ -948,44 +987,21 @@ function getActivePracticeDeck(){
   return (lockedQuiz && !lockedQuiz.error) ? lockedQuiz : null;
 }
 
-function syncCountChips(){
-  const active = getActivePracticeDeck();
-  const tfEl = document.getElementById('pracTopicFilter');
-  const tfVal = tfEl ? tfEl.value : '';
-  const pool = active ? (active.questions || []).filter(q => !tfVal || String((q && q.topic) || '').trim() === tfVal) : [];
-  const maxN = pool.length;
-  const cntEl = document.getElementById('cnt');
-  const cur = cntEl ? parseInt(cntEl.value, 10) : maxN;
-  document.querySelectorAll('.p-chip').forEach(btn => {
-    const raw = btn.dataset.cnt;
-    const v = raw === 'all' ? maxN : parseInt(raw, 10);
-    if(raw === 'all'){
-      btn.textContent = `All (${maxN})`;
-      btn.style.display = '';
-      btn.classList.toggle('sel', !cur || cur >= maxN);
-    } else {
-      btn.style.display = v < maxN ? '' : 'none';
-      btn.classList.toggle('sel', cur === v);
-    }
-  });
-}
-
-function setPracCountChip(val){
-  const active = getActivePracticeDeck();
-  const tfEl = document.getElementById('pracTopicFilter');
-  const tfVal = tfEl ? tfEl.value : '';
-  const pool = active ? (active.questions || []).filter(q => !tfVal || String((q && q.topic) || '').trim() === tfVal) : [];
-  const maxN = pool.length || 1;
-  const cntEl = document.getElementById('cnt');
-  if(cntEl){
-    cntEl.max = maxN;
-    cntEl.value = (val === 'all' || val >= maxN) ? maxN : val;
+function togglePracticeQuizSelect(){
+  quizSelected = !quizSelected;
+  const card = document.getElementById('pracQuizCard');
+  if(card) card.classList.toggle('sel', quizSelected);
+  const sub = document.getElementById('pracQuizSub');
+  if(sub){
+    sub.textContent = quizSelected
+      ? (sub.dataset.selText || '')
+      : (sub.dataset.unselText || '');
   }
-  updatePracSummary();
+  const errEl = document.getElementById('pErr');
+  if(quizSelected && errEl) errEl.style.display = 'none';
 }
 
 function updatePracSummary(){
-  const b = document.getElementById('pOptBadge');
   const active = getActivePracticeDeck();
   const tfEl = document.getElementById('pracTopicFilter');
   const tfVal = tfEl ? tfEl.value : '';
@@ -995,36 +1011,11 @@ function updatePracSummary(){
   if(maxEl) maxEl.textContent = '/ ' + (maxN || '—');
   const cntEl = document.getElementById('cnt');
   if(cntEl && maxN > 0) cntEl.max = maxN;
-  const cnt = parseInt((cntEl || {}).value, 10);
-  const effCnt = (!isNaN(cnt) && cnt > 0 && (!maxN || cnt < maxN)) ? cnt : maxN;
-  const startBtn = document.getElementById('startPracBtn');
-  if(startBtn) startBtn.textContent = `▶️ Start Practice (${effCnt || 0} Q${effCnt === 1 ? '' : 's'})`;
-  syncCountChips();
-  if(!b) return;
-  const tm = !!(document.getElementById('timed') || {}).checked;
-  const sec = Math.max(5, Math.min(900, parseInt((document.getElementById('pTime') || {}).value, 10) || 15));
-  const prev = Math.max(0, Math.min(120, parseFloat((document.getElementById('pPrevTime') || {}).value) || 0));
-  const thk = Math.max(0, Math.min(120, parseFloat((document.getElementById('pThinkTime') || {}).value) || 0));
-  const shuf = !!(document.getElementById('pracShuffle') || {}).checked;
-  const saEl = document.getElementById('pracShuffleAns');
-  const shufAns = saEl ? saEl.checked : true;
   const ttsEl = document.getElementById('pracReadAloud');
-  const tts = ttsEl ? ttsEl.checked : autoReadAloud;
   if(ttsEl){
-    autoReadAloud = tts;
-    try{ localStorage.setItem('brainrush_prac_tts', tts ? '1' : '0'); }catch(e){}
+    autoReadAloud = ttsEl.checked;
+    try{ localStorage.setItem('brainrush_prac_tts', autoReadAloud ? '1' : '0'); }catch(e){}
   }
-  const parts = [];
-  parts.push(`${effCnt || maxN || 0} Qs`);
-  if(tfVal) parts.push(tfVal.replace(/^Chapter\s+(\d+).*/i, 'Ch $1'));
-  parts.push(tm ? `${sec}s timer` : 'Untimed');
-  if(prev > 0) parts.push(`${prev}s preview`);
-  if(thk > 0) parts.push(`${thk}s think`);
-  if(shuf) parts.push('Shuffled');
-  if(!shufAns) parts.push('Fixed A/B/C/D');
-  if(tts) parts.push('🔊 Read-Aloud');
-  b.textContent = parts.join(' · ');
-  b.classList.toggle('hi', true);
 }
 
 function onPracTopicFilterChange(){
@@ -1097,83 +1088,87 @@ async function setup(){
         <h1>🧑‍🎓 Solo Practice</h1>
         <p class="sub">${esc(msg)}</p>
         <button type="button" class="go" onclick="setup()">🔄 Retry Loading Comprehensive Test</button>
-        <a class="sec" href="/play" style="display:inline-block;text-decoration:none;margin-top:12px">🎮 Back to Live Game</a>
       </div>
     `;
     return;
   }
 
+  quizSelected = false;
+  const subBase = `${deckTopics.length ? `${deckTopics.length} Chapters · ` : ''}${n} Total Questions`;
+
   $.innerHTML = `
     <div class="card-panel">
       <h1>🧑‍🎓 Solo Practice</h1>
-      <p class="sub" style="margin-bottom:12px">Study at your own pace with Percentage Grading, Read-Aloud, Chapter Accuracy, and a Printable Study Guide.</p>
+      <p class="sub" style="margin-bottom:12px">Tap the quiz below to select it, then start practicing.</p>
 
-      <div class="p-hero-card">
+      <div class="p-hero-card" id="pracQuizCard" onclick="togglePracticeQuizSelect()">
         <div style="min-width:0">
           <div class="p-hero-title">🎓 ${esc(qInfo.title)}</div>
-          <div class="p-hero-sub">${deckTopics.length ? `${deckTopics.length} Chapters · ` : ''}${n} Total Questions</div>
+          <div class="p-hero-sub" id="pracQuizSub" data-unsel-text="👆 Tap to select quiz · ${esc(subBase)}" data-sel-text="✅ Selected · ${esc(subBase)}">👆 Tap to select quiz · ${esc(subBase)}</div>
         </div>
-        <span class="p-deck-meta">${n} Qs</span>
+        <span class="p-hero-chk">✓</span>
       </div>
 
       <div onchange="updatePracSummary()" oninput="updatePracSummary()">
-        <div class="p-sec-box">
-          <div class="p-sec-hdr">
-            <span>📚 1. Chapter &amp; Question Count</span>
-            <span class="p-acc-badge hi" id="pOptBadge">All ${n} Qs · Untimed</span>
+        ${deckTopics.length > 1 ? `<details class="p-acc" id="pAcc1">
+          <summary>
+            <span class="sum-left"><span class="chev">▶</span> 📚 1. Chapter</span>
+          </summary>
+          <div class="p-acc-body">
+            <select id="pracTopicFilter" onchange="onPracTopicFilterChange()" style="font-size:.94em;padding:9px 11px;text-align:left;margin-bottom:0">
+              <option value="">All ${deckTopics.length} Chapters (${n} Questions)</option>
+              ${deckTopics.map(tp => {
+                const c = (active.questions || []).filter(q => String((q && q.topic) || '').trim() === tp).length;
+                return `<option value="${esc(tp)}">🏷️ ${esc(tp)} (${c} Qs)</option>`;
+              }).join('')}
+            </select>
           </div>
-          ${deckTopics.length > 1 ? `<select id="pracTopicFilter" onchange="onPracTopicFilterChange()" style="font-size:.94em;padding:9px 11px;text-align:left;margin-bottom:8px">
-            <option value="">All ${deckTopics.length} Chapters (${n} Questions)</option>
-            ${deckTopics.map(tp => {
-              const c = (active.questions || []).filter(q => String((q && q.topic) || '').trim() === tp).length;
-              return `<option value="${esc(tp)}">🏷️ ${esc(tp)} (${c} Qs)</option>`;
-            }).join('')}
-          </select>` : ''}
-          <div class="p-count-chips" style="margin-bottom:0">
-            <button type="button" class="p-chip" data-cnt="10" onclick="setPracCountChip(10)">10 Qs</button>
-            <button type="button" class="p-chip" data-cnt="25" onclick="setPracCountChip(25)">25 Qs</button>
-            <button type="button" class="p-chip" data-cnt="50" onclick="setPracCountChip(50)">50 Qs</button>
-            <button type="button" class="p-chip sel" data-cnt="all" onclick="setPracCountChip('all')">All (${n})</button>
-          </div>
-        </div>
+        </details>` : ''}
 
-        <div class="p-sec-box">
-          <div class="p-sec-hdr"><span>⏱️ 2. Timers &amp; Pacing</span></div>
-          <div class="quick-pacing-grid" style="margin-bottom:0">
-            <label class="qp-box" title="Exact number of questions to practice">
-              <span>📝 Questions</span>
-              <span><input id="cnt" type="number" min="1" max="${n || 1}" value="${n || ''}" placeholder="All"> <small id="pMaxCnt" style="opacity:.75">/ ${n || '—'}</small></span>
-            </label>
-            <label class="qp-box" title="Seconds per question when Countdown Timer is checked">
-              <span>⏱️ Timer</span>
-              <span><input id="pTime" type="number" min="5" max="900" value="15"> <small style="opacity:.75">s</small></span>
-            </label>
-            <label class="qp-box" title="Reading preview before answer choices appear (0 = instant)">
-              <span>👀 Preview</span>
-              <span><input id="pPrevTime" type="number" min="0" max="120" value="0"> <small style="opacity:.75">s</small></span>
-            </label>
-            <label class="qp-box" title="Choices shown on screen, locked while you think (0 = off)">
-              <span>🧠 Think</span>
-              <span><input id="pThinkTime" type="number" min="0" max="120" value="0"> <small style="opacity:.75">s</small></span>
-            </label>
+        <details class="p-acc" id="pAcc2">
+          <summary>
+            <span class="sum-left"><span class="chev">▶</span> ⏱️ 2. Timers &amp; Pacing</span>
+          </summary>
+          <div class="p-acc-body">
+            <div class="quick-pacing-grid" style="margin-bottom:0">
+              <label class="qp-box" title="Exact number of questions to practice">
+                <span>📝 Questions</span>
+                <span><input id="cnt" type="number" min="1" max="${n || 1}" value="${n || ''}" placeholder="All"> <small id="pMaxCnt" style="opacity:.75">/ ${n || '—'}</small></span>
+              </label>
+              <label class="qp-box" title="Seconds per question when Countdown Timer is checked">
+                <span>⏱️ Timer</span>
+                <span><input id="pTime" type="number" min="5" max="900" value="15"> <small style="opacity:.75">s</small></span>
+              </label>
+              <label class="qp-box" title="Reading preview before answer choices appear (0 = instant)">
+                <span>👀 Preview</span>
+                <span><input id="pPrevTime" type="number" min="0" max="120" value="0"> <small style="opacity:.75">s</small></span>
+              </label>
+              <label class="qp-box" title="Choices shown on screen, locked while you think (0 = off)">
+                <span>🧠 Think</span>
+                <span><input id="pThinkTime" type="number" min="0" max="120" value="0"> <small style="opacity:.75">s</small></span>
+              </label>
+            </div>
           </div>
-        </div>
+        </details>
 
-        <div class="p-sec-box">
-          <div class="p-sec-hdr"><span>🎛️ 3. Practice Options</span></div>
-          <div class="p-toggle-grid">
-            <label class="p-tog-pill"><input type="checkbox" id="timed"> <span>⏱️ Countdown Timer</span></label>
-            <label class="p-tog-pill"><input type="checkbox" id="pracReadAloud"> <span>🔊 Auto Read-Aloud</span></label>
-            <label class="p-tog-pill"><input type="checkbox" id="pracShuffle"> <span>🎲 Shuffle Questions</span></label>
-            <label class="p-tog-pill"><input type="checkbox" id="pracShuffleAns"> <span>🔀 Shuffle Choices</span></label>
+        <details class="p-acc" id="pAcc3">
+          <summary>
+            <span class="sum-left"><span class="chev">▶</span> 🎛️ 3. Practice Options</span>
+          </summary>
+          <div class="p-acc-body">
+            <div class="p-toggle-grid">
+              <label class="p-tog-pill"><input type="checkbox" id="timed"> <span>⏱️ Countdown Timer</span></label>
+              <label class="p-tog-pill"><input type="checkbox" id="pracReadAloud"> <span>🔊 Auto Read-Aloud</span></label>
+              <label class="p-tog-pill"><input type="checkbox" id="pracShuffle"> <span>🎲 Shuffle Questions</span></label>
+              <label class="p-tog-pill"><input type="checkbox" id="pracShuffleAns"> <span>🔀 Shuffle Choices</span></label>
+            </div>
           </div>
-        </div>
+        </details>
       </div>
 
       <div id="pErr" class="err-banner"></div>
-      <button class="go" id="startPracBtn" onclick="start()">▶️ Start Practice (${n} Qs)</button>
+      <button class="go" id="startPracBtn" onclick="start()">▶️ Start Practice Quiz</button>
     </div>
-    <div><a class="plink" href="/play">🎮 Back to Live Game</a></div>
   `;
   const shufEl = document.getElementById('pracShuffle');
   if(shufEl) shufEl.checked = true;
@@ -1225,10 +1220,14 @@ async function start(customQs){
   let quizTitle = run && run.title ? run.title : 'Practice Quiz';
   if(!qs){
     const errEl = document.getElementById('pErr');
+    if(!quizSelected && document.getElementById('pracQuizCard')){
+      if(errEl){ errEl.textContent = '👆 Tap the quiz card above to select it before starting.'; errEl.style.display = 'block'; }
+      return;
+    }
     await fetchAssignedQuiz();
     const active = getActivePracticeDeck();
     if(!active || !Array.isArray(active.questions) || !active.questions.length){
-      if(errEl){ errEl.textContent = 'Please select or create a practice quiz first.'; errEl.style.display = 'block'; }
+      if(errEl){ errEl.textContent = 'Please select a practice quiz first.'; errEl.style.display = 'block'; }
       return;
     }
     quizTitle = active.title || 'Practice Quiz';
