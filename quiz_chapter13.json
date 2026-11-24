@@ -1,262 +1,212 @@
 [
   {
-    "q": "Maya can clearly explain her bakery idea in simple terms; what advantage is she most likely to gain?",
+    "q": "What practical benefits do entrepreneurs gain when they can clearly explain their business concept?",
     "a": [
-      "Stronger customer ties and better supplier terms",
-      "Skipping the trial period with wholesale vendors",
-      "Spending half the time training new store workers",
-      "Getting her city business permit approved faster"
+      "They are forty percent more likely to build strong customer relationships and sixty-five percent more likely to secure favorable supplier terms.",
+      "They acquire their first fifty neighborhood buyers in half the time and earn thirty percent higher profit margins.",
+      "They are twice as likely to receive microfinance equipment loans and fifty percent more likely to retain employees.",
+      "They reduce their customer acquisition costs by fifty percent and double their average order size in the first year."
     ],
     "c": 0,
-    "t": 15,
+    "t": 20,
     "quote": "Research from the World Bank shows that entrepreneurs who can clearly explain their business concept are 40% more likely to build strong customer relationships and 65% more likely to secure favorable terms with suppliers.",
-    "src": "Chapter 13, pp. 189–190"
+    "src": "Chapter 13, pp. 189–190",
+    "topic": "Chapter 13: Sharing Your Business Story & Next Steps"
   },
   {
-    "q": "Leo starts his business story by describing a local problem; what key detail should he include?",
+    "q": "In the Six-Part Framework for Explaining Your Business, what key elements belong in Part 1 (\"The Problem or Need You Address\")?",
     "a": [
-      "How much money families lose to the problem yearly",
-      "Why current ways of dealing with it do not work well",
-      "How long the problem has existed in nearby cities",
-      "How many other shops failed to solve the problem"
+      "Your formal education, your past employment history, and your five-year income goals.",
+      "A real community problem, why it matters in daily life, how people currently deal with it, and why current solutions do not work well.",
+      "Your complete retail price list, your monthly overhead costs, and your desired profit margin per unit.",
+      "The names of your top three local competitors and how long they have operated in your neighborhood."
     ],
     "c": 1,
-    "t": 15,
-    "quote": "1. The Problem or Need You Address: Key elements: A real problem people in your community face; Why this problem matters in daily life; How people currently deal with this challenge; Why current solutions aren’t working well.",
-    "src": "Chapter 13, p. 190"
+    "t": 20,
+    "quote": "1. The Problem or Need You Address: Begin by describing the everyday challenge or need your business helps with. Key elements: A real problem people in your community face; Why this problem matters in daily life; How people currently deal with this challenge; Why current solutions aren’t working well",
+    "src": "Chapter 13, p. 190",
+    "topic": "Chapter 13: Sharing Your Business Story & Next Steps"
   },
   {
-    "q": "Ana is explaining the 'How Your Business Works' part of her story; what should she share?",
+    "q": "In Part 4 of your business story (\"How Your Business Works\"), what practical operational details should you explain?",
     "a": [
-      "Her daily opening hours and store return policy",
-      "Her prices, how she controls costs, and quality steps",
-      "Her supplier contracts and tax registration number",
-      "Her monthly sales goals and advertising budget"
-    ],
-    "c": 1,
-    "t": 15,
-    "quote": "4. How Your Business Works: Key elements: Your products or services and their prices; How you manage your costs; How you ensure good quality; How you’re planning for the future.",
-    "src": "Chapter 13, p. 191"
-  },
-  {
-    "q": "Sam covers all six parts of the story framework instead of just naming what he sells; what is the result?",
-    "a": [
-      "Buyers pay a higher price on their first order",
-      "Listeners stop asking questions about his prices",
-      "He is three times more likely to gain buyer trust",
-      "He can use the exact same pitch for every group"
+      "The step-by-step history of how you first discovered the problem and built your initial prototype.",
+      "The personal background of each family member who helps in your shop and how much you pay them.",
+      "Your products or services and their prices, how you manage costs, how you ensure good quality, and how you plan for the future.",
+      "The legal structure of your business, your municipal permit numbers, and your annual tax bracket."
     ],
     "c": 2,
-    "t": 15,
+    "t": 20,
+    "quote": "4. How Your Business Works: Explain the practical aspects of how you operate and sustain your business. Key elements: Your products or services and their prices; How you manage your costs; How you ensure good quality; How you’re planning for the future",
+    "src": "Chapter 13, p. 191",
+    "topic": "Chapter 13: Sharing Your Business Story & Next Steps"
+  },
+  {
+    "q": "How do entrepreneurs who cover all six areas of the business story framework perform compared to those who focus only on what they sell or their personal story?",
+    "a": [
+      "They close sales in half the time during their first conversation with a new buyer.",
+      "They are three times more likely to gain customer trust and support.",
+      "They receive forty percent more word-of-mouth referrals during their first six months.",
+      "They are twice as likely to form strategic partnerships with nearby local shops."
+    ],
+    "c": 1,
+    "t": 20,
     "quote": "Research from Harvard Business School found that entrepreneurs who cover all six of these areas when explaining their business are three times more likely to gain customer trust and support compared to those who focus only on what they sell or their personal story.",
-    "src": "Chapter 13, p. 192"
+    "src": "Chapter 13, p. 192",
+    "topic": "Chapter 13: Sharing Your Business Story & Next Steps"
   },
   {
-    "q": "Omar is explaining his new repair shop to his worried aunt and uncle; what should he emphasize?",
+    "q": "When adjusting your business story to speak with family and community members, what should you emphasize?",
     "a": [
-      "How fast he will pay back his personal savings",
-      "Why his repair prices beat every rival in town",
-      "Steady family support, careful money habits, and local good",
-      "How his shop will bring tourists into the neighborhood"
+      "Detailed three-year cash flow spreadsheets and technical calculations of equipment depreciation.",
+      "Complex legal partnership agreements and your plan to open stores in distant provinces.",
+      "Stability, careful money and risk management, and how the business provides reliable support and helps others.",
+      "Why your technical production tools are more modern than the equipment used by older local vendors."
     ],
     "c": 2,
-    "t": 15,
-    "quote": "Talking with Family and Community Members: Focus on stability, responsibility, and how your business contributes to the community.",
-    "src": "Chapter 13, p. 193"
+    "t": 20,
+    "quote": "Talking with Family and Community Members: Focus on stability, responsibility, and how your business contributes to the community. What to emphasize: How your business provides reliable support for your family; Your careful approach to money and risk management; Ways your business helps the wider community; How they might share in or support your progress",
+    "src": "Chapter 13, p. 193",
+    "topic": "Chapter 13: Sharing Your Business Story & Next Steps"
   },
   {
-    "q": "Nina is meeting with a fruit farmer to supply her juice stand; what should she focus on?",
+    "q": "When adjusting your business story to speak with potential partners or suppliers, what should you emphasize?",
     "a": [
-      "The lowest price she is willing to pay per box",
-      "Other farms that already offered to sell to her",
-      "Her reliability and how both businesses can grow together",
-      "Her five-year goal of buying her own delivery truck"
+      "How much personal money you have saved in your household emergency account at home.",
+      "Why your product is cheaper than imported alternatives and how customers can buy from you today.",
+      "Your personal family history and how your business helps you balance work with childcare duties.",
+      "How working together helps both businesses, your reliability and organized approach, shared growth potential, and clear expectations."
     ],
-    "c": 2,
-    "t": 15,
-    "quote": "Talking with Potential Partners or Suppliers: Focus on how working together creates benefits for both of you. What to emphasize: How the relationship helps both businesses; Your reliability and organized approach; Growth potential that benefits them too.",
-    "src": "Chapter 13, pp. 193–194"
+    "c": 3,
+    "t": 20,
+    "quote": "Talking with Potential Partners or Suppliers: Focus on how working together creates benefits for both of you. What to emphasize: How the relationship helps both businesses; Your reliability and organized approach; Growth potential that benefits them too; Clear expectations about working together",
+    "src": "Chapter 13, pp. 193–194",
+    "topic": "Chapter 13: Sharing Your Business Story & Next Steps"
   },
   {
-    "q": "Tariq is applying for a small loan to buy a sewing machine; what should he bring to the meeting?",
+    "q": "When talking with lenders or support organizations, what four pieces of evidence should you emphasize?",
     "a": [
-      "Reference letters from neighbors and his home lease",
-      "Interest rate quotes from three competing banks",
-      "Expense records, buyer proof, and a clear plan for the funds",
-      "A written promise to donate ten percent of his profit"
+      "Your personal family background, your passion for the craft, your community volunteer work, and your long-term dreams.",
+      "Evidence of careful money management, proof customers value what you offer, a clear plan for using support, and how you handle risks.",
+      "Why your competitors are failing, how fast you plan to open new locations, and why you need money immediately.",
+      "Your wholesale supplier price lists, your daily work schedule, your product recipes, and your family living budget."
     ],
-    "c": 2,
-    "t": 15,
-    "quote": "Talking with Lenders or Support Organizations: What to emphasize: Evidence of careful money management; Proof that customers value what you offer; Clear explanation of how you would use support; How you handle challenges and risks.",
-    "src": "Chapter 13, p. 194"
+    "c": 1,
+    "t": 20,
+    "quote": "Talking with Lenders or Support Organizations: Focus on practical business details and clear planning. What to emphasize: Evidence of careful money management; Proof that customers value what you offer; Clear explanation of how you would use support; How you handle challenges and risks",
+    "src": "Chapter 13, p. 194",
+    "topic": "Chapter 13: Sharing Your Business Story & Next Steps"
   },
   {
-    "q": "You meet a potential buyer at a busy community event and have 30 seconds; what do you share?",
+    "q": "Among the four practical formats for sharing your business story, when is \"The Visual Story\" (five to ten images with minimal text) especially useful?",
     "a": [
-      "Your full price list, store address, and phone number",
-      "Why you started the shop and your five-year plan",
-      "The problem you solve, your solution, and what makes it special",
-      "Your best-selling item and a request for a referral"
+      "When you are submitting an official application for a commercial bank loan or government grant.",
+      "When you are registering your formal business structure and tax account at a municipal office.",
+      "At community gatherings, when explaining your business to groups, or in situations where language differences exist.",
+      "When you are signing a written wholesale supply contract with a large regional manufacturer."
     ],
     "c": 2,
-    "t": 15,
-    "quote": "The Quick Introduction (30 Seconds): Format: 2-3 sentences covering the problem you solve, your solution, and what makes it special.",
-    "src": "Chapter 13, p. 195"
+    "t": 20,
+    "quote": "The Visual Story: Using pictures to explain your business with minimal text. Format: 5-10 images that show key aspects of your business with brief explanations... When to use it: Community gatherings, when explaining to groups, in situations where language differences exist",
+    "src": "Chapter 13, pp. 195–196",
+    "topic": "Chapter 13: Sharing Your Business Story & Next Steps"
   },
   {
-    "q": "Grace puts together 8 photos with short captions showing her basket shop; when is this Visual Story best used?",
+    "q": "Why should an entrepreneur prepare at least two different formats for explaining their business (such as a 30-second introduction and a visual story or handout)?",
     "a": [
-      "When applying for a formal commercial bank loan",
-      "When emailing price quotes to city wholesalers",
-      "At community gatherings or where language barriers exist",
-      "When training a bookkeeper to track monthly sales"
+      "It reduces the time spent answering basic customer questions about prices and business hours by fifty percent.",
+      "It satisfies the formal documentation requirements of both local market associations and municipal tax offices.",
+      "It allows you to test two different brand names at the same time to see which one customers remember better.",
+      "Entrepreneurs with at least two ways of explaining their business were seventy percent more likely to take advantage of unexpected opportunities."
     ],
-    "c": 2,
-    "t": 15,
-    "quote": "The Visual Story: Using pictures to explain your business with minimal text... When to use it: Community gatherings, when explaining to groups, in situations where language differences exist.",
-    "src": "Chapter 13, pp. 195–196"
-  },
-  {
-    "q": "Why should David prepare at least two different ways to explain his business before he needs them?",
-    "a": [
-      "To test which pitch gets more sales in month one",
-      "To use one for new buyers and one for regulars",
-      "To be 70% more likely to catch unexpected opportunities",
-      "To avoid forgetting price details when he is nervous"
-    ],
-    "c": 2,
-    "t": 15,
+    "c": 3,
+    "t": 20,
     "quote": "Research from MIT found that entrepreneurs with at least two different ways of explaining their business were 70% more likely to take advantage of unexpected opportunities than those who created explanations only when specifically asked.",
-    "src": "Chapter 13, p. 196"
+    "src": "Chapter 13, p. 196",
+    "topic": "Chapter 13: Sharing Your Business Story & Next Steps"
   },
   {
-    "q": "How can a solar lamp seller use an everyday example to make his business easy to understand?",
+    "q": "How does \"Speaking in Your Community's Style\" make sharing your business story more effective?",
     "a": [
-      "Compare his lamp price to a bag of groceries",
-      "Name the biggest stores in town and compare himself",
-      "Tell a short story about one student his lamp helped",
-      "Ask listeners about their job before naming his product"
+      "By focusing strictly on financial facts, profit margins, and production statistics rather than personal stories.",
+      "By memorizing a single word-for-word script and delivering it the exact same way to every audience you meet.",
+      "By using common local expressions, respecting appropriate formality, considering cultural attitudes, and matching local expectations.",
+      "By keeping every business conversation under thirty seconds so listeners never feel pressured to buy from you."
     ],
     "c": 2,
-    "t": 15,
-    "quote": "Using Everyday Examples: Start with a common situation that illustrates the problem you solve; Share a brief personal connection to why you started your business; Tell a short story about how you helped a specific customer.",
-    "src": "Chapter 13, pp. 196–197"
+    "t": 20,
+    "quote": "Speaking in Your Community’s Style: Adapt your communication to what works in your local context. Key approaches: Use language and expressions that are common locally; Respect appropriate levels of formality in different settings; Consider cultural attitudes about business and success; Adjust your tone, gestures, and examples to match local expectations",
+    "src": "Chapter 13, p. 197",
+    "topic": "Chapter 13: Sharing Your Business Story & Next Steps"
   },
   {
-    "q": "Elena is explaining her business to village elders; how does she speak in her community's style?",
+    "q": "Why is \"Demonstrating Rather Than Just Telling\" such an effective way to share your business story?",
     "a": [
-      "Keep her talk under one minute to save their time",
-      "Use technical business words to sound professional",
-      "Match local formality, tone, and respect for their wisdom",
-      "Talk about village history before mentioning her shop"
+      "Showing samples, live work, or before-and-after examples makes you twice as likely to be remembered and recommended.",
+      "Giving away free full-sized products to everyone at a market forces competitors to lower their prices.",
+      "Live demonstrations legally bind spectators at a public market to purchase at least one item before leaving.",
+      "Live demonstrations allow you to skip explaining what problem your business solves or how much you charge."
     ],
-    "c": 2,
-    "t": 15,
-    "quote": "Speaking in Your Community’s Style: Use language and expressions that are common locally; Respect appropriate levels of formality in different settings; Consider cultural attitudes about business and success.",
-    "src": "Chapter 13, p. 197"
+    "c": 0,
+    "t": 20,
+    "quote": "Demonstrating Rather Than Just Telling: Showing practical examples helps people understand your business better. Key approaches: Bring product samples when possible; Demonstrate how your service works; Show before/after examples... Research from the World Economic Forum found that entrepreneurs who incorporate these communication approaches are twice as likely to be remembered and recommended compared to those who focus only on facts and figures.",
+    "src": "Chapter 13, p. 198",
+    "topic": "Chapter 13: Sharing Your Business Story & Next Steps"
   },
   {
-    "q": "Ben has little formal schooling; how can he still make his carpentry pitch trustworthy and powerful?",
+    "q": "When planning your next business steps, why should you focus on setting just two or three practical growth priorities rather than trying to improve everything at once?",
     "a": [
-      "Memorize his monthly sales numbers without notes",
-      "Promise buyers that his workshop has zero problems",
-      "Speak from real craft experience and honest care",
-      "Use complex textbook words to impress buyers"
+      "Focusing on two or three specific improvements that make the biggest difference balances income growth with stability, risk, and your personal capacity.",
+      "Limiting your plan to two or three priorities ensures that you can finish every business improvement within a single thirty-day month.",
+      "Community savings groups only allow members to work on two business improvement goals per calendar year.",
+      "Concentrating on just two or three areas allows you to pause your daily financial tracking while you work on growth."
     ],
-    "c": 2,
-    "t": 15,
-    "quote": "Showing Genuine Knowledge and Care: Your genuine understanding and commitment communicate more powerfully than fancy words. Speak from real experience and knowledge.",
-    "src": "Chapter 13, p. 197"
+    "c": 0,
+    "t": 20,
+    "quote": "Setting Practical Growth Priorities: Rather than trying to improve everything at once, focus on the most important next steps. Key approaches: Identify 2-3 specific improvements that would make the biggest difference; Consider both short-term needs and longer-term opportunities; Balance income growth with stability and risk management; Account for your personal circumstances and capacity",
+    "src": "Chapter 13, p. 199",
+    "topic": "Chapter 13: Sharing Your Business Story & Next Steps"
   },
   {
-    "q": "Instead of just stating facts and prices, a tailor brings altered clothes to show buyers; what is the benefit?",
+    "q": "What are the four recommended approaches for \"Building Support Systems\" as your business grows?",
     "a": [
-      "Buyers make their purchase decision twice as fast",
-      "Product returns drop to zero in the first month",
-      "She is twice as likely to be remembered and recommended",
-      "She can charge double without explaining her costs"
+      "Hire a full-time assistant manager, sign an exclusive distributor contract, borrow bank capital, and retain a law firm.",
+      "Identify specific skills you need, look for experienced mentors, consider peer groups or business associations, and research community learning resources.",
+      "Form a corporate board of directors, sell company shares to neighbors, outsource your production, and rent a downtown office.",
+      "Open a commercial line of credit, buy automated factory machinery, hire commission-only sales agents, and trademark your logo."
     ],
-    "c": 2,
-    "t": 15,
-    "quote": "Research from the World Economic Forum found that entrepreneurs who incorporate these communication approaches are twice as likely to be remembered and recommended compared to those who focus only on facts and figures.",
-    "src": "Chapter 13, p. 198"
+    "c": 1,
+    "t": 20,
+    "quote": "Building Support Systems: Growing businesses benefit from appropriate support networks and resources. Key approaches: Identify specific skills or knowledge that would help you grow; Look for mentors with experience in areas you want to develop; Consider peer groups or associations of similar businesses; Research learning resources accessible in your community",
+    "src": "Chapter 13, p. 200",
+    "topic": "Chapter 13: Sharing Your Business Story & Next Steps"
   },
   {
-    "q": "Before planning how to expand his food stall, what should Carlos check first about his current position?",
+    "q": "What four things should you consider when \"Balancing Business and Personal Growth\" so your development stays sustainable?",
     "a": [
-      "How many new competitors opened across town",
-      "What it costs to rent a building downtown",
-      "Which items make the most profit and what challenges repeat",
-      "Which worker can run a second location next year"
+      "How changes affect family life, keeping health and wellbeing priorities, which parts of work you enjoy most, and your deeper purposes beyond income.",
+      "How to match the salary of corporate executives, how to eliminate all physical work, how to avoid taxes, and when to sell the shop.",
+      "How many hours your competitors work each week, how fast regional factories are growing, and how to double your staff every month.",
+      "How to keep family members completely separate from business discussions, how to work seven days a week, and how to retire in two years."
     ],
-    "c": 2,
-    "t": 15,
-    "quote": "Assessing Your Current Position: Key questions to consider: What aspects of your business are working well? Where do you face recurring challenges? Which products or services are most profitable? How stable is your income and cash flow?",
-    "src": "Chapter 13, pp. 198–199"
+    "c": 0,
+    "t": 20,
+    "quote": "Balancing Business and Personal Growth: Sustainable business development must align with your personal circumstances and goals. Key approaches: Consider how business changes will affect your family life; Ensure your health and wellbeing remain priorities; Think about which aspects of work you enjoy most; Reflect on your deeper purposes beyond income generation",
+    "src": "Chapter 13, p. 200",
+    "topic": "Chapter 13: Sharing Your Business Story & Next Steps"
   },
   {
-    "q": "Maria wants to improve her meal service; how should she set practical growth priorities?",
+    "q": "What kind of growth plan makes an entrepreneur three times more likely to achieve sustainable business development?",
     "a": [
-      "Fix every weak area of the business at once",
-      "Spend all her time on her least profitable meal",
-      "Pick 2 to 3 high-impact improvements that fit her capacity",
-      "Copy the exact size of her biggest local rival"
+      "A detailed three-year financial plan that sets fixed monthly revenue targets for every product line.",
+      "A customer-driven plan that focuses on daily sales and avoids setting written goals or timelines.",
+      "A conservative plan that keeps your product and prices unchanged until you save a six-month cash reserve.",
+      "A structured but flexible step-by-step plan that breaks larger goals into small, achievable actions."
     ],
-    "c": 2,
-    "t": 15,
-    "quote": "Setting Practical Growth Priorities: Rather than trying to improve everything at once, focus on the most important next steps. Identify 2-3 specific improvements that would make the biggest difference.",
-    "src": "Chapter 13, p. 199"
-  },
-  {
-    "q": "Ahmed wants to expand his furniture shop; how should he build a practical growth path?",
-    "a": [
-      "Work late every night until the whole expansion is done",
-      "Save 100% of the total cost before taking step one",
-      "Break the goal into small steps with realistic timelines",
-      "Leave the steps vague so workers can pick their own pace"
-    ],
-    "c": 2,
-    "t": 15,
-    "quote": "Creating Your Growth Path: Plan a step-by-step approach to development rather than attempting major changes all at once. Break larger goals into smaller, achievable steps.",
-    "src": "Chapter 13, p. 199"
-  },
-  {
-    "q": "How can a growing market vendor build strong support systems without spending a lot of money?",
-    "a": [
-      "Hire a full-time consultant to audit monthly sales",
-      "Ask top buyers to trade cash for company shares",
-      "Find a mentor and join a peer group of local vendors",
-      "Sign an exclusive deal with one large distributor"
-    ],
-    "c": 2,
-    "t": 15,
-    "quote": "Building Support Systems: Look for mentors with experience in areas you want to develop; Consider peer groups or associations of similar businesses; Research learning resources accessible in your community.",
-    "src": "Chapter 13, p. 200"
-  },
-  {
-    "q": "Priya turns down huge catering orders so she has time for her young kids; what principle is she practicing?",
-    "a": [
-      "Planning to retire early and hand off the shop",
-      "Keeping family completely separate from business plans",
-      "Balancing business growth with health and family life",
-      "Waiting for her personal income to beat local wages"
-    ],
-    "c": 2,
-    "t": 15,
-    "quote": "Balancing Business and Personal Growth: Sustainable business development must align with your personal circumstances and goals. Consider how business changes will affect your family life; Ensure your health and wellbeing remain priorities.",
-    "src": "Chapter 13, p. 200"
-  },
-  {
-    "q": "Which type of growth plan makes an entrepreneur three times more likely to build a lasting business?",
-    "a": [
-      "A strict five-year plan approved by a loan officer",
-      "A fast plan aimed at doubling buyers every six months",
-      "A structured but flexible step-by-step growth plan",
-      "A cautious plan that changes nothing for three years"
-    ],
-    "c": 2,
-    "t": 15,
-    "quote": "Research from the Kauffman Foundation shows that Problem-First Entrepreneurs who create structured but flexible growth plans are three times more likely to achieve sustainable business development than those who either avoid planning entirely or create rigid, overambitious plans.",
-    "src": "Chapter 13, p. 201"
+    "c": 3,
+    "t": 20,
+    "quote": "Creating Your Growth Path: Plan a step-by-step approach to development rather than attempting major changes all at once. Key approaches: Break larger goals into smaller, achievable steps... Research from the Kauffman Foundation shows that Problem-First Entrepreneurs who create structured but flexible growth plans are three times more likely to achieve sustainable business development than those who either avoid planning entirely or create rigid, overambitious plans.",
+    "src": "Chapter 13, pp. 199 & 201",
+    "topic": "Chapter 13: Sharing Your Business Story & Next Steps"
   }
 ]

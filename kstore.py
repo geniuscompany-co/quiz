@@ -274,6 +274,31 @@ def has_accounts():
     return bool(store.get_json("accounts", {}))
 
 
+def make_practice_key(file_id):
+    fid = str(file_id or "").strip()
+    if not fid:
+        return ""
+    sig = hmac.new(_secret(), ("prac|" + fid).encode("utf-8"), hashlib.sha256).hexdigest()[:16]
+    raw = ("%s|%s" % (fid, sig)).encode("utf-8")
+    return base64.urlsafe_b64encode(raw).decode("ascii").rstrip("=")
+
+
+def verify_practice_key(key):
+    s = str(key or "").strip()
+    if not s:
+        return None
+    try:
+        pad = "=" * ((4 - len(s) % 4) % 4)
+        decoded = base64.urlsafe_b64decode((s + pad).encode("ascii")).decode("utf-8")
+        fid, sig = decoded.rsplit("|", 1)
+        expected = hmac.new(_secret(), ("prac|" + fid).encode("utf-8"), hashlib.sha256).hexdigest()[:16]
+        if fid and hmac.compare_digest(sig, expected):
+            return fid
+    except Exception:
+        pass
+    return None
+
+
 # ---------------------------------------------------------------- User quizzes
 def _clean_course_ids(courses):
     out = []
@@ -415,6 +440,143 @@ def deck_courses_set(owner, file_id, courses):
                     d[fid]["courses"] = cleaned
                     store.set_json("uq:" + q_owner, d)
     return cleaned
+
+
+def _clean_folder_name(val):
+    return re.sub(r"\s+", " ", str(val or "").strip())[:40]
+
+
+def deck_folders_map(owner):
+    raw = store.get_json("deckfolders:" + owner, {}) or {}
+    if not isinstance(raw, dict):
+        return {}
+    out = {}
+    for k, v in raw.items():
+        fn = _clean_folder_name(v)
+        if fn:
+            out[str(k)[:120]] = fn
+    return out
+
+
+def deck_folder_set(owner, file_id, folder):
+    fid = str(file_id or "").strip()[:120]
+    if not fid:
+        return ""
+    cleaned = _clean_folder_name(folder)
+    with _lock:
+        df = store.get_json("deckfolders:" + owner, {}) or {}
+        if not isinstance(df, dict):
+            df = {}
+        if cleaned:
+            df[fid] = cleaned
+            custom = store.get_json("folders:" + owner, []) or []
+            if not isinstance(custom, list):
+                custom = []
+            if cleaned not in ("Built-in", "My Quizzes", "Case Studies", "Saved on this device") and cleaned not in custom:
+                custom.append(cleaned)
+                store.set_json("folders:" + owner, custom[:100])
+        else:
+            df.pop(fid, None)
+        store.set_json("deckfolders:" + owner, df)
+        if fid.startswith("uq:"):
+            parts = fid.split(":", 2)
+            q_owner = parts[1] if len(parts) >= 2 else owner
+            if q_owner in (owner, "_shared"):
+                d = uq_load(q_owner)
+                if fid in d and isinstance(d[fid], dict):
+                    d[fid]["folder"] = cleaned
+                    store.set_json("uq:" + q_owner, d)
+    return cleaned
+
+
+def custom_folders_list(owner):
+    raw = store.get_json("folders:" + owner, []) or []
+    if not isinstance(raw, list):
+        return []
+    out = []
+    for f in raw:
+        fn = _clean_folder_name(f)
+        if fn and fn not in out:
+            out.append(fn)
+        if len(out) >= 100:
+            break
+    return out
+
+
+def custom_folder_add(owner, name):
+    fn = _clean_folder_name(name)
+    if not fn:
+        return custom_folders_list(owner)
+    with _lock:
+        cur = custom_folders_list(owner)
+        if fn not in cur:
+            cur.append(fn)
+            store.set_json("folders:" + owner, cur[:100])
+    return cur
+
+
+def custom_folder_delete(owner, name):
+    fn = _clean_folder_name(name)
+    if not fn:
+        return custom_folders_list(owner)
+    with _lock:
+        cur = [x for x in custom_folders_list(owner) if x != fn]
+        store.set_json("folders:" + owner, cur)
+        df = store.get_json("deckfolders:" + owner, {}) or {}
+        if isinstance(df, dict):
+            changed = False
+            for k in list(df.keys()):
+                if _clean_folder_name(df[k]) == fn:
+                    del df[k]
+                    changed = True
+            if changed:
+                store.set_json("deckfolders:" + owner, df)
+        for q_owner in ({owner, "_shared"}):
+            d = uq_load(q_owner)
+            u_changed = False
+            for qid, rec in d.items():
+                if isinstance(rec, dict) and _clean_folder_name(rec.get("folder")) == fn:
+                    rec["folder"] = ""
+                    u_changed = True
+            if u_changed:
+                store.set_json("uq:" + q_owner, d)
+    return cur
+
+
+def custom_folder_rename(owner, old_name, new_name):
+    old_fn = _clean_folder_name(old_name)
+    new_fn = _clean_folder_name(new_name)
+    if not old_fn or not new_fn or old_fn == new_fn:
+        return custom_folders_list(owner)
+    with _lock:
+        cur = custom_folders_list(owner)
+        updated = []
+        for x in cur:
+            v = new_fn if x == old_fn else x
+            if v not in updated:
+                updated.append(v)
+        if new_fn not in updated:
+            updated.append(new_fn)
+        store.set_json("folders:" + owner, updated[:100])
+        df = store.get_json("deckfolders:" + owner, {}) or {}
+        if isinstance(df, dict):
+            changed = False
+            for k, v in list(df.items()):
+                if _clean_folder_name(v) == old_fn:
+                    df[k] = new_fn
+                    changed = True
+            if changed:
+                store.set_json("deckfolders:" + owner, df)
+        for q_owner in ({owner, "_shared"}):
+            d = uq_load(q_owner)
+            u_changed = False
+            for qid, rec in d.items():
+                if isinstance(rec, dict) and _clean_folder_name(rec.get("folder")) == old_fn:
+                    rec["folder"] = new_fn
+                    u_changed = True
+            if u_changed:
+                store.set_json("uq:" + q_owner, d)
+    return updated
 
 
 def uq_save(owner, title, questions, folder="", tags=None, qid=None, courses=None):

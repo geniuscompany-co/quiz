@@ -1,0 +1,212 @@
+[
+  {
+    "q": "How do basic financial management practices help a micro-business over time?",
+    "a": [
+      "They make the business thirty percent more likely to survive downturns and forty percent more likely to grow sustainably.",
+      "They help the owner reduce monthly material waste by twenty-five percent and double their personal savings rate.",
+      "They allow the business to reach consistent weekly profitability in half the time of informally managed shops.",
+      "They increase average annual profit margins by thirty-five percent without requiring any price increases."
+    ],
+    "c": 0,
+    "t": 20,
+    "quote": "Research by the International Finance Corporation found that micro-businesses with basic financial management practices are 30% more likely to survive economic downturns and 40% more likely to grow into sustainable enterprises.",
+    "src": "Chapter 6, p. 56",
+    "topic": "Chapter 6: Financial Management for Micro-Entrepreneurs"
+  },
+  {
+    "q": "Why is it dangerous to mix your personal money and your business money in the same container or account?",
+    "a": [
+      "Mobile phone companies charge a higher transfer fee on mixed personal and business accounts.",
+      "You cannot tell if the business is truly profitable or if you are secretly paying for it with personal money.",
+      "Commercial banks freeze accounts that process both household grocery bills and customer payments.",
+      "Wholesale suppliers refuse to accept cash payments drawn from a household savings container."
+    ],
+    "c": 1,
+    "t": 20,
+    "quote": "1. Separate Business and Personal Money... Why it matters: When money mixes together, you can’t tell if your business is truly profitable or if you’re unknowingly subsidizing it with personal funds.",
+    "src": "Chapter 6, p. 57",
+    "topic": "Chapter 6: Financial Management for Micro-Entrepreneurs"
+  },
+  {
+    "q": "Why should you pay yourself a fixed amount on a regular schedule instead of taking cash from the business whenever you need it?",
+    "a": [
+      "It ensures that you always take home at least fifty percent of your daily gross sales revenue before paying suppliers.",
+      "It makes it much easier to calculate your direct material cost per unit when you review your prices each week.",
+      "Random withdrawals make it impossible to plan and save, while a fixed amount creates stability for you and the business.",
+      "Keeping your personal pay fixed allows you to skip recording personal withdrawals in your daily tracking notebook."
+    ],
+    "c": 2,
+    "t": 20,
+    "quote": "4. Pay Yourself a Fixed Amount: Decide on a reasonable amount to take from the business regularly, rather than taking money randomly. Why it matters: Random withdrawals make it impossible to plan and save. A fixed 'salary' creates stability for both you and your business.",
+    "src": "Chapter 6, p. 57",
+    "topic": "Chapter 6: Financial Management for Micro-Entrepreneurs"
+  },
+  {
+    "q": "When setting up a basic financial tracking notebook in Step 1, which five columns should you create?",
+    "a": [
+      "Product Name, Wholesale Price, Retail Price, Competitor Price, and Profit Margin.",
+      "Customer Name, Phone Number, Delivery Address, Payment Method, and Amount Due.",
+      "Supplier Name, Order Quantity, Shipping Cost, Unit Cost, and Reorder Date.",
+      "Date, Description, Money In, Money Out, and Balance."
+    ],
+    "c": 3,
+    "t": 20,
+    "quote": "Step 1: Set Up Your Tracking Notebook: Create a notebook with these columns: Date: When the transaction happened; Description: What the money was for; Money In: Any revenue or sales; Money Out: Any expenses or costs; Balance: How much business money you have left",
+    "src": "Chapter 6, p. 58",
+    "topic": "Chapter 6: Financial Management for Micro-Entrepreneurs"
+  },
+  {
+    "q": "Why can a business with strong daily sales still fail if the owner confuses revenue with profit?",
+    "a": [
+      "Because high expenses can eat up all the sales revenue, leaving no actual profit to support you or grow the business.",
+      "Because high daily sales volume forces the owner to pay wholesale suppliers in advance before collecting customer cash.",
+      "Because strong daily sales make it impossible to calculate how much indirect overhead cost belongs to each product.",
+      "Because focusing on gross sales revenue causes the owner to set retail prices too high for neighborhood buyers."
+    ],
+    "c": 0,
+    "t": 20,
+    "quote": "Why it matters: Revenue (sales) is not the same as profit. Many businesses with strong sales still fail because their expenses eat up all the revenue... Profit is what actually supports you and allows the business to grow. Without profit, a business eventually fails.",
+    "src": "Chapter 6, pp. 57 & 59–60",
+    "topic": "Chapter 6: Financial Management for Micro-Entrepreneurs"
+  },
+  {
+    "q": "How do you calculate your business's Profit Margin percentage, and why does a higher profit margin matter?",
+    "a": [
+      "Divide total revenue by total expenses and multiply by one hundred; a higher margin proves your prices are lower than competitors.",
+      "Divide profit by revenue and multiply by one hundred; a higher margin gives you more flexibility and security instead of needing huge sales volume to survive.",
+      "Subtract direct material costs from your retail price; a higher margin guarantees that your business will never experience a cash flow shortage.",
+      "Divide net profit by the number of items sold each week; a higher margin tells you exactly how much fixed salary you can pay yourself."
+    ],
+    "c": 1,
+    "t": 20,
+    "quote": "4. Profit Margin: Percentage of each sale that becomes profit. How to calculate it: (Profit ÷ Revenue) × 100 = Profit Margin %. Why it matters: Higher profit margins give you more flexibility and security. Low margins mean you must sell high volume to survive.",
+    "src": "Chapter 6, p. 60",
+    "topic": "Chapter 6: Financial Management for Micro-Entrepreneurs"
+  },
+  {
+    "q": "Why is monitoring your \"Cash Flow\" (the timing pattern of when money comes in and goes out) critical even if your business is profitable overall?",
+    "a": [
+      "Because tracking weekly cash flow is the only way to calculate how much indirect cost to add to each product unit.",
+      "Because a steady cash flow pattern allows you to transfer all of your monthly revenue into personal household savings.",
+      "Because even a profitable business can fail if it runs out of cash at a critical moment, and tracking it helps you plan for lean periods.",
+      "Because wholesale suppliers require a certified cash flow statement before selling raw materials for cash at the market."
+    ],
+    "c": 2,
+    "t": 20,
+    "quote": "5. Cash Flow: Pattern of when money comes in and goes out of your business... Why it matters: Even profitable businesses can fail if they run out of cash at critical moments. Understanding cash flow helps you plan for lean periods.",
+    "src": "Chapter 6, p. 60",
+    "topic": "Chapter 6: Financial Management for Micro-Entrepreneurs"
+  },
+  {
+    "q": "When calculating the total cost per unit of your product or service, how should you include monthly Indirect Costs (such as tool maintenance, workspace, or business phone calls)?",
+    "a": [
+      "Add a flat ten percent overhead fee to your direct material cost on every item you produce.",
+      "Subtract your monthly indirect costs from your personal salary at the end of the month instead of adding them to unit prices.",
+      "Divide your total monthly indirect costs by the number of units you sell each month, then add that amount to your direct cost per unit.",
+      "Charge your entire monthly indirect cost to the first ten orders you sell at the beginning of each month."
+    ],
+    "c": 2,
+    "t": 20,
+    "quote": "Indirect Cost Per Unit: (Total Indirect Costs ÷ Monthly Units)... Total Cost Per Unit: (Direct Costs + Indirect Cost Per Unit)",
+    "src": "Chapter 6, pp. 61–62",
+    "topic": "Chapter 6: Financial Management for Micro-Entrepreneurs"
+  },
+  {
+    "q": "When building a business cash reserve from your daily earnings (under the Five Strategies for Healthy Cash Flow), how much should you aim to set aside as a baseline emergency fund?",
+    "a": [
+      "Enough to cover at least two weeks of business expenses.",
+      "Enough to replace your most expensive piece of work equipment in cash.",
+      "Enough to cover twelve full months of both business and household expenses.",
+      "Enough to buy three full months of raw materials without any customer sales."
+    ],
+    "c": 0,
+    "t": 20,
+    "quote": "1. Build a Cash Reserve: Set aside a small amount from every day’s earnings to create an emergency fund for your business. How much: Aim for enough to cover at least two weeks of expenses.",
+    "src": "Chapter 6, p. 63",
+    "topic": "Chapter 6: Financial Management for Micro-Entrepreneurs"
+  },
+  {
+    "q": "To keep your cash flow healthy, when is the best time to make a major purchase or restock materials?",
+    "a": [
+      "Right after your highest income periods, when your cash on hand is strongest.",
+      "Two weeks before your busy season starts, even if your cash box is nearly empty.",
+      "On the first Monday of every month, regardless of how much you sold that week.",
+      "At the end of the tax year, so you can deduct the full expense immediately."
+    ],
+    "c": 0,
+    "t": 20,
+    "quote": "2. Time Your Purchases Strategically: Make major purchases or investments right after your highest income periods, not before them.",
+    "src": "Chapter 6, p. 63",
+    "topic": "Chapter 6: Financial Management for Micro-Entrepreneurs"
+  },
+  {
+    "q": "Under the \"50-30-20 Rule for Micro-Entrepreneurs,\" how should you divide your business profit?",
+    "a": [
+      "Fifty percent for supplier debt, thirty percent for paid advertising, and twenty percent for taxes.",
+      "Fifty percent for personal living needs, thirty percent for business reinvestment, and twenty percent for savings.",
+      "Fifty percent for emergency savings, thirty percent for personal use, and twenty percent for employee bonuses.",
+      "Fifty percent for new inventory, thirty percent for store rent, and twenty percent for personal living needs."
+    ],
+    "c": 1,
+    "t": 20,
+    "quote": "The 50-30-20 Rule for Micro-Entrepreneurs: This simple division of your profit provides balance between current needs and future growth: 50% for Personal Use... 30% for Business Reinvestment... 20% for Savings",
+    "src": "Chapter 6, p. 64",
+    "topic": "Chapter 6: Financial Management for Micro-Entrepreneurs"
+  },
+  {
+    "q": "When reinvesting profits back into your business, what should you invest in first to get the quickest return?",
+    "a": [
+      "Hiring an outside bookkeeper to audit your weekly sales and expense records.",
+      "Purchasing business insurance to protect your shop against property damage.",
+      "Buying tools or equipment that save you time or improve your quality.",
+      "Building a formal website so customers in distant cities can find your shop."
+    ],
+    "c": 2,
+    "t": 20,
+    "quote": "Reinvestment Priorities: Where to Put Your Business Money First: When reinvesting in your business, focus on these priorities in order: 1. Tools and Equipment That Save Time or Improve Quality: Investments that make your work faster or better usually provide the quickest return.",
+    "src": "Chapter 6, p. 65",
+    "topic": "Chapter 6: Financial Management for Micro-Entrepreneurs"
+  },
+  {
+    "q": "In what situation is taking a small microfinance loan helpful rather than dangerous?",
+    "a": [
+      "When you need extra cash to cover regular weekly operating expenses during a slow sales month.",
+      "When you want startup capital to launch and test an unproven new business idea for the first time.",
+      "When you can use the new loan to pay off several older business debts that are due this month.",
+      "When you are buying essential equipment that will quickly generate enough extra income to repay the loan."
+    ],
+    "c": 3,
+    "t": 20,
+    "quote": "Microfinance can be helpful for: Purchasing essential equipment that will quickly generate more income; Taking advantage of bulk purchase discounts on inventory; Bridging predictable cash flow gaps (when repayment source is certain); Expanding a proven business model with demonstrated profitability. Avoid borrowing for: Covering regular operating expenses; Unproven business ideas; Personal consumption; Paying off other debts.",
+    "src": "Chapter 6, pp. 67–68",
+    "topic": "Chapter 6: Financial Management for Micro-Entrepreneurs"
+  },
+  {
+    "q": "What are the four steps of creating a simple Business Emergency Plan before a crisis happens?",
+    "a": [
+      "Cut all variable costs, freeze inventory orders, ask suppliers for credit extensions, and lower retail prices.",
+      "Identify your biggest risks, build financial reserves, develop backup systems, and create customer communication plans.",
+      "Purchase commercial property insurance, secure a bank credit line, move sales online, and sign annual supplier contracts.",
+      "Double your retail profit margins, stockpile six months of materials, lease a backup warehouse, and hire temporary staff."
+    ],
+    "c": 1,
+    "t": 20,
+    "quote": "Create a Simple Business Emergency Plan: 1. Identify Your Biggest Risks... 2. Build Financial Reserves... 3. Develop Backup Systems... 4. Create Customer Communication Plans",
+    "src": "Chapter 6, pp. 68–69",
+    "topic": "Chapter 6: Financial Management for Micro-Entrepreneurs"
+  },
+  {
+    "q": "When you face the Financial Red Flag of \"Consistently Missed Financial Goals,\" what is the recommended solution?",
+    "a": [
+      "Take out a short-term microloan to launch an aggressive newspaper advertising campaign.",
+      "Cut your prices by twenty percent across all products to bring in more bargain shoppers.",
+      "Add three or four new product lines immediately to see if a different item sells better.",
+      "Scale back to your most profitable products or services and rebuild from a stronger foundation."
+    ],
+    "c": 3,
+    "t": 20,
+    "quote": "5. Consistently Missed Financial Goals: When you repeatedly fall short of basic financial targets, your business strategy needs reassessment. Solution: Scale back to your most profitable products/services and rebuild from a stronger foundation.",
+    "src": "Chapter 6, p. 70",
+    "topic": "Chapter 6: Financial Management for Micro-Entrepreneurs"
+  }
+]

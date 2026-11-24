@@ -1,197 +1,212 @@
 [
   {
-    "q": "Fatima's textile sales drop every rainy season, so she starts making waterproof bags. Which strategy is she using?",
+    "q": "What is an effective resilience strategy for overcoming Challenge 1 (\"Inconsistent Cash Flow\" across seasons)?",
     "a": [
-      "Cutting costs during a slow season",
-      "Selling something that peaks when sales dip",
-      "Offering subscriptions to smooth her income",
-      "Building a reserve during strong months"
-    ],
-    "c": 1,
-    "t": 20,
-    "quote": "Develop complementary products or services that sell when your main offerings slow down. Fatima developed waterproof bags that sell especially well during the rainy season, balancing her annual cash flow.",
-    "src": "Chapter 8, p. 91"
-  },
-  {
-    "q": "Three new vendors open near Samuel's stall and undercut his prices. What does the chapter suggest he do?",
-    "a": [
-      "Match their prices to keep his regulars.",
-      "Lower his quality slightly to cut costs.",
-      "Move his stall to a less crowded spot.",
-      "Add extras like delivery and cooking tips."
-    ],
-    "c": 3,
-    "t": 20,
-    "quote": "Samuel in Kenya stopped competing on price. Instead, he began offering free delivery for regular customers and providing cooking suggestions with each purchase.",
-    "src": "Chapter 8, pp. 91–92"
-  },
-  {
-    "q": "Elena is worn out from cleaning, scheduling, and talking with customers. Which change follows the chapter's advice?",
-    "a": [
-      "Hand scheduling to a low-cost helper",
-      "Add new services to raise her income",
-      "Work longer days during busy weeks",
-      "Hire a manager to run the business"
+      "Develop complementary products or services that sell well when your main offerings slow down.",
+      "Offer thirty-day credit terms to all shoppers during slow months to encourage larger purchases.",
+      "Switch to lower-grade raw materials during the off-season so your profit margin per unit stays high.",
+      "Stockpile extra finished inventory during your slowest months so you do not have to work during busy months."
     ],
     "c": 0,
     "t": 20,
-    "quote": "Find low-cost help for time-consuming but simple activities. Elena hired her teenage nephew to handle customer scheduling.",
-    "src": "Chapter 8, p. 92"
+    "quote": "Challenge 1: Inconsistent Cash Flow... Resilience strategies: Build a cash reserve during strong periods to cover at least one month of expenses; Develop complementary products or services that sell when your main offerings slow down; Create advance purchase or subscription options to smooth income",
+    "src": "Chapter 8, p. 91",
+    "topic": "Chapter 8: Overcoming Challenges & Regulations"
   },
   {
-    "q": "Carlos worries that his food stall doesn't meet all the rules. What approach does the chapter recommend?",
+    "q": "When new competitors appear nearby and try to undercut your prices (Challenge 2), what is the recommended resilience strategy?",
     "a": [
-      "Avoid inspectors until he is fully registered.",
-      "Pay for full registration right away.",
-      "Ask a health inspector for advice.",
-      "Move to a market with fewer rules."
+      "Match the competitors' lower prices immediately and cut your own personal pay until they leave the market.",
+      "Focus on quality, service, personalization, and unique elements beyond what competitors can easily copy.",
+      "Replace your original product line with the exact same low-cost items that the new competitors are selling.",
+      "Ask your wholesale suppliers to stop selling raw materials to the new vendors entering your neighborhood."
+    ],
+    "c": 1,
+    "t": 20,
+    "quote": "Challenge 2: Competition and Price Pressure... Resilience strategies: Focus on quality and service beyond what competitors can easily copy; Build deeper customer relationships through personalization; Add unique elements to your products or services",
+    "src": "Chapter 8, p. 91",
+    "topic": "Chapter 8: Overcoming Challenges & Regulations"
+  },
+  {
+    "q": "If you are exhausted from handling every aspect of your business alone (Challenge 3: Limited Time and Energy), which resilience strategy should you apply?",
+    "a": [
+      "Close your shop three days a week and raise your prices by half to make up for the shorter hours.",
+      "Take out a bank loan to hire a full-time store manager so you can step away from daily production.",
+      "Prioritize your most profitable activities, create simple routines, and find low-cost help for simple, time-consuming tasks.",
+      "Pause all financial record-keeping and quality checks so you can spend every working hour serving buyers."
     ],
     "c": 2,
     "t": 20,
-    "quote": "He built a relationship with a local health inspector, asking for advice rather than avoiding contact.",
-    "src": "Chapter 8, p. 94"
+    "quote": "Challenge 3: Limited Time and Energy... Resilience strategies: Identify your most profitable activities and prioritize them; Create simple systems and routines for repetitive tasks; Find low-cost help for time-consuming but simple activities; Set clear boundaries between business and personal time; Simplify your offerings to focus on what works best",
+    "src": "Chapter 8, p. 92",
+    "topic": "Chapter 8: Overcoming Challenges & Regulations"
   },
   {
-    "q": "Ahmed does carpentry for homeowners, small shops, a hotel, and government offices. Which kind of diversification is this?",
+    "q": "How can a small business overcome Challenge 4 (\"Limited Access to Resources\" and high costs for small-quantity supplies)?",
     "a": [
-      "Product",
-      "Location",
-      "Seasonal",
-      "Customer"
+      "Switch to a brokerage business model that never requires using physical tools or raw materials.",
+      "Borrow three months of working capital from a commercial bank at the start of every quarter.",
+      "Require every customer to purchase and bring their own raw materials before you begin work.",
+      "Form purchasing groups with similar businesses to buy in bulk, develop multiple suppliers, and share or adapt equipment creatively."
     ],
     "c": 3,
     "t": 20,
-    "quote": "Customer diversification: Develop multiple customer segments to avoid dependence on any single group. When economic conditions affected one customer segment, others sustained his business.",
-    "src": "Chapter 8, p. 95"
+    "quote": "Challenge 4: Limited Access to Resources... Resilience strategies: Form purchasing groups with similar businesses to buy in larger quantities; Develop relationships with multiple suppliers for essential materials; Investigate shared equipment arrangements with complementary businesses; Adapt existing tools creatively rather than purchasing specialized equipment",
+    "src": "Chapter 8, pp. 92–93",
+    "topic": "Chapter 8: Overcoming Challenges & Regulations"
   },
   {
-    "q": "Priya sells at a village stall, through city shops, at a tourist market, and on WhatsApp. What does this mainly protect her from?",
+    "q": "How do entrepreneurs who proactively address the five common business challenges compare to those who react only when problems become severe?",
     "a": [
-      "Losing income when one sales spot has problems",
-      "Competitors copying her best-selling products",
-      "Running short of materials in busy months",
-      "Paying higher taxes as her sales grow"
+      "They are three times more likely to build sustainable businesses.",
+      "They recover from seasonal sales drops in half the usual time.",
+      "They save forty percent more cash in their emergency reserves each year.",
+      "They experience fifty percent fewer supplier and inventory delays."
     ],
     "c": 0,
     "t": 20,
-    "quote": "When one location experienced problems (like weather affecting the market), other channels maintained her income.",
-    "src": "Chapter 8, p. 95"
+    "quote": "Research by the World Bank shows that entrepreneurs who proactively address these five common challenges are three times more likely to build sustainable businesses than those who react only when problems become severe.",
+    "src": "Chapter 8, p. 94",
+    "topic": "Chapter 8: Overcoming Challenges & Regulations"
   },
   {
-    "q": "How should a small business think about formalization?",
+    "q": "Which approach is an example of Customer Diversification that protects a business when one group of buyers slows down?",
     "a": [
-      "As a yes-or-no choice made once at the start",
-      "As a step required before making any sales",
-      "As a series of levels to climb as it grows",
-      "As a task only for businesses with employees"
-    ],
-    "c": 2,
-    "t": 20,
-    "quote": "Rather than seeing formalization as a yes/no decision, view it as a spectrum with multiple levels.",
-    "src": "Chapter 8, p. 96"
-  },
-  {
-    "q": "A tailor joins the local market association and pays the standard stall fee. Which formalization level is this?",
-    "a": [
-      "Basic safety and community standards",
-      "Local recognition",
-      "Partial formalization",
-      "Full formalization"
-    ],
-    "c": 1,
-    "t": 20,
-    "quote": "Level 2, Local Recognition: A tailor registering with the local market association and paying standard fees for their stall.",
-    "src": "Chapter 8, p. 96"
-  },
-  {
-    "q": "Which of these is a benefit of formalizing a business?",
-    "a": [
-      "Lower overall tax payments",
-      "Less record-keeping each month",
-      "Fewer rules to follow",
-      "The chance to serve larger clients"
-    ],
-    "c": 3,
-    "t": 20,
-    "quote": "Benefits of increased formalization include the Ability to serve larger customers who require documentation.",
-    "src": "Chapter 8, p. 97"
-  },
-  {
-    "q": "Elena's cleaning service has five employees, and formalizing worries her because of the cost. What did she do?",
-    "a": [
-      "Registered everything at once to avoid penalties",
-      "Stayed informal until the costs came down",
-      "Registered the business, then workers one at a time",
-      "Registered her workers first, then the business"
-    ],
-    "c": 2,
-    "t": 20,
-    "quote": "She formalized gradually, first registering the business while learning about labor requirements, then formally registering employees one by one as revenue from new corporate clients increased.",
-    "src": "Chapter 8, p. 98"
-  },
-  {
-    "q": "A home food producer can't afford formal certification yet. What should she focus on first?",
-    "a": [
-      "Saving until she can pay for certification",
-      "Following real safety practices and writing them down",
-      "Waiting until an inspector visits her kitchen",
-      "Getting the paperwork in order before anything else"
-    ],
-    "c": 1,
-    "t": 20,
-    "quote": "Focus first on actual safety practices, not just compliance paperwork. Document your safety procedures, even in simple form.",
-    "src": "Chapter 8, p. 100"
-  },
-  {
-    "q": "A furniture maker runs his workshop from home. How can he avoid trouble with neighbors?",
-    "a": [
-      "Keep set hours and control the dust.",
-      "Move into a rented shop right away.",
-      "Work late when neighbors are away.",
-      "Register as a formal business first."
+      "Serving both individual buyers and business clients, or mixing high-volume and high-margin segments.",
+      "Rotating your special promotions each week so every neighborhood group gets a turn to buy at a discount.",
+      "Requiring half of your buyers to pay in cash while allowing long-term buyers to use monthly billing.",
+      "Replacing low-spending buyers with larger corporate clients as your product quality and reputation grow."
     ],
     "c": 0,
     "t": 20,
-    "quote": "The furniture maker maintained strict working hours and dust control to accommodate neighbors.",
-    "src": "Chapter 8, p. 101"
+    "quote": "2. Customer Diversification: Develop multiple customer segments to avoid dependence on any single group: Individual consumers and businesses; Local customers and visitors/tourists; High-volume, low-margin and low-volume, high-margin customers... When economic conditions affected one customer segment, others sustained his business.",
+    "src": "Chapter 8, p. 95",
+    "topic": "Chapter 8: Overcoming Challenges & Regulations"
   },
   {
-    "q": "An inspector visits Maria's production space, which isn't fully up to standard yet. What's her best approach?",
+    "q": "How does \"Location Diversification\" help protect a micro-business from problems at a single sales spot?",
     "a": [
-      "Say it already meets every requirement.",
-      "Close until the space fully complies.",
-      "Ask a friend to speak for her instead.",
-      "Show a written plan for gradual fixes."
-    ],
-    "c": 3,
-    "t": 20,
-    "quote": "Progressive compliance: She showed him her written plan for gradually improving the facility. He allowed her to continue operating while implementing improvements on an agreed timeline.",
-    "src": "Chapter 8, p. 102"
-  },
-  {
-    "q": "Street vendors want set vending areas and simpler permits from the city. What's most likely to work?",
-    "a": [
-      "Each vendor applies for a permit alone",
-      "The vendors form an association together",
-      "The vendors hire a lawyer to fight the city",
-      "Each vendor moves to a less-watched area"
-    ],
-    "c": 1,
-    "t": 20,
-    "quote": "Street vendors in a Colombian city formed an association that successfully negotiated with municipal authorities for designated vending areas and simplified permit processes that individual vendors couldn't have achieved alone.",
-    "src": "Chapter 8, pp. 102–103"
-  },
-  {
-    "q": "Jasmine's skincare sales are strong some weeks and almost zero in others. What did she do?",
-    "a": [
-      "Cut her prices to draw steady buyers",
-      "Took a loan to cover the slow weeks",
-      "Created monthly subscription packages",
-      "Stopped selling individual products"
+      "Moving your main workshop closer to your wholesale suppliers cuts your weekly transport expenses in half.",
+      "Renting a stall in the wealthiest neighborhood in town allows you to charge higher prices for the same goods.",
+      "Selling through multiple channels—such as different physical locations, mobile services, online, or intermediaries—maintains income if one channel has problems.",
+      "Dividing your raw material inventory across two separate storage rooms protects your stock against weather damage."
     ],
     "c": 2,
     "t": 20,
-    "quote": "She analyzed her sales patterns and created a subscription model where customers received monthly product packages. This created reliable base income.",
-    "src": "Chapter 8, p. 103"
+    "quote": "3. Location Diversification: Expand where and how you sell to reach different customer groups: Different physical locations; Online and offline channels; Direct sales and through intermediaries; Fixed locations and mobile services... When one location experienced problems (like weather affecting the market), other channels maintained her income.",
+    "src": "Chapter 8, p. 95",
+    "topic": "Chapter 8: Overcoming Challenges & Regulations"
+  },
+  {
+    "q": "On the four-level Formalization Spectrum, what distinguishes Level 2 (\"Local Recognition\") from Level 3 (\"Partial Formalization\")?",
+    "a": [
+      "Level 2 requires annual corporate tax audits, while Level 3 requires national import and export licenses.",
+      "Level 2 involves basic local permits or market association registration, while Level 3 adds basic tax registration, a business bank account, and written agreements.",
+      "Level 2 includes opening a business bank account and formal accounting, while Level 3 adds full employee benefits and corporate licensing.",
+      "Level 2 applies only to home-based service providers, while Level 3 applies only to retail shops with a permanent public storefront."
+    ],
+    "c": 1,
+    "t": 20,
+    "quote": "Level 2: Local Recognition: Obtaining basic local permits where available; Registration with neighborhood associations; Arrangements with market organizers or property owners; Basic record-keeping of transactions... Level 3: Partial Formalization: Basic tax registration where practical; Opening a business bank account; Written agreements with key suppliers or customers; Simple accounting systems",
+    "src": "Chapter 8, p. 96",
+    "topic": "Chapter 8: Overcoming Challenges & Regulations"
+  },
+  {
+    "q": "On the Formalization Spectrum, how should a small business handle formal registration and rules?",
+    "a": [
+      "Complete full corporate registration and licensing before selling to your very first customer.",
+      "Remain completely informal forever so you never have to pay registration fees or taxes.",
+      "Match your level of formalization to your current size and move up gradually as the business grows.",
+      "Complete health, tax, and labor licensing together at the end of your first full year of steady sales."
+    ],
+    "c": 2,
+    "t": 20,
+    "quote": "Research by the International Labour Organization shows that businesses benefit most when they match their level of formalization to their current size and capacity, moving gradually up the spectrum as they grow.",
+    "src": "Chapter 8, p. 97",
+    "topic": "Chapter 8: Overcoming Challenges & Regulations"
+  },
+  {
+    "q": "When weighing the benefits and costs of moving up the Formalization Spectrum, which of the following is a key benefit of increased formalization?",
+    "a": [
+      "Lower monthly overhead costs and less time spent on administrative paperwork and record-keeping.",
+      "Access to banking and credit, ability to serve larger clients requiring documentation, and protection from arbitrary penalties.",
+      "Greater flexibility to change your business structure or close temporarily during slow seasonal periods without fees.",
+      "Automatic exemption from municipal market stall fees and priority access to wholesale supplier discounts."
+    ],
+    "c": 1,
+    "t": 20,
+    "quote": "Benefits of Increased Formalization: Access to banking services and potentially credit; Ability to serve larger customers who require documentation; Protection from arbitrary enforcement or penalties; Possibility of government support programs; Clearer path to growth and expansion",
+    "src": "Chapter 8, pp. 97–98",
+    "topic": "Chapter 8: Overcoming Challenges & Regulations"
+  },
+  {
+    "q": "What is the practical, recommended approach to \"Business Registration\" when your micro-business is ready to take its first formal step?",
+    "a": [
+      "Wait until your business has at least five full-time employees before applying for any local permit or license.",
+      "Register your business under a relative's existing company name so you do not have to file separate paperwork.",
+      "Pay an outside legal consultant to complete full national corporate registration before you open a bank account.",
+      "Research simplified small-business options, ask other owners or associations for advice, and start with the lowest registration level that meets your immediate needs."
+    ],
+    "c": 3,
+    "t": 20,
+    "quote": "Business Registration — Practical approach: Research the simplified or small business registration options in your area; Ask other business owners about their experience with the process; Consider whether a business association can assist with registration; Start with the lowest level of registration that meets your immediate needs; Keep copies of all registration documents in a safe place",
+    "src": "Chapter 8, pp. 99–100",
+    "topic": "Chapter 8: Overcoming Challenges & Regulations"
+  },
+  {
+    "q": "What regulatory approach builds stronger businesses and leads to fewer enforcement problems?",
+    "a": [
+      "Completing all government compliance paperwork and licensing forms before investing in workplace equipment.",
+      "Hiring a certified compliance specialist to review your written records before every annual inspection.",
+      "Focusing first on the actual substance of regulations—like real safety, fair treatment, and quality—rather than just paperwork compliance.",
+      "Keeping your business below the minimum employee threshold so formal labor and safety rules do not apply to your shop."
+    ],
+    "c": 2,
+    "t": 20,
+    "quote": "Focus first on actual safety practices, not just compliance paperwork... Research from the World Economic Forum indicates that entrepreneurs who focus first on the substance of regulations (safety, fair treatment, quality) rather than just paperwork compliance build stronger businesses and face fewer enforcement problems.",
+    "src": "Chapter 8, pp. 100–101",
+    "topic": "Chapter 8: Overcoming Challenges & Regulations"
+  },
+  {
+    "q": "Under Principle 1 of working with authorities (\"Seek Information Before Problems Arise\"), how should you approach a regulatory office?",
+    "a": [
+      "Visit during less busy times with specific questions and frame your inquiry as a sincere effort to comply appropriately.",
+      "Ask a respected community leader to visit the office on your behalf so you do not have to give your business name.",
+      "Request a formal inspection of your workshop on opening day so officials can list every rule you need to follow.",
+      "Wait until you have saved enough money for full Level 4 compliance before asking officials any questions."
+    ],
+    "c": 0,
+    "t": 20,
+    "quote": "1. Seek Information Before Problems Arise: Proactively learning about requirements is better than waiting for enforcement. Approach: Visit relevant offices during less busy times with specific questions. Frame your inquiries as an effort to comply appropriately.",
+    "src": "Chapter 8, p. 101",
+    "topic": "Chapter 8: Overcoming Challenges & Regulations"
+  },
+  {
+    "q": "When working with regulatory officials, what is the recommended approach for practicing \"Progressive Compliance\"?",
+    "a": [
+      "Completing the easiest and cheapest paperwork requirements first before addressing facility safety rules.",
+      "Documenting the good-faith steps you are taking to improve and sharing your written plan with authorities.",
+      "Paying your annual registration fees in small monthly installments as your seasonal business revenue grows.",
+      "Asking the town council to grant your shop a temporary two-year exemption from new health and safety rules."
+    ],
+    "c": 1,
+    "t": 20,
+    "quote": "3. Focus on Progressive Compliance: Show good faith efforts toward improvement rather than claiming immediate perfect compliance. Approach: Document the steps you’re taking to improve compliance and share your plan when interacting with authorities.",
+    "src": "Chapter 8, p. 102",
+    "topic": "Chapter 8: Overcoming Challenges & Regulations"
+  },
+  {
+    "q": "Why does Principle 4 (\"Build Relationships Beyond Enforcement\") recommend engaging with regulatory officials at community events or business workshops?",
+    "a": [
+      "Because officials often share advance warnings about upcoming surprise inspection weeks with vendors they know personally.",
+      "Because attending public workshops qualifies your business for reduced annual registration and permit fees.",
+      "Because local officials can co-sign commercial bank loan applications for small businesses in their district.",
+      "Because many officials want to support economic development alongside their regulatory role, and positive relationships help when you later need guidance."
+    ],
+    "c": 3,
+    "t": 20,
+    "quote": "4. Build Relationships Beyond Enforcement: Recognize that many officials want to support economic development alongside their regulatory role. Approach: Engage with authorities at community events or business workshops, not just during inspections.",
+    "src": "Chapter 8, p. 102",
+    "topic": "Chapter 8: Overcoming Challenges & Regulations"
   }
 ]

@@ -564,10 +564,32 @@ def list_quizzes(owner="_shared"):
     items = []
     labels = {
         "quiz.json": "Current Default Quiz",
+        "quiz_chapter1.json": "Chapter 1: Problem-First Entrepreneurship",
+        "quiz_chapter2.json": "Chapter 2: Finding Real Problems to Solve",
+        "quiz_chapter3.json": "Chapter 3: Business Models for Bootstrapped Ventures",
+        "quiz_chapter4.json": "Chapter 4: Lean Startup in a No-Capital Environment",
+        "quiz_chapter5.json": "Chapter 5: Marketing Without Money",
+        "quiz_chapter6.json": "Chapter 6: Financial Management for Micro-Entrepreneurs",
+        "quiz_chapter7.json": "Chapter 7: Scaling Without Investment",
         "quiz_chapter8.json": "Chapter 8: Overcoming Challenges & Regulations",
+        "quiz_chapter9.json": "Chapter 9: Ethical Entrepreneurship & Social Impact",
         "quiz_chapter13.json": "Chapter 13: Sharing Your Business Story & Next Steps",
+        "quiz_entr101_master150.json": "ENTR 101: Comprehensive Master Review (All 10 Chapters)",
         "quiz_fun_facts.json": "Fun Facts Trivia",
         "quiz_ultimate_silly_trivia.json": "Ultimate Silly Trivia",
+    }
+    builtin_folders = {
+        "quiz_chapter1.json": "ENTR 101 Quizzes",
+        "quiz_chapter2.json": "ENTR 101 Quizzes",
+        "quiz_chapter3.json": "ENTR 101 Quizzes",
+        "quiz_chapter4.json": "ENTR 101 Quizzes",
+        "quiz_chapter5.json": "ENTR 101 Quizzes",
+        "quiz_chapter6.json": "ENTR 101 Quizzes",
+        "quiz_chapter7.json": "ENTR 101 Quizzes",
+        "quiz_chapter8.json": "ENTR 101 Quizzes",
+        "quiz_chapter9.json": "ENTR 101 Quizzes",
+        "quiz_chapter13.json": "ENTR 101 Quizzes",
+        "quiz_entr101_master150.json": "ENTR 101 Quizzes",
     }
     hidden = K.builtin_deleted()
     files = sorted(f for f in os.listdir(ROOT)
@@ -580,34 +602,45 @@ def list_quizzes(owner="_shared"):
             if isinstance(data, dict):
                 q = data.get("questions", [])
                 title = data.get("title") or f[5:-5].replace("_", " ").title()
+                def_folder = data.get("folder") or builtin_folders.get(f) or "Built-in"
             else:
                 q = data
                 title = labels.get(f) or f[5:-5].replace("_", " ").title()
+                def_folder = builtin_folders.get(f) or "Built-in"
             if isinstance(q, list) and q:
                 es = K.estimate_duration_sec(q)
-                items.append({"file": f, "title": "%s (%d Qs)" % (title, len(q)), "count": len(q), "folder": "Built-in", "tags": [], "builtin": True,
+                items.append({"file": f, "title": "%s (%d Qs)" % (title, len(q)), "count": len(q), "folder": def_folder, "tags": [], "builtin": True,
                               "case": any(isinstance(x, dict) and x.get("type") in CASE_TYPES for x in q),
                               "est_sec": es, "est_min": max(1, int(round(es / 60.0)))})
         except Exception:
             pass
     owners = ["_shared"] + ([owner] if owner != "_shared" else [])
     items += K.uq_list(owners)
-    dc_map, ds_map = {}, {}
+    dc_map, ds_map, df_map = {}, {}, {}
     for o in owners:
         dc_map.update(K.deck_courses_map(o))
         ds_map.update(K.deck_settings_map(o))
+        df_map.update(K.deck_folders_map(o))
     for it in items:
         fid = it.get("file")
+        if fid:
+            it["practice_key"] = K.make_practice_key(fid)
         if fid in dc_map:
             it["courses"] = dc_map[fid]
         elif "courses" not in it:
             it["courses"] = []
         if fid in ds_map:
             it["settings"] = ds_map[fid]
+        if fid in df_map and df_map[fid]:
+            it["folder"] = df_map[fid]
     ord_list = K.deck_order_list(owner) or (K.deck_order_list("_shared") if owner != "_shared" else [])
     if ord_list:
         pos = {f: i for i, f in enumerate(ord_list)}
         items.sort(key=lambda x: pos.get(x.get("file"), len(ord_list) + 1000))
+    else:
+        def _nat_key(it):
+            return [int(t) if t.isdigit() else t.lower() for t in re.split(r"(\d+)", str(it.get("file") or ""))]
+        items.sort(key=_nat_key)
     return items
 
 
@@ -3179,14 +3212,47 @@ class H(BaseHTTPRequestHandler):
             self.send(K.store.status())
             return True
         if path == "/api/quizzes":
+            owners_f = ["_shared"] + ([owner] if owner != "_shared" else [])
+            c_folders = []
+            for o_f in owners_f:
+                for fn in K.custom_folders_list(o_f):
+                    if fn not in c_folders:
+                        c_folders.append(fn)
             self.send({
                 "quizzes": list_quizzes(owner),
+                "folders": c_folders,
                 "host_settings": K.host_settings_get(owner) or (K.host_settings_get("_shared") if owner != "_shared" else {}),
             })
             return True
         if path == "/api/quiz_data":
-            qs_ = [dict((k, v) for k, v in x.items() if k != "note") for x in load_quiz(q.get("file") or "quiz.json")]
-            self.send({"file": q.get("file"), "questions": qs_})
+            k_in = str(q.get("k") or "").strip()
+            file_in = str(q.get("file") or "").strip()
+            if k_in:
+                target_file = K.verify_practice_key(k_in)
+                if not target_file:
+                    self.send({"error": "Invalid or expired practice link."}, 403)
+                    return True
+            elif file_in and not host_lock_required() or authed(tok, q.get("pw", "")):
+                target_file = file_in or "quiz.json"
+            elif file_in:
+                target_file = file_in
+            else:
+                self.send({"error": "Use a practice link shared by your instructor."}, 403)
+                return True
+            meta = next((x for x in list_quizzes(owner) if x.get("file") == target_file), None)
+            if not meta and target_file.startswith("uq:"):
+                parts = target_file.split(":", 2)
+                if len(parts) >= 2:
+                    meta = next((x for x in list_quizzes(parts[1]) if x.get("file") == target_file), None)
+            raw_qs = load_quiz(target_file)
+            qs_ = [dict((k, v) for k, v in x.items() if k != "note") for x in raw_qs]
+            title_ = re.sub(r"\s*\(\d+\s*(?:Qs|slides?)\)\s*$", "", (meta or {}).get("title") or "Practice Quiz", flags=re.I)
+            self.send({
+                "file": target_file,
+                "title": title_,
+                "count": len(qs_),
+                "questions": qs_,
+            })
             return True
         if path == "/api/hw_info":
             d = K.hw_get(q.get("id", ""))
@@ -3341,7 +3407,7 @@ class H(BaseHTTPRequestHandler):
                 )
                 self.send({"error": err}, 400) if err else self.send(res)
             return True
-        gated = ("/api/upload_quiz", "/api/delete_quiz", "/api/dup_quiz", "/api/deck_courses", "/api/deck_order", "/api/deck_settings", "/api/host_settings", "/api/history_clear", "/api/ai_quiz",
+        gated = ("/api/upload_quiz", "/api/delete_quiz", "/api/dup_quiz", "/api/deck_courses", "/api/deck_folder", "/api/folders", "/api/deck_order", "/api/deck_settings", "/api/host_settings", "/api/history_clear", "/api/ai_quiz",
                  "/api/import_sheet", "/api/hw_create", "/api/upload_img")
         if path not in gated:
             return False
@@ -3369,6 +3435,23 @@ class H(BaseHTTPRequestHandler):
             else:
                 saved = K.deck_courses_set(owner, f, body.get("courses") if isinstance(body.get("courses"), list) else [])
                 self.send({"ok": True, "file": f, "courses": saved, "quizzes": list_quizzes(owner)})
+        elif path == "/api/deck_folder":
+            f = str(body.get("file") or "").strip()
+            if not f:
+                self.send({"error": "Missing deck file"}, 400)
+            else:
+                saved = K.deck_folder_set(owner, f, body.get("folder", ""))
+                self.send({"ok": True, "file": f, "folder": saved, "folders": K.custom_folders_list(owner), "quizzes": list_quizzes(owner)})
+        elif path == "/api/folders":
+            act = str(body.get("action") or "add").strip().lower()
+            name = str(body.get("name") or "").strip()
+            if act == "delete":
+                saved = K.custom_folder_delete(owner, name)
+            elif act == "rename":
+                saved = K.custom_folder_rename(owner, body.get("old_name", ""), body.get("new_name", ""))
+            else:
+                saved = K.custom_folder_add(owner, name)
+            self.send({"ok": True, "folders": saved, "quizzes": list_quizzes(owner)})
         elif path == "/api/deck_order":
             order_in = body.get("order") if isinstance(body.get("order"), list) else []
             saved = K.deck_order_set(owner, order_in)

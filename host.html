@@ -1206,8 +1206,9 @@ Quote: Paris has been the capital since 987 CE."></textarea>
 
     <div class="studio-filter-bar">
      <input id="deckSearch" class="studio-search" type="text" placeholder="🔍 Filter library by title, folder, or #tag…" oninput="renderDeckCards()">
-     <div id="deckFolders" style="display:flex;gap:6px;flex-wrap:wrap"></div>
+     <div id="deckFolders" style="display:flex;gap:6px;flex-wrap:wrap;align-items:center"></div>
     </div>
+    <div id="folderManagerBar" style="display:none;margin-top:8px"></div>
 
     <div class="deck-grid" id="deckGrid"></div>
    </div>
@@ -2630,6 +2631,154 @@ function storeCustomQuizLocal(item){
 let editingQuizFile = '';
 let showAddCourseDecks = false;
 let openDeckCourseMenuFile = '';
+let openDeckFolderMenuFile = '';
+let showFolderManagerBar = false;
+
+function cleanFolderNameStr(val){
+ return String(val == null ? '' : val).replace(/\s+/g, ' ').trim().slice(0, 40);
+}
+function loadLocalCustomFolders(){
+ try{
+  const raw = JSON.parse(localStorage.getItem('brainrush_custom_folders') || '[]');
+  const out = [];
+  (Array.isArray(raw) ? raw : []).forEach(x => {
+   const fn = cleanFolderNameStr(x);
+   if(fn && !out.includes(fn)) out.push(fn);
+  });
+  return out;
+ }catch(e){ return []; }
+}
+function saveLocalCustomFolders(arr){
+ const out = [];
+ (Array.isArray(arr) ? arr : []).forEach(x => {
+  const fn = cleanFolderNameStr(x);
+  if(fn && !out.includes(fn)) out.push(fn);
+ });
+ try{ localStorage.setItem('brainrush_custom_folders', JSON.stringify(out)); }catch(e){}
+ return out;
+}
+function loadLocalDeckFolders(){
+ try{
+  const raw = JSON.parse(localStorage.getItem('brainrush_deck_folders') || '{}') || {};
+  return (raw && typeof raw === 'object') ? raw : {};
+ }catch(e){ return {}; }
+}
+function saveLocalDeckFolders(map){
+ try{ localStorage.setItem('brainrush_deck_folders', JSON.stringify(map || {})); }catch(e){}
+}
+function getAllKnownFolders(wantCase){
+ const set = new Set(loadLocalCustomFolders());
+ (quizList || []).forEach(q => {
+  if(wantCase !== undefined && (!!q.case !== !!wantCase)) return;
+  const f = deckFolderOf(q, !!q.case);
+  if(f) set.add(f);
+ });
+ return Array.from(set).sort((a,b)=>(a==='Built-in')-(b==='Built-in') || a.localeCompare(b));
+}
+function setDeckFolderAssignment(file, folderName, skipServer=false){
+ const f = String(file || '').trim();
+ if(!f) return '';
+ const cleaned = cleanFolderNameStr(folderName);
+ const locMap = loadLocalDeckFolders();
+ if(cleaned) locMap[f] = cleaned;
+ else delete locMap[f];
+ saveLocalDeckFolders(locMap);
+ if(cleaned && !['Built-in','My Quizzes','Case Studies','Saved on this device'].includes(cleaned)){
+  const cf = loadLocalCustomFolders();
+  if(!cf.includes(cleaned)){ cf.push(cleaned); saveLocalCustomFolders(cf); }
+ }
+ const qObj = quizList.find(x => x.file === f);
+ if(qObj) qObj.folder = cleaned || (qObj.builtin ? 'Built-in' : (qObj.case ? 'Case Studies' : 'My Quizzes'));
+ try{
+  const locQ = getSavedCustomQuizzes();
+  const idx = locQ.findIndex(x => x.file === f);
+  if(idx >= 0){ locQ[idx].folder = cleaned; localStorage.setItem('brainrush_custom_quizzes', JSON.stringify(locQ)); }
+ }catch(e){}
+ if(!skipServer && !f.startsWith('local_')){
+  const tok = localStorage.getItem('brainrush_token') || localStorage.getItem('brainrush_host_tok') || '';
+  const pw = sessionStorage.getItem('brainrush_pw') || '';
+  fetch('/api/deck_folder', {method:'POST', body:JSON.stringify({file: f, folder: cleaned, token: tok, password: pw})}).catch(()=>{});
+ }
+ openDeckFolderMenuFile = '';
+ const sel = document.getElementById('quizSel');
+ renderQuizSelect(sel ? sel.value : '');
+ return cleaned;
+}
+function toggleDeckFolderPicker(file){
+ openDeckCourseMenuFile = '';
+ openDeckFolderMenuFile = (openDeckFolderMenuFile === file) ? '' : String(file || '');
+ renderDeckGrid();
+}
+function toggleFolderManagerBar(forceState){
+ showFolderManagerBar = (typeof forceState === 'boolean') ? forceState : !showFolderManagerBar;
+ renderDeckGrid();
+ if(showFolderManagerBar){
+  setTimeout(() => { const inp = document.getElementById('newFolderInp'); if(inp) inp.focus(); }, 30);
+ }
+}
+function createNewQuizFolder(nameOpt){
+ const inp = document.getElementById('newFolderInp');
+ const fn = cleanFolderNameStr(nameOpt !== undefined ? nameOpt : (inp ? inp.value : ''));
+ if(!fn) return;
+ const cur = loadLocalCustomFolders();
+ if(!cur.includes(fn)){
+  cur.push(fn);
+  saveLocalCustomFolders(cur);
+ }
+ const tok = localStorage.getItem('brainrush_token') || localStorage.getItem('brainrush_host_tok') || '';
+ const pw = sessionStorage.getItem('brainrush_pw') || '';
+ fetch('/api/folders', {method:'POST', body:JSON.stringify({action:'add', name: fn, token: tok, password: pw})}).catch(()=>{});
+ if(inp) inp.value = '';
+ deckFolderFilter = fn;
+ renderDeckGrid();
+}
+function promptNewFolderForDeck(file){
+ const fn = cleanFolderNameStr(window.prompt('📂 Enter new folder name:', ''));
+ if(!fn) return;
+ createNewQuizFolder(fn);
+ if(file) setDeckFolderAssignment(file, fn);
+}
+function renameQuizFolder(oldName){
+ const oldFn = cleanFolderNameStr(oldName);
+ if(!oldFn) return;
+ const newFn = cleanFolderNameStr(window.prompt(`✏️ Rename folder "${oldFn}" to:`, oldFn));
+ if(!newFn || newFn === oldFn) return;
+ const cur = loadLocalCustomFolders().map(x => x === oldFn ? newFn : x);
+ if(!cur.includes(newFn)) cur.push(newFn);
+ saveLocalCustomFolders(cur);
+ const locMap = loadLocalDeckFolders();
+ (quizList || []).forEach(q => {
+  if(deckFolderOf(q, !!q.case) === oldFn){
+   q.folder = newFn;
+   locMap[q.file] = newFn;
+  }
+ });
+ saveLocalDeckFolders(locMap);
+ const tok = localStorage.getItem('brainrush_token') || localStorage.getItem('brainrush_host_tok') || '';
+ const pw = sessionStorage.getItem('brainrush_pw') || '';
+ fetch('/api/folders', {method:'POST', body:JSON.stringify({action:'rename', old_name: oldFn, new_name: newFn, token: tok, password: pw})}).catch(()=>{});
+ if(deckFolderFilter === oldFn) deckFolderFilter = newFn;
+ const sel = document.getElementById('quizSel');
+ renderQuizSelect(sel ? sel.value : '');
+}
+function deleteQuizFolder(folderName){
+ const fn = cleanFolderNameStr(folderName);
+ if(!fn) return;
+ if(!window.confirm(`Remove folder "${fn}"? (All quizzes inside it will stay safe in your library.)`)) return;
+ saveLocalCustomFolders(loadLocalCustomFolders().filter(x => x !== fn));
+ const locMap = loadLocalDeckFolders();
+ Object.keys(locMap).forEach(k => { if(cleanFolderNameStr(locMap[k]) === fn) delete locMap[k]; });
+ saveLocalDeckFolders(locMap);
+ (quizList || []).forEach(q => {
+  if(q.folder === fn) q.folder = q.builtin ? 'Built-in' : (q.case ? 'Case Studies' : 'My Quizzes');
+ });
+ const tok = localStorage.getItem('brainrush_token') || localStorage.getItem('brainrush_host_tok') || '';
+ const pw = sessionStorage.getItem('brainrush_pw') || '';
+ fetch('/api/folders', {method:'POST', body:JSON.stringify({action:'delete', name: fn, token: tok, password: pw})}).catch(()=>{});
+ if(deckFolderFilter === fn) deckFolderFilter = 'ALL';
+ const sel = document.getElementById('quizSel');
+ renderQuizSelect(sel ? sel.value : '');
+}
 
 function cleanCourseIdList(arr){
  const out = [];
@@ -3016,6 +3165,7 @@ function mergeQuizLists(serverList){
  const delSet = new Set(getDeletedBuiltinsLocal());
  const locCourseMap = loadLocalDeckCourses();
  const locSettingsMap = loadLocalDeckSettingsMap();
+ const locFolderMap = loadLocalDeckFolders();
  const map = new Map();
  (serverList||[]).forEach(q=>{
   if(!delSet.has(q.file)){
@@ -3024,6 +3174,9 @@ function mergeQuizLists(serverList){
     locCourseMap[q.file] = serverCourses;
    }
    q.courses = Object.prototype.hasOwnProperty.call(locCourseMap, q.file) ? cleanCourseIdList(locCourseMap[q.file]) : serverCourses;
+   if(locFolderMap[q.file]){
+    q.folder = locFolderMap[q.file];
+   }
    if(q.settings && typeof q.settings === 'object' && Object.keys(q.settings).length && !Object.prototype.hasOwnProperty.call(locSettingsMap, q.file)){
     locSettingsMap[q.file] = q.settings;
    }
@@ -3037,6 +3190,7 @@ function mergeQuizLists(serverList){
   if(!delSet.has(q.file)){
    if(!map.has(q.file)){
     q.courses = Object.prototype.hasOwnProperty.call(locCourseMap, q.file) ? cleanCourseIdList(locCourseMap[q.file]) : cleanCourseIdList(q.courses || []);
+    if(locFolderMap[q.file]) q.folder = locFolderMap[q.file];
     if(locSettingsMap[q.file] && Object.keys(locSettingsMap[q.file]).length) q.settings = locSettingsMap[q.file];
     map.set(q.file, q);
    } else {
@@ -3131,11 +3285,43 @@ function renderDeckGrid(){
   }
  }
  if(!grid) return;
- const folders = [...new Set(pool.map(q => deckFolderOf(q, wantCase)))].sort((a,b)=>(a==='Built-in')-(b==='Built-in') || a.localeCompare(b));
+ const folderCounts = {};
+ pool.forEach(q => {
+  const fn = deckFolderOf(q, wantCase);
+  folderCounts[fn] = (folderCounts[fn] || 0) + 1;
+ });
+ const customFolders = loadLocalCustomFolders();
+ const folderSet = new Set(Object.keys(folderCounts).concat(customFolders));
+ const folders = Array.from(folderSet).sort((a,b)=>(a==='Built-in')-(b==='Built-in') || a.localeCompare(b));
  if(deckFolderFilter !== 'ALL' && !folders.includes(deckFolderFilter)) deckFolderFilter = 'ALL';
  if(fBox){
-  fBox.innerHTML = (folders.length > 1 ? [`<button type="button" class="f-chip${deckFolderFilter==='ALL'?' active':''}" data-f="ALL" onclick="setDeckFolder(this.dataset.f)">All (${pool.length})</button>`]
-   .concat(folders.map(f => `<button type="button" class="f-chip${deckFolderFilter===f?' active':''}" data-f="${esc(f)}" onclick="setDeckFolder(this.dataset.f)">${esc(f)}</button>`)) : []).join('');
+  const chips = [`<button type="button" class="f-chip${deckFolderFilter==='ALL'?' active':''}" data-f="ALL" onclick="setDeckFolder(this.dataset.f)">All (${pool.length})</button>`]
+   .concat(folders.map(f => `<button type="button" class="f-chip${deckFolderFilter===f?' active':''}" data-f="${esc(f)}" onclick="setDeckFolder(this.dataset.f)">📂 ${esc(f)} (${folderCounts[f] || 0})</button>`))
+   .concat([`<button type="button" class="f-chip" style="border-style:dashed;color:var(--gold);border-color:#ffdf5d66" onclick="toggleFolderManagerBar()" title="Create or manage quiz folders">${showFolderManagerBar ? '✕ Close Folders' : '➕ Folder'}</button>`]);
+  fBox.innerHTML = chips.join('');
+ }
+ const fmBar = document.getElementById('folderManagerBar');
+ if(fmBar){
+  if(showFolderManagerBar){
+   const isSystemF = ['ALL','Built-in','My Quizzes','Case Studies','Saved on this device'].includes(deckFolderFilter);
+   fmBar.style.display = 'block';
+   fmBar.innerHTML = `<div class="course-lib-bar" style="margin-top:4px;background:linear-gradient(135deg,#3b076455,#1e1b4b77);border-color:#c084fc66">
+    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:space-between">
+     <div style="display:flex;align-items:center;gap:6px;flex:1;min-width:220px">
+      <span style="font-weight:850;font-size:.84em;color:var(--gold);white-space:nowrap">📂 New Folder:</span>
+      <input id="newFolderInp" type="text" maxlength="40" placeholder="e.g. ENTR 101 Quizzes, Midterm Review…" style="flex:1;min-width:140px;margin:0;padding:6px 10px;border-radius:8px;border:1px solid var(--border-hi);background:#0e091cd9;color:#fff;font-size:.85em;font-weight:700" onkeydown="if(event.key==='Enter'){event.preventDefault();createNewQuizFolder();}">
+      <button type="button" class="btn-sm" style="margin:0;padding:6px 12px;font-size:.8em;background:#26890c;border-color:#7dff6b" onclick="createNewQuizFolder()">+ Create Folder</button>
+     </div>
+     <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+      ${!isSystemF ? `<button type="button" class="btn-sm" style="margin:0;padding:5px 10px;font-size:.78em" data-fn="${esc(deckFolderFilter)}" onclick="renameQuizFolder(this.dataset.fn)">✏️ Rename "${esc(deckFolderFilter)}"</button>
+      <button type="button" class="btn-sm" style="margin:0;padding:5px 10px;font-size:.78em;background:#e21b3c66;border-color:#fda4af66" data-fn="${esc(deckFolderFilter)}" onclick="deleteQuizFolder(this.dataset.fn)">🗑️ Delete Folder</button>` : `<span style="font-size:.76em;opacity:.78">Tip: Click <b>📂</b> on any quiz card below to move it into a folder!</span>`}
+     </div>
+    </div>
+   </div>`;
+  } else {
+   fmBar.style.display = 'none';
+   fmBar.innerHTML = '';
+  }
  }
  const qStr = ((document.getElementById('deckSearch') || {}).value || '').toLowerCase().trim();
  const shown = pool.filter(q => {
@@ -3146,15 +3332,18 @@ function renderDeckGrid(){
   return hay.includes(qStr);
  });
  if(!shown.length){
-  const emptyMsg = pool.length
-   ? 'No decks match your search filter.'
-   : (activeCid
-      ? `No ${wantCase ? 'case studies' : 'quizzes'} assigned to <b>${esc(formatCourseDisplayName(activeCid))}</b> yet — click <b>+ New / Edit</b> above to create one for this course${unlinkedPool.length ? ', or click <b>+ Assign</b> above to include one from your Main Library!' : '!'}`
-      : (wantCase ? 'No case studies yet — click <b>+ New / Edit</b> above!' : 'No quizzes yet — click <b>+ New / Edit</b> above!'));
+  const emptyMsg = (deckFolderFilter !== 'ALL' && !qStr)
+   ? `Folder <b>📂 ${esc(deckFolderFilter)}</b> is empty — switch to <b>All (${pool.length})</b> and click <b>📂</b> on any ${wantCase ? 'case study' : 'quiz'} card to move it into this folder!`
+   : (pool.length
+    ? 'No decks match your search filter.'
+    : (activeCid
+       ? `No ${wantCase ? 'case studies' : 'quizzes'} assigned to <b>${esc(formatCourseDisplayName(activeCid))}</b> yet — click <b>+ New / Edit</b> above to create one for this course${unlinkedPool.length ? ', or click <b>+ Assign</b> above to include one from your Main Library!' : '!'}`
+       : (wantCase ? 'No case studies yet — click <b>+ New / Edit</b> above!' : 'No quizzes yet — click <b>+ New / Edit</b> above!')));
   grid.innerHTML = `<div style="text-align:center;padding:24px 14px;opacity:.84;font-size:.92em;background:#ffffff08;border:1px dashed var(--border);border-radius:14px">${emptyMsg}</div>`;
   return;
  }
  const knownCourses = getAllKnownCoursesSafe();
+ const allFoldersForPicker = Array.from(new Set([wantCase ? 'Case Studies' : 'My Quizzes', 'Built-in'].concat(folders))).filter(Boolean);
  const canReorder = shown.length > 1;
  grid.innerHTML = shown.map((q, sIdx) => {
   const cleanTitle = (q.title || '').replace(/\s*\(\d+\s*(?:Qs|slides?)\)\s*$/i, '');
@@ -3172,6 +3361,7 @@ function renderDeckGrid(){
   const hasSavedSet = !!getDeckSavedSettings(q);
   const estMin = q.est_min || Math.max(1, Math.round(((q.count || 1) * (q.case ? 65 : 32)) / 60));
   const menuOpen = (openDeckCourseMenuFile === q.file) && knownCourses.length > 0;
+  const folderMenuOpen = (openDeckFolderMenuFile === q.file);
   const coursePopHtml = menuOpen ? `<div class="deck-course-pop" onclick="event.stopPropagation()">
    <span style="font-weight:850;color:#ffdf5d">🎓 Courses:</span>
    ${knownCourses.slice(0, 12).map(c => {
@@ -3182,18 +3372,28 @@ function renderDeckGrid(){
    }).join('')}
    <button type="button" class="btn-sm" style="margin:0 0 0 auto;padding:2px 7px;font-size:.9em;background:transparent" onclick="toggleDeckCoursePicker('')">✕</button>
   </div>` : '';
+  const folderPopHtml = folderMenuOpen ? `<div class="deck-course-pop" onclick="event.stopPropagation()">
+   <span style="font-weight:850;color:#ffdf5d">📂 Move to Folder:</span>
+   ${allFoldersForPicker.map(fn => {
+    const isCurF = (f === fn);
+    return `<button type="button" class="btn-sm" style="margin:0;padding:3px 9px;font-size:.92em;background:${isCurF?'#26890c':'#ffffff18'};border-color:${isCurF?'#7dff6b':'#ffffff30'}" data-f="${esc(q.file)}" data-fn="${esc(fn)}" onclick="setDeckFolderAssignment(this.dataset.f, this.dataset.fn)">${isCurF ? '✓ ' : '📂 '}${esc(fn)}</button>`;
+   }).join('')}
+   <button type="button" class="btn-sm" style="margin:0;padding:3px 9px;font-size:.92em;background:#7c3aed;border-color:#c4b5fd" data-f="${esc(q.file)}" onclick="promptNewFolderForDeck(this.dataset.f)">➕ New Folder…</button>
+   <button type="button" class="btn-sm" style="margin:0 0 0 auto;padding:2px 7px;font-size:.9em;background:transparent" onclick="toggleDeckFolderPicker('')">✕</button>
+  </div>` : '';
   return `<div class="deck-card${isSel?' active':''}" style="flex-wrap:wrap" data-file="${esc(q.file)}" ${canReorder ? `draggable="true" ondragstart="onDeckDragStart(event,this.dataset.file)" ondragover="onDeckDragOver(event,this)" ondragleave="onDeckDragLeave(this)" ondrop="onDeckDrop(event,this.dataset.file)" ondragend="onDeckDragEnd()"` : ''} onclick="pickDeckCard(this.dataset.file)">
    <div class="deck-left">
     ${canReorder ? `<span class="deck-grip" title="Drag to reorder in library" onclick="event.stopPropagation()">⋮⋮</span>` : ''}
     <span class="deck-check">${isSel ? '✓' : ''}</span>
     <div class="deck-info">
      <div class="deck-title">${esc(cleanTitle)}</div>
-     <div class="deck-meta"><span>📂 ${esc(f)}</span>${hasSavedSet ? `<span class="deck-tag" style="background:#3b0764cc;border:1px solid #c084fc66;color:#e9d5ff" title="Has saved quiz settings (timers, scoring &amp; modifiers)">⚙️ Saved setup</span>` : ''}${cPills}${tags}</div>
+     <div class="deck-meta"><span style="cursor:pointer;text-decoration:underline dotted #ffffff55" title="Click to move this deck to another folder" onclick="event.stopPropagation();toggleDeckFolderPicker('${esc(q.file)}')">📂 ${esc(f)}</span>${hasSavedSet ? `<span class="deck-tag" style="background:#3b0764cc;border:1px solid #c084fc66;color:#e9d5ff" title="Has saved quiz settings (timers, scoring &amp; modifiers)">⚙️ Saved setup</span>` : ''}${cPills}${tags}</div>
     </div>
    </div>
    <div class="deck-right">
     <span class="deck-acts" onclick="event.stopPropagation()">
      ${canReorder ? `<button type="button" class="deck-act-btn move" ${sIdx===0?'disabled':''} onclick="moveDeckStep(this.closest('.deck-card').dataset.file, -1)" title="Move up">↑</button><button type="button" class="deck-act-btn move" ${sIdx===shown.length-1?'disabled':''} onclick="moveDeckStep(this.closest('.deck-card').dataset.file, 1)" title="Move down">↓</button>` : ''}
+     <button type="button" class="deck-act-btn" onclick="toggleDeckFolderPicker(this.closest('.deck-card').dataset.file)" title="Move deck to a folder">📂 Folder</button>
      ${knownCourses.length ? `<button type="button" class="deck-act-btn" onclick="toggleDeckCoursePicker(this.closest('.deck-card').dataset.file)" title="Assign or change courses for this deck">🎓${qCids.length ? ' ' + qCids.length : ''}</button>` : ''}
      ${activeCid ? `<button type="button" class="deck-act-btn" onclick="toggleDeckInCourse(this.closest('.deck-card').dataset.file, '${esc(activeCid)}')" title="Remove from this course (keeps deck in All Decks)">✕ Unlink</button>` : ''}
      <button type="button" class="deck-act-btn" onclick="editSelectedDeck(this.closest('.deck-card').dataset.file)" title="Edit this deck">✏️ Edit</button>
@@ -3205,6 +3405,7 @@ function renderDeckGrid(){
     <span class="deck-est">⏱ ~${estMin} min</span>
    </div>
    ${coursePopHtml}
+   ${folderPopHtml}
   </div>`;
  }).join('');
 }
@@ -3409,6 +3610,11 @@ function syncQuizCount(){
   if(r && r.host_settings && typeof r.host_settings === 'object' && Object.keys(r.host_settings).length){
    const curLocal = loadLocalGlobalSettings();
    if(!Object.keys(curLocal).length) saveLocalGlobalSettings(r.host_settings);
+  }
+  if(r && Array.isArray(r.folders) && r.folders.length){
+   const curF = loadLocalCustomFolders();
+   r.folders.forEach(fn => { const c = cleanFolderNameStr(fn); if(c && !curF.includes(c)) curF.push(c); });
+   saveLocalCustomFolders(curF);
   }
   const srv = (r && r.quizzes) || [];
   const delB = getDeletedBuiltinsLocal();
@@ -5107,6 +5313,11 @@ async function refreshQuizzes(sel){
   if(r && r.host_settings && typeof r.host_settings === 'object' && Object.keys(r.host_settings).length){
    saveLocalGlobalSettings(r.host_settings);
   }
+  if(r && Array.isArray(r.folders) && r.folders.length){
+   const curF = loadLocalCustomFolders();
+   r.folders.forEach(fn => { const c = cleanFolderNameStr(fn); if(c && !curF.includes(c)) curF.push(c); });
+   saveLocalCustomFolders(curF);
+  }
   quizList = mergeQuizLists(r.quizzes || []);
   _lastAppliedDeckFile = null;
   renderQuizSelect(sel);
@@ -5563,7 +5774,7 @@ const _openQuizModal0 = openQuizModal;
 openQuizModal = function(){
  _openQuizModal0();
  const fl = document.getElementById('folderList');
- if(fl) fl.innerHTML = [...new Set(quizList.map(q=>q.folder).filter(f=>f && f!=='Built-in'))].map(f=>`<option value="${esc(f)}">`).join('');
+ if(fl) fl.innerHTML = getAllKnownFolders().filter(f=>f && f!=='Built-in').map(f=>`<option value="${esc(f)}">`).join('');
  updateAcctLabels();
 };
 
@@ -6548,7 +6759,7 @@ openQuizModal = function(mode){
  if(tg) tg.placeholder = isC ? 'ethical leadership, whistleblowing' : 'unit 3, fractions';
  if(tx) tx.placeholder = isC ? CASE_PLACEHOLDER : QUIZ_PLACEHOLDER;
  const fl = document.getElementById('folderList');
- if(fl) fl.innerHTML = [...new Set(quizList.map(q=>q.folder).filter(f=>f && f!=='Built-in'))].map(f=>`<option value="${esc(f)}">`).join('');
+ if(fl) fl.innerHTML = getAllKnownFolders().filter(f=>f && f!=='Built-in').map(f=>`<option value="${esc(f)}">`).join('');
  populateBuilderCourseSelect([]);
  updateAcctLabels();
  syncBuilderAiUI();
@@ -6648,7 +6859,11 @@ saveCustomQuiz = async function(){
    document.getElementById('customErr').textContent = 'Add at least one Case Study slide (Type: info, poll, rank, open, brainstorm, or scale) — use the "+ Case Slide" menu above.';
    return;
   }
-  const folderVal = ((document.getElementById('customFolder')||{}).value||'').trim() || (isC ? 'Case Studies' : '');
+  const folderVal = cleanFolderNameStr(((document.getElementById('customFolder')||{}).value||'')) || ((deckFolderFilter && !['ALL','Built-in','My Quizzes','Case Studies','Saved on this device'].includes(deckFolderFilter)) ? deckFolderFilter : (isC ? 'Case Studies' : ''));
+  if(folderVal && !['Built-in','My Quizzes','Case Studies','Saved on this device'].includes(folderVal)){
+   const curCF = loadLocalCustomFolders();
+   if(!curCF.includes(folderVal)){ curCF.push(folderVal); saveLocalCustomFolders(curCF); }
+  }
   const tagsVal = ((document.getElementById('customTags')||{}).value||'').split(',').map(x=>x.trim()).filter(Boolean);
   const coursesVal = readBuilderCoursesToSave();
   const r = await postPw('/api/upload_quiz', {title, questions: qs, folder: folderVal, tags: tagsVal, courses: coursesVal});
