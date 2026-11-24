@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>BrainRush — Solo Practice</title>
+<title>BrainRush — Practice Quizzes</title>
 <style>
 :root{
   --bg1:#2c1957;
@@ -851,14 +851,14 @@ blockquote{
 <div id="topHud">
   <div class="hud-inner">
     <div class="hud-left">
-      <a href="/play" class="hud-brand"><span class="hud-bolt">⚡</span>BrainRush</a>
-      <button id="sfxBtn" class="hud-btn" onclick="toggleSfx()" title="Sound effects">🔊</button>
+      <a href="/play" class="hud-brand">BrainRush</a>
+      <button id="sfxBtn" class="hud-btn" onclick="toggleSfx()" title="Sound effects">Sound: On</button>
     </div>
     <div class="hud-right" id="hudStats"></div>
   </div>
   <div class="timer-wrap" id="hudTimer" style="display:none">
     <div class="bar"><i id="tb" style="width:100%"></i></div>
-    <span class="tlbl-pill" id="tlbl">⏱️ 20s</span>
+    <span class="tlbl-pill" id="tlbl">20s</span>
   </div>
 </div>
 
@@ -867,7 +867,7 @@ blockquote{
 <canvas id="fx"></canvas>
 
 <script>
-const $ = document.getElementById('app'), sh = ["▲","◆","●","■","★","⬟"];
+const $ = document.getElementById('app'), sh = ["A","B","C","D","E","F"];
 function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
 function norm(s){return String(s).toLowerCase().replace(/[^a-z0-9]+/g,' ').trim()}
 function qtype(q){return q.type||'mc'}
@@ -879,7 +879,7 @@ try{ autoReadAloud = localStorage.getItem('brainrush_prac_tts') === '1'; }catch(
 function stopSpeak(){
   try{ if(window.speechSynthesis) window.speechSynthesis.cancel(); }catch(e){}
   const b = document.getElementById('ttsBtn');
-  if(b){ b.classList.remove('on'); b.textContent = '🔊 Read Aloud'; }
+  if(b){ b.classList.remove('on'); b.textContent = 'Read Aloud'; }
 }
 function speakPractice(forceStart){
   if(!run || run.i >= run.qs.length) return;
@@ -905,10 +905,10 @@ function speakPractice(forceStart){
   try{
     const u = new SpeechSynthesisUtterance(parts.join('. '));
     const b = document.getElementById('ttsBtn');
-    if(b){ b.classList.add('on'); b.textContent = '⏹️ Stop Reading'; }
+    if(b){ b.classList.add('on'); b.textContent = 'Stop Reading'; }
     u.onend = u.onerror = () => {
       const btn = document.getElementById('ttsBtn');
-      if(btn){ btn.classList.remove('on'); btn.textContent = '🔊 Read Aloud'; }
+      if(btn){ btn.classList.remove('on'); btn.textContent = 'Read Aloud'; }
     };
     window.speechSynthesis.speak(u);
   }catch(e){}
@@ -940,7 +940,7 @@ function beep(f, d, type, v, delay){
 function sfxCorrect(){ [523.25,659.25,783.99].forEach((f,i)=>beep(f,.15,'triangle',.25,i*.08)); }
 function sfxPartial(){ [440,554.37].forEach((f,i)=>beep(f,.14,'triangle',.2,i*.09)); }
 function sfxWrong(){ beep(196,.24,'sawtooth',.16,0); beep(147,.3,'sawtooth',.16,.11); }
-function updSfx(){ const b = document.getElementById('sfxBtn'); if(b) b.textContent = sfxOn ? '🔊' : '🔇'; }
+function updSfx(){ const b = document.getElementById('sfxBtn'); if(b) b.textContent = sfxOn ? 'Sound: On' : 'Sound: Off'; }
 function toggleSfx(){
   sfxOn = !sfxOn;
   try{ localStorage.setItem('brainrush_sfx', sfxOn ? '1' : '0'); }catch(e){}
@@ -972,13 +972,13 @@ function syncHud(){
   const doneN = run.done ? (run.i + 1) : run.i;
   const livePct = doneN > 0 ? Math.round(100 * run.creditSum / doneN) + '%' : '100%';
   if(hs){
-    hs.innerHTML = `<span class="hud-stats"><span>Q ${run.i+1}/${run.qs.length}</span><span class="hs-score">📊 ${doneN > 0 ? livePct : '—%'} (${run.right}/${doneN})</span>${run.streak >= 2 ? `<span class="hs-streak">🔥 ${run.streak}</span>` : ''}</span>`;
+    hs.innerHTML = `<span class="hud-stats"><span>Q ${run.i+1}/${run.qs.length}</span><span class="hs-score">${doneN > 0 ? livePct : '—%'} (${run.right}/${doneN})</span>${run.streak >= 2 ? `<span class="hs-streak">Streak ${run.streak}</span>` : ''}</span>`;
   }
   const showMainTimer = run.timed && !(run.previewLeft > 0) && !(run.thinkLeft > 0);
   if(ht) ht.style.display = showMainTimer ? 'flex' : 'none';
 }
 
-let run = null, lockedQuiz = null, quizSelected = false;
+let run = null, lockedQuiz = null;
 const PRAC_PARAMS = new URLSearchParams(location.search);
 const PRAC_KEY = (PRAC_PARAMS.get('k') || '').trim();
 const PRAC_FILE = (PRAC_PARAMS.get('quiz') || PRAC_PARAMS.get('file') || '').trim();
@@ -987,25 +987,11 @@ function getActivePracticeDeck(){
   return (lockedQuiz && !lockedQuiz.error) ? lockedQuiz : null;
 }
 
-function togglePracticeQuizSelect(){
-  quizSelected = !quizSelected;
-  const card = document.getElementById('pracQuizCard');
-  if(card) card.classList.toggle('sel', quizSelected);
-  const sub = document.getElementById('pracQuizSub');
-  if(sub){
-    sub.textContent = quizSelected
-      ? (sub.dataset.selText || '')
-      : (sub.dataset.unselText || '');
-  }
-  const errEl = document.getElementById('pErr');
-  if(quizSelected && errEl) errEl.style.display = 'none';
-}
-
 function updatePracSummary(){
   const active = getActivePracticeDeck();
   const tfEl = document.getElementById('pracTopicFilter');
   const tfVal = tfEl ? tfEl.value : '';
-  const pool = active ? (active.questions || []).filter(q => !tfVal || String((q && q.topic) || '').trim() === tfVal) : [];
+  const pool = active ? (active.questions || []).filter(q => (!tfVal || tfVal === '__ALL__') || String((q && q.topic) || '').trim() === tfVal) : [];
   const maxN = pool.length;
   const maxEl = document.getElementById('pMaxCnt');
   if(maxEl) maxEl.textContent = '/ ' + (maxN || '—');
@@ -1022,7 +1008,9 @@ function onPracTopicFilterChange(){
   const active = getActivePracticeDeck();
   const tfEl = document.getElementById('pracTopicFilter');
   const tfVal = tfEl ? tfEl.value : '';
-  const pool = active ? (active.questions || []).filter(q => !tfVal || String((q && q.topic) || '').trim() === tfVal) : [];
+  const errEl = document.getElementById('pErr');
+  if(tfVal && errEl) errEl.style.display = 'none';
+  const pool = active ? (active.questions || []).filter(q => (!tfVal || tfVal === '__ALL__') || String((q && q.topic) || '').trim() === tfVal) : [];
   const cntEl = document.getElementById('cnt');
   if(cntEl){
     cntEl.max = pool.length || 1;
@@ -1063,8 +1051,8 @@ async function setup(){
   if(!lockedQuiz || lockedQuiz.error){
     $.innerHTML = `
       <div class="card-panel">
-        <h1>🧑‍🎓 Solo Practice</h1>
-        <p class="sub">Loading Comprehensive Test…</p>
+        <h1>Practice Quizzes</h1>
+        <p class="sub">Loading Practice Quizzes…</p>
       </div>
     `;
   }
@@ -1082,69 +1070,59 @@ async function setup(){
   if(!active){
     const msg = (qInfo && qInfo.error)
       ? qInfo.error
-      : 'Could not load the Comprehensive Test. Tap Retry below.';
+      : 'Could not load the Practice Quizzes. Tap Retry below.';
     $.innerHTML = `
       <div class="card-panel">
-        <h1>🧑‍🎓 Solo Practice</h1>
+        <h1>Practice Quizzes</h1>
         <p class="sub">${esc(msg)}</p>
-        <button type="button" class="go" onclick="setup()">🔄 Retry Loading Comprehensive Test</button>
+        <button type="button" class="go" onclick="setup()">Retry Loading Quizzes</button>
       </div>
     `;
     return;
   }
 
-  quizSelected = false;
-  const subBase = `${deckTopics.length ? `${deckTopics.length} Chapters · ` : ''}${n} Total Questions`;
-
   $.innerHTML = `
     <div class="card-panel">
-      <h1>🧑‍🎓 Solo Practice</h1>
-      <p class="sub" style="margin-bottom:12px">Tap the quiz below to select it, then start practicing.</p>
-
-      <div class="p-hero-card" id="pracQuizCard" onclick="togglePracticeQuizSelect()">
-        <div style="min-width:0">
-          <div class="p-hero-title">🎓 ${esc(qInfo.title)}</div>
-          <div class="p-hero-sub" id="pracQuizSub" data-unsel-text="👆 Tap to select quiz · ${esc(subBase)}" data-sel-text="✅ Selected · ${esc(subBase)}">👆 Tap to select quiz · ${esc(subBase)}</div>
-        </div>
-        <span class="p-hero-chk">✓</span>
-      </div>
+      <h1>Practice Quizzes</h1>
+      <p class="sub" style="margin-bottom:14px">Select a quiz from the dropdown below to begin practicing.</p>
 
       <div onchange="updatePracSummary()" oninput="updatePracSummary()">
-        ${deckTopics.length > 1 ? `<details class="p-acc" id="pAcc1">
+        <details class="p-acc" id="pAcc1" open>
           <summary>
-            <span class="sum-left"><span class="chev">▶</span> 📚 1. Chapter</span>
+            <span class="sum-left">A. CHAPTER QUIZZES</span>
           </summary>
           <div class="p-acc-body">
-            <select id="pracTopicFilter" onchange="onPracTopicFilterChange()" style="font-size:.94em;padding:9px 11px;text-align:left;margin-bottom:0">
-              <option value="">All ${deckTopics.length} Chapters (${n} Questions)</option>
+            <select id="pracTopicFilter" onchange="onPracTopicFilterChange()" style="font-size:.94em;padding:10px 12px;text-align:left;margin-bottom:0">
+              <option value="">Select a Quiz...</option>
+              <option value="__ALL__">All ${deckTopics.length || 10} Chapters (${n} Questions)</option>
               ${deckTopics.map(tp => {
                 const c = (active.questions || []).filter(q => String((q && q.topic) || '').trim() === tp).length;
-                return `<option value="${esc(tp)}">🏷️ ${esc(tp)} (${c} Qs)</option>`;
+                return `<option value="${esc(tp)}">${esc(tp)} (${c} Questions)</option>`;
               }).join('')}
             </select>
           </div>
-        </details>` : ''}
+        </details>
 
         <details class="p-acc" id="pAcc2">
           <summary>
-            <span class="sum-left"><span class="chev">▶</span> ⏱️ 2. Timers &amp; Pacing</span>
+            <span class="sum-left">B. TIMERS &amp; PACING</span>
           </summary>
           <div class="p-acc-body">
             <div class="quick-pacing-grid" style="margin-bottom:0">
               <label class="qp-box" title="Exact number of questions to practice">
-                <span>📝 Questions</span>
+                <span>Questions</span>
                 <span><input id="cnt" type="number" min="1" max="${n || 1}" value="${n || ''}" placeholder="All"> <small id="pMaxCnt" style="opacity:.75">/ ${n || '—'}</small></span>
               </label>
               <label class="qp-box" title="Seconds per question when Countdown Timer is checked">
-                <span>⏱️ Timer</span>
+                <span>Timer</span>
                 <span><input id="pTime" type="number" min="5" max="900" value="15"> <small style="opacity:.75">s</small></span>
               </label>
               <label class="qp-box" title="Reading preview before answer choices appear (0 = instant)">
-                <span>👀 Preview</span>
+                <span>Preview</span>
                 <span><input id="pPrevTime" type="number" min="0" max="120" value="0"> <small style="opacity:.75">s</small></span>
               </label>
               <label class="qp-box" title="Choices shown on screen, locked while you think (0 = off)">
-                <span>🧠 Think</span>
+                <span>Think</span>
                 <span><input id="pThinkTime" type="number" min="0" max="120" value="0"> <small style="opacity:.75">s</small></span>
               </label>
             </div>
@@ -1153,21 +1131,21 @@ async function setup(){
 
         <details class="p-acc" id="pAcc3">
           <summary>
-            <span class="sum-left"><span class="chev">▶</span> 🎛️ 3. Practice Options</span>
+            <span class="sum-left">C. PRACTICE OPTIONS</span>
           </summary>
           <div class="p-acc-body">
             <div class="p-toggle-grid">
-              <label class="p-tog-pill"><input type="checkbox" id="timed"> <span>⏱️ Countdown Timer</span></label>
-              <label class="p-tog-pill"><input type="checkbox" id="pracReadAloud"> <span>🔊 Auto Read-Aloud</span></label>
-              <label class="p-tog-pill"><input type="checkbox" id="pracShuffle"> <span>🎲 Shuffle Questions</span></label>
-              <label class="p-tog-pill"><input type="checkbox" id="pracShuffleAns"> <span>🔀 Shuffle Choices</span></label>
+              <label class="p-tog-pill"><input type="checkbox" id="timed"> <span>Countdown Timer</span></label>
+              <label class="p-tog-pill"><input type="checkbox" id="pracReadAloud"> <span>Auto Read-Aloud</span></label>
+              <label class="p-tog-pill"><input type="checkbox" id="pracShuffle"> <span>Shuffle Questions</span></label>
+              <label class="p-tog-pill"><input type="checkbox" id="pracShuffleAns"> <span>Shuffle Choices</span></label>
             </div>
           </div>
         </details>
       </div>
 
       <div id="pErr" class="err-banner"></div>
-      <button class="go" id="startPracBtn" onclick="start()">▶️ Start Practice Quiz</button>
+      <button class="go" id="startPracBtn" onclick="start()">Start Practice Quiz</button>
     </div>
   `;
   const shufEl = document.getElementById('pracShuffle');
@@ -1220,8 +1198,12 @@ async function start(customQs){
   let quizTitle = run && run.title ? run.title : 'Practice Quiz';
   if(!qs){
     const errEl = document.getElementById('pErr');
-    if(!quizSelected && document.getElementById('pracQuizCard')){
-      if(errEl){ errEl.textContent = '👆 Tap the quiz card above to select it before starting.'; errEl.style.display = 'block'; }
+    const tfEl = document.getElementById('pracTopicFilter');
+    const tfVal = tfEl ? tfEl.value : '';
+    if(!tfVal){
+      if(errEl){ errEl.textContent = 'Please select a quiz from A. CHAPTER QUIZZES before starting.'; errEl.style.display = 'block'; }
+      const acc1 = document.getElementById('pAcc1');
+      if(acc1) acc1.open = true;
       return;
     }
     await fetchAssignedQuiz();
@@ -1230,7 +1212,7 @@ async function start(customQs){
       if(errEl){ errEl.textContent = 'Please select a practice quiz first.'; errEl.style.display = 'block'; }
       return;
     }
-    quizTitle = active.title || 'Practice Quiz';
+    quizTitle = (tfVal === '__ALL__') ? (active.title || 'All 10 Chapters') : tfVal;
     if(errEl) errEl.style.display = 'none';
     const cntEl = document.getElementById('cnt');
     const rawCnt = cntEl ? parseInt(cntEl.value, 10) : NaN;
@@ -1250,9 +1232,7 @@ async function start(customQs){
     prevMax = Math.max(0, Math.min(120, parseFloat(pvEl && pvEl.value !== '' ? pvEl.value : prevMax) || 0));
     const thEl = document.getElementById('pThinkTime');
     thinkMax = Math.max(0, Math.min(120, parseFloat(thEl && thEl.value !== '' ? thEl.value : thinkMax) || 0));
-    const tfEl = document.getElementById('pracTopicFilter');
-    const tfVal = tfEl ? tfEl.value : '';
-    qs = (active.questions || []).filter(q => !tfVal || String((q && q.topic) || '').trim() === tfVal);
+    qs = (active.questions || []).filter(q => tfVal === '__ALL__' || String((q && q.topic) || '').trim() === tfVal);
     if(shuffle){
       for(let i = qs.length - 1; i > 0; i--){
         const j = Math.floor(Math.random() * (i + 1));
@@ -1355,19 +1335,19 @@ function renderQuestionStage(phaseTransition){
     const pct = Math.min(100, (run.previewLeft / Math.max(1, run.previewTotal)) * 100);
     phaseBannerHtml = `<div class="phase-banner preview">
       <div style="flex:1;min-width:180px">
-        <div>👀 Reading Preview (<span id="prevSecLbl">${Math.ceil(run.previewLeft)}</span>s) — Read the question first…</div>
+        <div>Reading Preview (<span id="prevSecLbl">${Math.ceil(run.previewLeft)}</span>s) — Read the question first…</div>
         <div class="phase-bar"><div class="phase-fill" id="prevFillBar" style="width:${pct}%"></div></div>
       </div>
-      <button type="button" class="sec" style="margin:0;padding:6px 12px;font-size:.84em" onclick="skipPreviewNow()">⏭️ Open Answers Now</button>
+      <button type="button" class="sec" style="margin:0;padding:6px 12px;font-size:.84em" onclick="skipPreviewNow()">Open Answers Now</button>
     </div>`;
   } else if(inThink){
     const pct = Math.min(100, (run.thinkLeft / Math.max(1, run.thinkTotal)) * 100);
     phaseBannerHtml = `<div class="phase-banner">
       <div style="flex:1;min-width:180px">
-        <div>🧠 Thinking Time (<span id="thkSecLbl">${Math.ceil(run.thinkLeft)}</span>s) — Choices shown, locked while you reason</div>
+        <div>Thinking Time (<span id="thkSecLbl">${Math.ceil(run.thinkLeft)}</span>s) — Choices shown, locked while you reason</div>
         <div class="phase-bar"><div class="phase-fill" id="thkFillBar" style="width:${pct}%"></div></div>
       </div>
-      <button type="button" class="sec" style="margin:0;padding:6px 12px;font-size:.84em;background:#7c3aed;border-color:#c4b5fd" onclick="skipThinkNow()">⏭️ Unlock Answers Now</button>
+      <button type="button" class="sec" style="margin:0;padding:6px 12px;font-size:.84em;background:#7c3aed;border-color:#c4b5fd" onclick="skipThinkNow()">Unlock Answers Now</button>
     </div>`;
   }
 
@@ -1375,14 +1355,14 @@ function renderQuestionStage(phaseTransition){
   if(inPrev){
     body = '';
   } else if(t === 'text'){
-    body = `<div class="card-panel" style="padding:14px"><input type="text" id="txt" placeholder="${inThink ? '🧠 Thinking time — unlocks in a moment…' : 'Type your answer…'}" autocomplete="off" autocapitalize="off" ${inThink ? 'disabled' : ''} onkeydown="if(event.key==='Enter')submitText()"><button class="go" onclick="submitText()" ${inThink ? 'disabled' : ''}>Submit Answer</button></div>`;
+    body = `<div class="card-panel" style="padding:14px"><input type="text" id="txt" placeholder="${inThink ? 'Thinking time — unlocks in a moment…' : 'Type your answer…'}" autocomplete="off" autocapitalize="off" ${inThink ? 'disabled' : ''} onkeydown="if(event.key==='Enter')submitText()"><button class="go" onclick="submitText()" ${inThink ? 'disabled' : ''}>Submit Answer</button></div>`;
   } else if(t === 'order'){
-    body = `<div class="sub" style="margin:2px 0 8px;font-weight:750">Tap items in the correct order (1 → ${(q.a||[]).length}; tap a placed slot to remove):</div><div id="ord"></div>`;
+    body = `<div class="sub" style="margin:2px 0 8px;font-weight:750">Tap items in the correct order (1 to ${(q.a||[]).length}; tap a placed slot to remove):</div><div id="ord"></div>`;
   } else if(t === 'multi'){
     body = `
       <div class="sub" style="margin:2px 0 8px;font-weight:750">Select ALL correct options, then tap Submit:</div>
       <div class="grid">${(q.a||[]).map((a,i)=>`<button id="mb${i}" class="c${i%6}" onclick="toggleMulti(${i})" ${inThink ? 'disabled' : ''}>${q.aimg && q.aimg[i] ? `<img src="${esc(q.aimg[i])}" alt="">` : ''}<span class="sh">${sh[i%6]}</span><span>${esc(a)}</span></button>`).join('')}</div>
-      <button class="go" id="multiSubBtn" style="margin-top:10px" onclick="submitMulti()" disabled>✅ Submit Selection (0)</button>
+      <button class="go" id="multiSubBtn" style="margin-top:10px" onclick="submitMulti()" disabled>Submit Selection (0)</button>
     `;
   } else if(t === 'match'){
     body = `<div class="sub" style="margin:2px 0 6px;font-weight:750">Tap a left item and its matching right partner (tap a paired item to unpair):</div><div id="matchBox"></div>`;
@@ -1398,7 +1378,7 @@ function renderQuestionStage(phaseTransition){
           <input type="number" id="slNum" class="slider-num" min="${sc.min}" max="${sc.max}" step="${sc.step}" value="${run.sliderVal}" ${inThink ? 'disabled' : ''} oninput="syncSlider(this.value)">
           ${sc.unit ? `<span style="font-weight:850">${esc(sc.unit)}</span>` : ''}
         </div>
-        <button class="go" id="slSubBtn" style="margin-top:12px" onclick="submitSlider()" ${inThink ? 'disabled' : ''}>🎯 Lock In Estimate</button>
+        <button class="go" id="slSubBtn" style="margin-top:12px" onclick="submitSlider()" ${inThink ? 'disabled' : ''}>Lock In Estimate</button>
       </div>
     `;
   } else if(t === 'pin'){
@@ -1410,15 +1390,15 @@ function renderQuestionStage(phaseTransition){
           <svg class="pin-svg" id="pinSvg" viewBox="0 0 100 100" preserveAspectRatio="none"></svg>
           <div class="pin-marker" id="pinMarker" style="display:none"></div>
         </div>
-        <div id="pinCoord" style="font-size:.82em;opacity:.82;margin-top:6px;font-weight:750">${inThink ? '🧠 Thinking Time — pin unlocks when timer finishes' : 'Tap anywhere on the image to drop a pin'}</div>
-        <button class="go" id="pinSubBtn" style="margin-top:10px" onclick="submitPin()" disabled>📍 Lock In Pin</button>
+        <div id="pinCoord" style="font-size:.82em;opacity:.82;margin-top:6px;font-weight:750">${inThink ? 'Thinking Time — pin unlocks when timer finishes' : 'Tap anywhere on the image to drop a pin'}</div>
+        <button class="go" id="pinSubBtn" style="margin-top:10px" onclick="submitPin()" disabled>Lock In Pin</button>
       </div>
     `;
   } else {
     body = `<div class="grid">${(q.a||[]).map((a,i)=>`<button class="c${i%6}" onclick="pick(${i})" ${inThink ? 'disabled' : ''}>${q.aimg && q.aimg[i] ? `<img src="${esc(q.aimg[i])}" alt="">` : ''}<span class="sh">${sh[i%6]}</span><span>${esc(a)}</span></button>`).join('')}</div>`;
   }
 
-  const topicTag = q.topic ? ` · 🏷️ ${esc(q.topic)}` : '';
+  const topicTag = q.topic ? ` · ${esc(q.topic)}` : '';
   const showStemImg = q.img && (t !== 'pin' || inPrev);
   const zoomCls = t === 'zoom' ? (inPrev ? '' : ' zoom-go') : '';
 
@@ -1426,7 +1406,7 @@ function renderQuestionStage(phaseTransition){
     <div class="q-card">
       <div class="q-top-row">
         <div class="qnum">Question ${run.i+1} of ${run.qs.length}${topicTag}</div>
-        <button type="button" class="tts-btn" id="ttsBtn" onclick="speakPractice()">🔊 Read Aloud</button>
+        <button type="button" class="tts-btn" id="ttsBtn" onclick="speakPractice()">Read Aloud</button>
       </div>
       <div class="q">${esc(q.q)}</div>
       ${showStemImg ? `<img class="q-img${zoomCls}" id="qStemImg" src="${esc(q.img)}" alt="" onclick="zoomImg(this.src)">` : ''}
@@ -1449,7 +1429,7 @@ function startQuestionLoop(){
   const qSec = run.qSec || run.tMax;
   const b0 = document.getElementById('tb'), l0 = document.getElementById('tlbl');
   if(b0){ b0.style.width = '100%'; b0.className = ''; }
-  if(l0){ l0.textContent = '⏱️ ' + qSec + 's'; l0.className = 'tlbl-pill'; }
+  if(l0){ l0.textContent = qSec + 's'; l0.className = 'tlbl-pill'; }
   if(!(run.previewLeft > 0) && !(run.thinkLeft > 0) && !run.timed) return;
   run.timer = setInterval(() => {
     if(!run || run.done){ stopTimer(); return; }
@@ -1484,7 +1464,7 @@ function startQuestionLoop(){
         b.className = urg ? 'urgent' : '';
       }
       if(l){
-        l.textContent = '⏱️ ' + Math.max(0, Math.ceil(run.t)) + 's';
+        l.textContent = Math.max(0, Math.ceil(run.t)) + 's';
         l.className = 'tlbl-pill' + (urg ? ' urgent' : '');
       }
       if(run.t <= 0){ stopTimer(); grade(false, 0, '(time ran out)'); }
@@ -1513,7 +1493,7 @@ function toggleMulti(i){
   const sub = document.getElementById('multiSubBtn');
   if(sub){
     sub.disabled = !run.sel.length;
-    sub.textContent = `✅ Submit Selection (${run.sel.length})`;
+    sub.textContent = `Submit Selection (${run.sel.length})`;
   }
 }
 
@@ -1562,7 +1542,7 @@ function drawMatch(){
         }).join('')}
       </div>
     </div>
-    ${!run.done ? `<button class="go" onclick="submitMatch()" ${(allLinked && !locked) ? '' : 'disabled'}>🔗 Submit Pairs (${run.matchPairs.filter(v => v >= 0).length}/${n})</button>` : ''}
+    ${!run.done ? `<button class="go" onclick="submitMatch()" ${(allLinked && !locked) ? '' : 'disabled'}>Submit Pairs (${run.matchPairs.filter(v => v >= 0).length}/${n})</button>` : ''}
   `;
 }
 
@@ -1700,9 +1680,9 @@ function drawOrder(){
   const locked = !!(run.done || run.previewLeft > 0 || run.thinkLeft > 0);
   const disp = run.perm.map(k => q.a[k]);
   el.innerHTML =
-    run.sel.map((j, n) => `<div class="slot" onclick="removeOrd(${n})"><span><b>#${n+1}</b> ${esc(disp[j])}</span><span class="rm">✕</span></div>`).join('') +
+    run.sel.map((j, n) => `<div class="slot" onclick="removeOrd(${n})"><span><b>#${n+1}</b> ${esc(disp[j])}</span><span class="rm">Remove</span></div>`).join('') +
     `<div class="grid">${disp.map((a, j) => run.sel.includes(j) ? '' : `<button class="c${j%6}" style="min-height:70px" onclick="tapOrd(${j})" ${locked ? 'disabled' : ''}><span>${esc(a)}</span></button>`).join('')}</div>` +
-    `<div style="display:flex;gap:8px;justify-content:center;align-items:center;margin-top:8px">${run.sel.length && !locked ? `<button class="sec" style="margin:0" onclick="run.sel.pop();drawOrder()">↩ Undo</button>` : ''}${run.sel.length === disp.length && !locked ? `<button class="go" style="margin:0;flex:1" onclick="submitOrder()">✅ Submit Order</button>` : ''}</div>`;
+    `<div style="display:flex;gap:8px;justify-content:center;align-items:center;margin-top:8px">${run.sel.length && !locked ? `<button class="sec" style="margin:0" onclick="run.sel.pop();drawOrder()">Undo</button>` : ''}${run.sel.length === disp.length && !locked ? `<button class="go" style="margin:0;flex:1" onclick="submitOrder()">Submit Order</button>` : ''}</div>`;
 }
 function tapOrd(j){ if(run.done || run.previewLeft > 0 || run.thinkLeft > 0) return; run.sel.push(j); drawOrder(); }
 function removeOrd(pos){ if(run.done || run.previewLeft > 0 || run.thinkLeft > 0) return; run.sel.splice(pos, 1); drawOrder(); }
@@ -1802,17 +1782,17 @@ function grade(ok, credit, given, meta){
   const fb = document.getElementById('fb');
   const cls = ok ? 'ok' : partial ? 'partial' : 'no';
   const headline = ok
-    ? `✅ Correct! · 📊 ${runPct}% Grade (${run.right}/${doneN})${run.streak > 1 ? ' · 🔥 ' + run.streak + ' streak' : ''}`
+    ? `Correct! · ${runPct}% Grade (${run.right}/${doneN})${run.streak > 1 ? ' · ' + run.streak + ' streak' : ''}`
     : partial
-      ? `⚡ Partial Credit (${Math.round(cr * 100)}%) · 📊 ${runPct}% Grade`
-      : `❌ Not quite · 📊 ${runPct}% Grade (${run.right}/${doneN})`;
+      ? `Partial Credit (${Math.round(cr * 100)}%) · ${runPct}% Grade`
+      : `Not quite · ${runPct}% Grade (${run.right}/${doneN})`;
   fb.innerHTML = `
     <div class="fb ${cls}">
       ${headline}
       ${ok ? '' : `<div style="font-size:.86em;font-weight:750;margin-top:4px;opacity:.95">Correct answer: <b>${esc(ansText(q))}</b></div>`}
     </div>
     ${q.quote ? `<blockquote>“${esc(q.quote)}”${q.src ? `<div style="font-size:.82em;font-style:normal;opacity:.75;margin-top:4px">— ${esc(q.src)}</div>` : ''}</blockquote>` : ''}
-    <button class="go" onclick="run.i++;show()">${run.i + 1 >= run.qs.length ? '🏆 See Final Results' : 'Next Question ➔'}</button>
+    <button class="go" onclick="run.i++;show()">${run.i + 1 >= run.qs.length ? 'See Final Results' : 'Next Question'}</button>
   `;
   if(run.readAloud){
     try{
@@ -1886,28 +1866,27 @@ function openPracticeStudyGuide(onlyMissed){
       });
 
   const topicHtml = topics.length ? `<div class="item">
-    <div class="pct">📊 Accuracy by Topic</div>
+    <div class="pct">Accuracy by Topic</div>
     ${topics.map(t => `<div style="margin:7px 0">
-      <div style="display:flex;justify-content:space-between;font-weight:700;font-size:.94em"><span>🏷️ ${esc(t.topic)}</span><span>${t.pct}% (${t.exact}/${t.n})</span></div>
+      <div style="display:flex;justify-content:space-between;font-weight:700;font-size:.94em"><span>${esc(t.topic)}</span><span>${t.pct}% (${t.exact}/${t.n})</span></div>
       <div style="height:8px;background:#e4e1f0;border-radius:99px;overflow:hidden;margin-top:3px"><div style="width:${t.pct}%;height:100%;background:${t.pct<60?'#ef4444':t.pct<80?'#f59e0b':'#16a34a'}"></div></div>
     </div>`).join('')}
   </div>` : '';
 
   const cardsHtml = items.length ? items.map(it => `<div class="item" style="border-left-color:${(it.pct||0)<100?'#ef4444':'#16a34a'}">
-    <div class="pct">Q${it.index}${it.topic ? ' · 🏷️ ' + esc(it.topic) : ''} · ${(it.pct||0) < 100 ? (it.pct > 0 ? `⚡ Partial (${it.pct}%)` : '❌ Missed (0%)') : '✅ Correct (100%)'}</div>
+    <div class="pct">Q${it.index}${it.topic ? ' · ' + esc(it.topic) : ''} · ${(it.pct||0) < 100 ? (it.pct > 0 ? `Partial (${it.pct}%)` : 'Missed (0%)') : 'Correct (100%)'}</div>
     <h3>${esc(it.q)}</h3>
     ${(it.pct||0) < 100 ? `<div style="color:#b91c1c;font-weight:600;margin-bottom:3px">Your answer: <b>${esc(it.your || 'No answer')}</b></div>` : ''}
-    <div class="ans">✅ Correct answer: <b>${esc(it.ans)}</b></div>
-    ${it.quote ? `<div class="fact">💡 “${esc(it.quote)}”${it.src ? ' — ' + esc(it.src) : ''}</div>` : ''}
-  </div>`).join('') : `<div class="item"><p style="margin:0;font-weight:700;color:#15803d">🌟 Perfect 100% score! You answered every question correctly.</p></div>`;
+    <div class="ans">Correct answer: <b>${esc(it.ans)}</b></div>
+    ${it.quote ? `<div class="fact">“${esc(it.quote)}”${it.src ? ' — ' + esc(it.src) : ''}</div>` : ''}
+  </div>`).join('') : `<div class="item"><p style="margin:0;font-weight:700;color:#15803d">Perfect 100% score! You answered every question correctly.</p></div>`;
 
   const htmlDoc = `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>📚 Study Guide — ${esc(title)} — BrainRush</title>
+  <title>Study Guide — ${esc(title)} — BrainRush</title>
   <style>
     body{font-family:system-ui,-apple-system,sans-serif;max-width:780px;margin:0 auto;padding:28px 18px 48px;color:#1e1b2e;background:#f8f7fc;line-height:1.45}
     .br-top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;background:#161224;color:#fff;padding:14px 18px;border-radius:14px;margin-bottom:20px;box-shadow:0 8px 24px rgba(15,12,26,.16)}
     .br-brand{display:inline-flex;align-items:center;gap:8px;font-weight:900;font-size:1.05em;letter-spacing:-.01em}
-    .br-bolt{width:26px;height:26px;border-radius:7px;background:linear-gradient(135deg,#facc15,#f97316);color:#1e1b2e;display:inline-flex;align-items:center;justify-content:center;font-size:.85em}
     h1{color:#1e1b2e;margin:.2em 0 .25em;font-size:1.62em;letter-spacing:-.015em}
     .sub{color:#524c69;margin:0 0 18px;font-size:.96em}
     .item{background:#fff;border:1px solid #e4e1f0;border-left:5px solid #7c3aed;border-radius:12px;padding:13px 18px;margin:12px 0;box-shadow:0 2px 8px rgba(30,27,46,.04);page-break-inside:avoid}
@@ -1919,10 +1898,10 @@ function openPracticeStudyGuide(onlyMissed){
     @media print{body{background:#fff;padding:0}.br-top button{display:none}.br-top{background:#fff;color:#1e1b2e;border:1px solid #ddd;box-shadow:none;padding:8px 12px}.item{box-shadow:none;border-color:#ccc}}
   </style></head><body>
     <div class="br-top">
-      <span class="br-brand"><span class="br-bolt">⚡</span>BrainRush &middot; Solo Study Guide</span>
-      <button onclick="window.print()">🖨️ Print / Save PDF</button>
+      <span class="br-brand">BrainRush &middot; Study Guide</span>
+      <button onclick="window.print()">Print / Save PDF</button>
     </div>
-    <h1>📚 ${onlyMissed ? 'Missed Questions Study Guide' : 'Complete Quiz Study Guide'} — ${esc(title)}</h1>
+    <h1>${onlyMissed ? 'Missed Questions Study Guide' : 'Complete Quiz Study Guide'} — ${esc(title)}</h1>
     <p class="sub">Final Percentage Grade: <b>${pct}%</b> (${run.right} of ${run.qs.length} exact · ${run.missed.length} to review).</p>
     ${topicHtml}
     ${cardsHtml}
@@ -1941,18 +1920,18 @@ function finish(){
   const topics = buildTopicStatsList();
   const weakTopics = topics.filter(t => t.pct < 80);
   const topicBoxHtml = topics.length ? `<div class="review-box">
-    <h3>📚 Chapters to Study More (Accuracy by Chapter)</h3>
+    <h3>Chapters to Study More (Accuracy by Chapter)</h3>
     ${weakTopics.length
-      ? `<div style="font-size:.86em;color:#ffdf5d;margin:-2px 0 8px;font-weight:800">🎯 Priority chapters to review: <b>${weakTopics.slice(0,3).map(t => esc(t.topic)).join(' · ')}</b></div>`
-      : `<div style="font-size:.86em;color:#7dff6b;margin:-2px 0 8px;font-weight:800">🌟 Awesome! You scored 80%+ across every chapter tested.</div>`}
+      ? `<div style="font-size:.86em;color:#ffdf5d;margin:-2px 0 8px;font-weight:800">Priority chapters to review: <b>${weakTopics.slice(0,3).map(t => esc(t.topic)).join(' · ')}</b></div>`
+      : `<div style="font-size:.86em;color:#7dff6b;margin:-2px 0 8px;font-weight:800">Awesome! You scored 80%+ across every chapter tested.</div>`}
     ${topics.map(t => {
-      const badge = t.pct < 60 ? '⚠️ Study More' : (t.pct < 80 ? '👍 Review' : '🌟 Mastered');
+      const badge = t.pct < 60 ? 'Study More' : (t.pct < 80 ? 'Review' : 'Mastered');
       return `<div class="missed">
       <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;font-weight:850;flex-wrap:wrap">
-        <span>🏷️ ${esc(t.topic)}</span>
+        <span>${esc(t.topic)}</span>
         <span style="display:inline-flex;align-items:center;gap:8px">
           <span style="color:${t.pct<60?'#ff9b9b':t.pct<80?'#ffdf5d':'#7dff6b'}">${t.pct}% <small style="opacity:.82">(${t.exact}/${t.n}) · ${badge}</small></span>
-          <button type="button" class="hud-btn" style="padding:2px 8px;font-size:.75em" data-tp="${esc(t.topic)}" onclick="practiceSingleTopic(this.dataset.tp)">🎯 Drill Chapter</button>
+          <button type="button" class="hud-btn" style="padding:2px 8px;font-size:.75em" data-tp="${esc(t.topic)}" onclick="practiceSingleTopic(this.dataset.tp)">Drill Chapter</button>
         </span>
       </div>
       <div class="tbar"><i style="width:${t.pct}%;background:${t.pct<60?'#ff5252':t.pct<80?'#ffb300':'#69f0ae'}"></i></div>
@@ -1963,35 +1942,34 @@ function finish(){
   const toughList = (run.missed || []).slice().sort((a,b) => (a.pct || 0) - (b.pct || 0) || a.index - b.index);
   const toughHtml = toughList.length
     ? `<div class="review-box">
-        <h3>🧠 Tough Ones Recap (Most Missed · ${toughList.length})</h3>
+        <h3>Tough Ones Recap (Most Missed · ${toughList.length})</h3>
         ${toughList.map(m => `<div class="missed">
-          <b>Q${m.index} (${m.pct || 0}% credit)${m.topic ? ` · <small style="color:var(--gold)">🏷️ ${esc(m.topic)}</small>` : ''}:</b> ${esc(m.q)}<br>
-          <span style="color:#ff9b9b">You: ${esc(m.your)}</span> &middot; <span style="color:#7dff6b">✅ ${esc(m.ans)}</span>
-          ${m.quote ? `<div style="font-size:.85em;opacity:.85;margin-top:4px;font-style:italic">💡 ${esc(m.quote)}</div>` : ''}
+          <b>Q${m.index} (${m.pct || 0}% credit)${m.topic ? ` · <small style="color:var(--gold)">${esc(m.topic)}</small>` : ''}:</b> ${esc(m.q)}<br>
+          <span style="color:#ff9b9b">You: ${esc(m.your)}</span> &middot; <span style="color:#7dff6b">Correct: ${esc(m.ans)}</span>
+          ${m.quote ? `<div style="font-size:.85em;opacity:.85;margin-top:4px;font-style:italic">${esc(m.quote)}</div>` : ''}
         </div>`).join('')}
       </div>`
-    : `<p style="color:#7dff6b;font-weight:850;margin:12px 0">🌟 Flawless run! You nailed every single question (100%).</p>`;
+    : `<p style="color:#7dff6b;font-weight:850;margin:12px 0">Flawless run! You nailed every single question (100%).</p>`;
 
   $.innerHTML = `
     <div class="card-panel">
-      <div style="font-size:3em;line-height:1">${pct >= 90 ? '🏆' : pct >= 70 ? '🎉' : '💪'}</div>
       <h1>Practice Complete!</h1>
-      <div class="grade-hero">📊 Percentage Grade: ${pct}%</div>
+      <div class="grade-hero">Percentage Grade: ${pct}%</div>
       <div class="stats-grid">
         <div class="stat"><b>${pct}%</b>Percentage Score</div>
         <div class="stat"><b>${run.right}/${run.qs.length}</b>Questions Correct</div>
-        <div class="stat"><b>🔥 ${run.best}</b>Best Streak</div>
+        <div class="stat"><b>${run.best}</b>Best Streak</div>
       </div>
       ${topicBoxHtml}
       ${toughHtml}
       <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
-        ${toughList.length ? `<button class="go" style="flex:1;margin:0;background:linear-gradient(180deg,#facc15,#eab308);color:#1e1b2e;box-shadow:0 4px 0 #a16207" onclick="openPracticeStudyGuide(true)">📄 Study Guide (Missed Questions)</button>` : ''}
-        <button class="sec" style="flex:1;margin:0;padding:13px 14px" onclick="openPracticeStudyGuide(false)">📚 Full Quiz Study Guide</button>
+        ${toughList.length ? `<button class="go" style="flex:1;margin:0;background:linear-gradient(180deg,#facc15,#eab308);color:#1e1b2e;box-shadow:0 4px 0 #a16207" onclick="openPracticeStudyGuide(true)">Study Guide (Missed Questions)</button>` : ''}
+        <button class="sec" style="flex:1;margin:0;padding:13px 14px" onclick="openPracticeStudyGuide(false)">Full Quiz Study Guide</button>
       </div>
-      ${run.missedQ.length ? `<button class="go blue" style="margin-top:10px" onclick="retryMissed()">🎯 Retry ${run.missedQ.length} Missed Question${run.missedQ.length === 1 ? '' : 's'}</button>` : ''}
-      ${weakTopics.length ? `<button class="go" style="margin-top:8px;background:linear-gradient(180deg,#a855f7,#7c3aed);color:#fff;box-shadow:0 4px 0 #581c87" onclick="practiceWeakTopics()">📚 Practice Weak Chapters (&lt;80% · ${weakTopics.length} Chapter${weakTopics.length === 1 ? '' : 's'})</button>` : ''}
-      <button class="go" onclick="start()">🔁 Practice Full Quiz Again</button>
-      <button class="sec" onclick="setup()">⚙️ Change Practice Options</button>
+      ${run.missedQ.length ? `<button class="go blue" style="margin-top:10px" onclick="retryMissed()">Retry ${run.missedQ.length} Missed Question${run.missedQ.length === 1 ? '' : 's'}</button>` : ''}
+      ${weakTopics.length ? `<button class="go" style="margin-top:8px;background:linear-gradient(180deg,#a855f7,#7c3aed);color:#fff;box-shadow:0 4px 0 #581c87" onclick="practiceWeakTopics()">Practice Weak Chapters (&lt;80% · ${weakTopics.length} Chapter${weakTopics.length === 1 ? '' : 's'})</button>` : ''}
+      <button class="go" onclick="start()">Practice Full Quiz Again</button>
+      <button class="sec" onclick="setup()">Change Practice Options</button>
     </div>
   `;
 }
