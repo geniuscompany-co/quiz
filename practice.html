@@ -747,72 +747,64 @@ blockquote{
 .phase-bar{width:100%;height:7px;background:rgba(255,255,255,.18);border-radius:99px;overflow:hidden;margin-top:4px}
 .phase-fill{height:100%;background:linear-gradient(90deg,#c084fc,#60a5fa);transition:width .18s linear}
 .phase-banner.preview .phase-fill{background:linear-gradient(90deg,#fde047,#f97316)}
-.b-modal-bg{
-  display:none;
-  position:fixed;
-  inset:0;
-  background:rgba(7,4,16,.84);
-  backdrop-filter:blur(6px);
-  z-index:88;
+.p-hero-card{
+  display:flex;
   align-items:center;
-  justify-content:center;
-  padding:14px;
-  overflow-y:auto;
-}
-.b-modal-bg.open{display:flex}
-.b-modal{
-  background:#1b162b;
-  border:1.5px solid rgba(255,255,255,.26);
-  border-radius:18px;
-  padding:18px 16px;
-  max-width:620px;
-  width:100%;
-  max-height:92vh;
-  overflow-y:auto;
-  text-align:left;
-  box-shadow:0 20px 56px rgba(0,0,0,.75);
-}
-.b-modal h2{margin:0 0 4px;font-size:1.25em}
-.b-modal textarea{
-  width:100%;
-  min-height:190px;
-  box-sizing:border-box;
-  padding:11px 12px;
-  border-radius:11px;
-  border:2px solid transparent;
-  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
-  font-size:.88em;
-  line-height:1.45;
-  color:#1e1b2e;
-  background:#fff;
-  margin:4px 0 8px;
-}
-.b-card{
-  background:rgba(255,255,255,.07);
-  border:1px solid rgba(255,255,255,.16);
-  border-radius:12px;
-  padding:11px 12px;
-  margin-bottom:9px;
-}
-.b-card input[type=text]{
-  text-align:left!important;
-  padding:8px 10px!important;
-  font-size:.92em!important;
-  margin:0 0 6px!important;
-}
-.b-opt-row{display:flex;align-items:center;gap:6px;margin-bottom:5px}
-.b-opt-row input[type=text]{margin:0!important;flex:1}
-.b-star-btn{
-  padding:6px 10px;
-  border-radius:8px;
-  border:1px solid rgba(255,255,255,.25);
-  background:rgba(255,255,255,.1);
+  justify-content:space-between;
+  gap:10px;
+  padding:12px 14px;
+  border-radius:13px;
+  border:1.5px solid rgba(255,223,93,.55);
+  background:linear-gradient(135deg,rgba(255,223,93,.15),rgba(124,58,237,.18));
   color:#fff;
-  font-weight:900;
-  cursor:pointer;
-  flex-shrink:0;
+  text-align:left;
+  margin-bottom:14px;
+  box-shadow:0 4px 16px rgba(0,0,0,.22);
 }
-.b-star-btn.ok{background:#16a34a;border-color:#86efac;color:#fff}
+.p-hero-title{font-weight:900;font-size:.98em;line-height:1.25}
+.p-hero-sub{font-size:.78em;opacity:.82;font-weight:700;margin-top:2px}
+.p-sec-box{
+  background:rgba(15,12,26,.52);
+  border:1px solid rgba(255,255,255,.13);
+  border-radius:13px;
+  padding:11px 12px;
+  margin-bottom:10px;
+  text-align:left;
+}
+.p-sec-hdr{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  font-size:.78em;
+  font-weight:900;
+  text-transform:uppercase;
+  letter-spacing:.05em;
+  color:var(--gold);
+  margin-bottom:7px;
+}
+.p-toggle-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:7px;
+}
+@media (max-width:440px){
+  .p-toggle-grid{grid-template-columns:1fr}
+}
+.p-tog-pill{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  background:rgba(0,0,0,.28);
+  border:1px solid rgba(255,255,255,.16);
+  border-radius:10px;
+  padding:9px 11px;
+  font-size:.86em;
+  font-weight:800;
+  cursor:pointer;
+  user-select:none;
+}
+.p-tog-pill input[type=checkbox]{width:17px;height:17px;margin:0;accent-color:#22c55e;flex-shrink:0}
 </style></head><body>
 
 <div id="topHud">
@@ -823,7 +815,7 @@ blockquote{
       <button id="a11y" class="hud-btn" onclick="cycleA11y()" title="Colorblind / High-contrast">👁️</button>
     </div>
     <div class="hud-right" id="hudStats">
-      <span class="hud-stats">🧑‍🎓 Solo Studio</span>
+      <span class="hud-stats">🧑‍🎓 Solo Practice</span>
     </div>
   </div>
   <div class="timer-wrap" id="hudTimer" style="display:none">
@@ -834,51 +826,6 @@ blockquote{
 
 <div id="app"></div>
 <div id="imgOv" onclick="this.style.display='none'"><img id="imgBig" alt=""></div>
-<div class="b-modal-bg" id="stuQuizModal" onclick="if(event.target===this)closeStuBuilder()">
-  <div class="b-modal">
-    <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px">
-      <h2 id="stuModalHdr">➕ Create My Practice Quiz</h2>
-      <button type="button" class="sec" style="margin:0;padding:5px 12px;font-size:.84em" onclick="closeStuBuilder()">✕ Close</button>
-    </div>
-    <p class="sub" style="text-align:left;margin:0 0 10px">Build your own study deck! Add questions visually or paste formatted text / CSV. Saved privately on your device.</p>
-
-    <div class="field-lbl"><span>Quiz Title</span></div>
-    <input type="text" id="stuTitle" placeholder="e.g. Biology Midterm Review" style="text-align:left;font-size:.98em;padding:10px 12px">
-
-    <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin:8px 0 6px">
-      <div style="display:inline-flex;gap:5px;background:rgba(0,0,0,.35);padding:3px;border-radius:10px;border:1px solid rgba(255,255,255,.15)">
-        <button type="button" id="stuTabVis" class="sec" style="margin:0;padding:6px 12px;font-size:.82em;background:#7c3aed;border-color:#c4b5fd" onclick="setStuBuilderTab('vis')">🃏 Visual Cards</button>
-        <button type="button" id="stuTabTxt" class="sec" style="margin:0;padding:6px 12px;font-size:.82em" onclick="setStuBuilderTab('txt')">📝 Paste Text / CSV</button>
-      </div>
-      <label class="sec" style="margin:0;padding:6px 11px;font-size:.8em;display:inline-flex;align-items:center;gap:5px;cursor:pointer">
-        📂 Import .json/.csv
-        <input type="file" id="stuFileInp" accept=".json,.csv,.txt" style="display:none" onchange="onStuFileImport(event)">
-      </label>
-    </div>
-
-    <div id="stuVisPane">
-      <div id="stuCardList"></div>
-      <div style="display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 10px">
-        <button type="button" class="sec" style="margin:0;padding:7px 12px;font-size:.84em;background:rgba(34,197,94,.22);border-color:#4ade80" onclick="addStuCard('mc')">+ Multiple Choice</button>
-        <button type="button" class="sec" style="margin:0;padding:7px 12px;font-size:.84em" onclick="addStuCard('tf')">+ True / False</button>
-        <button type="button" class="sec" style="margin:0;padding:7px 12px;font-size:.84em" onclick="addStuCard('text')">+ Type Answer</button>
-      </div>
-    </div>
-
-    <div id="stuTxtPane" style="display:none">
-      <div style="font-size:.78em;opacity:.82;margin-bottom:4px;line-height:1.4">
-        Separate questions with a blank line. Prefix the correct choice with <b>*</b>. Optional lines: <code>Topic: Cell Biology</code>, <code>Quote: Explanation shown after answering</code>, <code>Time: 25</code>, <code>Think: 5</code>.
-      </div>
-      <textarea id="stuRawText" placeholder="What is the powerhouse of the cell?&#10;Nucleus&#10;*Mitochondria&#10;Ribosome&#10;Golgi apparatus&#10;Topic: Cell Biology&#10;Quote: Mitochondria generate most of the cell's ATP."></textarea>
-    </div>
-
-    <div id="stuBuildErr" class="err-banner"></div>
-    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
-      <button type="button" class="go" style="flex:1;margin:0" onclick="saveStuQuiz(true)">▶️ Save &amp; Practice Now</button>
-      <button type="button" class="sec" style="margin:0;padding:12px 16px" onclick="saveStuQuiz(false)">💾 Save to My Quizzes</button>
-    </div>
-  </div>
-</div>
 <canvas id="fx"></canvas>
 
 <script>
@@ -1008,35 +955,12 @@ function syncHud(){
   if(ht) ht.style.display = showMainTimer ? 'flex' : 'none';
 }
 
-let run = null, lockedQuiz = null, selectedDeckId = '';
+let run = null, lockedQuiz = null;
 const PRAC_PARAMS = new URLSearchParams(location.search);
 const PRAC_KEY = (PRAC_PARAMS.get('k') || '').trim();
 const PRAC_FILE = (PRAC_PARAMS.get('quiz') || PRAC_PARAMS.get('file') || '').trim();
 
-/* --- Student Self-Created Practice Quizzes (Local Device Storage) --- */
-function getStudentCustomQuizzes(){
-  try{
-    const arr = JSON.parse(localStorage.getItem('brainrush_student_practice_quizzes') || '[]');
-    return Array.isArray(arr) ? arr.filter(x => x && x.id && Array.isArray(x.questions) && x.questions.length) : [];
-  }catch(e){ return []; }
-}
-function saveStudentCustomQuizzes(list){
-  try{ localStorage.setItem('brainrush_student_practice_quizzes', JSON.stringify(list || [])); }catch(e){}
-}
-function selectPracticeSource(id){
-  selectedDeckId = id;
-  setup();
-}
 function getActivePracticeDeck(){
-  const stuList = getStudentCustomQuizzes();
-  if(selectedDeckId && selectedDeckId.startsWith('stu:')){
-    const found = stuList.find(x => x.id === selectedDeckId);
-    if(found) return found;
-  }
-  if(lockedQuiz && !lockedQuiz.error && (!selectedDeckId || selectedDeckId === 'assigned')){
-    return lockedQuiz;
-  }
-  if(stuList.length) return stuList[0];
   return (lockedQuiz && !lockedQuiz.error) ? lockedQuiz : null;
 }
 
@@ -1107,6 +1031,8 @@ function updatePracSummary(){
     try{ localStorage.setItem('brainrush_prac_tts', tts ? '1' : '0'); }catch(e){}
   }
   const parts = [];
+  parts.push(`${effCnt || maxN || 0} Qs`);
+  if(tfVal) parts.push(tfVal.replace(/^Chapter\s+(\d+).*/i, 'Ch $1'));
   parts.push(tm ? `${sec}s timer` : 'Untimed');
   if(prev > 0) parts.push(`${prev}s preview`);
   if(thk > 0) parts.push(`${thk}s think`);
@@ -1114,7 +1040,7 @@ function updatePracSummary(){
   if(!shufAns) parts.push('Fixed A/B/C/D');
   if(tts) parts.push('🔊 Read-Aloud');
   b.textContent = parts.join(' · ');
-  b.classList.toggle('hi', tm || prev > 0 || thk > 0 || tts);
+  b.classList.toggle('hi', true);
 }
 
 function onPracTopicFilterChange(){
@@ -1130,14 +1056,14 @@ function onPracTopicFilterChange(){
   updatePracSummary();
 }
 
-async function fetchAssignedQuiz(){
-  if(lockedQuiz) return lockedQuiz;
+async function fetchAssignedQuiz(forceRetry){
+  if(lockedQuiz && !lockedQuiz.error && !forceRetry) return lockedQuiz;
   const targetFile = PRAC_FILE || 'quiz_entr101_master150.json';
   const qUrl = PRAC_KEY
     ? '/api/quiz_data?k=' + encodeURIComponent(PRAC_KEY)
     : '/api/quiz_data?file=' + encodeURIComponent(targetFile);
   try{
-    const res = await fetch(qUrl);
+    const res = await fetch(qUrl, {cache: 'no-store'});
     const data = await res.json();
     if(!res.ok || data.error) return {error: data.error || 'Could not load practice quiz.'};
     const gradable = (data.questions || []).filter(q => !['poll','open','rank','info','scale','brainstorm'].includes(q.type));
@@ -1159,15 +1085,15 @@ async function setup(){
   stopSpeak();
   run = null;
   syncHud();
-  const qInfo = await fetchAssignedQuiz();
-  const hasAssigned = !!(qInfo && !qInfo.error);
-  const stuList = getStudentCustomQuizzes();
-  if(!selectedDeckId){
-    if(hasAssigned) selectedDeckId = 'assigned';
-    else if(stuList.length) selectedDeckId = stuList[0].id;
-  } else if(selectedDeckId !== 'assigned' && !stuList.some(x => x.id === selectedDeckId)){
-    selectedDeckId = hasAssigned ? 'assigned' : (stuList[0] ? stuList[0].id : '');
+  if(!lockedQuiz || lockedQuiz.error){
+    $.innerHTML = `
+      <div class="card-panel">
+        <h1>🧑‍🎓 Solo Practice</h1>
+        <p class="sub">Loading Comprehensive Test…</p>
+      </div>
+    `;
   }
+  const qInfo = await fetchAssignedQuiz(true);
   const active = getActivePracticeDeck();
   const n = active ? (active.questions || []).length : 0;
   const deckTopics = [];
@@ -1178,37 +1104,16 @@ async function setup(){
     });
   }
 
-  let deckCardsHtml = '';
-  if(hasAssigned){
-    const sel = (active && active.id === 'assigned');
-    deckCardsHtml += `<div class="p-deck-card ${sel ? 'sel' : ''}" data-id="assigned" onclick="selectPracticeSource('assigned')">
-      <span style="min-width:0;overflow:hidden;text-overflow:ellipsis">🎓 ${esc(qInfo.title)}</span>
-      <span class="p-deck-meta">${qInfo.count || 0} Qs</span>
-    </div>`;
-  }
-  stuList.forEach(sq => {
-    const sel = (active && active.id === sq.id);
-    deckCardsHtml += `<div class="p-deck-card ${sel ? 'sel' : ''}" data-id="${esc(sq.id)}" onclick="selectPracticeSource('${esc(sq.id)}')">
-      <span style="min-width:0;overflow:hidden;text-overflow:ellipsis">✍️ ${esc(sq.title)}</span>
-      <span style="display:inline-flex;align-items:center;gap:5px;flex-shrink:0" onclick="event.stopPropagation()">
-        <span class="p-deck-meta">${(sq.questions || []).length} Qs</span>
-        <button type="button" class="hud-btn" style="padding:3px 8px;font-size:.75em" title="Edit this quiz" onclick="openStuBuilder('${esc(sq.id)}')">✏️</button>
-        <button type="button" class="hud-btn" style="padding:3px 8px;font-size:.75em;background:rgba(226,27,60,.35)" title="Delete this quiz" onclick="deleteStuQuiz('${esc(sq.id)}')">🗑️</button>
-      </span>
-    </div>`;
-  });
-
   if(!active){
     const msg = (qInfo && qInfo.error)
       ? qInfo.error
-      : 'Create your own custom practice quiz below to start studying!';
+      : 'Could not load the Comprehensive Test. Tap Retry below.';
     $.innerHTML = `
       <div class="card-panel">
-        <div class="studio-hero-pill"><span class="hud-bolt">⚡</span>BrainRush &middot; Solo Studio</div>
         <h1>🧑‍🎓 Solo Practice</h1>
         <p class="sub">${esc(msg)}</p>
-        <button type="button" class="go" onclick="openStuBuilder()">➕ Create My Own Practice Quiz</button>
-        <a class="sec" href="/play" style="display:inline-block;text-decoration:none;margin-top:12px">🎮 Go to Live Game Join Screen</a>
+        <button type="button" class="go" onclick="setup()">🔄 Retry Loading Comprehensive Test</button>
+        <a class="sec" href="/play" style="display:inline-block;text-decoration:none;margin-top:12px">🎮 Back to Live Game</a>
       </div>
     `;
     return;
@@ -1217,43 +1122,45 @@ async function setup(){
   $.innerHTML = `
     <div class="card-panel">
       <h1>🧑‍🎓 Solo Practice</h1>
-      <p class="sub" style="margin-bottom:14px">Practice at your own pace with instant feedback and a custom study guide.</p>
+      <p class="sub" style="margin-bottom:12px">Study at your own pace with Percentage Grading, Read-Aloud, Chapter Accuracy, and a Printable Study Guide.</p>
 
-      <div class="field-lbl"><span>Quiz</span></div>
-      <div class="p-deck-list">${deckCardsHtml}</div>
-
-      ${deckTopics.length > 1 ? `<div class="field-lbl" style="margin-top:10px"><span>Chapter / Topic</span></div>
-      <select id="pracTopicFilter" onchange="onPracTopicFilterChange()" style="font-size:.96em;padding:10px 12px;text-align:left;margin-bottom:8px">
-        <option value="">📚 All ${deckTopics.length} Chapters (${n} Questions)</option>
-        ${deckTopics.map(tp => {
-          const c = (active.questions || []).filter(q => String((q && q.topic) || '').trim() === tp).length;
-          return `<option value="${esc(tp)}">🏷️ ${esc(tp)} (${c} Qs)</option>`;
-        }).join('')}
-      </select>` : ''}
-
-      <div class="field-lbl" style="margin-top:8px"><span>How Many Questions?</span></div>
-      <div class="p-count-chips">
-        <button type="button" class="p-chip" data-cnt="10" onclick="setPracCountChip(10)">10 Qs</button>
-        <button type="button" class="p-chip" data-cnt="25" onclick="setPracCountChip(25)">25 Qs</button>
-        <button type="button" class="p-chip" data-cnt="50" onclick="setPracCountChip(50)">50 Qs</button>
-        <button type="button" class="p-chip sel" data-cnt="all" onclick="setPracCountChip('all')">All (${n})</button>
+      <div class="p-hero-card">
+        <div style="min-width:0">
+          <div class="p-hero-title">🎓 ${esc(qInfo.title)}</div>
+          <div class="p-hero-sub">${deckTopics.length ? `${deckTopics.length} Chapters · ` : ''}${n} Total Questions</div>
+        </div>
+        <span class="p-deck-meta">${n} Qs</span>
       </div>
 
-      <div id="pErr" class="err-banner"></div>
-      <button class="go" id="startPracBtn" onclick="start()">▶️ Start Practice (${n} Qs)</button>
+      <div onchange="updatePracSummary()" oninput="updatePracSummary()">
+        <div class="p-sec-box">
+          <div class="p-sec-hdr">
+            <span>📚 1. Chapter &amp; Question Count</span>
+            <span class="p-acc-badge hi" id="pOptBadge">All ${n} Qs · Untimed</span>
+          </div>
+          ${deckTopics.length > 1 ? `<select id="pracTopicFilter" onchange="onPracTopicFilterChange()" style="font-size:.94em;padding:9px 11px;text-align:left;margin-bottom:8px">
+            <option value="">All ${deckTopics.length} Chapters (${n} Questions)</option>
+            ${deckTopics.map(tp => {
+              const c = (active.questions || []).filter(q => String((q && q.topic) || '').trim() === tp).length;
+              return `<option value="${esc(tp)}">🏷️ ${esc(tp)} (${c} Qs)</option>`;
+            }).join('')}
+          </select>` : ''}
+          <div class="p-count-chips" style="margin-bottom:0">
+            <button type="button" class="p-chip" data-cnt="10" onclick="setPracCountChip(10)">10 Qs</button>
+            <button type="button" class="p-chip" data-cnt="25" onclick="setPracCountChip(25)">25 Qs</button>
+            <button type="button" class="p-chip" data-cnt="50" onclick="setPracCountChip(50)">50 Qs</button>
+            <button type="button" class="p-chip sel" data-cnt="all" onclick="setPracCountChip('all')">All (${n})</button>
+          </div>
+        </div>
 
-      <details class="p-acc" id="pTimersAcc">
-        <summary>
-          <span class="sum-left"><span class="chev">▶</span> ⚙️ Timers, Read-Aloud &amp; Options</span>
-          <span class="p-acc-badge" id="pOptBadge">Untimed · Shuffled</span>
-        </summary>
-        <div class="p-acc-body" onchange="updatePracSummary()" oninput="updatePracSummary()">
-          <div class="quick-pacing-grid">
-            <label class="qp-box" title="Custom number of questions to practice">
+        <div class="p-sec-box">
+          <div class="p-sec-hdr"><span>⏱️ 2. Timers &amp; Pacing</span></div>
+          <div class="quick-pacing-grid" style="margin-bottom:0">
+            <label class="qp-box" title="Exact number of questions to practice">
               <span>📝 Questions</span>
               <span><input id="cnt" type="number" min="1" max="${n || 1}" value="${n || ''}" placeholder="All"> <small id="pMaxCnt" style="opacity:.75">/ ${n || '—'}</small></span>
             </label>
-            <label class="qp-box" title="Seconds to answer each question when Countdown Timer is enabled">
+            <label class="qp-box" title="Seconds per question when Countdown Timer is checked">
               <span>⏱️ Timer</span>
               <span><input id="pTime" type="number" min="5" max="900" value="15"> <small style="opacity:.75">s</small></span>
             </label>
@@ -1261,35 +1168,28 @@ async function setup(){
               <span>👀 Preview</span>
               <span><input id="pPrevTime" type="number" min="0" max="120" value="0"> <small style="opacity:.75">s</small></span>
             </label>
-            <label class="qp-box" title="Choices shown on screen, but locked while you reason (0 = off)">
+            <label class="qp-box" title="Choices shown on screen, locked while you think (0 = off)">
               <span>🧠 Think</span>
               <span><input id="pThinkTime" type="number" min="0" max="120" value="0"> <small style="opacity:.75">s</small></span>
             </label>
           </div>
+        </div>
 
-          <div class="timer-opt-row">
-            <label><input type="checkbox" id="timed"> ⏱️ Enable Countdown Timer</label>
-          </div>
-
-          <div class="timer-opt-row">
-            <label><input type="checkbox" id="pracReadAloud"> 🔊 Student Read-Aloud (Auto-Speak Questions &amp; Choices)</label>
-          </div>
-
-          <div class="timer-opt-row">
-            <label><input type="checkbox" id="pracShuffle"> 🎲 Randomize Question Order</label>
-          </div>
-
-          <div class="timer-opt-row" style="margin-bottom:2px">
-            <label><input type="checkbox" id="pracShuffleAns"> 🔀 Shuffle A/B/C/D Choices</label>
+        <div class="p-sec-box">
+          <div class="p-sec-hdr"><span>🎛️ 3. Practice Options</span></div>
+          <div class="p-toggle-grid">
+            <label class="p-tog-pill"><input type="checkbox" id="timed"> <span>⏱️ Countdown Timer</span></label>
+            <label class="p-tog-pill"><input type="checkbox" id="pracReadAloud"> <span>🔊 Auto Read-Aloud</span></label>
+            <label class="p-tog-pill"><input type="checkbox" id="pracShuffle"> <span>🎲 Shuffle Questions</span></label>
+            <label class="p-tog-pill"><input type="checkbox" id="pracShuffleAns"> <span>🔀 Shuffle Choices</span></label>
           </div>
         </div>
-      </details>
-
-      <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-top:6px;padding-top:10px;border-top:1px solid rgba(255,255,255,.1)">
-        <button type="button" class="hud-btn" style="padding:7px 13px;font-size:.86em;background:rgba(124,58,237,.35);border-color:rgba(196,181,253,.55)" onclick="openStuBuilder()">➕ Create My Own Quiz</button>
-        <a class="hud-btn" href="/play" style="padding:7px 13px;font-size:.86em;text-decoration:none">🎮 Join Live Class Game</a>
       </div>
+
+      <div id="pErr" class="err-banner"></div>
+      <button class="go" id="startPracBtn" onclick="start()">▶️ Start Practice (${n} Qs)</button>
     </div>
+    <div><a class="plink" href="/play">🎮 Back to Live Game</a></div>
   `;
   const shufEl = document.getElementById('pracShuffle');
   if(shufEl) shufEl.checked = true;
@@ -2108,280 +2008,10 @@ function finish(){
       ${run.missedQ.length ? `<button class="go blue" style="margin-top:10px" onclick="retryMissed()">🎯 Retry ${run.missedQ.length} Missed Question${run.missedQ.length === 1 ? '' : 's'}</button>` : ''}
       ${weakTopics.length ? `<button class="go" style="margin-top:8px;background:linear-gradient(180deg,#a855f7,#7c3aed);color:#fff;box-shadow:0 4px 0 #581c87" onclick="practiceWeakTopics()">📚 Practice Weak Chapters (&lt;80% · ${weakTopics.length} Chapter${weakTopics.length === 1 ? '' : 's'})</button>` : ''}
       <button class="go" onclick="start()">🔁 Practice Full Quiz Again</button>
-      <button class="sec" onclick="setup()">⚙️ Change Practice Options / Quizzes</button>
+      <button class="sec" onclick="setup()">⚙️ Change Practice Options</button>
     </div>
   `;
 }
 
-/* --- Student Self-Created Quiz Builder (Visual Cards + Paste Text/CSV) --- */
-let stuBuilderMode = 'vis', stuEditingId = '', stuCards = [];
-function makeBlankStuCard(type){
-  const t = type || 'mc';
-  if(t === 'tf') return {type:'tf', q:'', a:['True','False'], c:0, topic:'', quote:''};
-  if(t === 'text') return {type:'text', q:'', a:[''], c:0, topic:'', quote:''};
-  return {type:'mc', q:'', a:['','','',''], c:0, topic:'', quote:''};
-}
-function openStuBuilder(editId){
-  stuEditingId = editId || '';
-  const modal = document.getElementById('stuQuizModal');
-  const hdr = document.getElementById('stuModalHdr');
-  const tInp = document.getElementById('stuTitle');
-  const errEl = document.getElementById('stuBuildErr');
-  if(errEl) errEl.style.display = 'none';
-  const existing = stuEditingId ? getStudentCustomQuizzes().find(x => x.id === stuEditingId) : null;
-  if(existing){
-    if(hdr) hdr.textContent = '✏️ Edit My Practice Quiz';
-    if(tInp) tInp.value = existing.title || '';
-    stuCards = JSON.parse(JSON.stringify(existing.questions || [makeBlankStuCard('mc')]));
-  } else {
-    if(hdr) hdr.textContent = '➕ Create My Practice Quiz';
-    if(tInp) tInp.value = '';
-    stuCards = [makeBlankStuCard('mc')];
-  }
-  const rawEl = document.getElementById('stuRawText');
-  if(rawEl) rawEl.value = formatStuQuestionsText(stuCards);
-  setStuBuilderTab('vis', true);
-  renderStuCards();
-  if(modal) modal.classList.add('open');
-}
-function closeStuBuilder(){
-  const modal = document.getElementById('stuQuizModal');
-  if(modal) modal.classList.remove('open');
-}
-function setStuBuilderTab(tab, skipSync){
-  if(!skipSync){
-    if(stuBuilderMode === 'vis' && tab === 'txt'){
-      const rawEl = document.getElementById('stuRawText');
-      if(rawEl) rawEl.value = formatStuQuestionsText(stuCards);
-    } else if(stuBuilderMode === 'txt' && tab === 'vis'){
-      const rawEl = document.getElementById('stuRawText');
-      const parsed = parseStuQuestionsText(rawEl ? rawEl.value : '');
-      if(parsed.length) stuCards = parsed;
-      renderStuCards();
-    }
-  }
-  stuBuilderMode = tab;
-  const vp = document.getElementById('stuVisPane'), tp = document.getElementById('stuTxtPane');
-  const tv = document.getElementById('stuTabVis'), tt = document.getElementById('stuTabTxt');
-  if(vp) vp.style.display = tab === 'vis' ? 'block' : 'none';
-  if(tp) tp.style.display = tab === 'txt' ? 'block' : 'none';
-  if(tv){ tv.style.background = tab === 'vis' ? '#7c3aed' : ''; tv.style.borderColor = tab === 'vis' ? '#c4b5fd' : ''; }
-  if(tt){ tt.style.background = tab === 'txt' ? '#7c3aed' : ''; tt.style.borderColor = tab === 'txt' ? '#c4b5fd' : ''; }
-}
-function renderStuCards(){
-  const box = document.getElementById('stuCardList');
-  if(!box) return;
-  box.innerHTML = stuCards.map((c, idx) => {
-    const t = c.type || 'mc';
-    let optsHtml = '';
-    if(t === 'tf'){
-      optsHtml = `<div style="display:flex;gap:8px;margin-bottom:6px">
-        ${['True','False'].map((lbl, oi) => `<button type="button" class="b-star-btn ${(c.c||0)===oi?'ok':''}" style="flex:1" onclick="stuSetCorrect(${idx},${oi})">${(c.c||0)===oi?'✓ ':''}${lbl}</button>`).join('')}
-      </div>`;
-    } else if(t === 'text'){
-      optsHtml = `<input type="text" placeholder="Accepted answer (separate synonyms with /)" value="${esc((c.a||[]).join(' / '))}" oninput="stuSetTextAns(${idx},this.value)">`;
-    } else {
-      const arr = Array.isArray(c.a) && c.a.length ? c.a : ['','','',''];
-      optsHtml = arr.map((opt, oi) => `<div class="b-opt-row">
-        <button type="button" class="b-star-btn ${(c.c||0)===oi?'ok':''}" title="Mark as correct answer" onclick="stuSetCorrect(${idx},${oi})">${(c.c||0)===oi?'✓':'○'}</button>
-        <input type="text" placeholder="Choice ${String.fromCharCode(65+oi)}${(c.c||0)===oi?' (Correct)':''}" value="${esc(opt)}" oninput="stuSetOpt(${idx},${oi},this.value)">
-      </div>`).join('');
-    }
-    return `<div class="b-card">
-      <div style="display:flex;align-items:center;justify-content:space-between;gap:6px;margin-bottom:6px;font-size:.82em;font-weight:850">
-        <span style="color:var(--gold)">Question #${idx+1} (${t==='tf'?'True/False':t==='text'?'Type Answer':'Multiple Choice'})</span>
-        ${stuCards.length > 1 ? `<button type="button" class="hud-btn" style="padding:2px 8px;font-size:.85em;background:rgba(226,27,60,.35)" onclick="stuDelCard(${idx})">🗑️ Remove</button>` : ''}
-      </div>
-      <input type="text" placeholder="Question prompt…" value="${esc(c.q||'')}" oninput="stuCards[${idx}].q=this.value">
-      ${optsHtml}
-      <div style="display:grid;grid-template-columns:1fr 1.4fr;gap:6px;margin-top:4px">
-        <input type="text" placeholder="🏷️ Topic (optional)" value="${esc(c.topic||'')}" oninput="stuCards[${idx}].topic=this.value" style="margin:0!important">
-        <input type="text" placeholder="💡 Explanation / Quote (optional)" value="${esc(c.quote||'')}" oninput="stuCards[${idx}].quote=this.value" style="margin:0!important">
-      </div>
-    </div>`;
-  }).join('');
-}
-function addStuCard(type){
-  stuCards.push(makeBlankStuCard(type));
-  renderStuCards();
-}
-function stuDelCard(idx){
-  if(stuCards.length <= 1) return;
-  stuCards.splice(idx, 1);
-  renderStuCards();
-}
-function stuSetCorrect(idx, oi){
-  if(!stuCards[idx]) return;
-  stuCards[idx].c = oi;
-  renderStuCards();
-}
-function stuSetOpt(idx, oi, val){
-  if(!stuCards[idx]) return;
-  if(!Array.isArray(stuCards[idx].a)) stuCards[idx].a = ['','','',''];
-  stuCards[idx].a[oi] = val;
-}
-function stuSetTextAns(idx, val){
-  if(!stuCards[idx]) return;
-  stuCards[idx].a = String(val || '').split('/').map(x => x.trim()).filter(Boolean);
-}
-function formatStuQuestionsText(qs){
-  return (qs || []).filter(q => q && (q.q || '').trim()).map(q => {
-    const t = q.type || 'mc';
-    const lines = [q.q.trim()];
-    if(t !== 'mc') lines.push('Type: ' + t);
-    if(t === 'tf'){
-      lines.push('*' + ((q.c === 1) ? 'False' : 'True'));
-    } else if(t === 'text'){
-      (q.a || []).filter(Boolean).forEach(a => lines.push(a));
-    } else {
-      (q.a || []).forEach((a, i) => {
-        if(String(a || '').trim()) lines.push((i === (q.c || 0) ? '*' : '') + String(a).trim());
-      });
-    }
-    if(q.topic) lines.push('Topic: ' + q.topic);
-    if(q.quote) lines.push('Quote: ' + q.quote);
-    return lines.join('\n');
-  }).join('\n\n');
-}
-function parseStuQuestionsText(raw){
-  const s = String(raw || '').trim();
-  if(!s) return [];
-  if(s.startsWith('[') || s.startsWith('{')){
-    try{
-      const j = JSON.parse(s);
-      const arr = Array.isArray(j) ? j : (j.questions || []);
-      return arr.filter(x => x && x.q);
-    }catch(e){}
-  }
-  const blocks = s.split(/\n\s*\n/).map(b => b.trim()).filter(Boolean);
-  if(blocks.length === 1 && s.includes(',') && s.split('\n').length > 1 && !/^\*/m.test(s)){
-    return s.split('\n').map(l => l.trim()).filter(Boolean).map(line => {
-      const p = line.split(',').map(x => x.trim());
-      if(p.length < 5 || p[0].toLowerCase() === 'question') return null;
-      const ans = p.slice(1, 5), cv = p[5] || '';
-      let cIdx = 0;
-      if(/^[a-d]$/i.test(cv)) cIdx = cv.toUpperCase().charCodeAt(0) - 65;
-      else if(/^[1-4]$/.test(cv)) cIdx = parseInt(cv, 10) - 1;
-      else { const k = ans.findIndex(x => x.toLowerCase() === cv.toLowerCase()); if(k >= 0) cIdx = k; }
-      return {type:'mc', q:p[0], a:ans, c:cIdx, topic:p[6]||'', quote:p[7]||''};
-    }).filter(Boolean);
-  }
-  return blocks.map(b => {
-    const lines = b.split('\n').map(l => l.trim()).filter(Boolean);
-    if(lines.length < 2) return null;
-    const q = lines[0];
-    let type = 'mc', c = 0, starTxt = '', topic = '', quote = '', tCustom = 0, thinkVal = 0;
-    const a = [];
-    lines.slice(1).forEach(l => {
-      if(/^type:/i.test(l)) type = l.replace(/^type:\s*/i, '').trim().toLowerCase();
-      else if(/^topic:/i.test(l)) topic = l.replace(/^topic:\s*/i, '').trim();
-      else if(/^(quote|explain):/i.test(l)) quote = l.replace(/^(quote|explain):\s*/i, '').trim();
-      else if(/^timer?:/i.test(l)) tCustom = parseInt(l.replace(/^timer?:\s*/i, ''), 10) || 0;
-      else if(/^think:/i.test(l)) thinkVal = parseInt(l.replace(/^think:\s*/i, ''), 10) || 0;
-      else {
-        let txt = l.replace(/^-\s+/, '').trim();
-        if(txt.startsWith('*')){
-          txt = txt.slice(1).trim();
-          c = a.length;
-          starTxt = txt;
-        }
-        if(txt) a.push(txt);
-      }
-    });
-    const out = {type, q, a, c, topic, quote};
-    if(tCustom >= 5){ out.t = tCustom; out.t_custom = true; }
-    if(thinkVal > 0) out.think = thinkVal;
-    if(type === 'tf'){
-      out.a = ['True', 'False'];
-      out.c = /^f/i.test(starTxt || a[0] || 't') ? 1 : 0;
-    } else if(type === 'text'){
-      if(!out.a.length) return null;
-    } else {
-      if(out.a.length < 2) return null;
-    }
-    return out;
-  }).filter(Boolean);
-}
-function onStuFileImport(ev){
-  const f = ev.target && ev.target.files && ev.target.files[0];
-  if(!f) return;
-  const tInp = document.getElementById('stuTitle');
-  if(tInp && !tInp.value.trim()){
-    tInp.value = f.name.replace(/\.(json|csv|txt)$/i, '').replace(/[_-]+/g, ' ');
-  }
-  const reader = new FileReader();
-  reader.onload = () => {
-    const parsed = parseStuQuestionsText(reader.result || '');
-    if(parsed.length){
-      stuCards = parsed;
-      const rawEl = document.getElementById('stuRawText');
-      if(rawEl) rawEl.value = formatStuQuestionsText(stuCards);
-      renderStuCards();
-    }
-  };
-  reader.readAsText(f);
-  ev.target.value = '';
-}
-function saveStuQuiz(startNow){
-  const errEl = document.getElementById('stuBuildErr');
-  if(errEl) errEl.style.display = 'none';
-  const title = ((document.getElementById('stuTitle') || {}).value || '').trim() || 'My Practice Quiz';
-  let qs = [];
-  if(stuBuilderMode === 'txt'){
-    qs = parseStuQuestionsText((document.getElementById('stuRawText') || {}).value || '');
-  } else {
-    qs = stuCards.map(c => {
-      const qTxt = String(c.q || '').trim();
-      if(!qTxt) return null;
-      const t = c.type || 'mc';
-      if(t === 'tf') return {type:'tf', q:qTxt, a:['True','False'], c:c.c===1?1:0, topic:(c.topic||'').trim(), quote:(c.quote||'').trim()};
-      if(t === 'text'){
-        const ans = (c.a || []).map(x => String(x || '').trim()).filter(Boolean);
-        if(!ans.length) return null;
-        return {type:'text', q:qTxt, a:ans, c:0, topic:(c.topic||'').trim(), quote:(c.quote||'').trim()};
-      }
-      const rawA = (c.a || []).map(x => String(x || '').trim());
-      const validA = [];
-      let newC = 0;
-      rawA.forEach((opt, idx) => {
-        if(opt){
-          if(idx === (c.c || 0)) newC = validA.length;
-          validA.push(opt);
-        }
-      });
-      if(validA.length < 2) return null;
-      return {type:'mc', q:qTxt, a:validA, c:newC, topic:(c.topic||'').trim(), quote:(c.quote||'').trim()};
-    }).filter(Boolean);
-  }
-  if(!qs.length){
-    if(errEl){
-      errEl.textContent = 'Add at least 1 question with valid answer choices before saving.';
-      errEl.style.display = 'block';
-    }
-    return;
-  }
-  const list = getStudentCustomQuizzes();
-  const id = stuEditingId || ('stu:' + Date.now());
-  const item = {id, title, questions: qs, count: qs.length, updated: Date.now()};
-  const idx = list.findIndex(x => x.id === id);
-  if(idx >= 0) list[idx] = item;
-  else list.unshift(item);
-  saveStudentCustomQuizzes(list);
-  selectedDeckId = id;
-  closeStuBuilder();
-  setup().then(() => {
-    if(startNow) start();
-  });
-}
-function deleteStuQuiz(id){
-  const list = getStudentCustomQuizzes();
-  const target = list.find(x => x.id === id);
-  if(!target) return;
-  if(!confirm(`Delete "${target.title}" from your device?`)) return;
-  const next = list.filter(x => x.id !== id);
-  saveStudentCustomQuizzes(next);
-  if(selectedDeckId === id) selectedDeckId = '';
-  setup();
-}
 setup();
 </script></body></html>

@@ -5058,7 +5058,7 @@ function openLinks(){
   ['🖥️ Spectator screen (leaderboard + word cloud)', o + '/spectator' + (pin ? '?pin='+pin : '')],
   ['🏆 Leaderboard only', o + '/spectator?mode=board' + (pin ? '&pin='+pin : '')],
   ['💭 Word cloud only', o + '/spectator?mode=cloud' + (pin ? '&pin='+pin : '')],
-  ...(!inCase ? [['🧑‍🎓 Student Solo Practice (Comprehensive Test & Self-Study Builder)', o + '/practice']] : [])
+  ...(!inCase ? [['🧑‍🎓 Student Solo Practice (ENTR 101 Comprehensive Test)', o + '/practice']] : [])
  ];
  document.getElementById('linksBody').innerHTML = '<p style="opacity:.8">Open on a second screen or share with students:</p>' + rows.map(r=>`<div><b style="font-size:.9em">${r[0]}</b><div class="link-row"><input readonly value="${esc(r[1])}" onclick="this.select()"><button class="btn-sm" style="margin:0" onclick="navigator.clipboard.writeText(this.previousElementSibling.value)">📋</button><a href="${esc(r[1])}" target="_blank"><button class="btn-sm" style="margin:0">↗</button></a></div></div>`).join('');
  document.getElementById('linksModal').classList.add('open');
@@ -5197,7 +5197,7 @@ const GUIDE = [
  ]},
  {id:'screens', title:'🖥️ Other Screens', items:[
   ['/spectator', 'A second-screen view with the live leaderboard and word cloud. Add ?mode=board or ?mode=cloud for just one. Standings hide the current question\'s results until it ends.'],
-  ['/practice', 'Solo Practice & Self-Study Studio: open to anyone at /practice with the ENTR 101 Comprehensive Test (all 10 chapters) ready to practice, plus the ability for students to create their own custom practice quizzes! Solo Practice includes full Timers & Pacing (Questions, Timer, Reading Preview, Thinking Time), Student Read-Aloud, Percentage Grading, Accuracy by Topic, Tough Ones Recap (Most Missed), and a printable Study Guide of missed questions.'],
+  ['/practice', 'Solo Practice: open to anyone at /practice with the ENTR 101 Comprehensive Test (all 10 chapters) preloaded and ready to practice! Includes Chapter filtering, full Timers & Pacing (Questions, Timer, Reading Preview, Thinking Time), Student Read-Aloud, Percentage Grading, Accuracy by Chapter, Tough Ones Recap (Most Missed), and a printable Study Guide of missed questions.'],
   ['/remote', 'The phone host remote — pair via Session Settings or 📱 Remote to pick & launch a session pre-game and control slides live.'],
   ['👁️ Phone accessibility button', 'On the join screen and in-game, cycles normal, colorblind and high-contrast colors.']
  ]}
