@@ -646,43 +646,315 @@ blockquote{
 }
 
 /* --- Finish Summary & Missed Review --- */
+.res-hero{
+  background:radial-gradient(circle at 50% 0%,rgba(124,58,237,.32),rgba(15,12,26,.78) 76%);
+  border:1px solid rgba(255,255,255,.16);
+  border-radius:18px;
+  padding:20px 16px 16px;
+  margin-bottom:12px;
+  text-align:center;
+  box-shadow:0 10px 28px rgba(0,0,0,.3);
+}
+.res-kicker{
+  font-size:.74em;
+  font-weight:900;
+  text-transform:uppercase;
+  letter-spacing:.12em;
+  color:rgba(255,255,255,.68);
+  margin-bottom:4px;
+}
+.res-title{
+  font-size:1.35em;
+  font-weight:900;
+  margin:0 0 14px;
+  letter-spacing:-.015em;
+}
+.score-ring{
+  --p:0;
+  --ring-col:#ffdf5d;
+  width:138px;
+  height:138px;
+  border-radius:50%;
+  margin:0 auto 12px;
+  padding:11px;
+  background:conic-gradient(var(--ring-col) calc(var(--p) * 1%),rgba(255,255,255,.11) 0);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 8px 26px rgba(0,0,0,.38);
+}
+.score-ring-in{
+  width:100%;
+  height:100%;
+  border-radius:50%;
+  background:#151125;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  border:1px solid rgba(255,255,255,.1);
+}
+.score-pct{
+  font-size:2.2em;
+  font-weight:900;
+  line-height:1;
+  letter-spacing:-.03em;
+  color:#fff;
+}
+.score-lbl{
+  font-size:.68em;
+  font-weight:850;
+  text-transform:uppercase;
+  letter-spacing:.09em;
+  color:rgba(255,255,255,.65);
+  margin-top:4px;
+}
+.res-status-pill{
+  display:inline-block;
+  padding:5px 14px;
+  border-radius:99px;
+  font-size:.82em;
+  font-weight:900;
+  letter-spacing:.02em;
+  margin-bottom:14px;
+}
+.res-status-pill.hi{background:rgba(34,197,94,.2);color:#86efac;border:1px solid rgba(74,222,128,.45)}
+.res-status-pill.mid{background:rgba(250,204,21,.18);color:#fde047;border:1px solid rgba(250,204,21,.45)}
+.res-status-pill.low{background:rgba(239,68,68,.2);color:#fca5a5;border:1px solid rgba(248,113,113,.45)}
 .stats-grid{
   display:grid;
   grid-template-columns:repeat(3,1fr);
   gap:8px;
-  margin:12px 0;
+  margin:0;
 }
 .stat{
-  background:rgba(0,0,0,.3);
-  border:1px solid rgba(255,255,255,.16);
+  background:rgba(0,0,0,.34);
+  border:1px solid rgba(255,255,255,.13);
   border-radius:12px;
-  padding:10px 8px;
+  padding:10px 6px;
   font-weight:750;
-  font-size:.84em;
+  font-size:.76em;
+  color:rgba(255,255,255,.78);
+  text-transform:uppercase;
+  letter-spacing:.04em;
 }
 .stat b{
   display:block;
-  font-size:1.45em;
+  font-size:1.5em;
   font-weight:900;
-  color:var(--gold);
+  color:#fff;
   margin-bottom:2px;
+  letter-spacing:-.01em;
 }
-.review-box{
-  background:rgba(0,0,0,.26);
-  border:1px solid rgba(255,255,255,.16);
-  border-radius:13px;
-  padding:12px 14px;
-  margin:10px 0;
+.sg-cta-card{
+  background:linear-gradient(135deg,rgba(250,204,21,.14),rgba(124,58,237,.22));
+  border:1.5px solid rgba(255,223,93,.48);
+  border-radius:15px;
+  padding:14px;
+  margin:0 0 12px;
   text-align:left;
+  box-shadow:0 6px 20px rgba(0,0,0,.22);
 }
-.review-box h3{margin:0 0 8px;font-size:1em;color:var(--gold)}
-.missed{
-  border-top:1px solid rgba(255,255,255,.14);
-  padding:9px 0;
-  font-size:.92em;
-  line-height:1.38;
+.sg-cta-hdr{
+  font-size:.76em;
+  font-weight:900;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  color:var(--gold);
+  margin-bottom:3px;
 }
-.missed:first-of-type{border-top:0;padding-top:2px}
+.sg-cta-sub{
+  font-size:.86em;
+  color:rgba(255,255,255,.82);
+  margin:0 0 10px;
+  line-height:1.35;
+}
+.sg-btn-row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+}
+@media (max-width:440px){
+  .sg-btn-row{grid-template-columns:1fr}
+}
+.sg-btn-pri{
+  width:100%;
+  padding:12px 12px;
+  border-radius:11px;
+  border:0;
+  background:linear-gradient(180deg,#facc15,#eab308);
+  color:#1e1b2e;
+  font-weight:900;
+  font-size:.9em;
+  cursor:pointer;
+  box-shadow:0 3px 0 #a16207;
+}
+.sg-btn-sec{
+  width:100%;
+  padding:12px 12px;
+  border-radius:11px;
+  border:1.5px solid rgba(255,255,255,.28);
+  background:rgba(15,12,26,.65);
+  color:#fff;
+  font-weight:850;
+  font-size:.9em;
+  cursor:pointer;
+}
+.res-actions-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  margin-bottom:12px;
+}
+@media (max-width:440px){
+  .res-actions-grid{grid-template-columns:1fr}
+}
+.res-act-btn{
+  width:100%;
+  margin:0!important;
+  padding:12px 12px!important;
+  font-size:.92em!important;
+  border-radius:11px!important;
+}
+.res-sec{
+  background:rgba(15,12,26,.58);
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:14px;
+  margin:0 0 10px;
+  text-align:left;
+  overflow:hidden;
+}
+.res-sec summary{
+  list-style:none;
+  cursor:pointer;
+  padding:13px 14px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  font-weight:900;
+  font-size:.9em;
+  color:#fff;
+  user-select:none;
+}
+.res-sec summary::-webkit-details-marker{display:none}
+.res-sec-pill{
+  font-size:.76em;
+  font-weight:850;
+  padding:3px 10px;
+  border-radius:99px;
+  background:rgba(255,255,255,.11);
+  color:var(--gold);
+  white-space:nowrap;
+}
+.res-sec-body{
+  padding:4px 14px 14px;
+  border-top:1px solid rgba(255,255,255,.09);
+}
+.ch-row{
+  background:rgba(0,0,0,.28);
+  border:1px solid rgba(255,255,255,.11);
+  border-radius:11px;
+  padding:10px 12px;
+  margin-top:8px;
+}
+.ch-row-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-bottom:6px;
+}
+.ch-name{
+  font-weight:850;
+  font-size:.9em;
+  line-height:1.25;
+}
+.ch-meta{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  font-weight:850;
+  font-size:.84em;
+}
+.q-rev-card{
+  background:rgba(0,0,0,.3);
+  border:1px solid rgba(255,255,255,.12);
+  border-left:4px solid #ef4444;
+  border-radius:11px;
+  padding:11px 13px;
+  margin-top:9px;
+}
+.q-rev-top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-bottom:5px;
+}
+.q-rev-num{
+  font-size:.73em;
+  font-weight:900;
+  text-transform:uppercase;
+  letter-spacing:.05em;
+  padding:2px 8px;
+  border-radius:6px;
+  background:rgba(239,68,68,.22);
+  color:#fca5a5;
+}
+.q-rev-topic{
+  font-size:.75em;
+  font-weight:800;
+  color:var(--gold);
+}
+.q-rev-stem{
+  font-weight:850;
+  font-size:.95em;
+  line-height:1.34;
+  margin-bottom:8px;
+  color:#fff;
+}
+.q-ans-row{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:5px;
+  font-size:.85em;
+  line-height:1.32;
+}
+.q-ans-you{
+  background:rgba(239,68,68,.15);
+  border:1px solid rgba(248,113,113,.3);
+  border-radius:8px;
+  padding:6px 9px;
+  color:#fecaca;
+}
+.q-ans-ok{
+  background:rgba(34,197,94,.16);
+  border:1px solid rgba(74,222,128,.35);
+  border-radius:8px;
+  padding:6px 9px;
+  color:#bbf7d0;
+}
+.q-ans-lbl{
+  font-size:.72em;
+  font-weight:900;
+  text-transform:uppercase;
+  letter-spacing:.05em;
+  opacity:.82;
+  display:block;
+  margin-bottom:1px;
+}
+.q-rev-quote{
+  margin-top:7px;
+  padding-top:6px;
+  border-top:1px solid rgba(255,255,255,.1);
+  font-size:.81em;
+  color:rgba(255,255,255,.78);
+  font-style:italic;
+  line-height:1.35;
+}
 
 /* --- Lightbox, Modals & Confetti --- */
 #imgOv{
@@ -1945,61 +2217,109 @@ function openPracticeStudyGuide(onlyMissed){
 function finish(){
   stopSpeak();
   syncHud();
-  const pct = Math.round(100 * run.creditSum / Math.max(1, run.qs.length));
+  const totalQ = Math.max(1, run.qs.length);
+  const pct = Math.round(100 * run.creditSum / totalQ);
   if(pct >= 80) confettiBurst();
+  const missedCount = (run.missed || []).length;
+  const ringCol = pct >= 80 ? '#22c55e' : (pct >= 60 ? '#facc15' : '#ef4444');
+  const statusCls = pct >= 80 ? 'hi' : (pct >= 60 ? 'mid' : 'low');
+  const statusTxt = pct >= 90
+    ? 'Outstanding Mastery'
+    : (pct >= 80 ? 'Strong Performance' : (pct >= 60 ? 'Good Progress — Review Missed Concepts' : 'Keep Practicing — Review Study Guide Below'));
+
   const topics = buildTopicStatsList();
   const weakTopics = topics.filter(t => t.pct < 80);
-  const topicBoxHtml = topics.length ? `<div class="review-box">
-    <h3>Chapters to Study More (Accuracy by Chapter)</h3>
-    ${weakTopics.length
-      ? `<div style="font-size:.86em;color:#ffdf5d;margin:-2px 0 8px;font-weight:800">Priority chapters to review: <b>${weakTopics.slice(0,3).map(t => esc(t.topic)).join(' · ')}</b></div>`
-      : `<div style="font-size:.86em;color:#7dff6b;margin:-2px 0 8px;font-weight:800">Awesome! You scored 80%+ across every chapter tested.</div>`}
-    ${topics.map(t => {
-      const badge = t.pct < 60 ? 'Study More' : (t.pct < 80 ? 'Review' : 'Mastered');
-      return `<div class="missed">
-      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;font-weight:850;flex-wrap:wrap">
-        <span>${esc(t.topic)}</span>
-        <span style="display:inline-flex;align-items:center;gap:8px">
-          <span style="color:${t.pct<60?'#ff9b9b':t.pct<80?'#ffdf5d':'#7dff6b'}">${t.pct}% <small style="opacity:.82">(${t.exact}/${t.n}) · ${badge}</small></span>
-          <button type="button" class="hud-btn" style="padding:2px 8px;font-size:.75em" data-tp="${esc(t.topic)}" onclick="practiceSingleTopic(this.dataset.tp)">Drill Chapter</button>
-        </span>
-      </div>
-      <div class="tbar"><i style="width:${t.pct}%;background:${t.pct<60?'#ff5252':t.pct<80?'#ffb300':'#69f0ae'}"></i></div>
-    </div>`;
-    }).join('')}
-  </div>` : '';
-
   const toughList = (run.missed || []).slice().sort((a,b) => (a.pct || 0) - (b.pct || 0) || a.index - b.index);
+
+  const studyGuideSection = `
+    <div class="sg-cta-card">
+      <div class="sg-cta-hdr">Printable 8.5x11 Study Guides</div>
+      <div class="sg-cta-sub">Open a clean, print-ready study sheet with questions, correct answers, and textbook explanations.</div>
+      <div class="sg-btn-row" style="${toughList.length ? '' : 'grid-template-columns:1fr'}">
+        ${toughList.length ? `<button type="button" class="sg-btn-pri" onclick="openPracticeStudyGuide(true)">Study Guide (Missed Questions · ${toughList.length})</button>` : ''}
+        <button type="button" class="${toughList.length ? 'sg-btn-sec' : 'sg-btn-pri'}" onclick="openPracticeStudyGuide(false)">Full Quiz Study Guide (${run.qs.length} Qs)</button>
+      </div>
+    </div>
+  `;
+
+  const actionButtonsHtml = `
+    <div class="res-actions-grid">
+      ${run.missedQ.length ? `<button type="button" class="go blue res-act-btn" onclick="retryMissed()">Retry ${run.missedQ.length} Missed Question${run.missedQ.length === 1 ? '' : 's'}</button>` : ''}
+      ${weakTopics.length ? `<button type="button" class="go res-act-btn" style="background:linear-gradient(180deg,#a855f7,#7c3aed);color:#fff;box-shadow:0 4px 0 #581c87" onclick="practiceWeakTopics()">Practice Weak Chapters (${weakTopics.length})</button>` : ''}
+      <button type="button" class="go res-act-btn" onclick="start()">Practice Full Quiz Again</button>
+      <button type="button" class="sec res-act-btn" style="border-width:1.5px" onclick="setup()">Change Quiz / Options</button>
+    </div>
+  `;
+
+  const topicBoxHtml = topics.length ? `<details class="res-sec" ${topics.length <= 4 ? 'open' : ''}>
+    <summary>
+      <span>Accuracy by Chapter</span>
+      <span class="res-sec-pill">${weakTopics.length ? `${weakTopics.length} to review` : 'All 80%+'}</span>
+    </summary>
+    <div class="res-sec-body">
+      ${topics.map(t => {
+        const col = t.pct < 60 ? '#ff8a80' : (t.pct < 80 ? '#ffdf5d' : '#69f0ae');
+        const barCol = t.pct < 60 ? '#ef4444' : (t.pct < 80 ? '#f59e0b' : '#22c55e');
+        return `<div class="ch-row">
+          <div class="ch-row-top">
+            <span class="ch-name">${esc(t.topic)}</span>
+            <span class="ch-meta">
+              <span style="color:${col}">${t.pct}% (${t.exact}/${t.n})</span>
+              <button type="button" class="hud-btn" style="padding:3px 9px;font-size:.76em" data-tp="${esc(t.topic)}" onclick="practiceSingleTopic(this.dataset.tp)">Drill</button>
+            </span>
+          </div>
+          <div class="tbar"><i style="width:${t.pct}%;background:${barCol}"></i></div>
+        </div>`;
+      }).join('')}
+    </div>
+  </details>` : '';
+
   const toughHtml = toughList.length
-    ? `<div class="review-box">
-        <h3>Tough Ones Recap (Most Missed · ${toughList.length})</h3>
-        ${toughList.map(m => `<div class="missed">
-          <b>Q${m.index} (${m.pct || 0}% credit)${m.topic ? ` · <small style="color:var(--gold)">${esc(m.topic)}</small>` : ''}:</b> ${esc(m.q)}<br>
-          <span style="color:#ff9b9b">You: ${esc(m.your)}</span> &middot; <span style="color:#7dff6b">Correct: ${esc(m.ans)}</span>
-          ${m.quote ? `<div style="font-size:.85em;opacity:.85;margin-top:4px;font-style:italic">${esc(m.quote)}</div>` : ''}
-        </div>`).join('')}
-      </div>`
-    : `<p style="color:#7dff6b;font-weight:850;margin:12px 0">Flawless run! You nailed every single question (100%).</p>`;
+    ? `<details class="res-sec">
+        <summary>
+          <span>Review Missed Questions</span>
+          <span class="res-sec-pill">${toughList.length} Question${toughList.length === 1 ? '' : 's'}</span>
+        </summary>
+        <div class="res-sec-body">
+          ${toughList.map(m => `<div class="q-rev-card">
+            <div class="q-rev-top">
+              <span class="q-rev-num">Question ${m.index}${m.pct > 0 ? ` · ${m.pct}% Credit` : ''}</span>
+              ${m.topic ? `<span class="q-rev-topic">${esc(m.topic)}</span>` : ''}
+            </div>
+            <div class="q-rev-stem">${esc(m.q)}</div>
+            <div class="q-ans-row">
+              <div class="q-ans-you"><span class="q-ans-lbl">Your Answer</span><b>${esc(m.your || 'No answer')}</b></div>
+              <div class="q-ans-ok"><span class="q-ans-lbl">Correct Answer</span><b>${esc(m.ans)}</b></div>
+            </div>
+            ${m.quote ? `<div class="q-rev-quote">“${esc(m.quote)}”${m.src ? ` — ${esc(m.src)}` : ''}</div>` : ''}
+          </div>`).join('')}
+        </div>
+      </details>`
+    : '';
 
   $.innerHTML = `
-    <div class="card-panel">
-      <h1>Practice Complete!</h1>
-      <div class="grade-hero">Percentage Grade: ${pct}%</div>
-      <div class="stats-grid">
-        <div class="stat"><b>${pct}%</b>Percentage Score</div>
-        <div class="stat"><b>${run.right}/${run.qs.length}</b>Questions Correct</div>
-        <div class="stat"><b>${run.best}</b>Best Streak</div>
+    <div class="card-panel" style="padding:16px">
+      <div class="res-hero">
+        <div class="res-kicker">${esc(run.title || 'Practice Quiz')}</div>
+        <h1 class="res-title">Practice Complete</h1>
+        <div class="score-ring" style="--p:${pct};--ring-col:${ringCol}">
+          <div class="score-ring-in">
+            <div class="score-pct">${pct}%</div>
+            <div class="score-lbl">Final Score</div>
+          </div>
+        </div>
+        <div class="res-status-pill ${statusCls}">${statusTxt}</div>
+        <div class="stats-grid">
+          <div class="stat"><b>${run.right}/${run.qs.length}</b>Correct</div>
+          <div class="stat"><b>${missedCount}</b>To Review</div>
+          <div class="stat"><b>${run.best}</b>Best Streak</div>
+        </div>
       </div>
+
+      ${studyGuideSection}
+      ${actionButtonsHtml}
       ${topicBoxHtml}
       ${toughHtml}
-      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
-        ${toughList.length ? `<button class="go" style="flex:1;margin:0;background:linear-gradient(180deg,#facc15,#eab308);color:#1e1b2e;box-shadow:0 4px 0 #a16207" onclick="openPracticeStudyGuide(true)">Study Guide (Missed Questions)</button>` : ''}
-        <button class="sec" style="flex:1;margin:0;padding:13px 14px" onclick="openPracticeStudyGuide(false)">Full Quiz Study Guide</button>
-      </div>
-      ${run.missedQ.length ? `<button class="go blue" style="margin-top:10px" onclick="retryMissed()">Retry ${run.missedQ.length} Missed Question${run.missedQ.length === 1 ? '' : 's'}</button>` : ''}
-      ${weakTopics.length ? `<button class="go" style="margin-top:8px;background:linear-gradient(180deg,#a855f7,#7c3aed);color:#fff;box-shadow:0 4px 0 #581c87" onclick="practiceWeakTopics()">Practice Weak Chapters (&lt;80% · ${weakTopics.length} Chapter${weakTopics.length === 1 ? '' : 's'})</button>` : ''}
-      <button class="go" onclick="start()">Practice Full Quiz Again</button>
-      <button class="sec" onclick="setup()">Change Practice Options</button>
     </div>
   `;
 }
