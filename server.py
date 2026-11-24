@@ -574,6 +574,7 @@ def list_quizzes(owner="_shared"):
         "quiz_chapter8.json": "Chapter 8: Overcoming Challenges & Regulations",
         "quiz_chapter9.json": "Chapter 9: Ethical Entrepreneurship & Social Impact",
         "quiz_chapter13.json": "Chapter 13: Sharing Your Business Story & Next Steps",
+        "quiz_chapter13_scenarios.json": "Chapter 13 (Scenarios): Sharing Your Business Story & Next Steps",
         "quiz_entr101_master150.json": "ENTR 101: Comprehensive Master Review (All 10 Chapters)",
         "quiz_fun_facts.json": "Fun Facts Trivia",
         "quiz_ultimate_silly_trivia.json": "Ultimate Silly Trivia",
@@ -589,6 +590,7 @@ def list_quizzes(owner="_shared"):
         "quiz_chapter8.json": "ENTR 101 Quizzes",
         "quiz_chapter9.json": "ENTR 101 Quizzes",
         "quiz_chapter13.json": "ENTR 101 Quizzes",
+        "quiz_chapter13_scenarios.json": "ENTR 101 Quizzes",
         "quiz_entr101_master150.json": "ENTR 101 Quizzes",
     }
     hidden = K.builtin_deleted()
