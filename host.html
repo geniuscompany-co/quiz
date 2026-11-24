@@ -3398,6 +3398,7 @@ function renderDeckGrid(){
      ${activeCid ? `<button type="button" class="deck-act-btn" onclick="toggleDeckInCourse(this.closest('.deck-card').dataset.file, '${esc(activeCid)}')" title="Remove from this course (keeps deck in All Decks)">✕ Unlink</button>` : ''}
      <button type="button" class="deck-act-btn" onclick="editSelectedDeck(this.closest('.deck-card').dataset.file)" title="Edit this deck">✏️ Edit</button>
      <button type="button" class="deck-act-btn" onclick="dupSelectedDeck(this.closest('.deck-card').dataset.file)" title="Duplicate this deck">⧉ Dup</button>
+     ${q.case ? '' : `<button type="button" class="deck-act-btn" onclick="copyDeckPracticeLink(this.closest('.deck-card').dataset.file, this)" title="Copy single-quiz Solo Practice link for students">🧑‍🎓 Practice</button>`}
      ${q.case ? '' : `<button type="button" class="deck-act-btn" onclick="hwSelectedDeck(this.closest('.deck-card').dataset.file)" title="Assign as Homework">📚 HW</button>`}
      <button type="button" class="deck-act-btn del" onclick="deleteDeckCard(this.closest('.deck-card').dataset.file)" title="Delete this deck">🗑️</button>
     </span>
@@ -3519,6 +3520,24 @@ async function dupSelectedDeck(fileOpt){
   if(mergedCourses.length) setDeckCourses(r.file, mergedCourses, true);
   if(srcSettings) persistDeckSettingsDebounced(r.file, srcSettings);
   renderQuizSelect(r.file);
+ }
+}
+function getDeckPracticeUrl(fileOpt){
+ const sel = document.getElementById('quizSel');
+ const f = fileOpt || (sel ? sel.value : '');
+ const q = quizList.find(x => x.file === f);
+ if(!f) return '';
+ const param = (q && q.practice_key) ? ('k=' + encodeURIComponent(q.practice_key)) : ('quiz=' + encodeURIComponent(f));
+ return `${location.origin}/practice?${param}`;
+}
+function copyDeckPracticeLink(fileOpt, btn){
+ const url = getDeckPracticeUrl(fileOpt);
+ if(!url) return;
+ try{ navigator.clipboard.writeText(url); }catch(e){}
+ if(btn){
+  if(!btn.dataset.origTxt) btn.dataset.origTxt = btn.textContent;
+  btn.textContent = '✅ Link Copied!';
+  setTimeout(()=>{ if(btn && btn.dataset.origTxt) btn.textContent = btn.dataset.origTxt; }, 1600);
  }
 }
 async function hwSelectedDeck(fileOpt){
@@ -5033,6 +5052,13 @@ async function clearHistory(){
 }
 
 // --- Links modal ---
+function syncPracticeLinkRow(){
+ const sel = document.getElementById('linksPracQuizSel'), inp = document.getElementById('linksPracUrlInp'), a = document.getElementById('linksPracOpenA');
+ if(!sel || !inp) return;
+ const url = getDeckPracticeUrl(sel.value) || '';
+ inp.value = url;
+ if(a) a.href = url || '#';
+}
 function openLinks(){
  const o = location.origin, inCase = document.body.classList.contains('sec-case');
  const rows = [
@@ -5041,8 +5067,25 @@ function openLinks(){
   ['🏆 Leaderboard only', o + '/spectator?mode=board' + (pin ? '&pin='+pin : '')],
   ['💭 Word cloud only', o + '/spectator?mode=cloud' + (pin ? '&pin='+pin : '')]
  ];
- if(!inCase) rows.push(['🧑‍🎓 Student practice mode (no live game needed)', o + '/practice']);
- document.getElementById('linksBody').innerHTML = '<p style="opacity:.8">Open on a second screen or share with students:</p>' + rows.map(r=>`<div><b style="font-size:.9em">${r[0]}</b><div class="link-row"><input readonly value="${esc(r[1])}" onclick="this.select()"><button class="btn-sm" style="margin:0" onclick="navigator.clipboard.writeText(this.previousElementSibling.value)">📋</button><a href="${esc(r[1])}" target="_blank"><button class="btn-sm" style="margin:0">↗</button></a></div></div>`).join('');
+ const pracQuizzes = quizList.filter(q => !q.case);
+ const curSel = ((document.getElementById('quizSel') || {}).value) || (pracQuizzes[0] ? pracQuizzes[0].file : '');
+ const initPrac = pracQuizzes.some(q => q.file === curSel) ? curSel : (pracQuizzes[0] ? pracQuizzes[0].file : '');
+ const initUrl = initPrac ? getDeckPracticeUrl(initPrac) : '';
+ const pracHtml = (!inCase && pracQuizzes.length) ? `<div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border)">
+  <b style="font-size:.9em">🧑‍🎓 Single-Quiz Student Solo Practice Link (locked to 1 quiz)</b>
+  <div style="font-size:.8em;opacity:.78;margin:3px 0 6px">Students who open this link can practice only the selected quiz and cannot browse your other quizzes:</div>
+  <select id="linksPracQuizSel" onchange="syncPracticeLinkRow()" style="width:100%;padding:8px 10px;border-radius:8px;border:0;font-weight:750;color:#2b0d57;margin:0 0 6px">
+   ${pracQuizzes.map(q => `<option value="${esc(q.file)}">${esc(q.title)}</option>`).join('')}
+  </select>
+  <div class="link-row">
+   <input id="linksPracUrlInp" readonly value="${esc(initUrl)}" onclick="this.select()">
+   <button class="btn-sm" style="margin:0" onclick="copyDeckPracticeLink(document.getElementById('linksPracQuizSel').value, this)">📋</button>
+   <a id="linksPracOpenA" href="${esc(initUrl)}" target="_blank"><button class="btn-sm" style="margin:0">↗</button></a>
+  </div>
+ </div>` : '';
+ document.getElementById('linksBody').innerHTML = '<p style="opacity:.8">Open on a second screen or share with students:</p>' + rows.map(r=>`<div><b style="font-size:.9em">${r[0]}</b><div class="link-row"><input readonly value="${esc(r[1])}" onclick="this.select()"><button class="btn-sm" style="margin:0" onclick="navigator.clipboard.writeText(this.previousElementSibling.value)">📋</button><a href="${esc(r[1])}" target="_blank"><button class="btn-sm" style="margin:0">↗</button></a></div></div>`).join('') + pracHtml;
+ const pSel = document.getElementById('linksPracQuizSel');
+ if(pSel && initPrac){ pSel.value = initPrac; syncPracticeLinkRow(); }
  document.getElementById('linksModal').classList.add('open');
 }
 
@@ -5179,7 +5222,7 @@ const GUIDE = [
  ]},
  {id:'screens', title:'🖥️ Other Screens', items:[
   ['/spectator', 'A second-screen view with the live leaderboard and word cloud. Add ?mode=board or ?mode=cloud for just one. Standings hide the current question\'s results until it ends.'],
-  ['/practice', 'Students study alone with any quiz: instant feedback, a score, an optional customizable countdown timer and a review of missed questions. Nothing is shared with the class.'],
+  ['/practice?k=…', 'Single-quiz Solo Practice link: click "🧑‍🎓 Practice" on any quiz card in the Host Studio (or open 🖥️ Modes) to copy a student link locked to that one quiz. Students get instant feedback, optional countdown timer, and missed-question review without access to your other quizzes.'],
   ['/remote', 'The phone host remote — pair via Session Settings or 📱 Remote to pick & launch a session pre-game and control slides live.'],
   ['👁️ Phone accessibility button', 'On the join screen and in-game, cycles normal, colorblind and high-contrast colors.']
  ]}

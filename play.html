@@ -1293,7 +1293,6 @@ function form(err, canReclaim){
   </div>
   <div class="join-links">
    <a class="plink" href="#" onclick="join(true);return false">🔁 Lost place? Rejoin</a>
-   <a class="plink" href="/practice">🧑‍🎓 Solo Practice</a>
   </div>`;
  updateCustPreview();
  checkPinConfig(savedPin);
@@ -2689,7 +2688,7 @@ function render(){
     ${calibHtml}
     ${missedHtml}
    </div>` : '';
-   $.innerHTML=`${trophyHtml}${repHtml}<div class="join-links"><a class="plink" href="/play" onclick="clearPlayerSession()">🔁 Join New Game</a><a class="plink" href="/practice">🧑‍🎓 Solo Practice</a></div>${reactBar()}`;
+   $.innerHTML=`${trophyHtml}${repHtml}<div class="join-links"><a class="plink" href="/play" onclick="clearPlayerSession()">🔁 Join New Game</a></div>${reactBar()}`;
   }
 }
 tryReconnect();

@@ -814,25 +814,11 @@ function syncHud(){
   if(ht) ht.style.display = run.timed ? 'flex' : 'none';
 }
 
-let quizzes = [], run = null, lastFile = '';
-function selectPracDeck(file){
-  const sel = document.getElementById('qs');
-  if(!sel) return;
-  sel.value = file || '';
-  if(sel.onchange) sel.onchange();
-  document.querySelectorAll('.p-deck-card').forEach(el => {
-    el.classList.toggle('sel', el.dataset.file === file);
-  });
-  const errEl = document.getElementById('pErr');
-  if(errEl && file) errEl.style.display = 'none';
-}
-function filterPracDecks(){
-  const q = ((document.getElementById('pSearch') || {}).value || '').trim().toLowerCase();
-  document.querySelectorAll('.p-deck-card').forEach(el => {
-    const hay = (el.dataset.search || '').toLowerCase();
-    el.style.display = (!q || hay.includes(q)) ? 'flex' : 'none';
-  });
-}
+let run = null, lockedQuiz = null;
+const PRAC_PARAMS = new URLSearchParams(location.search);
+const PRAC_KEY = (PRAC_PARAMS.get('k') || '').trim();
+const PRAC_FILE = (PRAC_PARAMS.get('quiz') || PRAC_PARAMS.get('file') || '').trim();
+
 function updatePracSummary(){
   const b = document.getElementById('pOptBadge');
   if(!b) return;
@@ -851,40 +837,63 @@ function updatePracSummary(){
   b.textContent = parts.join(' · ');
   b.classList.toggle('hi', custom);
 }
+
+async function fetchAssignedQuiz(){
+  if(lockedQuiz) return lockedQuiz;
+  if(!PRAC_KEY && !PRAC_FILE) return null;
+  const qUrl = PRAC_KEY
+    ? '/api/quiz_data?k=' + encodeURIComponent(PRAC_KEY)
+    : '/api/quiz_data?file=' + encodeURIComponent(PRAC_FILE);
+  try{
+    const res = await fetch(qUrl);
+    const data = await res.json();
+    if(!res.ok || data.error) return {error: data.error || 'Invalid or expired practice link.'};
+    const gradable = (data.questions || []).filter(q => !['poll','open','rank','info','scale','brainstorm'].includes(q.type));
+    lockedQuiz = {
+      file: data.file || PRAC_FILE,
+      title: String(data.title || 'Practice Quiz').replace(/\s*\(\d+\s*(?:Qs|slides?)\)\s*$/i, ''),
+      questions: gradable,
+      count: gradable.length
+    };
+    return lockedQuiz;
+  }catch(e){
+    return {error: 'Could not load practice quiz.'};
+  }
+}
+
 async function setup(){
   stopTimer();
   stopSpeak();
   run = null;
   syncHud();
-  try{ quizzes = (await (await fetch('/api/quizzes')).json()).quizzes || []; }catch(e){}
-  const qPool = quizzes.filter(q => !q.case);
-  const list = qPool.length ? qPool : quizzes;
-  const initFile = (lastFile && list.some(q => q.file === lastFile)) ? lastFile : (list[0] ? list[0].file : '');
+  const qInfo = await fetchAssignedQuiz();
+  if(!qInfo || qInfo.error){
+    const msg = (qInfo && qInfo.error)
+      ? qInfo.error
+      : 'Solo Practice requires a direct quiz link from your instructor. Open the practice link shared for your class quiz.';
+    $.innerHTML = `
+      <div class="card-panel">
+        <div class="studio-hero-pill"><span class="hud-bolt">⚡</span>BrainRush &middot; Solo Studio</div>
+        <h1>🧑‍🎓 Solo Practice</h1>
+        <p class="sub">${esc(msg)}</p>
+        <a class="go" href="/play" style="display:block;text-decoration:none;text-align:center;margin-top:12px">🎮 Go to Live Game Join Screen</a>
+      </div>
+    `;
+    return;
+  }
+  const n = qInfo.count || 0;
   $.innerHTML = `
     <div class="card-panel">
       <div class="studio-hero-pill"><span class="hud-bolt">⚡</span>BrainRush &middot; Solo Studio</div>
       <h1>🧑‍🎓 Solo Practice</h1>
       <p class="sub">Study at your own pace with instant explanations. Scores stay private on your device.</p>
 
-      <div class="field-lbl"><span>Choose a Deck</span><span>${list.length} available</span></div>
-      <select id="qs" style="display:none">
-        <option value="">— Select a Quiz —</option>
-        ${list.map(q => {
-          const lbl = /\(\d+\s*Qs\)$/i.test(q.title || '') ? q.title : `${q.title} (${q.count} Qs)`;
-          return `<option value="${esc(q.file)}" data-n="${q.count}" ${q.file === initFile ? 'selected' : ''}>${esc(lbl)}</option>`;
-        }).join('')}
-      </select>
-      ${list.length > 4 ? `<input id="pSearch" class="p-search" type="search" placeholder="🔍 Filter practice decks…" oninput="filterPracDecks()">` : ''}
+      <div class="field-lbl"><span>Assigned Practice Quiz</span><span>${n} ${n === 1 ? 'Question' : 'Questions'}</span></div>
       <div class="p-deck-list">
-        ${list.length ? list.map(q => {
-          const chosen = q.file === initFile;
-          const cleanTitle = String(q.title || '').replace(/\s*\(\d+\s*Qs\)$/i, '');
-          const searchStr = `${q.title || ''} ${q.folder || ''} ${(q.tags || []).join(' ')}`;
-          return `<button type="button" class="p-deck-card ${chosen ? 'sel' : ''}" data-file="${esc(q.file)}" data-search="${esc(searchStr)}" onclick="selectPracDeck(this.dataset.file)">
-            <span style="min-width:0;overflow:hidden;text-overflow:ellipsis">🎮 ${esc(cleanTitle)}</span>
-            <span class="p-deck-meta">${q.count || 0} Qs</span>
-          </button>`;
-        }).join('') : `<div style="opacity:.7;padding:12px;font-size:.9em">No practice decks found.</div>`}
+        <div class="p-deck-card sel" style="cursor:default">
+          <span style="min-width:0;overflow:hidden;text-overflow:ellipsis">🎮 ${esc(qInfo.title)}</span>
+          <span class="p-deck-meta">${n} Qs</span>
+        </div>
       </div>
 
       <details class="p-acc" id="pOptsAcc">
@@ -894,7 +903,7 @@ async function setup(){
         </summary>
         <div class="p-acc-body" onchange="updatePracSummary()" oninput="updatePracSummary()">
           <div class="field-lbl"><span>Question Count</span><span style="opacity:.7;text-transform:none;letter-spacing:0">Optional</span></div>
-          <input id="cnt" type="number" min="1" value="" placeholder="How many questions? (blank = all)">
+          <input id="cnt" type="number" min="1" max="${n || 1}" value="" placeholder="${n ? `How many questions? (1–${n}, blank = all)` : 'How many questions? (blank = all)'}">
 
           <div class="timer-opt-row">
             <label><input type="checkbox" id="pracShuffle"> 🎲 Randomize Question Order</label>
@@ -921,22 +930,7 @@ async function setup(){
   `;
   const saEl = document.getElementById('pracShuffleAns');
   if(saEl) saEl.checked = true;
-  const sel = document.getElementById('qs');
-  if(sel && initFile) sel.value = initFile;
-  sel.onchange = () => {
-    const opt = sel.selectedOptions[0];
-    const n = opt && opt.dataset ? opt.dataset.n : '';
-    const cEl = document.getElementById('cnt');
-    if(n){
-      cEl.max = n;
-      cEl.placeholder = `How many questions? (1–${n}, blank = all)`;
-    } else {
-      cEl.removeAttribute('max');
-      cEl.placeholder = 'How many questions? (blank = all)';
-    }
-    updatePracSummary();
-  };
-  sel.onchange();
+  updatePracSummary();
 }
 
 function shufflePracticeQuestionOptions(q){
@@ -975,14 +969,12 @@ async function start(customQs){
   let shuffle = run ? !!run.shuffle : false;
   let shuffleAns = run && run.shuffleAns !== undefined ? !!run.shuffleAns : true;
   if(!qs){
-    const sel = document.getElementById('qs');
-    const file = sel ? sel.value : lastFile;
     const errEl = document.getElementById('pErr');
-    if(!file){
-      if(errEl){ errEl.textContent = 'Please select a quiz first.'; errEl.style.display = 'block'; }
+    const qInfo = await fetchAssignedQuiz();
+    if(!qInfo || qInfo.error){
+      if(errEl){ errEl.textContent = (qInfo && qInfo.error) || 'Practice quiz link required.'; errEl.style.display = 'block'; }
       return;
     }
-    lastFile = file;
     if(errEl) errEl.style.display = 'none';
     const cntEl = document.getElementById('cnt');
     const rawCnt = cntEl ? parseInt(cntEl.value, 10) : NaN;
@@ -991,11 +983,10 @@ async function start(customQs){
     const shufEl = document.getElementById('pracShuffle');
     shuffle = shufEl ? shufEl.checked : shuffle;
     const shufAnsEl = document.getElementById('pracShuffleAns');
-    shuffleAns = shufAnsEl ? shufAnsEl.checked : true;
+    shuffleAns = shufAnsEl ? shufAnsEl.checked : shuffleAns;
     const ptEl = document.getElementById('pTime');
     tMax = Math.max(5, Math.min(600, parseInt(ptEl ? ptEl.value : tMax, 10) || 20));
-    const r = await (await fetch('/api/quiz_data?file=' + encodeURIComponent(file))).json();
-    qs = (r.questions || []).filter(q => !['poll','open','rank','info','scale','brainstorm'].includes(q.type));
+    qs = (qInfo.questions || []).slice();
     if(shuffle){
       for(let i = qs.length - 1; i > 0; i--){
         const j = Math.floor(Math.random() * (i + 1));
@@ -1483,7 +1474,7 @@ function finish(){
       }
       ${run.missedQ.length ? `<button class="go blue" onclick="retryMissed()">🎯 Retry ${run.missedQ.length} Missed Question${run.missedQ.length === 1 ? '' : 's'}</button>` : ''}
       <button class="go" onclick="start()">🔁 Practice Full Quiz Again</button>
-      <button class="sec" onclick="setup()">📚 Choose Another Quiz</button>
+      <button class="sec" onclick="setup()">⚙️ Change Practice Options</button>
     </div>
   `;
 }
