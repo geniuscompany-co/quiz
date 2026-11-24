@@ -747,16 +747,15 @@ blockquote{
   letter-spacing:-.01em;
 }
 .sg-cta-card{
-  background:linear-gradient(135deg,rgba(250,204,21,.14),rgba(124,58,237,.22));
-  border:1.5px solid rgba(255,223,93,.48);
+  background:rgba(15,12,26,.58);
+  border:1px solid rgba(255,255,255,.14);
   border-radius:15px;
   padding:14px;
   margin:0 0 12px;
   text-align:left;
-  box-shadow:0 6px 20px rgba(0,0,0,.22);
 }
 .sg-cta-hdr{
-  font-size:.76em;
+  font-size:.75em;
   font-weight:900;
   text-transform:uppercase;
   letter-spacing:.08em;
@@ -764,58 +763,73 @@ blockquote{
   margin-bottom:3px;
 }
 .sg-cta-sub{
-  font-size:.86em;
-  color:rgba(255,255,255,.82);
-  margin:0 0 10px;
+  font-size:.84em;
+  color:rgba(255,255,255,.76);
+  margin:0 0 11px;
   line-height:1.35;
 }
-.sg-btn-row{
+.res-btn-grid{
   display:grid;
   grid-template-columns:1fr 1fr;
-  gap:8px;
+  gap:9px;
 }
 @media (max-width:440px){
-  .sg-btn-row{grid-template-columns:1fr}
+  .res-btn-grid{grid-template-columns:1fr}
 }
-.sg-btn-pri{
+.r-btn{
   width:100%;
-  padding:12px 12px;
-  border-radius:11px;
-  border:0;
-  background:linear-gradient(180deg,#facc15,#eab308);
-  color:#1e1b2e;
-  font-weight:900;
-  font-size:.9em;
-  cursor:pointer;
-  box-shadow:0 3px 0 #a16207;
-}
-.sg-btn-sec{
-  width:100%;
-  padding:12px 12px;
-  border-radius:11px;
-  border:1.5px solid rgba(255,255,255,.28);
-  background:rgba(15,12,26,.65);
+  margin:0;
+  padding:11px 13px;
+  border-radius:12px;
+  border:1.5px solid rgba(255,255,255,.18);
+  background:rgba(255,255,255,.07);
   color:#fff;
-  font-weight:850;
-  font-size:.9em;
   cursor:pointer;
+  text-align:left;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  gap:2px;
+  font-family:inherit;
+  transition:transform .08s,border-color .15s,background .15s,box-shadow .15s;
 }
-.res-actions-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:8px;
-  margin-bottom:12px;
+.r-btn:hover{
+  border-color:rgba(255,255,255,.38);
+  background:rgba(255,255,255,.11);
 }
-@media (max-width:440px){
-  .res-actions-grid{grid-template-columns:1fr}
+.r-btn:active{transform:scale(.98)}
+.r-btn-title{
+  font-size:.92em;
+  font-weight:900;
+  line-height:1.22;
+  letter-spacing:-.01em;
 }
-.res-act-btn{
-  width:100%;
-  margin:0!important;
-  padding:12px 12px!important;
-  font-size:.92em!important;
-  border-radius:11px!important;
+.r-btn-sub{
+  font-size:.75em;
+  font-weight:750;
+  opacity:.78;
+  line-height:1.2;
 }
+.r-btn.gold{
+  background:linear-gradient(135deg,rgba(250,204,21,.22),rgba(234,179,8,.12));
+  border-color:rgba(250,204,21,.55);
+}
+.r-btn.gold .r-btn-title{color:var(--gold)}
+.r-btn.green{
+  background:linear-gradient(135deg,rgba(34,197,94,.24),rgba(22,163,74,.14));
+  border-color:rgba(74,222,128,.55);
+}
+.r-btn.green .r-btn-title{color:#86efac}
+.r-btn.blue{
+  background:linear-gradient(135deg,rgba(59,130,246,.24),rgba(37,99,235,.14));
+  border-color:rgba(96,165,250,.55);
+}
+.r-btn.blue .r-btn-title{color:#93c5fd}
+.r-btn.purple{
+  background:linear-gradient(135deg,rgba(168,85,247,.25),rgba(124,58,237,.15));
+  border-color:rgba(192,132,252,.55);
+}
+.r-btn.purple .r-btn-title{color:#d8b4fe}
 .res-sec{
   background:rgba(15,12,26,.58);
   border:1px solid rgba(255,255,255,.14);
@@ -1468,43 +1482,52 @@ async function start(customQs){
   let shuffle = run ? !!run.shuffle : false;
   let shuffleAns = run && run.shuffleAns !== undefined ? !!run.shuffleAns : true;
   let quizTitle = run && run.title ? run.title : 'Practice Quiz';
+  let topicFilter = run && run.topicFilter ? run.topicFilter : '';
+  let rawCnt = run && run.rawCnt ? run.rawCnt : NaN;
+  let baseQs = run && Array.isArray(run.fullPool) && run.fullPool.length ? run.fullPool.slice() : null;
   if(!qs){
     const errEl = document.getElementById('pErr');
     const tfEl = document.getElementById('pracTopicFilter');
-    const tfVal = tfEl ? tfEl.value : '';
-    if(!tfVal){
+    const tfVal = tfEl ? tfEl.value : topicFilter;
+    if(!tfVal && !baseQs){
       if(errEl){ errEl.textContent = 'Please select a quiz from A. CHAPTER QUIZZES before starting.'; errEl.style.display = 'block'; }
       const acc1 = document.getElementById('pAcc1');
       if(acc1) acc1.open = true;
       return;
     }
+    topicFilter = tfVal || topicFilter || '__ALL__';
     await fetchAssignedQuiz();
     const active = getActivePracticeDeck();
     if(!active || !Array.isArray(active.questions) || !active.questions.length){
       if(errEl){ errEl.textContent = 'Please select a practice quiz first.'; errEl.style.display = 'block'; }
       return;
     }
-    quizTitle = (tfVal === '__ALL__') ? (active.title || 'All 10 Chapters') : tfVal;
+    if(tfEl){
+      quizTitle = (topicFilter === '__ALL__') ? (active.title || 'All 10 Chapters') : topicFilter;
+    }
     if(errEl) errEl.style.display = 'none';
     const cntEl = document.getElementById('cnt');
-    const rawCnt = cntEl ? parseInt(cntEl.value, 10) : NaN;
+    if(cntEl) rawCnt = parseInt(cntEl.value, 10);
     const tmEl = document.getElementById('timed');
-    timed = tmEl ? tmEl.checked : timed;
+    if(tmEl) timed = tmEl.checked;
     const raEl = document.getElementById('pracReadAloud');
-    readAloud = raEl ? raEl.checked : readAloud;
-    autoReadAloud = readAloud;
-    try{ localStorage.setItem('brainrush_prac_tts', readAloud ? '1' : '0'); }catch(e){}
+    if(raEl){
+      readAloud = raEl.checked;
+      autoReadAloud = readAloud;
+      try{ localStorage.setItem('brainrush_prac_tts', readAloud ? '1' : '0'); }catch(e){}
+    }
     const shufEl = document.getElementById('pracShuffle');
-    shuffle = shufEl ? shufEl.checked : shuffle;
+    if(shufEl) shuffle = shufEl.checked;
     const shufAnsEl = document.getElementById('pracShuffleAns');
-    shuffleAns = shufAnsEl ? shufAnsEl.checked : shuffleAns;
+    if(shufAnsEl) shuffleAns = shufAnsEl.checked;
     const ptEl = document.getElementById('pTime');
-    tMax = Math.max(5, Math.min(900, parseInt(ptEl ? ptEl.value : tMax, 10) || 15));
+    if(ptEl) tMax = Math.max(5, Math.min(900, parseInt(ptEl.value, 10) || 15));
     const pvEl = document.getElementById('pPrevTime');
-    prevMax = Math.max(0, Math.min(120, parseFloat(pvEl && pvEl.value !== '' ? pvEl.value : prevMax) || 0));
+    if(pvEl) prevMax = Math.max(0, Math.min(120, parseFloat(pvEl.value !== '' ? pvEl.value : prevMax) || 0));
     const thEl = document.getElementById('pThinkTime');
-    thinkMax = Math.max(0, Math.min(120, parseFloat(thEl && thEl.value !== '' ? thEl.value : thinkMax) || 0));
-    qs = (active.questions || []).filter(q => tfVal === '__ALL__' || String((q && q.topic) || '').trim() === tfVal);
+    if(thEl) thinkMax = Math.max(0, Math.min(120, parseFloat(thEl.value !== '' ? thEl.value : thinkMax) || 0));
+    baseQs = (active.questions || []).filter(q => topicFilter === '__ALL__' || String((q && q.topic) || '').trim() === topicFilter);
+    qs = baseQs.slice();
     if(shuffle){
       for(let i = qs.length - 1; i > 0; i--){
         const j = Math.floor(Math.random() * (i + 1));
@@ -1517,12 +1540,20 @@ async function start(customQs){
       if(errEl){ errEl.textContent = 'This deck has no gradable practice questions.'; errEl.style.display = 'block'; }
       return;
     }
-  } else if(shuffleAns){
-    qs = qs.map(shufflePracticeQuestionOptions);
+  } else {
+    if(!baseQs) baseQs = qs.slice();
+    if(shuffle){
+      for(let i = qs.length - 1; i > 0; i--){
+        const j = Math.floor(Math.random() * (i + 1));
+        [qs[i], qs[j]] = [qs[j], qs[i]];
+      }
+    }
+    if(shuffleAns) qs = qs.map(shufflePracticeQuestionOptions);
   }
   if(!qs.length) return;
   run = {
     title: quizTitle,
+    topicFilter, rawCnt, fullPool: baseQs,
     qs, i:0, score:0, streak:0, best:0, right:0, creditSum:0,
     missed:[], missedQ:[], topics:{},
     timed, tMax, prevMax, thinkMax, readAloud, shuffle, shuffleAns,
@@ -1531,6 +1562,23 @@ async function start(customQs){
     sliderVal:0, pinXY:null, done:false
   };
   show();
+}
+
+function practiceFullQuizAgain(){
+  if(!run) return setup();
+  if(Array.isArray(run.fullPool) && run.fullPool.length){
+    let pool = run.fullPool.slice();
+    if(run.shuffle){
+      for(let i = pool.length - 1; i > 0; i--){
+        const j = Math.floor(Math.random() * (i + 1));
+        [pool[i], pool[j]] = [pool[j], pool[i]];
+      }
+    }
+    if(!isNaN(run.rawCnt) && run.rawCnt > 0) pool = pool.slice(0, run.rawCnt);
+    start(pool);
+  } else {
+    start();
+  }
 }
 
 function stopTimer(){ if(run && run.timer){ clearInterval(run.timer); run.timer = null; } }
@@ -2235,19 +2283,40 @@ function finish(){
     <div class="sg-cta-card">
       <div class="sg-cta-hdr">Printable 8.5x11 Study Guides</div>
       <div class="sg-cta-sub">Open a clean, print-ready study sheet with questions, correct answers, and textbook explanations.</div>
-      <div class="sg-btn-row" style="${toughList.length ? '' : 'grid-template-columns:1fr'}">
-        ${toughList.length ? `<button type="button" class="sg-btn-pri" onclick="openPracticeStudyGuide(true)">Study Guide (Missed Questions · ${toughList.length})</button>` : ''}
-        <button type="button" class="${toughList.length ? 'sg-btn-sec' : 'sg-btn-pri'}" onclick="openPracticeStudyGuide(false)">Full Quiz Study Guide (${run.qs.length} Qs)</button>
+      <div class="res-btn-grid" style="${toughList.length ? '' : 'grid-template-columns:1fr'}">
+        ${toughList.length ? `<button type="button" class="r-btn gold" onclick="openPracticeStudyGuide(true)">
+          <span class="r-btn-title">Missed Questions Study Guide</span>
+          <span class="r-btn-sub">Print / PDF · ${toughList.length} Question${toughList.length === 1 ? '' : 's'} to Review</span>
+        </button>` : ''}
+        <button type="button" class="r-btn ${toughList.length ? '' : 'gold'}" onclick="openPracticeStudyGuide(false)">
+          <span class="r-btn-title">Full Quiz Study Guide</span>
+          <span class="r-btn-sub">Print / PDF · All ${run.qs.length} Questions &amp; Answers</span>
+        </button>
       </div>
     </div>
   `;
 
   const actionButtonsHtml = `
-    <div class="res-actions-grid">
-      ${run.missedQ.length ? `<button type="button" class="go blue res-act-btn" onclick="retryMissed()">Retry ${run.missedQ.length} Missed Question${run.missedQ.length === 1 ? '' : 's'}</button>` : ''}
-      ${weakTopics.length ? `<button type="button" class="go res-act-btn" style="background:linear-gradient(180deg,#a855f7,#7c3aed);color:#fff;box-shadow:0 4px 0 #581c87" onclick="practiceWeakTopics()">Practice Weak Chapters (${weakTopics.length})</button>` : ''}
-      <button type="button" class="go res-act-btn" onclick="start()">Practice Full Quiz Again</button>
-      <button type="button" class="sec res-act-btn" style="border-width:1.5px" onclick="setup()">Change Quiz / Options</button>
+    <div class="sg-cta-card">
+      <div class="sg-cta-hdr">Continue Practicing</div>
+      <div class="res-btn-grid" style="margin-top:6px">
+        ${run.missedQ.length ? `<button type="button" class="r-btn blue" onclick="retryMissed()">
+          <span class="r-btn-title">Retry Missed Questions</span>
+          <span class="r-btn-sub">Drill ${run.missedQ.length} Missed Question${run.missedQ.length === 1 ? '' : 's'}</span>
+        </button>` : ''}
+        ${weakTopics.length ? `<button type="button" class="r-btn purple" onclick="practiceWeakTopics()">
+          <span class="r-btn-title">Practice Weak Chapters</span>
+          <span class="r-btn-sub">Focus on ${weakTopics.length} Chapter${weakTopics.length === 1 ? '' : 's'} (&lt;80%)</span>
+        </button>` : ''}
+        <button type="button" class="r-btn green" onclick="practiceFullQuizAgain()">
+          <span class="r-btn-title">Practice Full Quiz Again</span>
+          <span class="r-btn-sub">Restart ${esc(run.title || 'Quiz')}</span>
+        </button>
+        <button type="button" class="r-btn" onclick="setup()">
+          <span class="r-btn-title">Change Quiz / Options</span>
+          <span class="r-btn-sub">Pick Another Chapter or Timer</span>
+        </button>
+      </div>
     </div>
   `;
 
