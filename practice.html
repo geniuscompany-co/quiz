@@ -657,7 +657,7 @@ blockquote{
 }
 .missed:first-of-type{border-top:0;padding-top:2px}
 
-/* --- Lightbox & Confetti --- */
+/* --- Lightbox, Modals & Confetti --- */
 #imgOv{
   display:none;
   position:fixed;
@@ -670,6 +670,122 @@ blockquote{
 }
 #imgOv img{max-width:96vw;max-height:90vh;border-radius:12px;background:#fff}
 #fx{position:fixed;inset:0;pointer-events:none;z-index:85}
+.quick-pacing-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  margin-bottom:8px;
+}
+.qp-box{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:6px;
+  background:rgba(0,0,0,.28);
+  border:1px solid rgba(255,255,255,.18);
+  border-radius:10px;
+  padding:8px 10px;
+  font-size:.86em;
+  font-weight:800;
+}
+.qp-box input[type=number]{
+  width:64px!important;
+  display:inline-block!important;
+  padding:5px 6px!important;
+  margin:0!important;
+  font-size:.96em!important;
+  border-radius:7px!important;
+}
+.tbar{height:8px;background:rgba(255,255,255,.15);border-radius:99px;overflow:hidden;margin-top:4px}
+.tbar i{display:block;height:100%;border-radius:99px}
+.phase-banner{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  flex-wrap:wrap;
+  background:rgba(124,58,237,.24);
+  border:1.5px solid rgba(196,181,253,.55);
+  border-radius:13px;
+  padding:10px 13px;
+  margin:6px 0 10px;
+  text-align:left;
+  font-size:.9em;
+  font-weight:800;
+}
+.phase-banner.preview{
+  background:rgba(245,158,11,.18);
+  border-color:rgba(253,224,71,.55);
+}
+.phase-bar{width:100%;height:7px;background:rgba(255,255,255,.18);border-radius:99px;overflow:hidden;margin-top:4px}
+.phase-fill{height:100%;background:linear-gradient(90deg,#c084fc,#60a5fa);transition:width .18s linear}
+.phase-banner.preview .phase-fill{background:linear-gradient(90deg,#fde047,#f97316)}
+.b-modal-bg{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(7,4,16,.84);
+  backdrop-filter:blur(6px);
+  z-index:88;
+  align-items:center;
+  justify-content:center;
+  padding:14px;
+  overflow-y:auto;
+}
+.b-modal-bg.open{display:flex}
+.b-modal{
+  background:#1b162b;
+  border:1.5px solid rgba(255,255,255,.26);
+  border-radius:18px;
+  padding:18px 16px;
+  max-width:620px;
+  width:100%;
+  max-height:92vh;
+  overflow-y:auto;
+  text-align:left;
+  box-shadow:0 20px 56px rgba(0,0,0,.75);
+}
+.b-modal h2{margin:0 0 4px;font-size:1.25em}
+.b-modal textarea{
+  width:100%;
+  min-height:190px;
+  box-sizing:border-box;
+  padding:11px 12px;
+  border-radius:11px;
+  border:2px solid transparent;
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-size:.88em;
+  line-height:1.45;
+  color:#1e1b2e;
+  background:#fff;
+  margin:4px 0 8px;
+}
+.b-card{
+  background:rgba(255,255,255,.07);
+  border:1px solid rgba(255,255,255,.16);
+  border-radius:12px;
+  padding:11px 12px;
+  margin-bottom:9px;
+}
+.b-card input[type=text]{
+  text-align:left!important;
+  padding:8px 10px!important;
+  font-size:.92em!important;
+  margin:0 0 6px!important;
+}
+.b-opt-row{display:flex;align-items:center;gap:6px;margin-bottom:5px}
+.b-opt-row input[type=text]{margin:0!important;flex:1}
+.b-star-btn{
+  padding:6px 10px;
+  border-radius:8px;
+  border:1px solid rgba(255,255,255,.25);
+  background:rgba(255,255,255,.1);
+  color:#fff;
+  font-weight:900;
+  cursor:pointer;
+  flex-shrink:0;
+}
+.b-star-btn.ok{background:#16a34a;border-color:#86efac;color:#fff}
 </style></head><body>
 
 <div id="topHud">
@@ -691,6 +807,51 @@ blockquote{
 
 <div id="app"></div>
 <div id="imgOv" onclick="this.style.display='none'"><img id="imgBig" alt=""></div>
+<div class="b-modal-bg" id="stuQuizModal" onclick="if(event.target===this)closeStuBuilder()">
+  <div class="b-modal">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px">
+      <h2 id="stuModalHdr">➕ Create My Practice Quiz</h2>
+      <button type="button" class="sec" style="margin:0;padding:5px 12px;font-size:.84em" onclick="closeStuBuilder()">✕ Close</button>
+    </div>
+    <p class="sub" style="text-align:left;margin:0 0 10px">Build your own study deck! Add questions visually or paste formatted text / CSV. Saved privately on your device.</p>
+
+    <div class="field-lbl"><span>Quiz Title</span></div>
+    <input type="text" id="stuTitle" placeholder="e.g. Biology Midterm Review" style="text-align:left;font-size:.98em;padding:10px 12px">
+
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin:8px 0 6px">
+      <div style="display:inline-flex;gap:5px;background:rgba(0,0,0,.35);padding:3px;border-radius:10px;border:1px solid rgba(255,255,255,.15)">
+        <button type="button" id="stuTabVis" class="sec" style="margin:0;padding:6px 12px;font-size:.82em;background:#7c3aed;border-color:#c4b5fd" onclick="setStuBuilderTab('vis')">🃏 Visual Cards</button>
+        <button type="button" id="stuTabTxt" class="sec" style="margin:0;padding:6px 12px;font-size:.82em" onclick="setStuBuilderTab('txt')">📝 Paste Text / CSV</button>
+      </div>
+      <label class="sec" style="margin:0;padding:6px 11px;font-size:.8em;display:inline-flex;align-items:center;gap:5px;cursor:pointer">
+        📂 Import .json/.csv
+        <input type="file" id="stuFileInp" accept=".json,.csv,.txt" style="display:none" onchange="onStuFileImport(event)">
+      </label>
+    </div>
+
+    <div id="stuVisPane">
+      <div id="stuCardList"></div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 10px">
+        <button type="button" class="sec" style="margin:0;padding:7px 12px;font-size:.84em;background:rgba(34,197,94,.22);border-color:#4ade80" onclick="addStuCard('mc')">+ Multiple Choice</button>
+        <button type="button" class="sec" style="margin:0;padding:7px 12px;font-size:.84em" onclick="addStuCard('tf')">+ True / False</button>
+        <button type="button" class="sec" style="margin:0;padding:7px 12px;font-size:.84em" onclick="addStuCard('text')">+ Type Answer</button>
+      </div>
+    </div>
+
+    <div id="stuTxtPane" style="display:none">
+      <div style="font-size:.78em;opacity:.82;margin-bottom:4px;line-height:1.4">
+        Separate questions with a blank line. Prefix the correct choice with <b>*</b>. Optional lines: <code>Topic: Cell Biology</code>, <code>Quote: Explanation shown after answering</code>, <code>Time: 25</code>, <code>Think: 5</code>.
+      </div>
+      <textarea id="stuRawText" placeholder="What is the powerhouse of the cell?&#10;Nucleus&#10;*Mitochondria&#10;Ribosome&#10;Golgi apparatus&#10;Topic: Cell Biology&#10;Quote: Mitochondria generate most of the cell's ATP."></textarea>
+    </div>
+
+    <div id="stuBuildErr" class="err-banner"></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
+      <button type="button" class="go" style="flex:1;margin:0" onclick="saveStuQuiz(true)">▶️ Save &amp; Practice Now</button>
+      <button type="button" class="sec" style="margin:0;padding:12px 16px" onclick="saveStuQuiz(false)">💾 Save to My Quizzes</button>
+    </div>
+  </div>
+</div>
 <canvas id="fx"></canvas>
 
 <script>
@@ -701,28 +862,33 @@ function qtype(q){return q.type||'mc'}
 function zoomImg(src){ document.getElementById('imgBig').src = src; document.getElementById('imgOv').style.display = 'flex'; }
 
 /* --- Read-Aloud TTS --- */
+let autoReadAloud = false;
+try{ autoReadAloud = localStorage.getItem('brainrush_prac_tts') === '1'; }catch(e){}
 function stopSpeak(){
   try{ if(window.speechSynthesis) window.speechSynthesis.cancel(); }catch(e){}
   const b = document.getElementById('ttsBtn');
   if(b){ b.classList.remove('on'); b.textContent = '🔊 Read Aloud'; }
 }
-function speakPractice(){
+function speakPractice(forceStart){
   if(!run || run.i >= run.qs.length) return;
   if(!('speechSynthesis' in window)) return;
-  if(window.speechSynthesis.speaking){
+  if(!forceStart && window.speechSynthesis.speaking){
     stopSpeak();
     return;
   }
+  stopSpeak();
   const q = run.qs[run.i], t = qtype(q);
   const parts = [q.q || ''];
-  if(['mc','tf','zoom','multi'].includes(t) && Array.isArray(q.a) && q.a.length){
-    parts.push('Options: ' + q.a.map((a, i) => `${i + 1}: ${a}`).join('. '));
-  } else if(t === 'order' && run.perm && Array.isArray(q.a)){
-    parts.push('Items to order: ' + run.perm.map(k => q.a[k]).join(', '));
-  } else if(t === 'match' && Array.isArray(q.pairs)){
-    parts.push('Match: ' + q.pairs.map(p => p.l).join(', '));
-  } else if(t === 'slider' && q.slider){
-    parts.push(`Range from ${q.slider.min} to ${q.slider.max}${q.slider.unit ? ' ' + q.slider.unit : ''}.`);
+  if(!(run.previewLeft > 0)){
+    if(['mc','tf','zoom','multi'].includes(t) && Array.isArray(q.a) && q.a.length){
+      parts.push('Options: ' + q.a.map((a, i) => `${i + 1}: ${a}`).join('. '));
+    } else if(t === 'order' && run.perm && Array.isArray(q.a)){
+      parts.push('Items to order: ' + run.perm.map(k => q.a[k]).join(', '));
+    } else if(t === 'match' && Array.isArray(q.pairs)){
+      parts.push('Match: ' + q.pairs.map(p => p.l).join(', '));
+    } else if(t === 'slider' && q.slider){
+      parts.push(`Range from ${q.slider.min} to ${q.slider.max}${q.slider.unit ? ' ' + q.slider.unit : ''}.`);
+    }
   }
   try{
     const u = new SpeechSynthesisUtterance(parts.join('. '));
@@ -807,35 +973,87 @@ function syncHud(){
     return;
   }
   const doneN = run.done ? (run.i + 1) : run.i;
-  const livePct = doneN > 0 ? Math.round(100 * run.creditSum / doneN) + '%' : '';
+  const livePct = doneN > 0 ? Math.round(100 * run.creditSum / doneN) + '%' : '100%';
   if(hs){
-    hs.innerHTML = `<span class="hud-stats"><span>Q ${run.i+1}/${run.qs.length}</span>${livePct ? `<span>📊 ${livePct}</span>` : ''}<span class="hs-score">⭐ ${run.score}</span>${run.streak >= 2 ? `<span class="hs-streak">🔥 ${run.streak}</span>` : ''}</span>`;
+    hs.innerHTML = `<span class="hud-stats"><span>Q ${run.i+1}/${run.qs.length}</span><span class="hs-score">📊 ${doneN > 0 ? livePct : '—%'} (${run.right}/${doneN})</span>${run.streak >= 2 ? `<span class="hs-streak">🔥 ${run.streak}</span>` : ''}</span>`;
   }
-  if(ht) ht.style.display = run.timed ? 'flex' : 'none';
+  const showMainTimer = run.timed && !(run.previewLeft > 0) && !(run.thinkLeft > 0);
+  if(ht) ht.style.display = showMainTimer ? 'flex' : 'none';
 }
 
-let run = null, lockedQuiz = null;
+let run = null, lockedQuiz = null, selectedDeckId = '';
 const PRAC_PARAMS = new URLSearchParams(location.search);
 const PRAC_KEY = (PRAC_PARAMS.get('k') || '').trim();
 const PRAC_FILE = (PRAC_PARAMS.get('quiz') || PRAC_PARAMS.get('file') || '').trim();
 
+/* --- Student Self-Created Practice Quizzes (Local Device Storage) --- */
+function getStudentCustomQuizzes(){
+  try{
+    const arr = JSON.parse(localStorage.getItem('brainrush_student_practice_quizzes') || '[]');
+    return Array.isArray(arr) ? arr.filter(x => x && x.id && Array.isArray(x.questions) && x.questions.length) : [];
+  }catch(e){ return []; }
+}
+function saveStudentCustomQuizzes(list){
+  try{ localStorage.setItem('brainrush_student_practice_quizzes', JSON.stringify(list || [])); }catch(e){}
+}
+function selectPracticeSource(id){
+  selectedDeckId = id;
+  document.querySelectorAll('.p-deck-card').forEach(el => {
+    el.classList.toggle('sel', el.dataset.id === id);
+  });
+  const active = getActivePracticeDeck();
+  const n = active ? (active.questions || []).length : 0;
+  const cEl = document.getElementById('cnt');
+  const mEl = document.getElementById('pMaxCnt');
+  if(cEl){
+    if(n){ cEl.max = n; if(!cEl.value || parseInt(cEl.value,10) > n) cEl.value = n; }
+    else { cEl.removeAttribute('max'); }
+  }
+  if(mEl) mEl.textContent = '/ ' + (n || '—');
+  updatePracSummary();
+}
+function getActivePracticeDeck(){
+  const stuList = getStudentCustomQuizzes();
+  if(selectedDeckId && selectedDeckId.startsWith('stu:')){
+    const found = stuList.find(x => x.id === selectedDeckId);
+    if(found) return found;
+  }
+  if(lockedQuiz && !lockedQuiz.error && (!selectedDeckId || selectedDeckId === 'assigned')){
+    return lockedQuiz;
+  }
+  if(stuList.length) return stuList[0];
+  return (lockedQuiz && !lockedQuiz.error) ? lockedQuiz : null;
+}
+
 function updatePracSummary(){
   const b = document.getElementById('pOptBadge');
   if(!b) return;
+  const active = getActivePracticeDeck();
+  const maxN = active ? (active.questions || []).length : 0;
   const cnt = parseInt((document.getElementById('cnt') || {}).value, 10);
+  const tm = !!(document.getElementById('timed') || {}).checked;
+  const sec = Math.max(5, Math.min(900, parseInt((document.getElementById('pTime') || {}).value, 10) || 15));
+  const prev = Math.max(0, Math.min(120, parseFloat((document.getElementById('pPrevTime') || {}).value) || 0));
+  const thk = Math.max(0, Math.min(120, parseFloat((document.getElementById('pThinkTime') || {}).value) || 0));
   const shuf = !!(document.getElementById('pracShuffle') || {}).checked;
   const saEl = document.getElementById('pracShuffleAns');
   const shufAns = saEl ? saEl.checked : true;
-  const tm = !!(document.getElementById('timed') || {}).checked;
-  const sec = parseInt((document.getElementById('pTime') || {}).value, 10) || 20;
+  const ttsEl = document.getElementById('pracReadAloud');
+  const tts = ttsEl ? ttsEl.checked : autoReadAloud;
+  if(ttsEl){
+    autoReadAloud = tts;
+    try{ localStorage.setItem('brainrush_prac_tts', tts ? '1' : '0'); }catch(e){}
+  }
   const parts = [];
-  parts.push((!isNaN(cnt) && cnt > 0) ? `${cnt} Qs` : 'All Qs');
+  parts.push((!isNaN(cnt) && cnt > 0 && (!maxN || cnt < maxN)) ? `${cnt}/${maxN} Qs` : `All ${maxN || ''} Qs`.trim());
+  parts.push(tm ? `${sec}s timer` : 'Untimed');
+  if(prev > 0) parts.push(`${prev}s preview`);
+  if(thk > 0) parts.push(`${thk}s think`);
   if(shuf) parts.push('Shuffled');
   if(!shufAns) parts.push('Fixed A/B/C/D');
-  parts.push(tm ? `${sec}s` : 'Untimed');
-  const custom = (!isNaN(cnt) && cnt > 0) || shuf || !shufAns || tm;
+  if(tts) parts.push('🔊 Read-Aloud');
   b.textContent = parts.join(' · ');
-  b.classList.toggle('hi', custom);
+  b.classList.toggle('hi', true);
 }
 
 async function fetchAssignedQuiz(){
@@ -850,6 +1068,7 @@ async function fetchAssignedQuiz(){
     if(!res.ok || data.error) return {error: data.error || 'Invalid or expired practice link.'};
     const gradable = (data.questions || []).filter(q => !['poll','open','rank','info','scale','brainstorm'].includes(q.type));
     lockedQuiz = {
+      id: 'assigned',
       file: data.file || PRAC_FILE,
       title: String(data.title || 'Practice Quiz').replace(/\s*\(\d+\s*(?:Qs|slides?)\)\s*$/i, ''),
       questions: gradable,
@@ -867,58 +1086,104 @@ async function setup(){
   run = null;
   syncHud();
   const qInfo = await fetchAssignedQuiz();
-  if(!qInfo || qInfo.error){
+  const hasAssigned = !!(qInfo && !qInfo.error);
+  const stuList = getStudentCustomQuizzes();
+  if(!selectedDeckId){
+    if(hasAssigned) selectedDeckId = 'assigned';
+    else if(stuList.length) selectedDeckId = stuList[0].id;
+  } else if(selectedDeckId !== 'assigned' && !stuList.some(x => x.id === selectedDeckId)){
+    selectedDeckId = hasAssigned ? 'assigned' : (stuList[0] ? stuList[0].id : '');
+  }
+  const active = getActivePracticeDeck();
+  const n = active ? (active.questions || []).length : 0;
+
+  let deckCardsHtml = '';
+  if(hasAssigned){
+    const sel = (active && active.id === 'assigned');
+    deckCardsHtml += `<div class="p-deck-card ${sel ? 'sel' : ''}" data-id="assigned" onclick="selectPracticeSource('assigned')">
+      <span style="min-width:0;overflow:hidden;text-overflow:ellipsis">🎓 ${esc(qInfo.title)} <small style="opacity:.75">(Instructor Link)</small></span>
+      <span class="p-deck-meta">${qInfo.count || 0} Qs</span>
+    </div>`;
+  }
+  stuList.forEach(sq => {
+    const sel = (active && active.id === sq.id);
+    deckCardsHtml += `<div class="p-deck-card ${sel ? 'sel' : ''}" data-id="${esc(sq.id)}" onclick="selectPracticeSource('${esc(sq.id)}')">
+      <span style="min-width:0;overflow:hidden;text-overflow:ellipsis">✍️ ${esc(sq.title)}</span>
+      <span style="display:inline-flex;align-items:center;gap:5px;flex-shrink:0" onclick="event.stopPropagation()">
+        <span class="p-deck-meta">${(sq.questions || []).length} Qs</span>
+        <button type="button" class="hud-btn" style="padding:3px 8px;font-size:.75em" title="Edit this quiz" onclick="openStuBuilder('${esc(sq.id)}')">✏️</button>
+        <button type="button" class="hud-btn" style="padding:3px 8px;font-size:.75em;background:rgba(226,27,60,.35)" title="Delete this quiz" onclick="deleteStuQuiz('${esc(sq.id)}')">🗑️</button>
+      </span>
+    </div>`;
+  });
+
+  if(!active){
     const msg = (qInfo && qInfo.error)
       ? qInfo.error
-      : 'Solo Practice requires a direct quiz link from your instructor. Open the practice link shared for your class quiz.';
+      : 'Open a single-quiz practice link from your instructor, or create your own custom practice quiz below to start studying!';
     $.innerHTML = `
       <div class="card-panel">
         <div class="studio-hero-pill"><span class="hud-bolt">⚡</span>BrainRush &middot; Solo Studio</div>
         <h1>🧑‍🎓 Solo Practice</h1>
         <p class="sub">${esc(msg)}</p>
-        <a class="go" href="/play" style="display:block;text-decoration:none;text-align:center;margin-top:12px">🎮 Go to Live Game Join Screen</a>
+        <button type="button" class="go" onclick="openStuBuilder()">➕ Create My Own Practice Quiz</button>
+        <a class="sec" href="/play" style="display:inline-block;text-decoration:none;margin-top:12px">🎮 Go to Live Game Join Screen</a>
       </div>
     `;
     return;
   }
-  const n = qInfo.count || 0;
+
   $.innerHTML = `
     <div class="card-panel">
       <div class="studio-hero-pill"><span class="hud-bolt">⚡</span>BrainRush &middot; Solo Studio</div>
       <h1>🧑‍🎓 Solo Practice</h1>
-      <p class="sub">Study at your own pace with instant explanations. Scores stay private on your device.</p>
+      <p class="sub">Study at your own pace with Percentage Grading, Read-Aloud, Topic Accuracy, and a Printable Study Guide.</p>
 
-      <div class="field-lbl"><span>Assigned Practice Quiz</span><span>${n} ${n === 1 ? 'Question' : 'Questions'}</span></div>
-      <div class="p-deck-list">
-        <div class="p-deck-card sel" style="cursor:default">
-          <span style="min-width:0;overflow:hidden;text-overflow:ellipsis">🎮 ${esc(qInfo.title)}</span>
-          <span class="p-deck-meta">${n} Qs</span>
-        </div>
+      <div class="field-lbl">
+        <span>${hasAssigned && stuList.length ? 'Assigned &amp; Custom Quizzes' : (hasAssigned ? 'Assigned Practice Quiz' : 'My Custom Practice Quizzes')}</span>
+        <button type="button" class="hud-btn" style="padding:3px 10px;font-size:.95em;background:rgba(124,58,237,.45);border-color:#c4b5fd;text-transform:none;letter-spacing:0" onclick="openStuBuilder()">➕ Create My Own Quiz</button>
       </div>
+      <div class="p-deck-list">${deckCardsHtml}</div>
 
-      <details class="p-acc" id="pOptsAcc">
+      <details class="p-acc" id="pTimersAcc" open>
         <summary>
-          <span>⚙️ Practice Options</span>
-          <span class="p-acc-badge" id="pOptBadge">All Qs · Untimed</span>
+          <span>⏱️ Timers &amp; Pacing</span>
+          <span class="p-acc-badge hi" id="pOptBadge">All Qs · 15s timer</span>
         </summary>
         <div class="p-acc-body" onchange="updatePracSummary()" oninput="updatePracSummary()">
-          <div class="field-lbl"><span>Question Count</span><span style="opacity:.7;text-transform:none;letter-spacing:0">Optional</span></div>
-          <input id="cnt" type="number" min="1" max="${n || 1}" value="" placeholder="${n ? `How many questions? (1–${n}, blank = all)` : 'How many questions? (blank = all)'}">
+          <div class="quick-pacing-grid">
+            <label class="qp-box" title="How many questions to practice">
+              <span>📝 Questions</span>
+              <span><input id="cnt" type="number" min="1" max="${n || 1}" value="${n || ''}" placeholder="All"> <small id="pMaxCnt" style="opacity:.75">/ ${n || '—'}</small></span>
+            </label>
+            <label class="qp-box" title="Seconds to answer each question when Countdown Timer is enabled">
+              <span>⏱️ Timer</span>
+              <span><input id="pTime" type="number" min="5" max="900" value="15"> <small style="opacity:.75">s</small></span>
+            </label>
+            <label class="qp-box" title="Reading preview before answer choices appear (0 = instant)">
+              <span>👀 Preview</span>
+              <span><input id="pPrevTime" type="number" min="0" max="120" value="0"> <small style="opacity:.75">s</small></span>
+            </label>
+            <label class="qp-box" title="Choices shown on screen, but locked while you reason (0 = off)">
+              <span>🧠 Think</span>
+              <span><input id="pThinkTime" type="number" min="0" max="120" value="0"> <small style="opacity:.75">s</small></span>
+            </label>
+          </div>
+
+          <div class="timer-opt-row">
+            <label><input type="checkbox" id="timed"> ⏱️ Enable Countdown Timer</label>
+          </div>
+
+          <div class="timer-opt-row">
+            <label><input type="checkbox" id="pracReadAloud"> 🔊 Student Read-Aloud (Auto-Speak Questions &amp; Choices)</label>
+          </div>
 
           <div class="timer-opt-row">
             <label><input type="checkbox" id="pracShuffle"> 🎲 Randomize Question Order</label>
           </div>
 
-          <div class="timer-opt-row">
-            <label><input type="checkbox" id="pracShuffleAns"> 🔀 Shuffle A/B/C/D Choices</label>
-          </div>
-
           <div class="timer-opt-row" style="margin-bottom:2px">
-            <label><input type="checkbox" id="timed"> ⏱️ Countdown timer</label>
-            <span class="timer-sec-box">
-              <input id="pTime" type="number" min="5" max="600" value="20">
-              <span style="font-size:.88em;opacity:.85">sec</span>
-            </span>
+            <label><input type="checkbox" id="pracShuffleAns"> 🔀 Shuffle A/B/C/D Choices</label>
           </div>
         </div>
       </details>
@@ -930,6 +1195,8 @@ async function setup(){
   `;
   const saEl = document.getElementById('pracShuffleAns');
   if(saEl) saEl.checked = true;
+  const raEl = document.getElementById('pracReadAloud');
+  if(raEl) raEl.checked = !!autoReadAloud;
   updatePracSummary();
 }
 
@@ -965,28 +1232,42 @@ async function start(customQs){
   stopSpeak();
   let qs = customQs;
   let timed = run ? run.timed : false;
-  let tMax = run ? run.tMax : 20;
+  let tMax = run ? run.tMax : 15;
+  let prevMax = run ? (run.prevMax || 0) : 0;
+  let thinkMax = run ? (run.thinkMax || 0) : 0;
+  let readAloud = run ? !!run.readAloud : autoReadAloud;
   let shuffle = run ? !!run.shuffle : false;
   let shuffleAns = run && run.shuffleAns !== undefined ? !!run.shuffleAns : true;
+  let quizTitle = run && run.title ? run.title : 'Practice Quiz';
   if(!qs){
     const errEl = document.getElementById('pErr');
-    const qInfo = await fetchAssignedQuiz();
-    if(!qInfo || qInfo.error){
-      if(errEl){ errEl.textContent = (qInfo && qInfo.error) || 'Practice quiz link required.'; errEl.style.display = 'block'; }
+    await fetchAssignedQuiz();
+    const active = getActivePracticeDeck();
+    if(!active || !Array.isArray(active.questions) || !active.questions.length){
+      if(errEl){ errEl.textContent = 'Please select or create a practice quiz first.'; errEl.style.display = 'block'; }
       return;
     }
+    quizTitle = active.title || 'Practice Quiz';
     if(errEl) errEl.style.display = 'none';
     const cntEl = document.getElementById('cnt');
     const rawCnt = cntEl ? parseInt(cntEl.value, 10) : NaN;
     const tmEl = document.getElementById('timed');
     timed = tmEl ? tmEl.checked : timed;
+    const raEl = document.getElementById('pracReadAloud');
+    readAloud = raEl ? raEl.checked : readAloud;
+    autoReadAloud = readAloud;
+    try{ localStorage.setItem('brainrush_prac_tts', readAloud ? '1' : '0'); }catch(e){}
     const shufEl = document.getElementById('pracShuffle');
     shuffle = shufEl ? shufEl.checked : shuffle;
     const shufAnsEl = document.getElementById('pracShuffleAns');
     shuffleAns = shufAnsEl ? shufAnsEl.checked : shuffleAns;
     const ptEl = document.getElementById('pTime');
-    tMax = Math.max(5, Math.min(600, parseInt(ptEl ? ptEl.value : tMax, 10) || 20));
-    qs = (qInfo.questions || []).slice();
+    tMax = Math.max(5, Math.min(900, parseInt(ptEl ? ptEl.value : tMax, 10) || 15));
+    const pvEl = document.getElementById('pPrevTime');
+    prevMax = Math.max(0, Math.min(120, parseFloat(pvEl && pvEl.value !== '' ? pvEl.value : prevMax) || 0));
+    const thEl = document.getElementById('pThinkTime');
+    thinkMax = Math.max(0, Math.min(120, parseFloat(thEl && thEl.value !== '' ? thEl.value : thinkMax) || 0));
+    qs = (active.questions || []).slice();
     if(shuffle){
       for(let i = qs.length - 1; i > 0; i--){
         const j = Math.floor(Math.random() * (i + 1));
@@ -1004,8 +1285,11 @@ async function start(customQs){
   }
   if(!qs.length) return;
   run = {
+    title: quizTitle,
     qs, i:0, score:0, streak:0, best:0, right:0, creditSum:0,
-    missed:[], missedQ:[], timed, tMax, shuffle, shuffleAns, t:tMax, timer:null,
+    missed:[], missedQ:[], topics:{},
+    timed, tMax, prevMax, thinkMax, readAloud, shuffle, shuffleAns,
+    t:tMax, previewLeft:0, previewTotal:0, thinkLeft:0, thinkTotal:0, timer:null,
     sel:[], perm:null, matchPerm:null, matchPairs:[], matchLeft:0,
     sliderVal:0, pinXY:null, done:false
   };
@@ -1013,6 +1297,17 @@ async function start(customQs){
 }
 
 function stopTimer(){ if(run && run.timer){ clearInterval(run.timer); run.timer = null; } }
+
+function skipPreviewNow(){
+  if(!run || run.done || !(run.previewLeft > 0)) return;
+  run.previewLeft = 0;
+  renderQuestionStage(true);
+}
+function skipThinkNow(){
+  if(!run || run.done || !(run.thinkLeft > 0)) return;
+  run.thinkLeft = 0;
+  renderQuestionStage(true);
+}
 
 function show(){
   stopTimer();
@@ -1023,7 +1318,13 @@ function show(){
   run.sel = [];
   run.pinXY = null;
   const qSec = (q.t_custom && q.t >= 5) ? q.t : run.tMax;
-  syncHud();
+  const qThink = (q.think && q.think > 0) ? Number(q.think) : run.thinkMax;
+  run.qSec = qSec;
+  run.t = qSec;
+  run.previewTotal = Math.max(0, Number(run.prevMax) || 0);
+  run.previewLeft = run.previewTotal;
+  run.thinkTotal = Math.max(0, Number(qThink) || 0);
+  run.thinkLeft = run.thinkTotal;
 
   if(t === 'order'){
     const n = (q.a || []).length;
@@ -1052,15 +1353,50 @@ function show(){
     run.sliderVal = Number(Math.min(Number(sc.max), Math.max(Number(sc.min), snapped)).toFixed(6));
   }
 
+  renderQuestionStage(false);
+  if(run.readAloud) setTimeout(() => speakPractice(true), 80);
+  startQuestionLoop();
+}
+
+function renderQuestionStage(phaseTransition){
+  if(!run || run.i >= run.qs.length) return;
+  const q = run.qs[run.i], t = qtype(q);
+  const inPrev = run.previewLeft > 0;
+  const inThink = !inPrev && run.thinkLeft > 0;
+  syncHud();
+
+  let phaseBannerHtml = '';
+  if(inPrev){
+    const pct = Math.min(100, (run.previewLeft / Math.max(1, run.previewTotal)) * 100);
+    phaseBannerHtml = `<div class="phase-banner preview">
+      <div style="flex:1;min-width:180px">
+        <div>👀 Reading Preview (<span id="prevSecLbl">${Math.ceil(run.previewLeft)}</span>s) — Read the question first…</div>
+        <div class="phase-bar"><div class="phase-fill" id="prevFillBar" style="width:${pct}%"></div></div>
+      </div>
+      <button type="button" class="sec" style="margin:0;padding:6px 12px;font-size:.84em" onclick="skipPreviewNow()">⏭️ Open Answers Now</button>
+    </div>`;
+  } else if(inThink){
+    const pct = Math.min(100, (run.thinkLeft / Math.max(1, run.thinkTotal)) * 100);
+    phaseBannerHtml = `<div class="phase-banner">
+      <div style="flex:1;min-width:180px">
+        <div>🧠 Thinking Time (<span id="thkSecLbl">${Math.ceil(run.thinkLeft)}</span>s) — Choices shown, locked while you reason</div>
+        <div class="phase-bar"><div class="phase-fill" id="thkFillBar" style="width:${pct}%"></div></div>
+      </div>
+      <button type="button" class="sec" style="margin:0;padding:6px 12px;font-size:.84em;background:#7c3aed;border-color:#c4b5fd" onclick="skipThinkNow()">⏭️ Unlock Answers Now</button>
+    </div>`;
+  }
+
   let body = '';
-  if(t === 'text'){
-    body = `<div class="card-panel" style="padding:14px"><input type="text" id="txt" placeholder="Type your answer…" autocomplete="off" autocapitalize="off" onkeydown="if(event.key==='Enter')submitText()"><button class="go" onclick="submitText()">Submit Answer</button></div>`;
+  if(inPrev){
+    body = '';
+  } else if(t === 'text'){
+    body = `<div class="card-panel" style="padding:14px"><input type="text" id="txt" placeholder="${inThink ? '🧠 Thinking time — unlocks in a moment…' : 'Type your answer…'}" autocomplete="off" autocapitalize="off" ${inThink ? 'disabled' : ''} onkeydown="if(event.key==='Enter')submitText()"><button class="go" onclick="submitText()" ${inThink ? 'disabled' : ''}>Submit Answer</button></div>`;
   } else if(t === 'order'){
     body = `<div class="sub" style="margin:2px 0 8px;font-weight:750">Tap items in the correct order (1 → ${(q.a||[]).length}; tap a placed slot to remove):</div><div id="ord"></div>`;
   } else if(t === 'multi'){
     body = `
       <div class="sub" style="margin:2px 0 8px;font-weight:750">Select ALL correct options, then tap Submit:</div>
-      <div class="grid">${(q.a||[]).map((a,i)=>`<button id="mb${i}" class="c${i%6}" onclick="toggleMulti(${i})">${q.aimg && q.aimg[i] ? `<img src="${esc(q.aimg[i])}" alt="">` : ''}<span class="sh">${sh[i%6]}</span><span>${esc(a)}</span></button>`).join('')}</div>
+      <div class="grid">${(q.a||[]).map((a,i)=>`<button id="mb${i}" class="c${i%6}" onclick="toggleMulti(${i})" ${inThink ? 'disabled' : ''}>${q.aimg && q.aimg[i] ? `<img src="${esc(q.aimg[i])}" alt="">` : ''}<span class="sh">${sh[i%6]}</span><span>${esc(a)}</span></button>`).join('')}</div>
       <button class="go" id="multiSubBtn" style="margin-top:10px" onclick="submitMulti()" disabled>✅ Submit Selection (0)</button>
     `;
   } else if(t === 'match'){
@@ -1071,58 +1407,90 @@ function show(){
     body = `
       <div class="slider-box">
         <div class="slider-val" id="slReadout">${run.sliderVal}${u}</div>
-        <input type="range" id="slRange" min="${sc.min}" max="${sc.max}" step="${sc.step}" value="${run.sliderVal}" oninput="syncSlider(this.value)">
+        <input type="range" id="slRange" min="${sc.min}" max="${sc.max}" step="${sc.step}" value="${run.sliderVal}" ${inThink ? 'disabled' : ''} oninput="syncSlider(this.value)">
         <div class="slider-ends"><span>${sc.min}${u}</span><span>${sc.max}${u}</span></div>
         <div style="display:flex;align-items:center;justify-content:center;gap:8px">
-          <input type="number" id="slNum" class="slider-num" min="${sc.min}" max="${sc.max}" step="${sc.step}" value="${run.sliderVal}" oninput="syncSlider(this.value)">
+          <input type="number" id="slNum" class="slider-num" min="${sc.min}" max="${sc.max}" step="${sc.step}" value="${run.sliderVal}" ${inThink ? 'disabled' : ''} oninput="syncSlider(this.value)">
           ${sc.unit ? `<span style="font-weight:850">${esc(sc.unit)}</span>` : ''}
         </div>
-        <button class="go" id="slSubBtn" style="margin-top:12px" onclick="submitSlider()">🎯 Lock In Estimate</button>
+        <button class="go" id="slSubBtn" style="margin-top:12px" onclick="submitSlider()" ${inThink ? 'disabled' : ''}>🎯 Lock In Estimate</button>
       </div>
     `;
   } else if(t === 'pin'){
     body = `
       <div class="pin-wrap">
         <div class="sub" style="margin:0 0 8px;font-weight:750">Tap directly on the image to place your pin:</div>
-        <div class="pin-stage" id="pinStage" onclick="placePin(event)">
+        <div class="pin-stage" id="pinStage" onclick="if(!(run&&run.thinkLeft>0))placePin(event)">
           <img src="${esc(q.img || '')}" alt="Target image" draggable="false">
           <svg class="pin-svg" id="pinSvg" viewBox="0 0 100 100" preserveAspectRatio="none"></svg>
           <div class="pin-marker" id="pinMarker" style="display:none"></div>
         </div>
-        <div id="pinCoord" style="font-size:.82em;opacity:.82;margin-top:6px;font-weight:750">Tap anywhere on the image to drop a pin</div>
+        <div id="pinCoord" style="font-size:.82em;opacity:.82;margin-top:6px;font-weight:750">${inThink ? '🧠 Thinking Time — pin unlocks when timer finishes' : 'Tap anywhere on the image to drop a pin'}</div>
         <button class="go" id="pinSubBtn" style="margin-top:10px" onclick="submitPin()" disabled>📍 Lock In Pin</button>
       </div>
     `;
   } else {
-    body = `<div class="grid">${(q.a||[]).map((a,i)=>`<button class="c${i%6}" onclick="pick(${i})">${q.aimg && q.aimg[i] ? `<img src="${esc(q.aimg[i])}" alt="">` : ''}<span class="sh">${sh[i%6]}</span><span>${esc(a)}</span></button>`).join('')}</div>`;
+    body = `<div class="grid">${(q.a||[]).map((a,i)=>`<button class="c${i%6}" onclick="pick(${i})" ${inThink ? 'disabled' : ''}>${q.aimg && q.aimg[i] ? `<img src="${esc(q.aimg[i])}" alt="">` : ''}<span class="sh">${sh[i%6]}</span><span>${esc(a)}</span></button>`).join('')}</div>`;
   }
 
-  const ptsTag = (q.pts != null && Number(q.pts) !== 1000) ? ` · ⭐ ${q.pts} pts` : '';
-  const showStemImg = q.img && t !== 'pin';
-  const zoomCls = t === 'zoom' ? ' zoom-go' : '';
+  const topicTag = q.topic ? ` · 🏷️ ${esc(q.topic)}` : '';
+  const showStemImg = q.img && (t !== 'pin' || inPrev);
+  const zoomCls = t === 'zoom' ? (inPrev ? '' : ' zoom-go') : '';
 
   $.innerHTML = `
     <div class="q-card">
       <div class="q-top-row">
-        <div class="qnum">Question ${run.i+1} of ${run.qs.length}${ptsTag}</div>
+        <div class="qnum">Question ${run.i+1} of ${run.qs.length}${topicTag}</div>
         <button type="button" class="tts-btn" id="ttsBtn" onclick="speakPractice()">🔊 Read Aloud</button>
       </div>
       <div class="q">${esc(q.q)}</div>
       ${showStemImg ? `<img class="q-img${zoomCls}" id="qStemImg" src="${esc(q.img)}" alt="" onclick="zoomImg(this.src)">` : ''}
     </div>
+    ${phaseBannerHtml}
     ${body}
     <div id="fb"></div>
   `;
 
-  if(t === 'order') drawOrder();
-  if(t === 'match') drawMatch();
-  if(t === 'text'){ const e = document.getElementById('txt'); if(e) e.focus(); }
-  if(run.timed){
-    run.t = qSec;
-    const b0 = document.getElementById('tb'), l0 = document.getElementById('tlbl');
-    if(b0){ b0.style.width = '100%'; b0.className = ''; }
-    if(l0){ l0.textContent = '⏱️ ' + qSec + 's'; l0.className = 'tlbl-pill'; }
-    run.timer = setInterval(() => {
+  if(!inPrev && t === 'order') drawOrder();
+  if(!inPrev && t === 'match') drawMatch();
+  if(!inPrev && !inThink && t === 'text'){ const e = document.getElementById('txt'); if(e) e.focus(); }
+  if(phaseTransition && !inPrev && run.readAloud){
+    setTimeout(() => speakPractice(true), 60);
+  }
+}
+
+function startQuestionLoop(){
+  stopTimer();
+  const qSec = run.qSec || run.tMax;
+  const b0 = document.getElementById('tb'), l0 = document.getElementById('tlbl');
+  if(b0){ b0.style.width = '100%'; b0.className = ''; }
+  if(l0){ l0.textContent = '⏱️ ' + qSec + 's'; l0.className = 'tlbl-pill'; }
+  if(!(run.previewLeft > 0) && !(run.thinkLeft > 0) && !run.timed) return;
+  run.timer = setInterval(() => {
+    if(!run || run.done){ stopTimer(); return; }
+    if(run.previewLeft > 0){
+      run.previewLeft = Math.max(0, run.previewLeft - 0.2);
+      const ps = document.getElementById('prevSecLbl'), pf = document.getElementById('prevFillBar');
+      if(ps) ps.textContent = Math.ceil(run.previewLeft);
+      if(pf) pf.style.width = Math.min(100, (run.previewLeft / Math.max(1, run.previewTotal)) * 100) + '%';
+      if(run.previewLeft <= 0){
+        renderQuestionStage(true);
+        if(!(run.thinkLeft > 0) && !run.timed) stopTimer();
+      }
+      return;
+    }
+    if(run.thinkLeft > 0){
+      run.thinkLeft = Math.max(0, run.thinkLeft - 0.2);
+      const ts = document.getElementById('thkSecLbl'), tf = document.getElementById('thkFillBar');
+      if(ts) ts.textContent = Math.ceil(run.thinkLeft);
+      if(tf) tf.style.width = Math.min(100, (run.thinkLeft / Math.max(1, run.thinkTotal)) * 100) + '%';
+      if(run.thinkLeft <= 0){
+        renderQuestionStage(false);
+        if(!run.timed) stopTimer();
+      }
+      return;
+    }
+    if(run.timed){
       run.t -= 0.2;
       const b = document.getElementById('tb'), l = document.getElementById('tlbl');
       const urg = run.t <= 5;
@@ -1135,12 +1503,14 @@ function show(){
         l.className = 'tlbl-pill' + (urg ? ' urgent' : '');
       }
       if(run.t <= 0){ stopTimer(); grade(false, 0, '(time ran out)'); }
-    }, 200);
-  }
+    } else {
+      stopTimer();
+    }
+  }, 200);
 }
 
 function pick(i){
-  if(run.done) return;
+  if(run.done || run.previewLeft > 0 || run.thinkLeft > 0) return;
   const q = run.qs[run.i];
   const valid = (Array.isArray(q.correct_multi) && q.correct_multi.length) ? q.correct_multi : [q.c || 0];
   const ok = !!q.all_correct || valid.includes(i);
@@ -1148,7 +1518,7 @@ function pick(i){
 }
 
 function toggleMulti(i){
-  if(run.done) return;
+  if(run.done || run.previewLeft > 0 || run.thinkLeft > 0) return;
   const pos = run.sel.indexOf(i);
   if(pos >= 0) run.sel.splice(pos, 1);
   else run.sel.push(i);
@@ -1163,7 +1533,7 @@ function toggleMulti(i){
 }
 
 function submitMulti(){
-  if(run.done || !run.sel.length) return;
+  if(run.done || run.previewLeft > 0 || run.thinkLeft > 0 || !run.sel.length) return;
   const q = run.qs[run.i];
   const picked = run.sel.slice();
   const req = (Array.isArray(q.correct_multi) && q.correct_multi.length) ? q.correct_multi : [q.c || 0];
@@ -1184,6 +1554,7 @@ function submitMulti(){
 function drawMatch(){
   const q = run.qs[run.i], el = document.getElementById('matchBox');
   if(!el) return;
+  const locked = !!(run.done || run.previewLeft > 0 || run.thinkLeft > 0);
   const pairs = q.pairs || [];
   const n = pairs.length;
   const rightDisp = run.matchPerm.map(k => pairs[k].r);
@@ -1194,24 +1565,24 @@ function drawMatch(){
         <div class="match-hdr">Prompts</div>
         ${pairs.map((p, li) => {
           const rj = run.matchPairs[li];
-          const act = run.matchLeft === li && !run.done;
-          return `<button type="button" class="m-item${act ? ' active' : ''}" onclick="tapMatchLeft(${li})" ${run.done ? 'disabled' : ''}><span>${esc(p.l)}</span>${rj >= 0 ? `<span class="m-badge pc${li%6}">#${li+1}</span>` : ''}</button>`;
+          const act = run.matchLeft === li && !locked;
+          return `<button type="button" class="m-item${act ? ' active' : ''}" onclick="tapMatchLeft(${li})" ${locked ? 'disabled' : ''}><span>${esc(p.l)}</span>${rj >= 0 ? `<span class="m-badge pc${li%6}">#${li+1}</span>` : ''}</button>`;
         }).join('')}
       </div>
       <div class="match-col">
         <div class="match-hdr">Matches</div>
         ${rightDisp.map((rt, rj) => {
           const li = run.matchPairs.indexOf(rj);
-          return `<button type="button" class="m-item" onclick="tapMatchRight(${rj})" ${run.done ? 'disabled' : ''}><span>${esc(rt)}</span>${li >= 0 ? `<span class="m-badge pc${li%6}">#${li+1}</span>` : ''}</button>`;
+          return `<button type="button" class="m-item" onclick="tapMatchRight(${rj})" ${locked ? 'disabled' : ''}><span>${esc(rt)}</span>${li >= 0 ? `<span class="m-badge pc${li%6}">#${li+1}</span>` : ''}</button>`;
         }).join('')}
       </div>
     </div>
-    ${!run.done ? `<button class="go" onclick="submitMatch()" ${allLinked ? '' : 'disabled'}>🔗 Submit Pairs (${run.matchPairs.filter(v => v >= 0).length}/${n})</button>` : ''}
+    ${!run.done ? `<button class="go" onclick="submitMatch()" ${(allLinked && !locked) ? '' : 'disabled'}>🔗 Submit Pairs (${run.matchPairs.filter(v => v >= 0).length}/${n})</button>` : ''}
   `;
 }
 
 function tapMatchLeft(li){
-  if(run.done) return;
+  if(run.done || run.previewLeft > 0 || run.thinkLeft > 0) return;
   if(run.matchPairs[li] >= 0){
     run.matchPairs[li] = -1;
     run.matchLeft = li;
@@ -1222,7 +1593,7 @@ function tapMatchLeft(li){
 }
 
 function tapMatchRight(rj){
-  if(run.done) return;
+  if(run.done || run.previewLeft > 0 || run.thinkLeft > 0) return;
   const existingLi = run.matchPairs.indexOf(rj);
   let targetLi = run.matchLeft;
   if(targetLi === null || targetLi === undefined){
@@ -1243,7 +1614,7 @@ function tapMatchRight(rj){
 }
 
 function submitMatch(){
-  if(run.done) return;
+  if(run.done || run.previewLeft > 0 || run.thinkLeft > 0) return;
   const q = run.qs[run.i], pairs = q.pairs || [], n = pairs.length;
   if(run.matchPairs.some(v => v < 0)) return;
   let hits = 0;
@@ -1261,7 +1632,7 @@ function submitMatch(){
 }
 
 function syncSlider(v){
-  if(run.done) return;
+  if(run.done || run.previewLeft > 0 || run.thinkLeft > 0) return;
   const q = run.qs[run.i], sc = q.slider || {min:0, max:100, step:1, unit:''};
   const num = parseFloat(v);
   if(isNaN(num)) return;
@@ -1275,7 +1646,7 @@ function syncSlider(v){
 }
 
 function submitSlider(){
-  if(run.done) return;
+  if(run.done || run.previewLeft > 0 || run.thinkLeft > 0) return;
   const q = run.qs[run.i], sc = q.slider || {min:0, max:100, step:1, target:50, margin:0, unit:''};
   const nEl = document.getElementById('slNum');
   let val = nEl ? parseFloat(nEl.value) : run.sliderVal;
@@ -1294,7 +1665,7 @@ function submitSlider(){
 }
 
 function placePin(ev){
-  if(run.done) return;
+  if(run.done || run.previewLeft > 0 || run.thinkLeft > 0) return;
   const st = document.getElementById('pinStage');
   if(!st) return;
   const rect = st.getBoundingClientRect();
@@ -1311,7 +1682,7 @@ function placePin(ev){
 }
 
 function submitPin(){
-  if(run.done || !run.pinXY) return;
+  if(run.done || run.previewLeft > 0 || run.thinkLeft > 0 || !run.pinXY) return;
   const q = run.qs[run.i], pn = q.pin || {x:50, y:50, r:12};
   const [px, py] = run.pinXY;
   const r = Math.max(1, Number(pn.r) || 12);
@@ -1328,7 +1699,7 @@ function submitPin(){
 }
 
 function submitText(){
-  if(run.done) return;
+  if(run.done || run.previewLeft > 0 || run.thinkLeft > 0) return;
   const q = run.qs[run.i];
   const el = document.getElementById('txt');
   const v = el ? el.value : '';
@@ -1341,15 +1712,17 @@ function submitText(){
 function drawOrder(){
   const q = run.qs[run.i], el = document.getElementById('ord');
   if(!el) return;
+  const locked = !!(run.done || run.previewLeft > 0 || run.thinkLeft > 0);
   const disp = run.perm.map(k => q.a[k]);
   el.innerHTML =
     run.sel.map((j, n) => `<div class="slot" onclick="removeOrd(${n})"><span><b>#${n+1}</b> ${esc(disp[j])}</span><span class="rm">✕</span></div>`).join('') +
-    `<div class="grid">${disp.map((a, j) => run.sel.includes(j) ? '' : `<button class="c${j%6}" style="min-height:70px" onclick="tapOrd(${j})"><span>${esc(a)}</span></button>`).join('')}</div>` +
-    `<div style="display:flex;gap:8px;justify-content:center;align-items:center;margin-top:8px">${run.sel.length && !run.done ? `<button class="sec" style="margin:0" onclick="run.sel.pop();drawOrder()">↩ Undo</button>` : ''}${run.sel.length === disp.length && !run.done ? `<button class="go" style="margin:0;flex:1" onclick="submitOrder()">✅ Submit Order</button>` : ''}</div>`;
+    `<div class="grid">${disp.map((a, j) => run.sel.includes(j) ? '' : `<button class="c${j%6}" style="min-height:70px" onclick="tapOrd(${j})" ${locked ? 'disabled' : ''}><span>${esc(a)}</span></button>`).join('')}</div>` +
+    `<div style="display:flex;gap:8px;justify-content:center;align-items:center;margin-top:8px">${run.sel.length && !locked ? `<button class="sec" style="margin:0" onclick="run.sel.pop();drawOrder()">↩ Undo</button>` : ''}${run.sel.length === disp.length && !locked ? `<button class="go" style="margin:0;flex:1" onclick="submitOrder()">✅ Submit Order</button>` : ''}</div>`;
 }
-function tapOrd(j){ if(run.done) return; run.sel.push(j); drawOrder(); }
-function removeOrd(pos){ if(run.done) return; run.sel.splice(pos, 1); drawOrder(); }
+function tapOrd(j){ if(run.done || run.previewLeft > 0 || run.thinkLeft > 0) return; run.sel.push(j); drawOrder(); }
+function removeOrd(pos){ if(run.done || run.previewLeft > 0 || run.thinkLeft > 0) return; run.sel.splice(pos, 1); drawOrder(); }
 function submitOrder(){
+  if(run.done || run.previewLeft > 0 || run.thinkLeft > 0) return;
   const q = run.qs[run.i];
   const orig = run.sel.map(j => run.perm[j]);
   const ok = !!q.all_correct || orig.every((v, i) => v === i);
@@ -1394,7 +1767,16 @@ function grade(ok, credit, given, meta){
   const partial = !ok && cr > 0;
   const ptsScale = (q.pts != null) ? (Number(q.pts) / 1000) : 1;
   let pts = 0;
-  run.creditSum += ok ? 1 : cr;
+  const earnedCr = ok ? 1 : cr;
+  run.creditSum += earnedCr;
+
+  const topKey = String(q.topic || '').trim();
+  if(topKey){
+    if(!run.topics[topKey]) run.topics[topKey] = {sum:0, exact:0, n:0};
+    run.topics[topKey].sum += earnedCr;
+    if(ok) run.topics[topKey].exact += 1;
+    run.topics[topKey].n += 1;
+  }
 
   if(ok){
     run.streak++;
@@ -1407,12 +1789,12 @@ function grade(ok, credit, given, meta){
     run.streak = 0;
     pts = Math.round(100 * cr * ptsScale);
     run.score += pts;
-    run.missed.push({q: q.q, your: given, ans: ansText(q)});
+    run.missed.push({index: run.i + 1, q: q.q, your: given, ans: ansText(q), quote: q.quote || '', src: q.src || '', topic: topKey, pct: Math.round(cr * 100)});
     run.missedQ.push(q);
     sfxPartial();
   } else {
     run.streak = 0;
-    run.missed.push({q: q.q, your: given, ans: ansText(q)});
+    run.missed.push({index: run.i + 1, q: q.q, your: given, ans: ansText(q), quote: q.quote || '', src: q.src || '', topic: topKey, pct: 0});
     run.missedQ.push(q);
     sfxWrong();
   }
@@ -1430,13 +1812,15 @@ function grade(ok, credit, given, meta){
     }
   });
 
+  const doneN = run.i + 1;
+  const runPct = Math.round(100 * run.creditSum / Math.max(1, doneN));
   const fb = document.getElementById('fb');
   const cls = ok ? 'ok' : partial ? 'partial' : 'no';
   const headline = ok
-    ? `✅ Correct! +${pts} pts${run.streak > 1 ? ' · 🔥 ' + run.streak + ' streak' : ''}`
+    ? `✅ Correct! · 📊 ${runPct}% Grade (${run.right}/${doneN})${run.streak > 1 ? ' · 🔥 ' + run.streak + ' streak' : ''}`
     : partial
-      ? `⚡ Partial Credit! +${pts} pts (${Math.round(cr * 100)}%)`
-      : '❌ Not quite';
+      ? `⚡ Partial Credit (${Math.round(cr * 100)}%) · 📊 ${runPct}% Grade`
+      : `❌ Not quite · 📊 ${runPct}% Grade (${run.right}/${doneN})`;
   fb.innerHTML = `
     <div class="fb ${cls}">
       ${headline}
@@ -1445,6 +1829,15 @@ function grade(ok, credit, given, meta){
     ${q.quote ? `<blockquote>“${esc(q.quote)}”${q.src ? `<div style="font-size:.82em;font-style:normal;opacity:.75;margin-top:4px">— ${esc(q.src)}</div>` : ''}</blockquote>` : ''}
     <button class="go" onclick="run.i++;show()">${run.i + 1 >= run.qs.length ? '🏆 See Final Results' : 'Next Question ➔'}</button>
   `;
+  if(run.readAloud){
+    try{
+      const msg = ok ? ('Correct! ' + (q.quote || '')) : ('Not quite. Correct answer: ' + ansText(q) + '. ' + (q.quote || ''));
+      if(window.speechSynthesis && msg.trim()){
+        const u = new SpeechSynthesisUtterance(msg);
+        window.speechSynthesis.speak(u);
+      }
+    }catch(e){}
+  }
   fb.scrollIntoView({behavior:'smooth', block:'nearest'});
 }
 
@@ -1453,30 +1846,410 @@ function retryMissed(){
   start(run.missedQ.slice());
 }
 
+function buildTopicStatsList(){
+  if(!run || !run.topics) return [];
+  return Object.entries(run.topics)
+    .filter(([, d]) => d && d.n > 0)
+    .map(([topic, d]) => ({
+      topic,
+      pct: Math.round(100 * d.sum / d.n),
+      exact: d.exact,
+      n: d.n
+    }))
+    .sort((a, b) => a.pct - b.pct || b.n - a.n);
+}
+
+function openPracticeStudyGuide(onlyMissed){
+  if(!run) return;
+  const pct = Math.round(100 * run.creditSum / Math.max(1, run.qs.length));
+  const title = run.title || 'Solo Practice';
+  const topics = buildTopicStatsList();
+  const items = onlyMissed
+    ? (run.missed || []).slice().sort((a,b) => (a.pct || 0) - (b.pct || 0) || a.index - b.index)
+    : (run.qs || []).map((q, idx) => {
+        const m = (run.missed || []).find(x => x.index === idx + 1);
+        return {
+          index: idx + 1,
+          q: q.q,
+          your: m ? m.your : ansText(q),
+          ans: ansText(q),
+          quote: q.quote || '',
+          src: q.src || '',
+          topic: q.topic || '',
+          pct: m ? (m.pct || 0) : 100,
+          missed: !!m
+        };
+      });
+
+  const topicHtml = topics.length ? `<div class="item">
+    <div class="pct">📊 Accuracy by Topic</div>
+    ${topics.map(t => `<div style="margin:7px 0">
+      <div style="display:flex;justify-content:space-between;font-weight:700;font-size:.94em"><span>🏷️ ${esc(t.topic)}</span><span>${t.pct}% (${t.exact}/${t.n})</span></div>
+      <div style="height:8px;background:#e4e1f0;border-radius:99px;overflow:hidden;margin-top:3px"><div style="width:${t.pct}%;height:100%;background:${t.pct<60?'#ef4444':t.pct<80?'#f59e0b':'#16a34a'}"></div></div>
+    </div>`).join('')}
+  </div>` : '';
+
+  const cardsHtml = items.length ? items.map(it => `<div class="item" style="border-left-color:${(it.pct||0)<100?'#ef4444':'#16a34a'}">
+    <div class="pct">Q${it.index}${it.topic ? ' · 🏷️ ' + esc(it.topic) : ''} · ${(it.pct||0) < 100 ? (it.pct > 0 ? `⚡ Partial (${it.pct}%)` : '❌ Missed (0%)') : '✅ Correct (100%)'}</div>
+    <h3>${esc(it.q)}</h3>
+    ${(it.pct||0) < 100 ? `<div style="color:#b91c1c;font-weight:600;margin-bottom:3px">Your answer: <b>${esc(it.your || 'No answer')}</b></div>` : ''}
+    <div class="ans">✅ Correct answer: <b>${esc(it.ans)}</b></div>
+    ${it.quote ? `<div class="fact">💡 “${esc(it.quote)}”${it.src ? ' — ' + esc(it.src) : ''}</div>` : ''}
+  </div>`).join('') : `<div class="item"><p style="margin:0;font-weight:700;color:#15803d">🌟 Perfect 100% score! You answered every question correctly.</p></div>`;
+
+  const htmlDoc = `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>📚 Study Guide — ${esc(title)} — BrainRush</title>
+  <style>
+    body{font-family:system-ui,-apple-system,sans-serif;max-width:780px;margin:0 auto;padding:28px 18px 48px;color:#1e1b2e;background:#f8f7fc;line-height:1.45}
+    .br-top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;background:#161224;color:#fff;padding:14px 18px;border-radius:14px;margin-bottom:20px;box-shadow:0 8px 24px rgba(15,12,26,.16)}
+    .br-brand{display:inline-flex;align-items:center;gap:8px;font-weight:900;font-size:1.05em;letter-spacing:-.01em}
+    .br-bolt{width:26px;height:26px;border-radius:7px;background:linear-gradient(135deg,#facc15,#f97316);color:#1e1b2e;display:inline-flex;align-items:center;justify-content:center;font-size:.85em}
+    h1{color:#1e1b2e;margin:.2em 0 .25em;font-size:1.62em;letter-spacing:-.015em}
+    .sub{color:#524c69;margin:0 0 18px;font-size:.96em}
+    .item{background:#fff;border:1px solid #e4e1f0;border-left:5px solid #7c3aed;border-radius:12px;padding:13px 18px;margin:12px 0;box-shadow:0 2px 8px rgba(30,27,46,.04);page-break-inside:avoid}
+    .pct{font-size:.78em;color:#6d28d9;font-weight:800;text-transform:uppercase;letter-spacing:.04em}
+    h3{margin:.32em 0;color:#1e1b2e}
+    .ans{color:#15803d;font-weight:600}
+    .fact{font-style:italic;color:#524c69;margin-top:6px}
+    button{padding:9px 18px;font-size:.92em;border-radius:10px;border:0;background:linear-gradient(180deg,#22c55e,#16a34a);color:#05210e;font-weight:900;cursor:pointer;box-shadow:0 3px 0 #0d5c2b}
+    @media print{body{background:#fff;padding:0}.br-top button{display:none}.br-top{background:#fff;color:#1e1b2e;border:1px solid #ddd;box-shadow:none;padding:8px 12px}.item{box-shadow:none;border-color:#ccc}}
+  </style></head><body>
+    <div class="br-top">
+      <span class="br-brand"><span class="br-bolt">⚡</span>BrainRush &middot; Solo Study Guide</span>
+      <button onclick="window.print()">🖨️ Print / Save PDF</button>
+    </div>
+    <h1>📚 ${onlyMissed ? 'Missed Questions Study Guide' : 'Complete Quiz Study Guide'} — ${esc(title)}</h1>
+    <p class="sub">Final Percentage Grade: <b>${pct}%</b> (${run.right} of ${run.qs.length} exact · ${run.missed.length} to review).</p>
+    ${topicHtml}
+    ${cardsHtml}
+  </body></html>`;
+
+  const blob = new Blob([htmlDoc], {type: 'text/html;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  window.open(url, '_blank');
+}
+
 function finish(){
   stopSpeak();
   syncHud();
   const pct = Math.round(100 * run.creditSum / Math.max(1, run.qs.length));
   if(pct >= 80) confettiBurst();
+  const topics = buildTopicStatsList();
+  const topicBoxHtml = topics.length ? `<div class="review-box">
+    <h3>📊 Accuracy by Topic</h3>
+    ${topics.map(t => `<div class="missed">
+      <div style="display:flex;justify-content:space-between;align-items:center;font-weight:850">
+        <span>🏷️ ${esc(t.topic)}</span>
+        <span style="color:${t.pct<60?'#ff9b9b':t.pct<80?'#ffdf5d':'#7dff6b'}">${t.pct}% <small style="opacity:.78">(${t.exact}/${t.n})</small></span>
+      </div>
+      <div class="tbar"><i style="width:${t.pct}%;background:${t.pct<60?'#ff5252':t.pct<80?'#ffb300':'#69f0ae'}"></i></div>
+    </div>`).join('')}
+  </div>` : '';
+
+  const toughList = (run.missed || []).slice().sort((a,b) => (a.pct || 0) - (b.pct || 0) || a.index - b.index);
+  const toughHtml = toughList.length
+    ? `<div class="review-box">
+        <h3>🧠 Tough Ones Recap (Most Missed · ${toughList.length})</h3>
+        ${toughList.map(m => `<div class="missed">
+          <b>Q${m.index} (${m.pct || 0}% credit)${m.topic ? ` · <small style="color:var(--gold)">🏷️ ${esc(m.topic)}</small>` : ''}:</b> ${esc(m.q)}<br>
+          <span style="color:#ff9b9b">You: ${esc(m.your)}</span> &middot; <span style="color:#7dff6b">✅ ${esc(m.ans)}</span>
+          ${m.quote ? `<div style="font-size:.85em;opacity:.85;margin-top:4px;font-style:italic">💡 ${esc(m.quote)}</div>` : ''}
+        </div>`).join('')}
+      </div>`
+    : `<p style="color:#7dff6b;font-weight:850;margin:12px 0">🌟 Flawless run! You nailed every single question (100%).</p>`;
+
   $.innerHTML = `
     <div class="card-panel">
       <div style="font-size:3em;line-height:1">${pct >= 90 ? '🏆' : pct >= 70 ? '🎉' : '💪'}</div>
       <h1>Practice Complete!</h1>
       <div class="grade-hero">📊 Percentage Grade: ${pct}%</div>
       <div class="stats-grid">
-        <div class="stat"><b>${pct}%</b>${run.right}/${run.qs.length} Exact</div>
-        <div class="stat"><b>⭐ ${run.score}</b>Points</div>
+        <div class="stat"><b>${pct}%</b>Percentage Score</div>
+        <div class="stat"><b>${run.right}/${run.qs.length}</b>Questions Correct</div>
         <div class="stat"><b>🔥 ${run.best}</b>Best Streak</div>
       </div>
-      ${run.missed.length
-        ? `<div class="review-box"><h3>📝 Review Missed (${run.missed.length})</h3>${run.missed.map(m => `<div class="missed"><b>${esc(m.q)}</b><br><span style="color:#ff9b9b">You: ${esc(m.your)}</span> &middot; <span style="color:#7dff6b">✅ ${esc(m.ans)}</span></div>`).join('')}</div>`
-        : `<p style="color:#7dff6b;font-weight:850;margin:12px 0">🌟 Flawless run! You nailed every single question.</p>`
-      }
-      ${run.missedQ.length ? `<button class="go blue" onclick="retryMissed()">🎯 Retry ${run.missedQ.length} Missed Question${run.missedQ.length === 1 ? '' : 's'}</button>` : ''}
+      ${topicBoxHtml}
+      ${toughHtml}
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
+        ${toughList.length ? `<button class="go" style="flex:1;margin:0;background:linear-gradient(180deg,#facc15,#eab308);color:#1e1b2e;box-shadow:0 4px 0 #a16207" onclick="openPracticeStudyGuide(true)">📄 Study Guide (Missed Questions)</button>` : ''}
+        <button class="sec" style="flex:1;margin:0;padding:13px 14px" onclick="openPracticeStudyGuide(false)">📚 Full Quiz Study Guide</button>
+      </div>
+      ${run.missedQ.length ? `<button class="go blue" style="margin-top:10px" onclick="retryMissed()">🎯 Retry ${run.missedQ.length} Missed Question${run.missedQ.length === 1 ? '' : 's'}</button>` : ''}
       <button class="go" onclick="start()">🔁 Practice Full Quiz Again</button>
-      <button class="sec" onclick="setup()">⚙️ Change Practice Options</button>
+      <button class="sec" onclick="setup()">⚙️ Change Practice Options / Quizzes</button>
     </div>
   `;
+}
+
+/* --- Student Self-Created Quiz Builder (Visual Cards + Paste Text/CSV) --- */
+let stuBuilderMode = 'vis', stuEditingId = '', stuCards = [];
+function makeBlankStuCard(type){
+  const t = type || 'mc';
+  if(t === 'tf') return {type:'tf', q:'', a:['True','False'], c:0, topic:'', quote:''};
+  if(t === 'text') return {type:'text', q:'', a:[''], c:0, topic:'', quote:''};
+  return {type:'mc', q:'', a:['','','',''], c:0, topic:'', quote:''};
+}
+function openStuBuilder(editId){
+  stuEditingId = editId || '';
+  const modal = document.getElementById('stuQuizModal');
+  const hdr = document.getElementById('stuModalHdr');
+  const tInp = document.getElementById('stuTitle');
+  const errEl = document.getElementById('stuBuildErr');
+  if(errEl) errEl.style.display = 'none';
+  const existing = stuEditingId ? getStudentCustomQuizzes().find(x => x.id === stuEditingId) : null;
+  if(existing){
+    if(hdr) hdr.textContent = '✏️ Edit My Practice Quiz';
+    if(tInp) tInp.value = existing.title || '';
+    stuCards = JSON.parse(JSON.stringify(existing.questions || [makeBlankStuCard('mc')]));
+  } else {
+    if(hdr) hdr.textContent = '➕ Create My Practice Quiz';
+    if(tInp) tInp.value = '';
+    stuCards = [makeBlankStuCard('mc')];
+  }
+  const rawEl = document.getElementById('stuRawText');
+  if(rawEl) rawEl.value = formatStuQuestionsText(stuCards);
+  setStuBuilderTab('vis', true);
+  renderStuCards();
+  if(modal) modal.classList.add('open');
+}
+function closeStuBuilder(){
+  const modal = document.getElementById('stuQuizModal');
+  if(modal) modal.classList.remove('open');
+}
+function setStuBuilderTab(tab, skipSync){
+  if(!skipSync){
+    if(stuBuilderMode === 'vis' && tab === 'txt'){
+      const rawEl = document.getElementById('stuRawText');
+      if(rawEl) rawEl.value = formatStuQuestionsText(stuCards);
+    } else if(stuBuilderMode === 'txt' && tab === 'vis'){
+      const rawEl = document.getElementById('stuRawText');
+      const parsed = parseStuQuestionsText(rawEl ? rawEl.value : '');
+      if(parsed.length) stuCards = parsed;
+      renderStuCards();
+    }
+  }
+  stuBuilderMode = tab;
+  const vp = document.getElementById('stuVisPane'), tp = document.getElementById('stuTxtPane');
+  const tv = document.getElementById('stuTabVis'), tt = document.getElementById('stuTabTxt');
+  if(vp) vp.style.display = tab === 'vis' ? 'block' : 'none';
+  if(tp) tp.style.display = tab === 'txt' ? 'block' : 'none';
+  if(tv){ tv.style.background = tab === 'vis' ? '#7c3aed' : ''; tv.style.borderColor = tab === 'vis' ? '#c4b5fd' : ''; }
+  if(tt){ tt.style.background = tab === 'txt' ? '#7c3aed' : ''; tt.style.borderColor = tab === 'txt' ? '#c4b5fd' : ''; }
+}
+function renderStuCards(){
+  const box = document.getElementById('stuCardList');
+  if(!box) return;
+  box.innerHTML = stuCards.map((c, idx) => {
+    const t = c.type || 'mc';
+    let optsHtml = '';
+    if(t === 'tf'){
+      optsHtml = `<div style="display:flex;gap:8px;margin-bottom:6px">
+        ${['True','False'].map((lbl, oi) => `<button type="button" class="b-star-btn ${(c.c||0)===oi?'ok':''}" style="flex:1" onclick="stuSetCorrect(${idx},${oi})">${(c.c||0)===oi?'✓ ':''}${lbl}</button>`).join('')}
+      </div>`;
+    } else if(t === 'text'){
+      optsHtml = `<input type="text" placeholder="Accepted answer (separate synonyms with /)" value="${esc((c.a||[]).join(' / '))}" oninput="stuSetTextAns(${idx},this.value)">`;
+    } else {
+      const arr = Array.isArray(c.a) && c.a.length ? c.a : ['','','',''];
+      optsHtml = arr.map((opt, oi) => `<div class="b-opt-row">
+        <button type="button" class="b-star-btn ${(c.c||0)===oi?'ok':''}" title="Mark as correct answer" onclick="stuSetCorrect(${idx},${oi})">${(c.c||0)===oi?'✓':'○'}</button>
+        <input type="text" placeholder="Choice ${String.fromCharCode(65+oi)}${(c.c||0)===oi?' (Correct)':''}" value="${esc(opt)}" oninput="stuSetOpt(${idx},${oi},this.value)">
+      </div>`).join('');
+    }
+    return `<div class="b-card">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:6px;margin-bottom:6px;font-size:.82em;font-weight:850">
+        <span style="color:var(--gold)">Question #${idx+1} (${t==='tf'?'True/False':t==='text'?'Type Answer':'Multiple Choice'})</span>
+        ${stuCards.length > 1 ? `<button type="button" class="hud-btn" style="padding:2px 8px;font-size:.85em;background:rgba(226,27,60,.35)" onclick="stuDelCard(${idx})">🗑️ Remove</button>` : ''}
+      </div>
+      <input type="text" placeholder="Question prompt…" value="${esc(c.q||'')}" oninput="stuCards[${idx}].q=this.value">
+      ${optsHtml}
+      <div style="display:grid;grid-template-columns:1fr 1.4fr;gap:6px;margin-top:4px">
+        <input type="text" placeholder="🏷️ Topic (optional)" value="${esc(c.topic||'')}" oninput="stuCards[${idx}].topic=this.value" style="margin:0!important">
+        <input type="text" placeholder="💡 Explanation / Quote (optional)" value="${esc(c.quote||'')}" oninput="stuCards[${idx}].quote=this.value" style="margin:0!important">
+      </div>
+    </div>`;
+  }).join('');
+}
+function addStuCard(type){
+  stuCards.push(makeBlankStuCard(type));
+  renderStuCards();
+}
+function stuDelCard(idx){
+  if(stuCards.length <= 1) return;
+  stuCards.splice(idx, 1);
+  renderStuCards();
+}
+function stuSetCorrect(idx, oi){
+  if(!stuCards[idx]) return;
+  stuCards[idx].c = oi;
+  renderStuCards();
+}
+function stuSetOpt(idx, oi, val){
+  if(!stuCards[idx]) return;
+  if(!Array.isArray(stuCards[idx].a)) stuCards[idx].a = ['','','',''];
+  stuCards[idx].a[oi] = val;
+}
+function stuSetTextAns(idx, val){
+  if(!stuCards[idx]) return;
+  stuCards[idx].a = String(val || '').split('/').map(x => x.trim()).filter(Boolean);
+}
+function formatStuQuestionsText(qs){
+  return (qs || []).filter(q => q && (q.q || '').trim()).map(q => {
+    const t = q.type || 'mc';
+    const lines = [q.q.trim()];
+    if(t !== 'mc') lines.push('Type: ' + t);
+    if(t === 'tf'){
+      lines.push('*' + ((q.c === 1) ? 'False' : 'True'));
+    } else if(t === 'text'){
+      (q.a || []).filter(Boolean).forEach(a => lines.push(a));
+    } else {
+      (q.a || []).forEach((a, i) => {
+        if(String(a || '').trim()) lines.push((i === (q.c || 0) ? '*' : '') + String(a).trim());
+      });
+    }
+    if(q.topic) lines.push('Topic: ' + q.topic);
+    if(q.quote) lines.push('Quote: ' + q.quote);
+    return lines.join('\n');
+  }).join('\n\n');
+}
+function parseStuQuestionsText(raw){
+  const s = String(raw || '').trim();
+  if(!s) return [];
+  if(s.startsWith('[') || s.startsWith('{')){
+    try{
+      const j = JSON.parse(s);
+      const arr = Array.isArray(j) ? j : (j.questions || []);
+      return arr.filter(x => x && x.q);
+    }catch(e){}
+  }
+  const blocks = s.split(/\n\s*\n/).map(b => b.trim()).filter(Boolean);
+  if(blocks.length === 1 && s.includes(',') && s.split('\n').length > 1 && !/^\*/m.test(s)){
+    return s.split('\n').map(l => l.trim()).filter(Boolean).map(line => {
+      const p = line.split(',').map(x => x.trim());
+      if(p.length < 5 || p[0].toLowerCase() === 'question') return null;
+      const ans = p.slice(1, 5), cv = p[5] || '';
+      let cIdx = 0;
+      if(/^[a-d]$/i.test(cv)) cIdx = cv.toUpperCase().charCodeAt(0) - 65;
+      else if(/^[1-4]$/.test(cv)) cIdx = parseInt(cv, 10) - 1;
+      else { const k = ans.findIndex(x => x.toLowerCase() === cv.toLowerCase()); if(k >= 0) cIdx = k; }
+      return {type:'mc', q:p[0], a:ans, c:cIdx, topic:p[6]||'', quote:p[7]||''};
+    }).filter(Boolean);
+  }
+  return blocks.map(b => {
+    const lines = b.split('\n').map(l => l.trim()).filter(Boolean);
+    if(lines.length < 2) return null;
+    const q = lines[0];
+    let type = 'mc', c = 0, starTxt = '', topic = '', quote = '', tCustom = 0, thinkVal = 0;
+    const a = [];
+    lines.slice(1).forEach(l => {
+      if(/^type:/i.test(l)) type = l.replace(/^type:\s*/i, '').trim().toLowerCase();
+      else if(/^topic:/i.test(l)) topic = l.replace(/^topic:\s*/i, '').trim();
+      else if(/^(quote|explain):/i.test(l)) quote = l.replace(/^(quote|explain):\s*/i, '').trim();
+      else if(/^timer?:/i.test(l)) tCustom = parseInt(l.replace(/^timer?:\s*/i, ''), 10) || 0;
+      else if(/^think:/i.test(l)) thinkVal = parseInt(l.replace(/^think:\s*/i, ''), 10) || 0;
+      else {
+        let txt = l.replace(/^-\s+/, '').trim();
+        if(txt.startsWith('*')){
+          txt = txt.slice(1).trim();
+          c = a.length;
+          starTxt = txt;
+        }
+        if(txt) a.push(txt);
+      }
+    });
+    const out = {type, q, a, c, topic, quote};
+    if(tCustom >= 5){ out.t = tCustom; out.t_custom = true; }
+    if(thinkVal > 0) out.think = thinkVal;
+    if(type === 'tf'){
+      out.a = ['True', 'False'];
+      out.c = /^f/i.test(starTxt || a[0] || 't') ? 1 : 0;
+    } else if(type === 'text'){
+      if(!out.a.length) return null;
+    } else {
+      if(out.a.length < 2) return null;
+    }
+    return out;
+  }).filter(Boolean);
+}
+function onStuFileImport(ev){
+  const f = ev.target && ev.target.files && ev.target.files[0];
+  if(!f) return;
+  const tInp = document.getElementById('stuTitle');
+  if(tInp && !tInp.value.trim()){
+    tInp.value = f.name.replace(/\.(json|csv|txt)$/i, '').replace(/[_-]+/g, ' ');
+  }
+  const reader = new FileReader();
+  reader.onload = () => {
+    const parsed = parseStuQuestionsText(reader.result || '');
+    if(parsed.length){
+      stuCards = parsed;
+      const rawEl = document.getElementById('stuRawText');
+      if(rawEl) rawEl.value = formatStuQuestionsText(stuCards);
+      renderStuCards();
+    }
+  };
+  reader.readAsText(f);
+  ev.target.value = '';
+}
+function saveStuQuiz(startNow){
+  const errEl = document.getElementById('stuBuildErr');
+  if(errEl) errEl.style.display = 'none';
+  const title = ((document.getElementById('stuTitle') || {}).value || '').trim() || 'My Practice Quiz';
+  let qs = [];
+  if(stuBuilderMode === 'txt'){
+    qs = parseStuQuestionsText((document.getElementById('stuRawText') || {}).value || '');
+  } else {
+    qs = stuCards.map(c => {
+      const qTxt = String(c.q || '').trim();
+      if(!qTxt) return null;
+      const t = c.type || 'mc';
+      if(t === 'tf') return {type:'tf', q:qTxt, a:['True','False'], c:c.c===1?1:0, topic:(c.topic||'').trim(), quote:(c.quote||'').trim()};
+      if(t === 'text'){
+        const ans = (c.a || []).map(x => String(x || '').trim()).filter(Boolean);
+        if(!ans.length) return null;
+        return {type:'text', q:qTxt, a:ans, c:0, topic:(c.topic||'').trim(), quote:(c.quote||'').trim()};
+      }
+      const rawA = (c.a || []).map(x => String(x || '').trim());
+      const validA = [];
+      let newC = 0;
+      rawA.forEach((opt, idx) => {
+        if(opt){
+          if(idx === (c.c || 0)) newC = validA.length;
+          validA.push(opt);
+        }
+      });
+      if(validA.length < 2) return null;
+      return {type:'mc', q:qTxt, a:validA, c:newC, topic:(c.topic||'').trim(), quote:(c.quote||'').trim()};
+    }).filter(Boolean);
+  }
+  if(!qs.length){
+    if(errEl){
+      errEl.textContent = 'Add at least 1 question with valid answer choices before saving.';
+      errEl.style.display = 'block';
+    }
+    return;
+  }
+  const list = getStudentCustomQuizzes();
+  const id = stuEditingId || ('stu:' + Date.now());
+  const item = {id, title, questions: qs, count: qs.length, updated: Date.now()};
+  const idx = list.findIndex(x => x.id === id);
+  if(idx >= 0) list[idx] = item;
+  else list.unshift(item);
+  saveStudentCustomQuizzes(list);
+  selectedDeckId = id;
+  closeStuBuilder();
+  setup().then(() => {
+    if(startNow) start();
+  });
+}
+function deleteStuQuiz(id){
+  const list = getStudentCustomQuizzes();
+  const target = list.find(x => x.id === id);
+  if(!target) return;
+  if(!confirm(`Delete "${target.title}" from your device?`)) return;
+  const next = list.filter(x => x.id !== id);
+  saveStudentCustomQuizzes(next);
+  if(selectedDeckId === id) selectedDeckId = '';
+  setup();
 }
 setup();
 </script></body></html>
