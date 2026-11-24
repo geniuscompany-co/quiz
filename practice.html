@@ -130,14 +130,14 @@ body.hc .card-panel,body.hc .q-card{background:#111;border:2px solid #fff}
   border:1px solid rgba(255,255,255,.14);
   background:rgba(15,12,26,.52);
   border-radius:12px;
-  margin:4px 0 10px;
+  margin:10px 0 12px;
   text-align:left;
   overflow:hidden;
 }
 .p-acc summary{
   list-style:none;
   cursor:pointer;
-  padding:10px 13px;
+  padding:11px 13px;
   display:flex;
   align-items:center;
   justify-content:space-between;
@@ -147,6 +147,33 @@ body.hc .card-panel,body.hc .q-card{background:#111;border:2px solid #fff}
   user-select:none;
 }
 .p-acc summary::-webkit-details-marker{display:none}
+.p-acc summary .sum-left{display:inline-flex;align-items:center;gap:6px}
+.p-acc summary .chev{font-size:.75em;opacity:.7;transition:transform .16s}
+.p-acc[open] summary .chev{transform:rotate(90deg)}
+.p-count-chips{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:7px;
+  margin:4px 0 12px;
+}
+.p-chip{
+  padding:9px 6px;
+  border-radius:10px;
+  border:1.5px solid rgba(255,255,255,.16);
+  background:rgba(15,12,26,.55);
+  color:#fff;
+  font-weight:850;
+  font-size:.88em;
+  cursor:pointer;
+  transition:border-color .14s,background .14s,transform .08s;
+}
+.p-chip:active{transform:scale(.97)}
+.p-chip.sel{
+  border-color:var(--gold);
+  background:rgba(255,223,93,.16);
+  color:var(--gold);
+  box-shadow:0 0 0 1px rgba(255,223,93,.22);
+}
 .p-acc-badge{
   font-size:.76em;
   font-weight:900;
@@ -1013,9 +1040,44 @@ function getActivePracticeDeck(){
   return (lockedQuiz && !lockedQuiz.error) ? lockedQuiz : null;
 }
 
+function syncCountChips(){
+  const active = getActivePracticeDeck();
+  const tfEl = document.getElementById('pracTopicFilter');
+  const tfVal = tfEl ? tfEl.value : '';
+  const pool = active ? (active.questions || []).filter(q => !tfVal || String((q && q.topic) || '').trim() === tfVal) : [];
+  const maxN = pool.length;
+  const cntEl = document.getElementById('cnt');
+  const cur = cntEl ? parseInt(cntEl.value, 10) : maxN;
+  document.querySelectorAll('.p-chip').forEach(btn => {
+    const raw = btn.dataset.cnt;
+    const v = raw === 'all' ? maxN : parseInt(raw, 10);
+    if(raw === 'all'){
+      btn.textContent = `All (${maxN})`;
+      btn.style.display = '';
+      btn.classList.toggle('sel', !cur || cur >= maxN);
+    } else {
+      btn.style.display = v < maxN ? '' : 'none';
+      btn.classList.toggle('sel', cur === v);
+    }
+  });
+}
+
+function setPracCountChip(val){
+  const active = getActivePracticeDeck();
+  const tfEl = document.getElementById('pracTopicFilter');
+  const tfVal = tfEl ? tfEl.value : '';
+  const pool = active ? (active.questions || []).filter(q => !tfVal || String((q && q.topic) || '').trim() === tfVal) : [];
+  const maxN = pool.length || 1;
+  const cntEl = document.getElementById('cnt');
+  if(cntEl){
+    cntEl.max = maxN;
+    cntEl.value = (val === 'all' || val >= maxN) ? maxN : val;
+  }
+  updatePracSummary();
+}
+
 function updatePracSummary(){
   const b = document.getElementById('pOptBadge');
-  if(!b) return;
   const active = getActivePracticeDeck();
   const tfEl = document.getElementById('pracTopicFilter');
   const tfVal = tfEl ? tfEl.value : '';
@@ -1026,6 +1088,11 @@ function updatePracSummary(){
   const cntEl = document.getElementById('cnt');
   if(cntEl && maxN > 0) cntEl.max = maxN;
   const cnt = parseInt((cntEl || {}).value, 10);
+  const effCnt = (!isNaN(cnt) && cnt > 0 && (!maxN || cnt < maxN)) ? cnt : maxN;
+  const startBtn = document.getElementById('startPracBtn');
+  if(startBtn) startBtn.textContent = `▶️ Start Practice (${effCnt || 0} Q${effCnt === 1 ? '' : 's'})`;
+  syncCountChips();
+  if(!b) return;
   const tm = !!(document.getElementById('timed') || {}).checked;
   const sec = Math.max(5, Math.min(900, parseInt((document.getElementById('pTime') || {}).value, 10) || 15));
   const prev = Math.max(0, Math.min(120, parseFloat((document.getElementById('pPrevTime') || {}).value) || 0));
@@ -1040,8 +1107,6 @@ function updatePracSummary(){
     try{ localStorage.setItem('brainrush_prac_tts', tts ? '1' : '0'); }catch(e){}
   }
   const parts = [];
-  parts.push((!isNaN(cnt) && cnt > 0 && (!maxN || cnt < maxN)) ? `${cnt}/${maxN} Qs` : `All ${maxN || ''} Qs`.trim());
-  if(tfVal) parts.push(tfVal.replace(/^Chapter\s+(\d+).*/i, 'Ch $1'));
   parts.push(tm ? `${sec}s timer` : 'Untimed');
   if(prev > 0) parts.push(`${prev}s preview`);
   if(thk > 0) parts.push(`${thk}s think`);
@@ -1049,7 +1114,7 @@ function updatePracSummary(){
   if(!shufAns) parts.push('Fixed A/B/C/D');
   if(tts) parts.push('🔊 Read-Aloud');
   b.textContent = parts.join(' · ');
-  b.classList.toggle('hi', true);
+  b.classList.toggle('hi', tm || prev > 0 || thk > 0 || tts);
 }
 
 function onPracTopicFilterChange(){
@@ -1151,24 +1216,40 @@ async function setup(){
 
   $.innerHTML = `
     <div class="card-panel">
-      <div class="studio-hero-pill"><span class="hud-bolt">⚡</span>BrainRush &middot; Solo Studio</div>
       <h1>🧑‍🎓 Solo Practice</h1>
-      <p class="sub">Study at your own pace with Percentage Grading, Read-Aloud, Topic Accuracy, and a Printable Study Guide.</p>
+      <p class="sub" style="margin-bottom:14px">Practice at your own pace with instant feedback and a custom study guide.</p>
 
-      <div class="field-lbl">
-        <span>${hasAssigned && stuList.length ? 'Comprehensive Test &amp; My Custom Quizzes' : (hasAssigned ? 'Practice Quiz' : 'My Custom Practice Quizzes')}</span>
-        <button type="button" class="hud-btn" style="padding:3px 10px;font-size:.95em;background:rgba(124,58,237,.45);border-color:#c4b5fd;text-transform:none;letter-spacing:0" onclick="openStuBuilder()">➕ Create My Own Quiz</button>
-      </div>
+      <div class="field-lbl"><span>Quiz</span></div>
       <div class="p-deck-list">${deckCardsHtml}</div>
 
-      <details class="p-acc" id="pTimersAcc" open>
+      ${deckTopics.length > 1 ? `<div class="field-lbl" style="margin-top:10px"><span>Chapter / Topic</span></div>
+      <select id="pracTopicFilter" onchange="onPracTopicFilterChange()" style="font-size:.96em;padding:10px 12px;text-align:left;margin-bottom:8px">
+        <option value="">📚 All ${deckTopics.length} Chapters (${n} Questions)</option>
+        ${deckTopics.map(tp => {
+          const c = (active.questions || []).filter(q => String((q && q.topic) || '').trim() === tp).length;
+          return `<option value="${esc(tp)}">🏷️ ${esc(tp)} (${c} Qs)</option>`;
+        }).join('')}
+      </select>` : ''}
+
+      <div class="field-lbl" style="margin-top:8px"><span>How Many Questions?</span></div>
+      <div class="p-count-chips">
+        <button type="button" class="p-chip" data-cnt="10" onclick="setPracCountChip(10)">10 Qs</button>
+        <button type="button" class="p-chip" data-cnt="25" onclick="setPracCountChip(25)">25 Qs</button>
+        <button type="button" class="p-chip" data-cnt="50" onclick="setPracCountChip(50)">50 Qs</button>
+        <button type="button" class="p-chip sel" data-cnt="all" onclick="setPracCountChip('all')">All (${n})</button>
+      </div>
+
+      <div id="pErr" class="err-banner"></div>
+      <button class="go" id="startPracBtn" onclick="start()">▶️ Start Practice (${n} Qs)</button>
+
+      <details class="p-acc" id="pTimersAcc">
         <summary>
-          <span>⏱️ Timers &amp; Pacing</span>
-          <span class="p-acc-badge hi" id="pOptBadge">All Qs · 15s timer</span>
+          <span class="sum-left"><span class="chev">▶</span> ⚙️ Timers, Read-Aloud &amp; Options</span>
+          <span class="p-acc-badge" id="pOptBadge">Untimed · Shuffled</span>
         </summary>
         <div class="p-acc-body" onchange="updatePracSummary()" oninput="updatePracSummary()">
           <div class="quick-pacing-grid">
-            <label class="qp-box" title="How many questions to practice">
+            <label class="qp-box" title="Custom number of questions to practice">
               <span>📝 Questions</span>
               <span><input id="cnt" type="number" min="1" max="${n || 1}" value="${n || ''}" placeholder="All"> <small id="pMaxCnt" style="opacity:.75">/ ${n || '—'}</small></span>
             </label>
@@ -1201,24 +1282,17 @@ async function setup(){
           <div class="timer-opt-row" style="margin-bottom:2px">
             <label><input type="checkbox" id="pracShuffleAns"> 🔀 Shuffle A/B/C/D Choices</label>
           </div>
-          ${deckTopics.length > 1 ? `<div class="timer-opt-row" style="margin-top:8px;flex-direction:column;align-items:stretch;gap:4px">
-            <span style="font-size:.82em;font-weight:850;color:var(--gold)">🏷️ Filter by Chapter / Topic (Optional)</span>
-            <select id="pracTopicFilter" onchange="onPracTopicFilterChange()" style="margin:0">
-              <option value="">All Chapters / Topics (${n} Qs)</option>
-              ${deckTopics.map(tp => {
-                const c = (active.questions || []).filter(q => String((q && q.topic) || '').trim() === tp).length;
-                return `<option value="${esc(tp)}">🏷️ ${esc(tp)} (${c} Qs)</option>`;
-              }).join('')}
-            </select>
-          </div>` : ''}
         </div>
       </details>
 
-      <div id="pErr" class="err-banner"></div>
-      <button class="go" onclick="start()">▶️ Start Practice</button>
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-top:6px;padding-top:10px;border-top:1px solid rgba(255,255,255,.1)">
+        <button type="button" class="hud-btn" style="padding:7px 13px;font-size:.86em;background:rgba(124,58,237,.35);border-color:rgba(196,181,253,.55)" onclick="openStuBuilder()">➕ Create My Own Quiz</button>
+        <a class="hud-btn" href="/play" style="padding:7px 13px;font-size:.86em;text-decoration:none">🎮 Join Live Class Game</a>
+      </div>
     </div>
-    <div><a class="plink" href="/play">🎮 Back to Live Game</a></div>
   `;
+  const shufEl = document.getElementById('pracShuffle');
+  if(shufEl) shufEl.checked = true;
   const saEl = document.getElementById('pracShuffleAns');
   if(saEl) saEl.checked = true;
   const raEl = document.getElementById('pracReadAloud');
