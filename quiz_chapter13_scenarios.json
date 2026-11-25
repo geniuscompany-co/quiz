@@ -1,11 +1,11 @@
 [
   {
-    "q": "Mateo runs a neighborhood bakery and spends an afternoon practicing how to clearly explain his business concept before meeting new shoppers and a local flour wholesaler. Based on World Bank research, what practical benefits is Mateo most likely to gain from explaining his concept clearly?",
+    "q": "Mateo practices clearly explaining his bakery concept before meeting shoppers and a flour supplier. What benefits does this bring?",
     "a": [
-      "He is forty percent more likely to build strong customer relationships and sixty-five percent more likely to secure favorable supplier terms.",
-      "He will acquire his first fifty neighborhood buyers in half the time and earn thirty percent higher profit margins.",
-      "He is twice as likely to receive a microfinance oven loan and fifty percent more likely to retain bakery helpers.",
-      "He will cut his customer acquisition costs by fifty percent and double his average bread order size in the first year."
+      "40% more likely to build strong customer ties and 65% more likely to get good supplier terms.",
+      "Gains his first 50 local buyers in half the time and earns 30% higher profit margins.",
+      "Twice as likely to get an equipment loan and 50% more likely to keep bakery helpers.",
+      "Cuts customer acquisition costs by 50% and doubles his average order size in year one."
     ],
     "c": 0,
     "t": 20,
@@ -14,12 +14,12 @@
     "topic": "Chapter 13: Sharing Your Business Story & Next Steps"
   },
   {
-    "q": "Amina is preparing Part 1 (\"The Problem or Need You Address\") of her business story for her clean-water delivery service. Which details should she include in this opening part of the Six-Part Framework?",
+    "q": "Amina is preparing Part 1 (\"The Problem or Need You Address\") for her water delivery service. What should she include?",
     "a": [
-      "Her formal schooling, her previous employment history, and her five-year household income goals.",
-      "The daily water challenge families face, why it matters in everyday life, how neighbors currently get water, and why current options fall short.",
-      "Her full delivery price list, her monthly cart maintenance expenses, and her target profit margin per container.",
-      "The names of the three bottled-water vendors in town and how many years each one has operated."
+      "Her formal schooling, past work history, and five-year household income goals.",
+      "The community problem, why it matters daily, how people cope now, and why current options fail.",
+      "Her full delivery price list, monthly cart repair costs, and target profit per container.",
+      "The names of the three local water vendors and how many years each has operated."
     ],
     "c": 1,
     "t": 20,
@@ -28,12 +28,12 @@
     "topic": "Chapter 13: Sharing Your Business Story & Next Steps"
   },
   {
-    "q": "Kofi is explaining his bicycle repair workshop to a local school administrator and reaches Part 4 of his business story (\"How Your Business Works\"). What practical operational details should Kofi share in this section?",
+    "q": "Kofi is explaining Part 4 of his business story (\"How Your Business Works\") for his bike repair shop. What details belong here?",
     "a": [
-      "The step-by-step story of the rainy morning he first noticed broken bicycles and fixed his first wheel.",
-      "The personal background of each cousin who helps in his stall and how much pocket money he pays them.",
-      "His repair services and prices, how he keeps parts costs low, how he guarantees quality repairs, and his plans for the future.",
-      "The legal registration category of his workshop, his municipal stall permit number, and his annual tax rate."
+      "The story of the rainy morning he first noticed broken bikes and fixed his first wheel.",
+      "The background of each cousin who helps in his stall and how much he pays them.",
+      "His repair services and prices, how he manages costs and quality, and his future plans.",
+      "His workshop's legal category, municipal stall permit number, and annual tax rate."
     ],
     "c": 2,
     "t": 20,
@@ -42,11 +42,11 @@
     "topic": "Chapter 13: Sharing Your Business Story & Next Steps"
   },
   {
-    "q": "At a weekend market fair, Sofia explains all six areas of the business story framework for her tailoring shop, while the vendor next to her only talks about her dress prices and personal background. According to Harvard Business School research, how is Sofia likely to perform compared to the other vendor?",
+    "q": "At a market fair, Sofia explains all six parts of her business story, while another tailor only shares prices and personal history. How will Sofia likely perform?",
     "a": [
-      "She will close dress sales in half the time during her very first conversation with a new shopper.",
+      "She will close dress sales in half the time during her first chat with a new shopper.",
       "She is three times more likely to gain customer trust and support.",
-      "She will receive forty percent more word-of-mouth referrals during her first six months at the market.",
+      "She will get 40% more word-of-mouth referrals during her first six months.",
       "She is twice as likely to form a formal partnership with nearby fabric stalls."
     ],
     "c": 1,
@@ -56,12 +56,12 @@
     "topic": "Chapter 13: Sharing Your Business Story & Next Steps"
   },
   {
-    "q": "Tariq is sitting down with his parents and village elders to explain his new solar phone-charging kiosk. How should Tariq adjust his business story for family and community members?",
+    "q": "Tariq is explaining his new solar phone-charging kiosk to his parents and village elders. What should he emphasize for family and community?",
     "a": [
-      "Present three-year cash flow spreadsheets and technical calculations of solar battery depreciation.",
-      "Outline complex legal partnership contracts and his ambition to open kiosks in distant provinces.",
-      "Emphasize stability, careful money and risk management, and how the kiosk reliably supports the family and helps neighbors.",
-      "Explain why his solar equipment is more modern than the generators used by older market vendors."
+      "Three-year cash flow spreadsheets and technical solar battery depreciation math.",
+      "Complex legal partnership contracts and plans to open kiosks in distant provinces.",
+      "Stability, careful money and risk management, and how the kiosk supports family and neighbors.",
+      "Why his solar equipment is more modern than generators used by older market vendors."
     ],
     "c": 2,
     "t": 20,
@@ -70,12 +70,12 @@
     "topic": "Chapter 13: Sharing Your Business Story & Next Steps"
   },
   {
-    "q": "Elena makes fresh fruit preserves and is meeting with a local orchard owner who could supply her fruit every week. When adjusting her business story for this potential supplier, what should Elena emphasize?",
+    "q": "Elena makes fruit jam and is meeting an orchard owner who could supply fruit weekly. What should she emphasize to this potential supplier?",
     "a": [
-      "How much personal cash she has set aside in her household emergency savings jar at home.",
-      "Why her fruit preserves are cheaper than imported jams and how retail shoppers can buy single jars today.",
-      "Her personal family history and how making preserves lets her work from home while caring for her children.",
-      "How partnering benefits both businesses, her reliability and organized approach, shared growth potential, and clear expectations."
+      "How much personal cash she has saved in her household emergency jar at home.",
+      "Why her jam is cheaper than imported brands and how shoppers can buy single jars today.",
+      "Her family history and how making jam lets her work from home while caring for her kids.",
+      "Mutual business benefits, her reliability and organization, shared growth, and clear expectations."
     ],
     "c": 3,
     "t": 20,
@@ -84,12 +84,12 @@
     "topic": "Chapter 13: Sharing Your Business Story & Next Steps"
   },
   {
-    "q": "David is meeting with a community microfinance officer to request support for a second sewing machine for his uniform business. What four pieces of evidence should David emphasize in this conversation?",
+    "q": "David is asking a microfinance officer for help buying a second sewing machine for his uniform shop. What four things should he emphasize?",
     "a": [
-      "His personal family background, his passion for sewing, his neighborhood volunteer work, and his ten-year dreams.",
-      "His records of careful money management, proof schools value his uniforms, a clear plan for using the support, and how he manages risks.",
-      "Why competing tailors are losing customers, how fast he wants to open three shops, and why he needs the funds today.",
-      "His fabric supplier price sheets, his daily sewing schedule, his pattern measurements, and his household grocery budget."
+      "His family background, passion for sewing, local volunteer work, and ten-year dreams.",
+      "Careful money management, proof customers value his work, how he will use the support, and risk management.",
+      "Why rival tailors are losing buyers, how fast he will open three shops, and why he needs cash today.",
+      "His fabric supplier price sheets, daily sewing schedule, pattern sizes, and family grocery budget."
     ],
     "c": 1,
     "t": 20,
@@ -98,12 +98,12 @@
     "topic": "Chapter 13: Sharing Your Business Story & Next Steps"
   },
   {
-    "q": "Grace has created a folder with eight clear photos showing her composting service in action with brief captions—a format known as \"The Visual Story.\" In which situation is Grace's visual story especially useful?",
+    "q": "Grace uses eight photos with short captions (\"The Visual Story\") to explain her composting service. When is this format most useful?",
     "a": [
-      "When she is submitting a formal written application for a commercial bank loan or government grant.",
-      "When she is registering her official business structure and tax identification number at the municipal office.",
-      "At a neighborhood gathering where she is explaining her service to a group of residents who speak different dialects.",
-      "When she is signing a multi-year wholesale supply contract with a regional agricultural distributor."
+      "When submitting a formal written application for a bank loan or government grant.",
+      "When registering her business structure and tax ID number at the municipal office.",
+      "At community gatherings, with groups, or when language differences exist.",
+      "When signing a multi-year wholesale supply contract with a regional farm distributor."
     ],
     "c": 2,
     "t": 20,
@@ -112,12 +112,12 @@
     "topic": "Chapter 13: Sharing Your Business Story & Next Steps"
   },
   {
-    "q": "Linh prepares both a 30-second spoken introduction and a one-page visual handout for her catering service before riding the bus to a regional market. According to MIT research, why is preparing at least two different formats so valuable for Linh?",
+    "q": "Linh prepares both a 30-second intro and a one-page visual handout for her catering business. Why is having at least two formats so helpful?",
     "a": [
-      "It cuts the time she spends answering basic customer questions about menu prices and delivery hours by fifty percent.",
-      "It fulfills the official paperwork rules of both the regional market committee and the municipal tax office.",
-      "It lets her test two different catering brand names at once to see which name passengers remember better.",
-      "Entrepreneurs with at least two ways of explaining their business are seventy percent more likely to take advantage of unexpected opportunities."
+      "It cuts the time spent answering basic customer questions about prices and hours by 50%.",
+      "It satisfies the paperwork rules of both the market committee and the local tax office.",
+      "It lets her test two catering brand names at once to see which one people remember.",
+      "Entrepreneurs with at least two formats are 70% more likely to seize unexpected opportunities."
     ],
     "c": 3,
     "t": 20,
@@ -126,12 +126,12 @@
     "topic": "Chapter 13: Sharing Your Business Story & Next Steps"
   },
   {
-    "q": "Samuel is introducing his home repair service to residents in a traditional neighborhood. How can Samuel apply \"Speaking in Your Community's Style\" to make his business story more effective?",
+    "q": "Samuel is introducing his home repair service in a traditional neighborhood. How can he apply \"Speaking in Your Community's Style\"?",
     "a": [
-      "By focusing on financial facts, profit margins, and repair statistics rather than personal stories.",
-      "By memorizing a script and delivering it the same way to every audience he meets.",
-      "By using common local expressions, considering cultural attitudes, and matching local expectations.",
-      "By keeping every business conversation under thirty seconds so listeners don't feel pressured to buy from him."
+      "Focus on financial facts, profit margins, and repair stats rather than personal stories.",
+      "Memorize one fixed script and deliver it the same way to every audience he meets.",
+      "Use common local expressions, respect cultural attitudes, and match local expectations.",
+      "Keep every business chat under 30 seconds so listeners never feel pressured to buy."
     ],
     "c": 2,
     "t": 20,
@@ -140,12 +140,12 @@
     "topic": "Chapter 13: Sharing Your Business Story & Next Steps"
   },
   {
-    "q": "Instead of only quoting prices for her leather-cleaning service, Nadia brings a scuffed shoe that is half-restored so market shoppers can see the before-and-after difference and watch her clean a sample piece. Based on World Economic Forum research, why is Nadia's approach so effective?",
+    "q": "Nadia brings a half-restored shoe to the market so shoppers see the before-and-after difference live. Why is demonstrating so effective?",
     "a": [
-      "Showing samples, live work, or before-and-after examples makes her twice as likely to be remembered and recommended.",
-      "Giving away free full-sized shoe repairs to everyone at the market forces competing cobblers to lower their prices.",
-      "Live demonstrations legally require market spectators who watch the cleaning to buy a service before leaving.",
-      "Live demonstrations allow her to skip explaining what problem her service solves or how much she charges."
+      "Showing samples, live work, or before-and-after results makes her twice as likely to be remembered and recommended.",
+      "Giving away free full shoe repairs at the market forces rival cobblers to lower their prices.",
+      "Live demonstrations legally require market spectators who watch to buy a service before leaving.",
+      "Live demonstrations let her skip explaining what problem she solves or how much she charges."
     ],
     "c": 0,
     "t": 20,
@@ -154,12 +154,12 @@
     "topic": "Chapter 13: Sharing Your Business Story & Next Steps"
   },
   {
-    "q": "After a profitable first year running his snack cart, Carlos lists twelve things he wants to upgrade, from new packaging and a second cart to wholesale catering and evening hours. Why should Carlos narrow his list to just two or three practical growth priorities right now?",
+    "q": "Carlos lists 12 upgrades he wants for his snack cart after a good first year. Why should he narrow his list to just 2 or 3 growth priorities?",
     "a": [
-      "Focusing on two or three specific improvements that make the biggest difference balances income growth with stability, risk, and his personal capacity.",
-      "Limiting his plan to two or three priorities guarantees he can complete every business upgrade within a single thirty-day month.",
-      "His neighborhood savings group only permits members to work on two business improvement goals per calendar year.",
-      "Concentrating on just two or three areas allows him to pause his daily expense tracking while he focuses on expansion."
+      "Focusing on 2–3 high-impact improvements balances income growth with stability, risk, and personal capacity.",
+      "Limiting his plan to 2–3 priorities guarantees he will finish every upgrade within 30 days.",
+      "His neighborhood savings group only allows members to pursue two business goals per year.",
+      "Focusing on 2–3 areas lets him pause daily expense tracking while he works on expansion."
     ],
     "c": 0,
     "t": 20,
@@ -168,12 +168,12 @@
     "topic": "Chapter 13: Sharing Your Business Story & Next Steps"
   },
   {
-    "q": "Priya's home soap-making business is growing, and she wants to build a strong support system for her next stage of development. Which four steps follow the chapter's recommended approach for \"Building Support Systems\"?",
+    "q": "Priya's home soap business is growing, and she wants a strong support network. Which four steps follow \"Building Support Systems\"?",
     "a": [
-      "Hire a full-time assistant manager, sign an exclusive distributor contract, borrow bank capital, and retain a law firm.",
-      "Identify specific skills she needs, look for experienced mentors, consider peer groups or business associations, and research community learning resources.",
-      "Form a corporate board of directors, sell company shares to neighbors, outsource her soap production, and rent a downtown office.",
-      "Open a commercial line of credit, buy automated factory machinery, hire commission-only sales agents, and trademark her logo."
+      "Hire a full-time manager, sign an exclusive distributor, borrow bank money, and retain a law firm.",
+      "Identify needed skills, find experienced mentors, join peer groups or associations, and use local learning resources.",
+      "Form a board of directors, sell shares to neighbors, outsource soap making, and rent a downtown office.",
+      "Open a bank credit line, buy factory machines, hire commission sales agents, and trademark her logo."
     ],
     "c": 1,
     "t": 20,
@@ -182,12 +182,12 @@
     "topic": "Chapter 13: Sharing Your Business Story & Next Steps"
   },
   {
-    "q": "Marcus has the chance to take on large late-night restaurant laundry orders, which would raise his income but require working every evening. To apply \"Balancing Business and Personal Growth,\" what four things should Marcus consider before deciding?",
+    "q": "Marcus can take late-night restaurant laundry orders for extra money, but it requires working every evening. What should he weigh to balance business and personal growth?",
     "a": [
-      "How the schedule affects his family life, keeping his health and wellbeing priorities, which parts of work he enjoys most, and his deeper purposes beyond income.",
-      "How to match the salary of corporate executives, how to eliminate all physical work, how to avoid taxes, and when to sell the laundry shop.",
-      "How many hours competing laundries work each week, how fast regional hotels are growing, and how to double his helpers every month.",
-      "How to keep family members completely out of business decisions, how to work seven days a week, and how to retire in two years."
+      "How it affects family life, keeping health a priority, which work he enjoys most, and his deeper purpose beyond income.",
+      "How to match corporate executive pay, avoid all physical labor, skip taxes, and sell the shop early.",
+      "How many hours rival laundries work, how fast local hotels grow, and how to double his staff monthly.",
+      "How to keep family out of business choices, work seven days a week, and retire in two years."
     ],
     "c": 0,
     "t": 20,
@@ -196,12 +196,12 @@
     "topic": "Chapter 13: Sharing Your Business Story & Next Steps"
   },
   {
-    "q": "Zara wants her small woodworking shop to grow sustainably over the next year. According to Kauffman Foundation research, what kind of growth plan will make Zara three times more likely to achieve sustainable business development?",
+    "q": "Zara wants her small woodworking shop to grow sustainably over the next year. What kind of growth plan makes her three times more likely to succeed?",
     "a": [
-      "A rigid three-year financial plan that locks in fixed monthly revenue targets for every furniture item.",
-      "An informal day-by-day approach that focuses only on current orders and avoids writing down goals or timelines.",
-      "A cautious plan that keeps her furniture designs and prices unchanged until she saves a six-month cash reserve.",
-      "A structured but flexible step-by-step plan that breaks larger goals into small, achievable actions."
+      "A rigid three-year financial plan with fixed monthly revenue targets for every item.",
+      "An informal day-by-day approach that focuses on today's orders and avoids written goals.",
+      "A cautious plan that keeps designs and prices unchanged until she saves six months of cash.",
+      "A structured but flexible step-by-step plan that breaks big goals into small, doable actions."
     ],
     "c": 3,
     "t": 20,
