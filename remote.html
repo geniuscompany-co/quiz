@@ -1382,6 +1382,20 @@ function setRemoteAuto(){
  const sec = Math.max(2, Math.min(120, parseInt(el && el.value, 10) || 7));
  ctl('set_auto_time', sec);
 }
+async function terminateRemoteGame(){
+ if(!pin || !host) return;
+ if(!confirm(`Terminate Game PIN ${pin} and release all players?`)) return;
+ await post('/api/terminate', {pin, host, mode:'discard'});
+ pin = ''; host = ''; S = {}; lastKey = '';
+ await pollNow();
+}
+async function setRemoteLiveSettings(){
+ const payload = {};
+ const cEl = document.getElementById('rLiveCount'), tEl = document.getElementById('rLiveQtime');
+ if(cEl && cEl.value) payload.count = Math.max(1, parseInt(cEl.value, 10) || (S.total || 1));
+ if(tEl && tEl.value) payload.qtime = Math.max(5, Math.min(900, parseInt(tEl.value, 10) || (S.qtime_default || 15)));
+ await hostCtl('update_settings', payload);
+}
 function getSavedRemotePlay(){
  try{
   const ps = JSON.parse(sessionStorage.getItem('brainrush_playtoo_session') || 'null');
@@ -1716,6 +1730,7 @@ function render(){
       <button class="ctrl-btn ${S.chat_enabled ? 'on' : ''}" onclick="hostCtl('toggle_chat')">💬 Live Chat: ${S.chat_enabled ? 'ON' : 'Off'}</button>
       <button class="ctrl-btn ${S.profiles_enabled ? 'on' : ''}" onclick="hostCtl('toggle_profiles')">📊 Profiles: ${S.profiles_enabled ? 'ON' : 'Off'}</button>
       <button class="ctrl-btn ${S.play_too_enabled ? 'on' : ''}" onclick="hostCtl('toggle_play_too')">🎮 Play Too: ${S.play_too_enabled ? 'ON' : 'Off'}</button>
+      <button class="ctrl-btn" style="background:rgba(185,28,28,.45);border-color:#fca5a5" onclick="terminateRemoteGame()">🛑 Terminate Game</button>
      </div>
      ${remotePlayTooBar('margin-top:10px')}
      <div style="display:flex;gap:6px;margin-top:10px">
@@ -1836,6 +1851,23 @@ function render(){
       <button class="ctrl-btn ${S.play_too_enabled ? 'on' : ''}" onclick="hostCtl('toggle_play_too')">🎮 Play Too: ${S.play_too_enabled ? 'ON' : 'Off'}</button>
       ${!isCaseGame ? `<button class="ctrl-btn ${S.auto ? 'on' : ''}" onclick="ctl('toggle_auto')">⏭️ Auto: ${S.auto ? 'ON' : 'Off'}</button>` : ''}
       <button class="ctrl-btn" onclick="addBots(5)">🤖 +5 Bots</button>
+      <button class="ctrl-btn" style="background:rgba(185,28,28,.45);border-color:#fca5a5" onclick="terminateRemoteGame()">🛑 Terminate Game</button>
+     </div>
+     ${!isCaseGame ? `<div class="set-row" style="margin-top:8px">
+      <span>📝 Total Questions</span>
+      <div class="set-row-right">
+       <input id="rLiveCount" type="number" min="${Math.max(1,(S.index||0)+1)}" max="${S.bank_total||S.total||200}" value="${S.total||10}" onkeydown="if(event.key==='Enter')setRemoteLiveSettings()">
+       <span>/${S.bank_total||S.total||'—'}</span>
+       <button class="ctrl-btn" style="padding:7px 13px" onclick="setRemoteLiveSettings()">Set</button>
+      </div>
+     </div>` : ''}
+     <div class="set-row" style="margin-top:6px">
+      <span>⏱️ Default Timer</span>
+      <div class="set-row-right">
+       <input id="rLiveQtime" type="number" min="5" max="900" value="${S.qtime_default||S.qtime||15}" onkeydown="if(event.key==='Enter')setRemoteLiveSettings()">
+       <span>s</span>
+       <button class="ctrl-btn" style="padding:7px 13px" onclick="setRemoteLiveSettings()">Set</button>
+      </div>
      </div>
      <div style="display:flex;gap:6px;margin-top:10px">
       <input id="rBcastIn" type="text" maxlength="140" placeholder="📢 Broadcast banner to phones…" style="flex:1;min-width:0;padding:9px 11px;border-radius:10px;border:1.5px solid rgba(255,255,255,.28);background:rgba(255,255,255,.1);color:#fff;font-size:.92em" onkeydown="if(event.key==='Enter')sendRemoteBroadcast('rBcastIn')">

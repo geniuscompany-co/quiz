@@ -1113,6 +1113,7 @@ body.has-chat{padding-bottom:58px}
     <div class="hud-right">
       <button id="standBtn" class="hud-btn" style="display:none" onclick="openStandings()">🏆 Standings</button>
       <button id="caseBtn" class="hud-btn" onclick="openCaseFile()">📁 Case</button>
+      <button id="quitBtn" class="hud-btn" style="display:none;background:rgba(226,27,60,.28);border-color:rgba(255,138,128,.55);color:#ffd0d6" onclick="quitGame()" title="Leave this game and join a different session">🚪 Quit</button>
     </div>
   </div>
   <div id="standDrawer"></div>
@@ -1244,6 +1245,26 @@ function clearPlayerSession(){
   else localStorage.removeItem('brainrush_session');
  }catch(e){}
 }
+async function quitGame(){
+ try{
+  if(pin && pid) fetch('/api/leave', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({pin, pid}), keepalive:true}).catch(()=>{});
+ }catch(e){}
+ if(window._pollTimer){ clearInterval(window._pollTimer); window._pollTimer = null; }
+ clearPlayerSession();
+ dead = false;
+ pin = '';
+ pid = '';
+ S = {};
+ last = '';
+ stopSpeech();
+ updHud();
+ showChat();
+ updateHostCtl();
+ try{
+  if(location.search) history.replaceState(null, '', location.pathname);
+ }catch(e){}
+ form();
+}
 
 async function checkPinConfig(pinVal){
  try{
@@ -1368,6 +1389,15 @@ async function tryReconnect(){
   const s = readPlayerSession();
   if(!s || !s.pin || !s.pid) return form();
   if(urlPin && String(urlPin) !== String(s.pin)) return form();
+  if(!urlPin){
+   try{
+    const act = await (await fetch('/api/active', {cache:'no-store'})).json();
+    if(act && act.pin && String(act.pin) !== String(s.pin)){
+     clearPlayerSession();
+     return form();
+    }
+   }catch(e){}
+  }
   const up = new URLSearchParams(location.search);
   const wantName = (up.get('auto') === '1' && up.get('name')) ? up.get('name').trim().toLowerCase() : '';
   const r = await fetch(`/api/state?pin=${s.pin}&pid=${s.pid}`, {cache:'no-store'});
@@ -1771,8 +1801,11 @@ function maybeResultFX(){
 
 function stealUi(m){
  if(!m.pu_steal || S.is_last || !m.steal_target || S.hide_board) return '';
- const ok = m.steal_gap <= 1500;
- return `<div class="steal-box"><div>🕵️ <b>Power-Up:</b> Target <b>${esc(shortName(m.steal_target))}</b> (${m.steal_gap} pts ahead)</div><div style="margin-top:4px"><button class="sab-btn" onclick="steal('steal')">🕵️ Steal up to 150</button><button class="sab-btn" ${ok?'':'disabled'} onclick="steal('swap')">🔀 Swap${ok?'':' (too far)'}</button></div></div>`;
+ const maxSwap = S.rubberband_enabled ? 50000 : 3500;
+ const ok = m.steal_gap <= maxSwap;
+ const hasLeaderHeist = m.leader_target && m.leader_gap > 0 && m.leader_target !== m.steal_target;
+ const heistAmt = Math.max(250, Math.min(1500, Math.round((m.leader_gap || m.steal_gap || 0) * 0.45)));
+ return `<div class="steal-box"><div>🕵️ <b>Catch-Up Power-Up:</b> Target <b>${esc(shortName(m.steal_target))}</b> (${m.steal_gap} pts ahead)${hasLeaderHeist ? ` or 1st Place <b>${esc(shortName(m.leader_target))}</b> (${m.leader_gap} pts ahead)` : ''}</div><div style="margin-top:5px;display:flex;flex-wrap:wrap;justify-content:center;gap:4px"><button class="sab-btn" onclick="steal('steal')">🕵️ Steal 250</button><button class="sab-btn" onclick="steal('heist')">👑 Heist ~${heistAmt} from 1st</button><button class="sab-btn" ${ok?'':'disabled'} onclick="steal('swap')">🔀 Swap Scores${ok?'':' (gap > '+maxSwap+')'}</button></div></div>`;
 }
 async function steal(mode){ const r = await post('/api/steal', {pin, pid, mode}); if(!r._httpOk) alert(r.error || 'Not available'); poll(); }
 async function toggleDon(){ await post('/api/don', {pin, pid}); poll(); }
@@ -1839,6 +1872,8 @@ function updHud(){
    hm.style.display = 'none';
   }
  }
+ const qb = document.getElementById('quitBtn');
+ if(qb) qb.style.display = (pid && S && S.phase) ? 'inline-flex' : 'none';
  const sb = document.getElementById('standBtn');
  const sd = document.getElementById('standDrawer');
  const showStand = !!(m && m.name && S.profiles_enabled && (!S.hide_board || S.phase === 'final') && S.phase);
@@ -2332,7 +2367,7 @@ function render(){
    lastTtsSlide = ttsKey;
   }
   if(S.pending){
-   $.innerHTML = `<div class="state-card"><div class="state-icon">⏳</div><div class="state-title">Waiting for Approval</div><p class="state-sub">Your nickname was sent to the host for quick review.</p></div>`;
+   $.innerHTML = `<div class="state-card"><div class="state-icon">⏳</div><div class="state-title">Waiting for Approval</div><p class="state-sub">Your nickname was sent to the host for quick review.</p><button type="button" class="hud-btn" style="margin-top:12px;padding:8px 16px;background:rgba(226,27,60,.28);border-color:rgba(255,138,128,.55)" onclick="quitGame()">🚪 Leave &amp; Switch Game</button></div>`;
    return;
   }
   maybeResultFX();
@@ -2373,6 +2408,7 @@ function render(){
      ${ctBadge}${tmBadge}
      <p class="state-sub" style="margin-top:12px">🟢 You're in! Eyes on the host — starting soon…</p>
      <div class="chip-row"><span class="rival-pill" id="lobbyCnt">${S.n||1} player${(S.n||1)===1?'':'s'} in lobby</span></div>
+     <div style="margin-top:12px"><button type="button" class="hud-btn" style="padding:7px 14px;background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.24)" onclick="quitGame()">🚪 Leave / Join Different Game</button></div>
     </div>${reactBar()}`;
   } else if(S.phase=='icebreaker'){
    if(m.word_sent){
@@ -2391,6 +2427,8 @@ function render(){
     $.innerHTML = `<div class="state-card">${qn0}<div class="state-icon">🔄</div><div class="state-title">Redemption Round!</div><p class="state-sub">The most-missed question is back for a second shot — worth <b>DOUBLE POINTS</b>!</p></div>${reactBar()}`;
    } else if(S.speed){
     $.innerHTML = `<div class="state-card">${qn0}<div class="state-icon">⚡</div><div class="state-title">Speed Round!</div><p class="state-sub">5 rapid-fire questions — <b>${S.speed_time||5} seconds</b> each, zero reading delay. Fast fingers win!</p></div>${reactBar()}`;
+   } else if(S.wheel_doom){
+    $.innerHTML = `<div class="state-card no">${qn0}<div class="state-icon">💀</div><div class="state-title">Doom Wheel!</div><p class="state-sub">${S.wheel_mod?`Spinning up: <b>${esc(S.wheel_mod)}</b>`:'Every slice on the Doom Wheel targets 1st place!'}</p></div>${reactBar()}`;
    } else {
     $.innerHTML = `<div class="state-card">${qn0}<div class="state-icon">🎡</div><div class="state-title">Mystery Wheel!</div><p class="state-sub">${S.wheel_mod?`Spinning up: <b>${esc(S.wheel_mod)}</b>`:'Watch to see which modifier lands for this round…'}</p></div>${reactBar()}`;
    }
@@ -2419,11 +2457,13 @@ function render(){
     (S.pts != null && Number(S.pts) !== 1000 && !S.unscored) ? `<span class="title-badge">⭐ ${S.pts} pts</span>` : '',
     S.speed ? `<span class="speed-pill">⚡ ${S.qtime||S.speed_time||5}s Speed</span>` : '',
     t==='zoom' ? `<span class="wheel-pill">🔍 Zoom Reveal</span>` : '',
-    S.wheel_mod ? `<span class="wheel-pill">🎡 ${esc(S.wheel_mod)}</span>` : '',
+    S.wheel_mod ? `<span class="${S.wheel_doom?'hot-pill':'wheel-pill'}">${S.wheel_doom?'💀':'🎡'} ${esc(S.wheel_mod)}</span>` : '',
     S.team_battle ? `<span class="team-pill">🤝 Team Battle</span>` : '',
     S.tiebreak ? `<span class="hot-pill">⚔️ Sudden Death</span>` : '',
     S.redemption ? `<span class="double-pill">🔄 2x Redemption</span>` : (S.boss ? `<span class="double-pill">🎰 Final Boss</span>` : ((S.double || m.active_2x) ? `<span class="double-pill">⚡ ${S.double && m.active_2x ? '4x' : '2x'} Points</span>` : '')),
-    m.underdog ? `<span class="underdog-pill">🎯 1.5x Underdog</span>` : ''
+    m.underdog ? `<span class="underdog-pill">🚀 ${m.underdog_mult || 1.5}x Catch-Up Boost</span>` : '',
+    S.bounty_enabled ? `<span class="hot-pill">🎯 Leader Bounty</span>` : '',
+    (S.mystery_swap_enabled && (S.index + 1) % 5 === 0) ? `<span class="wheel-pill">🔀 Mystery Swap Round</span>` : ''
    ].filter(Boolean).join('');
    const chipRow = `<div class="chip-row">${chips}</div>`;
    const hideTopImg = (t === 'pin' && !inPrev && !fullyDone && S.consensus_step !== 2);
@@ -2576,7 +2616,8 @@ function render(){
     $.innerHTML=`<div class="state-card"><div class="state-icon">⚔️</div><div class="state-title">Tiebreaker Complete</div><p class="state-sub">Check the final result!</p></div>${reactBar()}`;
    } else {
     const st = m.streak >= 5 ? `<span class="streak-pill">🔥🔥 ${m.streak} Streak! ${m.bonus?`(+${m.bonus})`:''}</span>` : m.streak >= 2 ? `<span class="streak-pill">🔥 ${m.streak} Streak ${m.bonus?`(+${m.bonus})`:''}</span>` : '';
-    const whMsg = m.wheel_bonus ? `<span class="underdog-pill">🎡 Wheel +${m.wheel_bonus}</span>` : '';
+    const whMsg = m.wheel_bonus ? `<span class="${m.wheel_bonus>0?'underdog-pill':'hot-pill'}">${S.wheel_doom?'💀 Doom':'🎡 Wheel'} ${m.wheel_bonus>0?'+'+m.wheel_bonus:m.wheel_bonus}</span>` : '';
+    const bnMsg = m.bounty_bonus ? `<span class="underdog-pill">🎯 Bounty +${m.bounty_bonus}</span>` : (m.bounty_loss ? `<span class="hot-pill">🎯 Bounty ${m.bounty_loss}</span>` : '');
     const cfMsg = m.conf_delta ? `<span class="${m.conf_delta>0?'double-pill':'hot-pill'}">🔥 Bet ${m.conf_delta>0?'+'+m.conf_delta:m.conf_delta}</span>` : '';
     const tbMsg = m.team_bonus ? `<span class="team-pill">🤝 Team +${m.team_bonus}</span>` : '';
     const shMsg = (!m.correct && m.shielded) ? `<span class="speed-pill">🛡️ Shield Saved Streak!</span>` : '';
@@ -2636,7 +2677,7 @@ function render(){
 
     const canSab = S.sabotage_enabled && !S.hide_board && !S.is_last && m.pu_freeze && m.score >= 200 && S.n > 1;
     const sabBtn = canSab ? `<div style="margin-top:8px"><button class="sab-btn" onclick="sabotage()">⛄ Snowball Leader (−200 pts)</button></div>` : m.ice_sent ? `<div style="margin-top:6px"><small style="color:#80deea;font-weight:800">⛄ Snowball queued for the leader!</small></div>` : '';
-    const bonusChips = [st, whMsg, cfMsg, tbMsg, shMsg].filter(Boolean).join('');
+    const bonusChips = [st, whMsg, bnMsg, cfMsg, tbMsg, shMsg].filter(Boolean).join('');
     const scoreLine = S.scoring_mode === 'percent'
      ? `Grade: <span style="color:var(--gold)">${m.pct??0}%</span> (${m.score} pts)${(!S.hide_board && m.rank)?` &middot; Rank #${m.rank}`:''}`
      : isSurvey

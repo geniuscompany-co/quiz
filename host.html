@@ -148,8 +148,15 @@ body.drawer-open .studio-btn-Inspector .acc-badge{background:#1e1b2e26;color:#1e
 .sum-chip.on{background:#14532d77;border-color:#4ade8077;color:#dcfce7}
 .sum-edit-link{margin:0;padding:5px 8px;background:transparent;border:0;color:var(--gold);font-size:1em;font-weight:800;box-shadow:none;cursor:pointer}
 .sum-edit-link:hover{text-decoration:underline}
-.studio-cta-btn{margin:0;padding:12px 26px;font-size:1.02em;font-weight:900;border-radius:12px;background:linear-gradient(180deg,#22c55e,#16a34a);color:#06210f;box-shadow:0 4px 0 #0d5c2b,0 8px 22px #0006;white-space:nowrap;letter-spacing:-.01em}
-.studio-cta-btn:hover{filter:brightness(1.06)}
+.studio-cta-btn{margin:0;padding:12px 26px;font-size:1.02em;font-weight:900;border-radius:12px;background:linear-gradient(180deg,#8b5cf6,#6d28d9);color:#fff;border:1.5px solid #c4b5fd;box-shadow:0 4px 0 #4c1d95,0 8px 22px #0006;white-space:nowrap;letter-spacing:-.01em}
+.studio-cta-btn:hover{filter:brightness(1.08)}
+.studio-cta-btn.session-active{background:rgba(255,255,255,.12);color:#fffd;border:1.5px dashed rgba(255,255,255,.32);box-shadow:none;font-size:.9em;padding:10px 16px}
+.studio-cta-btn.session-active:hover{background:rgba(255,255,255,.2);border-color:#c4b5fd}
+.studio-active-banner{display:none;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;width:100%;padding:12px 16px;border-radius:14px;background:linear-gradient(135deg,rgba(20,83,45,.88),rgba(15,12,26,.92));border:1.5px solid #4ade80;box-shadow:0 8px 24px rgba(0,0,0,.4)}
+.diff-mix-box{margin-top:8px;padding:9px 10px;border-radius:10px;background:#00000038;border:1px solid #ffffff22;font-size:.81em}
+.diff-mix-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:6px}
+.diff-mix-cell{display:flex;flex-direction:column;gap:3px;background:#ffffff0d;border:1px solid #ffffff1c;border-radius:8px;padding:6px 7px;text-align:center;font-weight:800}
+.diff-mix-cell input{width:100%!important;box-sizing:border-box;padding:4px 5px!important;font-size:.95em!important;border-radius:6px!important;border:0;text-align:center;font-weight:900;color:#2b0d57;background:#fff}
 
 /* Slide-Over Right Settings Inspector Drawer */
 .studio-drawer{width:380px;max-width:92vw;flex-shrink:0;background:var(--drawer);border-left:1px solid var(--border-hi);display:none;flex-direction:column;justify-content:space-between;position:sticky;top:0;height:100vh;max-height:100vh;overflow:hidden;z-index:48;box-shadow:-16px 0 44px #0009}
@@ -392,11 +399,15 @@ blockquote cite{display:block;font-size:.74em;font-style:normal;margin-top:4px;o
 .q-stage h1{font-size:clamp(1.8em,3vw,2.55em);line-height:1.25;max-width:900px}
 .ans-reveal{animation:slideUp .32s cubic-bezier(.22,1,.36,1)}
 @keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-.board-wrap{position:relative;max-width:640px;margin:6px auto}
-.row{background:#ffffff1f;border:1px solid #ffffff26;padding:0 18px;height:37px;border-radius:10px;max-width:640px;box-sizing:border-box;display:flex;align-items:center;justify-content:space-between;font-size:1.06em;margin:3px auto;font-variant-numeric:tabular-nums}
+.board-wrap{position:relative;max-width:680px;margin:6px auto}
+.row{background:#ffffff1f;border:1px solid #ffffff26;padding:0 16px;height:44px;border-radius:11px;max-width:680px;box-sizing:border-box;display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:1.04em;margin:4px auto;font-variant-numeric:tabular-nums;overflow:hidden}
+.row>span:first-child{display:flex;align-items:center;gap:6px;min-width:0;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row>span:last-child,.row>b:last-child{display:inline-flex;align-items:center;gap:6px;flex-shrink:0;white-space:nowrap}
+.row .ctag,.row .title-pill,.row .streak,.row .shift{flex-shrink:0;white-space:nowrap}
+.row .ctag{max-width:115px;overflow:hidden;text-overflow:ellipsis;vertical-align:middle}
 .board-wrap .row{position:absolute;left:0;right:0;margin:0;transition:transform .85s cubic-bezier(.22,1,.36,1),background .4s}
 .row.moved-up{background:#26890ccc;border-color:#7dff6b;box-shadow:0 4px 14px #0005}
-.gain{font-size:.82em;background:#fff3;padding:2px 8px;border-radius:99px;margin-right:8px;opacity:0;transition:opacity .35s}
+.gain{font-size:.82em;background:#fff3;padding:2px 8px;border-radius:99px;margin-right:4px;opacity:0;transition:opacity .35s;white-space:nowrap}
 .gain.show{opacity:1}
 .streak{font-size:.82em;background:#ff6d00;color:#fff;padding:2px 8px;border-radius:99px;margin-left:8px;font-weight:700}
 .shift{font-size:.85em;margin-left:6px;opacity:.9}
@@ -860,6 +871,7 @@ body.in-game .live-view-bar{max-width:1180px;padding-right:108px}
    <button id="chatMenuBtn" style="display:none" onclick="hostCtl('toggle_chat')"><span>💬 Live Chat</span><span class="state" id="chatMenuState">OFF</span></button>
    <button id="profilesMenuBtn" style="display:none" onclick="hostCtl('toggle_profiles')"><span>📊 Standings &amp; Profiles</span><span class="state" id="profilesMenuState">OFF</span></button>
    <button id="playTooMenuBtn" style="display:none" onclick="hostCtl('toggle_play_too')"><span>🎮 Host Play-Along</span><span class="state" id="playTooMenuState">OFF</span></button>
+   <button id="endGameMenuBtn" style="display:none;color:#fca5a5" onclick="closeNavMenu();terminateGame()"><span>🛑 Terminate Game</span><span class="state" style="background:#991b1b;color:#fff">End</span></button>
    <button onclick="cycleTheme()"><span>🎨 Visual Theme</span><span class="state" id="themeState">Studio</span></button>
    <button id="musicBtn" onclick="cycleMusic()"><span>🎵 Background Music</span><span class="state" id="musicState">Classic</span></button>
    <button id="awakeBtn" onclick="toggleAwake()"><span>☀️ Keep Screen Awake</span><span class="state" id="awakeState">ON</span></button>
@@ -1214,17 +1226,18 @@ Quote: Paris has been the capital since 987 CE."></textarea>
    </div>
 
    <div class="studio-launch-bar">
-    <div class="studio-summary-pills">
+    <div id="studioActiveSessionBanner" class="studio-active-banner"></div>
+    <div class="studio-summary-pills" id="studioSummaryPills">
      <button type="button" class="sum-chip" id="timerSummary" onclick="toggleStudioDrawer(true)" title="Click to edit session timers">⏱ <span id="timerSubTxt">15s · 5s preview</span></button>
      <button type="button" class="sum-chip quiz-only" id="vibeSummaryChip" onclick="toggleStudioDrawer(true)" title="Click to customize vibe preset &amp; twists">✨ <span id="vibeSummaryTxt">Standard (0)</span></button>
      <button type="button" class="sum-chip" id="screenSummaryChip" onclick="toggleStudioDrawer(true)" title="Click to configure Dual Screen or Remote">📽️ <span id="screenSummary">Standard</span></button>
      <button type="button" class="sum-edit-link" onclick="toggleStudioDrawer(true)">Edit in drawer →</button>
     </div>
-    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-     <button type="button" id="studioViewGameBtn" class="btn-sec" style="display:none;margin:0;padding:11px 18px;font-size:.94em;border-radius:12px;background:#7c3aed;border-color:#c4b5fd;color:#fff;font-weight:850" onclick="setHostViewMode('game')">🎮 View Active Game →</button>
+    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap" id="studioLaunchActions">
+     <button type="button" id="studioViewGameBtn" class="btn-sec" style="display:none;margin:0;padding:11px 18px;font-size:.94em;border-radius:12px;background:#16a34a;border-color:#86efac;color:#fff;font-weight:900" onclick="setHostViewMode('game')">🎮 Return to Live Game →</button>
      <button id="launchBtn" class="studio-cta-btn" onclick="create()">
-      <span class="quiz-only">🚀 Create Live Game →</span>
-      <span class="case-only">📖 Launch Selected Case →</span>
+      <span class="quiz-only" id="launchBtnQuizTxt">🎛️ Open New Game Lobby →</span>
+      <span class="case-only" id="launchBtnCaseTxt">📖 Open Case Study Lobby →</span>
      </button>
     </div>
    </div>
@@ -1265,6 +1278,27 @@ Quote: Paris has been the capital since 987 CE."></textarea>
        <option value="hard">🔴 Hard Only</option>
        <option value="progressive">📈 Progressive (Easy → Medium → Hard)</option>
       </select>
+      <div id="diffMixBox" class="diff-mix-box">
+       <div style="display:flex;align-items:center;justify-content:space-between;gap:6px;flex-wrap:wrap">
+        <label style="display:inline-flex;align-items:center;gap:6px;cursor:pointer;font-weight:800">
+         <input id="qDiffMixOn" type="checkbox" onchange="onDiffMixChange()" style="width:15px;height:15px;margin:0;accent-color:#16a34a">
+         <span>🎯 Custom Easy / Med / Hard % Mix</span>
+        </label>
+        <span id="diffMixTotalBadge" style="font-size:.88em;color:var(--gold);font-weight:900">33% / 34% / 33%</span>
+       </div>
+       <div id="diffMixControls" style="display:none">
+        <div class="diff-mix-grid">
+         <label class="diff-mix-cell"><span style="color:#86efac">🟢 Easy %</span><input id="qMixEasy" type="number" min="0" max="100" value="33" oninput="onDiffMixChange()"></label>
+         <label class="diff-mix-cell"><span style="color:#fde047">🟡 Med %</span><input id="qMixMed" type="number" min="0" max="100" value="34" oninput="onDiffMixChange()"></label>
+         <label class="diff-mix-cell"><span style="color:#fca5a5">🔴 Hard %</span><input id="qMixHard" type="number" min="0" max="100" value="33" oninput="onDiffMixChange()"></label>
+        </div>
+        <div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:6px;justify-content:center">
+         <button type="button" class="btn-sm" style="margin:0;padding:3px 7px;font-size:.75em;background:#ffffff14" onclick="setDiffMixPreset(33,34,33)">Balanced (33/34/33)</button>
+         <button type="button" class="btn-sm" style="margin:0;padding:3px 7px;font-size:.75em;background:#ffffff14" onclick="setDiffMixPreset(50,30,20)">Warm-Up (50/30/20)</button>
+         <button type="button" class="btn-sm" style="margin:0;padding:3px 7px;font-size:.75em;background:#ffffff14" onclick="setDiffMixPreset(20,40,40)">Challenge (20/40/40)</button>
+        </div>
+       </div>
+      </div>
      </div>
      <div class="case-only" oninput="syncCaseTimerSpec();updateTimerSummary();if(typeof onInspectorSettingChange==='function')onInspectorSettingChange()">
       <div class="case-timers-grid">
@@ -1322,12 +1356,16 @@ Quote: Paris has been the capital since 987 CE."></textarea>
       <div class="sub-body">
        <div class="mode-grid">
         <label class="mode-pill quiz-only"><input id="qWheel" type="checkbox"> 🎡 Mystery Wheel</label>
+        <label class="mode-pill quiz-only" title="Every 4th question spins the Doom Wheel where EVERY slice hurts 1st place (25% Leader Tax, Vampire Drain, −800 Leader Risk, or Scoreboard Quake)!"><input id="qDoomWheel" type="checkbox"> 💀 Doom Wheel (Hurts 1st Place)</label>
+        <label class="mode-pill quiz-only" title="Trailing players earn up to 2x–3x points based on how far behind 1st place they are, plus boosted Final Boss Wager stakes!"><input id="qRubberband" type="checkbox"> 🚀 Blue-Shell Catch-Up Boost (2x–3x)</label>
+        <label class="mode-pill quiz-only" title="Whenever 1st place misses a question, every player who answers right earns a +400 Bounty while 1st place drops −300!"><input id="qBounty" type="checkbox"> 🎯 Leader Bounty (+400 when 1st misses)</label>
+        <label class="mode-pill quiz-only" title="Every 5th question: if 1st place misses, the fastest challenger who gets it right swaps total scores with 1st place!"><input id="qMysterySwap" type="checkbox"> 🔀 Mystery Score Swap (every 5th Q)</label>
         <label class="mode-pill quiz-only"><input id="qWager" type="checkbox"> 🎰 Final Boss Wager</label>
         <label class="mode-pill quiz-only"><input id="qRedemp" type="checkbox"> 🔄 Redemption Round</label>
         <label class="mode-pill quiz-only"><input id="qHot" type="checkbox"> 🔥 Hot Seat Rounds</label>
         <label class="mode-pill quiz-only"><input id="qDbl" type="checkbox"> 💥 Double or Nothing</label>
         <label class="mode-pill quiz-only"><input id="qSabotage" type="checkbox"> ⛄ Snowballs</label>
-        <label class="mode-pill quiz-only"><input id="qSteal" type="checkbox"> 🕵️ Steal / Swap Power-Up</label>
+        <label class="mode-pill quiz-only"><input id="qSteal" type="checkbox"> 🕵️ Steal / Heist / Swap Power-Up</label>
         <label class="mode-pill quiz-only"><input id="qTie" type="checkbox"> ⚔️ Sudden-Death Tiebreaker</label>
        </div>
        <div style="text-align:right;margin-top:6px;font-size:.8em"><a href="#" onclick="openGuide('setup');return false" style="color:#ffdf5d;font-weight:700">📖 What do these twists do?</a></div>
@@ -1487,6 +1525,43 @@ function syncHostViewLayout(){
  if(studioEl) studioEl.style.display = showGame ? 'none' : '';
  if(stageEl) stageEl.style.display = showGame ? 'block' : 'none';
  if(viewGameBtn) viewGameBtn.style.display = (!IS_AUDIENCE && hasGame) ? 'inline-flex' : 'none';
+ const actBanner = document.getElementById('studioActiveSessionBanner');
+ const sumPills = document.getElementById('studioSummaryPills');
+ const launchBtn = document.getElementById('launchBtn');
+ const lQuizTxt = document.getElementById('launchBtnQuizTxt');
+ const lCaseTxt = document.getElementById('launchBtnCaseTxt');
+ if(!IS_AUDIENCE){
+  if(hasGame){
+   if(sumPills) sumPills.style.display = 'none';
+   if(actBanner){
+    actBanner.style.display = 'flex';
+    const ph = S.phase || 'lobby';
+    const canStart = ph !== 'lobby' || (S.n || 0) > 0;
+    const stepLbl = ph === 'lobby'
+     ? (canStart ? `🚀 Start ${S.case_game?'Case Study':'Game'} Now ➔` : '⏳ Waiting for 1st Player…')
+     : (ph === 'final' ? '🏆 View Final Podium' : `⏭️ Next Step (${ph.toUpperCase()}) ➔`);
+    actBanner.innerHTML = `<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+      <span class="lvb-pill live-dot" style="font-size:.9em;padding:5px 12px">🟢 ACTIVE PIN <b>${esc(pin)}</b></span>
+      <span style="font-weight:800;font-size:.92em">👥 <b>${S.n||0}</b> ${S.n===1?'Player':'Players'} Joined</span>
+     </div>
+     <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+      ${ph === 'lobby' ? `<button type="button" class="btn-sm" style="margin:0;padding:8px 13px;background:#ffffff1c" onclick="addBots(5)">🤖 +5 Bots</button>` : ''}
+      <button type="button" style="margin:0;padding:10px 20px;font-size:.98em;font-weight:900;border-radius:11px;border:0;background:linear-gradient(180deg,#22c55e,#16a34a);color:#05210e;box-shadow:0 3px 0 #0d5c2b;cursor:pointer" ${canStart ? `onclick="${ph==='final'?"setHostViewMode('game')":'next()'}"` : 'disabled style="opacity:.55;cursor:not-allowed"'}>${esc(stepLbl)}</button>
+      <button type="button" class="btn-sm" style="margin:0;padding:9px 14px;background:#7c3aed;border-color:#c4b5fd;font-weight:850" onclick="setHostViewMode('game');toggleLiveWing(true)">🎛️ Live Settings &amp; Wing</button>
+      <button type="button" class="btn-sm" style="margin:0;padding:9px 14px;background:#b91c1c;border-color:#fca5a5;color:#fff;font-weight:850" onclick="terminateGame()">🛑 Terminate Game</button>
+     </div>`;
+   }
+   if(launchBtn) launchBtn.classList.add('session-active');
+   if(lQuizTxt) lQuizTxt.textContent = '🔄 Replace with New Game PIN…';
+   if(lCaseTxt) lCaseTxt.textContent = '🔄 Replace with New Case PIN…';
+  } else {
+   if(actBanner){ actBanner.style.display = 'none'; actBanner.innerHTML = ''; }
+   if(sumPills) sumPills.style.display = 'flex';
+   if(launchBtn) launchBtn.classList.remove('session-active');
+   if(lQuizTxt) lQuizTxt.textContent = '🎛️ Open New Game Lobby →';
+   if(lCaseTxt) lCaseTxt.textContent = '📖 Open Case Study Lobby →';
+  }
+ }
  document.body.classList.toggle('in-game', showGame);
  document.body.classList.toggle('is-presenter-console', !!(!IS_AUDIENCE && showGame && window.presenterMode && pin));
  if(!showGame){
@@ -1570,6 +1645,7 @@ function updateLiveViewSwitchBar(){
    <button type="button" class="lvb-btn-proj" onclick="copyJoinLink(this)" title="Copy student /play join link">📋 Copy /play Link</button>
    <button type="button" class="lvb-btn-proj${pLive?' on':''}" onclick="openProjectedGameScreen()" title="Open or focus the projected game screen (/present) for the classroom projector">${pLive ? '🟢 Projected Screen Live ↗' : '📽️ Project Game Screen ↗'}</button>
    ${ph !== 'final' ? `<button type="button" class="lvb-btn-next" ${canNext?'onclick="next()"':'disabled style="opacity:.55;cursor:not-allowed"'}>${esc(nextLbl)}</button>` : ''}
+   <button type="button" class="lvb-btn-proj" style="background:#991b1b;border-color:#fca5a5;color:#fff" onclick="terminateGame()" title="End and close this game session">🛑 End Game</button>
   </div>`;
 }
 
@@ -1705,7 +1781,7 @@ function toggleAdvPanel(){
  const acc = document.getElementById('accOptions');
  if(acc) acc.open = true;
 }
-const GAMEPLAY_OPT_IDS = ['qShuffle','qWager','qRedemp','qSabotage','qWheel','qTeams','qIce','qAuto','qHot','qBattle','qTie','qSpeed','qDbl','qSteal','qConsensus','qHideBoard','qStudentTts','qChat','qProfiles','qPlayToo'];
+const GAMEPLAY_OPT_IDS = ['qShuffle','qWager','qRedemp','qSabotage','qWheel','qDoomWheel','qRubberband','qBounty','qMysterySwap','qTeams','qIce','qAuto','qHot','qBattle','qTie','qSpeed','qDbl','qSteal','qConsensus','qHideBoard','qStudentTts','qChat','qProfiles','qPlayToo'];
 const QUIZ_PRESETS = {
  clean: [],
  quick: ['qShuffle'],
@@ -1823,7 +1899,7 @@ function updateScreenSummary(){
 function updateOptSummary(){
  const isC = (typeof hostSection !== 'undefined' && hostSection === 'case');
  const cntChecked = arr => arr.filter(id=>{ const el = document.getElementById(id); return el && el.checked; }).length;
- const nTwist = isC ? 0 : cntChecked(['qWheel','qWager','qRedemp','qHot','qDbl','qSabotage','qSteal','qTie']);
+ const nTwist = isC ? 0 : cntChecked(['qWheel','qDoomWheel','qRubberband','qBounty','qMysterySwap','qWager','qRedemp','qHot','qDbl','qSabotage','qSteal','qTie']);
  const nTeam = cntChecked(isC ? ['qTeams','qConsensus','qIce'] : ['qShuffle','qSpeed','qAuto','qTeams','qBattle','qConsensus','qIce']);
  const bots = document.getElementById('qBots');
  const nClass = cntChecked(['qMod','qRosterOn','qHideBoard','qStudentTts','qChat','qProfiles','qPlayToo']) + ((bots && parseInt(bots.value, 10) > 0) ? 1 : 0);
@@ -3001,19 +3077,22 @@ function persistCurrentQuizOrder(){
 
 const SAVED_SETTING_DEFAULTS = {
  qTime: 15, qPrevTime: 5, qThinkTime: 0, qTeamTime: 12, qSpeedTime: 5, qAutoTime: 7, qBots: 0,
+ qMixEasy: 33, qMixMed: 34, qMixHard: 33,
  cPollTime: 45, cDiscussTime: 60, cRankTime: 60, cOpenTime: 120, qBrainTime: 45, qScaleTime: 25, cTime: 20, cPrevTime: 5,
  qScoring: 'classic', qDifficulty: '', qIcePrompt: "In one word, how are you feeling about today's quiz?",
- qUntimed: false, qShuffle: false, qShuffleAns: true, qWheel: false, qWager: false, qRedemp: false, qHot: false, qDbl: false, qSabotage: false, qSteal: false, qTie: false,
+ qDiffMixOn: false,
+ qUntimed: false, qShuffle: false, qShuffleAns: true, qWheel: false, qDoomWheel: false, qRubberband: false, qBounty: false, qMysterySwap: false, qWager: false, qRedemp: false, qHot: false, qDbl: false, qSabotage: false, qSteal: false, qTie: false,
  qSpeed: false, qAuto: false, qTeams: false, qBattle: false, qConsensus: false, qIce: false,
  qMod: false, qRosterOn: false, qHideBoard: false, qStudentTts: false, qChat: false, qProfiles: false, qPlayToo: false
 };
 const SAVED_BOOL_KEYS = [
- 'qUntimed','qShuffle','qShuffleAns','qWheel','qWager','qRedemp','qHot','qDbl','qSabotage','qSteal','qTie',
+ 'qDiffMixOn','qUntimed','qShuffle','qShuffleAns','qWheel','qDoomWheel','qRubberband','qBounty','qMysterySwap','qWager','qRedemp','qHot','qDbl','qSabotage','qSteal','qTie',
  'qSpeed','qAuto','qTeams','qBattle','qConsensus','qIce',
  'qMod','qRosterOn','qHideBoard','qStudentTts','qChat','qProfiles','qPlayToo'
 ];
 const SAVED_NUM_KEYS = [
  'qTime','qPrevTime','qThinkTime','qTeamTime','qSpeedTime','qAutoTime','qBots',
+ 'qMixEasy','qMixMed','qMixHard',
  'cPollTime','cDiscussTime','cRankTime','cOpenTime','qBrainTime','qScaleTime','cTime','cPrevTime'
 ];
 let _applyingSettingsGuard = false;
@@ -3097,6 +3176,54 @@ function syncDifficultySelectOptions(selectedQ){
   if(Object.prototype.hasOwnProperty.call(labels, opt.value)) opt.textContent = labels[opt.value];
  });
 }
+function syncDiffMixUI(){
+ const df = String((document.getElementById('qDifficulty')||{}).value || '').trim().toLowerCase();
+ const box = document.getElementById('diffMixBox');
+ const chk = document.getElementById('qDiffMixOn');
+ const ctl = document.getElementById('diffMixControls');
+ const bdg = document.getElementById('diffMixTotalBadge');
+ const canMix = (df === '' || df === 'progressive');
+ if(box) box.style.display = canMix ? 'block' : 'none';
+ const on = !!(chk && chk.checked);
+ if(ctl) ctl.style.display = on ? 'block' : 'none';
+ const e = Math.max(0, parseInt((document.getElementById('qMixEasy')||{}).value, 10) || 0);
+ const m = Math.max(0, parseInt((document.getElementById('qMixMed')||{}).value, 10) || 0);
+ const h = Math.max(0, parseInt((document.getElementById('qMixHard')||{}).value, 10) || 0);
+ const tot = e + m + h;
+ if(bdg){
+  if(!on) bdg.textContent = 'Deck Default';
+  else if(tot <= 0) bdg.textContent = 'Set % > 0';
+  else {
+   const pe = Math.round(e * 100 / tot), pm = Math.round(m * 100 / tot), ph = Math.max(0, 100 - pe - pm);
+   bdg.textContent = `${pe}% / ${pm}% / ${ph}%`;
+  }
+ }
+}
+function getActiveDiffMix(){
+ const df = String((document.getElementById('qDifficulty')||{}).value || '').trim().toLowerCase();
+ const chk = document.getElementById('qDiffMixOn');
+ if((df !== '' && df !== 'progressive') || !chk || !chk.checked) return null;
+ const e = Math.max(0, parseInt((document.getElementById('qMixEasy')||{}).value, 10) || 0);
+ const m = Math.max(0, parseInt((document.getElementById('qMixMed')||{}).value, 10) || 0);
+ const h = Math.max(0, parseInt((document.getElementById('qMixHard')||{}).value, 10) || 0);
+ if(e + m + h <= 0) return null;
+ return {easy: e, medium: m, hard: h};
+}
+function setDiffMixPreset(e, m, h){
+ const chk = document.getElementById('qDiffMixOn');
+ if(chk) chk.checked = true;
+ const eEl = document.getElementById('qMixEasy'), mEl = document.getElementById('qMixMed'), hEl = document.getElementById('qMixHard');
+ if(eEl) eEl.value = e;
+ if(mEl) mEl.value = m;
+ if(hEl) hEl.value = h;
+ onDiffMixChange();
+}
+function onDiffMixChange(){
+ syncDiffMixUI();
+ updateTimerSummary();
+ updateOptSummary();
+ if(typeof onInspectorSettingChange === 'function') onInspectorSettingChange();
+}
 function onDifficultyChange(){
  const sel = document.getElementById('quizSel');
  const q = quizList.find(x => x.file === (sel && sel.value));
@@ -3109,6 +3236,7 @@ function onDifficultyChange(){
   }
   if(mx) mx.textContent = '/ ' + maxC;
  }
+ syncDiffMixUI();
  updateTimerSummary();
  updateOptSummary();
  if(typeof onInspectorSettingChange === 'function') onInspectorSettingChange();
@@ -3145,6 +3273,7 @@ function applyInspectorSettingsToDom(cfg, selectedQ){
   const sr = document.getElementById('speedTimeRow'); if(sr) sr.style.display = merged.qSpeed ? 'flex' : 'none';
   const ir = document.getElementById('icePromptRow'); if(ir) ir.style.display = merged.qIce ? 'block' : 'none';
   const rr = document.getElementById('rosterRow'); if(rr) rr.style.display = merged.qRosterOn ? 'block' : 'none';
+  if(typeof syncDiffMixUI === 'function') syncDiffMixUI();
   if(typeof syncCaseTimerSpec === 'function') syncCaseTimerSpec();
   if(typeof updateTimerSummary === 'function') updateTimerSummary();
   if(typeof updateOptSummary === 'function') updateOptSummary();
@@ -3750,6 +3879,13 @@ async function create(){
   if(sel) sel.focus();
   return;
  }
+ if(pin && S && S.phase && S.phase !== 'final'){
+  const pCnt = S.n || 0;
+  if(!confirm(`A live game (PIN ${pin}) is currently active${pCnt ? ` with ${pCnt} player${pCnt===1?'':'s'}` : ''}.\n\nClick OK to terminate PIN ${pin} (freeing all players) and open a new game lobby, or Cancel to keep the current game.`)){
+   return;
+  }
+  try{ await post('/api/terminate', {pin, host, mode:'discard'}); }catch(e){}
+ }
  ensureAudio();sfxJoin();
  const inp = document.getElementById('qCount');
  const shuf = document.getElementById('qShuffle');
@@ -3785,14 +3921,16 @@ async function create(){
  const stuTtsOn = !!(document.getElementById('qStudentTts') && document.getElementById('qStudentTts').checked);
  const scoringMode = ((document.getElementById('qScoring')||{}).value || 'classic');
  const diffVal = ((document.getElementById('qDifficulty')||{}).value || '');
+ const diffMix = typeof getActiveDiffMix === 'function' ? getActiveDiffMix() : null;
  const clampCt = (id, defV) => Math.max(5, Math.min(900, parseInt((document.getElementById(id)||{}).value, 10) || defV));
  window._lastShuffle = shuf ? shuf.checked : false;
  window._lastShuffleAns = shufAns ? shufAns.checked : true;
  window._lastDifficulty = diffVal;
+ window._lastDiffMix = diffMix;
  window.lastGame={file:qf,count:cnt}; try{ localStorage.setItem('brainrush_last', JSON.stringify(window.lastGame)); }catch(e){}
  const r=await postPw('/api/create',{
   quiz:qf, custom_questions: picked && picked.questions ? picked.questions : null,
-  count:cnt, difficulty:diffVal, shuffle:shuf ? shuf.checked : false, shuffle_answers: shufAns ? shufAns.checked : true, qtime:qtm, untimed:untimedOn, preview:prevSec,
+  count:cnt, difficulty:diffVal, diff_mix:diffMix, shuffle:shuf ? shuf.checked : false, shuffle_answers: shufAns ? shufAns.checked : true, qtime:qtm, untimed:untimedOn, preview:prevSec,
   think_time:thinkSec, scoring_mode:scoringMode,
   hide_board:hideBoardOn, allow_tts:stuTtsOn, consensus:consensusOn,
   case_times:{
@@ -3805,6 +3943,10 @@ async function create(){
   redemption:redemp ? redemp.checked : false,
   sabotage:sab ? sab.checked : false,
   wheel:wheel ? wheel.checked : false,
+  doom_wheel:(document.getElementById('qDoomWheel')||{}).checked || false,
+  rubberband:(document.getElementById('qRubberband')||{}).checked || false,
+  bounty:(document.getElementById('qBounty')||{}).checked || false,
+  mystery_swap:(document.getElementById('qMysterySwap')||{}).checked || false,
   hotseat:(document.getElementById('qHot')||{}).checked || false,
   team_battle:(document.getElementById('qBattle')||{}).checked || false,
   tiebreak:(document.getElementById('qTie')||{}).checked || false,
@@ -3834,13 +3976,74 @@ async function create(){
  const chBtn = document.getElementById('chatMenuBtn'); if(chBtn) chBtn.style.display = 'flex';
  const pfBtn = document.getElementById('profilesMenuBtn'); if(pfBtn) pfBtn.style.display = 'flex';
  const ptBtn = document.getElementById('playTooMenuBtn'); if(ptBtn) ptBtn.style.display = 'flex';
+ const egBtn = document.getElementById('endGameMenuBtn'); if(egBtn) egBtn.style.display = 'flex';
  const aq = document.getElementById('addQuizMenuBtn');
  if(aq) aq.style.display = 'none';
- hostViewMode = 'studio';
+ hostViewMode = 'game';
  syncHostViewLayout();
  startHostPoll();
 }
 window.startGame = function(){ return create(); };
+async function terminateGame(mode){
+ if(!pin || !host){
+  try{ localStorage.removeItem('brainrush_host'); }catch(e){}
+  pin = ''; host = ''; S = {};
+  hostViewMode = 'studio';
+  syncHostViewLayout();
+  return;
+ }
+ const pCnt = (S && S.n) || 0;
+ const ph = (S && S.phase) || 'lobby';
+ let chosenMode = mode || '';
+ if(!chosenMode){
+  if(ph !== 'final' && !confirm(`Terminate Game PIN ${pin}${pCnt ? ` (${pCnt} player${pCnt===1?'':'s'})` : ''}?\n\nAll connected players will be released from this game immediately so they can join a new quiz.`)){
+   return;
+  }
+  chosenMode = 'discard';
+ }
+ try{
+  await post('/api/terminate', {pin, host, mode: chosenMode});
+ }catch(e){}
+ if(chosenMode === 'final'){
+  await poll();
+  return;
+ }
+ if(pollTimer){ clearInterval(pollTimer); pollTimer = null; }
+ stopBgm();
+ try{ localStorage.removeItem('brainrush_host'); }catch(e){}
+ pin = ''; host = ''; S = {};
+ last = ''; lastWingKey = '';
+ const egBtn = document.getElementById('endGameMenuBtn'); if(egBtn) egBtn.style.display = 'none';
+ const aq = document.getElementById('addQuizMenuBtn'); if(aq) aq.style.display = 'flex';
+ hostViewMode = 'studio';
+ syncHostViewLayout();
+ updateMeta();
+ syncLiveFeatureBtns();
+ if(typeof broadcastPresSync === 'function') broadcastPresSync();
+}
+window.terminateGame = terminateGame;
+async function applyLiveSettings(extra){
+ if(!pin || !host) return;
+ const payload = Object.assign({}, extra || {});
+ const cEl = document.getElementById('wingLiveCount'), tEl = document.getElementById('wingLiveQtime'),
+       pEl = document.getElementById('wingLivePreview'), kEl = document.getElementById('wingLiveThink'),
+       aEl = document.getElementById('wingLiveAutoSec'), sEl = document.getElementById('wingLiveScoring'),
+       uEl = document.getElementById('wingLiveUntimed');
+ if(cEl && cEl.value) payload.count = Math.max(1, parseInt(cEl.value, 10) || (S.total || 1));
+ if(tEl && tEl.value) payload.qtime = Math.max(5, Math.min(900, parseInt(tEl.value, 10) || (S.qtime_default || 15)));
+ if(pEl && pEl.value !== '') payload.preview = Math.max(0, Math.min(120, parseFloat(pEl.value) || 0));
+ if(kEl && kEl.value !== '') payload.think_time = Math.max(0, Math.min(120, parseFloat(kEl.value) || 0));
+ if(aEl && aEl.value) payload.auto_time = Math.max(2, Math.min(120, parseInt(aEl.value, 10) || 7));
+ if(sEl && sEl.value) payload.scoring_mode = sEl.value;
+ if(uEl) payload.untimed = !!uEl.checked;
+ await hostCtl('update_settings', payload);
+ const badge = document.getElementById('wingLiveSavedMsg');
+ if(badge){
+  badge.textContent = '✅ Live settings updated!';
+  setTimeout(()=>{ if(badge) badge.textContent = ''; }, 2000);
+ }
+}
+window.applyLiveSettings = applyLiveSettings;
 async function addBots(n=5){ensureAudio();await post('/api/bots',{pin,host,count:n});await poll()}
 async function hostCtl(action, sec=10, prompt=''){
  ensureAudio();
@@ -4205,7 +4408,7 @@ function board(b,off=0){
 
 let animDone = -1;
 function animBoard(b, qIdx){
- const H = 41, first = animDone !== qIdx && qIdx > 0;
+ const H = 50, first = animDone !== qIdx && qIdx > 0;
  const isPct = S && S.scoring_mode === 'percent';
  const click = !!(S && S.profiles_enabled);
  const prevOrder = [...b].sort((a,c)=>(a.prev_rank||99)-(c.prev_rank||99));
@@ -4281,11 +4484,12 @@ async function replayRound(){
  const shufAnsOn = shufAnsEl ? shufAnsEl.checked : (window._lastShuffleAns !== undefined ? !!window._lastShuffleAns : true);
  const diffEl = document.getElementById('qDifficulty');
  const diffVal = isCase ? '' : (diffEl ? (diffEl.value || '') : (window._lastDifficulty || ''));
+ const diffMix = isCase ? null : ((typeof getActiveDiffMix === 'function' ? getActiveDiffMix() : null) || window._lastDiffMix || null);
  podiumShown = false;
  animDone = -1;
  await post('/api/replay',{
   pin, host, quiz: qf,
-  count: cnt, difficulty: diffVal, shuffle: !isCase && shufOn, shuffle_answers: shufAnsOn,
+  count: cnt, difficulty: diffVal, diff_mix: diffMix, shuffle: !isCase && shufOn, shuffle_answers: shufAnsOn,
   custom_questions: picked && picked.questions ? picked.questions : null
  });
  await poll();
@@ -4351,22 +4555,28 @@ function esc(s){return String(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt
 function shortName(n){const a=Array.from(String(n==null?'':n));return a.length>11?a.slice(0,11).join('')+'...':a.join('')}
 const QR = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 29 29" width="240" height="240" style="background:#fff;border-radius:12px;display:block"><path d="M2 2h7v1h-7zM10 2h2v1h-2zM18 2h1v1h-1zM20 2h7v1h-7zM2 3h1v1h-1zM8 3h1v1h-1zM16 3h1v1h-1zM20 3h1v1h-1zM26 3h1v1h-1zM2 4h1v1h-1zM4 4h3v1h-3zM8 4h1v1h-1zM10 4h1v1h-1zM13 4h6v1h-6zM20 4h1v1h-1zM22 4h3v1h-3zM26 4h1v1h-1zM2 5h1v1h-1zM4 5h3v1h-3zM8 5h1v1h-1zM10 5h2v1h-2zM13 5h1v1h-1zM15 5h4v1h-4zM20 5h1v1h-1zM22 5h3v1h-3zM26 5h1v1h-1zM2 6h1v1h-1zM4 6h3v1h-3zM8 6h1v1h-1zM10 6h4v1h-4zM15 6h4v1h-4zM20 6h1v1h-1zM22 6h3v1h-3zM26 6h1v1h-1zM2 7h1v1h-1zM8 7h1v1h-1zM11 7h1v1h-1zM14 7h2v1h-2zM18 7h1v1h-1zM20 7h1v1h-1zM26 7h1v1h-1zM2 8h7v1h-7zM10 8h1v1h-1zM12 8h1v1h-1zM14 8h1v1h-1zM16 8h1v1h-1zM18 8h1v1h-1zM20 8h7v1h-7zM11 9h1v1h-1zM13 9h1v1h-1zM17 9h1v1h-1zM2 10h4v1h-4zM8 10h1v1h-1zM10 10h1v1h-1zM16 10h1v1h-1zM18 10h2v1h-2zM22 10h3v1h-3zM26 10h1v1h-1zM2 11h1v1h-1zM4 11h1v1h-1zM6 11h2v1h-2zM9 11h1v1h-1zM11 11h1v1h-1zM15 11h1v1h-1zM18 11h1v1h-1zM21 11h1v1h-1zM25 11h1v1h-1zM2 12h2v1h-2zM5 12h2v1h-2zM8 12h3v1h-3zM15 12h1v1h-1zM18 12h1v1h-1zM20 12h1v1h-1zM22 12h1v1h-1zM3 13h4v1h-4zM9 13h1v1h-1zM13 13h3v1h-3zM17 13h1v1h-1zM21 13h1v1h-1zM23 13h2v1h-2zM4 14h2v1h-2zM8 14h4v1h-4zM13 14h1v1h-1zM15 14h2v1h-2zM19 14h4v1h-4zM24 14h3v1h-3zM3 15h1v1h-1zM7 15h1v1h-1zM10 15h1v1h-1zM12 15h2v1h-2zM17 15h1v1h-1zM20 15h3v1h-3zM26 15h1v1h-1zM3 16h3v1h-3zM7 16h3v1h-3zM12 16h1v1h-1zM14 16h1v1h-1zM19 16h1v1h-1zM22 16h1v1h-1zM24 16h2v1h-2zM2 17h1v1h-1zM9 17h2v1h-2zM12 17h1v1h-1zM14 17h1v1h-1zM17 17h3v1h-3zM21 17h2v1h-2zM26 17h1v1h-1zM6 18h1v1h-1zM8 18h6v1h-6zM15 18h1v1h-1zM18 18h9v1h-9zM10 19h1v1h-1zM14 19h3v1h-3zM18 19h1v1h-1zM22 19h1v1h-1zM24 19h1v1h-1zM26 19h1v1h-1zM2 20h7v1h-7zM12 20h3v1h-3zM16 20h1v1h-1zM18 20h1v1h-1zM20 20h1v1h-1zM22 20h1v1h-1zM24 20h3v1h-3zM2 21h1v1h-1zM8 21h1v1h-1zM14 21h1v1h-1zM17 21h2v1h-2zM22 21h1v1h-1zM25 21h1v1h-1zM2 22h1v1h-1zM4 22h3v1h-3zM8 22h1v1h-1zM13 22h1v1h-1zM16 22h1v1h-1zM18 22h6v1h-6zM26 22h1v1h-1zM2 23h1v1h-1zM4 23h3v1h-3zM8 23h1v1h-1zM10 23h1v1h-1zM14 23h1v1h-1zM16 23h1v1h-1zM20 23h1v1h-1zM22 23h5v1h-5zM2 24h1v1h-1zM4 24h3v1h-3zM8 24h1v1h-1zM10 24h1v1h-1zM13 24h1v1h-1zM15 24h6v1h-6zM22 24h1v1h-1zM24 24h2v1h-2zM2 25h1v1h-1zM8 25h1v1h-1zM10 25h1v1h-1zM12 25h1v1h-1zM15 25h2v1h-2zM19 25h2v1h-2zM22 25h1v1h-1zM24 25h1v1h-1zM2 26h7v1h-7zM10 26h7v1h-7zM21 26h6v1h-6z" fill="#2b0d57"/></svg>';
 const WHEEL_IDS = ['speed','robin','crate','streak2x'], WHEEL_EMO = ['⚡','🏹','🎁','🔥'];
+const DOOM_WHEEL_IDS = ['doom_tax','doom_drain','doom_bounty','doom_quake'], DOOM_WHEEL_EMO = ['💀','🧛','🎯','🌋'];
 let spunQ = -1;
 function wheelHtml(){
- const segs = WHEEL_EMO.map((e,i)=>`<span style="transform:rotate(${i*90+45}deg) translate(-.5em,-5.1em) rotate(${-(i*90+45)}deg)">${e}</span>`).join('');
- return `<div class="spin-stage"><div class="wheel-wrap"><div class="wheel-ptr">🔻</div><div class="wheel-disc" id="wheelDisc">${segs}</div></div><div class="spin-result" id="spinRes">🎡 Spinning the Mystery Wheel…</div></div>`;
+ const isDoom = !!(S && S.wheel_doom);
+ const emos = isDoom ? DOOM_WHEEL_EMO : WHEEL_EMO;
+ const segs = emos.map((e,i)=>`<span style="transform:rotate(${i*90+45}deg) translate(-.5em,-5.1em) rotate(${-(i*90+45)}deg)">${e}</span>`).join('');
+ const discStyle = isDoom ? ' style="border-color:#f87171;box-shadow:0 0 28px rgba(239,68,68,.55)"' : '';
+ return `<div class="spin-stage"><div class="wheel-wrap"><div class="wheel-ptr">🔻</div><div class="wheel-disc" id="wheelDisc"${discStyle}>${segs}</div></div><div class="spin-result" id="spinRes">${isDoom ? '💀 Spinning the Doom Wheel (Every Option Hurts 1st Place)…' : '🎡 Spinning the Mystery Wheel…'}</div></div>`;
 }
 function runWheel(){
  if(spunQ === S.index) return;
  spunQ = S.index;
  const d = document.getElementById('wheelDisc'), r = document.getElementById('spinRes');
  if(!d) return;
- const i = Math.max(0, WHEEL_IDS.indexOf(S.wheel_id));
+ const isDoom = !!(S && S.wheel_doom);
+ const ids = isDoom ? DOOM_WHEEL_IDS : WHEEL_IDS;
+ const i = Math.max(0, ids.indexOf(S.wheel_id));
  const final = 360*5 - (i*90 + 45);
  requestAnimationFrame(()=>requestAnimationFrame(()=>{ d.style.transform = `rotate(${final}deg)`; }));
- for(let k=0;k<14;k++) setTimeout(()=>tone(500+k*35, 0.05, 'square', 0.12), k*k*17);
+ for(let k=0;k<14;k++) setTimeout(()=>tone((isDoom?340:500)+k*(isDoom?22:35), 0.05, isDoom?'sawtooth':'square', 0.14), k*k*17);
  setTimeout(()=>{
-  if(r){ r.textContent = '🎡 ' + (S.wheel_mod||''); r.classList.add('show'); }
+  if(r){ r.textContent = (isDoom ? '💀 ' : '🎡 ') + (S.wheel_mod||''); r.classList.add('show'); }
   sfxReveal();
  }, 3500);
 }
@@ -4404,7 +4614,7 @@ function updateLiveWing(){
  const inThink = ph === 'question' && !inPrev && !inCons && (S.think_left || 0) > 0;
  const pLive = (typeof isProjectorLive === 'function') && isProjectorLive();
  const rLive = typeof remoteLastLive !== 'undefined' && !!remoteLastLive;
- const wk = `${pin}:${ph}:${S.index||0}:${S.qtype||''}:${inPrev?1:0}:${inThink?1:0}:${inCons?1:0}:${S.paused?1:0}:${S.n||0}:${nAct}:${S.hide_board?1:0}:${S.allow_tts?1:0}:${S.chat_enabled?1:0}:${S.profiles_enabled?1:0}:${S.play_too_enabled?1:0}:${S.auto?1:0}:${S.can_reconsider?1:0}:${S.discuss_left!=null?1:0}:${(S.pending_list||[]).map(p=>p.name).join(',')}:${S.note||''}:${S.topic||''}:${S.quote||''}:${pLive?1:0}:${rLive?1:0}:${window.presenterMode?1:0}`;
+ const wk = `${pin}:${ph}:${S.index||0}:${S.total||0}:${S.qtime_default||15}:${S.untimed?1:0}:${S.preview_default||0}:${S.think_time||0}:${S.auto_time||7}:${S.scoring_mode||'classic'}:${S.wheel_enabled?1:0}:${S.doom_wheel_enabled?1:0}:${S.rubberband_enabled?1:0}:${S.bounty_enabled?1:0}:${S.mystery_swap_enabled?1:0}:${S.wager_enabled?1:0}:${S.redemption_enabled?1:0}:${S.hotseat_enabled?1:0}:${S.sabotage_enabled?1:0}:${S.steal_enabled?1:0}:${ttsOn?1:0}:${S.qtype||''}:${inPrev?1:0}:${inThink?1:0}:${inCons?1:0}:${S.paused?1:0}:${S.n||0}:${nAct}:${S.hide_board?1:0}:${S.allow_tts?1:0}:${S.chat_enabled?1:0}:${S.profiles_enabled?1:0}:${S.play_too_enabled?1:0}:${S.auto?1:0}:${S.can_reconsider?1:0}:${S.discuss_left!=null?1:0}:${(S.pending_list||[]).map(p=>p.name).join(',')}:${S.note||''}:${S.topic||''}:${S.quote||''}:${pLive?1:0}:${rLive?1:0}:${window.presenterMode?1:0}`;
 
  let ansLbl = `👥 ${S.n||0} Joined`;
  if(ph === 'icebreaker') ansLbl = `💬 ${S.word_total||0} Words`;
@@ -4507,10 +4717,40 @@ function updateLiveWing(){
     ${pendBlock}
     ${paceBtns ? `<div class="wing-sec-card"><div class="wing-sec-lbl"><span>⏱️ Live Pacing</span></div><div class="wing-ctl-row">${paceBtns}</div></div>` : ''}
     <div class="wing-sec-card">
+     <div class="wing-sec-lbl"><span>⚙️ Live Game Settings (Mid-Game)</span><span id="wingLiveSavedMsg" style="color:#4ade80;font-size:.9em"></span></div>
+     <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:.78em;font-weight:800;margin-bottom:6px">
+      ${S.case_game ? '' : `<label style="display:flex;align-items:center;justify-content:space-between;background:#0004;padding:5px 8px;border-radius:8px"><span>📝 Total Qs</span><span style="display:inline-flex;align-items:center;gap:3px"><input id="wingLiveCount" type="number" min="${Math.max(1,(S.index||0)+1)}" max="${S.bank_total||S.total||200}" value="${S.total||10}" style="width:46px;padding:3px 5px;border-radius:6px;border:0;text-align:center;font-weight:900;color:#2b0d57" onchange="applyLiveSettings()"><small style="opacity:.7">/${S.bank_total||S.total||'—'}</small></span></label>`}
+      <label style="display:flex;align-items:center;justify-content:space-between;background:#0004;padding:5px 8px;border-radius:8px"><span>⏱️ Timer</span><span><input id="wingLiveQtime" type="number" min="5" max="900" value="${S.qtime_default||S.qtime||15}" style="width:48px;padding:3px 5px;border-radius:6px;border:0;text-align:center;font-weight:900;color:#2b0d57" onchange="applyLiveSettings()">s</span></label>
+      <label style="display:flex;align-items:center;justify-content:space-between;background:#0004;padding:5px 8px;border-radius:8px"><span>👀 Preview</span><span><input id="wingLivePreview" type="number" min="0" max="120" value="${S.preview_default!=null?S.preview_default:5}" style="width:44px;padding:3px 5px;border-radius:6px;border:0;text-align:center;font-weight:900;color:#2b0d57" onchange="applyLiveSettings()">s</span></label>
+      <label style="display:flex;align-items:center;justify-content:space-between;background:#0004;padding:5px 8px;border-radius:8px"><span>🧠 Think</span><span><input id="wingLiveThink" type="number" min="0" max="120" value="${S.think_time||0}" style="width:44px;padding:3px 5px;border-radius:6px;border:0;text-align:center;font-weight:900;color:#2b0d57" onchange="applyLiveSettings()">s</span></label>
+      ${S.case_game ? '' : `<label style="display:flex;align-items:center;justify-content:space-between;background:#0004;padding:5px 8px;border-radius:8px"><span>⏭️ Auto Wait</span><span><input id="wingLiveAutoSec" type="number" min="2" max="120" value="${S.auto_time||7}" style="width:44px;padding:3px 5px;border-radius:6px;border:0;text-align:center;font-weight:900;color:#2b0d57" onchange="applyLiveSettings()">s</span></label>`}
+      <label style="display:flex;align-items:center;gap:6px;background:#0004;padding:5px 8px;border-radius:8px;cursor:pointer"><input id="wingLiveUntimed" type="checkbox" ${S.untimed?'checked':''} onchange="applyLiveSettings()" style="width:14px;height:14px;margin:0;accent-color:#16a34a"><span>♾️ Untimed</span></label>
+     </div>
+     <div style="display:flex;align-items:center;justify-content:space-between;gap:6px;background:#0004;padding:5px 8px;border-radius:8px;font-size:.78em;font-weight:800;margin-bottom:6px">
+      <span>🎯 Scoring</span>
+      <select id="wingLiveScoring" onchange="applyLiveSettings()" style="flex:1;max-width:190px;padding:4px 6px;border-radius:6px;border:0;font-weight:800;font-size:.95em;color:#2b0d57">
+       <option value="classic" ${(S.scoring_mode||'classic')==='classic'?'selected':''}>⚡ Classic (Speed+Streak)</option>
+       <option value="accuracy" ${S.scoring_mode==='accuracy'?'selected':''}>🎯 Accuracy Only</option>
+       <option value="percent" ${S.scoring_mode==='percent'?'selected':''}>📊 Percentage (%)</option>
+       <option value="survey" ${S.scoring_mode==='survey'?'selected':''}>🗳️ Ungraded (0 pts)</option>
+      </select>
+     </div>
+     <div class="wing-btn-grid">
+      <button type="button" class="${ttsOn?'on':''}" onclick="toggleTts();lastWingKey='';updateLiveWing()">🗣️ Host Auto-Read: ${ttsOn?'ON':'Off'}</button>
+      <button type="button" class="${S.allow_tts?'on':''}" onclick="hostCtl('toggle_student_tts')">🔊 Student Read-Aloud: ${S.allow_tts?'ON':'Off'}</button>
+      ${S.case_game ? '' : `
+      <button type="button" class="${S.doom_wheel_enabled?'on':''}" onclick="applyLiveSettings({doom_wheel:!S.doom_wheel_enabled})">💀 Doom Wheel: ${S.doom_wheel_enabled?'ON':'Off'}</button>
+      <button type="button" class="${S.rubberband_enabled?'on':''}" onclick="applyLiveSettings({rubberband:!S.rubberband_enabled})">🚀 Catch-Up 3x: ${S.rubberband_enabled?'ON':'Off'}</button>
+      <button type="button" class="${S.bounty_enabled?'on':''}" onclick="applyLiveSettings({bounty:!S.bounty_enabled})">🎯 Leader Bounty: ${S.bounty_enabled?'ON':'Off'}</button>
+      <button type="button" class="${S.mystery_swap_enabled?'on':''}" onclick="applyLiveSettings({mystery_swap:!S.mystery_swap_enabled})">🔀 Score Swap: ${S.mystery_swap_enabled?'ON':'Off'}</button>
+      <button type="button" class="${S.wheel_enabled?'on':''}" onclick="applyLiveSettings({wheel:!S.wheel_enabled})">🎡 Mystery Wheel: ${S.wheel_enabled?'ON':'Off'}</button>
+      <button type="button" class="${S.steal_enabled?'on':''}" onclick="applyLiveSettings({steal:!S.steal_enabled})">🕵️ Steal/Heist: ${S.steal_enabled?'ON':'Off'}</button>`}
+     </div>
+    </div>
+    <div class="wing-sec-card">
      <div class="wing-sec-lbl"><span>🎛️ Classroom Controls</span></div>
      <div class="wing-btn-grid">
       <button type="button" class="${S.hide_board?'on':''}" onclick="hostCtl('toggle_hide_board')">🙈 ${S.hide_board?'Board Hidden':'Hide Board'}</button>
-      <button type="button" class="${S.allow_tts?'on':''}" onclick="hostCtl('toggle_student_tts')">🔊 ${S.allow_tts?'Read-Aloud ON':'Student TTS'}</button>
       <button type="button" class="${S.chat_enabled?'on':''}" onclick="hostCtl('toggle_chat')">💬 ${S.chat_enabled?'Chat ON':'Live Chat'}</button>
       <button type="button" class="${S.profiles_enabled?'on':''}" onclick="hostCtl('toggle_profiles')">📊 ${S.profiles_enabled?'Profiles ON':'Profiles'}</button>
       <button type="button" class="${rLive?'on':''}" onclick="openRemoteModal()">📱 ${rLive?'Remote Live':'Remote'}</button>
@@ -4519,6 +4759,8 @@ function updateLiveWing(){
       <button type="button" class="${S.play_too_enabled?'on':''}" onclick="hostCtl('toggle_play_too')">🎮 ${S.play_too_enabled?'Play-Too ON':'Play Too'}</button>
       ${S.case_game ? `<button type="button" onclick="openLinks()">🖥️ Modes</button>` : `<button type="button" class="${S.auto?'on':''}" onclick="hostCtl('toggle_auto')">⏭️ Auto: ${S.auto?'ON':'Off'}</button>`}
       <button type="button" onclick="toggleHostChat()">📢 ${S.chat_enabled?'Open Chat':'Broadcast'}</button>
+      ${ph !== 'lobby' ? `<button type="button" style="background:#78350f88;border-color:#fbbf2488;color:#fde68a" onclick="if(confirm('End the game right now and jump to Final Podium?'))terminateGame('final')">🏆 End to Podium</button>` : ''}
+      <button type="button" style="background:#991b1b;border-color:#fca5a5;color:#fff;grid-column:1 / -1" onclick="terminateGame()">🛑 Terminate Game (Release All Players)</button>
      </div>
     </div>
    </div>
@@ -4678,7 +4920,7 @@ function render(){
    </div>${dock}`;
   } else {
    $.innerHTML=`${hud}
-   <div class="intro-wheel"><div class="double-banner">🎡 MYSTERY WHEEL ROUND</div>${wheelHtml()}
+   <div class="intro-wheel"><div class="double-banner"${S.wheel_doom?' style="background:linear-gradient(135deg,#991b1b,#dc2626);border-color:#fca5a5"':''}>${S.wheel_doom?'💀 DOOM WHEEL ROUND — HURTS 1ST PLACE 💀':'🎡 MYSTERY WHEEL ROUND'}</div>${wheelHtml()}
     <div class="preview-bar" style="max-width:500px;margin:14px auto"><div class="preview-fill" id="ib" style="width:${ipct}%"></div></div>
    </div>${dock}`;
    runWheel();
@@ -4686,7 +4928,7 @@ function render(){
  } else if(S.phase=='question'){
   const sec = Math.ceil(S.left);
   const pct = Math.min(100, ((S.preview_left||0)/(S.preview_total||5))*100);
-  const wheelBanner = S.wheel_mod ? `<div class="wheel-banner">🎡 MYSTERY WHEEL: ${esc(S.wheel_mod)}</div>` : '';
+  const wheelBanner = S.wheel_mod ? `<div class="wheel-banner"${S.wheel_doom?' style="background:linear-gradient(135deg,#7f1d1d,#b91c1c);border-color:#f87171;color:#fecaca"':''}>${S.wheel_doom?'💀 DOOM WHEEL':'🎡 MYSTERY WHEEL'}: ${esc(S.wheel_mod)}</div>` : '';
   const extraB = `${S.team_battle?`<div class="team-banner">🤝 TEAM BATTLE! Your team's most popular answer earns +300 each</div>`:''}${S.hot?`<div class="hot-banner">🔥 HOT SEAT: ${esc(S.hot.name)} — will they nail it?</div>`:''}${S.tiebreak?`<div class="tb-banner">⚔️ SUDDEN DEATH TIEBREAKER: ${(S.tb_names||[]).map(esc).join(' vs ')}</div>`:''}`;
   const badges = `${diffB}${ptsB}${allOkB}${wheelBanner}${S.speed?`<div class="speed-banner">⚡ SPEED ROUND — ${S.speed_time||5} seconds, no waiting!</div>`:''}${S.dbl?'<div class="dbl-banner">💥 DOUBLE OR NOTHING — opt in on your phone!</div>':''}${extraB}${S.redemption?'<div class="redemp-banner">🔄 REDEMPTION QUESTION (MOST MISSED!) 🔄</div>':''}${S.boss?'<div class="double-banner">🎰 FINAL BOSS WAGER! 🎰</div>':S.double?'<div class="double-banner">⚡ DOUBLE POINTS! ⚡</div>':''}`;
   const mediaCol = (imgHtml || exH) ? `<div class="q-media">${imgHtml}${exH}</div>` : '';
@@ -5184,6 +5426,7 @@ function enterGame(){
  const chBtn = document.getElementById('chatMenuBtn'); if(chBtn) chBtn.style.display = 'flex';
  const pfBtn = document.getElementById('profilesMenuBtn'); if(pfBtn) pfBtn.style.display = 'flex';
  const ptBtn = document.getElementById('playTooMenuBtn'); if(ptBtn) ptBtn.style.display = 'flex';
+ const egBtn = document.getElementById('endGameMenuBtn'); if(egBtn) egBtn.style.display = 'flex';
  const aq = document.getElementById('addQuizMenuBtn'); if(aq) aq.style.display = 'none';
  startHostPoll();
 }
@@ -5215,7 +5458,14 @@ function resumeGame(){
  }
  enterGame();
 }
-function discardGame(btn){ localStorage.removeItem('brainrush_host'); btn.closest('.resume-card').remove(); }
+function discardGame(btn){
+ const sv = window._resumeSaved;
+ if(sv && sv.pin && sv.host){
+  try{ post('/api/terminate', {pin: sv.pin, host: sv.host, mode: 'discard'}); }catch(e){}
+ }
+ localStorage.removeItem('brainrush_host');
+ btn.closest('.resume-card').remove();
+}
 </script>
 <script>
 // ===== Feature Guide =====
@@ -7849,7 +8099,7 @@ function renderPresenter(){
     ${words.length ? words.map(w=>`<span class="pcon-chip">${esc(w.text)}${w.count>1?` <b>×${w.count}</b>`:''}</span>`).join('') : '<span style="opacity:.7">Waiting for responses on phones…</span>'}
    </div>`;
  } else if(ph === 'intro'){
-  const title = S.redemption ? '🔄 Redemption Round (Double Points)' : S.speed ? `⚡ Speed Round (5 × ${S.speed_time||5}s Rapid Questions)` : ('🎡 Mystery Wheel: ' + (S.wheel_mod || 'Spinning…'));
+  const title = S.redemption ? '🔄 Redemption Round (Double Points)' : S.speed ? `⚡ Speed Round (5 × ${S.speed_time||5}s Rapid Questions)` : ((S.wheel_doom ? '💀 Doom Wheel: ' : '🎡 Mystery Wheel: ') + (S.wheel_mod || 'Spinning…'));
   slideBody = `<div class="pcon-lbl"><span>🎪 Special Round Announcement</span><span>Slide ${(S.index||0)+1}/${S.total}</span></div>
    <h2 style="margin:.2em 0">${esc(title)}</h2>`;
  } else if(ph === 'question'){
@@ -7857,7 +8107,7 @@ function renderPresenter(){
    S.difficulty ? (S.difficulty==='easy'?'🟢 Easy':S.difficulty==='medium'?'🟡 Medium':S.difficulty==='hard'?'🔴 Hard':S.difficulty) : '',
    (S.pts !== null && S.pts !== undefined) ? (S.pts === 0 ? 'Ungraded · 0 pts' : `💎 ${S.pts} pts`) : '',
    S.all_correct ? '✅ All Answers Accepted' : '',
-   S.wheel_mod ? `🎡 ${S.wheel_mod}` : '',
+   S.wheel_mod ? `${S.wheel_doom?'💀':'🎡'} ${S.wheel_mod}` : '',
    S.speed ? '⚡ Speed Round' : '',
    S.dbl ? '💥 Double or Nothing' : '',
    S.team_battle ? '🤝 Team Battle' : '',
@@ -8013,6 +8263,7 @@ function renderPresenter(){
    <button class="btn-sm" onclick="toggleMute()">${muted ? '🔇 Muted' : '🔊 Sound'}</button>
    <button class="btn-sm" onclick="toggleTts()">${ttsOn ? '🗣️ Voice ON' : '🗣️ Voice'}</button>
    <button class="btn-sm" onclick="setPresenterMode(false)" title="Switch laptop back to standard single-screen view">🖥️ Single Screen</button>
+   <button class="btn-sm" style="background:#991b1b;border-color:#fca5a5;color:#fff" onclick="terminateGame()" title="Terminate game and release all players">🛑 End Game</button>
   </div>
  </div>
  <div class="pcon-grid">
@@ -8029,6 +8280,26 @@ function renderPresenter(){
   <div class="pcon-col">
    ${notesCard}
    ${upNextCard}
+   ${ph !== 'final' ? `<div class="pcon-card">
+    <div class="pcon-lbl"><span>⚙️ Live Game Settings (Mid-Game)</span><span id="wingLiveSavedMsg" style="color:#4ade80"></span></div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(125px,1fr));gap:6px;font-size:.82em;font-weight:800;margin-bottom:8px">
+     ${S.case_game ? '' : `<label style="display:flex;align-items:center;justify-content:space-between;background:#0004;padding:5px 8px;border-radius:8px"><span>📝 Total Qs</span><span><input id="wingLiveCount" type="number" min="${Math.max(1,(S.index||0)+1)}" max="${S.bank_total||S.total||200}" value="${S.total||10}" style="width:46px;padding:3px 5px;border-radius:6px;border:0;text-align:center;font-weight:900;color:#2b0d57" onchange="applyLiveSettings()">/${S.bank_total||S.total||'—'}</span></label>`}
+     <label style="display:flex;align-items:center;justify-content:space-between;background:#0004;padding:5px 8px;border-radius:8px"><span>⏱️ Timer</span><span><input id="wingLiveQtime" type="number" min="5" max="900" value="${S.qtime_default||S.qtime||15}" style="width:48px;padding:3px 5px;border-radius:6px;border:0;text-align:center;font-weight:900;color:#2b0d57" onchange="applyLiveSettings()">s</span></label>
+     <label style="display:flex;align-items:center;justify-content:space-between;background:#0004;padding:5px 8px;border-radius:8px"><span>👀 Preview</span><span><input id="wingLivePreview" type="number" min="0" max="120" value="${S.preview_default!=null?S.preview_default:5}" style="width:44px;padding:3px 5px;border-radius:6px;border:0;text-align:center;font-weight:900;color:#2b0d57" onchange="applyLiveSettings()">s</span></label>
+     <label style="display:flex;align-items:center;justify-content:space-between;background:#0004;padding:5px 8px;border-radius:8px"><span>🧠 Think</span><span><input id="wingLiveThink" type="number" min="0" max="120" value="${S.think_time||0}" style="width:44px;padding:3px 5px;border-radius:6px;border:0;text-align:center;font-weight:900;color:#2b0d57" onchange="applyLiveSettings()">s</span></label>
+     <label style="display:flex;align-items:center;gap:6px;background:#0004;padding:5px 8px;border-radius:8px;cursor:pointer"><input id="wingLiveUntimed" type="checkbox" ${S.untimed?'checked':''} onchange="applyLiveSettings()" style="width:14px;height:14px;margin:0;accent-color:#16a34a"><span>♾️ Untimed</span></label>
+    </div>
+    <div style="display:flex;gap:5px;flex-wrap:wrap">
+     <button type="button" class="btn-sm ${ttsOn?'on':''}" style="margin:0;font-size:.78em" onclick="toggleTts();window.renderPresenter()">🗣️ Host Voice: ${ttsOn?'ON':'Off'}</button>
+     <button type="button" class="btn-sm ${S.allow_tts?'on':''}" style="margin:0;font-size:.78em" onclick="hostCtl('toggle_student_tts')">🔊 Student TTS: ${S.allow_tts?'ON':'Off'}</button>
+     ${S.case_game ? '' : `
+     <button type="button" class="btn-sm ${S.auto?'on':''}" style="margin:0;font-size:.78em" onclick="hostCtl('toggle_auto')">⏭️ Auto: ${S.auto?'ON':'Off'}</button>
+     <button type="button" class="btn-sm ${S.doom_wheel_enabled?'on':''}" style="margin:0;font-size:.78em" onclick="applyLiveSettings({doom_wheel:!S.doom_wheel_enabled})">💀 Doom Wheel: ${S.doom_wheel_enabled?'ON':'Off'}</button>
+     <button type="button" class="btn-sm ${S.rubberband_enabled?'on':''}" style="margin:0;font-size:.78em" onclick="applyLiveSettings({rubberband:!S.rubberband_enabled})">🚀 Catch-Up 3x: ${S.rubberband_enabled?'ON':'Off'}</button>
+     <button type="button" class="btn-sm ${S.bounty_enabled?'on':''}" style="margin:0;font-size:.78em" onclick="applyLiveSettings({bounty:!S.bounty_enabled})">🎯 Leader Bounty: ${S.bounty_enabled?'ON':'Off'}</button>
+     <button type="button" class="btn-sm ${S.mystery_swap_enabled?'on':''}" style="margin:0;font-size:.78em" onclick="applyLiveSettings({mystery_swap:!S.mystery_swap_enabled})">🔀 Score Swap: ${S.mystery_swap_enabled?'ON':'Off'}</button>`}
+    </div>
+   </div>` : ''}
    ${rosterCard}
   </div>
  </div>`;
@@ -8054,7 +8325,7 @@ create = async function(){
 };
 const _enterGamePres = enterGame;
 enterGame = function(){
- hostViewMode = 'studio';
+ hostViewMode = 'game';
  syncHostViewLayout();
  _enterGamePres();
  broadcastPresSync();

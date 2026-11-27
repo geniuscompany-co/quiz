@@ -1903,8 +1903,8 @@ def start_question(g, qi):
     g["consensus_step"] = 1 if has_consensus_phase(g, qi) else 0
     g["consensus_until"] = 0.0
     if (g.get("wheel", True) or g.get("doom_wheel")) and qi > 0 and (qi + 1) % 4 == 0 and not is_boss_q(g, qi) and not g["quiz"][qi].get("redemption") and not is_speed_q(g, qi) and not is_unscored_type(g["quiz"][qi]):
-        if g.get("doom_wheel") and g.get("wheel", True):
-            use_doom = (qi // 4) % 2 == 1
+        if g.get("doom_wheel") and g.get("wheel"):
+            use_doom = ((qi + 1) // 4) % 2 == 1
         else:
             use_doom = bool(g.get("doom_wheel"))
         pool_ev = DOOM_WHEEL_EVENTS if use_doom else WHEEL_EVENTS
