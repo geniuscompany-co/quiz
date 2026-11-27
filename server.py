@@ -514,6 +514,8 @@ def activate_pending(g, pid):
 
 def qtime(g, i=None):
     idx = g["q"] if i is None else i
+    if g.get("untimed"):
+        return 0
     if is_speed_q(g, idx):
         return g.get("speed_time") or 5
     if 0 <= idx < len(g["quiz"]):
@@ -524,9 +526,9 @@ def qtime(g, i=None):
                 return q["t"]
             ct = g.get("case_times") or {}
             return ct.get(qtp) or CASE_TIMES[qtp]
-        if q.get("t_custom") and q.get("t"):
+        if q.get("t_custom") and q.get("t") is not None:
             return q["t"]
-    if g.get("qtime"):
+    if g.get("qtime") is not None:
         return g["qtime"]
     return g["quiz"][idx].get("t", DEFAULT_TIME)
 
@@ -1005,6 +1007,7 @@ def new_game(quiz_file="quiz.json", count=None, shuffle=False, shuffle_answers=T
         "chat_enabled": False, "profiles_enabled": False, "play_too_enabled": False,
         "chat": [], "cseq": 0, "chat_q": [],
         "shuffle_answers": bool(shuffle_answers),
+        "untimed": False,
     }
     return GAMES[pin]
 
@@ -1266,9 +1269,18 @@ def cur_think_left(g):
 
 def cur_timer_state(g):
     """Return (preview_left, q_left, q_elapsed, total_qtime)."""
-    qt = qtime(g) + g.get("extra_time", 0.0)
+    base_qt = qtime(g)
     prev_t = prev_time(g)
     thk_t = think_sec(g)
+    if base_qt <= 0 or g.get("untimed"):
+        if g.get("paused"):
+            prev_left = g.get("pause_prev", 0.0)
+            return prev_left, 0.0, 0.0, 0.0
+        elapsed = time.time() - g["start"]
+        prev_left = max(0.0, prev_t - elapsed) if g["phase"] == "question" else 0.0
+        q_elapsed = max(0.0, elapsed - prev_t - thk_t)
+        return prev_left, 0.0, q_elapsed, 0.0
+    qt = base_qt + g.get("extra_time", 0.0)
     if g.get("paused"):
         prev_left = g.get("pause_prev", 0.0)
         q_left = g.get("pause_rem", qt)
@@ -1314,7 +1326,9 @@ def audience_pcts(g, qi):
 def record_answer(g, p, choice, t, given=None, credit=None, extra=None):
     qi = g["q"]
     q = g["quiz"][qi]
-    qt = max(1.0, qtime(g) + g.get("extra_time", 0.0))
+    raw_qt = qtime(g)
+    is_untimed = bool(g.get("untimed") or raw_qt <= 0)
+    qt = 15.0 if is_untimed else max(1.0, raw_qt + g.get("extra_time", 0.0))
     qtp = qtype_of(q)
     if credit is None:
         if q.get("all_correct"):
@@ -1363,8 +1377,8 @@ def record_answer(g, p, choice, t, given=None, credit=None, extra=None):
         new_streak = prev_streak + 1
         s_mult = 2 if (wmod and wmod["id"] == "streak2x") else 1
         bonus = (min(300, (new_streak - 1) * 100) if new_streak >= 2 else 0) * s_mult
-        spd_mult = 1.35 if (smode == "classic" and wmod and wmod["id"] == "speed" and t <= qt * 0.45) else 1.0
-        speed_factor = (1.0 - min(1.0, t / qt) / 2.0) if smode == "classic" else 1.0
+        spd_mult = 1.35 if (not is_untimed and smode == "classic" and wmod and wmod["id"] == "speed" and t <= qt * 0.45) else 1.0
+        speed_factor = (1.0 - min(1.0, t / qt) / 2.0) if (smode == "classic" and not is_untimed) else 1.0
         base = round(base_max * credit * speed_factor * qmult(g) * p_mult * u_mult * spd_mult * (2 if don else 1))
         if wmod and wmod["id"] == "crate":
             wheel_bonus = random.choice([150, 200, 250, 300, 400])
@@ -1381,7 +1395,7 @@ def record_answer(g, p, choice, t, given=None, credit=None, extra=None):
             conf_delta = 250
         gained = base + bonus + wager_amt + wheel_bonus + conf_delta
     elif credit > 0:
-        speed_factor = (1.0 - min(1.0, t / qt) / 2.0) if smode == "classic" else 1.0
+        speed_factor = (1.0 - min(1.0, t / qt) / 2.0) if (smode == "classic" and not is_untimed) else 1.0
         gained = round(base_max * credit * speed_factor * qmult(g))
     else:
         wager_loss = wager_amt if (wager_amt > 0 and not shielded) else 0
@@ -1938,7 +1952,7 @@ def advance_game(g):
         if has_consensus_phase(g, qi) and g.get("consensus_step") == 1:
             for p in eligible(g):
                 if p.get("bot") and qi not in p["answers"]:
-                    delay = round(random.uniform(2.0, qtime(g) * 0.7), 2)
+                    delay = round(random.uniform(2.0, max(3.5, (qtime(g) or 15) * 0.7)), 2)
                     bot_auto_answer(g, p, delay)
             enter_consensus_phase2(g)
             return
@@ -1951,7 +1965,7 @@ def advance_game(g):
                 if qi in plan:
                     delay, _ = plan[qi]
                 else:
-                    delay = round(random.uniform(2.0, qtime(g) * 0.7), 2)
+                    delay = round(random.uniform(2.0, max(3.5, (qtime(g) or 15) * 0.7)), 2)
                 if is_boss_q(g, qi) and qi not in p.setdefault("wagers", {}):
                     p["wagers"][qi] = random.choice([0, 50, 50, 100])
                 bot_auto_answer(g, p, delay)
@@ -2079,7 +2093,8 @@ def tick(g):
             done = False
         else:
             done = ps and all(qi in p["answers"] for p in ps)
-        if qtype_of(q) != "info" and ((not g.get("paused") and q_left <= 0) or done):
+        timed_out = (not g.get("untimed") and qt > 0 and not g.get("paused") and q_left <= 0)
+        if qtype_of(q) != "info" and (timed_out or done):
             if has_consensus_phase(g, qi) and g.get("consensus_step") == 1:
                 enter_consensus_phase2(g)
             else:
@@ -2850,6 +2865,7 @@ def view(g, pid=None, host=False):
         "scoring_mode": g.get("scoring_mode", "classic"),
         "hide_board": bool(g.get("hide_board")),
         "allow_tts": bool(g.get("allow_tts")),
+        "untimed": bool(g.get("untimed")),
         "think_default": int(g.get("think_time") or 0),
         "logo": g.get("logo") or "",
     }
@@ -3765,7 +3781,7 @@ class H(BaseHTTPRequestHandler):
                     owner=owner_of(body.get("token")),
                 )
                 for k_ in ("speed", "dbl", "steal", "moderate", "hide_board", "allow_tts", "consensus",
-                           "chat_enabled", "profiles_enabled", "play_too_enabled"):
+                           "chat_enabled", "profiles_enabled", "play_too_enabled", "untimed"):
                     if k_ in body:
                         g[k_] = bool(body[k_])
                 sm_ = str(body.get("scoring_mode") or "").strip().lower()
@@ -3787,9 +3803,14 @@ class H(BaseHTTPRequestHandler):
                         g["team_preview"] = max(0.0, min(180.0, float(body["team_preview"])))
                     except Exception:
                         pass
-                if body.get("qtime"):
+                if "qtime" in body and body["qtime"] is not None:
                     try:
-                        g["qtime"] = max(5, min(900, int(body["qtime"])))
+                        qtv = int(body["qtime"])
+                        if qtv <= 0:
+                            g["untimed"] = True
+                            g["qtime"] = 0
+                        else:
+                            g["qtime"] = max(5, min(900, qtv))
                     except Exception:
                         pass
                 if body.get("speed_time"):
@@ -3998,6 +4019,14 @@ class H(BaseHTTPRequestHandler):
                     g["profiles_enabled"] = not g.get("profiles_enabled", False)
                 elif act == "toggle_play_too":
                     g["play_too_enabled"] = not g.get("play_too_enabled", False)
+                elif act == "toggle_untimed":
+                    g["untimed"] = not g.get("untimed", False)
+                    if not g["untimed"] and not g.get("qtime"):
+                        g["qtime"] = DEFAULT_TIME
+                    if g["phase"] == "question":
+                        g["start"] = time.time() - prev_time(g) - think_sec(g)
+                        g["extra_time"] = 0.0
+                        g["paused"] = False
                 elif act == "spotlight":
                     qi_s = g["q"]
                     if qi_s >= 0:
@@ -4104,24 +4133,35 @@ class H(BaseHTTPRequestHandler):
                         if g.get("paused"):
                             g["pause_rem"] = new_rem
                 elif act == "set_time" and g["phase"] == "question":
-                    target_s = max(1.0, min(900.0, float(body.get("sec", 30))))
-                    if g.get("consensus_step") == 2:
-                        g["consensus_total"] = int(round(target_s))
-                        if g.get("paused"):
-                            g["pause_consensus"] = target_s
-                        else:
-                            g["consensus_until"] = time.time() + target_s
+                    raw_ts = float(body.get("sec", 30))
+                    if raw_ts <= 0:
+                        g["untimed"] = True
+                        g["paused"] = False
                     else:
-                        prev_l, q_l, _, _ = cur_timer_state(g)
-                        thk_l, _ = cur_think_left(g)
-                        delta = target_s - q_l
-                        g["extra_time"] = g.get("extra_time", 0.0) + delta
-                        if g.get("paused"):
-                            g["pause_prev"] = 0.0
-                            g["pause_think"] = 0.0
-                            g["pause_rem"] = target_s
-                        elif prev_l > 0 or thk_l > 0:
+                        if g.get("untimed"):
+                            g["untimed"] = False
+                            if not g.get("qtime"):
+                                g["qtime"] = max(5, min(900, int(round(raw_ts))))
                             g["start"] = time.time() - prev_time(g) - think_sec(g)
+                            g["extra_time"] = 0.0
+                        target_s = max(1.0, min(900.0, raw_ts))
+                        if g.get("consensus_step") == 2:
+                            g["consensus_total"] = int(round(target_s))
+                            if g.get("paused"):
+                                g["pause_consensus"] = target_s
+                            else:
+                                g["consensus_until"] = time.time() + target_s
+                        else:
+                            prev_l, q_l, _, _ = cur_timer_state(g)
+                            thk_l, _ = cur_think_left(g)
+                            delta = target_s - q_l
+                            g["extra_time"] = g.get("extra_time", 0.0) + delta
+                            if g.get("paused"):
+                                g["pause_prev"] = 0.0
+                                g["pause_think"] = 0.0
+                                g["pause_rem"] = target_s
+                            elif prev_l > 0 or thk_l > 0:
+                                g["start"] = time.time() - prev_time(g) - think_sec(g)
                 elif act == "discuss":
                     sec_ = max(0.0, min(900.0, float(body.get("sec", g.get("discuss_time", 60)))))
                     if sec_ > 0:
@@ -4146,6 +4186,7 @@ class H(BaseHTTPRequestHandler):
                 return self.send({
                     "ok": True, "auto": g["auto"], "paused": g["paused"],
                     "hide_board": bool(g.get("hide_board")), "allow_tts": bool(g.get("allow_tts")),
+                    "untimed": bool(g.get("untimed")),
                     "chat_enabled": bool(g.get("chat_enabled")),
                     "profiles_enabled": bool(g.get("profiles_enabled")),
                     "play_too_enabled": bool(g.get("play_too_enabled")),

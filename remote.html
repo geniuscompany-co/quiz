@@ -970,7 +970,7 @@ function applyRemoteDeckSettings(file){
   qTime:15, qPrevTime:5, qThinkTime:0, qBots:0,
   cPollTime:45, cDiscussTime:60, cRankTime:60, cOpenTime:120, qBrainTime:90, qScaleTime:25, cTime:20, cPrevTime:5,
   qScoring:'classic',
-  qShuffle:false, qShuffleAns:true, qIce:false, qTeams:false, qConsensus:false,
+  qUntimed:false, qShuffle:false, qShuffleAns:true, qIce:false, qTeams:false, qConsensus:false,
   qHideBoard:false, qStudentTts:false, qChat:false, qProfiles:false, qPlayToo:false,
   qWager:false, qRedemp:false, qWheel:false, qHot:false, qTie:false, qMod:false
  }, remoteGlobalSettings || {}, (qObj && qObj.settings) || {});
@@ -989,6 +989,7 @@ function applyRemoteDeckSettings(file){
  setVal('mCheckTime', cfg.cTime);
  setVal('mCasePrev', cfg.cPrevTime);
  setVal('mBots', cfg.qBots);
+ setChk('mUntimed', cfg.qUntimed);
  setChk('mShuf', cfg.qShuffle);
  setChk('mShufAns', cfg.qShuffleAns);
  setChk('mIce', cfg.qIce);
@@ -1097,6 +1098,7 @@ function renderOptsHtml(){
   `;
  }
  return `
+  <label class="opt-pill"><input type="checkbox" id="mUntimed"> ♾️ Untimed Quiz</label>
   <label class="opt-pill"><input type="checkbox" id="mShuf"> 🎲 Shuffle Qs</label>
   <label class="opt-pill"><input type="checkbox" id="mShufAns"> 🔀 Shuffle A/B/C/D</label>
   <label class="opt-pill"><input type="checkbox" id="mIce"> 💭 Word Cloud</label>
@@ -1233,6 +1235,7 @@ async function launchFromPhone(){
   pair_key: rkey,
   scoring_mode: scoringMode,
   qtime: isCase ? numVal('mCheckTime', 20, 5, 900) : numVal('mQTime', 15, 5, 900),
+  untimed: isCase ? false : chk('mUntimed'),
   preview: isCase ? numVal('mCasePrev', 5, 0, 120) : numVal('mPrevTime', 5, 0, 120),
   think_time: numVal('rThinkTime', 0, 0, 120),
   shuffle: isCase ? false : chk('mShuf'),
@@ -1566,6 +1569,8 @@ function updTopBar(){
   const tot = Math.max(1, S.think_total || 5);
   pf.style.width = Math.min(100, (rem / tot) * 100) + '%';
   pf.className = 'rp-fill think' + (S.paused ? ' paused' : '');
+ } else if(S.untimed || !(S.qtime > 0)){
+  pw.style.display = 'none';
  } else {
   const rem = Math.max(0, (S.left || 0) - elapsed);
   const tot = Math.max(1, S.qtime || 15);
@@ -1591,6 +1596,7 @@ function updateLiveText(){
   else if(S.consensus_step === 2) tmEl.textContent = `🤝 Consensus (${Math.ceil(cRem)}s)`;
   else if(pvRem > 0) tmEl.textContent = `👀 Reading (${Math.ceil(pvRem)}s)`;
   else if(thkRem > 0) tmEl.textContent = `🧠 Thinking (${Math.ceil(thkRem)}s)`;
+  else if(S.untimed || !(S.qtime > 0)) tmEl.textContent = `♾️ Untimed`;
   else tmEl.textContent = `⏱️ ${Math.ceil(qRem)}s left`;
  }
  const cntNow = (S.consensus_step === 2) ? (S.consensus_voted || 0) : (S.answered || 0);
@@ -1642,7 +1648,7 @@ function render(){
 
  const stateKey = [
   pin, ph, S.index, S.total, S.qtype || '', isCaseGame ? 1 : 0, S.case ? 1 : 0, S.unscored ? 1 : 0,
-  S.is_last ? 1 : 0, startDisabled ? 1 : 0, S.paused ? 1 : 0, S.auto ? 1 : 0,
+  S.is_last ? 1 : 0, startDisabled ? 1 : 0, S.paused ? 1 : 0, S.untimed ? 1 : 0, S.auto ? 1 : 0,
   S.auto_time || 7, inPrev ? 1 : 0, inThink ? 1 : 0, S.consensus_step || 0,
   S.hide_board ? 1 : 0, S.allow_tts ? 1 : 0, S.chat_enabled ? 1 : 0, S.profiles_enabled ? 1 : 0, S.play_too_enabled ? 1 : 0, S.scoring_mode || 'classic',
   discOn ? 1 : 0, S.discuss_default || 60,
@@ -1826,13 +1832,16 @@ function render(){
    <div class="thumb-dock">
     ${inPrev ? `<button class="skip-prev-btn" onclick="ctl('skip_preview')">⏭️ Open Answers Now (Skip Preview)</button>` : ''}
     ${inThink ? `<button class="skip-prev-btn" onclick="hostCtl('skip_think')">⏭️ Unlock Answers Now</button>` : ''}
-    ${ph === 'question' && S.qtype !== 'info' ? `
+    ${ph === 'question' && S.qtype !== 'info' ? (S.untimed || !(S.qtime > 0) ? `
+     <div class="quick-tbar">
+      <button class="ctrl-btn on" style="grid-column:1 / -1" onclick="hostCtl('toggle_untimed')">♾️ Untimed ON (Tap to Enable Timer)</button>
+     </div>` : `
      <div class="quick-tbar">
       <button class="ctrl-btn" onclick="ctl('pause')">${S.paused ? '▶️ Resume' : '⏸️ Pause'}</button>
       <button class="ctrl-btn" onclick="ctl('add_time',-10)">-10s</button>
       <button class="ctrl-btn" onclick="ctl('add_time',10)">+10s</button>
       <button class="ctrl-btn" onclick="ctl('add_time',30)">+30s</button>
-     </div>` : ''}
+     </div>`) : ''}
     <button class="big-btn" onclick="next()" ${startDisabled ? 'disabled' : ''}>${mainLbl}<span id="rAutoLeft"></span></button>
    </div>` : '';
 

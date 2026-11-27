@@ -353,7 +353,7 @@ ALLOWED_SETTING_KEYS = {
     "qCount", "qTime", "qPrevTime", "qThinkTime", "qTeamTime", "qSpeedTime", "qAutoTime", "qBots",
     "cPollTime", "cDiscussTime", "cRankTime", "cOpenTime", "qBrainTime", "qScaleTime", "cTime", "cPrevTime",
     "qScoring", "qIcePrompt",
-    "qShuffle", "qShuffleAns", "qWheel", "qWager", "qRedemp", "qHot", "qDbl", "qSabotage", "qSteal", "qTie",
+    "qUntimed", "qShuffle", "qShuffleAns", "qWheel", "qWager", "qRedemp", "qHot", "qDbl", "qSabotage", "qSteal", "qTie",
     "qSpeed", "qAuto", "qTeams", "qBattle", "qConsensus", "qIce",
     "qMod", "qRosterOn", "qHideBoard", "qStudentTts", "qChat", "qProfiles", "qPlayToo",
 }

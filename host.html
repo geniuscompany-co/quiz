@@ -1248,10 +1248,14 @@ Quote: Paris has been the capital since 987 CE."></textarea>
     <div class="acc-body">
      <div class="quick-bar quiz-only" oninput="updateTimerSummary();updateOptSummary();if(typeof onInspectorSettingChange==='function')onInspectorSettingChange()">
       <label><span>📝 Questions</span><span><input id="qCount" type="number" min="1" max="200" value="" placeholder="—"> <small id="qMax" style="opacity:.75">/ —</small></span></label>
-      <label title="Seconds players get to answer each question"><span>⏱️ Timer</span><span><input id="qTime" type="number" min="5" max="900" value="15"><small style="opacity:.75">s</small></span></label>
+      <label id="qTimeBoxLbl" title="Seconds players get to answer each question"><span>⏱️ Timer</span><span><input id="qTime" type="number" min="5" max="900" value="15"><small style="opacity:.75">s</small></span></label>
       <label title="Reading preview before answer buttons open (set 0 for instant)"><span>👀 Preview</span><span><input id="qPrevTime" type="number" min="0" max="120" value="5"><small style="opacity:.75">s</small></span></label>
       <label title="Choices shown on screen &amp; phones, but answers locked while students reason"><span>🧠 Think</span><span><input id="qThinkTime" type="number" min="0" max="120" value="0"><small style="opacity:.75">s</small></span></label>
      </div>
+     <label class="mode-pill quiz-only" style="margin-top:8px;display:flex;align-items:center;gap:8px;cursor:pointer" title="Disable the countdown timer so questions stay open until everyone answers or you click Reveal Results">
+      <input id="qUntimed" type="checkbox" onchange="updateTimerSummary();updateOptSummary();if(typeof onInspectorSettingChange==='function')onInspectorSettingChange()">
+      <span>♾️ Untimed Quiz (No Countdown Timer)</span>
+     </label>
      <div class="case-only" oninput="syncCaseTimerSpec();updateTimerSummary();if(typeof onInspectorSettingChange==='function')onInspectorSettingChange()">
       <div class="case-timers-grid">
        <label class="ct-item" title="Voting timer on Decision Poll slides"><span>🗳️ Poll</span><span><input id="cPollTime" type="number" min="5" max="900" value="45">s</span></label>
@@ -1509,6 +1513,7 @@ function updateLiveViewSwitchBar(){
   else if(inPrev) phaseTxt = `👀 ${sl} · Preview ${Math.ceil(S.preview_left||0)}s`;
   else if(inThink) phaseTxt = `🧠 ${sl} · Think ${Math.ceil(S.think_left||0)}s`;
   else if(inCons) phaseTxt = `🤝 ${sl} · Team ${Math.ceil(S.consensus_left||0)}s`;
+  else if(S.untimed || !(S.qtime > 0)) phaseTxt = `♾️ ${sl} · Untimed (${S.answered||0}/${nAct})`;
   else phaseTxt = `⏱ ${sl} · ${S.paused?'⏸ ':''}${Math.ceil(S.left||0)}s (${S.answered||0}/${nAct})`;
  } else if(ph === 'results'){
   phaseTxt = `📊 Results ${(S.index||0)+1}/${S.total||0}`;
@@ -1762,7 +1767,12 @@ function updateTimerSummary(){
   if(db){ db.textContent = `Poll ${poll}s`; db.classList.toggle('on', poll !== 45 || disc !== 60); }
  } else {
   const cnt = parseInt((document.getElementById('qCount')||{}).value, 10) || 0;
-  const tm = parseInt((document.getElementById('qTime')||{}).value, 10) || 15;
+  const untimed = !!(document.getElementById('qUntimed') && document.getElementById('qUntimed').checked);
+  const tmInp = document.getElementById('qTime'), tmBox = document.getElementById('qTimeBoxLbl');
+  if(tmInp) tmInp.disabled = untimed;
+  if(tmBox) tmBox.style.opacity = untimed ? '0.45' : '1';
+  const tm = parseInt((tmInp||{}).value, 10) || 15;
+  const tmLbl = untimed ? 'Untimed' : `${tm}s`;
   const pvEl = document.getElementById('qPrevTime');
   const pv = (pvEl && pvEl.value !== '') ? Math.max(0, parseFloat(pvEl.value) || 0) : 5;
   const thkEl = document.getElementById('qThinkTime');
@@ -1770,15 +1780,15 @@ function updateTimerSummary(){
   const thkLbl = thk > 0 ? ` · ${thk}s think` : '';
   if(cnt > 0){
    const basePerQ = (q && q.est_sec && q.count) ? (q.est_sec / q.count) : 32;
-   const estSec = Math.max(cnt * 8, cnt * (basePerQ + (tm - 15) + (pv - 5) + thk));
+   const estSec = Math.max(cnt * 8, cnt * (basePerQ + ((untimed ? 20 : tm) - 15) + (pv - 5) + thk));
    const estMin = Math.max(1, Math.round(estSec / 60));
-   setTxt(`${cnt} Qs · ${tm}s${thkLbl} · ~${estMin}m`);
+   setTxt(`${cnt} Qs · ${tmLbl}${thkLbl} · ~${estMin}m`);
   } else {
-   setTxt(`${tm}s · ${pv}s preview${thkLbl}`);
+   setTxt(`${tmLbl} · ${pv}s preview${thkLbl}`);
   }
-  const cust = !!(cnt > 0 || tm !== 15 || pv !== 5 || thk > 0);
+  const cust = !!(cnt > 0 || untimed || tm !== 15 || pv !== 5 || thk > 0);
   b.classList.toggle('on', cust);
-  if(db){ db.textContent = thk > 0 ? `${tm}s + ${thk}s` : `${tm}s`; db.classList.toggle('on', tm !== 15 || pv !== 5 || thk > 0); }
+  if(db){ db.textContent = thk > 0 ? `${tmLbl} + ${thk}s` : tmLbl; db.classList.toggle('on', untimed || tm !== 15 || pv !== 5 || thk > 0); }
  }
 }
 function updateScreenSummary(){
@@ -2976,12 +2986,12 @@ const SAVED_SETTING_DEFAULTS = {
  qTime: 15, qPrevTime: 5, qThinkTime: 0, qTeamTime: 12, qSpeedTime: 5, qAutoTime: 7, qBots: 0,
  cPollTime: 45, cDiscussTime: 60, cRankTime: 60, cOpenTime: 120, qBrainTime: 45, qScaleTime: 25, cTime: 20, cPrevTime: 5,
  qScoring: 'classic', qIcePrompt: "In one word, how are you feeling about today's quiz?",
- qShuffle: false, qShuffleAns: true, qWheel: false, qWager: false, qRedemp: false, qHot: false, qDbl: false, qSabotage: false, qSteal: false, qTie: false,
+ qUntimed: false, qShuffle: false, qShuffleAns: true, qWheel: false, qWager: false, qRedemp: false, qHot: false, qDbl: false, qSabotage: false, qSteal: false, qTie: false,
  qSpeed: false, qAuto: false, qTeams: false, qBattle: false, qConsensus: false, qIce: false,
  qMod: false, qRosterOn: false, qHideBoard: false, qStudentTts: false, qChat: false, qProfiles: false, qPlayToo: false
 };
 const SAVED_BOOL_KEYS = [
- 'qShuffle','qShuffleAns','qWheel','qWager','qRedemp','qHot','qDbl','qSabotage','qSteal','qTie',
+ 'qUntimed','qShuffle','qShuffleAns','qWheel','qWager','qRedemp','qHot','qDbl','qSabotage','qSteal','qTie',
  'qSpeed','qAuto','qTeams','qBattle','qConsensus','qIce',
  'qMod','qRosterOn','qHideBoard','qStudentTts','qChat','qProfiles','qPlayToo'
 ];
@@ -3690,6 +3700,7 @@ async function create(){
  const auto = document.getElementById('qAuto');
  const picked = quizList.find(x=>x.file===qf);
  const cnt = inp ? (parseInt(inp.value, 10) || null) : null;
+ const untimedOn = !!(document.getElementById('qUntimed') && document.getElementById('qUntimed').checked);
  const qtm = tm ? Math.max(5, Math.min(900, parseInt(tm.value, 10) || 15)) : 15;
  const prevEl = document.getElementById('qPrevTime');
  const prevParsed = prevEl && prevEl.value !== '' ? parseFloat(prevEl.value) : 5;
@@ -3713,7 +3724,7 @@ async function create(){
  window.lastGame={file:qf,count:cnt}; try{ localStorage.setItem('brainrush_last', JSON.stringify(window.lastGame)); }catch(e){}
  const r=await postPw('/api/create',{
   quiz:qf, custom_questions: picked && picked.questions ? picked.questions : null,
-  count:cnt, shuffle:shuf ? shuf.checked : false, shuffle_answers: shufAns ? shufAns.checked : true, qtime:qtm, preview:prevSec,
+  count:cnt, shuffle:shuf ? shuf.checked : false, shuffle_answers: shufAns ? shufAns.checked : true, qtime:qtm, untimed:untimedOn, preview:prevSec,
   think_time:thinkSec, scoring_mode:scoringMode,
   hide_board:hideBoardOn, allow_tts:stuTtsOn, consensus:consensusOn,
   case_times:{
@@ -4096,7 +4107,7 @@ function handleAudio(){
    if(S.board && S.board[0]) speak('Congratulations to our winner, ' + S.board[0].name + '!');
   }
  }
- if(S.phase === 'question' && !S.paused && (S.preview_left || 0) <= 0){
+ if(S.phase === 'question' && !S.paused && !S.untimed && (S.qtime || 0) > 0 && (S.preview_left || 0) <= 0){
   const sec = Math.ceil(S.left);
   if(sec > 0 && sec !== lastTickSec){
    lastTickSec = sec;
@@ -4337,6 +4348,7 @@ function updateLiveWing(){
   else if(inPrev) tmLbl = `👀 ${Math.ceil(S.preview_left||0)}s Preview`;
   else if(inThink) tmLbl = `🧠 ${Math.ceil(S.think_left||0)}s Think`;
   else if(inCons) tmLbl = `🤝 ${Math.ceil(S.consensus_left||0)}s Team`;
+  else if(S.untimed || !(S.qtime > 0)) tmLbl = '♾️ Untimed';
   else tmLbl = S.paused ? `⏸️ ${Math.ceil(S.left||0)}s` : `⏱ ${Math.ceil(S.left||0)}s`;
  } else if(ph === 'results'){
   tmLbl = S.discuss_left != null ? `🗣️ ${S.discuss_left}s` : (S.auto && S.auto_left != null ? `⏭️ ${S.auto_left}s` : 'RESULTS');
@@ -4393,12 +4405,16 @@ function updateLiveWing(){
  } else if(ph === 'question'){
   if(inPrev){
    paceBtns = `<button type="button" onclick="hostCtl('skip_preview')">⏭️ Open Answers Now</button>`;
+  } else if(S.untimed || !(S.qtime > 0)){
+   paceBtns = `${inThink ? `<button type="button" onclick="hostCtl('skip_think')">⏭️ Unlock Answers</button>` : ''}
+    <button type="button" class="on" onclick="hostCtl('toggle_untimed')">♾️ Untimed: ON (Enable Timer)</button>`;
   } else {
    paceBtns = `${inThink ? `<button type="button" onclick="hostCtl('skip_think')">⏭️ Unlock Answers</button>` : ''}
     <button type="button" id="wingPauseBtn" onclick="hostCtl('pause')">${S.paused ? '▶️ Resume' : '⏸️ Pause'}</button>
     <button type="button" onclick="hostCtl('add_time',-10)">-10s</button>
     <button type="button" onclick="hostCtl('add_time',15)">+15s</button>
-    <button type="button" onclick="hostCtl('add_time',30)">+30s</button>`;
+    <button type="button" onclick="hostCtl('add_time',30)">+30s</button>
+    <button type="button" onclick="hostCtl('toggle_untimed')">♾️ Make Untimed</button>`;
   }
  } else if(ph === 'results'){
   paceBtns = `${S.can_reconsider ? `<button type="button" onclick="reconsiderVote(30)">🔄 Re-open Vote (30s)</button>` : ''}
@@ -4458,15 +4474,20 @@ function render(){
  const inCons = S.phase==='question' && S.consensus_step === 2;
  const inThink = S.phase==='question' && !inPrev && !inCons && (S.think_left||0) > 0;
  const k = S.phase==='question'
-  ? `q:${S.index}:${inPrev?1:0}:${inThink?1:0}:${S.consensus_step||0}:${window.presenterMode?1:0}:${(S.pending_list||[]).length}:${S.n||0}:${S.discuss_left!=null?1:0}`
+  ? `q:${S.index}:${inPrev?1:0}:${inThink?1:0}:${S.consensus_step||0}:${S.untimed?1:0}:${window.presenterMode?1:0}:${(S.pending_list||[]).length}:${S.n||0}:${S.discuss_left!=null?1:0}`
   : JSON.stringify({...S,left:0,qtime:0,answered:0,preview_left:0,think_left:0,consensus_left:0,consensus_voted:0,auto_left:0,intro_left:0,discuss_left:0,_da:S.discuss_left!=null,reactions:null,chat:null,_pm:!!window.presenterMode});
  if(k==last){
   const t=document.getElementById('t');
   if(t){
-   const sec = Math.ceil(S.left);
-   t.textContent = S.paused ? '⏸️ ' + sec : sec;
-   t.classList.toggle('urgent', !S.paused && sec <= 5);
-   t.classList.toggle('paused', !!S.paused);
+   if(S.untimed || !(S.qtime > 0)){
+    t.textContent = '♾️';
+    t.classList.remove('urgent', 'paused');
+   } else {
+    const sec = Math.ceil(S.left);
+    t.textContent = S.paused ? '⏸️ ' + sec : sec;
+    t.classList.toggle('urgent', !S.paused && sec <= 5);
+    t.classList.toggle('paused', !!S.paused);
+   }
   }
   const pb=document.getElementById('pauseBtn');
   if(pb) pb.textContent = S.paused ? '▶️ Resume' : '⏸️ Pause';
@@ -4645,7 +4666,7 @@ function render(){
     <div class="stage-hud-left"><span class="qnum">${S.case_game?'Slide':'Question'} ${S.index+1} <small>of ${S.total}</small></span></div>
     <div class="stage-hud-right">
      <span class="ans-pill">📝 <b id="ansCnt">${S.answered}/${nAct}</b> Answered</span>
-     <div class="timer ${!S.paused&&sec<=5?'urgent':''} ${S.paused?'paused':''}" id="t">${S.paused?'⏸️ '+sec:sec}</div>
+     ${(S.untimed || !(S.qtime > 0)) ? `<span class="ans-pill" id="t" title="Untimed Question — no countdown timer">♾️ Untimed</span>` : `<div class="timer ${!S.paused&&sec<=5?'urgent':''} ${S.paused?'paused':''}" id="t">${S.paused?'⏸️ '+sec:sec}</div>`}
     </div>
    </div>
    ${badges?`<div class="stage-badges">${badges}</div>`:''}
@@ -4658,6 +4679,7 @@ function render(){
    <div class="ans-reveal">${answerArea()}</div>
    <div class="host-dock aud-hide">
     ${inThink ? `<button class="btn-sm" style="background:#7c4dff;border-color:#d1c4e9" onclick="hostCtl('skip_think')">⏭️ Unlock Answers Now</button>` : ''}
+    ${(S.untimed || !(S.qtime > 0)) ? `<button class="btn-sm" onclick="hostCtl('toggle_untimed')" title="Turn countdown timer back on">⏱️ Enable Timer</button>` : `
     <button class="btn-sm" id="pauseBtn" onclick="hostCtl('pause')">${S.paused?'▶️ Resume':'⏸️ Pause'}</button>
     <button class="btn-sm" onclick="hostCtl('add_time',-10)" title="Subtract 10 seconds">-10s</button>
     <button class="btn-sm" onclick="hostCtl('add_time',10)" title="Add 10 seconds">+10s</button>
@@ -4666,6 +4688,7 @@ function render(){
      <input id="liveSecInp" type="number" min="1" max="900" value="${sec}" onkeydown="if(event.key==='Enter')applyLiveTimer('liveSecInp')"><span>s</span>
      <button class="btn-sm" onclick="applyLiveTimer('liveSecInp')">Set</button>
     </span>
+    <button class="btn-sm" onclick="hostCtl('toggle_untimed')" title="Switch to Untimed (no countdown)">♾️ Untimed</button>`}
     ${wingBtnHtml()}
     <span class="dock-sep"></span>
     <button class="dock-next" onclick="next()">⏭️ ${S.case_game?'Reveal':'Results'} ➔</button>
@@ -7697,6 +7720,7 @@ function renderPresenter(){
     <button class="btn-sm" onclick="hostCtl('add_time',15)">+15s</button>
    </div>` : '';
    ctrlHtml = `<div class="pcon-ctrl" style="flex-wrap:wrap">${thkRow}${consRow}
+    ${(S.untimed || !(S.qtime > 0)) ? `<span class="pcon-chip" id="t">♾️ Untimed</span><button class="btn-sm" onclick="hostCtl('toggle_untimed')">⏱️ Enable Timer</button>` : `
     <div class="timer ${!S.paused&&sec<=5?'urgent':''} ${S.paused?'paused':''}" id="t">${S.paused ? '⏸️ ' + sec : sec}</div>
     <button class="btn-sm" id="pauseBtn" onclick="hostCtl('pause')">${S.paused ? '▶️ Resume' : '⏸️ Pause'}</button>
     <button class="btn-sm" onclick="hostCtl('add_time',-10)" title="Subtract 10 seconds">-10s</button>
@@ -7706,6 +7730,7 @@ function renderPresenter(){
      <input id="pconSecInp" type="number" min="1" max="900" value="${sec}" onkeydown="if(event.key==='Enter')applyLiveTimer('pconSecInp')"><span>s</span>
      <button class="btn-sm" onclick="applyLiveTimer('pconSecInp')">Set</button>
     </span>
+    <button class="btn-sm" onclick="hostCtl('toggle_untimed')">♾️ Untimed</button>`}
     <span class="pcon-chip" style="margin-left:auto">📝 <b id="ansCnt">${S.answered||0}/${nAct}</b> responded</span>
    </div>`;
   }
