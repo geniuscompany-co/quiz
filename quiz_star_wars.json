@@ -1,0 +1,2602 @@
+[
+  {
+    "q": "On which desert planet with twin suns did both Anakin and Luke Skywalker grow up?",
+    "a": [
+      "Geonosis",
+      "Jakku",
+      "Jedha",
+      "Tatooine"
+    ],
+    "c": 3,
+    "difficulty": "easy",
+    "topic": "The Skywalker Saga",
+    "quote": "Tatooine, an Outer Rim desert world orbiting twin suns Tatoo I and Tatoo II, is home to both Anakin and Luke Skywalker."
+  },
+  {
+    "q": "Who is Luke Skywalker and Princess Leia Organa's biological mother?",
+    "a": [
+      "Breha Organa",
+      "Mon Mothma",
+      "Padmé Amidala",
+      "Shmi Skywalker"
+    ],
+    "c": 2,
+    "difficulty": "easy",
+    "topic": "The Skywalker Saga",
+    "quote": "Padmé Amidala, former Queen and Senator of Naboo, gives birth to twins Luke and Leia at Polis Massa in Episode III: Revenge of the Sith."
+  },
+  {
+    "q": "What color is Mace Windu's unique lightsaber blade in the prequel trilogy?",
+    "a": [
+      "Green",
+      "Yellow",
+      "Purple",
+      "Blue"
+    ],
+    "c": 2,
+    "difficulty": "easy",
+    "topic": "The Skywalker Saga",
+    "quote": "Jedi Master Mace Windu (played by Samuel L. Jackson) wields a distinctive purple-bladed lightsaber first ignited during the Battle of Geonosis."
+  },
+  {
+    "q": "Which bounty hunter delivers a carbonite-frozen Han Solo to Jabba the Hutt?",
+    "a": [
+      "Boba Fett",
+      "Greedo",
+      "Jango Fett",
+      "Bossk"
+    ],
+    "c": 0,
+    "difficulty": "easy",
+    "topic": "The Skywalker Saga",
+    "quote": "Boba Fett tracks the Millennium Falcon to Cloud City on Bespin and transports the carbonite-frozen Han Solo to Jabba's Palace in Slave I."
+  },
+  {
+    "q": "What species is Han Solo's loyal co-pilot and first mate, Chewbacca?",
+    "a": [
+      "Wookiee",
+      "Gungan",
+      "Twi'lek",
+      "Ewok"
+    ],
+    "c": 0,
+    "difficulty": "easy",
+    "topic": "The Skywalker Saga",
+    "quote": "Chewbacca is a 200-year-old Wookiee warrior from the forest planet Kashyyyk and co-pilot of the Millennium Falcon."
+  },
+  {
+    "q": "In Episode V: The Empire Strikes Back, which planet in the Dagobah system does Luke travel to in order to train with Jedi Master Yoda?",
+    "a": [
+      "Hoth",
+      "Mustafar",
+      "Endor",
+      "Dagobah"
+    ],
+    "c": 3,
+    "difficulty": "easy",
+    "topic": "The Skywalker Saga",
+    "quote": "Following Obi-Wan Kenobi's Force vision on Hoth, Luke flies his X-wing to the swamp-covered planet Dagobah to train under Grand Master Yoda."
+  },
+  {
+    "q": "What is the name of Han Solo's famous modified Corellian light freighter?",
+    "a": [
+      "Millennium Falcon",
+      "Ghost",
+      "Razor Crest",
+      "Tantive IV"
+    ],
+    "c": 0,
+    "difficulty": "easy",
+    "topic": "The Skywalker Saga",
+    "quote": "The Millennium Falcon is a heavily modified YT-1300 Corellian light freighter that Han Solo won from Lando Calrissian in a game of sabacc."
+  },
+  {
+    "q": "Who is Supreme Leader Snoke's masked enforcer—and the son of Han Solo and Leia Organa—in the sequel trilogy?",
+    "a": [
+      "General Hux",
+      "Captain Phasma",
+      "Kylo Ren (Ben Solo)",
+      "Poe Dameron"
+    ],
+    "c": 2,
+    "difficulty": "easy",
+    "topic": "The Skywalker Saga",
+    "quote": "Born Ben Solo, the son of Han Solo and Leia Organa falls to the dark side and becomes Kylo Ren, master of the Knights of Ren."
+  },
+  {
+    "q": "Which Gungan outcast befriends Qui-Gon Jinn and Obi-Wan Kenobi on Naboo in Episode I: The Phantom Menace?",
+    "a": [
+      "Boss Nass",
+      "Jar Jar Binks",
+      "Captain Tarpals",
+      "Sebulba"
+    ],
+    "c": 1,
+    "difficulty": "easy",
+    "topic": "The Skywalker Saga",
+    "quote": "Jar Jar Binks guides Qui-Gon Jinn and Obi-Wan Kenobi through Naboo's underwater city of Otoh Gunga and later serves in the Galactic Senate."
+  },
+  {
+    "q": "In Episode IV: A New Hope, what callsign does Luke Skywalker fly under during the Trench Run on the first Death Star?",
+    "a": [
+      "Gold Leader",
+      "Blue Three",
+      "Red Five",
+      "Rogue Leader"
+    ],
+    "c": 2,
+    "difficulty": "easy",
+    "topic": "The Skywalker Saga",
+    "quote": "Luke Skywalker flies his T-65B X-wing starfighter under the callsign 'Red Five' during the Battle of Yavin."
+  },
+  {
+    "q": "Who built the protocol droid C-3PO out of spare parts on Tatooine?",
+    "a": [
+      "Owen Lars",
+      "Anakin Skywalker",
+      "Watto",
+      "Obi-Wan Kenobi"
+    ],
+    "c": 1,
+    "difficulty": "easy",
+    "topic": "The Skywalker Saga",
+    "quote": "Nine-year-old Anakin Skywalker rebuilt C-3PO from scrap parts on Tatooine to help his mother, Shmi Skywalker."
+  },
+  {
+    "q": "Which Sith Lord with red-and-black tattoos and a double-bladed lightsaber duels Qui-Gon Jinn and Obi-Wan Kenobi on Naboo?",
+    "a": [
+      "Darth Sidious",
+      "Darth Plagueis",
+      "Darth Maul",
+      "Darth Tyranus"
+    ],
+    "c": 2,
+    "difficulty": "easy",
+    "topic": "The Skywalker Saga",
+    "quote": "Darth Maul, a Dathomirian Zabrak apprentice to Darth Sidious, wields a double-bladed red lightsaber during the Duel of the Fates on Naboo."
+  },
+  {
+    "q": "On which icy planet is the Rebel Alliance's Echo Base located at the start of Episode V: The Empire Strikes Back?",
+    "a": [
+      "Kijimi",
+      "Hoth",
+      "Ilum",
+      "Crait"
+    ],
+    "c": 1,
+    "difficulty": "easy",
+    "topic": "The Skywalker Saga",
+    "quote": "Imperial probe droids discover the Rebel Alliance's hidden Echo Base on the frozen sixth planet of the Hoth system."
+  },
+  {
+    "q": "What small, furry, forest-dwelling native species helps the Rebel strike team destroy the Death Star II shield generator in Episode VI: Return of the Jedi?",
+    "a": [
+      "Ewoks",
+      "Tusken Raiders",
+      "Porgs",
+      "Jawas"
+    ],
+    "c": 0,
+    "difficulty": "easy",
+    "topic": "The Skywalker Saga",
+    "quote": "Led by Chief Chirpa and Wicket W. Warrick, the Ewoks of the Forest Moon of Endor ally with the Rebels to bring down the Imperial shield generator."
+  },
+  {
+    "q": "What is the Imperial directive issued by Supreme Chancellor Palpatine in Episode III: Revenge of the Sith that turns clone troopers against their Jedi Generals?",
+    "a": [
+      "Order 66",
+      "Order 99",
+      "Base Delta Zero",
+      "Operation Cinder"
+    ],
+    "c": 0,
+    "difficulty": "easy",
+    "topic": "The Skywalker Saga",
+    "quote": "Darth Sidious transmits the command 'Execute Order 66,' triggering the clone troopers across the galaxy to turn on the Jedi Order."
+  },
+  {
+    "q": "Who serves as the administrator of Cloud City on Bespin when Han Solo and Princess Leia seek refuge there in Episode V?",
+    "a": [
+      "Lobot",
+      "Bail Organa",
+      "Wedge Antilles",
+      "Lando Calrissian"
+    ],
+    "c": 3,
+    "difficulty": "easy",
+    "topic": "The Skywalker Saga",
+    "quote": "Han Solo's old friend Lando Calrissian serves as Baron Administrator of the tibanna gas mining colony Cloud City above Bespin."
+  },
+  {
+    "q": "In Episode VII: The Force Awakens, which round, orange-and-white astromech droid carries a map fragment leading to Luke Skywalker?",
+    "a": [
+      "BB-8",
+      "D-O",
+      "C1-10P",
+      "R2-D2"
+    ],
+    "c": 0,
+    "difficulty": "easy",
+    "topic": "The Skywalker Saga",
+    "quote": "Resistance pilot Poe Dameron entrusts his spherical astromech droid BB-8 with the map fragment to Luke Skywalker on Jakku."
+  },
+  {
+    "q": "Which former Jedi Master and student of Yoda leads the Confederacy of Independent Systems (Separatists) as Darth Tyranus?",
+    "a": [
+      "Qui-Gon Jinn",
+      "Ki-Adi-Mundi",
+      "Count Dooku",
+      "Sifo-Dyas"
+    ],
+    "c": 2,
+    "difficulty": "easy",
+    "topic": "The Skywalker Saga",
+    "quote": "Count Dooku of Serenno leaves the Jedi Order and becomes Darth Sidious's apprentice Darth Tyranus, spearheading the Separatist movement."
+  },
+  {
+    "q": "On which volcanic lava world do Obi-Wan Kenobi and Anakin Skywalker fight their fateful duel in Episode III: Revenge of the Sith?",
+    "a": [
+      "Kamino",
+      "Exegol",
+      "Mustafar",
+      "Sullust"
+    ],
+    "c": 2,
+    "difficulty": "easy",
+    "topic": "The Skywalker Saga",
+    "quote": "After Anakin slaughters the Separatist Council on the volcanic world of Mustafar, Obi-Wan Kenobi confronts and defeats him by the lava river."
+  },
+  {
+    "q": "In Episode VII: The Force Awakens, what is the former stormtrooper designation of the hero who Poe Dameron names 'Finn'?",
+    "a": [
+      "FN-2187",
+      "TK-421",
+      "CT-7567",
+      "FN-2199"
+    ],
+    "c": 0,
+    "difficulty": "easy",
+    "topic": "The Skywalker Saga",
+    "quote": "Finn served as First Order stormtrooper FN-2187 under Captain Phasma before rescuing Poe Dameron, who gave him the name 'Finn' after 'FN'."
+  },
+  {
+    "q": "Which peaceful core planet—Princess Leia's adoptive homeworld—is destroyed by Grand Moff Tarkin to demonstrate the first Death Star's power?",
+    "a": [
+      "Alderaan",
+      "Hosnian Prime",
+      "Coruscant",
+      "Naboo"
+    ],
+    "c": 0,
+    "difficulty": "easy",
+    "topic": "The Skywalker Saga",
+    "quote": "Grand Moff Tarkin orders the Death Star superlaser fired on Alderaan in Episode IV: A New Hope despite Leia giving a location for the Rebel base."
+  },
+  {
+    "q": "What high-speed vehicle sport does nine-year-old Anakin Skywalker win on Tatooine to earn his freedom in Episode I: The Phantom Menace?",
+    "a": [
+      "Swoop biking",
+      "Speeder jousting",
+      "Fathier racing",
+      "Podracing"
+    ],
+    "c": 3,
+    "difficulty": "easy",
+    "topic": "The Skywalker Saga",
+    "quote": "Anakin Skywalker defeats the Dug champion Sebulba in the Boonta Eve Classic Podrace at Mos Espa, winning his freedom from Watto."
+  },
+  {
+    "q": "In Episode IX: The Rise of Skywalker, Rey discovers she is the biological granddaughter of which Sith Lord?",
+    "a": [
+      "Emperor Sheev Palpatine",
+      "Darth Plagueis",
+      "Count Dooku",
+      "Darth Vader"
+    ],
+    "c": 0,
+    "difficulty": "easy",
+    "topic": "The Skywalker Saga",
+    "quote": "Rey is the daughter of Dathan, an un-Force-sensitive strand-cast clone of Emperor Sheev Palpatine, before choosing the name Rey Skywalker."
+  },
+  {
+    "q": "What four-armed cyborg serves as Supreme Commander of the Separatist Droid Army and collects defeated Jedi lightsabers as trophies?",
+    "a": [
+      "Wat Tambor",
+      "Nute Gunray",
+      "General Grievous",
+      "Admiral Trench"
+    ],
+    "c": 2,
+    "difficulty": "easy",
+    "topic": "The Skywalker Saga",
+    "quote": "Trained in lightsaber combat by Count Dooku, the Kaleesh cyborg General Grievous wields four stolen Jedi lightsabers against Obi-Wan on Utapau."
+  },
+  {
+    "q": "In Episode II: Attack of the Clones, which stormy ocean planet outside the Republic archive maps hosts the secret cloning facilities?",
+    "a": [
+      "Ahch-To",
+      "Kamino",
+      "Mon Cala",
+      "Kef Bir"
+    ],
+    "c": 1,
+    "difficulty": "medium",
+    "topic": "The Skywalker Saga",
+    "quote": "Obi-Wan tracks a Kamino saberdart to Tipoca City on the watery world of Kamino, which had been erased from the Jedi Archives."
+  },
+  {
+    "q": "What is the name of Jabba the Hutt's grotesque, giant carnivorous pit monster that Luke Skywalker kills beneath Jabba's Palace?",
+    "a": [
+      "Rancor",
+      "Rathtar",
+      "Sarlacc",
+      "Krayt Dragon"
+    ],
+    "c": 0,
+    "difficulty": "medium",
+    "topic": "The Skywalker Saga",
+    "quote": "Luke drops a heavy iron portcullis door onto the neck of Jabba's pet Rancor (named Pateesa), devastating its keeper Malakili."
+  },
+  {
+    "q": "Which Mon Calamari admiral commands the Rebel fleet from Home One at the Battle of Endor and famously shouts, 'It's a trap!'?",
+    "a": [
+      "Admiral Piett",
+      "Admiral Holdo",
+      "Admiral Gial Ackbar",
+      "Admiral Raddus"
+    ],
+    "c": 2,
+    "difficulty": "medium",
+    "topic": "The Skywalker Saga",
+    "quote": "Admiral Gial Ackbar leads the Alliance Fleet aboard the MC80 cruiser Home One during the Battle of Endor in Return of the Jedi."
+  },
+  {
+    "q": "In Episode IV: A New Hope, which Rodian bounty hunter corners Han Solo in Chalmun's Spaceport Cantina in Mos Eisley?",
+    "a": [
+      "Ponda Baba",
+      "4-LOM",
+      "Greedo",
+      "Dengar"
+    ],
+    "c": 2,
+    "difficulty": "medium",
+    "topic": "The Skywalker Saga",
+    "quote": "Greedo confronts Han Solo in the Mos Eisley Cantina over Han's unpaid debt to Jabba the Hutt before being shot under the table."
+  },
+  {
+    "q": "What is the name of the First Order's planet-sized superweapon in Episode VII: The Force Awakens that drains stars to destroy entire star systems?",
+    "a": [
+      "Dreadnought Fulminatrix",
+      "Supremacy",
+      "Starkiller Base",
+      "Finalizer"
+    ],
+    "c": 2,
+    "difficulty": "medium",
+    "topic": "The Skywalker Saga",
+    "quote": "Carved out of the sacred kyber-crystal world of Ilum, Starkiller Base destroys the Hosnian system before Poe Dameron destroys its thermal oscillator."
+  },
+  {
+    "q": "Which Jedi Master originally secretly commissioned the creation of the clone army on Kamino before his death?",
+    "a": [
+      "Master Sifo-Dyas",
+      "Master Plo Koon",
+      "Master Kit Fisto",
+      "Master Shaak Ti"
+    ],
+    "c": 0,
+    "difficulty": "medium",
+    "topic": "The Skywalker Saga",
+    "quote": "Prime Minister Lama Su tells Obi-Wan Kenobi that Jedi Master Sifo-Dyas ordered the clone army for the Republic nearly ten years earlier."
+  },
+  {
+    "q": "On which ancient ocean planet—site of the first Jedi Temple—does Luke Skywalker live in self-imposed exile in Episodes VII and VIII?",
+    "a": [
+      "Ossus",
+      "Ahch-To",
+      "Yavin 4",
+      "Tython"
+    ],
+    "c": 1,
+    "difficulty": "medium",
+    "topic": "The Skywalker Saga",
+    "quote": "Rey travels aboard the Millennium Falcon to the remote island planet of Ahch-To to return Anakin's lightsaber to an exiled Luke Skywalker."
+  },
+  {
+    "q": "In Episode VIII: The Last Jedi, what mineral covers the white plains over blood-red soil at the old Rebel outpost where the Resistance makes its stand?",
+    "a": [
+      "Salt (on the planet Crait)",
+      "Quartz (on the planet Christophsis)",
+      "Ash (on the planet Mustafar)",
+      "Snow (on the planet Hoth)"
+    ],
+    "c": 0,
+    "difficulty": "medium",
+    "topic": "The Skywalker Saga",
+    "quote": "On the mineral planet Crait, a Resistance soldier tastes the white surface layer and confirms, 'Salt,' as ski speeders kick up red mineral dust."
+  },
+  {
+    "q": "Which Toydarian junk dealer on Tatooine owns both Shmi and Anakin Skywalker in Episode I: The Phantom Menace and is immune to Jedi mind tricks?",
+    "a": [
+      "Watto",
+      "Unkar Plutt",
+      "Dexter Jettster",
+      "Sebulba"
+    ],
+    "c": 0,
+    "difficulty": "medium",
+    "topic": "The Skywalker Saga",
+    "quote": "Watto tells Qui-Gon Jinn, 'I'm a Toydarian! Mind tricks don't-a work on me—only money!' when Qui-Gon tries to pay with Republic credits."
+  },
+  {
+    "q": "What is the name of Darth Vader's massive Executor-class Star Dreadnought (Super Star Destroyer) in Episodes V and VI?",
+    "a": [
+      "Devastator",
+      "Chimaera",
+      "Executor",
+      "Avenger"
+    ],
+    "c": 2,
+    "difficulty": "medium",
+    "topic": "The Skywalker Saga",
+    "quote": "The 19,000-meter Super Star Destroyer Executor serves as Darth Vader's flagship until Arvel Crynyd crashes his A-wing into its bridge at Endor."
+  },
+  {
+    "q": "In Episode III: Revenge of the Sith, on which sinkhole-covered planet does Obi-Wan Kenobi track down and defeat General Grievous?",
+    "a": [
+      "Mygeeto",
+      "Felucia",
+      "Utapau",
+      "Cato Neimoidia"
+    ],
+    "c": 2,
+    "difficulty": "medium",
+    "topic": "The Skywalker Saga",
+    "quote": "Obi-Wan rides a feathered varactyl lizard named Boga into battle against General Grievous in the sinkhole city of Pau City on Utapau."
+  },
+  {
+    "q": "Which Vice Admiral of the Resistance stays behind aboard the cruiser Raddus in Episode VIII and executes a lightspeed ram into Snoke's flagship?",
+    "a": [
+      "Commander Larma D'Acy",
+      "Kaydel Ko Connix",
+      "General Carlist Rieekan",
+      "Vice Admiral Amilyn Holdo"
+    ],
+    "c": 3,
+    "difficulty": "medium",
+    "topic": "The Skywalker Saga",
+    "quote": "Vice Admiral Amilyn Holdo jumps the MC85 Star Cruiser Raddus to hyperspace straight through Supreme Leader Snoke's Mega-class dreadnought Supremacy."
+  },
+  {
+    "q": "In Episode IV: A New Hope, which numbered detention block on the first Death Star holds Princess Leia captive ('Detention Block ___')?",
+    "a": [
+      "TK-421",
+      "AA-23",
+      "OB-94",
+      "CC-77"
+    ],
+    "c": 1,
+    "difficulty": "medium",
+    "topic": "The Skywalker Saga",
+    "quote": "Luke, Han, and Chewbacca take the turbolift to Detention Block AA-23 (Cell 2187) to rescue Princess Leia while Han bluffs over the intercom."
+  },
+  {
+    "q": "Who is the Trade Federation Viceroy who blockades Naboo in Episode I and stays in the Separatist Council until Anakin slays him on Mustafar?",
+    "a": [
+      "Nute Gunray",
+      "Lott Dod",
+      "Rune Haako",
+      "Poggle the Lesser"
+    ],
+    "c": 0,
+    "difficulty": "medium",
+    "topic": "The Skywalker Saga",
+    "quote": "Neimoidian Viceroy Nute Gunray leads the Trade Federation blockade of Naboo and spends over a decade trying to have Padmé Amidala assassinated."
+  },
+  {
+    "q": "What is the name of the ancient Sith wayfinder-Destination hidden world in the Unknown Regions where Emperor Palpatine builds the Final Order fleet in Episode IX?",
+    "a": [
+      "Moraband",
+      "Exegol",
+      "Dromund Kaas",
+      "Korriban"
+    ],
+    "c": 1,
+    "difficulty": "medium",
+    "topic": "The Skywalker Saga",
+    "quote": "Kylo Ren and later Rey use Sith wayfinders to navigate the Red Honeycomb Zone to the dark, lightning-swept Sith citadel world of Exegol."
+  },
+  {
+    "q": "In Episode VI: Return of the Jedi, what identity does Princess Leia disguise herself as when infiltrating Jabba's Palace with a thermal detonator?",
+    "a": [
+      "Zuckuss the Gand",
+      "Bossk the Trandoshan hunter",
+      "Zam Wesell the Clawdite",
+      "Boushh the Ubese bounty hunter"
+    ],
+    "c": 3,
+    "difficulty": "medium",
+    "topic": "The Skywalker Saga",
+    "quote": "Leia wears the helmet and breath-mask of the Ubese bounty hunter Boushh to bring Chewbacca into Jabba's Palace and free Han from carbonite."
+  },
+  {
+    "q": "In Episode II: Attack of the Clones, who is the shape-shifting Clawdite assassin hired by Jango Fett to kill Senator Padmé Amidala?",
+    "a": [
+      "Bazine Netal",
+      "Aurra Sing",
+      "Zam Wesell",
+      "Asajj Ventress"
+    ],
+    "c": 2,
+    "difficulty": "medium",
+    "topic": "The Skywalker Saga",
+    "quote": "Anakin and Obi-Wan chase the Clawdite changeling bounty hunter Zam Wesell through Coruscant's skylanes before Jango Fett silences her with a toxic dart."
+  },
+  {
+    "q": "Which Wookiee chieftain—alongside Chewbacca—helps Jedi Master Yoda escape Kashyyyk after Order 66 is issued in Episode III?",
+    "a": [
+      "Black Krrsantan",
+      "Attichitcuk",
+      "Tarfful",
+      "Gungi"
+    ],
+    "c": 2,
+    "difficulty": "medium",
+    "topic": "The Skywalker Saga",
+    "quote": "Wookiee General Tarfful and Chewbacca guide Grand Master Yoda to a secret escape pod on Kashyyyk after Commander Gree attempts to execute Order 66."
+  },
+  {
+    "q": "In Episode VIII: The Last Jedi, to which opulent casino city on the planet Cantonica do Finn and Rose Tico travel to find the Master Codebreaker?",
+    "a": [
+      "Cloud City",
+      "Mos Espa",
+      "Theed",
+      "Canto Bight"
+    ],
+    "c": 3,
+    "difficulty": "medium",
+    "topic": "The Skywalker Saga",
+    "quote": "Following Maz Kanata's advice, Finn, Rose Tico, and BB-8 travel to the casino resort city of Canto Bight, where they meet the slicer DJ."
+  },
+  {
+    "q": "What is the name of Darth Plagueis's title in the famous Sith legend Palpatine tells Anakin at the Galaxies Opera House in Episode III?",
+    "a": [
+      "Darth Plagueis the Eternal",
+      "Darth Plagueis the Wise",
+      "Darth Plagueis the Unseen",
+      "Darth Plagueis the Immortal"
+    ],
+    "c": 1,
+    "difficulty": "medium",
+    "topic": "The Skywalker Saga",
+    "quote": "Palpatine asks Anakin, 'Did you ever hear the tragedy of Darth Plagueis the Wise?'—revealing how Plagueis could influence midichlorians to create life."
+  },
+  {
+    "q": "Which Rebel pilot is the sole survivor besides Luke from Red and Gold Squadrons to fly in BOTH Death Star trench/core attacks in Episodes IV and VI?",
+    "a": [
+      "Biggs Darklighter",
+      "Wedge Antilles",
+      "Dak Ralter",
+      "Jek Porkins"
+    ],
+    "c": 1,
+    "difficulty": "medium",
+    "topic": "The Skywalker Saga",
+    "quote": "Corellian pilot Wedge Antilles (Red Two / Red Leader) survives the Battle of Yavin, fights at Hoth, and destroys the Death Star II power regulator with Lando."
+  },
+  {
+    "q": "In Episode I: The Phantom Menace, what exact midichlorian count reading does Obi-Wan Kenobi report from young Anakin Skywalker's blood sample?",
+    "a": [
+      "15,500 (equal to Qui-Gon Jinn)",
+      "Over 20,000 (even higher than Master Yoda)",
+      "50,000",
+      "Exactly 10,000"
+    ],
+    "c": 1,
+    "difficulty": "hard",
+    "topic": "The Skywalker Saga",
+    "quote": "When Qui-Gon transmits Anakin's blood test to Obi-Wan, Obi-Wan replies, 'The reading's off the chart... over 20,000. Even Master Yoda doesn't have a midichlorian count that high.'"
+  },
+  {
+    "q": "In Episode IV: A New Hope, which exact cell number inside Detention Block AA-23 was Princess Leia Organa held in on the first Death Star?",
+    "a": [
+      "Cell 4210",
+      "Cell 1138",
+      "Cell 3263",
+      "Cell 2187"
+    ],
+    "c": 3,
+    "difficulty": "hard",
+    "topic": "The Skywalker Saga",
+    "quote": "R2-D2 locates Princess Leia in Cell 2187 of Detention Block AA-23—a number inspired by Arthur Lipsett's short film 21-87 and later echoed in Finn's designation FN-2187."
+  },
+  {
+    "q": "What is the full eight-digit designation of the Death Star trash compactor on Detention Level that nearly crushes Luke, Han, Leia, and Chewbacca?",
+    "a": [
+      "1138421",
+      "9421870",
+      "3263827",
+      "5017567"
+    ],
+    "c": 2,
+    "difficulty": "hard",
+    "topic": "The Skywalker Saga",
+    "quote": "Desperate to stop the closing walls, Luke shouts into his comlink, 'Shut down all the garbage mashers on the detention level! ... 3263827!'"
+  },
+  {
+    "q": "In Episode III: Revenge of the Sith, which Cerean Jedi Master is gunned down by Commander Bacara and the Galactic Marines on the snow-covered bridges of Mygeeto?",
+    "a": [
+      "Stass Allie",
+      "Ki-Adi-Mundi",
+      "Plo Koon",
+      "Aayla Secura"
+    ],
+    "c": 1,
+    "difficulty": "hard",
+    "topic": "The Skywalker Saga",
+    "quote": "Jedi Council member Ki-Adi-Mundi is leading a charge across a bridge on Mygeeto when Commander Bacara and his Galactic Marines execute Order 66."
+  },
+  {
+    "q": "On which lush jungle planet covered in giant pitcher plants and fungi is Twi'lek Jedi General Aayla Secura killed by Commander Bly and the 327th Star Corps?",
+    "a": [
+      "Saleucami",
+      "Cato Neimoidia",
+      "Boz Pity",
+      "Felucia"
+    ],
+    "c": 3,
+    "difficulty": "hard",
+    "topic": "The Skywalker Saga",
+    "quote": "During Order 66 in Revenge of the Sith, Commander Bly and the 327th Star Corps shoot down Jedi General Aayla Secura on the colorful fungal world of Felucia."
+  },
+  {
+    "q": "In Episode II: Attack of the Clones, what is the name of Obi-Wan Kenobi's four-armed Besalisk friend who runs a 1950s-style diner on Coruscant and identifies the Kamino saberdart?",
+    "a": [
+      "Seboca",
+      "Elan Sleazebaggano",
+      "W. Wald",
+      "Dexter Jettster"
+    ],
+    "c": 3,
+    "difficulty": "hard",
+    "topic": "The Skywalker Saga",
+    "quote": "Dexter Jettster, proprietor of Dex's Diner in CoCo Town on Coruscant, identifies the toxic dart that killed Zam Wesell as a Kamino saberdart."
+  },
+  {
+    "q": "What is the name of the icy, spice-runners' mountain planet in Episode IX: The Rise of Skywalker where Poe Dameron reunites with Zorii Bliss and droidsmith Babu Frik?",
+    "a": [
+      "Pasaana",
+      "Cantonica",
+      "Ajan Kloss",
+      "Kijimi"
+    ],
+    "c": 3,
+    "difficulty": "hard",
+    "topic": "The Skywalker Saga",
+    "quote": "The heroes travel to the frigid planet Kijimi to have the Anzellan droidsmith Babu Frik bypass C-3PO's programming restrictions and translate the Sith dagger."
+  },
+  {
+    "q": "In Episode VI: Return of the Jedi, which A-wing pilot (Green Leader) sacrifices himself by crashing his crippled starfighter directly into the bridge of the Super Star Destroyer Executor?",
+    "a": [
+      "Arvel Crynyd",
+      "Horton Salm",
+      "Ten Numb",
+      "Nien Nunb"
+    ],
+    "c": 0,
+    "difficulty": "hard",
+    "topic": "The Skywalker Saga",
+    "quote": "After the Executor's bridge deflector shields drop, Green Leader Arvel Crynyd spirals his damaged RZ-1 A-wing through the bridge viewport, sending the dreadnought into the Death Star II."
+  },
+  {
+    "q": "In Episode V: The Empire Strikes Back, who serves as Luke Skywalker's snowspeeder tail gunner during the Battle of Hoth before being killed when their rear harpoon gun is hit?",
+    "a": [
+      "Dak Ralter",
+      "Wes Janson",
+      "Hobbie Klivian",
+      "Zev Senesca"
+    ],
+    "c": 0,
+    "difficulty": "hard",
+    "topic": "The Skywalker Saga",
+    "quote": "Luke's enthusiastic Rogue Group snowspeeder gunner Dak Ralter boasts that he feels he could 'take on the whole Empire myself' shortly before being killed in action on Hoth."
+  },
+  {
+    "q": "What is the rebel callsign of pilot Zev Senesca, who locates Han Solo and Luke Skywalker on the frozen plains of Hoth the morning after they go missing?",
+    "a": [
+      "Gold Five",
+      "Rogue Two",
+      "Red Six",
+      "Rogue Three"
+    ],
+    "c": 1,
+    "difficulty": "hard",
+    "topic": "The Skywalker Saga",
+    "quote": "Flying a T-47 airspeeder, Zev Senesca reports in over the comm: 'Echo Base, this is Rogue Two. I found them. Repeat, I found them.'"
+  },
+  {
+    "q": "In Episode III: Revenge of the Sith, which isolated asteroid medical facility is where Padmé Amidala gives birth to twins Luke and Leia before passing away?",
+    "a": [
+      "Polis Massa",
+      "Kessel",
+      "Ord Mantell",
+      "Rishi Moon"
+    ],
+    "c": 0,
+    "difficulty": "hard",
+    "topic": "The Skywalker Saga",
+    "quote": "Bail Organa, Yoda, and Obi-Wan bring the mortally stricken Padmé Amidala to the subterranean medical center on the asteroid colony of Polis Massa."
+  },
+  {
+    "q": "In Episode II: Attack of the Clones, who is the Archduke of Geonosis who oversees the battle droid foundries and hands Count Dooku the ultimate weapon (Death Star) holographic plans?",
+    "a": [
+      "Poggle the Lesser",
+      "Sun Fac",
+      "Wat Tambor",
+      "Shu Mai"
+    ],
+    "c": 0,
+    "difficulty": "hard",
+    "topic": "The Skywalker Saga",
+    "quote": "Archduke Poggle the Lesser of the Stalgasin Hive entrusts the Geonosian blueprints for the Ultimate Weapon to Count Dooku before Dooku flees to Coruscant."
+  },
+  {
+    "q": "In Episode IX: The Rise of Skywalker, on which ocean moon in the Endor system do Rey, Finn, and Poe find the submerged wreckage of the second Death Star and fight the Orbak cavalry charge?",
+    "a": [
+      "Forest Moon of Endor",
+      "Yavin 8",
+      "Pasaana",
+      "Kef Bir"
+    ],
+    "c": 3,
+    "difficulty": "hard",
+    "topic": "The Skywalker Saga",
+    "quote": "Jannah and her tribe of former First Order stormtroopers live on Kef Bir, an ocean moon of Endor where the Emperor's throne room wreckage lies in the surf."
+  },
+  {
+    "q": "In Episode I: The Phantom Menace, who serves as Queen Padmé Amidala's loyal handmaiden decoy ('Queen') during much of the crisis on Tatooine and Coruscant?",
+    "a": [
+      "Dormé",
+      "Rabé",
+      "Cordé",
+      "Sabé"
+    ],
+    "c": 3,
+    "difficulty": "hard",
+    "topic": "The Skywalker Saga",
+    "quote": "Handmaiden Sabé (played by Keira Knightley) impersonates Queen Amidala in full royal regalia while Padmé poses as a simple handmaiden on Tatooine."
+  },
+  {
+    "q": "Which Imperial Admiral is Force-choked to death by Darth Vader in Episode V for coming out of lightspeed too close to the Hoth system, resulting in Captain Piett's immediate promotion?",
+    "a": [
+      "Moff Tiaan Jerjerrod",
+      "Admiral Kendal Ozzel",
+      "General Maximilian Veers",
+      "Captain Lorth Needa"
+    ],
+    "c": 1,
+    "difficulty": "hard",
+    "topic": "The Skywalker Saga",
+    "quote": "Furious that the Rebel base detected the fleet and raised its energy shield, Vader tells Captain Piett, 'You are in command now, Admiral Piett,' while choking Admiral Ozzel over a viewscreen."
+  },
+  {
+    "q": "In Episode IX: The Rise of Skywalker, which Allegiant General of the First Order executes the traitor General Hux after realizing Hux is the Resistance spy?",
+    "a": [
+      "General Domaric Quinn",
+      "Commander Pyre",
+      "Captain Canady",
+      "Allegiant General Enric Pryde"
+    ],
+    "c": 3,
+    "difficulty": "hard",
+    "topic": "The Skywalker Saga",
+    "quote": "Veteran Imperial and First Order officer Allegiant General Enric Pryde immediately sees through Hux's cover story and shoots him dead with a blaster."
+  },
+  {
+    "q": "What is the exact inscription translated by C-3PO from the ancient Ochi of Bestoon Sith blade in Episode IX that gives the coordinates to the Emperor's Wayfinder?",
+    "a": [
+      "'In the shadow of Mustafar's fortress lies the compass of Darth Plagueis.'",
+      "'Only the blood of the dyad may unlock the gate of Exegol beyond the Red Nebula.'",
+      "'The Emperor's wayfinder is in the imperial vault. At delta 3-6, transient 9-3-6, bearing 3-2, on a southwest spire in the southern shore.'",
+      "'Seek the throne of the Dark Lord beneath the twin suns of Korriban at the third eclipse.'"
+    ],
+    "c": 2,
+    "difficulty": "hard",
+    "topic": "The Skywalker Saga",
+    "quote": "After Babu Frik reboots C-3PO on Kijimi, C-3PO translates the Runes of the Sith etched into Ochi's dagger pointing to the Imperial vault on Kef Bir."
+  },
+  {
+    "q": "In Episode IV: A New Hope, what is the name of the Imperial officer who insults Darth Vader's 'sad devotion to that ancient religion' in the Death Star conference room before being Force-choked?",
+    "a": [
+      "General Cassio Tagge",
+      "Chief Bast",
+      "Admiral Conan Antonio Motti",
+      "Colonel Wullf Yularen"
+    ],
+    "c": 2,
+    "difficulty": "hard",
+    "topic": "The Skywalker Saga",
+    "quote": "Admiral Motti mocks Vader's inability to conjure up the stolen data tapes via the Force, prompting Vader to utter, 'I find your lack of faith disturbing.'"
+  },
+  {
+    "q": "In Episode VII: The Force Awakens, how many Portions does the Crolute junk boss Unkar Plutt offer Rey in exchange for the astromech droid BB-8 at Niima Outpost?",
+    "a": [
+      "60 portions",
+      "100 portions",
+      "Quarter portion",
+      "25 portions"
+    ],
+    "c": 0,
+    "difficulty": "hard",
+    "topic": "The Skywalker Saga",
+    "quote": "After offering Rey only a quarter portion for her scavenged Star Destroyer parts, Unkar Plutt offers a massive 60 portions for BB-8—which Rey refuses."
+  },
+  {
+    "q": "In Episode VI: Return of the Jedi, who is the Sullustan co-pilot sitting beside Lando Calrissian in the cockpit of the Millennium Falcon during the Battle of Endor?",
+    "a": [
+      "Droopy McCool",
+      "Nien Nunb",
+      "Orrimaarko",
+      "Ten Numb"
+    ],
+    "c": 1,
+    "difficulty": "hard",
+    "topic": "The Skywalker Saga",
+    "quote": "Sullustan smuggler and Rebel Alliance hero Nien Nunb co-pilots the Millennium Falcon with General Lando Calrissian into the superstructure of the second Death Star."
+  },
+  {
+    "q": "Who is the main protagonist of Rogue One: A Star Wars Story, recruited by the Rebel Alliance to locate her father and steal the Death Star plans?",
+    "a": [
+      "Hera Syndulla",
+      "Qi'ra",
+      "Jyn Erso",
+      "Mon Mothma"
+    ],
+    "c": 2,
+    "difficulty": "easy",
+    "topic": "Rogue One: A Star Wars Story",
+    "quote": "Jyn Erso, daughter of reluctant Imperial weapons scientist Galen Erso, leads the Rogue One strike team to Scarif."
+  },
+  {
+    "q": "What is the affectionate nickname Galen Erso gives his daughter Jyn, which also serves as the code name for the Death Star project files in the Scarif vault?",
+    "a": [
+      "Little Star",
+      "Nova",
+      "Stardust",
+      "Sunbeam"
+    ],
+    "c": 2,
+    "difficulty": "easy",
+    "topic": "Rogue One: A Star Wars Story",
+    "quote": "Galen Erso calls Jyn 'Stardust,' enabling her to immediately recognize the 'Stardust' tape in the Citadel Tower data vault on Scarif."
+  },
+  {
+    "q": "Which sarcastic, reprogrammed Imperial KX-series security droid serves as Cassian Andor's loyal companion in Rogue One?",
+    "a": [
+      "L3-37",
+      "IG-11",
+      "AP-5",
+      "K-2SO"
+    ],
+    "c": 3,
+    "difficulty": "easy",
+    "topic": "Rogue One: A Star Wars Story",
+    "quote": "Voiced by Alan Tudyk, K-2SO is a reprogrammed Imperial KX-series security droid who sacrifices himself holding off stormtroopers in the Scarif vault."
+  },
+  {
+    "q": "On which tropical, shield-gated Imperial security planet are the Death Star structural blueprints stored and stolen in the climax of Rogue One?",
+    "a": [
+      "Scarif",
+      "Lah'mu",
+      "Jedha",
+      "Eadu"
+    ],
+    "c": 0,
+    "difficulty": "easy",
+    "topic": "Rogue One: A Star Wars Story",
+    "quote": "The Imperial security complex and Citadel Tower housing the Stardust plans are located on the tropical world of Scarif."
+  },
+  {
+    "q": "What famous two-line mantra does the blind Guardian of the Whills, Chirrut Îmwe, chant repeatedly while walking through blaster fire on Scarif?",
+    "a": [
+      "'May the Force be with us always.'",
+      "'I am one with the Force, and the Force is with me.'",
+      "'There is no emotion, there is peace.'",
+      "'Light and darkness are one in the Force.'"
+    ],
+    "c": 1,
+    "difficulty": "easy",
+    "topic": "Rogue One: A Star Wars Story",
+    "quote": "Chirrut Îmwe walks across the Scarif battlefield to throw the master communications switch while chanting, 'I am one with the Force, and the Force is with me.'"
+  },
+  {
+    "q": "Which ruthless Imperial Director of Advanced Weapons Research oversees the construction of the Death Star and clashes with Grand Moff Tarkin in Rogue One?",
+    "a": [
+      "Admiral Kassius Konstantine",
+      "General Hurst Romodi",
+      "Moff Gideon",
+      "Director Orson Krennic"
+    ],
+    "c": 3,
+    "difficulty": "easy",
+    "topic": "Rogue One: A Star Wars Story",
+    "quote": "Director Orson Krennic forces Galen Erso to complete the Death Star's superlaser, only for Grand Moff Tarkin to take command of the battle station."
+  },
+  {
+    "q": "In the final scene of Rogue One, which iconic character receives the data card containing the Death Star plans aboard the blockade runner Tantive IV?",
+    "a": [
+      "Luke Skywalker",
+      "Mon Mothma",
+      "Princess Leia Organa",
+      "Bail Organa"
+    ],
+    "c": 2,
+    "difficulty": "easy",
+    "topic": "Rogue One: A Star Wars Story",
+    "quote": "After Rebel troopers pass the data disk through a jammed door away from Darth Vader's lightsaber, Princess Leia receives it and declares it brings 'Hope.'"
+  },
+  {
+    "q": "Which extreme Rebel insurgent leader—originally introduced on Onderon in The Clone Wars—raised Jyn Erso and leads the Partisans on Jedha?",
+    "a": [
+      "Bail Organa",
+      "General Jan Dodonna",
+      "Saw Gerrera",
+      "Cham Syndulla"
+    ],
+    "c": 2,
+    "difficulty": "medium",
+    "topic": "Rogue One: A Star Wars Story",
+    "quote": "Saw Gerrera (played by Forest Whitaker) rescued a young Jyn Erso on Lah'mu and leads a militant Partisan insurgency from the Catacombs of Cadera on Jedha."
+  },
+  {
+    "q": "Who is the Imperial cargo shuttle pilot who defects on Galen Erso's instructions, delivers the hologram to Saw Gerrera, and invents the callsign 'Rogue One'?",
+    "a": [
+      "Baze Malbus",
+      "Bodhi Rook",
+      "Tivik",
+      "Cassian Andor"
+    ],
+    "c": 1,
+    "difficulty": "medium",
+    "topic": "Rogue One: A Star Wars Story",
+    "quote": "Jedha native and former Imperial cargo pilot Bodhi Rook defects with Galen's message and names their stolen Zeta-class shuttle 'Rogue One' as they leave Yavin 4."
+  },
+  {
+    "q": "Who is Chirrut Îmwe's heavily armed best friend and fellow former Guardian of the Whills, who carries a repeating heavy blaster cannon on his back?",
+    "a": [
+      "Moroff",
+      "Baze Malbus",
+      "Pao",
+      "Bistan"
+    ],
+    "c": 1,
+    "difficulty": "medium",
+    "topic": "Rogue One: A Star Wars Story",
+    "quote": "Baze Malbus protects Chirrut Îmwe from Jedha to Scarif, where he avenges Chirrut's death in a final stand against Imperial death troopers."
+  },
+  {
+    "q": "Why is the ancient desert moon of Jedha strategically vital to the Empire's completion of the Death Star superlaser in Rogue One?",
+    "a": [
+      "It is the headquarters of the Tarkin Initiative",
+      "It produces the tibanna gas used in Imperial Star Destroyers",
+      "It houses the hyperdrive core foundry for the Death Star",
+      "It is a rich source of kyber crystals, which the Empire is strip-mining from the Temple of the Kyber"
+    ],
+    "c": 3,
+    "difficulty": "medium",
+    "topic": "Rogue One: A Star Wars Story",
+    "quote": "The Star Destroyer above Jedha Holy City extracts massive quantities of kyber crystals from the sacred Temple of the Whills to power the Death Star's superlaser."
+  },
+  {
+    "q": "On which stormy, rocky mountain planet does Galen Erso run the Empire's kyber-crystal weapons research facility before a Rebel X-wing bombing raid mortally wounds him?",
+    "a": [
+      "Lah'mu",
+      "Kafrene",
+      "Wobani",
+      "Eadu"
+    ],
+    "c": 3,
+    "difficulty": "medium",
+    "topic": "Rogue One: A Star Wars Story",
+    "quote": "Jyn, Cassian, and K-2SO crash-land on the rain-lashed cliffs of Eadu, where Galen Erso dies in Jyn's arms during an Alliance squadron bombing run."
+  },
+  {
+    "q": "On which remote, black-sand agricultural planet are Galen, Lyra, and young Jyn Erso hiding in the opening sequence of Rogue One when Director Krennic arrives?",
+    "a": [
+      "Dantooine",
+      "Lothal",
+      "Atollon",
+      "Lah'mu"
+    ],
+    "c": 3,
+    "difficulty": "medium",
+    "topic": "Rogue One: A Star Wars Story",
+    "quote": "Galen and Lyra Erso hide on a remote homestead on the black-sand planet Lah'mu until Director Krennic and his death troopers track them down."
+  },
+  {
+    "q": "Where is Darth Vader's dark castle—complete with his bacta tank overlooking a river of lava—located when Director Krennic visits him in Rogue One?",
+    "a": [
+      "Mustafar",
+      "Exegol",
+      "Coruscant",
+      "Malachor"
+    ],
+    "c": 0,
+    "difficulty": "medium",
+    "topic": "Rogue One: A Star Wars Story",
+    "quote": "Director Krennic travels to Fortress Vader on the volcanic world of Mustafar, where Vader Force-chokes him and warns, 'Be careful not to choke on your aspirations, Director.'"
+  },
+  {
+    "q": "Which Mon Calamari Admiral defies the fracturing Rebel Council on Yavin 4 and leads the Alliance Fleet aboard the flagship Profundity to reinforce Rogue One at Scarif?",
+    "a": [
+      "General Crix Madine",
+      "Admiral Raddus",
+      "General Antoc Merrick",
+      "Admiral Gial Ackbar"
+    ],
+    "c": 1,
+    "difficulty": "hard",
+    "topic": "Rogue One: A Star Wars Story",
+    "quote": "Upon hearing that Jyn's team is already fighting on Scarif, Admiral Raddus boards the MC75 Star Cruiser Profundity and brings the Rebel fleet into the Battle of Scarif."
+  },
+  {
+    "q": "In Rogue One, what is the name of the fearsome cephalopod-like creature that Saw Gerrera uses on Jedha to read Bodhi Rook's mind at the risk of making him lose his sanity?",
+    "a": [
+      "Dianoga",
+      "Bor Gullet",
+      "Summa-verminoth",
+      "Rancor"
+    ],
+    "c": 1,
+    "difficulty": "hard",
+    "topic": "Rogue One: A Star Wars Story",
+    "quote": "Saw Gerrera subjects the defecting pilot Bodhi Rook to a Mairan mind-reading creature named Bor Gullet, warning, 'Bor Gullet will know the truth!'"
+  },
+  {
+    "q": "At the beginning of Rogue One, Cassian Andor meets his injured Rebel informant Tivik on which crowded asteroid trading outpost inside an asteroid belt?",
+    "a": [
+      "The Ring of Kafrene",
+      "Ord Mantell",
+      "Polis Massa",
+      "Oba Diah"
+    ],
+    "c": 0,
+    "difficulty": "hard",
+    "topic": "Rogue One: A Star Wars Story",
+    "quote": "Cassian Andor first learns of Galen Erso's defection and the planet-killer weapon from the anxious Onderon informant Tivik at the Ring of Kafrene trading post."
+  },
+  {
+    "q": "From which grim Imperial labor-camp planet do Rebel forces rescue Jyn Erso (under her alias Liana Hallik) from a turbo-tank prison transport near the start of Rogue One?",
+    "a": [
+      "Wobani",
+      "Mimban",
+      "Vandor",
+      "Narkina 5"
+    ],
+    "c": 0,
+    "difficulty": "hard",
+    "topic": "Rogue One: A Star Wars Story",
+    "quote": "A Rebel Extraction team led by Melshi frees Jyn Erso from an Imperial HCVw A9 turbo tank at Labor Camp LEG-817 on the bleak planet Wobani."
+  },
+  {
+    "q": "During the space battle over Scarif, what tactic does Admiral Raddus use to break through the impenetrable planetary shield gate before it can be re-opened?",
+    "a": [
+      "He orders Blue Squadron Y-wings to drop proton bombs down the shield gate's central reactor shaft",
+      "He hyperspace-jumps a Corellian corvette straight through the gate's aperture",
+      "He has a Lightmaker Hammerhead corvette ram a disabled Imperial Star Destroyer into a second Star Destroyer, slicing through the shield gate station",
+      "He fires an ion cannon barrage from the Profundity directly into the shield generator reactors"
+    ],
+    "c": 2,
+    "difficulty": "hard",
+    "topic": "Rogue One: A Star Wars Story",
+    "quote": "After Gold Squadron disables an Imperial I-class Star Destroyer with ion torpedoes, Raddus orders a Sphyrna-class Hammerhead corvette to push it into a second Star Destroyer, crashing both onto the Shield Gate."
+  },
+  {
+    "q": "Who is the Rebel Alliance General and Blue Leader who leads his X-wing and U-wing squadron through the Scarif shield gate before being shot down in the ground battle?",
+    "a": [
+      "General Davits Draven",
+      "General Vanden Willard",
+      "General Antoc Merrick (Blue Leader)",
+      "General Jan Dodonna"
+    ],
+    "c": 2,
+    "difficulty": "hard",
+    "topic": "Rogue One: A Star Wars Story",
+    "quote": "General Antoc Merrick leads Blue Squadron through the Scarif Shield Gate just before it closes to provide air support for Jyn and Cassian's ground team."
+  },
+  {
+    "q": "What is the real birth name of the titular bounty hunter in The Mandalorian?",
+    "a": [
+      "Paz Vizsla",
+      "Boba Fett",
+      "Din Djarin",
+      "Pre Vizsla"
+    ],
+    "c": 2,
+    "difficulty": "easy",
+    "topic": "The Mandalorian",
+    "quote": "Moff Gideon reveals in Season 1 ('Chapter 8: Redemption') that the Mandalorian's true name is Din Djarin, a foundling rescued during the Clone Wars."
+  },
+  {
+    "q": "What is the sacred creed phrase repeated by Din Djarin and the Children of the Watch whenever affirming their strict Mandalorian code?",
+    "a": [
+      "'For Mandalore!'",
+      "'This is the Way.'",
+      "'Honor and Beskar.'",
+      "'Never remove the helm.'"
+    ],
+    "c": 1,
+    "difficulty": "easy",
+    "topic": "The Mandalorian",
+    "quote": "Members of the Children of the Watch covert affirm their adherence to the ancient Way of the Mand'alor with the phrase, 'This is the Way.'"
+  },
+  {
+    "q": "Which former Jedi reveal in Season 2 ('Chapter 13: The Jedi') that 'The Child' is actually named Grogu and was raised at the Jedi Temple on Coruscant?",
+    "a": [
+      "Luke Skywalker",
+      "Kanan Jarrus",
+      "Obi-Wan Kenobi",
+      "Ahsoka Tano"
+    ],
+    "c": 3,
+    "difficulty": "easy",
+    "topic": "The Mandalorian",
+    "quote": "On the forest world of Corvus, Ahsoka Tano communicates with the Child through the Force and tells Din Djarin his name is Grogu."
+  },
+  {
+    "q": "What precious, nearly indestructible Mandalorian alloy—capable of deflecting blaster fire and lightsaber strikes—is used to forge Din Djarin's armor?",
+    "a": [
+      "Durasteel",
+      "Phrik",
+      "Beskar",
+      "Cortosis"
+    ],
+    "c": 2,
+    "difficulty": "easy",
+    "topic": "The Mandalorian",
+    "quote": "The Armorer melts down Imperial-stamped ingots of sacred Mandalorian iron—Beskar—to forge Din Djarin's cuirass, pauldrons, and Grogu's chainmail shirt."
+  },
+  {
+    "q": "What is the name of Din Djarin's pre-Empire patrol gunship that serves as his home until it is destroyed by Moff Gideon's cruiser on Tython?",
+    "a": [
+      "Gauntlet",
+      "Razor Crest",
+      "Ghost",
+      "Slave I"
+    ],
+    "c": 1,
+    "difficulty": "easy",
+    "topic": "The Mandalorian",
+    "quote": "The Razor Crest is an ST-70 Assault Ship that serves as Din Djarin's bounty-hunting vessel until Moff Gideon's Arquitens-class light cruiser destroys it in Season 2."
+  },
+  {
+    "q": "Who is the primary Imperial remnant antagonist across Seasons 1–3 of The Mandalorian, who wields the Darksaber and covets Grogu's high-M-count blood?",
+    "a": [
+      "General Hux",
+      "Moff Gideon",
+      "Director Krennic",
+      "Grand Admiral Thrawn"
+    ],
+    "c": 1,
+    "difficulty": "easy",
+    "topic": "The Mandalorian",
+    "quote": "Former ISB officer Moff Gideon commands an Imperial remnant, wields the stolen Mandalorian Darksaber, and uses Dr. Pershing to harvest Grogu's blood."
+  },
+  {
+    "q": "What catchphrase does the Ugnaught moisture farmer Kuiil frequently use to end an argument or confirm a decision in Season 1 of The Mandalorian?",
+    "a": [
+      "'No more words.'",
+      "'So it shall be.'",
+      "'It is done.'",
+      "'I have spoken.'"
+    ],
+    "c": 3,
+    "difficulty": "easy",
+    "topic": "The Mandalorian",
+    "quote": "On Arvala-7, the wise former Imperial indentured servant Kuiil punctuates his declarations with the phrase, 'I have spoken.'"
+  },
+  {
+    "q": "Which legendary Jedi Master arrives aboard Moff Gideon's cruiser in a single X-wing at the end of Season 2 to destroy the Dark Troopers and train Grogu?",
+    "a": [
+      "Mace Windu",
+      "Ezra Bridger",
+      "Luke Skywalker",
+      "Cal Kestis"
+    ],
+    "c": 2,
+    "difficulty": "easy",
+    "topic": "The Mandalorian",
+    "quote": "Answering Grogu's call from the seeing stone on Tython, Luke Skywalker boards Moff Gideon's light cruiser with R2-D2, defeats the Dark Trooper platoon, and takes Grogu to train."
+  },
+  {
+    "q": "Who is the head of the Bounty Hunters' Guild (and later High Magistrate of Nevarro) who starts as Din Djarin's contact and becomes one of his closest allies?",
+    "a": [
+      "Greef Karga",
+      "Peli Motto",
+      "Mayfeld",
+      "Cara Dune"
+    ],
+    "c": 0,
+    "difficulty": "easy",
+    "topic": "The Mandalorian",
+    "quote": "Played by Carl Weathers, Greef Karga runs the Bounty Hunters' Guild on Nevarro before becoming High Magistrate of the thriving trade hub."
+  },
+  {
+    "q": "Which bounty hunter droid attempts to terminate Grogu in Chapter 1, is rebuilt and reprogrammed by Kuiil as a nurse droid, and self-destructs to save the team in the Season 1 finale?",
+    "a": [
+      "IG-11",
+      "4-LOM",
+      "HK-47",
+      "IG-88"
+    ],
+    "c": 0,
+    "difficulty": "easy",
+    "topic": "The Mandalorian",
+    "quote": "Reprogrammed by Kuiil to nurse and protect Grogu, IG-11 wades into a river of lava on Nevarro and self-destructs to eliminate an ambush of stormtroopers."
+  },
+  {
+    "q": "Which former Rebel Shock Trooper from Alderaan teams up with Din Djarin in Season 1 and later serves as Marshal of Nevarro?",
+    "a": [
+      "Bo-Katan Kryze",
+      "Cara Dune (Carasynthia Dune)",
+      "Fennec Shand",
+      "Koska Reeves"
+    ],
+    "c": 1,
+    "difficulty": "medium",
+    "topic": "The Mandalorian",
+    "quote": "Former Rebel Alliance Drop Trooper Carasynthia 'Cara' Dune of Alderaan helps Din Djarin defend Sorgan and Nevarro before becoming a New Republic Marshal."
+  },
+  {
+    "q": "After the Razor Crest is destroyed, what modified prequel-era starfighter does Din Djarin rebuild with mechanic Peli Motto on Tatooine?",
+    "a": [
+      "A Jedi Eta-2 Actis Interceptor",
+      "A V-wing Starfighter",
+      "An ARC-170 Starfighter",
+      "A modified Naboo N-1 Starfighter"
+    ],
+    "c": 3,
+    "difficulty": "medium",
+    "topic": "The Mandalorian",
+    "quote": "Peli Motto and her Jawa and pit-droid crew help Din Djarin strip down and hot-rod a vintage Chrome-plated Naboo N-1 Starfighter, replacing the droid socket with a bubble dome for Grogu."
+  },
+  {
+    "q": "Who is the Lawman (Marshal) of Mos Pelgo (later Freetown) on Tatooine who wears Boba Fett's recovered Mandalorian armor in Season 2 ('Chapter 9: The Marshal')?",
+    "a": [
+      "Migs Mayfeld",
+      "Gor Koresh",
+      "Axe Woves",
+      "Cobb Vanth"
+    ],
+    "c": 3,
+    "difficulty": "medium",
+    "topic": "The Mandalorian",
+    "quote": "Marshal Cobb Vanth trades stolen mining crystals to Jawas for Boba Fett's acid-scarred beskar armor to protect Mos Pelgo and later teams up with Din Djarin to slay a greater krayt dragon."
+  },
+  {
+    "q": "Why does Bo-Katan Kryze refuse to simply accept the Darksaber when Din Djarin offers to hand it to her at the end of Season 2?",
+    "a": [
+      "The kyber crystal inside the Darksaber only responds to a Force-sensitive wielder",
+      "She believes the blade was cursed after Moff Gideon wielded it during the Night of a Thousand Tears",
+      "According to Mandalorian creed, the Darksaber must be won in combat to grant a legitimate claim to the throne of Mandalore",
+      "Only a member of the Children of the Watch may hold the blade"
+    ],
+    "c": 2,
+    "difficulty": "medium",
+    "topic": "The Mandalorian",
+    "quote": "Because Din Djarin defeated Moff Gideon in single combat, he became the rightful owner of the Darksaber; Bo-Katan cannot accept it as a gift without winning it in battle."
+  },
+  {
+    "q": "On which ancient Jedi planet does Din Djarin place Grogu atop the seeing stone at the henge ruins in Season 2 ('Chapter 14: The Tragedy') so Grogu can reach out to a Jedi?",
+    "a": [
+      "Ilum",
+      "Corvus",
+      "Ossus",
+      "Tython"
+    ],
+    "c": 3,
+    "difficulty": "medium",
+    "topic": "The Mandalorian",
+    "quote": "Following Ahsoka Tano's directions, Din brings Grogu to the ancient Jedi seeing stone on top of a mountain on Tython, where Grogu enters a protective Force field."
+  },
+  {
+    "q": "In Season 3 of The Mandalorian, how does Bo-Katan Kryze legitimately regain ownership of the Darksaber from Din Djarin without fighting him?",
+    "a": [
+      "Grogu uses the Force to pass the Darksaber from Din to Bo-Katan",
+      "The Armorer declares the rule of combat suspended after the Living Waters are rediscovered",
+      "A cyborg creature captures and disarms Din Djarin in the Mines of Mandalore, and Bo-Katan defeats that captor with the Darksaber—earning it by right of conquest",
+      "Din Djarin yields to Bo-Katan during an honorable sparring duel on Kalevala"
+    ],
+    "c": 2,
+    "difficulty": "medium",
+    "topic": "The Mandalorian",
+    "quote": "Din Djarin explains before Axe Woves and the Nite Owls that when the subterranean cyborg trapped him on Mandalore, Bo-Katan slew the enemy that defeated him, making the Darksaber rightfully hers."
+  },
+  {
+    "q": "Which gigantic, legendary Mandalorian beast—long thought to be mere myth—does Bo-Katan Kryze witness alive beneath the Living Waters in the Mines of Mandalore in Season 3?",
+    "a": [
+      "A Greater Krayt Dragon",
+      "A living Mythosaur",
+      "A Purrgil Ultra",
+      "A Zillo Beast"
+    ],
+    "c": 1,
+    "difficulty": "medium",
+    "topic": "The Mandalorian",
+    "quote": "When Bo-Katan dives into the Living Waters beneath Sundari to rescue a sinking Din Djarin, she comes face-to-face with a living Mythosaur in the depths."
+  },
+  {
+    "q": "What is the name of the enthusiastic Tatooine hangar mechanic at Mos Eisley (Bay three-five) who frequently babysits Grogu with her trio of pit droids?",
+    "a": [
+      "Xi'an",
+      "Peli Motto",
+      "Drash",
+      "Omera"
+    ],
+    "c": 1,
+    "difficulty": "medium",
+    "topic": "The Mandalorian",
+    "quote": "Played by Amy Sedaris, Peli Motto runs Hangar 3-5 at Mos Eisley spaceport on Tatooine, repairs the Razor Crest, and builds Din's custom N-1 starfighter."
+  },
+  {
+    "q": "In Season 2 ('Chapter 15: The Believer'), which sharp-tongued former Imperial sharpshooter is temporarily released from the Karthon Chop Fields by Cara Dune to help Din infiltrate an Imperial rhydonium refinery on Morak?",
+    "a": [
+      "Burg",
+      "Migs Mayfeld",
+      "Q9-0 (Zero)",
+      "Ranzar Malk"
+    ],
+    "c": 1,
+    "difficulty": "medium",
+    "topic": "The Mandalorian",
+    "quote": "Played by Bill Burr, former Imperial sharpshooter Migs Mayfeld helps Din Djarin infiltrate the secret Imperial rhydonium refinery on Morak to obtain Moff Gideon's cruiser coordinates."
+  },
+  {
+    "q": "During the infiltration of the Imperial refinery on Morak in Season 2, what strict rule of his creed does Din Djarin break in front of Imperial troops in order to access the terminal?",
+    "a": [
+      "He surrenders his beskar spear to an Imperial officer",
+      "He swears an oath of loyalty to the Galactic Empire",
+      "He abandons a fellow Mandalorian foundling in battle",
+      "He removes his helmet and allows his bare face to be scanned by the Imperial facial-recognition terminal"
+    ],
+    "c": 3,
+    "difficulty": "medium",
+    "topic": "The Mandalorian",
+    "quote": "Because Mayfeld cannot risk being recognized by his former commanding officer Valin Hess, Din Djarin removes his Juggernaut driver helmet to scan his face for Grogu's sake."
+  },
+  {
+    "q": "What is the name of the Imperial cloning scientist (bearing the Kaminoan cloner patch) who tries to protect Grogu while extracting his blood for Moff Gideon?",
+    "a": [
+      "Brendol Hux",
+      "Dr. Penn Pershing",
+      "Dr. Royce Hemlock",
+      "Elia Kane"
+    ],
+    "c": 1,
+    "difficulty": "hard",
+    "topic": "The Mandalorian",
+    "quote": "Dr. Penn Pershing wears a uniform bearing the symbol of the Kaminoan cloners while conducting M-count blood transfusion experiments for Moff Gideon before being betrayed by Elia Kane on Coruscant."
+  },
+  {
+    "q": "Which Jedi Master personally rescued young Grogu from the burning Jedi Temple on Coruscant during Order 66, as shown in Grogu's Season 3 flashback?",
+    "a": [
+      "Master Shaak Ti",
+      "Master Cin Drallig",
+      "Master Kelleran Beq",
+      "Master Jocasta Nu"
+    ],
+    "c": 2,
+    "difficulty": "hard",
+    "topic": "The Mandalorian",
+    "quote": "In 'Chapter 20: The Foundling' (Season 3), Jedi Master Kelleran Beq (played by Ahmed Best) dual-wields lightsabers to fight off the 501st Legion and escapes Coruscant with Grogu in a Naboo yacht."
+  },
+  {
+    "q": "When Din Djarin asks the Armorer in Season 3 to repurpose his pure beskar spear because it can pierce Mandalorian armor, what two items does she forge from it?",
+    "a": [
+      "Pauldrons for Paz Vizsla's son Ragnar and a new signet",
+      "A tiny beskar chainmail tunic for Grogu and replacement armor plating",
+      "A new whistling bird launcher and a beskar vibroblade",
+      "A beskar shield for Bo-Katan and a helmet crest"
+    ],
+    "c": 1,
+    "difficulty": "hard",
+    "topic": "The Mandalorian",
+    "quote": "In 'The Book of Boba Fett' / Season 3 arc, the Armorer melts down Din's beskar spear and crafts a miniature beskar chainmail shirt for Grogu."
+  },
+  {
+    "q": "What two-animal signet does the Armorer bestow upon Din Djarin at the end of Season 1, declaring him and Grogu a 'clan of two'?",
+    "a": [
+      "The Krykna signet",
+      "The Mythosaur signet",
+      "The Shriek-hawk signet",
+      "The Mudhorn signet"
+    ],
+    "c": 3,
+    "difficulty": "hard",
+    "topic": "The Mandalorian",
+    "quote": "Because Din Djarin defeated the Mudhorn on Arvala-7 only with the uncredited Force assistance of Grogu, the Armorer brands the Mudhorn signet onto his right pauldron."
+  },
+  {
+    "q": "In Season 3 ('Chapter 22: Guns for Hire'), what empty Ig-11 chassis mech suit does the Anzellan droidsmith crew modify so Grogu can pilot it around Nevarro while pressing 'Yes' and 'No' buttons?",
+    "a": [
+      "IG-88B",
+      "LOM-12",
+      "IG-12",
+      "IG-100"
+    ],
+    "c": 2,
+    "difficulty": "hard",
+    "topic": "The Mandalorian",
+    "quote": "The Anzellan droidsmiths hollow out IG-11's torso into a cockpit mech suit dubbed IG-12, which Grogu pilots while repeatedly pressing the 'Yes' and 'No' vocalizer buttons."
+  },
+  {
+    "q": "Who is the Pirate King of the Gorian Shard gang who blockades Nevarro in his Corsair flagship in Season 3 before being defeated by Din Djarin and Bo-Katan?",
+    "a": [
+      "Kragan Gorr",
+      "Vane",
+      "Gorian Shard",
+      "Hondo Ohnaka"
+    ],
+    "c": 2,
+    "difficulty": "hard",
+    "topic": "The Mandalorian",
+    "quote": "Pirate King Gorian Shard bombards High Magistrate Greef Karga's city on Nevarro from hisCumulus-class Corsair until the Mandalorians liberate the planet and earn land on Nevarro."
+  },
+  {
+    "q": "In Season 3 ('Chapter 23: The Spies'), which heavy-infantry Mandalorian warrior stays behind at the Great Forge blast doors to hold off Moff Gideon's Beskar-armored troopers and three Praetorian Guards, sacrificing his life?",
+    "a": [
+      "Paz Vizsla",
+      "Koska Reeves",
+      "Ragnar Vizsla",
+      "Axe Woves"
+    ],
+    "c": 0,
+    "difficulty": "hard",
+    "topic": "The Mandalorian",
+    "quote": "Descendant of Tarre Vizsla, heavy-gunner Paz Vizsla single-handedly wipes out the remaining Imperial super commandos so his fellow Mandalorians can escape before falling to three Elite Praetorian Guards."
+  },
+  {
+    "q": "What happens to the Darksaber during the climactic battle of Season 3 ('Chapter 24: The Return') inside Moff Gideon's secret base on Mandalore?",
+    "a": [
+      "Bo-Katan drops it into the Living Waters as an offering to the Mythosaur",
+      "Moff Gideon crushes the hilt of the Darksaber in his powered Dark Trooper exosuit hand",
+      "Grogu uses it to slice through Gideon's electrostaff",
+      "The Armorer reforges it into a new crown for Mandalore"
+    ],
+    "c": 1,
+    "difficulty": "hard",
+    "topic": "The Mandalorian",
+    "quote": "Wearing his third-generation beskar Dark Trooper armor suit, Moff Gideon grabs Bo-Katan's hand and crushes the Darksaber's hilt before she, Din, and Grogu defeat him and Axe Woves crashes the Imperial cruiser into the base."
+  },
+  {
+    "q": "In Season 2 ('Chapter 13: The Jedi'), who is the cruel Magistrate of Calodan on the planet Corvus—a protégé of Grand Admiral Thrawn—who duels Ahsoka Tano with a pure beskar spear?",
+    "a": [
+      "Elia Kane",
+      "Rook Kast",
+      "Governor Arihnda Pryce",
+      "Morgan Elsbeth"
+    ],
+    "c": 3,
+    "difficulty": "hard",
+    "topic": "The Mandalorian",
+    "quote": "Nightsister survivor and naval industrialist Morgan Elsbeth rules the walled town of Calodan on Corvus until Ahsoka Tano defeats her and demands to know the location of her master, Grand Admiral Thrawn."
+  },
+  {
+    "q": "What formal adoption title and name does Din Djarin give Grogu before the Armorer at the end of Season 3 so Grogu can officially become a Mandalorian apprentice?",
+    "a": [
+      "Grogu Kryze",
+      "Grogu of Nevarro",
+      "Grogu Vizsla",
+      "Din Grogu"
+    ],
+    "c": 3,
+    "difficulty": "hard",
+    "topic": "The Mandalorian",
+    "quote": "Because Grogu is too young to speak the Creed himself, Din Djarin formally adopts him as his son, naming him 'Din Grogu,' and they settle in a cabin near Nevarro city."
+  },
+  {
+    "q": "Who directed the 2026 feature film The Mandalorian and Grogu after creating the original series?",
+    "a": [
+      "Gareth Edwards",
+      "J.J. Abrams",
+      "Jon Favreau",
+      "Rian Johnson"
+    ],
+    "c": 2,
+    "difficulty": "easy",
+    "topic": "The Mandalorian and Grogu",
+    "quote": "Series creator Jon Favreau directed The Mandalorian and Grogu (2026) from a screenplay co-written with Dave Filoni and Noah Kloor."
+  },
+  {
+    "q": "In The Mandalorian and Grogu, which surviving son and heir of Jabba the Hutt—originally introduced as a baby in The Clone Wars—must Din Djarin and Grogu rescue?",
+    "a": [
+      "Gorga the Hutt",
+      "Rotta the Hutt",
+      "Ziro the Hutt",
+      "Jabba Jr."
+    ],
+    "c": 1,
+    "difficulty": "easy",
+    "topic": "The Mandalorian and Grogu",
+    "quote": "Din Djarin and Grogu are tasked with rescuing a grown-up, muscular Rotta the Hutt (voiced by Jeremy Allen White), the son of the late Jabba the Hutt."
+  },
+  {
+    "q": "Which legendary sci-fi actress stars in The Mandalorian and Grogu as New Republic military officer Colonel Ward, who hires Din Djarin and Grogu for stealth missions?",
+    "a": [
+      "Linda Hamilton",
+      "Carrie-Anne Moss",
+      "Sigourney Weaver",
+      "Jamie Lee Curtis"
+    ],
+    "c": 2,
+    "difficulty": "easy",
+    "topic": "The Mandalorian and Grogu",
+    "quote": "Sigourney Weaver plays New Republic Colonel Ward, a former Rebel pilot who recruits Din Djarin and Grogu to hunt down Imperial warlords and criminal targets."
+  },
+  {
+    "q": "Which purple-furred Lasat hero from Star Wars Rebels—and New Republic Adelphi Ranger pilot—teams up with Din Djarin and Grogu in The Mandalorian and Grogu?",
+    "a": [
+      "Bossk",
+      "Chopper",
+      "Kallus",
+      "Garazeb 'Zeb' Orrelios"
+    ],
+    "c": 3,
+    "difficulty": "easy",
+    "topic": "The Mandalorian and Grogu",
+    "quote": "Voiced by Steve Blum, former Ghost crew member and New Republic pilot Garazeb 'Zeb' Orrelios joins the action in The Mandalorian and Grogu."
+  },
+  {
+    "q": "Which actor provides the voice of the gladiatorial, grown-up Rotta the Hutt in The Mandalorian and Grogu?",
+    "a": [
+      "Diego Luna",
+      "Adam Driver",
+      "Jeremy Allen White",
+      "Oscar Isaac"
+    ],
+    "c": 2,
+    "difficulty": "medium",
+    "topic": "The Mandalorian and Grogu",
+    "quote": "Emmy-winning actor Jeremy Allen White voices Jabba the Hutt's surviving son, Rotta the Hutt, in The Mandalorian and Grogu."
+  },
+  {
+    "q": "Which replacement patrol gunship model does Din Djarin acquire and fly in The Mandalorian and Grogu alongside his N-1 Starfighter?",
+    "a": [
+      "A Kom'rk-class Gauntlet fighter",
+      "A newly acquired ST-70 Razor Crest gunship (with yellow/gold stripes)",
+      "A Lambda-class Imperial shuttle",
+      "A Firespray-31 patrol craft"
+    ],
+    "c": 1,
+    "difficulty": "medium",
+    "topic": "The Mandalorian and Grogu",
+    "quote": "In The Mandalorian and Grogu, Din Djarin acquires a second ST-70 Razor Crest assault ship customized with distinctive yellow painted hull markings."
+  },
+  {
+    "q": "Which Imperial warlord—who previously appeared via hologram on the Shadow Council in Season 3—serves as a central high-value target tracked by Din Djarin and Colonel Ward in The Mandalorian and Grogu?",
+    "a": [
+      "Warlord / Commander Janu Coin (played by Jonny Coyne)",
+      "General Veers",
+      "Commandant Brendol Hux",
+      "Captain Gilad Pellaeon"
+    ],
+    "c": 0,
+    "difficulty": "medium",
+    "topic": "The Mandalorian and Grogu",
+    "quote": "Jonny Coyne reprises his role from the Shadow Council as the elusive Imperial remnant warlord Janu Coin, whom Din Djarin tracks by bargaining with the Hutt Clans."
+  },
+  {
+    "q": "Which acclaimed Academy Award-winning film director makes a special voice cameo as the alien character Hugo Durant in The Mandalorian and Grogu?",
+    "a": [
+      "Steven Spielberg",
+      "Martin Scorsese",
+      "George Lucas",
+      "Guillermo del Toro"
+    ],
+    "c": 1,
+    "difficulty": "hard",
+    "topic": "The Mandalorian and Grogu",
+    "quote": "Legendary filmmaker Martin Scorsese makes a guest voice cameo as an alien shopkeeper/contact named Hugo Durant in The Mandalorian and Grogu."
+  },
+  {
+    "q": "Which iconic, wide-brimmed-hat Kyuzo bounty hunter from Star Wars: The Clone Wars (accompanied by his pet anooba Marrok) is voiced by Dave Filoni in The Mandalorian and Grogu?",
+    "a": [
+      "Cad Bane",
+      "Suggi",
+      "Embo",
+      "Dengar"
+    ],
+    "c": 2,
+    "difficulty": "hard",
+    "topic": "The Mandalorian and Grogu",
+    "quote": "Dave Filoni reprises his Clone Wars voice role as the fan-favorite Kyuzo bounty hunter Embo (who uses his Reinforced circular hat as a weapon and shield) in The Mandalorian and Grogu."
+  },
+  {
+    "q": "In The Mandalorian and Grogu, to which swampy Hutt homeworld must Din Djarin travel to negotiate with the Hutt Clans before undertaking the mission to rescue Rotta the Hutt?",
+    "a": [
+      "Oba Diah",
+      "Nar Shaddaa",
+      "Nal Hutta",
+      "Kessel"
+    ],
+    "c": 2,
+    "difficulty": "hard",
+    "topic": "The Mandalorian and Grogu",
+    "quote": "To secure intelligence on his Imperial warlord target, Din Djarin travels to the Hutt homeworld of Nal Hutta, where the Hutt Clan demands the rescue of Rotta the Hutt."
+  },
+  {
+    "q": "Who is the young Togruta Padawan assigned by Master Yoda to be Anakin Skywalker's apprentice at the Battle of Christophsis in Star Wars: The Clone Wars?",
+    "a": [
+      "Shaak Ti",
+      "Aayla Secura",
+      "Ahsoka Tano",
+      "Barriss Offee"
+    ],
+    "c": 2,
+    "difficulty": "easy",
+    "topic": "Star Wars: The Clone Wars (2008–2020)",
+    "quote": "Fourteen-year-old Togruta Padawan Ahsoka Tano arrives on Christophsis in the 2008 The Clone Wars film and becomes Anakin Skywalker's apprentice."
+  },
+  {
+    "q": "What affectionate nickname does Anakin Skywalker immediately give his new Padawan Ahsoka Tano because of her feisty attitude?",
+    "a": [
+      "Kid",
+      "Snips",
+      "Skyguy",
+      "Sparky"
+    ],
+    "c": 1,
+    "difficulty": "easy",
+    "topic": "Star Wars: The Clone Wars (2008–2020)",
+    "quote": "Anakin nicknames Ahsoka 'Snips' for her snappy remarks, while Ahsoka calls Anakin 'Skyguy.'"
+  },
+  {
+    "q": "Which elite clone legion with distinctive blue armor markings is commanded by Jedi General Anakin Skywalker and Clone Captain Rex?",
+    "a": [
+      "The 327th Star Corps",
+      "The 104th 'Wolfpack' Battalion",
+      "The 501st Legion",
+      "The 212th Attack Battalion"
+    ],
+    "c": 2,
+    "difficulty": "easy",
+    "topic": "Star Wars: The Clone Wars (2008–2020)",
+    "quote": "Captain Rex (CT-7567) serves as second-in-command to General Anakin Skywalker at the head of the elite 501st Legion."
+  },
+  {
+    "q": "What is the seven-character clone designation number of Clone Captain Rex?",
+    "a": [
+      "CT-7567",
+      "CT-5555",
+      "CC-2224",
+      "CT-1409"
+    ],
+    "c": 0,
+    "difficulty": "easy",
+    "topic": "Star Wars: The Clone Wars (2008–2020)",
+    "quote": "Captain Rex's official Grand Army of the Republic serial number is CT-7567, which Ahsoka Tano uses to look up his medical file during Order 66."
+  },
+  {
+    "q": "Who is Count Dooku's dual-red-lightsaber-wielding Dathomirian assassin who later returns to the Nightsisters after Dooku betrays her?",
+    "a": [
+      "Aurra Sing",
+      "Savage Opress",
+      "Mother Talzin",
+      "Asajj Ventress"
+    ],
+    "c": 3,
+    "difficulty": "easy",
+    "topic": "Star Wars: The Clone Wars (2008–2020)",
+    "quote": "Born a Nightsister of Dathomir and trained as a Jedi Padawan by Ky Narec before becoming Dooku's Sith assassin, Asajj Ventress wields twin curved-hilt red lightsabers."
+  },
+  {
+    "q": "Which ruthless Duros bounty hunter wears a wide-brimmed hat and breathing tubes in his cheeks and frequently outsmarts the Jedi during the Clone Wars?",
+    "a": [
+      "Cad Bane",
+      "Bossk",
+      "IG-88",
+      "Embo"
+    ],
+    "c": 0,
+    "difficulty": "easy",
+    "topic": "Star Wars: The Clone Wars (2008–2020)",
+    "quote": "With Jango Fett's death at Geonosis, the red-eyed Duros gunslinger Cad Bane becomes the galaxy's premier bounty hunter during the Clone Wars."
+  },
+  {
+    "q": "Who is the pacifist Duchess of Mandalore (and leader of the New Mandalorians) who shares a long, secret romantic history with Obi-Wan Kenobi?",
+    "a": [
+      "Ursa Wren",
+      "Bo-Katan Kryze",
+      "Rook Kast",
+      "Duchess Satine Kryze"
+    ],
+    "c": 3,
+    "difficulty": "easy",
+    "topic": "Star Wars: The Clone Wars (2008–2020)",
+    "quote": "Duchess Satine Kryze leads the pacifist New Mandalorians from Sundari and previously fell in love with Obi-Wan Kenobi when he and Qui-Gon Jinn protected her for a year."
+  },
+  {
+    "q": "Which yellow-skinned Dathomirian Zabrak warrior is magically enhanced by Mother Talzin and later rescues his long-lost brother Darth Maul from the junk planet Lotho Minor?",
+    "a": [
+      "Savage Opress",
+      "Lom Pyke",
+      "Pre Vizsla",
+      "Feral"
+    ],
+    "c": 0,
+    "difficulty": "easy",
+    "topic": "Star Wars: The Clone Wars (2008–2020)",
+    "quote": "Mother Talzin transforms Savage Opress into a towering warrior to take revenge on Count Dooku and sends him with a talisman to find his brother Maul."
+  },
+  {
+    "q": "Which swashbuckling Weequay pirate captain based on Florrum manages to capture Count Dooku, Obi-Wan Kenobi, and Anakin Skywalker all at the same time?",
+    "a": [
+      "Turk Falso",
+      "Gorian Shard",
+      "Pikk Mukmuk",
+      "Hondo Ohnaka"
+    ],
+    "c": 3,
+    "difficulty": "easy",
+    "topic": "Star Wars: The Clone Wars (2008–2020)",
+    "quote": "Hondo Ohnaka, leader of the Ohnaka Gang on Florrum, captures Count Dooku and then captures Obi-Wan and Anakin to demand a triple spice ransom from the Republic."
+  },
+  {
+    "q": "Which Clone Commander with orange armor markings leads the 212th Attack Battalion alongside Jedi General Obi-Wan Kenobi?",
+    "a": [
+      "Commander Cody (CC-2224)",
+      "Commander Wolffe (CC-3636)",
+      "Commander Fox (CC-1010)",
+      "Commander Bly (CC-5052)"
+    ],
+    "c": 0,
+    "difficulty": "easy",
+    "topic": "Star Wars: The Clone Wars (2008–2020)",
+    "quote": "Marshal Commander Cody (CC-2224) leads the 212th Attack Battalion and Ghost Company under General Obi-Wan Kenobi throughout the Clone Wars."
+  },
+  {
+    "q": "What hidden biological implant inside the brain of every clone trooper—discovered by ARC Trooper Fives in Season 6—forces them to obey Order 66 against their will?",
+    "a": [
+      "A Kaminoan droid control nanovirus",
+      "A bio-engineered organic inhibitor chip (behavioral modification biochip)",
+      "A cortical cybernetic transceiver dish",
+      "A midichlorian suppression gland"
+    ],
+    "c": 1,
+    "difficulty": "easy",
+    "topic": "Star Wars: The Clone Wars (2008–2020)",
+    "quote": "After his friend Tup prematurely executes Jedi General Tiplar, ARC Trooper Fives and medical droid AZI-3 uncover a secret Stage 3 organic inhibitor chip inside every clone's brain."
+  },
+  {
+    "q": "Which major four-part final story arc concludes Season 7 of Star Wars: The Clone Wars concurrently with the events of Episode III: Revenge of the Sith?",
+    "a": [
+      "The Battle of Umbara",
+      "The Siege of Mandalore",
+      "The Citadel Rescue",
+      "The Mortis Trilogy"
+    ],
+    "c": 1,
+    "difficulty": "easy",
+    "topic": "Star Wars: The Clone Wars (2008–2020)",
+    "quote": "The final four episodes of Season 7 depict the Siege of Mandalore, where Ahsoka Tano, Captain Rex, and Bo-Katan Kryze capture Maul just as Order 66 is executed."
+  },
+  {
+    "q": "Which Domino Squad clone trooper—and eventual ARC Trooper of the 501st—is killed by Commander Fox on Coruscant just as he tries to warn Anakin and Rex about Palpatine's Order 66 inhibitor chips?",
+    "a": [
+      "Cutup (CT-4040)",
+      "Heavy (CT-782)",
+      "Fives (CT-5555)",
+      "Droidbait (CT-00-2010)"
+    ],
+    "c": 2,
+    "difficulty": "medium",
+    "topic": "Star Wars: The Clone Wars (2008–2020)",
+    "quote": "Drugged by Kaminoan scientist Nala Se and cornered in a Coruscant warehouse, ARC Trooper Fives (CT-5555) is fatally shot by Coruscant Guard Commander Fox and dies in Rex's arms."
+  },
+  {
+    "q": "Who is the Governor of Concordia who secretly leads the Mandalorian terrorist group Death Watch and wields the Darksaber before being beheaded by Darth Maul in single combat?",
+    "a": [
+      "Almec",
+      "Fenn Rau",
+      "Gar Saxon",
+      "Pre Vizsla"
+    ],
+    "c": 3,
+    "difficulty": "medium",
+    "topic": "Star Wars: The Clone Wars (2008–2020)",
+    "quote": "Governor Pre Vizsla of Clan Vizsla leads Death Watch and allies with Maul's Shadow Collective, only for Maul to challenge him to a duel, defeat him, and execute him with the Darksaber."
+  },
+  {
+    "q": "During the brutal Battle of Umbara in Season 4, which treacherous Besalisk Jedi General temporarily takes over the 501st Legion and tricks Two clone units ( the 501st and 212th) into firing on each other?",
+    "a": [
+      "General Ima-Gun Di",
+      "General Pong Krell",
+      "General Quinlan Vos",
+      "General Even Piell"
+    ],
+    "c": 1,
+    "difficulty": "medium",
+    "topic": "Star Wars: The Clone Wars (2008–2020)",
+    "quote": "Foreseeing the fall of the Republic and hoping to become Count Dooku's new apprentice, four-armed Besalisk Jedi General Pong Krell deliberately sends the 501st and 212th to slaughter each other on Umbara before Dogma executes him."
+  },
+  {
+    "q": "In Season 5, why does Ahsoka Tano refuse the Jedi Council's offer to return to the Jedi Order as a Padawan?",
+    "a": [
+      "She was expelled by the Council after being framed by her friend Barriss Offee for bombing the Jedi Temple hangar",
+      "She discovered Anakin's secret marriage to Padmé Amidala and left to protect their secret",
+      "She lost her connection to the Force during the trials on Mortis",
+      "She wanted to remain on Mandalore to help Bo-Katan fight Darth Maul"
+    ],
+    "c": 0,
+    "difficulty": "medium",
+    "topic": "Star Wars: The Clone Wars (2008–2020)",
+    "quote": "After Jedi Padawan Barriss Offee bombs the Jedi Temple and frames Ahsoka for the murder of Letta Turmond, the Council expels Ahsoka; even after Anakin clears her name, the disillusioned Ahsoka walks away from the Order."
+  },
+  {
+    "q": "Which Domino Squad member—believed killed when the Citadel prison shuttle exploded in Season 3—is rescued from a stasis chamber on Skako Minor in Season 7 and later joins the Bad Batch?",
+    "a": [
+      "Hardcase",
+      "Hevy (CT-782)",
+      "99",
+      "Echo (CT-1409)"
+    ],
+    "c": 3,
+    "difficulty": "medium",
+    "topic": "Star Wars: The Clone Wars (2008–2020)",
+    "quote": "Captured at the Citadel on Lola Sayu, ARC Trooper Echo (CT-1409) is kept alive by the Techno Union on Skako Minor to feed Republic battle algorithms until Rex, Anakin, and Clone Force 99 rescue him."
+  },
+  {
+    "q": "On the mysterious, Force-saturated realm of Mortis in Season 3, what are the names of the three celestial Force-wielders representing Balance, the Light Side, and the Dark Side?",
+    "a": [
+      "The Father, the Daughter, and the Son",
+      "The Architect, the Guardian, and the Destroyer",
+      "The Whills of Dawn, Noon, and Dusk",
+      "Bendu, Ashla, and Bogan"
+    ],
+    "c": 0,
+    "difficulty": "medium",
+    "topic": "Star Wars: The Clone Wars (2008–2020)",
+    "quote": "On Mortis, Anakin, Obi-Wan, and Ahsoka encounter the Father (Balance), the Daughter (Light Side, whose life force revives Ahsoka), and the Son (Dark Side)."
+  },
+  {
+    "q": "What is the name of the criminal syndicate alliance forged by Darth Maul in Season 5 that unites the Pyke Syndicate, Black Sun, the Hutt Cartel, and Death Watch?",
+    "a": [
+      "The Shadow Collective",
+      "The Guavian Death Gang",
+      "Crimson Dawn",
+      "The Crymorah Syndicate"
+    ],
+    "c": 0,
+    "difficulty": "medium",
+    "topic": "Star Wars: The Clone Wars (2008–2020)",
+    "quote": "Darth Maul and Savage Opress assemble the Shadow Collective—comprising Death Watch, Black Sun, the Pyke Syndicate, and briefly the Hutt Clans—to overthrow Duchess Satine and conquer Mandalore."
+  },
+  {
+    "q": "Who is the deformed, malformed maintenance clone on Kamino who inspires Domino Squad and dies heroically fetching grenades and ammunition during the Separatist invasion of Tipoca City?",
+    "a": [
+      "Kix",
+      "Jesse",
+      "99",
+      "Tup"
+    ],
+    "c": 2,
+    "difficulty": "medium",
+    "topic": "Star Wars: The Clone Wars (2008–2020)",
+    "quote": "The hunchbacked maintenance clone 99 mentors Domino Squad on Kamino and sacrifices his life running ammunition during the Battle of Kamino—later inspiring Clone Force 99's name."
+  },
+  {
+    "q": "In Season 1 ('Rookies'), which Domino Squad trooper stays behind inside the Rishi Moon listening post to manually detonate the liquid tibanna bombs, destroying the outpost to warn the Republic fleet?",
+    "a": [
+      "Cutup (CT-4040)",
+      "Hevy (CT-782)",
+      "Droidbait (CT-00-2010)",
+      "Waxer"
+    ],
+    "c": 1,
+    "difficulty": "medium",
+    "topic": "Star Wars: The Clone Wars (2008–2020)",
+    "quote": "When the remote detonator fails at the Rishi Moon outpost, heavy-weapons trooper Hevy stays behind surrounded by battle droids and blows up the station manually so Kamino won't be ambushed."
+  },
+  {
+    "q": "What happens when Darth Sidious personally travels to Mandalore in Season 5 ('The Lawless') to confront his former apprentice Darth Maul and Savage Opress?",
+    "a": [
+      "Mother Talzin appears and teleports Maul and Savage back to Dathomir before anyone dies",
+      "Sidious duels both brothers at once with twin red lightsabers, kills Savage Opress, and tortures Maul with Force lightning ('I have other uses for you')",
+      "Maul and Savage force Sidious to retreat after Bo-Katan bombs the Sundari palace",
+      "Sidious executes both brothers and installs Prime Minister Almec as Emperor of Mandalore"
+    ],
+    "c": 1,
+    "difficulty": "medium",
+    "topic": "Star Wars: The Clone Wars (2008–2020)",
+    "quote": "Sensing Maul has become a rival Sith Lord, Darth Sidious arrives in Sundari, wields dual red lightsabers to impale Savage Opress, and overpowers Maul while cackling that he won't kill him because he has 'other uses' for him."
+  },
+  {
+    "q": "In Season 7, which two sisters from Coruscant's Level 1313 befriend Ahsoka Tano after she leaves the Jedi Order and end up running spice for the Pyke Syndicate on Oba Diah?",
+    "a": [
+      "Sugi and Seripas",
+      "Trace and Rafa Martez",
+      "Bo-Katan and Satine Kryze",
+      "Steela and Saw Gerrera"
+    ],
+    "c": 1,
+    "difficulty": "medium",
+    "topic": "Star Wars: The Clone Wars (2008–2020)",
+    "quote": "When Ahsoka's speeder bike breaks down in Coruscant's lower levels, she meets mechanic Trace Martez and her hustler older sister Rafa Martez before Bo-Katan recruits Ahsoka for Mandalore."
+  },
+  {
+    "q": "What color are the pair of lightsabers that Anakin Skywalker returns to Ahsoka Tano right before the Siege of Mandalore in Season 7?",
+    "a": [
+      "Blue (modified by Anakin from her original green and yellow-green blades)",
+      "Pure white (purified from an Inquisitor's crystal)",
+      "Green and yellow-green",
+      "Purple"
+    ],
+    "c": 0,
+    "difficulty": "medium",
+    "topic": "Star Wars: The Clone Wars (2008–2020)",
+    "quote": "Before Ahsoka departs with the 332nd Company for Mandalore, Anakin returns her two lightsabers—revealing he took care of them and tuned the blades from green to blue."
+  },
+  {
+    "q": "In the 2008 Star Wars: The Clone Wars theatrical film, on which vertical-cliff monastery planet are Anakin and Ahsoka sent to rescue Jabba the Hutt's kidnapped infant son Rotta ('Stinky')?",
+    "a": [
+      "Teth",
+      "Ryloth",
+      "Christophsis",
+      "Rugosa"
+    ],
+    "c": 0,
+    "difficulty": "hard",
+    "topic": "Star Wars: The Clone Wars (2008–2020)",
+    "quote": "Asajj Ventress holds the kidnapped Huttlet Rotta inside an ancient B'omarr Monastery atop a sheer rock spire on the jungle planet Teth."
+  },
+  {
+    "q": "Which freedom fighter on Onderon—and older sister of Saw Gerrera—is elected leader of the Onderon Rebels in Season 5 before tragically falling to her death from a cliff after a droid gunship crashes?",
+    "a": [
+      "Steela Gerrera",
+      "Mina Bonteri",
+      "Numa",
+      "Lux Bonteri"
+    ],
+    "c": 0,
+    "difficulty": "hard",
+    "topic": "Star Wars: The Clone Wars (2008–2020)",
+    "quote": "Trained by Ahsoka, Anakin, Obi-Wan, and Rex, Steela Gerrera leads the Onderon rebels to victory over King Sanjay Rash, only to be killed at the moment of triumph when a gunship shot down by Saw blasts the cliff ledge beneath her."
+  },
+  {
+    "q": "What is the name of the little blue Twi'lek girl whom 212th Attack Battalion troopers Waxer and Boil rescue and befriend in the ruins of Nabat during the Battle of Ryloth (and who later reappears as a freedom fighter in Rebels)?",
+    "a": [
+      "Shaeeah",
+      "Numa",
+      "Suu Lawquane",
+      "Hera Syndulla"
+    ],
+    "c": 1,
+    "difficulty": "hard",
+    "topic": "Star Wars: The Clone Wars (2008–2020)",
+    "quote": "On Ryloth, Ghost Company scouts Waxer and Boil bond with the orphaned Twi'lek child Numa, who calls them 'Nerra' (brother); Waxer paints her portrait on his helmet, and adult Numa wears Boil's armor piece in Star Wars Rebels."
+  },
+  {
+    "q": "In Season 1 ('Lair of Grievous'), who is Kit Fisto's rash former Mon Calamari Padawan (newly promoted to Jedi Knight) who confronts General Grievous on Vassek 3 and is killed by Grievous's concealed chest blaster?",
+    "a": [
+      "Nahdar Vebb",
+      "Eeth Koth",
+      "Ima-Gun Di",
+      "Bolla Ropal"
+    ],
+    "c": 0,
+    "difficulty": "hard",
+    "topic": "Star Wars: The Clone Wars (2008–2020)",
+    "quote": "Refusing to retreat into Grievous's castle with Master Kit Fisto, eager Mon Calamari Jedi Knight Nahdar Vebb battles General Grievous and is shot point-blank while locked in a lightsaber bind."
+  },
+  {
+    "q": "In Season 4 ('The Box'), which Jedi Master undergoes facial reconstructive surgery and fakes his own murder by the sniper Rako Hardeen so he can infiltrate a prison and uncover Count Dooku's plot to kidnap Chancellor Palpatine?",
+    "a": [
+      "Plo Koon",
+      "Quinlan Vos",
+      "Mace Windu",
+      "Obi-Wan Kenobi"
+    ],
+    "c": 3,
+    "difficulty": "hard",
+    "topic": "Star Wars: The Clone Wars (2008–2020)",
+    "quote": "Without telling Anakin, Obi-Wan Kenobi fakes his death at the hands of Concord Dawn sniper Rako Hardeen, assumes Hardeen's face via holographic/surgical alteration, breaks out of prison with Cad Bane and Moralo Eval, and survives Dooku's lethal 'Box' tournament."
+  },
+  {
+    "q": "Who is the spider-like Harch Separatist fleet commander who narrowly survives multiple ship-destroying defeats against Anakin Skywalker and resurfaces with cybernetic legs and eye implants at Anaxes in Season 7?",
+    "a": [
+      "General Kalani",
+      "Commander Riff Tamson",
+      "Admiral Trench",
+      "General Loathsom"
+    ],
+    "c": 2,
+    "difficulty": "hard",
+    "topic": "Star Wars: The Clone Wars (2008–2020)",
+    "quote": "Six-armed Harch tactician Admiral Trench fights Anakin over Christophsis, Ringo Vinda, and Anaxes, where Anakin finally executes him after getting the deactivation code for the Anaxes bomb."
+  },
+  {
+    "q": "During the Gathering on Ilum in Season 5, which young Wookiee Jedi youngling harvests a kyber crystal and crafts a wooden-hilted green lightsaber out of sacred Brylark tree wood under Huyang's guidance?",
+    "a": [
+      "Petro",
+      "Katooni",
+      "Zatt",
+      "Gungi"
+    ],
+    "c": 3,
+    "difficulty": "hard",
+    "topic": "Star Wars: The Clone Wars (2008–2020)",
+    "quote": "The Wookiee youngling Gungi selects a Brylark wood hilt from Professor Huyang's ancient drawers aboard the Crucible (and later survives Order 66 to appear in The Bad Batch Season 2)."
+  },
+  {
+    "q": "Which ancient, thousand-generation Mark IV architect droid (voiced by David Tennant) teaches Jedi younglings how to construct their lightsabers aboard the vessel Crucible in Season 5?",
+    "a": [
+      "AZI-3",
+      "Professor Huyang",
+      "WAC-47",
+      "M5-BZ"
+    ],
+    "c": 1,
+    "difficulty": "hard",
+    "topic": "Star Wars: The Clone Wars (2008–2020)",
+    "quote": "Professor Huyang has guided Jedi younglings—including Master Yoda himself—in assembling their lightsabers for over a thousand generations."
+  },
+  {
+    "q": "In Season 2 ('The Zillo Beast'), from which planet—home to the insectoid Dug species and rich in Malastare fuel reserves—does the Republic accidentally awaken an indestructible, lightsaber-proof giant monster with an electro-proton bomb?",
+    "a": [
+      "Toydaria",
+      "Malastare",
+      "Geonosis",
+      "Dathomir"
+    ],
+    "c": 1,
+    "difficulty": "hard",
+    "topic": "Star Wars: The Clone Wars (2008–2020)",
+    "quote": "When the Republic detonates an experimental electro-proton bomb on Malastare to wipe out the droid army, the crater awakens the ancient Zillo Beast, which Palpatine ships to Coruscant to clone its armor scales."
+  },
+  {
+    "q": "In the series finale of The Clone Wars ('Victory and Death'), aboard which Venator-class Star Destroyer do Ahsoka Tano and Captain Rex survive Order 66 before it crashes into a snow-covered moon?",
+    "a": [
+      "The Tribunal",
+      "The Negotiator",
+      "The Resolute",
+      "The Tranquility"
+    ],
+    "c": 0,
+    "difficulty": "hard",
+    "topic": "Star Wars: The Clone Wars (2008–2020)",
+    "quote": "While transporting the captured Maul in a Mandalorian sarcophagus back to Coruscant aboard the Venator-class Star Destroyer Tribunal, Order 66 triggers; Maul rips out the hyperdrive, causing the Tribunal to crash onto an unnamed moon."
+  },
+  {
+    "q": "Which ARC Trooper of the 501st Legion—bearing the Republic cog tattoo across his face and helmet—commands the 332nd Company against Ahsoka and Rex after Order 66 and perishes in the crash of the Tribunal?",
+    "a": [
+      "Commander Vaughn (CT-0292)",
+      "Sergeant Appo (CC-1119)",
+      "ARC Trooper Jesse (CT-5597)",
+      "ARC Trooper Kix (CT-6116)"
+    ],
+    "c": 2,
+    "difficulty": "hard",
+    "topic": "Star Wars: The Clone Wars (2008–2020)",
+    "quote": "Bound by his inhibitor chip, loyal 501st veteran ARC Trooper Jesse refuses Rex's plea that Ahsoka is no longer a Jedi, orders the 332nd to fire on them, and has his helmet placed atop a grave marker in the final shot before Darth Vader visits the wreckage years later."
+  },
+  {
+    "q": "What is the official military unit designation of the elite squad of genetically mutated clones known as the 'Bad Batch'?",
+    "a": [
+      "Delta Squad",
+      "Inferno Squad",
+      "Domino Squad",
+      "Clone Force 99"
+    ],
+    "c": 3,
+    "difficulty": "easy",
+    "topic": "The Bad Batch",
+    "quote": "Named in honor of the maintenance clone 99 from Kamino, the experimental unit of enhanced clones is officially designated Clone Force 99."
+  },
+  {
+    "q": "Who is the bandana-wearing sergeant and leader of the Bad Batch, whose genetic mutation gives him heightened electromagnetic sensory perception and tracking skills?",
+    "a": [
+      "Hunter",
+      "Crosshair",
+      "Tech",
+      "Wrecker"
+    ],
+    "c": 0,
+    "difficulty": "easy",
+    "topic": "The Bad Batch",
+    "quote": "Sergeant Hunter leads Clone Force 99, using his enhanced electromagnetic senses to feel transmissions and track targets across any terrain."
+  },
+  {
+    "q": "Who is the young female clone from Kamino who joins the Bad Batch in Season 1 and turns out to be an unaltered genetic sister to Boba Fett?",
+    "a": [
+      "Emerie Karr",
+      "Benni Baro",
+      "Nala Se",
+      "Omega"
+    ],
+    "c": 3,
+    "difficulty": "easy",
+    "topic": "The Bad Batch",
+    "quote": "Omega is an unaltered first-generation female clone created on Kamino alongside Alpha (Boba Fett) who escapes with Clone Force 99."
+  },
+  {
+    "q": "Which member of the Bad Batch is the squad's sniper, whose inhibitor chip intensifies under Imperial experimentation, causing him to initially stay loyal to the Empire and hunt his former brothers?",
+    "a": [
+      "Echo",
+      "Hunter",
+      "Tech",
+      "Crosshair"
+    ],
+    "c": 3,
+    "difficulty": "easy",
+    "topic": "The Bad Batch",
+    "quote": "With his inhibitor chip amplified by Admiral Tarkin and Nala Se's medical droid, the marksman Crosshair turns against Clone Force 99 in Season 1 before eventually turning against the Empire."
+  },
+  {
+    "q": "What is the name of the Bad Batch's modified Omicron-class attack shuttle that serves as their mobile home and base of operations?",
+    "a": [
+      "The Marauder (Havoc Marauder)",
+      "The Twilight",
+      "The Phantom",
+      "The Mantis"
+    ],
+    "c": 0,
+    "difficulty": "easy",
+    "topic": "The Bad Batch",
+    "quote": "Clone Force 99 flies a customized Omicron-class attack shuttle named the Marauder (or Havoc Marauder), with a forward gunnery bubble that becomes Omega's room."
+  },
+  {
+    "q": "Which towering, super-strong demolitions expert of the Bad Batch carries a massive plush Lula doll and has a fear of extreme heights?",
+    "a": [
+      "Wrecker",
+      "Gregor",
+      "Scorch",
+      "Howzer"
+    ],
+    "c": 0,
+    "difficulty": "easy",
+    "topic": "The Bad Batch",
+    "quote": "Wrecker provides Clone Force 99's raw muscle and explosives expertise, gifting his beloved tooka doll 'Lula' to Omega."
+  },
+  {
+    "q": "Which brilliant, goggle-wearing intelligence and computer specialist of the Bad Batch sacrifices his life on a damaged rail car over Eriadu in Season 2 to save his squad?",
+    "a": [
+      "Crosshair",
+      "Echo",
+      "Tech",
+      "Gonky"
+    ],
+    "c": 2,
+    "difficulty": "easy",
+    "topic": "The Bad Batch",
+    "quote": "In Season 2 ('Plan 99'), Tech dangles from a shattered rail car high above Eriadu and shoots the coupling—saying, 'When have we ever followed orders?'—sacrificing himself so the rest of the squad survives."
+  },
+  {
+    "q": "Which ruthless Imperial Admiral decides to terminate the Kaminoan cloning contract in Season 1 and orders his Venator Star Destroyers to bombard Tipoca City into the ocean?",
+    "a": [
+      "Director Orson Krennic",
+      "Vice Admiral Edmon Rampart",
+      "Governor Wilhuff Tarkin",
+      "Admiral Barton Coburn"
+    ],
+    "c": 1,
+    "difficulty": "medium",
+    "topic": "The Bad Batch",
+    "quote": "Vice Admiral Edmon Rampart spearheads Project War-Mantle to replace clones with conscripted TK stormtroopers and orders the orbital destruction of Tipoca City on Kamino."
+  },
+  {
+    "q": "Where did Captain Rex take the Bad Batch in Season 1 ('Battle Scars') to use an old medical bay inside a crashed Jedi cruiser to surgically remove their Order 66 inhibitor chips?",
+    "a": [
+      "The shipbreaking scrapyards of Bracca",
+      "The asteroid base of Polis Massa",
+      "The spice mines of Kessel",
+      "The underground tunnels of Saleucami"
+    ],
+    "c": 0,
+    "difficulty": "medium",
+    "topic": "The Bad Batch",
+    "quote": "Captain Rex meets Clone Force 99 at the Scrapper Guild yards on Bracca, where they remove Hunter, Tech, Echo, and an activated Wrecker's inhibitor chips inside a wrecked Venator cruiser."
+  },
+  {
+    "q": "What is the name of the ultra-secret Imperial science facility built inside a mountain on the planet Wayland in Seasons 2 and 3, where Nala Se and the Empire conduct cloning experiments?",
+    "a": [
+      "Mount Tantiss",
+      "Tarkin's Keep",
+      "Station 79",
+      "The Citadel"
+    ],
+    "c": 0,
+    "difficulty": "medium",
+    "topic": "The Bad Batch",
+    "quote": "Doctor Royce Hemlock commands the Advanced Science Division's hidden vault facility inside Mount Tantiss on the jungle planet Wayland."
+  },
+  {
+    "q": "Who is the cold, calculating chief scientist of the Empire's Advanced Science Division at Mount Tantiss—easily recognized by the glove he wears over his injured left hand—who serves as the main villain of Seasons 2 and 3?",
+    "a": [
+      "Dr.Scalder",
+      "Dr. Penn Pershing",
+      "Dr. Boll",
+      "Dr. Royce Hemlock"
+    ],
+    "c": 3,
+    "difficulty": "medium",
+    "topic": "The Bad Batch",
+    "quote": "Dr. Royce Hemlock leads Emperor Palpatine's top-secret Project Necromancer inside Mount Tantiss, kidnapping Omega to compel Kaminoan Chief Scientist Nala Se's cooperation."
+  },
+  {
+    "q": "Which peaceful island paradise planet—where the pirate-turned-broker Phee Genoa brings the Bad Batch—becomes their adopted refuge and home in Seasons 2 and 3?",
+    "a": [
+      "Pabu",
+      "Pantora",
+      "Raxus",
+      "Ord Mantell"
+    ],
+    "c": 0,
+    "difficulty": "medium",
+    "topic": "The Bad Batch",
+    "quote": "Treasure hunter Phee Genoa brings Clone Force 99 and Omega to the secluded island sanctuary of Pabu, ruled by Mayor Shep Hazard, where Hunter and Omega finally settle in peace."
+  },
+  {
+    "q": "In Season 1 of The Bad Batch, which two rival bounty hunters clash with each other on Bora Vio while both attempting to capture Omega for the Kaminoans?",
+    "a": [
+      "Boba Fett and Bossk",
+      "Cad Bane and Fennec Shand",
+      "Dengar and IG-88",
+      "Aurra Sing and Embo"
+    ],
+    "c": 1,
+    "difficulty": "medium",
+    "topic": "The Bad Batch",
+    "quote": "Prime Minister Lama Su hires Fennec Shand to retrieve Omega, while Chief Scientist Nala Se secretly hires Cad Bane to keep Omega out of Lama Su's hands, leading the two bounty hunters to duel at the abandoned Kaminoan facility on Bora Vio."
+  },
+  {
+    "q": "Why is Omega so desperately hunted by Dr. Royce Hemlock and Emperor Palpatine's Project Necromancer in Season 3 of The Bad Batch?",
+    "a": [
+      "Her blood contains the antidote to the Zillo Beast toxin stored at Mount Tantiss",
+      "She is naturally Force-sensitive with a midichlorian count higher than Yoda's",
+      "Omega's unique blood is capable of successfully accepts an M-count (midichlorian) transfer without degrading, making her the key to cloning a Force-sensitive body for the Emperor",
+      "She possesses the sole encrypted master DNA template of Jango Fett in her cerebral implant"
+    ],
+    "c": 2,
+    "difficulty": "medium",
+    "topic": "The Bad Batch",
+    "quote": "Dr. Emerie Karr and Nala Se discover that Omega's blood specimen is the only clone sample able to maintain a stable M-count transfer without degradation for Emperor Palpatine's Project Necromancer."
+  },
+  {
+    "q": "On which planet do the Bad Batch take mercenary jobs for the diminutive Trandoshan tavern owner Cid inside her parlor during Seasons 1 and 2?",
+    "a": [
+      "Corellia",
+      "Ord Mantell",
+      "Kessel",
+      "Daro"
+    ],
+    "c": 1,
+    "difficulty": "hard",
+    "topic": "The Bad Batch",
+    "quote": "Former Jedi informant Cid runs Cid's Parlor in Ord Mantell City on Ord Mantell, employing Clone Force 99 as mercenaries before eventually betraying them to Dr. Hemlock."
+  },
+  {
+    "q": "What is the name of the white-furred, vicious-turned-loyal Lurca hound at Mount Tantiss that bonds with Omega and Crosshair and escapes with them in Season 3?",
+    "a": [
+      "Boga",
+      "Marrok",
+      "Batcher",
+      "Ruby"
+    ],
+    "c": 2,
+    "difficulty": "hard",
+    "topic": "The Bad Batch",
+    "quote": "Omega nurses an injured female Lurca patrol hound back to health at Mount Tantiss and names her 'Batcher'; Batcher helps Omega and Crosshair escape Wayland and lives with them on Pabu."
+  },
+  {
+    "q": "Who is the bespectacled female clone scientist at Mount Tantiss who realizes she is another genetic sister to Omega and ultimately turns against Dr. Hemlock to help free the imprisoned Force-sensitive children?",
+    "a": [
+      "Dr. Emerie Karr",
+      "Halle Burtoni",
+      "Dr. Scalder",
+      "Taun We"
+    ],
+    "c": 0,
+    "difficulty": "hard",
+    "topic": "The Bad Batch",
+    "quote": "Created by Nala Se on Kamino and raised by Dr. Hemlock, Chief Medical Scientist Dr. Emerie Karr keeps Omega's Lula doll and later helps Echo and Omega rescue the Project Necromancer children inside the Tantiss Vault."
+  },
+  {
+    "q": "In Season 2 ('The Outpost'), on which freezing snow planet does Crosshair finally snap and shoot his callous Imperial Lieutenant Nolan after Nolan leaves clone trooper Mayday to die?",
+    "a": [
+      "Ilum",
+      "Orto Plutonia",
+      "Barton IV",
+      "Pantora"
+    ],
+    "c": 2,
+    "difficulty": "hard",
+    "topic": "The Bad Batch",
+    "quote": "After carrying the mortally wounded Commander Mayday through a blizzard back to the supply depot on Barton IV, Crosshair watches Lieutenant Nolan refuse Mayday medical care and executes Nolan on the spot."
+  },
+  {
+    "q": "In the series finale of The Bad Batch ('The Cavalry Has Arrived'), how does Chief Medical Scientist Nala Se destroy all of the Empire's M-count cloning research inside Mount Tantiss?",
+    "a": [
+      "She floods the Mount Tantiss magma chamber by overriding the reactor cooling rods",
+      "She enters the data lab with a thermal detonator and sacrifices herself, blowing up the databanks along with Rampart after he shoots her",
+      "She releases the captive Zillo Beast directly into the Project Necromancer servers",
+      "She injects herself and Dr. Hemlock with the Blue Shadow Virus"
+    ],
+    "c": 1,
+    "difficulty": "hard",
+    "topic": "The Bad Batch",
+    "quote": "Determined that Omega will never be hunted for her blood again, Nala Se takes a thermal detonator into the Mount Tantiss laboratory; when Vice Admiral Rampart shoots her to steal the research for leverage, her dying hand releases the detonator, obliterating the databanks and Rampart."
+  },
+  {
+    "q": "In the epilogue of The Bad Batch series finale, set years later during the Galactic Civil War, why does a grown-up Omega say goodbye to an aging Hunter on Pabu?",
+    "a": [
+      "She is going to Tatooine to find her brother Boba Fett",
+      "She is leaving Pabu to join the Rebel Alliance as a starfighter pilot",
+      "She is traveling to Mandalore to join Bo-Katan's Nite Owls",
+      "She has been invited by Ahsoka Tano to train at the Jedi Temple on Ossus"
+    ],
+    "c": 1,
+    "difficulty": "hard",
+    "topic": "The Bad Batch",
+    "quote": "In the final flash-forward scene on Pabu, an adult Omega informs an older Hunter that the Rebellion needs pilots, promises to stay in touch with him, Wrecker, and Crosshair, and flies off to join the Rebel Alliance."
+  },
+  {
+    "q": "What is the name of the modified VCX-100 light freighter piloted by Hera Syndulla that serves as the home and base of the main Rebel crew in Star Wars Rebels?",
+    "a": [
+      "The Ghost",
+      "The Outrider",
+      "The Phantom",
+      "The Razor Crest"
+    ],
+    "c": 0,
+    "difficulty": "easy",
+    "topic": "Star Wars Rebels",
+    "quote": "Twi'lek pilot Hera Syndulla captains the modified Corellian VCX-100 light freighter Ghost, while the crew uses the callsign 'Spectres.'"
+  },
+  {
+    "q": "Which street-smart fourteen-year-old orphan from the planet Lothal joins the Ghost crew as Spectre-6 and is trained in the ways of the Force by Kanan Jarrus?",
+    "a": [
+      "Zare Leonis",
+      "Ezra Bridger",
+      "Jai Kell",
+      "Mart Mattin"
+    ],
+    "c": 1,
+    "difficulty": "easy",
+    "topic": "Star Wars Rebels",
+    "quote": "Born on Empire Day on the Outer Rim planet Lothal, Ezra Bridger joins the Ghost crew as Spectre-6 and becomes Kanan Jarrus's Jedi Padawan."
+  },
+  {
+    "q": "What was Kanan Jarrus's real birth name as a Jedi Padawan before he went into hiding after Order 66?",
+    "a": [
+      "Zayne Carrick",
+      "Cal Kestis",
+      "Caleb Dume",
+      "Ferus Olin"
+    ],
+    "c": 2,
+    "difficulty": "easy",
+    "topic": "Star Wars Rebels",
+    "quote": "Kanan Jarrus was born Caleb Dume, the Padawan of Jedi Master Depa Billaba, who sacrificed herself on Kaller during Order 66 so young Caleb could escape."
+  },
+  {
+    "q": "Which cantankerous, mismatched-parts C1-series astromech droid serves as Hera Syndulla's loyal mechanic aboard the Ghost?",
+    "a": [
+      "AP-5",
+      "Chopper (C1-10P)",
+      "R2-D2",
+      "BD-1"
+    ],
+    "c": 1,
+    "difficulty": "easy",
+    "topic": "Star Wars Rebels",
+    "quote": "Hera rescued the grumpy C1-series astromech droid C1-10P ('Chopper') from a crashed Republic Y-wing on Ryloth during the Clone Wars."
+  },
+  {
+    "q": "Which young Mandalorian weapons expert and graffiti artist of Clan Wren serves as Spectre-5 aboard the Ghost?",
+    "a": [
+      "Sabine Wren",
+      "Bo-Katan Kryze",
+      "Ketsu Onyo",
+      "Koska Reeves"
+    ],
+    "c": 0,
+    "difficulty": "easy",
+    "topic": "Star Wars Rebels",
+    "quote": "Sabine Wren of Clan Wren, House Vizsla, is a former Imperial Academy cadet on Mandalore who uses her custom-painted armor and explosive artwork against the Empire."
+  },
+  {
+    "q": "Which brilliant, blue-skinned, red-eyed Chiss Imperial Grand Admiral studies his enemies' art and culture and serves as the primary antagonist of Seasons 3 and 4 of Star Wars Rebels?",
+    "a": [
+      "Admiral Konstantine",
+      "Grand Admiral Thrawn",
+      "Moff Gideon",
+      "Grand Moff Tarkin"
+    ],
+    "c": 1,
+    "difficulty": "easy",
+    "topic": "Star Wars Rebels",
+    "quote": "Governor Arihnda Pryce requests the Seventh Fleet commanded by the Chiss tactician Grand Admiral Mitth'raw'nuruodo ('Thrawn') to crush the Phoenix Cell and liberate Lothal."
+  },
+  {
+    "q": "In the Season 1 finale of Star Wars Rebels, who is revealed to be the mysterious Rebel intelligence informant codenamed 'Fulcrum'?",
+    "a": [
+      "Cassian Andor",
+      "Mon Mothma",
+      "Bail Organa",
+      "Ahsoka Tano"
+    ],
+    "c": 3,
+    "difficulty": "easy",
+    "topic": "Star Wars Rebels",
+    "quote": "In 'Fire Across the Galaxy,' the hooded Rebel operative 'Fulcrum' steps down the ladder aboard Phoenix Home and is revealed to be Anakin Skywalker's former Padawan, Ahsoka Tano."
+  },
+  {
+    "q": "Which ruthless ISB Agent (Agent ISB-021)—having survived being stranded with Zeb on an icy Geonosis moon—secretly defects to become the second Rebel informant codenamed 'Fulcrum'?",
+    "a": [
+      "Lieutenant Yogar Lyste",
+      "Minister Maketh Tua",
+      "Commandant Cumberlayne Aresko",
+      "Agent Alexsandr Kallus"
+    ],
+    "c": 3,
+    "difficulty": "medium",
+    "topic": "Star Wars Rebels",
+    "quote": "After bonding with his adversary Zeb Orrelios while stranded on Bahryn in Season 2 ('The Honorable Ones'), ISB Agent Alexsandr Kallus realizes the Empire doesn't care about him and secretly becomes a Fulcrum spy for the Rebellion."
+  },
+  {
+    "q": "On which ancient Sith temple planet does Darth Maul blind Kanan Jarrus and Ahsoka Tano stay behind to duel her former master Darth Vader in the Season 2 finale ('Twilight of the Apprentice')?",
+    "a": [
+      "Exegol",
+      "Malachor",
+      "Dathomir",
+      "Korriban"
+    ],
+    "c": 1,
+    "difficulty": "medium",
+    "topic": "Star Wars Rebels",
+    "quote": "Inside the Sith superweapon temple on Malachor, Maul blinds Kanan with a lightsaber swipe across the eyes, and Ahsoka Tano confronts Darth Vader, slicing off half his mask and discovering he is Anakin Skywalker."
+  },
+  {
+    "q": "What is the name of the ancient, powerful Force entity waiting on the planet Atollon who declares himself 'the one in the middle' between the light (Ashla) and the dark (Bogan)?",
+    "a": [
+      "Morai",
+      "Tor Valum",
+      "The Father",
+      "The Bendu"
+    ],
+    "c": 3,
+    "difficulty": "medium",
+    "topic": "Star Wars Rebels",
+    "quote": "Voiced by Tom Baker, the massive, ancient Force-wielder on Atollon introduces himself to Kanan and Ezra as 'the Bendu—the one in the middle.'"
+  },
+  {
+    "q": "In Season 3 ('Twin Suns'), on which planet does Obi-Wan Kenobi defeat Darth Maul in a brief three-strike lightsaber duel, holding his dying enemy in his arms as Maul asks if Luke is the Chosen One?",
+    "a": [
+      "Dathomir",
+      "Mandalore",
+      "Tatooine",
+      "Naboo"
+    ],
+    "c": 2,
+    "difficulty": "medium",
+    "topic": "Star Wars Rebels",
+    "quote": "After Maul tracks Obi-Wan to the deserts of Tatooine using Ezra and the Holocrons, Obi-Wan strikes Maul down when Maul tries the same hilt-bash move that killed Qui-Gon Jinn; dying in Obi-Wan's arms, Maul sighs, 'He will avenge us.'"
+  },
+  {
+    "q": "How does Jedi Knight Kanan Jarrus sacrifice his life to save Hera Syndulla, Ezra, and Sabine in Season 4 ('Jedi Night')?",
+    "a": [
+      "He uses the Force to hold back a massive fuel depot explosion on Lothal while pushing their gunship away to safety, restoring his sight for one final look at Hera",
+      "He flies the Phantom I directly into the bridge of Grand Admiral Thrawn's flagship Chimaera",
+      "He stays behind inside the Imperial Dome on Lothal as it self-destructs into orbit",
+      "He intercepts Grand Inquisitor's double-bladed spinning lightsaber to shield Ezra on Tarkin's Star Destroyer"
+    ],
+    "c": 0,
+    "difficulty": "medium",
+    "topic": "Star Wars Rebels",
+    "quote": "When Governor Pryce orders AT-ATs to fire on the Lothal Imperial fuel pod where Kanan and the crew are standing, Kanan holds back the fireball with one hand—his eyes clearing for one final gaze at Hera—and Force-pushes their shuttle to safety."
+  },
+  {
+    "q": "What hyperspace-traveling, whale-like deep-space creatures does Ezra Bridger summon at the Battle of Lothal to wrap their tentacles around Thrawn's flagship Chimaera and jump both Ezra and Thrawn into the Unknown Regions?",
+    "a": [
+      "Purrgil",
+      "Summa-verminoth",
+      "Loth-wolves",
+      "Neebrays"
+    ],
+    "c": 0,
+    "difficulty": "medium",
+    "topic": "Star Wars Rebels",
+    "quote": "In the series finale ('Family Reunion – and Farewell'), Mart Mattin arrives above Lothal with a pod of space-faring Purrgil whales that answer Ezra's Force call, smashing Thrawn's blockade and leaping into hyperspace with Ezra and Thrawn aboard the Chimaera."
+  },
+  {
+    "q": "Which arc-pulse generator superweapon—originally designed by Sabine Wren when she was an Imperial cadet—specifically targets the beskar alloy in Mandalorian armor to superheat and vaporize the wearers inside?",
+    "a": [
+      "The Electro-Proton Bomb",
+      "Project Harvester",
+      "The Defoliator",
+      "The Duchess"
+    ],
+    "c": 3,
+    "difficulty": "medium",
+    "topic": "Star Wars Rebels",
+    "quote": "In Season 4 ('Heroes of Mandalore'), Sabine Wren, Bo-Katan Kryze, and Clan Wren destroy 'The Duchess,' an arc-pulse weapon Sabine designed at the Imperial Academy that reacts specifically with beskar alloy."
+  },
+  {
+    "q": "Who was the Pau'an former Jedi Temple Guard who serves as the empire's 'Grand Inquisitor' in Season 1 of Star Wars Rebels before falling into the exploding reactor of Tarkin's flagship Sovereign?",
+    "a": [
+      "The Seventh Sister",
+      "The Eighth Brother",
+      "The Fifth Brother",
+      "The Grand Inquisitor"
+    ],
+    "c": 3,
+    "difficulty": "hard",
+    "topic": "Star Wars Rebels",
+    "quote": "Voiced by Jason Isaacs, the Pau'an Grand Inquisitor—once a Jedi Temple Guard on Coruscant—is defeated by Kanan Jarrus over Mustafar, warning, 'There are some things far more frightening than death' before letting himself fall into the flames."
+  },
+  {
+    "q": "In Season 4 ('A World Between Worlds'), through which mystical extra-dimensional Force realm of starlit pathways and portals does Ezra Bridger reach back in time to pull Ahsoka Tano out of her collapsing duel with Darth Vader on Malachor?",
+    "a": [
+      "The Wellspring of Life",
+      "The Mortis Monolith",
+      "The Netherworld of the Force",
+      "The World Between Worlds"
+    ],
+    "c": 3,
+    "difficulty": "hard",
+    "topic": "Star Wars Rebels",
+    "quote": "Unlocking the Mortis mural outside the buried Lothal Jedi Temple, Ezra enters the World Between Worlds, follows the convor Morai, and pulls Ahsoka Tano through a portal moments before Darth Vader's killing blow on Malachor."
+  },
+  {
+    "q": "Who was the very first Mandalorian in history to be inducted into the Jedi Order—and the creator of the black-bladed Darksaber over a thousand years before the Clone Wars, as explained by Fenn Rau to Kanan and Sabine?",
+    "a": [
+      "Pre Vizsla",
+      "Mandalore the Great",
+      "Canderous Ordo",
+      "Tarre Vizsla"
+    ],
+    "c": 3,
+    "difficulty": "hard",
+    "topic": "Star Wars Rebels",
+    "quote": "In Season 3 ('Trials of the Darksaber'), Protector of Concord Dawn Fenn Rau explains that over a thousand years ago, Tarre Vizsla became the first Mandalorian inducted into the Jedi Order and forged the unique Darksaber."
+  },
+  {
+    "q": "What is the name of Grand Admiral Thrawn's personal Imperial I-class Star Destroyer flagship, which has a stylized three-headed Chimaera emblem painted onto the underside of its hull?",
+    "a": [
+      "The Sovereign",
+      "The Harbinger",
+      "The Relentless",
+      "The Chimaera"
+    ],
+    "c": 3,
+    "difficulty": "hard",
+    "topic": "Star Wars Rebels",
+    "quote": "Grand Admiral Thrawn commands the Seventh Fleet from his personal flagship, the Imperial Star Destroyer Chimaera, which the Purrgil drag into hyperspace at the end of the Battle of Lothal."
+  },
+  {
+    "q": "Which giant, Force-connected canine creatures native to Lothal—led by a massive white wolf that whispers 'Dume' to Ezra—help the Rebels travel across Lothal through hyperspace-like subterranean tunnels in Season 4?",
+    "a": [
+      "Anoobas",
+      "Vulptices",
+      "Loth-wolves",
+      "Loth-cats"
+    ],
+    "c": 2,
+    "difficulty": "hard",
+    "topic": "Star Wars Rebels",
+    "quote": "After Kanan Jarrus's death, a gigantic white Loth-wolf manifests his will in the Force, speaking the name 'Dume' and handing Ezra the key to the Lothal Jedi Temple mural."
+  },
+  {
+    "q": "In the epilogue of the Star Wars Rebels series finale (set after the Battle of Endor), who is revealed to be the child born to Hera Syndulla and the late Kanan Jarrus?",
+    "a": [
+      "Cham Syndulla Jr.",
+      "Ezra Syndulla",
+      "Caleb Syndulla",
+      "Jacen Syndulla"
+    ],
+    "c": 3,
+    "difficulty": "hard",
+    "topic": "Star Wars Rebels",
+    "quote": "Sabine Wren's epilogue reveals that before Kanan's sacrifice on Lothal, he and Hera conceived a green-haired human-Twi'lek hybrid son named Jacen Syndulla ('Spectre-7'), who inherited his mother's love of flying."
+  }
+]

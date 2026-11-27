@@ -434,6 +434,13 @@ WHEEL_EVENTS = [
     {"id": "streak2x", "label": "🔥 DOUBLE STREAK: Streak Bonuses are 2x This Round!"},
 ]
 
+DOOM_WHEEL_EVENTS = [
+    {"id": "doom_tax", "label": "💀 DOOM WHEEL — LEADER TAX: 1st Place Loses 25% of Their Score Right Now!", "doom": True},
+    {"id": "doom_drain", "label": "🧛 DOOM WHEEL — VAMPIRE DRAIN: Every Correct Answer Steals 250 pts from 1st Place!", "doom": True},
+    {"id": "doom_bounty", "label": "🎯 DOOM WHEEL — LEADER BOUNTY: 1st Place Risks −800 if Wrong (Everyone Else Earns 2x)!", "doom": True},
+    {"id": "doom_quake", "label": "🌋 DOOM WHEEL — SCOREBOARD QUAKE: 1st Place Drops −600 pts & Everyone Else Gains +300!", "doom": True},
+]
+
 
 TEAM_PROMPTS = [
     "Everyone say your answer out loud and ONE reason why.",
@@ -580,6 +587,7 @@ def list_quizzes(owner="_shared"):
         "quiz_entr101_master150.json": "ENTR 101: Comprehensive Master Review (All 10 Chapters)",
         "quiz_fun_facts.json": "Fun Facts Trivia",
         "quiz_keeper_lost_cities.json": "Keeper of the Lost Cities (Shannon Messenger)",
+        "quiz_star_wars.json": "Star Wars: Ultimate Galaxy Trivia",
         "quiz_thanksgiving_trivia.json": "Thanksgiving Feast & History Trivia",
         "quiz_ultimate_silly_trivia.json": "Ultimate Silly Trivia",
     }
@@ -974,8 +982,23 @@ def shuffle_question_options(q):
 DIFFICULTY_ORDER = {"easy": 0, "medium": 1, "hard": 2}
 
 
-def apply_difficulty_filter(bank, difficulty="", count=None, shuffle=False):
+def clean_diff_mix(mix):
+    if not isinstance(mix, dict):
+        return None
+    try:
+        e = max(0, min(100, int(round(float(mix.get("easy", 0))))))
+        m = max(0, min(100, int(round(float(mix.get("medium", 0))))))
+        h = max(0, min(100, int(round(float(mix.get("hard", 0))))))
+    except Exception:
+        return None
+    if e + m + h <= 0:
+        return None
+    return {"easy": e, "medium": m, "hard": h}
+
+
+def apply_difficulty_filter(bank, difficulty="", count=None, shuffle=False, diff_mix=None):
     diff = str(difficulty or "").strip().lower()
+    mix = clean_diff_mix(diff_mix)
     pool = [dict(x) for x in bank]
     if diff in ("easy", "medium", "hard"):
         filtered = [x for x in pool if str(x.get("difficulty") or "").strip().lower() == diff]
@@ -990,6 +1013,36 @@ def apply_difficulty_filter(bank, difficulty="", count=None, shuffle=False):
         k = len(pool)
     if any(is_case_type(x) for x in pool) or any(x.get("goto") for x in pool):
         quiz = [dict(x) for x in pool[:k]]
+    elif diff in ("", "progressive") and mix:
+        by_lvl = {0: [], 1: [], 2: []}
+        for x in pool:
+            lv = DIFFICULTY_ORDER.get(str(x.get("difficulty") or "").strip().lower(), 1)
+            by_lvl[lv].append(dict(x))
+        if shuffle or k < len(pool):
+            for lv in (0, 1, 2):
+                random.shuffle(by_lvl[lv])
+        tot_w = float(max(1, mix["easy"] + mix["medium"] + mix["hard"]))
+        weights = [mix["easy"] / tot_w, mix["medium"] / tot_w, mix["hard"] / tot_w]
+        raw_c = [k * w for w in weights]
+        counts = [min(len(by_lvl[lv]), int(raw_c[lv])) for lv in (0, 1, 2)]
+        rem_need = k - sum(counts)
+        order_lv = sorted((0, 1, 2), key=lambda lv: (raw_c[lv] - int(raw_c[lv]), weights[lv]), reverse=True)
+        for lv in order_lv:
+            while rem_need > 0 and counts[lv] < len(by_lvl[lv]):
+                counts[lv] += 1
+                rem_need -= 1
+        for lv in (0, 1, 2):
+            while rem_need > 0 and counts[lv] < len(by_lvl[lv]):
+                counts[lv] += 1
+                rem_need -= 1
+        s0 = by_lvl[0][:counts[0]]
+        s1 = by_lvl[1][:counts[1]]
+        s2 = by_lvl[2][:counts[2]]
+        quiz = s0 + s1 + s2
+        if diff == "progressive":
+            quiz.sort(key=lambda x: DIFFICULTY_ORDER.get(str(x.get("difficulty") or "").strip().lower(), 1))
+        elif shuffle:
+            random.shuffle(quiz)
     elif diff == "progressive":
         by_lvl = {0: [], 1: [], 2: []}
         for x in pool:
@@ -1021,7 +1074,7 @@ def apply_difficulty_filter(bank, difficulty="", count=None, shuffle=False):
     return quiz, pool
 
 
-def new_game(quiz_file="quiz.json", count=None, shuffle=False, shuffle_answers=True, custom_questions=None, owner="_shared", difficulty=""):
+def new_game(quiz_file="quiz.json", count=None, shuffle=False, shuffle_answers=True, custom_questions=None, owner="_shared", difficulty="", diff_mix=None):
     while True:
         pin = str(random.randint(100000, 999999))
         if pin not in GAMES:
@@ -1031,7 +1084,8 @@ def new_game(quiz_file="quiz.json", count=None, shuffle=False, shuffle_answers=T
     diff_norm = str(difficulty or "").strip().lower()
     if diff_norm not in ("easy", "medium", "hard", "progressive"):
         diff_norm = ""
-    quiz, bank = apply_difficulty_filter(raw_bank, diff_norm, count=count, shuffle=shuffle)
+    mix_clean = clean_diff_mix(diff_mix)
+    quiz, bank = apply_difficulty_filter(raw_bank, diff_norm, count=count, shuffle=shuffle, diff_mix=mix_clean)
     if shuffle_answers:
         quiz = [shuffle_question_options(x) for x in quiz]
     GAMES[pin] = {
@@ -1041,7 +1095,8 @@ def new_game(quiz_file="quiz.json", count=None, shuffle=False, shuffle_answers=T
         "teams": False, "wager": True, "redemption": False, "redemption_added": False,
         "sabotage": False, "icebreaker": False, "icebreaker_prompt": "In one word, how are you feeling about today's quiz?",
         "words": [],
-        "wheel": True, "wheel_mods": {}, "robin_stolen": {},
+        "wheel": True, "doom_wheel": False, "rubberband": False, "bounty": False, "mystery_swap": False,
+        "wheel_mods": {}, "robin_stolen": {}, "doom_applied": {}, "swap_applied": {},
         "hotseat": True, "team_battle": True, "tiebreak": True,
         "roster": [], "canvas_roster": [], "banned": [], "logo": "", "bank": bank, "quiz_file": quiz_file,
         "created": time.time(), "shuf": {}, "match_shuf": {}, "hot": {}, "team_results": {}, "team_prompts": {},
@@ -1056,22 +1111,25 @@ def new_game(quiz_file="quiz.json", count=None, shuffle=False, shuffle_answers=T
         "init_counts": {}, "revotes": {}, "branched_qs": [], "visited_qs": [],
         "chat_enabled": False, "profiles_enabled": False, "play_too_enabled": False,
         "chat": [], "cseq": 0, "chat_q": [],
-        "shuffle_answers": bool(shuffle_answers),
-        "untimed": False, "difficulty": diff_norm,
+        "shuffle_answers": bool(shuffle_answers), "shuffle": bool(shuffle),
+        "untimed": False, "difficulty": diff_norm, "diff_mix": mix_clean,
     }
     return GAMES[pin]
 
 
-def replay_game(g, quiz_file="quiz.json", count=None, shuffle=True, shuffle_answers=None, custom_questions=None, difficulty=None):
+def replay_game(g, quiz_file="quiz.json", count=None, shuffle=True, shuffle_answers=None, custom_questions=None, difficulty=None, diff_mix=None):
     cleaned_custom = clean_questions(custom_questions) if custom_questions else []
     raw_bank = cleaned_custom if cleaned_custom else [dict(x) for x in load_quiz(quiz_file)]
     diff_norm = str(g.get("difficulty", "") if difficulty is None else difficulty).strip().lower()
     if diff_norm not in ("easy", "medium", "hard", "progressive"):
         diff_norm = ""
     g["difficulty"] = diff_norm
-    g["quiz"], bank = apply_difficulty_filter(raw_bank, diff_norm, count=count, shuffle=shuffle)
+    if diff_mix is not None:
+        g["diff_mix"] = clean_diff_mix(diff_mix)
+    g["quiz"], bank = apply_difficulty_filter(raw_bank, diff_norm, count=count, shuffle=shuffle, diff_mix=g.get("diff_mix"))
     shuf_ans = g.get("shuffle_answers", True) if shuffle_answers is None else bool(shuffle_answers)
     g["shuffle_answers"] = shuf_ans
+    g["shuffle"] = bool(shuffle)
     if shuf_ans:
         g["quiz"] = [shuffle_question_options(x) for x in g["quiz"]]
     g["phase"] = "lobby"
@@ -1081,6 +1139,8 @@ def replay_game(g, quiz_file="quiz.json", count=None, shuffle=True, shuffle_answ
     g["redemption_added"] = False
     g["wheel_mods"] = {}
     g["robin_stolen"] = {}
+    g["doom_applied"] = {}
+    g["swap_applied"] = {}
     g["shuf"] = {}
     g["match_shuf"] = {}
     g["hot"] = {}
@@ -1135,17 +1195,31 @@ def do_steal(g, pid, mode):
     idx = names.index(p["name"])
     if idx == 0:
         return None, "You're already in 1st place"
+    qi = g["q"]
+    if mode == "heist":
+        tname = lb[0]["name"]
+        target = next(x for x in g["players"].values() if x["name"] == tname)
+        gap = max(0, target["score"] - p["score"])
+        amt = min(target["score"], max(250, min(1500, round(gap * 0.45))))
+        if amt <= 0:
+            return None, "Nothing to steal from 1st place"
+        add_bonus(p, qi, amt, "steal_bonus")
+        add_bonus(target, qi, -amt, "stolen")
+        pu["steal_used"] = True
+        g["rseq"] = g.get("rseq", 0) + 1
+        g["reactions"].append({"id": g["rseq"], "emoji": "👑", "name": "%s → %s" % (short_name(p["name"]), short_name(tname)), "t": time.time()})
+        return {"target": tname, "mode": mode, "amt": amt}, None
     tname = lb[idx - 1]["name"]
     target = next(x for x in g["players"].values() if x["name"] == tname)
-    qi = g["q"]
     if mode == "swap":
         gap = target["score"] - p["score"]
-        if gap > 1500:
-            return None, "Too far ahead to swap (max gap 1500)"
+        max_swap_gap = 50000 if g.get("rubberband") else 3500
+        if gap > max_swap_gap:
+            return None, "Too far ahead to swap (max gap %d)" % max_swap_gap
         add_bonus(p, qi, gap, "swap")
         add_bonus(target, qi, -gap, "swap")
     else:
-        amt = min(150, target["score"])
+        amt = min(250, target["score"])
         if amt <= 0:
             return None, "Nothing to steal"
         add_bonus(p, qi, amt, "steal_bonus")
@@ -1340,14 +1414,27 @@ def cur_timer_state(g):
     return prev_left, q_left, q_elapsed, qt
 
 
-def is_underdog(g, p, qi):
-    if qi < 3 or len(g["players"]) < 2:
-        return False
+def rubberband_mult(g, p, qi):
+    if qi < 2 or len(g["players"]) < 2:
+        return 1.0
     scores = sorted([x["score"] for x in g["players"].values()], reverse=True)
-    if scores[0] <= 0:
-        return False
+    leader_sc = scores[0]
+    if leader_sc <= 0:
+        return 1.0
+    gap = leader_sc - p["score"]
+    if g.get("rubberband"):
+        if gap >= 2500:
+            return 3.0
+        if gap >= 1500:
+            return 2.5
+        if gap >= 800:
+            return 2.0
     median = scores[len(scores) // 2]
-    return p["score"] < median
+    return 1.5 if p["score"] < median else 1.0
+
+
+def is_underdog(g, p, qi):
+    return rubberband_mult(g, p, qi) > 1.0
 
 
 def audience_pcts(g, qi):
@@ -1404,15 +1491,20 @@ def record_answer(g, p, choice, t, given=None, credit=None, extra=None):
     pu = p.get("powerups", {})
     p_mult = 2 if pu.get("2x_q") == qi else 1
     shielded = (pu.get("shield_q") == qi)
-    underdog = is_underdog(g, p, qi)
-    u_mult = 1.5 if underdog else 1.0
+    u_mult = rubberband_mult(g, p, qi)
+    underdog = u_mult > 1.0
     wmod = g.get("wheel_mods", {}).get(qi)
     confident = bool(p.get("confident", {}).get(qi))
     don = bool(p.get("don", {}).get(qi)) and is_dbl_q(g, qi)
     wager_pct = p.get("wagers", {}).get(qi)
     wager_amt = 0
     if not unscored_mode and wager_pct is not None and wager_pct > 0:
-        stake = max(500, p["score"])
+        if g.get("rubberband") and len(g["players"]) > 1:
+            leader_now = max(x["score"] for x in g["players"].values())
+            gap_now = max(0, leader_now - p["score"])
+            stake = max(500, p["score"] + round(gap_now * 0.85))
+        else:
+            stake = max(500, p["score"])
         wager_amt = round(stake * (wager_pct / 100.0))
     wheel_bonus = 0
     conf_delta = 0
@@ -1426,7 +1518,12 @@ def record_answer(g, p, choice, t, given=None, credit=None, extra=None):
         bonus = (min(300, (new_streak - 1) * 100) if new_streak >= 2 else 0) * s_mult
         spd_mult = 1.35 if (not is_untimed and smode == "classic" and wmod and wmod["id"] == "speed" and t <= qt * 0.45) else 1.0
         speed_factor = (1.0 - min(1.0, t / qt) / 2.0) if (smode == "classic" and not is_untimed) else 1.0
-        base = round(base_max * credit * speed_factor * qmult(g) * p_mult * u_mult * spd_mult * (2 if don else 1))
+        bounty_mult = 1.0
+        if wmod and wmod["id"] == "doom_bounty" and len(g["players"]) > 1:
+            leader = max(g["players"].values(), key=lambda x: x["score"])
+            if leader["name"] != p["name"]:
+                bounty_mult = 2.0
+        base = round(base_max * credit * speed_factor * qmult(g) * p_mult * u_mult * spd_mult * bounty_mult * (2 if don else 1))
         if wmod and wmod["id"] == "crate":
             wheel_bonus = random.choice([150, 200, 250, 300, 400])
         elif wmod and wmod["id"] == "robin" and len(g["players"]) > 1:
@@ -1436,6 +1533,15 @@ def record_answer(g, p, choice, t, given=None, credit=None, extra=None):
                 stolen_so_far = g.setdefault("robin_stolen", {}).get(qi, 0)
                 if stolen_so_far < 300:
                     ded = min(150, 300 - stolen_so_far, leader["score"])
+                    leader["score"] = max(0, leader["score"] - ded)
+                    g["robin_stolen"][qi] = stolen_so_far + ded
+        elif wmod and wmod["id"] == "doom_drain" and len(g["players"]) > 1:
+            leader = max(g["players"].values(), key=lambda x: x["score"])
+            if leader["name"] != p["name"] and leader["score"] > 0:
+                wheel_bonus = 250
+                stolen_so_far = g.setdefault("robin_stolen", {}).get(qi, 0)
+                if stolen_so_far < 1000:
+                    ded = min(250, 1000 - stolen_so_far, leader["score"])
                     leader["score"] = max(0, leader["score"] - ded)
                     g["robin_stolen"][qi] = stolen_so_far + ded
         if confident:
@@ -1448,7 +1554,12 @@ def record_answer(g, p, choice, t, given=None, credit=None, extra=None):
         wager_loss = wager_amt if (wager_amt > 0 and not shielded) else 0
         if confident and not shielded:
             conf_delta = -150
-        gained = -wager_loss + conf_delta - (400 if (don and not shielded) else 0)
+        doom_pen = 0
+        if wmod and wmod["id"] == "doom_bounty" and not shielded and len(g["players"]) > 1:
+            leader = max(g["players"].values(), key=lambda x: x["score"])
+            if leader["name"] == p["name"] and leader["score"] > 0:
+                doom_pen = min(800, leader["score"])
+        gained = -wager_loss + conf_delta - (400 if (don and not shielded) else 0) - doom_pen
     p["score"] = max(0, p["score"] + gained)
     rec = {
         "choice": choice, "gained": gained, "bonus": bonus,
@@ -1737,6 +1848,47 @@ def settle_question(g):
                 right += 1
         hs["ok"] = hot_ok
         hs["right"] = right
+    wmod_s = g.get("wheel_mods", {}).get(qi)
+    if wmod_s and not g.setdefault("doom_applied", {}).get(qi) and len(P) > 1 and g.get("scoring_mode") != "survey":
+        g["doom_applied"][qi] = True
+        lb_now = sorted(P.values(), key=lambda x: -x["score"])
+        leader_p = lb_now[0]
+        if wmod_s["id"] == "doom_tax" and leader_p["score"] > 0:
+            cut = max(150, round(leader_p["score"] * 0.25))
+            add_bonus(leader_p, qi, -min(leader_p["score"], cut), "wheel_bonus")
+        elif wmod_s["id"] == "doom_quake" and leader_p["score"] > 0:
+            cut = min(600, leader_p["score"])
+            add_bonus(leader_p, qi, -cut, "wheel_bonus")
+            for op in P.values():
+                if op["name"] != leader_p["name"]:
+                    add_bonus(op, qi, 300, "wheel_bonus")
+    if g.get("bounty") and len(P) > 1 and g.get("scoring_mode") != "survey" and not is_unscored_type(q):
+        lb_pre = sorted(P.values(), key=lambda x: -(x["score"] - (x["answers"].get(qi) or {}).get("gained", 0)))
+        leader_pre = lb_pre[0]
+        la = leader_pre["answers"].get(qi)
+        leader_missed = not (la and la.get("correct"))
+        if leader_missed and (leader_pre["score"] > 0):
+            for op in P.values():
+                if op["name"] != leader_pre["name"] and (op["answers"].get(qi) or {}).get("correct"):
+                    add_bonus(op, qi, 400, "bounty_bonus")
+            ded_b = min(300, leader_pre["score"])
+            if ded_b > 0:
+                add_bonus(leader_pre, qi, -ded_b, "bounty_loss")
+    if g.get("mystery_swap") and len(P) > 1 and g.get("scoring_mode") != "survey" and not is_unscored_type(q) and (qi + 1) % 5 == 0 and not g.setdefault("swap_applied", {}).get(qi):
+        g["swap_applied"][qi] = True
+        lb_sw = sorted(P.values(), key=lambda x: -x["score"])
+        lead_sw = lb_sw[0]
+        la_sw = lead_sw["answers"].get(qi)
+        if not (la_sw and la_sw.get("correct")):
+            challengers = [x for x in lb_sw[1:] if (x["answers"].get(qi) or {}).get("correct")]
+            if challengers:
+                ch_p = min(challengers, key=lambda x: (x["answers"].get(qi) or {}).get("time", 99))
+                gap_sw = max(0, lead_sw["score"] - ch_p["score"])
+                if gap_sw > 0:
+                    add_bonus(ch_p, qi, gap_sw, "swap")
+                    add_bonus(lead_sw, qi, -gap_sw, "swap")
+                    g["rseq"] = g.get("rseq", 0) + 1
+                    g["reactions"].append({"id": g["rseq"], "emoji": "🔀", "name": "%s ⇄ %s" % (short_name(ch_p["name"]), short_name(lead_p["name"])), "t": time.time()})
 
 
 def start_question(g, qi):
@@ -1750,8 +1902,13 @@ def start_question(g, qi):
     g["discuss_until"] = 0.0
     g["consensus_step"] = 1 if has_consensus_phase(g, qi) else 0
     g["consensus_until"] = 0.0
-    if g.get("wheel", True) and qi > 0 and (qi + 1) % 4 == 0 and not is_boss_q(g, qi) and not g["quiz"][qi].get("redemption") and not is_speed_q(g, qi) and not is_unscored_type(g["quiz"][qi]):
-        g.setdefault("wheel_mods", {})[qi] = random.choice(WHEEL_EVENTS)
+    if (g.get("wheel", True) or g.get("doom_wheel")) and qi > 0 and (qi + 1) % 4 == 0 and not is_boss_q(g, qi) and not g["quiz"][qi].get("redemption") and not is_speed_q(g, qi) and not is_unscored_type(g["quiz"][qi]):
+        if g.get("doom_wheel") and g.get("wheel", True):
+            use_doom = (qi // 4) % 2 == 1
+        else:
+            use_doom = bool(g.get("doom_wheel"))
+        pool_ev = DOOM_WHEEL_EVENTS if use_doom else WHEEL_EVENTS
+        g.setdefault("wheel_mods", {})[qi] = random.choice(pool_ev)
     q = g["quiz"][qi]
     if qtype_of(q) == "order":
         n = len(q["a"])
@@ -2902,6 +3059,18 @@ def view(g, pid=None, host=False):
         "teams_enabled": bool(g.get("teams")),
         "consensus_enabled": bool(g.get("consensus")),
         "sabotage_enabled": bool(g.get("sabotage", True)),
+        "wheel_enabled": bool(g.get("wheel")),
+        "doom_wheel_enabled": bool(g.get("doom_wheel")),
+        "rubberband_enabled": bool(g.get("rubberband")),
+        "bounty_enabled": bool(g.get("bounty")),
+        "mystery_swap_enabled": bool(g.get("mystery_swap")),
+        "wager_enabled": bool(g.get("wager")),
+        "redemption_enabled": bool(g.get("redemption")),
+        "hotseat_enabled": bool(g.get("hotseat")),
+        "dbl_enabled": bool(g.get("dbl")),
+        "steal_enabled": bool(g.get("steal")),
+        "tiebreak_enabled": bool(g.get("tiebreak")),
+        "speed_enabled": bool(g.get("speed")),
         "team_board": team_leaderboard(g) if g.get("teams") else [],
         "auto": bool(g.get("auto")),
         "auto_time": int(g["auto_time"]) if g.get("auto_time") else 7,
@@ -2909,11 +3078,15 @@ def view(g, pid=None, host=False):
         "case_game": any(is_case_type(x) for x in g["quiz"]),
         "discuss_default": int(g.get("discuss_time", 60)),
         "speed_time": int(g.get("speed_time", 5)),
+        "qtime_default": int(g.get("qtime") or DEFAULT_TIME),
+        "preview_default": float(g.get("preview") if g.get("preview") is not None else PREVIEW_TIME),
         "scoring_mode": g.get("scoring_mode", "classic"),
         "hide_board": bool(g.get("hide_board")),
         "allow_tts": bool(g.get("allow_tts")),
         "untimed": bool(g.get("untimed")),
         "game_difficulty": g.get("difficulty") or "",
+        "diff_mix": g.get("diff_mix"),
+        "bank_total": len(g.get("bank") or g.get("quiz") or []),
         "think_default": int(g.get("think_time") or 0),
         "logo": g.get("logo") or "",
     }
@@ -2982,6 +3155,7 @@ def view(g, pid=None, host=False):
             redemption=bool(q.get("redemption")),
             wheel_mod=wmod["label"] if wmod else None,
             wheel_id=wmod["id"] if wmod else None,
+            wheel_doom=bool(wmod.get("doom")) if wmod else False,
         )
         if g.get("consensus_step") == 2 and ph == "question":
             c_left = max(0.0, float(g.get("pause_consensus", 0.0))) if g.get("paused") else max(0.0, g.get("consensus_until", 0.0) - now)
@@ -3127,6 +3301,7 @@ def view(g, pid=None, host=False):
         out.update(
             index=g["q"], redemption=bool(iq.get("redemption")),
             wheel_mod=iw["label"] if iw else None, wheel_id=iw["id"] if iw else None,
+            wheel_doom=bool(iw.get("doom")) if iw else False,
             speed=(is_speed_q(g, g["q"]) and g["q"] == speed_start(g)),
             intro_total=il, intro_left=round(max(0.0, il - (now - g.get("intro_start", now))), 2),
         )
@@ -3196,6 +3371,9 @@ def view(g, pid=None, host=False):
             "correct": a.get("correct", False) if a else False,
             "shielded": a.get("shielded", False) if a else False,
             "underdog": (is_underdog(g, p, g["q"]) if ph == "question" else (a.get("underdog", False) if a else False)),
+            "underdog_mult": round(rubberband_mult(g, p, g["q"]), 2),
+            "bounty_bonus": (a.get("bounty_bonus", 0) if a else 0),
+            "bounty_loss": (a.get("bounty_loss", 0) if a else 0),
             "streak": streak,
             "rank": my_rank,
             "leader": leader_name,
@@ -3231,6 +3409,8 @@ def view(g, pid=None, host=False):
             ab_ = lb[my_idx - 1]
             me["steal_target"] = ab_["name"]
             me["steal_gap"] = max(0, ab_["score"] - p["score"])
+            me["leader_target"] = lb[0]["name"]
+            me["leader_gap"] = max(0, lb[0]["score"] - p["score"])
         me["don"] = bool(p.get("don", {}).get(g["q"])) if g["q"] >= 0 else False
         tp_ = g.get("team_prompts", {}).get(g["q"], {}).get(p.get("team")) if g["q"] >= 0 else None
         if tp_ and ph in ("question", "results"):
@@ -3827,9 +4007,11 @@ class H(BaseHTTPRequestHandler):
                     custom_questions=body.get("custom_questions"),
                     owner=owner_of(body.get("token")),
                     difficulty=body.get("difficulty") or "",
+                    diff_mix=body.get("diff_mix"),
                 )
                 for k_ in ("speed", "dbl", "steal", "moderate", "hide_board", "allow_tts", "consensus",
-                           "chat_enabled", "profiles_enabled", "play_too_enabled", "untimed"):
+                           "chat_enabled", "profiles_enabled", "play_too_enabled", "untimed",
+                           "doom_wheel", "rubberband", "bounty", "mystery_swap"):
                     if k_ in body:
                         g[k_] = bool(body[k_])
                 sm_ = str(body.get("scoring_mode") or "").strip().lower()
@@ -3956,6 +4138,28 @@ class H(BaseHTTPRequestHandler):
             g = GAMES.get(body.get("pin"))
             if not g:
                 return self.send({"error": "Game not found"}, 404)
+            if path == "/api/leave":
+                pid_l = body.get("pid")
+                if pid_l and pid_l in g["players"]:
+                    nm_l = g["players"][pid_l]["name"]
+                    del g["players"][pid_l]
+                    modlog(g, "left game", nm_l)
+                elif pid_l and pid_l in g.get("pending", {}):
+                    g["pending"].pop(pid_l, None)
+                return self.send({"ok": True})
+            if path == "/api/terminate":
+                if body.get("host") != g["host"]:
+                    return self.send({"error": "Forbidden"}, 403)
+                mode_t = str(body.get("mode") or "discard").strip().lower()
+                if mode_t == "final":
+                    go_final(g)
+                    return self.send({"ok": True, "phase": "final"})
+                pk_t = g.get("pair_key")
+                if pk_t and pk_t in REMOTE_PAIRS:
+                    REMOTE_PAIRS[pk_t]["pin"] = ""
+                    REMOTE_PAIRS[pk_t]["host"] = ""
+                GAMES.pop(g["pin"], None)
+                return self.send({"ok": True, "terminated": True})
             if path == "/api/kick":
                 if body.get("host") != g["host"]:
                     return self.send({"error": "Forbidden"}, 403)
@@ -4042,6 +4246,7 @@ class H(BaseHTTPRequestHandler):
                     shuffle_answers=body.get("shuffle_answers"),
                     custom_questions=body.get("custom_questions"),
                     difficulty=body.get("difficulty"),
+                    diff_mix=body.get("diff_mix"),
                 )
                 return self.send({"ok": True, "pin": g["pin"]})
             if path == "/api/bots":
@@ -4232,6 +4437,75 @@ class H(BaseHTTPRequestHandler):
                         for p in g["players"].values():
                             p["word_sent"] = False
                             p.get("plan", {}).pop("ice_t", None)
+                elif act == "update_settings":
+                    if "qtime" in body and body["qtime"] is not None:
+                        try:
+                            qtv = int(body["qtime"])
+                            if qtv <= 0:
+                                g["untimed"] = True
+                                g["qtime"] = 0
+                            else:
+                                g["qtime"] = max(5, min(900, qtv))
+                        except Exception:
+                            pass
+                    if "untimed" in body:
+                        g["untimed"] = bool(body["untimed"])
+                        if not g["untimed"] and not g.get("qtime"):
+                            g["qtime"] = DEFAULT_TIME
+                    if "preview" in body and body["preview"] is not None:
+                        try:
+                            g["preview"] = max(0.0, min(120.0, float(body["preview"])))
+                        except Exception:
+                            pass
+                    if "think_time" in body and body["think_time"] is not None:
+                        try:
+                            g["think_time"] = max(0.0, min(120.0, float(body["think_time"])))
+                        except Exception:
+                            pass
+                    if "auto_time" in body and body["auto_time"] is not None:
+                        try:
+                            g["auto_time"] = max(2, min(120, int(body["auto_time"])))
+                        except Exception:
+                            pass
+                    if "speed_time" in body and body["speed_time"] is not None:
+                        try:
+                            g["speed_time"] = max(3, min(120, int(body["speed_time"])))
+                        except Exception:
+                            pass
+                    if "scoring_mode" in body:
+                        sm_u = str(body.get("scoring_mode") or "").strip().lower()
+                        if sm_u in SCORING_MODES:
+                            g["scoring_mode"] = sm_u
+                    for bk in ("auto", "hide_board", "allow_tts", "chat_enabled", "profiles_enabled", "play_too_enabled",
+                               "wheel", "doom_wheel", "rubberband", "bounty", "mystery_swap",
+                               "wager", "redemption", "hotseat", "dbl", "sabotage", "steal", "tiebreak", "speed"):
+                        if bk in body:
+                            g[bk] = bool(body[bk])
+                    if "count" in body and body["count"] is not None and not g.get("case_game"):
+                        try:
+                            want_n = int(body["count"])
+                            bank_list = list(g.get("bank") or g["quiz"] or [])
+                            min_n = max(1, (g["q"] + 1) if g["q"] >= 0 else 1)
+                            max_n = max(min_n, len(bank_list))
+                            want_n = max(min_n, min(max_n, want_n))
+                            cur_base = [q_ for q_ in g["quiz"] if not q_.get("redemption") and not q_.get("tiebreak")]
+                            extra_qs = [q_ for q_ in g["quiz"] if q_.get("redemption") or q_.get("tiebreak")]
+                            if want_n < len(cur_base):
+                                cur_base = cur_base[:want_n]
+                            elif want_n > len(cur_base):
+                                used_stems = {q_.get("q") for q_ in cur_base}
+                                avail = [dict(x) for x in bank_list if x.get("q") not in used_stems]
+                                if g.get("shuffle", True):
+                                    random.shuffle(avail)
+                                need = want_n - len(cur_base)
+                                add_qs = avail[:need]
+                                if g.get("shuffle_answers", True):
+                                    add_qs = [shuffle_question_options(x) for x in add_qs]
+                                cur_base.extend(add_qs)
+                            g["quiz"] = cur_base + extra_qs
+                            g["n_base"] = len(cur_base)
+                        except Exception:
+                            pass
                 return self.send({
                     "ok": True, "auto": g["auto"], "paused": g["paused"],
                     "hide_board": bool(g.get("hide_board")), "allow_tts": bool(g.get("allow_tts")),
@@ -4239,6 +4513,7 @@ class H(BaseHTTPRequestHandler):
                     "chat_enabled": bool(g.get("chat_enabled")),
                     "profiles_enabled": bool(g.get("profiles_enabled")),
                     "play_too_enabled": bool(g.get("play_too_enabled")),
+                    "total": len(g["quiz"]),
                 })
             if path == "/api/chat":
                 if not g.get("chat_enabled"):
