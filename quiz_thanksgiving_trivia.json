@@ -1,0 +1,327 @@
+[
+  {
+    "q": "How long did the 1621 Plymouth harvest feast—often called the 'First Thanksgiving'—actually last?",
+    "a": [
+      "One afternoon",
+      "Three days",
+      "Seven days",
+      "Two weeks"
+    ],
+    "c": 1,
+    "t": 20,
+    "topic": "Thanksgiving History",
+    "quote": "The autumn 1621 celebration between the Plymouth colonists and the Wampanoag people lasted three full days!"
+  },
+  {
+    "q": "Which meat was definitely documented on the table at the 1621 feast by Pilgrim chronicler Edward Winslow?",
+    "a": [
+      "Ham",
+      "Venison (deer)",
+      "Beef roast",
+      "Fried chicken"
+    ],
+    "c": 1,
+    "t": 20,
+    "topic": "Thanksgiving History",
+    "quote": "Wampanoag leader Massasoit and his men brought five deer (venison) as a gift to share at the three-day feast."
+  },
+  {
+    "q": "Which everyday eating utensil was completely missing from the 1621 Plymouth Thanksgiving table?",
+    "a": [
+      "Knives",
+      "Spoons",
+      "Forks",
+      "Wooden trenchers"
+    ],
+    "c": 2,
+    "t": 20,
+    "topic": "Thanksgiving History",
+    "quote": "The Pilgrims ate with knives, spoons, and their fingers! Table forks didn't become common in America until the 1700s."
+  },
+  {
+    "q": "Who spent 36 years writing letters to presidents—and also wrote 'Mary Had a Little Lamb'—convincing Abraham Lincoln to make Thanksgiving a national holiday in 1863?",
+    "a": [
+      "Sarah Josepha Hale",
+      "Harriet Beecher Stowe",
+      "Louisa May Alcott",
+      "Clara Barton"
+    ],
+    "c": 0,
+    "t": 20,
+    "topic": "Thanksgiving History",
+    "quote": "Magazine editor Sarah Josepha Hale campaigned for 36 years before President Lincoln proclaimed Thanksgiving a national holiday in October 1863."
+  },
+  {
+    "q": "Why did President Franklin D. Roosevelt briefly move Thanksgiving one week earlier in 1939—a controversy nicknamed 'Franksgiving'?",
+    "a": [
+      "To avoid early December snowstorms",
+      "To lengthen the Christmas shopping season during the Great Depression",
+      "To line up with the Army-Navy football game",
+      "To match Canada's Thanksgiving date"
+    ],
+    "c": 1,
+    "t": 20,
+    "topic": "Thanksgiving History",
+    "quote": "Retailers begged FDR for extra holiday shopping days during the Great Depression. After half the country refused to switch dates, Congress permanently fixed Thanksgiving as the fourth Thursday of November in 1941."
+  },
+  {
+    "q": "Which Founding Father praised the wild turkey in a letter to his daughter as a 'much more respectable Bird' than the bald eagle?",
+    "a": [
+      "Thomas Jefferson",
+      "John Adams",
+      "Benjamin Franklin",
+      "Alexander Hamilton"
+    ],
+    "c": 2,
+    "t": 20,
+    "topic": "Turkey Trivia",
+    "quote": "In a 1784 letter to his daughter Sarah, Benjamin Franklin joked that the bald eagle had 'bad moral character' while the turkey was a 'Bird of Courage.'"
+  },
+  {
+    "q": "What is the proper name for the long, fleshy red appendage that hangs down over a turkey's beak?",
+    "a": [
+      "The wattle",
+      "The snood",
+      "The spur",
+      "The comb"
+    ],
+    "c": 1,
+    "t": 20,
+    "topic": "Turkey Trivia",
+    "quote": "The flap hanging over the beak is the snood! (The red skin under the chin and neck is the wattle.)"
+  },
+  {
+    "q": "Which turkeys actually make the famous 'gobble, gobble' sound?",
+    "a": [
+      "Only male turkeys (toms)",
+      "Only female turkeys (hens)",
+      "Only baby turkeys (poults)",
+      "Both males and females equally"
+    ],
+    "c": 0,
+    "t": 20,
+    "topic": "Turkey Trivia",
+    "quote": "Only male turkeys (called toms or gobblers) gobble! Female turkeys (hens) communicate with clicks, purrs, and yelps."
+  },
+  {
+    "q": "How fast can a wild turkey fly in short bursts when escaping danger?",
+    "a": [
+      "Wild turkeys cannot fly at all",
+      "Up to 15 mph",
+      "Up to 55 mph",
+      "Up to 90 mph"
+    ],
+    "c": 2,
+    "t": 20,
+    "topic": "Turkey Trivia",
+    "quote": "While heavy domestic farm turkeys can't fly, wild turkeys can sprint 20 mph on land and fly up to 55 mph in short bursts!"
+  },
+  {
+    "q": "Which U.S. President made the White House turkey pardon an official annual tradition in 1989, assuring the bird it would 'not end up on anyone's dinner table'?",
+    "a": [
+      "Ronald Reagan",
+      "George H.W. Bush",
+      "Bill Clinton",
+      "Harry S. Truman"
+    ],
+    "c": 1,
+    "t": 20,
+    "topic": "Turkey Trivia",
+    "quote": "Though earlier presidents occasionally spared gift turkeys, George H.W. Bush turned the formal 'presidential pardon' into a permanent annual ceremony in 1989."
+  },
+  {
+    "q": "How did the giant 1953 frozen turkey surplus at Swanson (260 tons of leftover birds sitting in refrigerated train cars!) change American dining?",
+    "a": [
+      "It led to the invention of the frozen TV Dinner",
+      "It created the first canned turkey soup",
+      "It started the first turkey fast-food chain",
+      "It inspired the invention of the microwave oven"
+    ],
+    "c": 0,
+    "t": 20,
+    "topic": "Food & Feast",
+    "quote": "Swanson salesman Gerry Thomas packed the extra turkey with cornbread dressing, peas, and sweet potatoes on aluminum trays inspired by airline meals—creating the very first TV Dinner!"
+  },
+  {
+    "q": "Why are ripe cranberries sometimes nicknamed 'bounceberries' by cranberry farmers?",
+    "a": [
+      "They bounce off water when harvested",
+      "Fresh, unbruised cranberries bounce like rubber balls because of tiny air pockets inside",
+      "They grow on springy vines that snap back when picked",
+      "They pop and bounce out of the pan when boiled"
+    ],
+    "c": 1,
+    "t": 20,
+    "topic": "Food & Feast",
+    "quote": "Healthy cranberries have four little air chambers inside—farmers even use mechanical 'bounce-board' separators that make fresh berries jump over wooden barriers!"
+  },
+  {
+    "q": "Who created the iconic Green Bean Casserole recipe in 1955 using canned green beans, cream of mushroom soup, and crispy fried onions?",
+    "a": [
+      "Julia Child",
+      "Dorcas Reilly at the Campbell Soup Company",
+      "Betty Crocker's radio host",
+      "Chef Boyardee"
+    ],
+    "c": 1,
+    "t": 20,
+    "topic": "Food & Feast",
+    "quote": "Home economist Dorcas Reilly invented the dish in Campbell's test kitchen in 1955 using ingredients most American pantries already had on hand."
+  },
+  {
+    "q": "Which amino acid in turkey is famous for getting blamed for post-Thanksgiving naps—even though chicken and cheddar cheese actually contain just as much or more of it?",
+    "a": [
+      "Melatonin",
+      "Tryptophan",
+      "Glutamine",
+      "Keratin"
+    ],
+    "c": 1,
+    "t": 20,
+    "topic": "Food & Feast",
+    "quote": "Turkey does contain L-tryptophan, but nutritionists say the real culprit behind the Thanksgiving food coma is eating a huge load of carbohydrates and dessert all at once!"
+  },
+  {
+    "q": "What did the pop-up plastic turkey timer (invented in the 1960s) originally use inside its tip to release the spring when the turkey reached ~180°F?",
+    "a": [
+      "Beeswax",
+      "A tiny bead of soft metal solder that melts at roasting temperature",
+      "Caramelized sugar",
+      "Compressed steam"
+    ],
+    "c": 1,
+    "t": 20,
+    "topic": "Food & Feast",
+    "quote": "Inside a pop-up timer, a spring-loaded stem is held down by a drop of food-safe soft metal alloy (or paraffin wax in newer models) that melts right around 180°F!"
+  },
+  {
+    "q": "Instead of giant helium balloons, what marched down the streets of New York City in the very first Macy's parade in 1924?",
+    "a": [
+      "Live animals borrowed from the Central Park Zoo",
+      "100 Broadway tap dancers dressed as turkeys",
+      "Steam-powered tractors pulling hayrides",
+      "Antique horse-drawn stagecoaches"
+    ],
+    "c": 0,
+    "t": 20,
+    "topic": "Parades & Traditions",
+    "quote": "The 1924 Macy's parade (originally called the Macy's Christmas Parade!) featured bears, elephants, camels, and monkeys borrowed from the Central Park Zoo."
+  },
+  {
+    "q": "Which cartoon character became the first giant helium balloon in the Macy's Thanksgiving Day Parade in 1927?",
+    "a": [
+      "Mickey Mouse",
+      "Felix the Cat",
+      "Bugs Bunny",
+      "Snoopy"
+    ],
+    "c": 1,
+    "t": 20,
+    "topic": "Parades & Traditions",
+    "quote": "Felix the Cat debuted in 1927 as the parade's first giant balloon (initially filled with air, before helium was used the following year)."
+  },
+  {
+    "q": "Which iconic character holds the all-time record for appearing as the most different balloon designs (8 versions and over 40 flights!) in Macy's Parade history?",
+    "a": [
+      "Kermit the Frog",
+      "Garfield",
+      "Snoopy",
+      "Pikachu"
+    ],
+    "c": 2,
+    "t": 20,
+    "topic": "Parades & Traditions",
+    "quote": "Snoopy first flew in 1968 as an aviator and has returned in eight different balloon designs—including an astronaut and Beagle Scout!"
+  },
+  {
+    "q": "Which two NFL teams have hosted a Thanksgiving Day football game almost every single year for decades?",
+    "a": [
+      "Green Bay Packers and Chicago Bears",
+      "Detroit Lions and Dallas Cowboys",
+      "New England Patriots and New York Giants",
+      "Pittsburgh Steelers and Philadelphia Eagles"
+    ],
+    "c": 1,
+    "t": 20,
+    "topic": "Sports & Traditions",
+    "quote": "The Detroit Lions started hosting on Thanksgiving in 1934, and the Dallas Cowboys joined as the second annual Thanksgiving host in 1966."
+  },
+  {
+    "q": "What unusual three-bird roast did legendary football broadcaster John Madden make famous by awarding its legs to NFL Thanksgiving game MVPs?",
+    "a": [
+      "The Turducken (a chicken inside a duck inside a turkey)",
+      "The Pheasant-Goose Crown Roast",
+      "The Triple-Smoked Gobbler",
+      "The Cajun Quail-Stuffed Turkey"
+    ],
+    "c": 0,
+    "t": 20,
+    "topic": "Sports & Traditions",
+    "quote": "John Madden loved carving a six-legged Turducken (deboned chicken stuffed into a deboned duck stuffed into a deboned turkey) live on the Thanksgiving broadcast!"
+  },
+  {
+    "q": "Why is the busiest shopping Friday after Thanksgiving called 'Black Friday'—before retailers later spun it as the day stores go 'into the black'?",
+    "a": [
+      "1950s Philadelphia police used it to describe the chaotic traffic jams and crowds before the Army-Navy game",
+      "Department stores used to dim their window lights until 6:00 a.m.",
+      "Newspapers printed their Friday sale ads on black paper",
+      "Coal delivery trucks blocked downtown streets every November"
+    ],
+    "c": 0,
+    "t": 20,
+    "topic": "Pop Culture & Fun Facts",
+    "quote": "Philadelphia police officers coined 'Black Friday' in the 1950s because every officer had to work 12-hour shifts handling suburban shoppers and Army-Navy football crowds."
+  },
+  {
+    "q": "According to plumbers across the United States, what do they nickname the day after Thanksgiving—their single busiest emergency call day of the year?",
+    "a": [
+      "Pipe Panic Friday",
+      "Brown Friday",
+      "Plunger Day",
+      "Clogtober"
+    ],
+    "c": 1,
+    "t": 20,
+    "topic": "Pop Culture & Fun Facts",
+    "quote": "Roto-Rooter and plumbers nationwide call the day after Thanksgiving 'Brown Friday'—calls jump by over 50% thanks to turkey grease, potato peels, and extra houseguests!"
+  },
+  {
+    "q": "The familiar melody of which winter holiday song was originally written in 1857 by James Lord Pierpont for a Sunday school Thanksgiving program?",
+    "a": [
+      "Deck the Halls",
+      "Jingle Bells",
+      "Frosty the Snowman",
+      "Winter Wonderland"
+    ],
+    "c": 1,
+    "t": 20,
+    "topic": "Pop Culture & Fun Facts",
+    "quote": "'Jingle Bells' (originally titled 'The One Horse Open Sleigh') was written for a Thanksgiving church concert in Savannah/Medford and doesn't mention Christmas once!"
+  },
+  {
+    "q": "In the classic 1973 TV special 'A Charlie Brown Thanksgiving,' what four-item feast do Snoopy and Linus prepare for the gang at the ping-pong table?",
+    "a": [
+      "Buttered toast, popcorn, pretzel sticks, and jelly beans",
+      "Peanut butter sandwiches, apple slices, marshmallows, and hot cocoa",
+      "Canned cranberry sauce, saltine crackers, cheese cubes, and pie",
+      "Waffles, chocolate chips, potato chips, and root beer"
+    ],
+    "c": 0,
+    "t": 20,
+    "topic": "Pop Culture & Fun Facts",
+    "quote": "Peppermint Patty is outraged when Snoopy serves buttered toast, popcorn, pretzel sticks, and jelly beans (plus an ice cream sundae)—before Marcie reminds her what Thanksgiving is really about!"
+  },
+  {
+    "q": "When does Canada celebrate its national Thanksgiving holiday each year?",
+    "a": [
+      "The last Thursday of November",
+      "The second Monday of October",
+      "The first Friday of November",
+      "The third Sunday of September"
+    ],
+    "c": 1,
+    "t": 20,
+    "topic": "Thanksgiving Around the World",
+    "quote": "Because Canada is farther north, its harvest season arrives earlier—so Canadian Thanksgiving is celebrated on the second Monday of October!"
+  }
+]

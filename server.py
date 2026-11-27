@@ -577,6 +577,7 @@ def list_quizzes(owner="_shared"):
         "quiz_chapter13_scenarios.json": "Chapter 13 (Scenarios): Sharing Your Business Story & Next Steps",
         "quiz_entr101_master150.json": "ENTR 101: Comprehensive Master Review (All 10 Chapters)",
         "quiz_fun_facts.json": "Fun Facts Trivia",
+        "quiz_thanksgiving_trivia.json": "Thanksgiving Feast & History Trivia",
         "quiz_ultimate_silly_trivia.json": "Ultimate Silly Trivia",
     }
     builtin_folders = {
