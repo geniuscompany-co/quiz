@@ -1256,6 +1256,16 @@ Quote: Paris has been the capital since 987 CE."></textarea>
       <input id="qUntimed" type="checkbox" onchange="updateTimerSummary();updateOptSummary();if(typeof onInspectorSettingChange==='function')onInspectorSettingChange()">
       <span>♾️ Untimed Quiz (No Countdown Timer)</span>
      </label>
+     <div class="preset-sel-row quiz-only" style="margin-top:8px" title="Filter questions by difficulty level or ramp up from Easy to Hard">
+      <span>🎚️ Difficulty Level</span>
+      <select id="qDifficulty" onchange="onDifficultyChange()">
+       <option value="">All Difficulty Levels</option>
+       <option value="easy">🟢 Easy Only</option>
+       <option value="medium">🟡 Medium Only</option>
+       <option value="hard">🔴 Hard Only</option>
+       <option value="progressive">📈 Progressive (Easy → Medium → Hard)</option>
+      </select>
+     </div>
      <div class="case-only" oninput="syncCaseTimerSpec();updateTimerSummary();if(typeof onInspectorSettingChange==='function')onInspectorSettingChange()">
       <div class="case-timers-grid">
        <label class="ct-item" title="Voting timer on Decision Poll slides"><span>🗳️ Poll</span><span><input id="cPollTime" type="number" min="5" max="900" value="45">s</span></label>
@@ -1778,17 +1788,20 @@ function updateTimerSummary(){
   const thkEl = document.getElementById('qThinkTime');
   const thk = (thkEl && thkEl.value !== '') ? Math.max(0, parseFloat(thkEl.value) || 0) : 0;
   const thkLbl = thk > 0 ? ` · ${thk}s think` : '';
+  const diffVal = ((document.getElementById('qDifficulty')||{}).value || '').toLowerCase();
+  const diffLblMap = {easy:' · 🟢 Easy', medium:' · 🟡 Medium', hard:' · 🔴 Hard', progressive:' · 📈 Easy→Hard'};
+  const diffLbl = diffLblMap[diffVal] || '';
   if(cnt > 0){
    const basePerQ = (q && q.est_sec && q.count) ? (q.est_sec / q.count) : 32;
    const estSec = Math.max(cnt * 8, cnt * (basePerQ + ((untimed ? 20 : tm) - 15) + (pv - 5) + thk));
    const estMin = Math.max(1, Math.round(estSec / 60));
-   setTxt(`${cnt} Qs · ${tmLbl}${thkLbl} · ~${estMin}m`);
+   setTxt(`${cnt} Qs${diffLbl} · ${tmLbl}${thkLbl} · ~${estMin}m`);
   } else {
-   setTxt(`${tmLbl} · ${pv}s preview${thkLbl}`);
+   setTxt(`${tmLbl}${diffLbl} · ${pv}s preview${thkLbl}`);
   }
-  const cust = !!(cnt > 0 || untimed || tm !== 15 || pv !== 5 || thk > 0);
+  const cust = !!(cnt > 0 || untimed || diffVal || tm !== 15 || pv !== 5 || thk > 0);
   b.classList.toggle('on', cust);
-  if(db){ db.textContent = thk > 0 ? `${tmLbl} + ${thk}s` : tmLbl; db.classList.toggle('on', untimed || tm !== 15 || pv !== 5 || thk > 0); }
+  if(db){ db.textContent = thk > 0 ? `${tmLbl} + ${thk}s` : tmLbl; db.classList.toggle('on', untimed || !!diffVal || tm !== 15 || pv !== 5 || thk > 0); }
  }
 }
 function updateScreenSummary(){
@@ -2272,6 +2285,7 @@ function renderBuilderPreview(){
   const thkPill = q.think ? `<span class="bp-badge">🧠 ${q.think}s</span>` : '';
   const ptsPill = (q.pts !== undefined && q.pts !== null && q.pts !== '') ? `<span class="bp-badge">💎 ${q.pts} pts</span>` : '';
   const topTopic = q.topic ? `<span class="bp-badge">🏷️ ${esc(q.topic)}</span>` : '';
+  const diffPill = q.difficulty ? `<span class="bp-badge">${q.difficulty==='easy'?'🟢 Easy':q.difficulty==='medium'?'🟡 Medium':q.difficulty==='hard'?'🔴 Hard':esc(q.difficulty)}</span>` : '';
   let body = '';
   if(qt === 'info'){
    const snip = (q.body || '').replace(/\s+/g,' ').trim().slice(0, 110);
@@ -2312,7 +2326,7 @@ function renderBuilderPreview(){
    q.quote ? '💡 Quote' : ''
   ].filter(Boolean);
   return `<div class="bp-card">
-   <div class="bp-top"><span><span class="bp-num">#${idx+1}</span> &middot; <span class="bp-badge">${typeName(qt)}</span></span><span>${tPill} ${thkPill} ${ptsPill} ${topTopic}</span></div>
+   <div class="bp-top"><span><span class="bp-num">#${idx+1}</span> &middot; <span class="bp-badge">${typeName(qt)}</span></span><span>${tPill} ${thkPill} ${ptsPill} ${diffPill} ${topTopic}</span></div>
    <div class="bp-q">${esc(q.q || '(Untitled slide)')}</div>
    ${body}
    ${extras.length ? `<div style="margin-top:5px;font-size:.76em;opacity:.75">${extras.join(' &middot; ')}</div>` : ''}
@@ -2362,6 +2376,7 @@ function formatQuestionsBlock(qs){
   }
   (q.exhibits||[]).forEach(e=>lines.push('Exhibit: '+e.url+(e.caption?' | '+e.caption:'')));
   if(q.img) lines.push('Image: '+q.img);
+  if(q.difficulty) lines.push('Difficulty: '+q.difficulty);
   if(q.topic) lines.push('Topic: '+q.topic);
   if(q.note) lines.push('Note: '+q.note);
   if(q.quote) lines.push('Quote: '+q.quote);
@@ -2465,7 +2480,7 @@ function parseCustomQuestions(raw){
   return Array.isArray(j) ? j : (j.questions || []);
  }
  const blocks = s.split(/\n\s*\n/).map(b=>b.trim()).filter(Boolean);
- if(blocks.length === 1 && s.includes(',') && s.split('\n').length > 1 && !/^(type|slider|pin|scale|image|quote|explain|body|role|exhibit|points|think|topic|note|timer?|allcorrect|partial):/im.test(s) && !/^\*/m.test(s)){
+ if(blocks.length === 1 && s.includes(',') && s.split('\n').length > 1 && !/^(type|slider|pin|scale|image|quote|explain|body|role|exhibit|points|think|topic|difficulty|note|timer?|allcorrect|partial):/im.test(s) && !/^\*/m.test(s)){
   return s.split('\n').map(l=>l.trim()).filter(Boolean).map(line=>{
    const p = line.split(',').map(x=>x.trim());
    if(p.length < 5 || p[0].toLowerCase()==='question') return null;
@@ -2486,12 +2501,13 @@ function parseCustomQuestions(raw){
   const noAns = (type==='open'||type==='info'||type==='brainstorm'||type==='slider'||type==='pin');
   const maxA = (type==='order'||type==='text') ? 8 : (type==='scale' ? 7 : 6);
   const a = [], aimg = [], lenses = [], outcomes = [], gotos = [], stars = [], pairs = [], exhibits = [], roles = [], bodyLines = [];
-  let c = 0, quote = '', img = '', starTxt = '', topic = '', note = '', customT = 0;
+  let c = 0, quote = '', img = '', starTxt = '', topic = '', difficulty = '', note = '', customT = 0;
   let ptsVal = null, thinkVal = 0, allCorrect = false, partialVal = true, sliderCfg = null, pinCfg = null, scaleLabels = null;
   lines.slice(1).forEach(l=>{
    if(/^(quote|explain):/i.test(l)){ quote = l.replace(/^(quote|explain):\s*/i,''); }
    else if(/^image:/i.test(l)){ img = l.replace(/^image:\s*/i,''); }
    else if(/^type:/i.test(l)){ }
+   else if(/^difficulty:/i.test(l)){ const dv = l.replace(/^difficulty:\s*/i,'').trim().toLowerCase(); if(['easy','medium','hard'].includes(dv)) difficulty = dv; }
    else if(/^timer?:/i.test(l)){ const tv = parseInt(l.replace(/^timer?:\s*/i,''), 10); if(tv > 0) customT = Math.max(5, Math.min(900, tv)); }
    else if(/^think:/i.test(l)){ const thv = parseInt(l.replace(/^think:\s*/i,''), 10); if(thv > 0) thinkVal = Math.max(1, Math.min(120, thv)); }
    else if(/^points:/i.test(l)){ const pv = parseInt(l.replace(/^points:\s*/i,''), 10); if(!isNaN(pv)) ptsVal = Math.max(0, Math.min(5000, pv)); }
@@ -2570,6 +2586,7 @@ function parseCustomQuestions(raw){
    }
   });
   const out = {q, a, c, quote, img, topic, note};
+  if(difficulty) out.difficulty = difficulty;
   if(customT > 0 && type !== 'info'){ out.t = customT; out.t_custom = true; }
   if(thinkVal > 0 && type !== 'info') out.think = thinkVal;
   if(ptsVal !== null) out.pts = ptsVal;
@@ -2985,7 +3002,7 @@ function persistCurrentQuizOrder(){
 const SAVED_SETTING_DEFAULTS = {
  qTime: 15, qPrevTime: 5, qThinkTime: 0, qTeamTime: 12, qSpeedTime: 5, qAutoTime: 7, qBots: 0,
  cPollTime: 45, cDiscussTime: 60, cRankTime: 60, cOpenTime: 120, qBrainTime: 45, qScaleTime: 25, cTime: 20, cPrevTime: 5,
- qScoring: 'classic', qIcePrompt: "In one word, how are you feeling about today's quiz?",
+ qScoring: 'classic', qDifficulty: '', qIcePrompt: "In one word, how are you feeling about today's quiz?",
  qUntimed: false, qShuffle: false, qShuffleAns: true, qWheel: false, qWager: false, qRedemp: false, qHot: false, qDbl: false, qSabotage: false, qSteal: false, qTie: false,
  qSpeed: false, qAuto: false, qTeams: false, qBattle: false, qConsensus: false, qIce: false,
  qMod: false, qRosterOn: false, qHideBoard: false, qStudentTts: false, qChat: false, qProfiles: false, qPlayToo: false
@@ -3047,6 +3064,8 @@ function readInspectorSettingsFromDom(includeCount=true){
  });
  const scEl = document.getElementById('qScoring');
  if(scEl && scEl.value) out.qScoring = scEl.value;
+ const dfEl = document.getElementById('qDifficulty');
+ if(dfEl) out.qDifficulty = dfEl.value || '';
  const ipEl = document.getElementById('qIcePrompt');
  if(ipEl && ipEl.value.trim()) out.qIcePrompt = ipEl.value.trim();
  SAVED_BOOL_KEYS.forEach(k => {
@@ -3054,6 +3073,45 @@ function readInspectorSettingsFromDom(includeCount=true){
   if(el) out[k] = !!el.checked;
  });
  return out;
+}
+function getEffectiveQuizMaxCount(q, diffVal){
+ if(!q) return 1;
+ const df = String(diffVal !== undefined ? diffVal : ((document.getElementById('qDifficulty')||{}).value || '')).trim().toLowerCase();
+ if((df === 'easy' || df === 'medium' || df === 'hard') && q.difficulties && q.difficulties[df] > 0){
+  return q.difficulties[df];
+ }
+ return q.count || 1;
+}
+function syncDifficultySelectOptions(selectedQ){
+ const dfEl = document.getElementById('qDifficulty');
+ if(!dfEl) return;
+ const diffs = selectedQ && selectedQ.difficulties ? selectedQ.difficulties : null;
+ const labels = {
+  '': diffs ? `All Difficulty Levels (${selectedQ.count || 0} Qs)` : 'All Difficulty Levels',
+  'easy': diffs ? `🟢 Easy Only (${diffs.easy || 0} Qs)` : '🟢 Easy Only',
+  'medium': diffs ? `🟡 Medium Only (${diffs.medium || 0} Qs)` : '🟡 Medium Only',
+  'hard': diffs ? `🔴 Hard Only (${diffs.hard || 0} Qs)` : '🔴 Hard Only',
+  'progressive': '📈 Progressive (Easy → Medium → Hard)'
+ };
+ Array.from(dfEl.options).forEach(opt => {
+  if(Object.prototype.hasOwnProperty.call(labels, opt.value)) opt.textContent = labels[opt.value];
+ });
+}
+function onDifficultyChange(){
+ const sel = document.getElementById('quizSel');
+ const q = quizList.find(x => x.file === (sel && sel.value));
+ const cntEl = document.getElementById('qCount'), mx = document.getElementById('qMax');
+ if(q){
+  const maxC = getEffectiveQuizMaxCount(q);
+  if(cntEl){
+   cntEl.max = maxC;
+   cntEl.value = maxC;
+  }
+  if(mx) mx.textContent = '/ ' + maxC;
+ }
+ updateTimerSummary();
+ updateOptSummary();
+ if(typeof onInspectorSettingChange === 'function') onInspectorSettingChange();
 }
 function applyInspectorSettingsToDom(cfg, selectedQ){
  _applyingSettingsGuard = true;
@@ -3065,16 +3123,20 @@ function applyInspectorSettingsToDom(cfg, selectedQ){
   });
   const scEl = document.getElementById('qScoring');
   if(scEl && merged.qScoring) scEl.value = merged.qScoring;
+  const dfEl = document.getElementById('qDifficulty');
+  syncDifficultySelectOptions(selectedQ);
+  if(dfEl) dfEl.value = merged.qDifficulty || '';
   const ipEl = document.getElementById('qIcePrompt');
   if(ipEl && merged.qIcePrompt) ipEl.value = merged.qIcePrompt;
   SAVED_BOOL_KEYS.forEach(k => {
    const el = document.getElementById(k);
    if(el && typeof merged[k] === 'boolean') el.checked = merged[k];
   });
-  const cntEl = document.getElementById('qCount');
+  const cntEl = document.getElementById('qCount'), mx = document.getElementById('qMax');
   if(cntEl && selectedQ){
-   const maxC = selectedQ.count || 1;
+   const maxC = getEffectiveQuizMaxCount(selectedQ, merged.qDifficulty || '');
    cntEl.max = maxC;
+   if(mx) mx.textContent = '/ ' + maxC;
    const savedCnt = (cfg && cfg.qCount) ? parseInt(cfg.qCount, 10) : NaN;
    cntEl.value = (!isNaN(savedCnt) && savedCnt >= 1 && savedCnt <= maxC) ? savedCnt : maxC;
   }
@@ -3369,6 +3431,10 @@ function renderDeckGrid(){
    : '';
   const isSel = cur === q.file;
   const hasSavedSet = !!getDeckSavedSettings(q);
+  const df = q.difficulties;
+  const diffMetaHtml = (df && (df.easy || df.medium || df.hard))
+   ? `<span class="deck-tag" style="background:#0f172acc;border:1px solid #38bdf866;color:#e0f2fe" title="Includes Difficulty Levels: ${df.easy||0} Easy, ${df.medium||0} Medium, ${df.hard||0} Hard">🎚️ ${df.easy?`🟢${df.easy} `:''}${df.medium?`🟡${df.medium} `:''}${df.hard?`🔴${df.hard}`:''}</span>`
+   : '';
   const estMin = q.est_min || Math.max(1, Math.round(((q.count || 1) * (q.case ? 65 : 32)) / 60));
   const menuOpen = (openDeckCourseMenuFile === q.file) && knownCourses.length > 0;
   const folderMenuOpen = (openDeckFolderMenuFile === q.file);
@@ -3397,7 +3463,7 @@ function renderDeckGrid(){
     <span class="deck-check">${isSel ? '✓' : ''}</span>
     <div class="deck-info">
      <div class="deck-title">${esc(cleanTitle)}</div>
-     <div class="deck-meta"><span style="cursor:pointer;text-decoration:underline dotted #ffffff55" title="Click to move this deck to another folder" onclick="event.stopPropagation();toggleDeckFolderPicker('${esc(q.file)}')">📂 ${esc(f)}</span>${hasSavedSet ? `<span class="deck-tag" style="background:#3b0764cc;border:1px solid #c084fc66;color:#e9d5ff" title="Has saved quiz settings (timers, scoring &amp; modifiers)">⚙️ Saved setup</span>` : ''}${cPills}${tags}</div>
+     <div class="deck-meta"><span style="cursor:pointer;text-decoration:underline dotted #ffffff55" title="Click to move this deck to another folder" onclick="event.stopPropagation();toggleDeckFolderPicker('${esc(q.file)}')">📂 ${esc(f)}</span>${diffMetaHtml}${hasSavedSet ? `<span class="deck-tag" style="background:#3b0764cc;border:1px solid #c084fc66;color:#e9d5ff" title="Has saved quiz settings (timers, scoring &amp; modifiers)">⚙️ Saved setup</span>` : ''}${cPills}${tags}</div>
     </div>
    </div>
    <div class="deck-right">
@@ -3718,13 +3784,15 @@ async function create(){
  const hideBoardOn = !!(document.getElementById('qHideBoard') && document.getElementById('qHideBoard').checked);
  const stuTtsOn = !!(document.getElementById('qStudentTts') && document.getElementById('qStudentTts').checked);
  const scoringMode = ((document.getElementById('qScoring')||{}).value || 'classic');
+ const diffVal = ((document.getElementById('qDifficulty')||{}).value || '');
  const clampCt = (id, defV) => Math.max(5, Math.min(900, parseInt((document.getElementById(id)||{}).value, 10) || defV));
  window._lastShuffle = shuf ? shuf.checked : false;
  window._lastShuffleAns = shufAns ? shufAns.checked : true;
+ window._lastDifficulty = diffVal;
  window.lastGame={file:qf,count:cnt}; try{ localStorage.setItem('brainrush_last', JSON.stringify(window.lastGame)); }catch(e){}
  const r=await postPw('/api/create',{
   quiz:qf, custom_questions: picked && picked.questions ? picked.questions : null,
-  count:cnt, shuffle:shuf ? shuf.checked : false, shuffle_answers: shufAns ? shufAns.checked : true, qtime:qtm, untimed:untimedOn, preview:prevSec,
+  count:cnt, difficulty:diffVal, shuffle:shuf ? shuf.checked : false, shuffle_answers: shufAns ? shufAns.checked : true, qtime:qtm, untimed:untimedOn, preview:prevSec,
   think_time:thinkSec, scoring_mode:scoringMode,
   hide_board:hideBoardOn, allow_tts:stuTtsOn, consensus:consensusOn,
   case_times:{
@@ -4211,11 +4279,13 @@ async function replayRound(){
  const shufOn = shufEl ? shufEl.checked : !!window._lastShuffle;
  const shufAnsEl = document.getElementById('qShuffleAns');
  const shufAnsOn = shufAnsEl ? shufAnsEl.checked : (window._lastShuffleAns !== undefined ? !!window._lastShuffleAns : true);
+ const diffEl = document.getElementById('qDifficulty');
+ const diffVal = isCase ? '' : (diffEl ? (diffEl.value || '') : (window._lastDifficulty || ''));
  podiumShown = false;
  animDone = -1;
  await post('/api/replay',{
   pin, host, quiz: qf,
-  count: cnt, shuffle: !isCase && shufOn, shuffle_answers: shufAnsOn,
+  count: cnt, difficulty: diffVal, shuffle: !isCase && shufOn, shuffle_answers: shufAnsOn,
   custom_questions: picked && picked.questions ? picked.questions : null
  });
  await poll();
@@ -4528,6 +4598,7 @@ function render(){
  const nAct = (S.n_active != null ? S.n_active : S.n);
  const ptsB = (S.pts !== null && S.pts !== undefined) ? `<span class="pts-badge">${S.pts === 0 ? 'Ungraded · 0 pts' : `💎 ${S.pts} pts`}</span>` : '';
  const allOkB = S.all_correct ? `<span class="pts-badge all-ok">✅ All Answers Accepted</span>` : '';
+ const diffB = S.difficulty ? `<span class="pts-badge" style="background:${S.difficulty==='easy'?'#14532dcc':S.difficulty==='medium'?'#713f12cc':'#7f1d1dcc'};border-color:${S.difficulty==='easy'?'#4ade8088':S.difficulty==='medium'?'#facc1588':'#f8717188'}">${S.difficulty==='easy'?'🟢 Easy':S.difficulty==='medium'?'🟡 Medium':S.difficulty==='hard'?'🔴 Hard':esc(S.difficulty)}</span>` : '';
  if(S.phase=='lobby'){
   spunQ = -1; seenWords.clear();
   const nm = (S.lobby||[]).map(p=>{
@@ -4616,7 +4687,7 @@ function render(){
   const pct = Math.min(100, ((S.preview_left||0)/(S.preview_total||5))*100);
   const wheelBanner = S.wheel_mod ? `<div class="wheel-banner">🎡 MYSTERY WHEEL: ${esc(S.wheel_mod)}</div>` : '';
   const extraB = `${S.team_battle?`<div class="team-banner">🤝 TEAM BATTLE! Your team's most popular answer earns +300 each</div>`:''}${S.hot?`<div class="hot-banner">🔥 HOT SEAT: ${esc(S.hot.name)} — will they nail it?</div>`:''}${S.tiebreak?`<div class="tb-banner">⚔️ SUDDEN DEATH TIEBREAKER: ${(S.tb_names||[]).map(esc).join(' vs ')}</div>`:''}`;
-  const badges = `${ptsB}${allOkB}${wheelBanner}${S.speed?`<div class="speed-banner">⚡ SPEED ROUND — ${S.speed_time||5} seconds, no waiting!</div>`:''}${S.dbl?'<div class="dbl-banner">💥 DOUBLE OR NOTHING — opt in on your phone!</div>':''}${extraB}${S.redemption?'<div class="redemp-banner">🔄 REDEMPTION QUESTION (MOST MISSED!) 🔄</div>':''}${S.boss?'<div class="double-banner">🎰 FINAL BOSS WAGER! 🎰</div>':S.double?'<div class="double-banner">⚡ DOUBLE POINTS! ⚡</div>':''}`;
+  const badges = `${diffB}${ptsB}${allOkB}${wheelBanner}${S.speed?`<div class="speed-banner">⚡ SPEED ROUND — ${S.speed_time||5} seconds, no waiting!</div>`:''}${S.dbl?'<div class="dbl-banner">💥 DOUBLE OR NOTHING — opt in on your phone!</div>':''}${extraB}${S.redemption?'<div class="redemp-banner">🔄 REDEMPTION QUESTION (MOST MISSED!) 🔄</div>':''}${S.boss?'<div class="double-banner">🎰 FINAL BOSS WAGER! 🎰</div>':S.double?'<div class="double-banner">⚡ DOUBLE POINTS! ⚡</div>':''}`;
   const mediaCol = (imgHtml || exH) ? `<div class="q-media">${imgHtml}${exH}</div>` : '';
   const thkPct = Math.min(100, ((S.think_left||0)/Math.max(1, S.think_total||5))*100);
   const thinkBanner = inThink ? `<div class="think-banner">
@@ -4695,7 +4766,7 @@ function render(){
    </div>`;
   }
  } else if(S.phase=='results'){
-  const resBadges = `${ptsB}${allOkB}`;
+  const resBadges = `${diffB}${ptsB}${allOkB}`;
   $.innerHTML=`<div class="stage-hud">
    <div class="stage-hud-left"><span class="qnum">${S.case_game?'Slide':'Question'} ${S.index+1} <small>of ${S.total}</small></span></div>
    <div class="stage-hud-right"><span class="ans-pill">📊 <b>${S.answered}/${nAct}</b> Responded</span></div>
@@ -6012,17 +6083,22 @@ syncQuizCount = function(){
  const deckChanged = (_lastAppliedDeckFile !== f);
  _lastAppliedDeckFile = f;
  if(q){
-  if(inp) inp.max = q.count;
-  if(mx) mx.textContent = '/ ' + q.count;
+  syncDifficultySelectOptions(q);
   if(cs) cs.textContent = q.count;
   if(deckChanged){
    applyInspectorSettingsToDom(getDeckSavedSettings(q) || {}, q);
-  } else if(inp && (!inp.value || parseInt(inp.value, 10) > q.count)){
-   const ds = getDeckSavedSettings(q);
-   const savedCnt = (ds && ds.qCount) ? parseInt(ds.qCount, 10) : NaN;
-   inp.value = (!isNaN(savedCnt) && savedCnt >= 1 && savedCnt <= q.count) ? savedCnt : q.count;
+  } else {
+   const maxC = getEffectiveQuizMaxCount(q);
+   if(inp) inp.max = maxC;
+   if(mx) mx.textContent = '/ ' + maxC;
+   if(inp && (!inp.value || parseInt(inp.value, 10) > maxC)){
+    const ds = getDeckSavedSettings(q);
+    const savedCnt = (ds && ds.qCount) ? parseInt(ds.qCount, 10) : NaN;
+    inp.value = (!isNaN(savedCnt) && savedCnt >= 1 && savedCnt <= maxC) ? savedCnt : maxC;
+   }
   }
  } else {
+  syncDifficultySelectOptions(null);
   if(inp){ inp.value = ''; inp.placeholder = '—'; }
   if(mx) mx.textContent = '/ —';
   if(cs) cs.textContent = '—';
@@ -6412,6 +6488,7 @@ function renderVisualCards(){
    <div class="vc-meta">
     <div><label>🏷️ Topic</label><input type="text" placeholder="Topic tag" value="${esc(q.topic||'')}" oninput="vcSetField(${idx},'topic',this.value)"></div>
     ${qt !== 'info' ? `
+     <div><label>🎚️ Difficulty</label><select class="vc-diff-sel" data-idx="${idx}" onchange="vcSetField(${idx},'difficulty',this.value)" style="width:100%;padding:6px 8px;border-radius:7px;border:0;font-weight:800;color:#2b0d57"><option value="">None</option><option value="easy">🟢 Easy</option><option value="medium">🟡 Medium</option><option value="hard">🔴 Hard</option></select></div>
      <div><label>⏱️ Time (s)</label><input type="number" min="5" max="900" placeholder="Default" value="${q.t||''}" oninput="vcSetNum(${idx},'t',this.value,true)"></div>
      <div><label>🧠 Think (s)</label><input type="number" min="0" max="120" placeholder="0" value="${q.think||''}" oninput="vcSetNum(${idx},'think',this.value,false)"></div>
      <div><label>💎 Points</label><input type="number" min="0" max="5000" placeholder="Auto" value="${q.pts!==undefined&&q.pts!==null?q.pts:''}" oninput="vcSetPts(${idx},this.value)"></div>
@@ -6428,6 +6505,10 @@ function renderVisualCards(){
  listEl.querySelectorAll('.vc-type-sel').forEach(sel=>{
   const q = visualCards[+sel.dataset.idx];
   if(q) sel.value = q.type || 'mc';
+ });
+ listEl.querySelectorAll('.vc-diff-sel').forEach(sel=>{
+  const q = visualCards[+sel.dataset.idx];
+  if(q) sel.value = q.difficulty || '';
  });
  listEl.querySelectorAll('.vc-scale-cnt').forEach(sel=>{
   const q = visualCards[+sel.dataset.idx];
@@ -6484,6 +6565,7 @@ function vcChangeType(idx, newType){
  const base = makeStarterCard(newType);
  base.q = old.q || '';
  base.topic = old.topic || '';
+ if(old.difficulty) base.difficulty = old.difficulty;
  if(old.t){ base.t = old.t; base.t_custom = !!old.t_custom; }
  if(old.think) base.think = old.think;
  if(old.pts !== undefined) base.pts = old.pts;
@@ -7771,6 +7853,7 @@ function renderPresenter(){
    <h2 style="margin:.2em 0">${esc(title)}</h2>`;
  } else if(ph === 'question'){
   const badges = [
+   S.difficulty ? (S.difficulty==='easy'?'🟢 Easy':S.difficulty==='medium'?'🟡 Medium':S.difficulty==='hard'?'🔴 Hard':S.difficulty) : '',
    (S.pts !== null && S.pts !== undefined) ? (S.pts === 0 ? 'Ungraded · 0 pts' : `💎 ${S.pts} pts`) : '',
    S.all_correct ? '✅ All Answers Accepted' : '',
    S.wheel_mod ? `🎡 ${S.wheel_mod}` : '',
@@ -7887,6 +7970,7 @@ function renderPresenter(){
    ? `<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px">
        <span class="pcon-chip" style="font-size:.82em">${qtypeBadge(un.qtype, un.case)}</span>
        <span class="pcon-chip" style="font-size:.82em">⏱️ ${un.qtime ? un.qtime + 's' : 'Untimed'}</span>
+       ${un.difficulty ? `<span class="pcon-chip" style="font-size:.82em">${un.difficulty==='easy'?'🟢 Easy':un.difficulty==='medium'?'🟡 Medium':un.difficulty==='hard'?'🔴 Hard':esc(un.difficulty)}</span>` : ''}
        ${un.branched ? `<span class="pcon-chip" style="font-size:.82em;background:#651fff88;border:1px solid #b388ff">🔀 Branched</span>` : ''}
        ${un.topic ? `<span class="pcon-chip" style="font-size:.82em">🏷️ ${esc(un.topic)}</span>` : ''}
       </div>

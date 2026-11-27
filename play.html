@@ -2396,6 +2396,7 @@ function render(){
    const typePillMap = {poll:'🗳️ Decision Poll', rank:'📊 Priority Rank', open:'✍️ Open Prompt', scale:'📏 Rating Scale', brainstorm:'💡 Brainstorm', multi:'☑️ Multi-Select', match:'🔗 Match Pairs', slider:'🎯 Estimate', pin:'📍 Pin on Image'};
    const chips = [
     `<span class="qnum">${(S.case||S.unscored)?'Slide':'Q'} ${S.index+1}/${S.total}</span>`,
+    S.difficulty ? `<span class="title-badge">${S.difficulty==='easy'?'🟢 Easy':S.difficulty==='medium'?'🟡 Medium':S.difficulty==='hard'?'🔴 Hard':esc(S.difficulty)}</span>` : '',
     S.topic ? `<span class="title-badge">🏷️ ${esc(S.topic)}</span>` : '',
     typePillMap[t] ? `<span class="wheel-pill">${typePillMap[t]}</span>` : '',
     (S.pts != null && Number(S.pts) !== 1000 && !S.unscored) ? `<span class="title-badge">⭐ ${S.pts} pts</span>` : '',
@@ -2625,7 +2626,7 @@ function render(){
        ? `Accuracy so far: <span style="color:var(--gold)">${m.pct??0}%</span>`
        : `Total Score: <span style="color:var(--gold)">${m.score}</span> (${m.pct??0}%)${(!S.hide_board && m.rank)?` &middot; Rank #${m.rank}`:''}`;
 
-    $.innerHTML=`<div class="chip-row" style="margin-bottom:6px"><span class="qnum">Question ${S.index+1} of ${S.total}</span>${S.topic?`<span class="title-badge">🏷️ ${esc(S.topic)}</span>`:''}</div>
+    $.innerHTML=`<div class="chip-row" style="margin-bottom:6px"><span class="qnum">Question ${S.index+1} of ${S.total}</span>${S.difficulty?`<span class="title-badge">${S.difficulty==='easy'?'🟢 Easy':S.difficulty==='medium'?'🟡 Medium':S.difficulty==='hard'?'🔴 Hard':esc(S.difficulty)}</span>`:''}${S.topic?`<span class="title-badge">🏷️ ${esc(S.topic)}</span>`:''}</div>
      ${S.question?`<div class="q-card" style="margin-bottom:8px"><p class="q-stem" style="font-size:.98rem">${esc(S.question)}</p></div>`:''}
      <div class="state-card ${cardCls}" style="margin:0">
       <div class="state-icon">${iconTxt}</div>

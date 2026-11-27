@@ -977,6 +977,7 @@ function applyRemoteDeckSettings(file){
  const setVal = (id, v) => { const el = document.getElementById(id); if(el && v !== undefined && v !== null) el.value = v; };
  const setChk = (id, v) => { const el = document.getElementById(id); if(el && typeof v === 'boolean') el.checked = v; };
  setVal('rScoring', cfg.qScoring || 'classic');
+ setVal('rDifficulty', cfg.qDifficulty || '');
  setVal('mQTime', cfg.qTime);
  setVal('mPrevTime', cfg.qPrevTime);
  setVal('rThinkTime', cfg.qThinkTime);
@@ -1070,6 +1071,8 @@ function updateRemoteOptBadge(){
  if(sa && !sa.checked) n++;
  const sc = (document.getElementById('rScoring') || {}).value || '';
  if(sc && sc !== 'classic') n++;
+ const df = (document.getElementById('rDifficulty') || {}).value || '';
+ if(df) n++;
  const bots = parseInt((document.getElementById('mBots') || {}).value, 10) || 0;
  if(bots > 0) n++;
  b.textContent = n > 0 ? `${n} customized` : 'Standard';
@@ -1181,6 +1184,15 @@ function renderStandby(){
        <option value="percent">📊 Percentage Grade (%)</option>
        <option value="survey">📋 Unscored Survey / Formative</option>
       </select>
+      ${launchMode === 'quiz' ? `
+      <div class="sec-lbl">🎚️ Difficulty Level</div>
+      <select id="rDifficulty" class="sel">
+       <option value="">All Difficulty Levels</option>
+       <option value="easy">🟢 Easy Only</option>
+       <option value="medium">🟡 Medium Only</option>
+       <option value="hard">🔴 Hard Only</option>
+       <option value="progressive">📈 Progressive (Easy → Medium → Hard)</option>
+      </select>` : ''}
       ${renderTimersHtml()}
       <div class="sec-lbl">✨ Session Modifiers</div>
       <div class="opt-grid">${renderOptsHtml()}</div>
@@ -1229,11 +1241,14 @@ async function launchFromPhone(){
  const teamsOn = chk('mTeams') || consensusOn;
  const scSel = document.getElementById('rScoring');
  const scoringMode = (scSel && scSel.value) ? scSel.value : 'classic';
+ const dfSel = document.getElementById('rDifficulty');
+ const diffVal = (!isCase && dfSel && dfSel.value) ? dfSel.value : '';
  const saEl = document.getElementById('mShufAns');
  const payload = {
   quiz: qf,
   pair_key: rkey,
   scoring_mode: scoringMode,
+  difficulty: diffVal,
   qtime: isCase ? numVal('mCheckTime', 20, 5, 900) : numVal('mQTime', 15, 5, 900),
   untimed: isCase ? false : chk('mUntimed'),
   preview: isCase ? numVal('mCasePrev', 5, 0, 120) : numVal('mPrevTime', 5, 0, 120),
@@ -1681,6 +1696,7 @@ function render(){
    open:'Open Response', brainstorm:'Brainstorm', info:'Case Chapter'
   };
   const qtBadge = S.qtype ? (qtLabels[S.qtype] || S.qtype.toUpperCase()) : '';
+  const diffBadge = S.difficulty ? (S.difficulty==='easy'?' · 🟢 Easy':S.difficulty==='medium'?' · 🟡 Medium':S.difficulty==='hard'?' · 🔴 Hard':'') : '';
   const modeMap = {classic:'🏆 Classic', accuracy:'🎯 Accuracy', percent:'📊 % Grade', survey:'📋 Survey'};
   const modePill = S.scoring_mode && S.scoring_mode !== 'classic' ? ` · ${modeMap[S.scoring_mode] || S.scoring_mode}` : '';
 
@@ -1738,7 +1754,7 @@ function render(){
    stageCard = `
     <div class="card">
      <div class="phase-row">
-      <span class="phase-tag">${qPhaseLbl}${qtBadge ? ' · ' + esc(qtBadge) : ''}</span>
+      <span class="phase-tag">${qPhaseLbl}${qtBadge ? ' · ' + esc(qtBadge) : ''}${diffBadge}</span>
       <span class="q-counter">${itemTag} ${(S.index || 0) + 1}/${S.total || 0}</span>
      </div>
      <div class="q-stem">${esc(S.question)}</div>

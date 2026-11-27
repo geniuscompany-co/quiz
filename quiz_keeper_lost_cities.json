@@ -1,0 +1,1302 @@
+[
+  {
+    "q": "What is the main protagonist's full name in the Keeper of the Lost Cities series?",
+    "a": [
+      "Sophie Elizabeth Foster",
+      "Sophie Marie Vacker",
+      "Sophie Eleanor Ruewen",
+      "Sophie Clara Sencen"
+    ],
+    "c": 0,
+    "difficulty": "easy",
+    "topic": "Characters & Abilities",
+    "quote": "Sophie Elizabeth Foster is raised in the human world before discovering she is an elf created by the Black Swan."
+  },
+  {
+    "q": "In which human city does Sophie Foster live with her human family at the beginning of Book 1?",
+    "a": [
+      "Seattle, Washington",
+      "San Diego, California",
+      "Boston, Massachusetts",
+      "Chicago, Illinois"
+    ],
+    "c": 1,
+    "difficulty": "easy",
+    "topic": "Characters & Abilities",
+    "quote": "Sophie lives in San Diego, California, and is on a class field trip to the Balboa Park Natural History Museum when Fitz finds her."
+  },
+  {
+    "q": "Which elf finds twelve-year-old Sophie at a natural history museum and introduces her to the Lost Cities?",
+    "a": [
+      "Keefe Sencen",
+      "Dex Dizznee",
+      "Fitz Vacker",
+      "Tam Song"
+    ],
+    "c": 2,
+    "difficulty": "easy",
+    "topic": "Characters & Abilities",
+    "quote": "Fitzroy Avery Vacker spots a newspaper article about a twelve-year-old child prodigy and locates Sophie at the museum."
+  },
+  {
+    "q": "What unusual eye color sets Sophie apart from every other elf in the Lost Cities?",
+    "a": [
+      "Violet",
+      "Emerald green",
+      "Silver",
+      "Brown"
+    ],
+    "c": 3,
+    "difficulty": "easy",
+    "topic": "Characters & Abilities",
+    "quote": "All natural-born elves have shades of blue eyes, whereas Sophie has warm brown eyes with flecks of gold from her alicorn DNA."
+  },
+  {
+    "q": "What is the first elvin ability Sophie manifests at age five after hitting her head?",
+    "a": [
+      "Telepathy",
+      "Telekinesis",
+      "Pyrokinesis",
+      "Vanishing"
+    ],
+    "c": 0,
+    "difficulty": "easy",
+    "topic": "Characters & Abilities",
+    "quote": "Sophie accidentally triggers her Telepathy at age five when she falls and hits her head on a curb."
+  },
+  {
+    "q": "What is Sophie's younger human sister originally named before her memories are erased and her family is relocated?",
+    "a": [
+      "Emma Foster",
+      "Amy Foster",
+      "Lucy Foster",
+      "Chloe Foster"
+    ],
+    "c": 1,
+    "difficulty": "easy",
+    "topic": "Characters & Abilities",
+    "quote": "Sophie's outspoken younger human sister is Amy Foster (who chooses the name Natalie when the Black Swan relocates the family)."
+  },
+  {
+    "q": "Which couple adopts Sophie after Grady and Edaline Ruewen lose their daughter Jolie?",
+    "a": [
+      "Alden and Della Vacker",
+      "Kesler and Juline Dizznee",
+      "Grady and Edaline Ruewen",
+      "Lord Cassius and Lady Gisela"
+    ],
+    "c": 2,
+    "difficulty": "easy",
+    "topic": "Characters & Abilities",
+    "quote": "Grady and Edaline Ruewen of Havenfield adopt Sophie as their ward and daughter."
+  },
+  {
+    "q": "What is the name of Grady and Edaline Ruewen's animal-filled estate where Sophie lives?",
+    "a": [
+      "Everglen",
+      "Candleshade",
+      "Shores of Solace",
+      "Havenfield"
+    ],
+    "c": 3,
+    "difficulty": "easy",
+    "topic": "Creatures & Elvin World",
+    "quote": "Havenfield sits on rugged cliffs by the ocean and serves as a sanctuary testing pastures for creatures before they go to the Sanctuary."
+  },
+  {
+    "q": "What is the name of the Vacker family's grand estate surrounded by glowing silver trees?",
+    "a": [
+      "Everglen",
+      "Havenfield",
+      "Rimeshire",
+      "Alluveterre"
+    ],
+    "c": 0,
+    "difficulty": "easy",
+    "topic": "Creatures & Elvin World",
+    "quote": "Alden and Della Vacker live at Everglen, a magnificent gated estate in the Lost Cities."
+  },
+  {
+    "q": "What is the special ability of Sophie's best friend Dex Dizznee?",
+    "a": [
+      "Flasher",
+      "Technopath",
+      "Conjurer",
+      "Shade"
+    ],
+    "c": 1,
+    "difficulty": "easy",
+    "topic": "Characters & Abilities",
+    "quote": "Dexter Alvin Dizznee manifests as a Technopath, someone with an innate talent for building and understanding gadgets."
+  },
+  {
+    "q": "What is the name of Dex's father's apothecary shop in Mysterium?",
+    "a": [
+      "Fizzleberry Fancies",
+      "Elixirs and Sparkles",
+      "Slurps and Burps",
+      "Apothecary Alley"
+    ],
+    "c": 2,
+    "difficulty": "easy",
+    "topic": "Creatures & Elvin World",
+    "quote": "Kesler Dizznee runs Slurps and Burps, an apothecary known for effective remedies that often have comical side effects."
+  },
+  {
+    "q": "What nickname does Keefe Sencen famously use to refer to his own signature hairstyle?",
+    "a": [
+      "The Golden Crown",
+      "The Silver Mane",
+      "Captain Curl",
+      "The Hair (and himself as Lord Hunkyhair)"
+    ],
+    "c": 3,
+    "difficulty": "easy",
+    "topic": "Characters & Abilities",
+    "quote": "Keefe constantly brags about 'The Hair' and calls himself President of the Foster Fan Club and Lord Hunkyhair."
+  },
+  {
+    "q": "What is Keefe Sencen's primary elvin ability when he first meets Sophie?",
+    "a": [
+      "Empath",
+      "Telepath",
+      "Vanisher",
+      "Mesmer"
+    ],
+    "c": 0,
+    "difficulty": "easy",
+    "topic": "Characters & Abilities",
+    "quote": "Keefe is a remarkably powerful Empath who can sense Sophie's emotions even without physical contact."
+  },
+  {
+    "q": "What is Biana Vacker's special ability?",
+    "a": [
+      "Psionipath",
+      "Vanisher",
+      "Beguiler",
+      "Froster"
+    ],
+    "c": 1,
+    "difficulty": "easy",
+    "topic": "Characters & Abilities",
+    "quote": "Like her mother Della, Biana manifests as a Vanisher capable of turning invisible to light."
+  },
+  {
+    "q": "What is Grady Ruewen's rare and feared elvin ability?",
+    "a": [
+      "Pyrokinetic",
+      "Inflictor",
+      "Mesmer",
+      "Vociferator"
+    ],
+    "c": 2,
+    "difficulty": "easy",
+    "topic": "Characters & Abilities",
+    "quote": "Grady is a Mesmer, giving him the power to compel others to obey his mental commands."
+  },
+  {
+    "q": "What is Edaline Ruewen's special ability that lets her summon objects from anywhere with a snap of her fingers?",
+    "a": [
+      "Teleporter",
+      "Enhancer",
+      "Phase-shifter",
+      "Conjurer"
+    ],
+    "c": 3,
+    "difficulty": "easy",
+    "topic": "Characters & Abilities",
+    "quote": "Edaline is a Conjurer who can snap her fingers to transport stored objects through the void."
+  },
+  {
+    "q": "What kind of prehistoric creature is Verdi, the bright green pet living in Havenfield's pastures?",
+    "a": [
+      "A vegetarian Tyrannosaurus rex",
+      "A wooly mammoth",
+      "A saber-toothed tiger",
+      "A winged gorgodon"
+    ],
+    "c": 0,
+    "difficulty": "easy",
+    "topic": "Creatures & Elvin World",
+    "quote": "Verdi is a feathery bright-green Tyrannosaurus rex who refuses to eat her vegetables despite being vegetarian."
+  },
+  {
+    "q": "What is the name of Sophie's mischievous pet imp that Dex dyes different colors?",
+    "a": [
+      "Stinky",
+      "Iggy",
+      "Sparky",
+      "Bramble"
+    ],
+    "c": 1,
+    "difficulty": "easy",
+    "topic": "Creatures & Elvin World",
+    "quote": "Sophie adopts an imp from Foxfire's alchemy dungeons and names him Iggy; Dex frequently gives him colorful makeovers."
+  },
+  {
+    "q": "What is the name of the glittering female alicorn (winged unicorn) who communicates telepathically with Sophie?",
+    "a": [
+      "Luna",
+      "Celeste",
+      "Silveny",
+      "Starlight"
+    ],
+    "c": 2,
+    "difficulty": "easy",
+    "topic": "Creatures & Elvin World",
+    "quote": "Silveny is the first female alicorn discovered in millennia and forms a deep telepathic bond with Sophie."
+  },
+  {
+    "q": "What is the name of the prestigious academy that noble elves attend in the Lost Cities?",
+    "a": [
+      "Exillium",
+      "Starlight Hall",
+      "Luminaria Academy",
+      "Foxfire"
+    ],
+    "c": 3,
+    "difficulty": "easy",
+    "topic": "Foxfire & Exillium",
+    "quote": "Foxfire is a multi-colored glass pyramid academy where young elves train for the nobility."
+  },
+  {
+    "q": "Instead of teachers, what are the instructors at Foxfire called?",
+    "a": [
+      "Mentors",
+      "Keepers",
+      "Preceptors",
+      "Regents"
+    ],
+    "c": 0,
+    "difficulty": "easy",
+    "topic": "Foxfire & Exillium",
+    "quote": "Foxfire instructors are called Mentors and typically teach Prodigies in one-on-one or very small sessions."
+  },
+  {
+    "q": "Instead of students, what are the young elves studying at Foxfire called?",
+    "a": [
+      "Waywards",
+      "Prodigies",
+      "Apprentices",
+      "Initiates"
+    ],
+    "c": 1,
+    "difficulty": "easy",
+    "topic": "Foxfire & Exillium",
+    "quote": "Foxfire students are referred to as Prodigies, arranged by levels corresponding to their year of study."
+  },
+  {
+    "q": "What is the name of the towering, high-pitched goblin bodyguard assigned to protect Sophie?",
+    "a": [
+      "Grizel",
+      "Woltzer",
+      "Sandor",
+      "Brielle"
+    ],
+    "c": 2,
+    "difficulty": "easy",
+    "topic": "Characters & Abilities",
+    "quote": "Sandor is a seven-foot-tall goblin warrior with an unexpectedly squeaky voice who is fiercely devoted to Sophie's safety."
+  },
+  {
+    "q": "How do elves primarily travel long distances across the world in a single moment?",
+    "a": [
+      "Apparating with wooden wands",
+      "Riding winged alicorns",
+      "Stepping through stone fireplaces",
+      "Light leaping with a leaping crystal"
+    ],
+    "c": 3,
+    "difficulty": "easy",
+    "topic": "Creatures & Elvin World",
+    "quote": "Elves angle a faceted crystal toward a beam of light and step into the path to leap to their destination on a beam of light."
+  },
+  {
+    "q": "What wristband device must young or unpracticed elves wear during light leaping so their molecules don't fade away?",
+    "a": [
+      "A nexus",
+      "A pathfinder",
+      "A registry pendant",
+      "A cache"
+    ],
+    "c": 0,
+    "difficulty": "easy",
+    "topic": "Creatures & Elvin World",
+    "quote": "A nexus measures the wearer's concentration during light leaping and pulls their particles back together if their focus slips."
+  },
+  {
+    "q": "What is the name of Sophie's favorite elvin dessert, often baked by Edaline and described as warm, gooey cake with melted chocolate and butterscotch?",
+    "a": [
+      "Ripplefluffs",
+      "Mallowmelt",
+      "Butterblasts",
+      "Lushberry tart"
+    ],
+    "c": 1,
+    "difficulty": "easy",
+    "topic": "Creatures & Elvin World",
+    "quote": "Mallowmelt is Sophie's absolute favorite elvin dessert, especially when topped with custard and ice cream."
+  },
+  {
+    "q": "How many Councillors sit on the elvin Council that rules the Lost Cities?",
+    "a": [
+      "Seven",
+      "Nine",
+      "Twelve",
+      "Fifteen"
+    ],
+    "c": 2,
+    "difficulty": "easy",
+    "topic": "Creatures & Elvin World",
+    "quote": "The Council consists of twelve unmarried leaders who govern the elvin world from Eternalia."
+  },
+  {
+    "q": "What is the capital city of the Lost Cities, home to the twelve Councillors' crystal castles?",
+    "a": [
+      "Atlantis",
+      "Mysterium",
+      "Lumenaria",
+      "Eternalia"
+    ],
+    "c": 3,
+    "difficulty": "easy",
+    "topic": "Creatures & Elvin World",
+    "quote": "Eternalia is the glittering capital of the Lost Cities where each Councillor resides in a personal crystal castle."
+  },
+  {
+    "q": "Which secret rebel organization created Sophie's tweaked genetics under the codename 'Project Moonlark'?",
+    "a": [
+      "The Black Swan",
+      "The Neverseen",
+      "The Council",
+      "The Cognates"
+    ],
+    "c": 0,
+    "difficulty": "easy",
+    "topic": "Black Swan & Neverseen",
+    "quote": "The Black Swan engineered Sophie's DNA as Project Moonlark to help wake the elvin world from dangerous complacency."
+  },
+  {
+    "q": "What is the name of the violent criminal extremist group wearing black cloaks with a white eyeless swan/circle motif that opposes both the Council and the Black Swan?",
+    "a": [
+      "The Waywards",
+      "The Neverseen",
+      "The Outcasts",
+      "The Vanguards"
+    ],
+    "c": 1,
+    "difficulty": "easy",
+    "topic": "Black Swan & Neverseen",
+    "quote": "The Neverseen is the ruthless rebel organization that seeks to overthrow the elvin system through force."
+  },
+  {
+    "q": "Which twin brother and sister join Sophie's circle of friends after attending Exillium?",
+    "a": [
+      "Dex and Bex Dizznee",
+      "Rex and Lex Dizznee",
+      "Tam and Linh Song",
+      "Fitz and Alvar Vacker"
+    ],
+    "c": 2,
+    "difficulty": "easy",
+    "topic": "Characters & Abilities",
+    "quote": "Tam and Linh Song are twins banished to Exillium after Linh accidentally flooded Atlantis."
+  },
+  {
+    "q": "What is Tam Song's elvin ability?",
+    "a": [
+      "Hydrokinetic",
+      "Flasher",
+      "Pyrokinetic",
+      "Shade"
+    ],
+    "c": 3,
+    "difficulty": "easy",
+    "topic": "Characters & Abilities",
+    "quote": "Tam is a powerful Shade who manipulates shadows and shadowvapor, as well as reading a person's shadowvapor."
+  },
+  {
+    "q": "What is Linh Song's elvin ability?",
+    "a": [
+      "Hydrokinetic",
+      "Froster",
+      "Guster",
+      "Shade"
+    ],
+    "c": 0,
+    "difficulty": "easy",
+    "topic": "Characters & Abilities",
+    "quote": "Linh is an extraordinary Hydrokinetic who can control massive amounts of water."
+  },
+  {
+    "q": "Who is the eccentric, glasses-wearing Flasher physician at Foxfire's Healing Center who treats Sophie's countless injuries?",
+    "a": [
+      "Sir Tiergan",
+      "Elwin Heslege",
+      "Lady Cadence",
+      "Magnate Leto"
+    ],
+    "c": 1,
+    "difficulty": "easy",
+    "topic": "Foxfire & Exillium",
+    "quote": "Elwin Heslege is Foxfire's caring physician who uses coloured light orbs to diagnose and heal Sophie and gives her stuffed animals."
+  },
+  {
+    "q": "Which five special abilities does Sophie Foster ultimately manifest across the series?",
+    "a": [
+      "Telepath, Empath, Mesmer, Vanisher, and Teleporter",
+      "Telepath, Polyglot, Flasher, Conjurer, and Inflictor",
+      "Telepath, Polyglot, Inflictor, Teleporter, and Enhancer",
+      "Telepath, Shade, Hydrokinetic, Teleporter, and Enhancer"
+    ],
+    "c": 2,
+    "difficulty": "medium",
+    "topic": "Characters & Abilities",
+    "quote": "Sophie manifests five abilities: Telepath, Polyglot, Inflictor, Teleporter, and Enhancer."
+  },
+  {
+    "q": "Which forbidden ability causes the Council to outlaw its training after Fintan sparks Everblaze and Brant kills Jolie?",
+    "a": [
+      "Mesmerizing",
+      "Inflicting",
+      "Shadow-wielding",
+      "Pyrokinesis"
+    ],
+    "c": 3,
+    "difficulty": "medium",
+    "topic": "Characters & Abilities",
+    "quote": "Pyrokinesis is outlawed in the Lost Cities because Pyrokinetics can summon Everblaze, a fire that cannot be extinguished by normal water."
+  },
+  {
+    "q": "Which of Sophie's friends from Foxfire secretly manifests as a Pyrokinetic and trains with Fintan and later Linh?",
+    "a": [
+      "Marella Redek",
+      "Maruca Chebota",
+      "Stina Heks",
+      "Biana Vacker"
+    ],
+    "c": 0,
+    "difficulty": "medium",
+    "topic": "Characters & Abilities",
+    "quote": "Marella Redek manifests as a Pyrokinetic and seeks training so she can control her flames and help her mother Caprise."
+  },
+  {
+    "q": "Whose death in a tragic fire before Book 1 left Grady and Edaline Ruewen isolated in grief for sixteen years?",
+    "a": [
+      "Edaline's sister, Juline",
+      "Their daughter, Jolie Ruewen",
+      "Grady's brother, Prentice",
+      "Alden's cousin, Cyrah"
+    ],
+    "c": 1,
+    "difficulty": "medium",
+    "topic": "Characters & Abilities",
+    "quote": "Jolie Ruewen died in a fire sparked by her fiancé Brant when she discovered he was part of the Neverseen."
+  },
+  {
+    "q": "Who is gradually revealed to have been Jolie Ruewen's fiancé—and an unregistered Pyrokinetic working for the Neverseen?",
+    "a": [
+      "Fintan Pyren",
+      "Alvar Vacker",
+      "Brant",
+      "Gethen"
+    ],
+    "c": 2,
+    "difficulty": "medium",
+    "topic": "Black Swan & Neverseen",
+    "quote": "Brant was an unregistered Pyrokinetic and member of the Neverseen; Jolie died in the fire when she confronted him."
+  },
+  {
+    "q": "Why is Dex's family looked down upon by elvin nobility despite Kesler being a skilled apothecary and Juline being a nobility member?",
+    "a": [
+      "His father was banished to Exillium as a teenager",
+      "They refused to register for registry pendants",
+      "His mother gave up her ability as a Froster",
+      "His parents were listed as a Bad Match AND had triplets (Rex, Bex, and Lex)"
+    ],
+    "c": 3,
+    "difficulty": "medium",
+    "topic": "Characters & Abilities",
+    "quote": "In elvin society, both ignoble 'Bad Matches' outside matchmaking lists and multiple births (like triplets) carry heavy social stigma."
+  },
+  {
+    "q": "Who is the Beguiler who serves as Principal of Foxfire at the start of the series before later becoming a Councillor?",
+    "a": [
+      "Dame Alina",
+      "Lady Cadence",
+      "Councillor Oralie",
+      "Lady Galvin"
+    ],
+    "c": 0,
+    "difficulty": "medium",
+    "topic": "Foxfire & Exillium",
+    "quote": "Dame Alina is a Beguiler who serves as Principal of Foxfire until Kenric's death opens a seat on the Council."
+  },
+  {
+    "q": "Which Councillor is Sophie's strongest supporter on the Council in the early books and tragically perishes in the Everblaze during Book 3?",
+    "a": [
+      "Councillor Terik",
+      "Councillor Kenric",
+      "Councillor Emery",
+      "Councillor Liora"
+    ],
+    "c": 1,
+    "difficulty": "medium",
+    "topic": "Characters & Abilities",
+    "quote": "Kenric Fathan is an upbeat, red-haired Telepath Councillor who dies in Fintan's Everblaze while saving Oralie in Book 3 (Everblaze)."
+  },
+  {
+    "q": "Which soft-spoken, pink-clad Empath Councillor is revealed in Book 8 (Legacy) to be Sophie's biological mother?",
+    "a": [
+      "Councillor Zarina",
+      "Councillor Noland",
+      "Councillor Oralie",
+      "Dame Alina"
+    ],
+    "c": 2,
+    "difficulty": "medium",
+    "topic": "Characters & Abilities",
+    "quote": "In Legacy, Sophie discovers that Councillor Oralie donated her genetic material to Mr. Forkle for Project Moonlark."
+  },
+  {
+    "q": "What is the name of the swollen, wrinkly-skinned member of the Black Swan's Collective who watched over Sophie as her human neighbor in San Diego?",
+    "a": [
+      "Granite",
+      "Blur",
+      "Wraith",
+      "Mr. Forkle"
+    ],
+    "c": 3,
+    "difficulty": "medium",
+    "topic": "Black Swan & Neverseen",
+    "quote": "Mr. Forkle posed as Sophie's eccentric neighbor in San Diego while eating ruckleberries to disguise his appearance."
+  },
+  {
+    "q": "Which three other identities in the Lost Cities are simultaneously held by Mr. Forkle (and his identical twin brother)?",
+    "a": [
+      "Magnate Leto, Sir Astin, and Admiral Riswyck",
+      "Sir Tiergan, Elwin Heslege, and Quinlin Sonden",
+      "Alden Vacker, Lord Cassius, and Kesler Dizznee",
+      "Blur, Wraith, and Prentice Endal"
+    ],
+    "c": 0,
+    "difficulty": "medium",
+    "topic": "Black Swan & Neverseen",
+    "quote": "Mr. Forkle and his twin shared the identities of Mr. Forkle, Magnate Leto (Foxfire principal), Sir Astin (Universe Mentor), and Admiral Riswyck."
+  },
+  {
+    "q": "How could Mr. Forkle appear to be in two places at once and survive after one 'Mr. Forkle' was killed by the Neverseen in Lodestar?",
+    "a": [
+      "He used a body-duplicating illusion device built by Tinker",
+      "Mr. Forkle was actually a pair of identical twin brothers sharing a single life and identity",
+      "He was a Phase-shifter who created a solid hologram clone",
+      "He transferred his consciousness into a backup clone body"
+    ],
+    "c": 1,
+    "difficulty": "medium",
+    "topic": "Black Swan & Neverseen",
+    "quote": "To avoid the elvin stigma against twins and protect Project Moonlark, the two identical brothers secretly lived as one person."
+  },
+  {
+    "q": "Which Telepath Mentor at Foxfire is secretly 'Granite' on the Black Swan's Collective and adoptive guardian to Wylie Endal?",
+    "a": [
+      "Sir Conley",
+      "Magnate Leto",
+      "Sir Tiergan",
+      "Quinlin Sonden"
+    ],
+    "c": 2,
+    "difficulty": "medium",
+    "topic": "Black Swan & Neverseen",
+    "quote": "Sir Tiergan is Sophie's Telepathy Mentor, Wylie's adoptive guardian, and the Black Swan Collective member known as Granite."
+  },
+  {
+    "q": "Which Froster—who is also Dex's mother and Edaline's sister—is secretly 'Squall' on the Black Swan's Collective?",
+    "a": [
+      "Della Vacker",
+      "Caprise Redek",
+      "Livvy Sonden",
+      "Juline Dizznee"
+    ],
+    "c": 3,
+    "difficulty": "medium",
+    "topic": "Black Swan & Neverseen",
+    "quote": "Juline Dizznee is revealed to be Squall, the Froster on the Black Swan's Collective."
+  },
+  {
+    "q": "Which Flasher physician—also Quinlin Sonden's estranged wife—is secretly 'Physic', the medic of the Black Swan's Collective?",
+    "a": [
+      "Livvy Sonden",
+      "Lady Cadence",
+      "Brielle",
+      "Marella's mother Caprise"
+    ],
+    "c": 0,
+    "difficulty": "medium",
+    "topic": "Black Swan & Neverseen",
+    "quote": "Livvy Sonden is a Flasher physician and Black Swan Collective member who went by the codename Physic."
+  },
+  {
+    "q": "Who is the Keeper for the Black Swan who was imprisoned in Exile, resulting in Alden's guilt-triggered memory break?",
+    "a": [
+      "Wylie Endal",
+      "Prentice Endal",
+      "Kenric Fathan",
+      "Fintan Pyren"
+    ],
+    "c": 1,
+    "difficulty": "medium",
+    "topic": "Black Swan & Neverseen",
+    "quote": "Prentice Endal (Wylie's father) was a Keeper for the Black Swan who called Swan Song before being captured and sent to Exile."
+  },
+  {
+    "q": "Who is Keefe Sencen's ruthless mother and one of the core leaders of the Neverseen behind Project Stellarlune?",
+    "a": [
+      "Vespera",
+      "Umber",
+      "Lady Gisela",
+      "Lady Cadence"
+    ],
+    "c": 2,
+    "difficulty": "medium",
+    "topic": "Black Swan & Neverseen",
+    "quote": "Lady Gisela is a Polyglot and mastermind within the Neverseen who manipulates Keefe's upbringing for her 'legacy'."
+  },
+  {
+    "q": "Which member of the Vacker family betrays the Lost Cities and reveals in Book 4 (Neverseen) that he is working with the Neverseen?",
+    "a": [
+      "Fitz Vacker",
+      "Alden Vacker",
+      "Fallon Vacker",
+      "Alvar Vacker"
+    ],
+    "c": 3,
+    "difficulty": "medium",
+    "topic": "Black Swan & Neverseen",
+    "quote": "Fitz and Biana's older brother Alvar Vacker is a Vanisher who secretly joined the Neverseen."
+  },
+  {
+    "q": "What rare telepathic partnership do Sophie and Fitz train to achieve so they can share thoughts effortlessly and boost their mental power?",
+    "a": [
+      "Cognates",
+      "Emissaries",
+      "Keepers",
+      "Waywards"
+    ],
+    "c": 0,
+    "difficulty": "medium",
+    "topic": "Characters & Abilities",
+    "quote": "Cognates are a pair of Telepaths who share complete trust and mental resonance, multiplying their telepathic strength."
+  },
+  {
+    "q": "What is the name of the outdoor school for banished 'Waywards' divided into Right, Left, and Ambi hemispheres?",
+    "a": [
+      "Alluveterre",
+      "Exillium",
+      "Loamnore",
+      "Watchward Heath"
+    ],
+    "c": 1,
+    "difficulty": "medium",
+    "topic": "Foxfire & Exillium",
+    "quote": "Exillium is the school for banished youth (Waywards), led by three Masked Coaches representing the Right, Left, and Ambi hemispheres."
+  },
+  {
+    "q": "What is the name of the male alicorn found by the Black Swan to be Silveny's mate?",
+    "a": [
+      "Wynn",
+      "solstice",
+      "Greyfell",
+      "Bronte"
+    ],
+    "c": 2,
+    "difficulty": "medium",
+    "topic": "Creatures & Elvin World",
+    "quote": "Greyfell is the silver-gray male alicorn who lives at the Sanctuary and becomes Silveny's mate."
+  },
+  {
+    "q": "What are the names of Silveny and Greyfell's twin baby alicorns born in Flashback?",
+    "a": [
+      "Star and Sky",
+      "Sol and Astra",
+      "Flicker and Beam",
+      "Wynn and Luna"
+    ],
+    "c": 3,
+    "difficulty": "medium",
+    "topic": "Creatures & Elvin World",
+    "quote": "Sophie helps deliver Silveny and Greyfell's twin alicorn foals and names them Wynn and Luna."
+  },
+  {
+    "q": "What is the name of the underground hideout built by the Black Swan amidst the roots of giant Panakes trees?",
+    "a": [
+      "Alluveterre",
+      "Choralmere",
+      "Rimeshire",
+      "Ravagog"
+    ],
+    "c": 0,
+    "difficulty": "medium",
+    "topic": "Creatures & Elvin World",
+    "quote": "Alluveterre is the Black Swan's hidden underground sanctuary located beneath a grove of Panakes trees."
+  },
+  {
+    "q": "Who is the fierce, colorful-haired ogre princess (and daughter of King Dimitar) who becomes Keefe's bodyguard?",
+    "a": [
+      "Bo",
+      "Ro",
+      "Tarina",
+      "Grizel"
+    ],
+    "c": 1,
+    "difficulty": "medium",
+    "topic": "Creatures & Elvin World",
+    "quote": "Princess Romhilda (Ro) is King Dimitar's daughter and is bound by oath to serve as Keefe's sharp-tongued bodyguard."
+  },
+  {
+    "q": "What is the name of the ogre capital city ruled by King Dimitar?",
+    "a": [
+      "Loamnore",
+      "Gorgoroth",
+      "Ravagog",
+      "Lumenaria"
+    ],
+    "c": 2,
+    "difficulty": "medium",
+    "topic": "Creatures & Elvin World",
+    "quote": "Ravagog is the heavily fortified capital city of the ogres."
+  },
+  {
+    "q": "What is the name of the subterranean capital city of the dwarves?",
+    "a": [
+      "Ravagog",
+      "Mysterium",
+      "Exile",
+      "Loamnore"
+    ],
+    "c": 3,
+    "difficulty": "medium",
+    "topic": "Creatures & Elvin World",
+    "quote": "Loamnore is the underground kingdom of the dwarves, carved beneath a mountain range."
+  },
+  {
+    "q": "What is Wylie Endal's special ability?",
+    "a": [
+      "Flasher",
+      "Psionipath",
+      "Shade",
+      "Technopath"
+    ],
+    "c": 0,
+    "difficulty": "medium",
+    "topic": "Characters & Abilities",
+    "quote": "Like his mother Cyrah, Wylie Endal manifests as a powerful Flasher capable of bending light and colors."
+  },
+  {
+    "q": "What ability does Wylie's cousin Maruca Chebota manifest during the series?",
+    "a": [
+      "Vanisher",
+      "Psionipath",
+      "Guster",
+      "Beguiler"
+    ],
+    "c": 1,
+    "difficulty": "medium",
+    "topic": "Characters & Abilities",
+    "quote": "Maruca manifests as a Psionipath, able to generate and project impenetrable force fields."
+  },
+  {
+    "q": "Which member of the Neverseen is a powerful Psionipath who traps enemies inside force fields and wears an ability-amplifying addler?",
+    "a": [
+      "Gethen",
+      "Trix",
+      "Ruy Ignis",
+      "Fintan Pyren"
+    ],
+    "c": 2,
+    "difficulty": "medium",
+    "topic": "Black Swan & Neverseen",
+    "quote": "Ruy Ignis is the Neverseen's Psionipath whose force fields blocked nearly all attacks until his bond was broken."
+  },
+  {
+    "q": "Which blond Telepath is the first member of the Neverseen captured by Sophie and her friends during Book 3 (Everblaze)?",
+    "a": [
+      "Brant",
+      "Ruy Ignis",
+      "Trix",
+      "Gethen"
+    ],
+    "c": 3,
+    "difficulty": "medium",
+    "topic": "Black Swan & Neverseen",
+    "quote": "Gethen is a high-ranking Telepath in the Neverseen whom Sophie captures in Everblaze (though he is later freed during the Exile break-in)."
+  },
+  {
+    "q": "Which strict, pointy-eared Councillor with the Inflictor ability initially distrusts Sophie before becoming one of her staunchest allies?",
+    "a": [
+      "Councillor Bronte",
+      "Councillor Emery",
+      "Councillor Terik",
+      "Councillor Clarette"
+    ],
+    "c": 0,
+    "difficulty": "medium",
+    "topic": "Characters & Abilities",
+    "quote": "Councillor Bronte is an ancient Inflictor who initially suspects Sophie's origins before becoming one of her most reliable allies."
+  },
+  {
+    "q": "What is the name of the maximum-security underground prison perched in the center of the earth where the Council holds its worst criminals?",
+    "a": [
+      "Nightfall",
+      "Exile",
+      "Tartarus",
+      "The Sanctuary"
+    ],
+    "c": 1,
+    "difficulty": "medium",
+    "topic": "Creatures & Elvin World",
+    "quote": "Exile is the labyrinthine maximum-security prison where the Council incarcerates dangerous prisoners and memory-broken criminals."
+  },
+  {
+    "q": "Why do elves experience physical pain, nausea, and psychological trauma leading to a 'memory break' whenever they commit violence?",
+    "a": [
+      "Their registry pendants shock their nervous systems whenever violence occurs",
+      "A magical curse placed by the ancient Ancients punishes any act of aggression",
+      "Elvin minds are wired with guilt that fractures their sanity when they intentionally harm another living being",
+      "The air of the Lost Cities contains spores that react to adrenaline"
+    ],
+    "c": 2,
+    "difficulty": "medium",
+    "topic": "Creatures & Elvin World",
+    "quote": "In Shannon Messenger's world, an elf's mind cannot handle the weight of lethal guilt; intense guilt literally shatters their consciousness."
+  },
+  {
+    "q": "What substance is Sophie DEATHLY allergic to, discovered when she drinks an ability-triggering elixir during a Foxfire alchemy lesson?",
+    "a": [
+      "Soporidine",
+      "Ruckleberries",
+      "Frissyn",
+      "Limbium"
+    ],
+    "c": 3,
+    "difficulty": "hard",
+    "topic": "Plot & Artifacts",
+    "quote": "Sophie goes into anaphylactic shock after ingesting limbium, requiring Elwin to administer adrenaline and elixir antidotes."
+  },
+  {
+    "q": "Which gnome sacrifices her own life in Book 4 (Neverseen) to transform into a giant Panakes tree whose blossoms cure the gnomish plague?",
+    "a": [
+      "Calla",
+      "Flori",
+      "Lur",
+      "Burdock"
+    ],
+    "c": 0,
+    "difficulty": "hard",
+    "topic": "Creatures & Elvin World",
+    "quote": "Calla willingly transforms into a Panakes tree at Havenfield so its healing petals and bark can save her fellow gnomes from the ogres' plague."
+  },
+  {
+    "q": "What are the official mascots of Levels One through Six at Foxfire before the Elite Levels (Silver and Gold Towers)?",
+    "a": [
+      "Silver Alicorn, Golden Phoenix, Emerald Dragon, Sapphire Griffin, Ruby Banshee, and Onyx Kraken",
+      "Valiant Gulon, Charging Mastodon, Soaring Halcyon, Prowling Brontodon, Striking Boobrie, and Roaring Sabretooth",
+      "Swirling Manticore, Leaping Sasquatch, Diving Plesiosaur, Stalking Chimera, Flaming Gargoyle, and Howling Yeti",
+      "Glowing Firefly, Prancing Unicorn, Gliding Pegasus, Charging Rhino, Swooping Falcon, and Roaring Lion"
+    ],
+    "c": 1,
+    "difficulty": "hard",
+    "topic": "Foxfire & Exillium",
+    "quote": "Foxfire's six lower levels use elvin creatures as mascots—starting with Level One's smelly green Valiant Gulon!"
+  },
+  {
+    "q": "Why is Sophie able to teleport unlike any other elf in the Lost Cities?",
+    "a": [
+      "She absorbed energy from a shattered Lodestar crystal during her kidnapping",
+      "Councillor Bronte unlocked a dormant Ancient gene during her Inflicting lessons",
+      "The Black Swan modeled stretches of her DNA on alicorn genetics, giving her the alicorns' instinct to fall through the void",
+      "She drank a rare quintessence potion brewed by Kesler Dizznee"
+    ],
+    "c": 2,
+    "difficulty": "hard",
+    "topic": "Plot & Artifacts",
+    "quote": "Because Project Moonlark used alicorn DNA as an inspiration for Sophie's genetic design, she shares Silveny's ability to enter the void and teleport."
+  },
+  {
+    "q": "What is the name of the sixth element—created by combining spark and shadow—that is the only substance capable of extinguishing Everblaze?",
+    "a": [
+      "Quintessence",
+      "Shadowflux",
+      "Stellarlune",
+      "Frissyn"
+    ],
+    "c": 3,
+    "difficulty": "hard",
+    "topic": "Plot & Artifacts",
+    "quote": "Frissyn is the sixth element forged by combining a Pyrokinetic's spark and a Shade's shadowvapor, used to extinguish Fintan's Everblaze."
+  },
+  {
+    "q": "What kind of special light—found in the stars and harnessed for the fifth element—must be collected safely before Fintan can use it to ignite Everblaze?",
+    "a": [
+      "Quintessence",
+      "Starstone",
+      "Lumenite",
+      "Aetherlight"
+    ],
+    "c": 0,
+    "difficulty": "hard",
+    "topic": "Plot & Artifacts",
+    "quote": "Quintessence is the volatile fifth element of starlight that requires careful bottling and is key to sparking Everblaze."
+  },
+  {
+    "q": "What are the marble-sized crystal spheres carried by every Councillor that store Dangerous 'Forgotten Secrets' removed from their own memories?",
+    "a": [
+      "Pathfinders",
+      "Caches",
+      "Addlers",
+      "Lodestars"
+    ],
+    "c": 1,
+    "difficulty": "hard",
+    "topic": "Plot & Artifacts",
+    "quote": "Each Councillor holds a cache containing encrypted Forgotten Secrets that were wiped from their active memory to protect the world."
+  },
+  {
+    "q": "Which ancient female member of the Neverseen lived inside the Nightfall facility for centuries conducting ruthless experiments on humans and creating illusions?",
+    "a": [
+      "Umber",
+      "Lady Gisela",
+      "Vespera",
+      "Zarina"
+    ],
+    "c": 2,
+    "difficulty": "hard",
+    "topic": "Black Swan & Neverseen",
+    "quote": "Vespera Neci Folend is an ancient elf who believed elves should conquer humans and was hidden inside Nightfall before Lady Gisela freed her."
+  },
+  {
+    "q": "What was the name of the Neverseen's Shade who attacked Sophie and Fitz with shadowflux in Flashback before being crushed under the gate at Shadow Thoughts?",
+    "a": [
+      "Trix",
+      "Vespera",
+      "Alvar",
+      "Umber"
+    ],
+    "c": 3,
+    "difficulty": "hard",
+    "topic": "Black Swan & Neverseen",
+    "quote": "Umber was the Neverseen's female Shade who ambushed Sophie and Fitz with shadowflux echoes and perished when the archway collapsed."
+  },
+  {
+    "q": "What is the ability of Trix, the Neverseen member who frequently works alongside Umber and Ruy?",
+    "a": [
+      "Guster",
+      "Froster",
+      "Vociferator",
+      "Charger"
+    ],
+    "c": 0,
+    "difficulty": "hard",
+    "topic": "Black Swan & Neverseen",
+    "quote": "Trix is the Neverseen's Guster, capable of manipulating powerful wind currents and vacuum pockets."
+  },
+  {
+    "q": "What ability does Councillor Terik possess that allows him to sense a person's potential and whether they are telling the truth?",
+    "a": [
+      "Empath",
+      "Descryer",
+      "Telepath",
+      "Beguiler"
+    ],
+    "c": 1,
+    "difficulty": "hard",
+    "topic": "Characters & Abilities",
+    "quote": "Councillor Terik is the only known Descryer in the Lost Cities, allowing him to read a person's potential."
+  },
+  {
+    "q": "How did Councillor Terik lose his leg during Book 5 (Lodestar)?",
+    "a": [
+      "He was bitten by a mutated gorgodon in the Sanctuary",
+      "Brant burned his leg with Everblaze in Eternalia",
+      "Fintan's sabotage caused the archetype building / wall at Lumenaria to collapse during the Peace Summit",
+      "King Dimitar struck him with an ogre broadsword in Ravagog"
+    ],
+    "c": 2,
+    "difficulty": "hard",
+    "topic": "Characters & Abilities",
+    "quote": "When the Neverseen destroyed Lumenaria's castle during the Peace Summit in Lodestar, Terik was trapped in the rubble and lost his leg."
+  },
+  {
+    "q": "What is the name of the ancient palace fortress on a tidal island with glowing green crystal walls that is destroyed during the Peace Summit in Book 5?",
+    "a": [
+      "Choralmere",
+      "Watchward Heath",
+      "Solreef",
+      "Lumenaria"
+    ],
+    "c": 3,
+    "difficulty": "hard",
+    "topic": "Plot & Artifacts",
+    "quote": "Lumenaria is the Neutral Territories' castle hub for prisoner transfers and summits before the Neverseen collapses it in Lodestar."
+  },
+  {
+    "q": "What is the name of Elwin Heslege's pet banshee who hides under his bed and warns when someone is near death?",
+    "a": [
+      "Bullhorn",
+      "Screecher",
+      "Whiskers",
+      "Banshee Bob"
+    ],
+    "c": 0,
+    "difficulty": "hard",
+    "topic": "Characters & Abilities",
+    "quote": "Bullhorn is Elwin's perceptive pet banshee who curls up with patients who will recover and only shrieks when someone's life is in grave danger."
+  },
+  {
+    "q": "What happens to Wylie's mother, Cyrah Endal, when Fintan and Brant force her to perform an unmapped light leap using a rough crystal?",
+    "a": [
+      "She is imprisoned inside the underwater facility of Nightfall",
+      "She fades entirely as her molecules fail to reassemble without sufficient concentration",
+      "She suffers a permanent memory break and is placed in Exile",
+      "She loses her Flasher ability and is stranded in the Forbidden Cities"
+    ],
+    "c": 1,
+    "difficulty": "hard",
+    "topic": "Characters & Abilities",
+    "quote": "Forced to leap with an uncut crystal to an unknown destination, Cyrah fades away completely."
+  },
+  {
+    "q": "What elixir do elves use to help victims recover their cohesion after partially 'fading' from a bad light leap?",
+    "a": [
+      "Youth",
+      "Soporidine",
+      "Fade fuel",
+      "Slumberberry tea"
+    ],
+    "c": 2,
+    "difficulty": "hard",
+    "topic": "Plot & Artifacts",
+    "quote": "Fade fuel is a potent medicine brewed to restore cellular density to elves who have partially faded during a light leap."
+  },
+  {
+    "q": "What white powder sedative do the Neverseen first use when kidnapping Sophie and Dex in Book 1?",
+    "a": [
+      "Limbium dust",
+      "Numbing nectar",
+      "Frissyn ash",
+      "Soporidine"
+    ],
+    "c": 3,
+    "difficulty": "hard",
+    "topic": "Plot & Artifacts",
+    "quote": "Soporidine is an odorless elvin sedative powder blown into victims' faces to induce paralysis and unconsciousness."
+  },
+  {
+    "q": "What is the elvin name for the bottled water that serves as the elves' staple daily drink and tastes slightly sweet and refreshing?",
+    "a": [
+      "Youth",
+      "Nectar",
+      "Lushberry tonic",
+      "Dewdrop"
+    ],
+    "c": 0,
+    "difficulty": "hard",
+    "topic": "Creatures & Elvin World",
+    "quote": "Elves drink bottled water called 'Youth', which keeps them hydrated and vital."
+  },
+  {
+    "q": "What collectibles come inside boxes of Prattles—an elvin treat modeled after human snacks—that Keefe and Sophie collect?",
+    "a": [
+      "Holographic trading cards of famous Councillors",
+      "Miniature enamel pins of rare creatures",
+      "Tiny glowing leaping crystals",
+      "Carved wooden figurines of the Ancients"
+    ],
+    "c": 1,
+    "difficulty": "hard",
+    "topic": "Creatures & Elvin World",
+    "quote": "Each Prattles box contains a small collectible pin depicting a creature, making certain rare pins (like the alicorn or mockingbird) prized treasures."
+  },
+  {
+    "q": "Which code phrase does the Black Swan use as their ultimate emergency call—signaling that a member is about to be captured or killed?",
+    "a": [
+      "Project Moonlark",
+      "Broken Wing",
+      "Swan Song",
+      "Nightfall"
+    ],
+    "c": 2,
+    "difficulty": "hard",
+    "topic": "Plot & Artifacts",
+    "quote": "Calling 'Swan Song' is the Black Swan's final distress code, first invoked by Prentice Endal before his capture."
+  },
+  {
+    "q": "What new abilities does Keefe Sencen manifest in Book 8.5 (Unlocked) after Lady Gisela and Shadowiske expose him to stellarlune and shadowflux?",
+    "a": [
+      "He manifests as a Telepath and a Pyrokinetic",
+      "He gains the ability to teleport through shadows and turn invisible",
+      "He becomes a Mesmer and a Hydrokinetic",
+      "He can sense abilities, issue unbreakable voice commands by speaking purely with raw emotion/power, and numb emotions"
+    ],
+    "c": 3,
+    "difficulty": "hard",
+    "topic": "Characters & Abilities",
+    "quote": "After awakening from his coma at the end of Legacy / Unlocked, Keefe develops a terrifying new voice-command power and ability-sensing intuition, prompting him to flee to the Forbidden Cities."
+  },
+  {
+    "q": "What two primal forces do Sophie and her friends discover in Book 9 (Stellarlune) are locked inside Vespera's and Gisela's experiments alongside shadowflux?",
+    "a": [
+      "Stellarlune and Elysian",
+      "Quintessence and Frissyn",
+      "Everblaze and Starlight",
+      "Magma and Aether"
+    ],
+    "c": 0,
+    "difficulty": "hard",
+    "topic": "Plot & Artifacts",
+    "quote": "In Book 9 (Stellarlune), the search centers on the true nature of stellarlune and the mysterious power source/entity known as Elysian."
+  },
+  {
+    "q": "Who is the secretive Technopath on the Black Swan's Collective who lives in an elaborate workshop and builds pathfinders and gadgets?",
+    "a": [
+      "Blur",
+      "Tinker",
+      "Wraith",
+      "Dex Dizznee"
+    ],
+    "c": 1,
+    "difficulty": "hard",
+    "topic": "Characters & Abilities",
+    "quote": "Tinker is the female Technopath associated with the Black Swan's Collective who mentors Dex and crafts high-level elvin technology."
+  },
+  {
+    "q": "Which member of the Black Swan's Collective has the Phase-shifter ability that makes their features constantly appear fuzzy and indistinct?",
+    "a": [
+      "Wraith",
+      "Granite",
+      "Blur",
+      "Squall"
+    ],
+    "c": 2,
+    "difficulty": "hard",
+    "topic": "Characters & Abilities",
+    "quote": "Blur is a Phase-shifter who keeps his body partially phased so his identity remains completely obscured."
+  },
+  {
+    "q": "Which member of the Black Swan's Collective is a Vanisher who wears a weighted cloak that appears to float cleanly without a visible body inside?",
+    "a": [
+      "Blur",
+      "Physic",
+      "Granite",
+      "Wraith"
+    ],
+    "c": 3,
+    "difficulty": "hard",
+    "topic": "Characters & Abilities",
+    "quote": "Wraith is the Vanisher on the Black Swan's Collective, recognizable by his empty-looking floating cloak."
+  },
+  {
+    "q": "What is the name of the dwarven king (later former king) who sides with the Neverseen during the siege of Loamnore before being overthrown?",
+    "a": [
+      "King Enki",
+      "King Dimitar",
+      "King Fallon",
+      "King Bronte"
+    ],
+    "c": 0,
+    "difficulty": "hard",
+    "topic": "Characters & Abilities",
+    "quote": "King Enki betrays the dwarves by striking a deal with the Neverseen, allowing them to tunnel beneath Loamnore."
+  },
+  {
+    "q": "Who is the calm, dark-skinned Telepath Councillor who serves as the spokesperson for the Council during Formal Tribunals?",
+    "a": [
+      "Councillor Bronte",
+      "Councillor Emery",
+      "Councillor Noland",
+      "Councillor Darek"
+    ],
+    "c": 1,
+    "difficulty": "hard",
+    "topic": "Characters & Abilities",
+    "quote": "Councillor Emery is a Telepath who acts as the moderating voice and chief spokesperson for the twelve Councillors."
+  },
+  {
+    "q": "Who is the Technopath Councillor who oversees the Sanctuary and helps verify technical gadgets for the Council?",
+    "a": [
+      "Councillor Ramira",
+      "Councillor Velia",
+      "Councillor Darek",
+      "Councillor Clarette"
+    ],
+    "c": 2,
+    "difficulty": "hard",
+    "topic": "Characters & Abilities",
+    "quote": "Councillor Darek is the Technopath on the Council."
+  },
+  {
+    "q": "Which Councillor is a Polyglot known for communicating with creatures like the mermaids and wearing unusual aquatic hairstyles?",
+    "a": [
+      "Councillor Oralie",
+      "Councillor Alina",
+      "Councillor Liora",
+      "Councillor Clarette"
+    ],
+    "c": 3,
+    "difficulty": "hard",
+    "topic": "Characters & Abilities",
+    "quote": "Councillor Clarette is a Polyglot on the Council who negotiates with non-elvin aquatic species."
+  },
+  {
+    "q": "What is the name of the friendly gnome who tends the gardens at Everglen before later helping Sophie and bonding with Bo?",
+    "a": [
+      "Flori",
+      "Calla",
+      "Lur",
+      "Cadoc"
+    ],
+    "c": 0,
+    "difficulty": "hard",
+    "topic": "Creatures & Elvin World",
+    "quote": "Flori is a young gnome originally from Everglen who sings to plants and becomes part of Sophie's close security and support group."
+  },
+  {
+    "q": "What is the name of the massive troll Empress whose underground breeding hives in Watchward Heath and Nightfall threaten to hatch an army of enhanced newborn trolls?",
+    "a": [
+      "Empress Tarina",
+      "Empress Pernille",
+      "Empress Vespera",
+      "Empress Dimitar"
+    ],
+    "c": 1,
+    "difficulty": "hard",
+    "topic": "Creatures & Elvin World",
+    "quote": "Empress Pernille rules the trolls while Tarina helps Sophie expose the Neverseen's mutated troll-hive experiments."
+  },
+  {
+    "q": "Which blue-skinned troll guard forms an alliance with Sophie to guard Silveny's babies before betraying and later helping explain the troll hives?",
+    "a": [
+      "Ro",
+      "Grizel",
+      "Tarina",
+      "Livvy"
+    ],
+    "c": 2,
+    "difficulty": "hard",
+    "topic": "Characters & Abilities",
+    "quote": "Tarina is the troll warrior assigned to Sophie's detail to protect Silveny during her pregnancy."
+  },
+  {
+    "q": "In Book 7 (Flashback), why do Sophie and Fitz spend weeks confined in the Foxfire Healing Center under Elwin's care?",
+    "a": [
+      "They both suffer severe limbium poisoning after infiltrating Nightfall",
+      "Fintan burns them with Everblaze during the battle of Eternalia",
+      "A collapsing force field from Ruy Ignis shatters their concentration nexuses",
+      "Umber's shadowflux attack leaves fading 'echoes' of darkness inside Sophie's wrist and Fitz's chest that threaten to consume them"
+    ],
+    "c": 3,
+    "difficulty": "hard",
+    "topic": "Plot & Artifacts",
+    "quote": "In Flashback, Umber strikes Sophie and Fitz with shadowflux, leaving deadly echoes inside their bodies that only heal after weeks in the Healing Center."
+  }
+]

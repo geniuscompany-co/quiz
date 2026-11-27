@@ -786,7 +786,7 @@ function show(){
   $.innerHTML = `
     <div class="q-card">
       <div class="q-top-row">
-        <span class="qnum">Question ${q.i+1} of ${q.n}${q.topic ? ' · 🏷️ ' + esc(q.topic) : ''}</span>
+        <span class="qnum">Question ${q.i+1} of ${q.n}${q.difficulty ? ' · ' + (q.difficulty==='easy'?'🟢 Easy':q.difficulty==='medium'?'🟡 Medium':q.difficulty==='hard'?'🔴 Hard':esc(q.difficulty)) : ''}${q.topic ? ' · 🏷️ ' + esc(q.topic) : ''}</span>
         <button type="button" class="tts-btn" id="ttsBtn" onclick="readAloud()">🔊 Read Aloud</button>
       </div>
       <div class="q">${esc(q.q)}</div>

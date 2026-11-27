@@ -579,6 +579,7 @@ def list_quizzes(owner="_shared"):
         "quiz_chapter13_scenarios.json": "Chapter 13 (Scenarios): Sharing Your Business Story & Next Steps",
         "quiz_entr101_master150.json": "ENTR 101: Comprehensive Master Review (All 10 Chapters)",
         "quiz_fun_facts.json": "Fun Facts Trivia",
+        "quiz_keeper_lost_cities.json": "Keeper of the Lost Cities (Shannon Messenger)",
         "quiz_thanksgiving_trivia.json": "Thanksgiving Feast & History Trivia",
         "quiz_ultimate_silly_trivia.json": "Ultimate Silly Trivia",
     }
@@ -625,9 +626,13 @@ def list_quizzes(owner="_shared"):
                                 seen_ch.append(ch_lbl)
                     def_tags = seen_ch[:12]
                 es = K.estimate_duration_sec(q)
-                items.append({"file": f, "title": "%s (%d Qs)" % (title, len(q)), "count": len(q), "folder": def_folder, "tags": def_tags, "builtin": True,
-                              "case": any(isinstance(x, dict) and x.get("type") in CASE_TYPES for x in q),
-                              "est_sec": es, "est_min": max(1, int(round(es / 60.0)))})
+                it_ = {"file": f, "title": "%s (%d Qs)" % (title, len(q)), "count": len(q), "folder": def_folder, "tags": def_tags, "builtin": True,
+                       "case": any(isinstance(x, dict) and x.get("type") in CASE_TYPES for x in q),
+                       "est_sec": es, "est_min": max(1, int(round(es / 60.0)))}
+                diffs = K.count_difficulties(q)
+                if diffs:
+                    it_["difficulties"] = diffs
+                items.append(it_)
         except Exception:
             pass
     owners = ["_shared"] + ([owner] if owner != "_shared" else [])
@@ -874,6 +879,10 @@ def clean_questions(questions):
                 item["roles"] = rl
         if q.get("topic"):
             item["topic"] = str(q["topic"]).strip()[:80]
+        if q.get("difficulty"):
+            df_v = str(q["difficulty"]).strip().lower()
+            if df_v in ("easy", "medium", "hard"):
+                item["difficulty"] = df_v
         if q.get("note"):
             item["note"] = str(q["note"]).strip()[:400]
         if q.get("quote"):
@@ -962,26 +971,67 @@ def shuffle_question_options(q):
     return out
 
 
-def new_game(quiz_file="quiz.json", count=None, shuffle=False, shuffle_answers=True, custom_questions=None, owner="_shared"):
+DIFFICULTY_ORDER = {"easy": 0, "medium": 1, "hard": 2}
+
+
+def apply_difficulty_filter(bank, difficulty="", count=None, shuffle=False):
+    diff = str(difficulty or "").strip().lower()
+    pool = [dict(x) for x in bank]
+    if diff in ("easy", "medium", "hard"):
+        filtered = [x for x in pool if str(x.get("difficulty") or "").strip().lower() == diff]
+        if filtered:
+            pool = filtered
+    if count is not None:
+        try:
+            k = max(1, min(len(pool), int(count)))
+        except Exception:
+            k = len(pool)
+    else:
+        k = len(pool)
+    if any(is_case_type(x) for x in pool) or any(x.get("goto") for x in pool):
+        quiz = [dict(x) for x in pool[:k]]
+    elif diff == "progressive":
+        by_lvl = {0: [], 1: [], 2: []}
+        for x in pool:
+            lv = DIFFICULTY_ORDER.get(str(x.get("difficulty") or "").strip().lower(), 1)
+            by_lvl[lv].append(dict(x))
+        if shuffle:
+            for lv in (0, 1, 2):
+                random.shuffle(by_lvl[lv])
+        if k < len(pool):
+            tot = len(pool)
+            c0 = min(len(by_lvl[0]), max(1 if by_lvl[0] and k >= 3 else 0, int(round(k * len(by_lvl[0]) / float(tot)))))
+            c1 = min(len(by_lvl[1]), max(1 if by_lvl[1] and k >= 3 else 0, int(round(k * len(by_lvl[1]) / float(tot)))))
+            c2 = max(0, min(len(by_lvl[2]), k - c0 - c1))
+            s0 = random.sample(by_lvl[0], c0) if (shuffle and c0 < len(by_lvl[0])) else by_lvl[0][:c0]
+            s1 = random.sample(by_lvl[1], c1) if (shuffle and c1 < len(by_lvl[1])) else by_lvl[1][:c1]
+            s2 = random.sample(by_lvl[2], c2) if (shuffle and c2 < len(by_lvl[2])) else by_lvl[2][:c2]
+            quiz = s0 + s1 + s2
+            if len(quiz) < k:
+                used_qs = {id(x) for x in quiz}
+                rem = [x for lv in (0, 1, 2) for x in by_lvl[lv] if id(x) not in used_qs]
+                quiz.extend(rem[:k - len(quiz)])
+                quiz.sort(key=lambda x: DIFFICULTY_ORDER.get(str(x.get("difficulty") or "").strip().lower(), 1))
+        else:
+            quiz = by_lvl[0] + by_lvl[1] + by_lvl[2]
+    elif k < len(pool) or shuffle:
+        quiz = [dict(x) for x in random.sample(pool, k)]
+    else:
+        quiz = [dict(x) for x in pool]
+    return quiz, pool
+
+
+def new_game(quiz_file="quiz.json", count=None, shuffle=False, shuffle_answers=True, custom_questions=None, owner="_shared", difficulty=""):
     while True:
         pin = str(random.randint(100000, 999999))
         if pin not in GAMES:
             break
     cleaned_custom = clean_questions(custom_questions) if custom_questions else []
-    bank = cleaned_custom if cleaned_custom else [dict(x) for x in load_quiz(quiz_file)]
-    if count is not None:
-        try:
-            k = max(1, min(len(bank), int(count)))
-        except Exception:
-            k = len(bank)
-    else:
-        k = len(bank)
-    if any(is_case_type(x) for x in bank) or any(x.get("goto") for x in bank):
-        quiz = [dict(x) for x in bank[:k]]
-    elif k < len(bank) or shuffle:
-        quiz = [dict(x) for x in random.sample(bank, k)]
-    else:
-        quiz = [dict(x) for x in bank]
+    raw_bank = cleaned_custom if cleaned_custom else [dict(x) for x in load_quiz(quiz_file)]
+    diff_norm = str(difficulty or "").strip().lower()
+    if diff_norm not in ("easy", "medium", "hard", "progressive"):
+        diff_norm = ""
+    quiz, bank = apply_difficulty_filter(raw_bank, diff_norm, count=count, shuffle=shuffle)
     if shuffle_answers:
         quiz = [shuffle_question_options(x) for x in quiz]
     GAMES[pin] = {
@@ -1007,27 +1057,19 @@ def new_game(quiz_file="quiz.json", count=None, shuffle=False, shuffle_answers=T
         "chat_enabled": False, "profiles_enabled": False, "play_too_enabled": False,
         "chat": [], "cseq": 0, "chat_q": [],
         "shuffle_answers": bool(shuffle_answers),
-        "untimed": False,
+        "untimed": False, "difficulty": diff_norm,
     }
     return GAMES[pin]
 
 
-def replay_game(g, quiz_file="quiz.json", count=None, shuffle=True, shuffle_answers=None, custom_questions=None):
+def replay_game(g, quiz_file="quiz.json", count=None, shuffle=True, shuffle_answers=None, custom_questions=None, difficulty=None):
     cleaned_custom = clean_questions(custom_questions) if custom_questions else []
-    bank = cleaned_custom if cleaned_custom else [dict(x) for x in load_quiz(quiz_file)]
-    if count is not None:
-        try:
-            k = max(1, min(len(bank), int(count)))
-        except Exception:
-            k = len(bank)
-    else:
-        k = len(bank)
-    if any(is_case_type(x) for x in bank) or any(x.get("goto") for x in bank):
-        g["quiz"] = [dict(x) for x in bank[:k]]
-    elif k < len(bank) or shuffle:
-        g["quiz"] = [dict(x) for x in random.sample(bank, k)]
-    else:
-        g["quiz"] = [dict(x) for x in bank]
+    raw_bank = cleaned_custom if cleaned_custom else [dict(x) for x in load_quiz(quiz_file)]
+    diff_norm = str(g.get("difficulty", "") if difficulty is None else difficulty).strip().lower()
+    if diff_norm not in ("easy", "medium", "hard", "progressive"):
+        diff_norm = ""
+    g["difficulty"] = diff_norm
+    g["quiz"], bank = apply_difficulty_filter(raw_bank, diff_norm, count=count, shuffle=shuffle)
     shuf_ans = g.get("shuffle_answers", True) if shuffle_answers is None else bool(shuffle_answers)
     g["shuffle_answers"] = shuf_ans
     if shuf_ans:
@@ -2866,6 +2908,7 @@ def view(g, pid=None, host=False):
         "hide_board": bool(g.get("hide_board")),
         "allow_tts": bool(g.get("allow_tts")),
         "untimed": bool(g.get("untimed")),
+        "game_difficulty": g.get("difficulty") or "",
         "think_default": int(g.get("think_time") or 0),
         "logo": g.get("logo") or "",
     }
@@ -2884,6 +2927,7 @@ def view(g, pid=None, host=False):
             out["up_next"] = {
                 "num": ni + 1, "total": len(g["quiz"]), "q": nq["q"],
                 "qtype": qtype_of(nq), "case": is_case_type(nq), "topic": nq.get("topic") or "",
+                "difficulty": nq.get("difficulty") or "",
                 "qtime": 0 if qtype_of(nq) == "info" else round(qtime(g, ni)),
                 "branched": bool(bt_next),
             }
@@ -2954,6 +2998,7 @@ def view(g, pid=None, host=False):
         out["speed"] = is_speed_q(g, g["q"])
         out["dbl"] = is_dbl_q(g, g["q"])
         out["topic"] = q.get("topic")
+        out["difficulty"] = q.get("difficulty") or ""
         if host:
             if q.get("note"):
                 out["note"] = q["note"]
@@ -3600,11 +3645,8 @@ class H(BaseHTTPRequestHandler):
             if not bank:
                 self.send({"error": "That quiz only has unscored or case-study slides. Homework needs scored questions."}, 400)
                 return True
-            try:
-                k = max(1, min(len(bank), int(body.get("count") or len(bank))))
-            except Exception:
-                k = len(bank)
-            qs_ = random.sample(bank, k) if (body.get("shuffle", True) or k < len(bank)) else [dict(x) for x in bank]
+            hw_diff = str(body.get("difficulty") or "").strip().lower()
+            qs_, _ = apply_difficulty_filter(bank, hw_diff, count=body.get("count") or len(bank), shuffle=bool(body.get("shuffle", True)))
             if body.get("shuffle_answers", True):
                 qs_ = [shuffle_question_options(x) for x in qs_]
             roster = []
@@ -3779,6 +3821,7 @@ class H(BaseHTTPRequestHandler):
                     shuffle_answers=True if body.get("shuffle_answers") is None else bool(body.get("shuffle_answers")),
                     custom_questions=body.get("custom_questions"),
                     owner=owner_of(body.get("token")),
+                    difficulty=body.get("difficulty") or "",
                 )
                 for k_ in ("speed", "dbl", "steal", "moderate", "hide_board", "allow_tts", "consensus",
                            "chat_enabled", "profiles_enabled", "play_too_enabled", "untimed"):
@@ -3993,6 +4036,7 @@ class H(BaseHTTPRequestHandler):
                     bool(body.get("shuffle", True)),
                     shuffle_answers=body.get("shuffle_answers"),
                     custom_questions=body.get("custom_questions"),
+                    difficulty=body.get("difficulty"),
                 )
                 return self.send({"ok": True, "pin": g["pin"]})
             if path == "/api/bots":

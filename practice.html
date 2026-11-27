@@ -1273,11 +1273,23 @@ function getActivePracticeDeck(){
   return (lockedQuiz && !lockedQuiz.error) ? lockedQuiz : null;
 }
 
+function getFilteredPracticePool(active, tfVal, dfVal){
+  if(!active || !Array.isArray(active.questions)) return [];
+  const df = String(dfVal || '').trim().toLowerCase();
+  return active.questions.filter(q => {
+    const okTopic = (!tfVal || tfVal === '__ALL__') || String((q && q.topic) || '').trim() === tfVal;
+    const okDiff = (!df || df === 'progressive') || String((q && q.difficulty) || '').trim().toLowerCase() === df;
+    return okTopic && okDiff;
+  });
+}
+
 function updatePracSummary(){
   const active = getActivePracticeDeck();
   const tfEl = document.getElementById('pracTopicFilter');
   const tfVal = tfEl ? tfEl.value : '';
-  const pool = active ? (active.questions || []).filter(q => (!tfVal || tfVal === '__ALL__') || String((q && q.topic) || '').trim() === tfVal) : [];
+  const dfEl = document.getElementById('pracDiffFilter');
+  const dfVal = dfEl ? dfEl.value : '';
+  const pool = getFilteredPracticePool(active, tfVal, dfVal);
   const maxN = pool.length;
   const maxEl = document.getElementById('pMaxCnt');
   if(maxEl) maxEl.textContent = '/ ' + (maxN || '—');
@@ -1294,9 +1306,11 @@ function onPracTopicFilterChange(){
   const active = getActivePracticeDeck();
   const tfEl = document.getElementById('pracTopicFilter');
   const tfVal = tfEl ? tfEl.value : '';
+  const dfEl = document.getElementById('pracDiffFilter');
+  const dfVal = dfEl ? dfEl.value : '';
   const errEl = document.getElementById('pErr');
   if(tfVal && errEl) errEl.style.display = 'none';
-  const pool = active ? (active.questions || []).filter(q => (!tfVal || tfVal === '__ALL__') || String((q && q.topic) || '').trim() === tfVal) : [];
+  const pool = getFilteredPracticePool(active, tfVal, dfVal);
   const cntEl = document.getElementById('cnt');
   if(cntEl){
     cntEl.max = pool.length || 1;
@@ -1346,10 +1360,14 @@ async function setup(){
   const active = getActivePracticeDeck();
   const n = active ? (active.questions || []).length : 0;
   const deckTopics = [];
+  const diffCounts = {easy:0, medium:0, hard:0};
+  let hasDifficulties = false;
   if(active && Array.isArray(active.questions)){
     active.questions.forEach(q => {
       const tp = String((q && q.topic) || '').trim();
       if(tp && !deckTopics.includes(tp)) deckTopics.push(tp);
+      const df = String((q && q.difficulty) || '').trim().toLowerCase();
+      if(df in diffCounts){ diffCounts[df]++; hasDifficulties = true; }
     });
   }
 
@@ -1386,6 +1404,15 @@ async function setup(){
                 return `<option value="${esc(tp)}">${esc(tp)} (${c} Questions)</option>`;
               }).join('')}
             </select>
+            ${hasDifficulties ? `
+            <div class="field-lbl" style="margin-top:10px"><span>🎚️ Difficulty Level</span></div>
+            <select id="pracDiffFilter" onchange="onPracTopicFilterChange()" style="font-size:.94em;padding:10px 12px;text-align:left;margin-bottom:0">
+              <option value="">All Difficulty Levels (${n} Questions)</option>
+              <option value="easy">🟢 Easy Only (${diffCounts.easy} Questions)</option>
+              <option value="medium">🟡 Medium Only (${diffCounts.medium} Questions)</option>
+              <option value="hard">🔴 Hard Only (${diffCounts.hard} Questions)</option>
+              <option value="progressive">📈 Progressive (Easy → Medium → Hard)</option>
+            </select>` : ''}
           </div>
         </details>
 
@@ -1526,13 +1553,19 @@ async function start(customQs){
     if(pvEl) prevMax = Math.max(0, Math.min(120, parseFloat(pvEl.value !== '' ? pvEl.value : prevMax) || 0));
     const thEl = document.getElementById('pThinkTime');
     if(thEl) thinkMax = Math.max(0, Math.min(120, parseFloat(thEl.value !== '' ? thEl.value : thinkMax) || 0));
-    baseQs = (active.questions || []).filter(q => topicFilter === '__ALL__' || String((q && q.topic) || '').trim() === topicFilter);
+    const dfEl = document.getElementById('pracDiffFilter');
+    const diffFilter = dfEl ? (dfEl.value || '').trim().toLowerCase() : '';
+    baseQs = getFilteredPracticePool(active, topicFilter, diffFilter);
     qs = baseQs.slice();
     if(shuffle){
       for(let i = qs.length - 1; i > 0; i--){
         const j = Math.floor(Math.random() * (i + 1));
         [qs[i], qs[j]] = [qs[j], qs[i]];
       }
+    }
+    if(diffFilter === 'progressive'){
+      const dOrd = {easy:0, medium:1, hard:2};
+      qs.sort((a,b) => (dOrd[String((a&&a.difficulty)||'').toLowerCase()] ?? 1) - (dOrd[String((b&&b.difficulty)||'').toLowerCase()] ?? 1));
     }
     if(!isNaN(rawCnt) && rawCnt > 0) qs = qs.slice(0, rawCnt);
     if(shuffleAns) qs = qs.map(shufflePracticeQuestionOptions);
@@ -1718,6 +1751,7 @@ function renderQuestionStage(phaseTransition){
     body = `<div class="grid">${(q.a||[]).map((a,i)=>`<button class="c${i%6}" onclick="pick(${i})" ${inThink ? 'disabled' : ''}>${q.aimg && q.aimg[i] ? `<img src="${esc(q.aimg[i])}" alt="">` : ''}<span class="sh">${sh[i%6]}</span><span>${esc(a)}</span></button>`).join('')}</div>`;
   }
 
+  const diffTag = q.difficulty ? ` · ${q.difficulty==='easy'?'🟢 Easy':q.difficulty==='medium'?'🟡 Medium':q.difficulty==='hard'?'🔴 Hard':esc(q.difficulty)}` : '';
   const topicTag = q.topic ? ` · ${esc(q.topic)}` : '';
   const showStemImg = q.img && (t !== 'pin' || inPrev);
   const zoomCls = t === 'zoom' ? (inPrev ? '' : ' zoom-go') : '';
@@ -1725,7 +1759,7 @@ function renderQuestionStage(phaseTransition){
   $.innerHTML = `
     <div class="q-card">
       <div class="q-top-row">
-        <div class="qnum">Question ${run.i+1} of ${run.qs.length}${topicTag}</div>
+        <div class="qnum">Question ${run.i+1} of ${run.qs.length}${diffTag}${topicTag}</div>
         <button type="button" class="tts-btn" id="ttsBtn" onclick="speakPractice()">Read Aloud</button>
       </div>
       <div class="q">${esc(q.q)}</div>

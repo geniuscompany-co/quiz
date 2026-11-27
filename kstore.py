@@ -352,7 +352,7 @@ def deck_order_set(owner, order):
 ALLOWED_SETTING_KEYS = {
     "qCount", "qTime", "qPrevTime", "qThinkTime", "qTeamTime", "qSpeedTime", "qAutoTime", "qBots",
     "cPollTime", "cDiscussTime", "cRankTime", "cOpenTime", "qBrainTime", "qScaleTime", "cTime", "cPrevTime",
-    "qScoring", "qIcePrompt",
+    "qScoring", "qIcePrompt", "qDifficulty",
     "qUntimed", "qShuffle", "qShuffleAns", "qWheel", "qWager", "qRedemp", "qHot", "qDbl", "qSabotage", "qSteal", "qTie",
     "qSpeed", "qAuto", "qTeams", "qBattle", "qConsensus", "qIce",
     "qMod", "qRosterOn", "qHideBoard", "qStudentTts", "qChat", "qProfiles", "qPlayToo",
@@ -657,18 +657,34 @@ def estimate_duration_sec(questions, qtime=15, preview=5):
     return max(30, int(tot))
 
 
+def count_difficulties(questions):
+    counts = {"easy": 0, "medium": 0, "hard": 0}
+    has_any = False
+    for q in questions or []:
+        if isinstance(q, dict):
+            d = str(q.get("difficulty") or "").strip().lower()
+            if d in counts:
+                counts[d] += 1
+                has_any = True
+    return counts if has_any else None
+
+
 def uq_list(owners):
     items = []
     for o in owners:
         for qid, v in uq_load(o).items():
             qs = v.get("questions") or []
             es = estimate_duration_sec(qs)
-            items.append({"file": qid, "title": "%s (%d Qs)" % (v["title"], len(qs)), "count": len(qs),
-                          "folder": v.get("folder") or "My Quizzes", "tags": v.get("tags", []),
-                          "courses": _clean_course_ids(v.get("courses") or []),
-                          "owner": o, "user": True,
-                          "case": any(x.get("type") in ("poll", "open", "rank", "info") for x in qs),
-                          "est_sec": es, "est_min": max(1, int(round(es / 60.0)))})
+            it_ = {"file": qid, "title": "%s (%d Qs)" % (v["title"], len(qs)), "count": len(qs),
+                   "folder": v.get("folder") or "My Quizzes", "tags": v.get("tags", []),
+                   "courses": _clean_course_ids(v.get("courses") or []),
+                   "owner": o, "user": True,
+                   "case": any(x.get("type") in ("poll", "open", "rank", "info") for x in qs),
+                   "est_sec": es, "est_min": max(1, int(round(es / 60.0)))}
+            diffs = count_difficulties(qs)
+            if diffs:
+                it_["difficulties"] = diffs
+            items.append(it_)
     return items
 
 
@@ -876,7 +892,7 @@ def hw_question(doc, sub):
     t = q.get("type") or "mc"
     a = q.get("a", [])
     out = {"i": i, "n": len(doc["questions"]), "q": q["q"], "type": t, "qtype": t, "pts": q.get("pts"),
-           "topic": q.get("topic") or "", "a": a, "img": q.get("img"), "aimg": q.get("aimg")}
+           "topic": q.get("topic") or "", "difficulty": q.get("difficulty") or "", "a": a, "img": q.get("img"), "aimg": q.get("aimg")}
     if t == "order":
         p = hw_perm(doc, sub["name"], i, len(a))
         out["a"] = [q["a"][k] for k in p]
