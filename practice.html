@@ -15,16 +15,19 @@
   --radius-sm:11px;
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;padding:0;min-height:100vh;min-height:100dvh}
+button,a,summary,.p-chip,.p-tog-pill,.slot,.m-item,.pin-stage,.r-btn{touch-action:manipulation}
+html,body{margin:0;padding:0;min-height:100vh;min-height:-webkit-fill-available;min-height:100dvh}
 body{
   font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
-  background:radial-gradient(1100px 680px at 54% -12%,var(--bg1) 0%,var(--bg2) 52%,var(--bg3) 100%) fixed;
+  background-color:var(--bg3);
+  background-image:radial-gradient(1100px 680px at 54% -12%,var(--bg1) 0%,var(--bg2) 52%,var(--bg3) 100%);
   color:#fff;
   text-align:center;
   display:flex;
   flex-direction:column;
   font-variant-numeric:tabular-nums;
   overflow-x:hidden;
+  -webkit-text-size-adjust:100%;
 }
 body.hc{background:#000!important}
 body.hc .card-panel,body.hc .q-card{background:#111;border:2px solid #fff}
@@ -361,7 +364,7 @@ input::placeholder{font-weight:650;opacity:.54;font-size:.86em}
   width:72px;
   padding:6px 8px;
   margin:0;
-  font-size:.98em;
+  font-size:1rem;
   border-radius:8px;
 }
 
@@ -1006,7 +1009,7 @@ blockquote{
   display:inline-block!important;
   padding:5px 6px!important;
   margin:0!important;
-  font-size:.96em!important;
+  font-size:1rem!important;
   border-radius:7px!important;
 }
 .tbar{height:8px;background:rgba(255,255,255,.15);border-radius:99px;overflow:hidden;margin-top:4px}
@@ -1396,7 +1399,7 @@ async function setup(){
             <span class="sum-left">A. CHAPTER QUIZZES</span>
           </summary>
           <div class="p-acc-body">
-            <select id="pracTopicFilter" onchange="onPracTopicFilterChange()" style="font-size:.94em;padding:10px 12px;text-align:left;margin-bottom:0">
+            <select id="pracTopicFilter" onchange="onPracTopicFilterChange()" style="font-size:1rem;padding:10px 12px;text-align:left;margin-bottom:0">
               <option value="">Select a Quiz...</option>
               <option value="__ALL__">All ${deckTopics.length || 10} Chapters (${n} Questions)</option>
               ${deckTopics.map(tp => {
@@ -1406,7 +1409,7 @@ async function setup(){
             </select>
             ${hasDifficulties ? `
             <div class="field-lbl" style="margin-top:10px"><span>🎚️ Difficulty Level</span></div>
-            <select id="pracDiffFilter" onchange="onPracTopicFilterChange()" style="font-size:.94em;padding:10px 12px;text-align:left;margin-bottom:0">
+            <select id="pracDiffFilter" onchange="onPracTopicFilterChange()" style="font-size:1rem;padding:10px 12px;text-align:left;margin-bottom:0">
               <option value="">All Difficulty Levels (${n} Questions)</option>
               <option value="easy">🟢 Easy Only (${diffCounts.easy} Questions)</option>
               <option value="medium">🟡 Medium Only (${diffCounts.medium} Questions)</option>

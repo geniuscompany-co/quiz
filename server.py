@@ -1152,7 +1152,7 @@ def do_steal(g, pid, mode):
         add_bonus(target, qi, -amt, "stolen")
     pu["steal_used"] = True
     g["rseq"] = g.get("rseq", 0) + 1
-    g["reactions"].append({"id": g["rseq"], "emoji": "🔀" if mode == "swap" else "🕵️", "name": "%s → %s" % (p["name"], tname), "t": time.time()})
+    g["reactions"].append({"id": g["rseq"], "emoji": "🔀" if mode == "swap" else "🕵️", "name": "%s → %s" % (short_name(p["name"]), short_name(tname)), "t": time.time()})
     return {"target": tname, "mode": mode}, None
 
 
@@ -1184,12 +1184,17 @@ def calc_max_streak(p, total_q):
     return best
 
 
+def short_name(name):
+    s = str(name or "")
+    return (s[:11] + "...") if len(s) > 11 else s
+
+
 def ptag(p):
     t_emo = ""
     if p.get("team") and p["team"] in TEAM_MAP:
         t_emo = TEAM_MAP[p["team"]]["emoji"] + " "
     av = (p.get("avatar") + " ") if p.get("avatar") else ""
-    return t_emo + av + p["name"]
+    return t_emo + av + short_name(p["name"])
 
 
 BOT_NAMES = [
@@ -2295,7 +2300,7 @@ def round_shoutout_items(g, rows):
                 climber = (diff, r)
         if climber:
             c = climber[1]
-            label = ((c["avatar"] + " ") if c.get("avatar") else "") + c["name"]
+            label = ((c["avatar"] + " ") if c.get("avatar") else "") + short_name(c["name"])
             items.append({
                 "kind": "climber",
                 "name": c["name"],
@@ -2303,7 +2308,7 @@ def round_shoutout_items(g, rows):
             })
     top_streak = max(rows, key=lambda r: r["streak"], default=None)
     if top_streak and top_streak["streak"] >= 2:
-        label = ((top_streak["avatar"] + " ") if top_streak.get("avatar") else "") + top_streak["name"]
+        label = ((top_streak["avatar"] + " ") if top_streak.get("avatar") else "") + short_name(top_streak["name"])
         items.append({
             "kind": "streak",
             "name": top_streak["name"],
@@ -3159,7 +3164,7 @@ def view(g, pid=None, host=False):
             passed = [x for x in lb if x["rank"] > my_rank and x["prev_rank"] < my_row["prev_rank"]]
             if passed:
                 ov = passed[0]
-                overtook = ((ov["avatar"] + " ") if ov.get("avatar") else "") + ov["name"]
+                overtook = ((ov["avatar"] + " ") if ov.get("avatar") else "") + short_name(ov["name"])
         if not g.get("hide_board") or ph == "final":
             lb_top = sorted(lb, key=lambda r: -r["prev"]) if ph == "question" else lb
             out["top3"] = [{"name": x["name"], "score": x["prev"] if ph == "question" else x["score"], "pct": x.get("pct", 0), "avatar": x.get("avatar", "")} for x in lb_top[:3]]
@@ -4294,7 +4299,7 @@ class H(BaseHTTPRequestHandler):
                     return self.send({"error": "Invalid reaction"}, 400)
                 return self.send({"ok": True})
             if path == "/api/join":
-                name = (body.get("name") or "").strip()[:48]
+                name = re.sub(r"\s+", " ", (body.get("name") or "")).strip()[:160]
                 is_host_join = bool(body.get("host") and body.get("host") == g["host"])
                 if name.lower() == "host":
                     return self.send({"error": "'Host' is reserved for host broadcasts — pick any nickname!"}, 400)
@@ -4326,7 +4331,6 @@ class H(BaseHTTPRequestHandler):
                             modlog(g, "rejoined", name)
                             return self.send({"pid": old_pid, "team": op.get("team", "")})
                 else:
-                    name = name[:16]
                     if is_profane(name):
                         modlog(g, "blocked name", name)
                         return self.send({"error": "That nickname isn't allowed. Pick another!"}, 400)
@@ -4404,7 +4408,7 @@ class H(BaseHTTPRequestHandler):
                 p["ice_sent_q"] = g["q"]
                 g["rseq"] = g.get("rseq", 0) + 1
                 g["reactions"].append({
-                    "id": g["rseq"], "emoji": "⛄", "name": "%s → %s" % (p["name"], target_name), "t": time.time(),
+                    "id": g["rseq"], "emoji": "⛄", "name": "%s → %s" % (short_name(p["name"]), short_name(target_name)), "t": time.time(),
                 })
                 return self.send({"ok": True, "target": target_name})
             if path == "/api/powerup":
@@ -4444,7 +4448,7 @@ class H(BaseHTTPRequestHandler):
                     p["last_react"] = time.time()
                     g["rseq"] = g.get("rseq", 0) + 1
                     g["reactions"].append({
-                        "id": g["rseq"], "emoji": emo, "name": p["name"], "t": time.time()
+                        "id": g["rseq"], "emoji": emo, "name": short_name(p["name"]), "t": time.time()
                     })
                 return self.send({"ok": True})
             if path == "/api/answer":

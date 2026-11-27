@@ -363,6 +363,7 @@ main.both{grid-template-columns:1.08fr .92fr}
 const q = new URLSearchParams(location.search), mode = q.get('mode') || 'both';
 let pin = q.get('pin') || '', lastKey = '';
 function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+function shortName(n){const a=Array.from(String(n==null?'':n));return a.length>11?a.slice(0,11).join('')+'...':a.join('')}
 
 try{ localStorage.removeItem('brainrush_a11y'); }catch(e){}
 document.body.classList.remove('cb','hc');
@@ -412,7 +413,7 @@ function board(S){
       <span class="row-left">
         <span class="rk">${rkLbl}</span>
         ${avHtml(r)}
-        <span>${esc(r.team_emoji ? r.team_emoji + ' ' : '')}<span${colStyle}>${esc(r.name)}</span></span>
+        <span>${esc(r.team_emoji ? r.team_emoji + ' ' : '')}<span${colStyle}>${esc(shortName(r.name))}</span></span>
         ${r.ctag ? `<span class="ttl">${esc(r.ctag)}</span>` : ''}
         ${r.title ? `<span class="ttl">${esc(r.title)}</span>` : ''}
         ${r.streak >= 5 ? '<span class="fire">🔥🔥</span>' : r.streak >= 2 ? `<span class="fire">🔥${r.streak}</span>` : ''}

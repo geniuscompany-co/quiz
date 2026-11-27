@@ -11,7 +11,18 @@
     "t": 20,
     "quote": "When most people think about marketing, they imagine expensive advertisements, fancy brochures, and professional websites. But these traditional marketing approaches share three big problems for Problem-First Entrepreneurs: They cost money you don’t have; They often target too broad an audience; They lack the personal trust that drives local business",
     "src": "Chapter 5, p. 45",
-    "topic": "Chapter 5: Marketing Without Money"
+    "topic": "Chapter 5: Marketing Without Money",
+    "distractor_pool": [
+      "They take several months to design and print, which delays your business launch past the busy buying season.",
+      "They attract bargain hunters who only buy once instead of loyal neighborhood customers who pay full price.",
+      "They make a small local business look like an outside corporation that charges high prices for basic goods.",
+      "They require formal government advertising permits and corporate registration before you can publish them.",
+      "They force you to lock in fixed retail prices in print before you have finished testing your production costs.",
+      "They focus customers on visual branding and logos rather than the technical durability of your products.",
+      "They only work for digital technology startups and online stores rather than physical neighborhood services.",
+      "They reveal your exact pricing and marketing plans to larger local competitors before you open your doors."
+    ],
+    "audit": "Verified against all 10 chapters: none of the chapters mention ad production delays, bargain-hunter attraction, looking like an outside corporation, advertising permits, price locks in print, logo distraction, tech-only applicability, or tipping off competitors as the failure points of traditional marketing."
   },
   {
     "q": "How did seventy-eight percent of successful small businesses acquire their first fifty customers?",
@@ -25,7 +36,18 @@
     "t": 20,
     "quote": "Research from the Kauffman Foundation found that 78% of successful small businesses acquired their first 50 customers through personal connections and word-of-mouth, not paid advertising.",
     "src": "Chapter 5, p. 45",
-    "topic": "Chapter 5: Marketing Without Money"
+    "topic": "Chapter 5: Marketing Without Money",
+    "distractor_pool": [
+      "By running half-price grand-opening promotions in their town's weekly newspaper.",
+      "By hiring commission-only sales promoters to hand out flyers at busy bus stops.",
+      "Through introductory discount coupons distributed to every house on their street.",
+      "By setting their initial retail prices twenty percent lower than every nearby competitor.",
+      "Through sponsored social media advertisements targeted at residents within five miles.",
+      "By offering thirty days of store credit to anyone willing to switch from a competing shop.",
+      "By setting up free product giveaway tables outside the largest regional shopping mall.",
+      "Through formal referral contracts signed with local chamber of commerce officials."
+    ],
+    "audit": "Verified against all 10 chapters: newspaper promos, commission flyer promoters, door-to-door discount coupons, undercutting competitors by 20%, paid social ads, 30-day credit offers, mall giveaways, and chamber of commerce contracts are never supported anywhere in the textbook."
   },
   {
     "q": "How do the most successful entrepreneurs connect the three essential elements of effective marketing (Message, Audience, and Channels)?",
@@ -39,7 +61,18 @@
     "t": 20,
     "quote": "The most successful entrepreneurs match their message to their specific audience and deliver it through channels those people already use and trust.",
     "src": "Chapter 5, p. 46",
-    "topic": "Chapter 5: Marketing Without Money"
+    "topic": "Chapter 5: Marketing Without Money",
+    "distractor_pool": [
+      "They broadcast a general message across every free channel in town to see who responds first.",
+      "They choose the largest local channel first and design a broad message that appeals to everyone.",
+      "They keep their message focused on low prices while rotating across different radio and print channels monthly.",
+      "They copy the marketing channels of their biggest competitor and use a message that promises lower prices.",
+      "They test ten different messages on social media first before choosing which local audience to serve.",
+      "They spend equal time on every available channel so no demographic group in the community feels excluded.",
+      "They build a brand-new communication channel first so competitors cannot interrupt their marketing message.",
+      "They hire a local media specialist to translate their product specifications into a formal radio announcement."
+    ],
+    "audit": "Verified against all 10 chapters: broadcasting general messages, targeting everyone, rotating low-price radio/print ads, copying competitor channels, social media A/B testing to pick an audience, equal channel splitting, building new channels, and hiring media specialists are completely unsupported."
   },
   {
     "q": "In the Word-of-Mouth Marketing System, how do you \"Create a Remarkable Experience\" in Step 1 without spending money?",
@@ -53,7 +86,18 @@
     "t": 20,
     "quote": "Step 1: Create a Remarkable Experience: Word-of-mouth starts with giving customers something worth talking about. This doesn’t mean being fancy—it means being noticeably better in ways customers care about: Be surprisingly helpful; Solve problems others ignore; Add unexpected personal touches; Be consistently reliable",
     "src": "Chapter 5, p. 47",
-    "topic": "Chapter 5: Marketing Without Money"
+    "topic": "Chapter 5: Marketing Without Money",
+    "distractor_pool": [
+      "By offering a thirty-day money-back guarantee to every customer who tries your product.",
+      "By staying open two hours later every evening than any competing shop in your neighborhood.",
+      "By giving a ten percent loyalty discount to customers who pay in cash at the market.",
+      "By packaging every purchase in expensive gift boxes printed with your company logo.",
+      "By matching or beating any lower price that a customer sees advertised at another store.",
+      "By providing free home delivery on every order regardless of distance or order size.",
+      "By offering a lifetime repair and replacement warranty on every item you produce.",
+      "By giving every tenth customer their entire purchase for free as a surprise reward."
+    ],
+    "audit": "Verified against all 10 chapters: 30-day money-back guarantees, staying open two hours later, 10% cash discounts, fancy logo gift boxes, price-matching guarantees, unconditional free delivery, lifetime warranties, and every-tenth-customer giveaways have zero support in the textbook."
   },
   {
     "q": "Which action is recommended in Step 2 (\"Make It Easy to Share\") to help satisfied customers spread the word about your business?",
@@ -67,7 +111,18 @@
     "t": 20,
     "quote": "Step 2: Make It Easy to Share: Help satisfied customers spread the word by: Giving them language to use... Providing shareable items: Simple business cards, samples they can share, or photos they can show others; Creating reasons to tell others: 'If you bring a friend next time, I’ll give you both a discount.'",
     "src": "Chapter 5, p. 47",
-    "topic": "Chapter 5: Marketing Without Money"
+    "topic": "Chapter 5: Marketing Without Money",
+    "distractor_pool": [
+      "Ask your best customers to sign a public guestbook displayed on the front counter of your stall.",
+      "Enter every customer who refers a neighbor into a monthly cash raffle held at your workshop.",
+      "Offer a permanent wholesale price to any customer who buys at least five items every week.",
+      "Pay customers a cash commission every time they post an online review on a regional website.",
+      "Require buyers to provide three friends' phone numbers before they can receive their receipt.",
+      "Print your customers' names and photos on a large banner hung across the main market street.",
+      "Mail a stack of twenty formal product catalogs to every customer who makes a first purchase.",
+      "Set up an automated text-messaging system that sends daily sales alerts to your buyers' contacts."
+    ],
+    "audit": "Verified against all 10 chapters: counter guestbooks, monthly cash raffles, permanent wholesale pricing for 5+ items, paid online review commissions, requiring friends' phone numbers, street banners with customer photos, mailing 20 catalogs, and automated daily SMS blasts are unsupported."
   },
   {
     "q": "When choosing your first ten community ambassadors to spread word-of-mouth, which two qualities should each person have?",
@@ -81,7 +136,18 @@
     "t": 20,
     "quote": "Step 3: Activate Your First 10 Ambassadors: Identify 10 people who would benefit from your product or service AND who are well-connected in your community",
     "src": "Chapter 5, p. 47",
-    "topic": "Chapter 5: Marketing Without Money"
+    "topic": "Chapter 5: Marketing Without Money",
+    "distractor_pool": [
+      "They have a professional social media account and work in the advertising industry.",
+      "They own a commercial building on the main street and belong to the city council.",
+      "They have lived in the town for thirty years and hold a university business degree.",
+      "They have enough personal wealth to invest in your shop and buy your most expensive items.",
+      "They manage a competing local business and are willing to send you their overflow customers.",
+      "They have previous experience working as paid retail salespeople in larger regional stores.",
+      "They travel between several different cities each week and know wholesale distributors.",
+      "They belong to the same household as you and depend on your business for their daily income."
+    ],
+    "audit": "Verified against all 10 chapters: requiring ad industry jobs, commercial building ownership/city council seats, 30-year residency/business degrees, personal wealth to invest, competing business managers, prior retail sales jobs, inter-city travel, or household dependency are completely false."
   },
   {
     "q": "How can you use the \"Solve a Visible Problem for Free\" strategy to market your business without spending money on ads?",
@@ -95,7 +161,18 @@
     "t": 20,
     "quote": "2. Solve a Visible Problem for Free: Demonstrate your skills by solving a visible community problem at no charge: Fix something broken in a public space; Offer your services during a community event; Clean up a neglected area related to your business",
     "src": "Chapter 5, pp. 48–49",
-    "topic": "Chapter 5: Marketing Without Money"
+    "topic": "Chapter 5: Marketing Without Money",
+    "distractor_pool": [
+      "Offer a free ten-minute phone consultation to any resident who calls your business number.",
+      "Mail a free instructional booklet on household maintenance to fifty homes in your postal code.",
+      "Lend your personal work tools at no charge to neighbors whenever they want to do their own repairs.",
+      "Give away your entire first week of store inventory for free to anyone who walks past your stall.",
+      "Work for free for one month inside an established competitor's shop to meet their regular buyers.",
+      "Pay the monthly utility bills for a neighborhood community center in exchange for hanging a banner.",
+      "Publish free weekly advice columns in the regional business newspaper about how to run a company.",
+      "Deliver free replacement parts to local factories whenever their commercial machinery breaks down."
+    ],
+    "audit": "Verified against all 10 chapters: phone consultations, mailing instructional booklets, lending personal tools for DIY, giving away a full week of inventory, working inside a competitor's shop, paying utility bills for banners, newspaper columns, and free factory parts have no textbook support."
   },
   {
     "q": "How does hosting a \"Micro-Event\" help a resource-constrained entrepreneur attract paying customers?",
@@ -109,7 +186,18 @@
     "t": 20,
     "quote": "4. Host Micro-Events: Organize tiny, low-cost gatherings to demonstrate your product or service: In-home demonstrations for neighbors; Skills workshops related to your business; Solution sessions for common problems",
     "src": "Chapter 5, p. 49",
-    "topic": "Chapter 5: Marketing Without Money"
+    "topic": "Chapter 5: Marketing Without Money",
+    "distractor_pool": [
+      "You rent a booth at an annual regional trade convention to display your product catalog.",
+      "You host a formal dinner for local bank officers and chamber of commerce board members.",
+      "You sponsor a neighborhood music festival by paying for the stage and sound equipment.",
+      "You hire a catering company and rent a hotel conference room for a grand-opening presentation.",
+      "You hold a twenty-four-hour flash sale at the central market with live loudspeaker announcements.",
+      "You organize a paid ticketed seminar where outside professors lecture on economic trends.",
+      "You set up an online webinar series aimed at attracting wholesale buyers from other provinces.",
+      "You host a weekly charity auction where local shops donate unsold inventory for publicity."
+    ],
+    "audit": "Verified against all 10 chapters: renting trade show booths, formal dinners for bankers, sponsoring music festivals, hotel conference rooms, 24-hour loudspeaker flash sales, paid academic seminars, inter-provincial webinars, and charity auctions are never recommended in the textbook."
   },
   {
     "q": "What benefit do Problem-First Entrepreneurs gain when they use at least three community-based marketing strategies?",
@@ -123,7 +211,18 @@
     "t": 20,
     "quote": "Research from the Global Entrepreneurship Monitor shows that Problem-First Entrepreneurs who use at least three of these community-based marketing strategies acquire customers 40% faster than those who focus on traditional advertising approaches.",
     "src": "Chapter 5, p. 50",
-    "topic": "Chapter 5: Marketing Without Money"
+    "topic": "Chapter 5: Marketing Without Money",
+    "distractor_pool": [
+      "They retain seventy-five percent more of their first-year buyers than shops that use price discounts.",
+      "They earn twice as many referrals per customer as businesses that rely only on digital channels.",
+      "They cut their weekly marketing time in half while doubling the average size of each customer order.",
+      "They achieve ninety percent brand recognition across their entire town within the first two months.",
+      "They can charge twenty-five percent higher retail prices than competitors who rely on paid ads.",
+      "They reduce their monthly production and material expenses by thirty percent during their first year.",
+      "They triple their average daily sales volume without needing to keep a marketing calendar.",
+      "They convert eighty-five percent of first-time market browsers into permanent weekly subscribers."
+    ],
+    "audit": "Verified against all 10 chapters: the specific GEM finding for using 3+ community-based marketing strategies is acquiring customers 40% faster; none of the other percentages or claims appear anywhere in the 10 chapters."
   },
   {
     "q": "In the Trust Equation, how do you build \"Intimacy\" with your customers?",
@@ -137,7 +236,18 @@
     "t": 20,
     "quote": "Intimacy: 'Do you understand my specific needs?' Build personal connection by: Listening more than you talk; Remembering personal details; Customizing solutions for individual needs",
     "src": "Chapter 5, p. 50",
-    "topic": "Chapter 5: Marketing Without Money"
+    "topic": "Chapter 5: Marketing Without Money",
+    "distractor_pool": [
+      "By offering a written one-year repair warranty on every product you sell at the market.",
+      "By posting your full supplier cost breakdown and profit margin percentage on your shop wall.",
+      "By keeping your retail prices fixed for twelve months even when raw material costs fluctuate.",
+      "By sharing your personal household budget and family financial struggles with every shopper.",
+      "By inviting your regular customers to vote on which wholesale suppliers your business should use.",
+      "By giving customers your personal accounting notebook to inspect whenever they visit your stall.",
+      "By socializing with customers for at least an hour before allowing them to discuss a purchase.",
+      "By offering personal cash loans to neighborhood buyers whenever they are short on household money."
+    ],
+    "audit": "Verified against all 10 chapters: written 1-year warranties, posting cost breakdowns on walls, 12-month price freezes, sharing family financial struggles, customer voting on suppliers, showing accounting notebooks to shoppers, mandatory 1-hour socializing, and lending cash to buyers are unsupported."
   },
   {
     "q": "In the Trust Equation, how does a business owner show low \"Self-Interest\" and prove they care about the customer?",
@@ -151,7 +261,18 @@
     "t": 20,
     "quote": "Self-Interest: 'Are you focused on me or just on making money?' Demonstrate customer focus by: Recommending the right solution, even when it’s not the most profitable for you; Following up after purchase to ensure satisfaction; Showing genuine interest in solving their problem",
     "src": "Chapter 5, p. 51",
-    "topic": "Chapter 5: Marketing Without Money"
+    "topic": "Chapter 5: Marketing Without Money",
+    "distractor_pool": [
+      "By matching any competitor's printed discount coupon on the spot without asking questions.",
+      "By offering a full cash refund to any buyer who finds a lower price at another local shop.",
+      "By keeping the store open twelve hours a day during every national holiday weekend.",
+      "By selling products at your exact raw material cost without adding any profit margin for yourself.",
+      "By refusing to accept payment until the customer has used the product for a full month.",
+      "By letting each customer choose whatever price they feel like paying at the checkout counter.",
+      "By donating half of every daily sale to a neighborhood charity chosen by the buyer.",
+      "By waiving all delivery and packaging charges whenever a customer places a large bulk order."
+    ],
+    "audit": "Verified against all 10 chapters: coupon matching, lowest-price cash refunds, 12-hour holiday openings, selling at zero profit, waiting a month for payment, pay-what-you-want pricing, donating 50% of sales, and waiving bulk delivery fees have zero support in the textbook."
   },
   {
     "q": "What are the four parts of the formula for creating a clear, memorable personal marketing message?",
@@ -165,7 +286,18 @@
     "t": 20,
     "quote": "Creating Your Personal Marketing Message: Your marketing message needs to be clear, memorable, and focused on customer benefits. Follow this simple format: 'I help [specific people] solve [specific problem] by providing [your solution], which gives them [key benefit].'",
     "src": "Chapter 5, p. 51",
-    "topic": "Chapter 5: Marketing Without Money"
+    "topic": "Chapter 5: Marketing Without Money",
+    "distractor_pool": [
+      "\"My company was founded in [year] at [location] and sells [product] for [price].\"",
+      "\"We beat [competitor] by offering [discount] on [product] with [warranty].\"",
+      "\"Our mission is to become the leading provider of [service] in [region] through [technology] and [quality].\"",
+      "\"I trained for [years] in [industry] so I can manufacture [product] using [equipment].\"",
+      "\"Buy [product] today at [location] and receive [bonus item] for less than [competitor price].\"",
+      "\"We guarantee [feature] and [durability] for every customer in [city] who orders [quantity].\"",
+      "\"Our shop combines [raw materials] with [production method] to achieve [profit margin] and [growth].\"",
+      "\"Ask any of our [number] customers in [neighborhood] why our [price] is the lowest in [market].\""
+    ],
+    "audit": "Verified against all 10 chapters: none of the alternative pitch templates (founding year/price, beating competitors/warranties, corporate mission statements, founder training/equipment, bonus promotions, feature guarantees, production/margin formulas, or lowest-price boasts) are supported."
   },
   {
     "q": "How do consistent, small weekly marketing actions compare to occasional big marketing pushes?",
@@ -179,7 +311,18 @@
     "t": 20,
     "quote": "Rather than doing one big marketing push, create a simple weekly calendar of small actions that consistently build visibility... According to the Small Business Administration, entrepreneurs who maintain consistent, small marketing actions over time outperform those who market sporadically, even when the sporadic marketers spend more money.",
     "src": "Chapter 5, pp. 51–52",
-    "topic": "Chapter 5: Marketing Without Money"
+    "topic": "Chapter 5: Marketing Without Money",
+    "distractor_pool": [
+      "Occasional big marketing pushes bring in twice as many loyal buyers as small weekly actions.",
+      "Big seasonal marketing campaigns are better for product shops, while weekly actions only work for services.",
+      "Both approaches produce the same customer growth over a year if the total hours spent are equal.",
+      "Small weekly actions work only during the first month, after which big quarterly ad campaigns are needed.",
+      "Sporadic marketing pushes perform better whenever a business has at least fifty dollars to spend on flyers.",
+      "Consistent weekly actions are only effective in small rural villages where there are no competing shops.",
+      "Big marketing pushes build stronger long-term trust because customers respect large public events.",
+      "Weekly marketing actions cost more money over a full year than running one large newspaper campaign."
+    ],
+    "audit": "Verified against all 10 chapters: the textbook explicitly states consistent small actions outperform sporadic marketing even when sporadic marketers spend more; none of the caveats or reversals in the distractors are supported."
   },
   {
     "q": "Why is claiming that your product or service is \"for everyone\" considered a major marketing mistake?",
@@ -193,7 +336,18 @@
     "t": 20,
     "quote": "Mistake 1: Trying to Serve Everyone: When you claim your business is 'for everyone,' your message becomes too general to resonate with anyone. Be specific about exactly who you help.",
     "src": "Chapter 5, p. 54",
-    "topic": "Chapter 5: Marketing Without Money"
+    "topic": "Chapter 5: Marketing Without Money",
+    "distractor_pool": [
+      "It requires you to print product labels in several different languages at once.",
+      "It forces you to stock too many sizes and colors in your storage room.",
+      "Competitors can easily challenge broad claims under national advertising laws.",
+      "It obligates you to deliver orders to distant neighborhoods where transportation costs are too high.",
+      "Municipal tax collectors classify broad-market businesses in a higher commercial tax bracket.",
+      "It attracts too many customers on opening day before your production equipment is ready.",
+      "Wholesale suppliers charge higher material prices to shops that do not specialize in one item.",
+      "It prevents you from charging cash at the counter because some customer groups expect credit."
+    ],
+    "audit": "Verified against all 10 chapters: multi-language label printing, stocking too many sizes/colors, advertising law challenges, distant delivery obligations, higher tax brackets, opening-day overcrowding, supplier price penalties, and forced credit terms have zero support."
   },
   {
     "q": "Why is focusing your marketing on product features instead of customer benefits a mistake?",
@@ -207,6 +361,17 @@
     "t": 20,
     "quote": "Mistake 2: Focusing on Features Instead of Benefits: Customers care less about what your product/service is and more about how it improves their lives. Always emphasize benefits over features.",
     "src": "Chapter 5, p. 54",
-    "topic": "Chapter 5: Marketing Without Money"
+    "topic": "Chapter 5: Marketing Without Money",
+    "distractor_pool": [
+      "Listing product features makes it too easy for nearby competitors to copy your design.",
+      "Truth-in-advertising laws require laboratory proof for every listed product feature.",
+      "Feature descriptions take up too much space on a small business card or market sign.",
+      "Focusing on technical features makes customers assume your product is too expensive for them.",
+      "Product features change every week, forcing you to reprint your marketing flyers constantly.",
+      "Customers rarely understand how a product is made and feel insulted by technical language.",
+      "Emphasizing features locks you into using the exact same raw materials even when prices rise.",
+      "Wholesale buyers only care about bulk discounts and ignore how a product is constructed."
+    ],
+    "audit": "Verified against all 10 chapters: competitor design copying, laboratory proof laws, business card space limits, high-price assumptions from technical features, weekly feature changes, insulting customers with technical language, material lock-in, and wholesale discount focus are unsupported."
   }
 ]

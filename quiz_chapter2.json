@@ -3,210 +3,375 @@
     "q": "What advantage do entrepreneurs gain when they identify genuine problems in their own communities?",
     "a": [
       "They have a thirty percent higher chance of building a sustainable business.",
-      "They reach their monthly break-even sales goal in half the usual time.",
-      "They earn forty percent higher profit margins during their first year of sales.",
-      "They acquire their first one hundred repeat buyers without any marketing cost."
+      "They can charge high prices without delivering reliable quality or honest customer service.",
+      "They no longer need to test a rapid prototype or gather feedback from early customers.",
+      "They are guaranteed to succeed even without a clear business model for making money."
     ],
     "c": 0,
     "t": 20,
     "quote": "A study by the Global Entrepreneurship Monitor found that entrepreneurs who identify genuine problems in their communities have a 30% higher chance of building sustainable businesses.",
     "src": "Chapter 2, p. 12",
-    "topic": "Chapter 2: Finding Real Problems to Solve"
+    "topic": "Chapter 2: Finding Real Problems to Solve",
+    "distractor_pool": [
+      "They can charge high prices without delivering reliable quality or honest customer service.",
+      "They no longer need to test a rapid prototype or gather feedback from early customers.",
+      "They are guaranteed to succeed even without a clear business model for making money.",
+      "They can skip tracking daily cash flow because community demand never slows down.",
+      "They are able to serve everyone at once using a single general marketing message.",
+      "They never have to build an emergency cash reserve for unexpected business disruptions.",
+      "They can hire full-time employees on day one without documenting their work processes.",
+      "They are exempt from local safety and community standards while operating informally."
+    ],
+    "audit": "All 8 distractors contradict core rules in Ch. 2 (rapid prototyping), Ch. 3 (clear business model), Ch. 5 (don't try to serve everyone), Ch. 6 (cash flow tracking and emergency reserves), Ch. 7 (staged hiring/systems), Ch. 8 (Level 1 safety standards), and Ch. 9 (ethical quality/fairness)."
   },
   {
     "q": "Why do local entrepreneurs have a \"secret advantage\" over large outside companies when starting a community business?",
     "a": [
-      "Local residents always prefer to buy from a neighbor even if the price is higher.",
+      "They have access to larger commercial bank loans and lower interest rates than corporations.",
       "They already understand what neighbors truly need and what fits the local culture.",
-      "They can operate from home without paying for transportation or market stall space.",
-      "Local suppliers give neighborhood founders first choice of the freshest raw materials."
+      "They can sell flawed or unsafe products because neighbors will never complain to friends.",
+      "They own patented factory technology that large outside companies are forbidden to use."
     ],
     "c": 1,
     "t": 20,
     "quote": "As an entrepreneur in your community, you have special knowledge that outsiders would pay a lot of money to access. You already understand: What people in your community truly need (not what outsiders think they need); What people are willing to pay for (even with limited money); Which solutions will fit your culture and which will fail; Who the trusted people and places in your community are.",
     "src": "Chapter 2, pp. 12–13",
-    "topic": "Chapter 2: Finding Real Problems to Solve"
+    "topic": "Chapter 2: Finding Real Problems to Solve",
+    "distractor_pool": [
+      "They have access to larger commercial bank loans and lower interest rates than corporations.",
+      "They can sell flawed or unsafe products because neighbors will never complain to friends.",
+      "They own patented factory technology that large outside companies are forbidden to use.",
+      "They can ignore product costs and price pressure because locals never compare shop prices.",
+      "They are exempt from having to earn credibility or reliability under the Trust Equation.",
+      "They never need to interview potential customers because assumptions are always accurate.",
+      "They can spend heavily on traditional mass media advertising across the entire province.",
+      "They receive automatic tax subsidies from regional trade ministries during their first decade."
+    ],
+    "audit": "All 8 distractors are false across all chapters; the textbook emphasizes that local founders have limited capital (Ch. 1), must interview customers to test assumptions (Ch. 2, 4), earn trust via the Trust Equation (Ch. 5), price sustainably (Ch. 3, 8), and uphold safety/quality (Ch. 8, 9)."
   },
   {
     "q": "How does the size of a community problem affect your potential business?",
     "a": [
-      "Smaller problems are usually better for beginners because they attract fewer competitors.",
-      "Bigger problems take longer to become profitable because customers need more education.",
+      "Trivial problems affecting very few people create the largest and most valuable markets.",
+      "Big problems should always be avoided by micro-entrepreneurs because only corporations can solve them.",
       "The bigger the problem and the more people it affects, the more valuable the solution and market.",
-      "Medium-sized problems affecting one neighborhood group offer the safest path to steady income."
+      "The fewer people affected by a problem, the easier it is to grow through word-of-mouth referrals."
     ],
     "c": 2,
     "t": 20,
     "quote": "The bigger the problem, the more valuable the solution. The more people affected by the problem, the larger your potential market.",
     "src": "Chapter 2, p. 13",
-    "topic": "Chapter 2: Finding Real Problems to Solve"
+    "topic": "Chapter 2: Finding Real Problems to Solve",
+    "distractor_pool": [
+      "Trivial problems affecting very few people create the largest and most valuable markets.",
+      "Big problems should always be avoided by micro-entrepreneurs because only corporations can solve them.",
+      "The fewer people affected by a problem, the easier it is to grow through word-of-mouth referrals.",
+      "Solving a major problem means you must start with a massive factory rather than a small test.",
+      "Problems that affect many people never require customer feedback or rapid prototyping.",
+      "Larger community problems only generate income if you spend months educating buyers first.",
+      "A big market opportunity allows you to ignore your direct and indirect costs when setting prices.",
+      "Widespread problems can only be addressed after securing venture capital from outside investors."
+    ],
+    "audit": "All 8 distractors contradict Ch. 1–6: the textbook encourages tackling real, widespread problems by starting small with an MVP/prototype (Ch. 1, 2, 4), calculating full costs (Ch. 3, 6), and bootstrapping without venture capital (Ch. 1, 7)."
   },
   {
-    "q": "What three things do the very best startup ideas tend to have in common?",
+    "q": "According to researcher Paul Graham in Chapter 2, what three things do the very best startup ideas tend to have in common?",
     "a": [
-      "They solve a daily problem, charge an affordable price, and earn a profit in the first week.",
-      "They use local materials, serve repeat neighborhood buyers, and grow through word-of-mouth.",
-      "They improve an existing service, require very little cash, and fit the local community culture.",
+      "They require outside investors, rely on patented technology, and target wealthy national markets.",
+      "They copy famous corporations, require formal business degrees, and launch with paid advertising.",
+      "They solve imaginary needs, depend on imported machinery, and take several years to earn revenue.",
       "They are something the founders want, can build themselves, and few others realize are worth doing."
     ],
     "c": 3,
     "t": 20,
     "quote": "Researcher Paul Graham explains it simply: 'The very best startup ideas tend to have three things in common: they’re something the founders themselves want, that they themselves can build, and that few others realize are worth doing.'",
     "src": "Chapter 2, p. 13",
-    "topic": "Chapter 2: Finding Real Problems to Solve"
+    "topic": "Chapter 2: Finding Real Problems to Solve",
+    "distractor_pool": [
+      "They require outside investors, rely on patented technology, and target wealthy national markets.",
+      "They copy famous corporations, require formal business degrees, and launch with paid advertising.",
+      "They solve imaginary needs, depend on imported machinery, and take several years to earn revenue.",
+      "They require hiring full-time specialists first, leasing a storefront, and borrowing bank capital.",
+      "They focus on luxury status goods, avoid local community ties, and charge the highest possible price.",
+      "They are things founders would never use themselves, cannot build alone, and everyone is already copying.",
+      "They wait for perfect market conditions, complete full Level 4 registration first, and avoid early testing.",
+      "They target every customer segment at once, emphasize product features over benefits, and market sporadically."
+    ],
+    "audit": "All 8 distractors directly contradict Paul Graham's quote (Ch. 2, p. 13) as well as principles across Ch. 1, 4, 5, 7, and 8."
   },
   {
     "q": "What defines a \"Poorly Solved Problem\" when hunting for business opportunities in your area?",
     "a": [
       "A need where existing options are too expensive, break quickly, or waste people's time.",
-      "A temporary price drop caused by an oversupply of imported factory goods.",
-      "A specialized technical issue that only affects large regional factories once a year.",
-      "A seasonal need where wholesale suppliers close their warehouses for a holiday week."
+      "A need that currently has no solution at all, such as a village with no electricity.",
+      "A daily challenge that residents have accepted for years as just the way things are.",
+      "A need that is already met by affordable, durable, and convenient neighborhood services."
     ],
     "c": 0,
     "t": 20,
     "quote": "2. Poorly Solved Problems: These are needs with existing solutions that fall short: Expensive transportation options that people can’t reliably afford; Low-quality products that break quickly; Services that waste people’s time with inefficiency",
     "src": "Chapter 2, p. 14",
-    "topic": "Chapter 2: Finding Real Problems to Solve"
+    "topic": "Chapter 2: Finding Real Problems to Solve",
+    "distractor_pool": [
+      "A need that currently has no solution at all, such as a village with no electricity.",
+      "A daily challenge that residents have accepted for years as just the way things are.",
+      "A need that is already met by affordable, durable, and convenient neighborhood services.",
+      "A luxury desire that nobody in the community cares enough about to spend money on.",
+      "A problem that only occurs once every decade during an unusual regional weather event.",
+      "A technical issue that can only be fixed by a multi-national manufacturing corporation.",
+      "A situation where customers are completely satisfied with the price and quality of current shops.",
+      "A fictional problem invented by an entrepreneur without talking to any local residents."
+    ],
+    "audit": "Distractors 1 and 2 describe Unsolved Problems and Hidden Problems (which are distinct categories on p. 14, not Poorly Solved Problems), while distractors 3–8 describe non-problems or textbook-rejected scenarios."
   },
   {
-    "q": "Which situation is an example of a \"Hidden Problem\" that can become a valuable business opportunity?",
+    "q": "Which situation defines a \"Hidden Problem\" that can become a valuable business opportunity?",
     "a": [
-      "A sudden equipment breakdown that forces a workshop to pause orders for a week.",
-      "A private financial issue that buyers feel too embarrassed to discuss in public.",
-      "A seasonal shipping delay that affects wholesale deliveries for two weeks each winter.",
+      "A secret product defect that a dishonest shopkeeper hides from unsuspecting buyers.",
+      "A confidential manufacturing formula that a corporation locks inside a private vault.",
+      "An accounting mistake caused by mixing personal living expenses with business cash.",
       "A daily problem that people have accepted as just the normal way things are."
     ],
     "c": 3,
     "t": 20,
     "quote": "3. Hidden Problems: These are needs people have accepted as 'just the way things are'",
     "src": "Chapter 2, p. 14",
-    "topic": "Chapter 2: Finding Real Problems to Solve"
+    "topic": "Chapter 2: Finding Real Problems to Solve",
+    "distractor_pool": [
+      "A secret product defect that a dishonest shopkeeper hides from unsuspecting buyers.",
+      "A confidential manufacturing formula that a corporation locks inside a private vault.",
+      "An accounting mistake caused by mixing personal living expenses with business cash.",
+      "A problem that an entrepreneur refuses to discuss with customers out of fear of idea theft.",
+      "A rare complaint that people loudly protest every day in local newspapers and markets.",
+      "A sudden one-day power outage that temporarily closes a neighborhood street market.",
+      "An illegal business practice that competitors use to avoid paying their suppliers fairly.",
+      "A tax compliance rule that only applies to large formal factories with hundred-person staffs."
+    ],
+    "audit": "All 8 distractors misinterpret 'Hidden Problem' (which Ch. 2 p. 14 specifically defines as everyday hardships people accept as 'just the way things are', like walking hours for water or studying by candlelight)."
   },
   {
     "q": "How does \"The Five Whys\" tool help an entrepreneur discover a real business opportunity?",
     "a": [
-      "It asks five competing shop owners why they chose their current store location.",
+      "It asks five competing shop owners why they chose their current retail store locations.",
       "It repeats the question \"why\" five times to dig past surface symptoms to the root problem.",
-      "It tests five different reasons why customers might hesitate to switch from a competitor.",
-      "It lists five ways a common neighborhood frustration could be solved with local tools."
+      "It requires you to pitch your business idea to five bank loan officers before launching.",
+      "It asks customers five direct questions to convince them that your product is already perfect."
     ],
     "c": 1,
     "t": 20,
     "quote": "Tool #1: The Five Whys: To find the real problem worth solving, ask 'why' five times.",
     "src": "Chapter 2, p. 14",
-    "topic": "Chapter 2: Finding Real Problems to Solve"
+    "topic": "Chapter 2: Finding Real Problems to Solve",
+    "distractor_pool": [
+      "It asks five competing shop owners why they chose their current retail store locations.",
+      "It requires you to pitch your business idea to five bank loan officers before launching.",
+      "It asks customers five direct questions to convince them that your product is already perfect.",
+      "It lists five reasons why your business should avoid pivoting from its original plan.",
+      "It surveys five hundred strangers in other cities before you test a local prototype.",
+      "It challenges five competitors to lower their prices during a neighborhood market event.",
+      "It explains five technical features of your product without mentioning customer benefits.",
+      "It records five excuses for why a new business cannot start without outside investors."
+    ],
+    "audit": "All 8 distractors fabricate false definitions of Tool #1 (The Five Whys) and contradict textbook principles on customer listening (Ch. 2, 4), benefit-focused messaging (Ch. 5), and bootstrapping without investors (Ch. 1)."
   },
   {
     "q": "When keeping a Problem Journal for one week, what should you record besides the problems and complaints you notice?",
     "a": [
-      "The retail prices charged by the five busiest shops in your neighborhood market.",
-      "The amount of time and money your household spends on daily necessities each day.",
+      "Detailed five-year financial projections for large corporations in your capital city.",
+      "Names of angel investors and venture capital firms that fund high-tech startups.",
       "Makeshift solutions and workarounds that people have created for themselves.",
-      "Ideas for new products that you have seen advertised in larger nearby cities."
+      "Television and newspaper advertising rates for broadcasting across the entire country."
     ],
     "c": 2,
     "t": 20,
     "quote": "Tool #2: Problem Journal: For one week, carry a small notebook everywhere. Write down: Problems you personally experience; Problems you observe others having; Complaints you hear from friends, family, neighbors; Makeshift solutions people have created",
     "src": "Chapter 2, p. 15",
-    "topic": "Chapter 2: Finding Real Problems to Solve"
+    "topic": "Chapter 2: Finding Real Problems to Solve",
+    "distractor_pool": [
+      "Detailed five-year financial projections for large corporations in your capital city.",
+      "Names of angel investors and venture capital firms that fund high-tech startups.",
+      "Television and newspaper advertising rates for broadcasting across the entire country.",
+      "Legal trademark registration numbers for imported luxury goods sold in department stores.",
+      "Personal opinions about why customers are wrong to complain about existing products.",
+      "Formal corporate organizational charts for managing hundreds of full-time factory workers.",
+      "Reasons why you should wait for perfect economic conditions before testing any idea.",
+      "Lists of complex product features that you want to build regardless of customer needs."
+    ],
+    "audit": "All 8 distractors have zero support in the Problem Journal instructions (Ch. 2, p. 15) or anywhere in Ch. 1–13."
   },
   {
     "q": "Why should you avoid asking people directly about their problems during an empathy conversation?",
     "a": [
-      "People usually focus on rare complaints instead of their biggest daily expenses.",
+      "Talking to potential customers before launch will cause them to steal your business idea.",
       "People often cannot clearly explain their own problems when asked directly.",
-      "Direct questions make people feel defensive about how they manage their work.",
-      "Direct questions cause people to ask for expensive features they will not buy."
+      "Customers never experience real frustrations during their daily work or household tasks.",
+      "Empathy conversations should focus on talking about yourself rather than listening to others."
     ],
     "c": 1,
     "t": 20,
     "quote": "Talk to 5-10 people about their daily challenges. But don’t ask directly about problems—people often can’t articulate them clearly.",
     "src": "Chapter 2, p. 15",
-    "topic": "Chapter 2: Finding Real Problems to Solve"
+    "topic": "Chapter 2: Finding Real Problems to Solve",
+    "distractor_pool": [
+      "Talking to potential customers before launch will cause them to steal your business idea.",
+      "Customers never experience real frustrations during their daily work or household tasks.",
+      "Empathy conversations should focus on talking about yourself rather than listening to others.",
+      "You should never ask people about what frustrates them or takes too much of their time.",
+      "Direct conversations with neighbors are illegal until you complete Level 4 formalization.",
+      "Entrepreneurs should rely on their own assumptions instead of interviewing community members.",
+      "Listening for emotions like frustration or anxiety distracts you from building a product.",
+      "Only paid marketing consultants are qualified to speak with potential buyers in your town."
+    ],
+    "audit": "All 8 distractors directly contradict Ch. 2 (p. 15, which tells you to ask about daily routines, frustrations, time/money drains, and listen for emotions) and Ch. 4 (listen more than you talk; don't fear idea theft)."
   },
   {
     "q": "What does the \"Painkiller vs. Vitamin\" test teach about choosing a business idea?",
     "a": [
       "Urgent solutions that people truly need sell much better than nice-to-have improvements.",
-      "Simple products that fix one specific problem perform better than complex all-in-one packages.",
-      "Everyday low-priced items generate steadier cash flow than occasional big-ticket repairs.",
-      "Solutions that save customers money every month sell faster than solutions that only save time."
+      "Nice-to-have luxury improvements always outsell solutions to urgent everyday problems.",
+      "Only businesses that sell medical pharmacy supplies can survive in a low-capital market.",
+      "You should focus on products people might vaguely want rather than things they urgently need."
     ],
     "c": 0,
     "t": 20,
     "quote": "The 'Painkiller vs. Vitamin' Test: Painkillers (solutions to urgent problems) sell better than vitamins (nice-to-have improvements). Ask: 'Is this solution something people NEED or just something they might WANT?'",
     "src": "Chapter 2, p. 16",
-    "topic": "Chapter 2: Finding Real Problems to Solve"
+    "topic": "Chapter 2: Finding Real Problems to Solve",
+    "distractor_pool": [
+      "Nice-to-have luxury improvements always outsell solutions to urgent everyday problems.",
+      "Only businesses that sell medical pharmacy supplies can survive in a low-capital market.",
+      "You should focus on products people might vaguely want rather than things they urgently need.",
+      "Vitamins are easier to sell on day one because customers urgently need them to survive.",
+      "A business idea only works if you spend months educating buyers on why they might want it.",
+      "Urgent problems should be ignored because customers refuse to pay for painkiller solutions.",
+      "You should design products with planned obsolescence so customers must buy replacements daily.",
+      "The best startup ideas solve minor cosmetic wishes rather than real daily frustrations."
+    ],
+    "audit": "All 8 distractors reverse the Painkiller vs. Vitamin test (Ch. 2, p. 16), the Right Now test (p. 16), or ethical design for durability over planned obsolescence (Ch. 9, p. 110)."
   },
   {
     "q": "Under the \"Right Now\" test, what makes a new business much harder to launch?",
     "a": [
-      "Entering a market where several established shops already sell a similar solution.",
-      "Starting with a product that requires you to buy raw materials before each sale.",
+      "Offering a solution that people would gladly pay for today if you presented it to them.",
+      "Solving an urgent problem where neighbors are already paying for imperfect alternatives.",
       "Having to educate people first about why they need your solution.",
-      "Offering a service that must be delivered in person at the customer's home."
+      "Starting with a simple prototype that solves the customer's core problem right away."
     ],
     "c": 2,
     "t": 20,
     "quote": "The 'Right Now' Test: Ask: 'Would someone buy this solution TODAY if I offered it to them?' If you need to educate people about why they need your solution, the business will be harder to launch.",
     "src": "Chapter 2, p. 16",
-    "topic": "Chapter 2: Finding Real Problems to Solve"
+    "topic": "Chapter 2: Finding Real Problems to Solve",
+    "distractor_pool": [
+      "Offering a solution that people would gladly pay for today if you presented it to them.",
+      "Solving an urgent problem where neighbors are already paying for imperfect alternatives.",
+      "Starting with a simple prototype that solves the customer's core problem right away.",
+      "Using tools and skills you already possess instead of waiting for outside investment.",
+      "Listening to customer feedback during your first month and adjusting your offering.",
+      "Pricing your product to cover your full costs while remaining affordable to local buyers.",
+      "Building a service business that starts generating revenue within the very first week.",
+      "Choosing a problem that affects many people in your immediate neighborhood market."
+    ],
+    "audit": "All 8 distractors describe textbook-recommended practices that make a business EASIER and more likely to succeed across Ch. 1–4, never harder to launch."
   },
   {
     "q": "What is the best proof that a business idea passes the \"Willingness to Pay\" test?",
     "a": [
-      "Fifty neighbors sign a community petition asking a new shop to open on their street.",
-      "A local microfinance officer agrees to review your one-page business model sketch.",
+      "Friends and family members say polite compliments when you describe your idea to them.",
+      "People tell you they would never spend money to fix the problem even if a solution existed.",
       "People are already spending their own money on imperfect solutions to the problem.",
-      "Local store owners offer to display your printed flyers in their front windows for free."
+      "No one in your town has ever tried to solve the problem or use a workaround before."
     ],
     "c": 2,
     "t": 20,
     "quote": "The 'Willingness to Pay' Test: Ask: 'Have people already shown they’ll spend money to solve this problem?' Look for evidence that people are already paying for imperfect solutions. This proves they value a solution enough to pay for it.",
     "src": "Chapter 2, p. 16",
-    "topic": "Chapter 2: Finding Real Problems to Solve"
+    "topic": "Chapter 2: Finding Real Problems to Solve",
+    "distractor_pool": [
+      "Friends and family members say polite compliments when you describe your idea to them.",
+      "People tell you they would never spend money to fix the problem even if a solution existed.",
+      "No one in your town has ever tried to solve the problem or use a workaround before.",
+      "You have spent months writing a formal business plan without talking to any real buyers.",
+      "Neighbors agree to accept your product only if you give it away permanently for free.",
+      "A distant corporation sells a luxury product that nobody in your community can afford.",
+      "Potential customers say the problem does not bother them enough to change their routine.",
+      "You assume people will pay high prices without checking what they currently spend on alternatives."
+    ],
+    "audit": "All 8 distractors contradict the Willingness to Pay test (Ch. 2, p. 16), the Conversation Test warning that people say nice things just to be polite (Ch. 4, p. 36–37), and market price research (Ch. 3, p. 29)."
   },
   {
     "q": "Why does the Rapid Prototype approach recommend testing a simple version of your idea with real customers within the first month?",
     "a": [
-      "Early customer sales provide the exact cost data you need to calculate your annual tax bill.",
+      "Customers always reject a simple product unless it is completely polished before launch.",
       "Entrepreneurs who test with real buyers within a month are twenty percent more likely to succeed.",
-      "Testing within thirty days prevents you from spending more than fifty dollars on startup tools.",
-      "Customers who buy your first simple prototype are twice as likely to sign annual contracts."
+      "Showing an imperfect prototype early permanently damages your reputation with local buyers.",
+      "Testing within the first month guarantees that you will never have to pivot or improve."
     ],
     "c": 1,
     "t": 20,
     "quote": "The Rapid Prototype: The fastest way to test if your idea works is to create a simple version and try selling it to real customers. This approach is supported by research from the Founder Institute, which found that entrepreneurs who test their ideas with real customers within the first month are 20% more likely to build successful businesses.",
     "src": "Chapter 2, p. 17",
-    "topic": "Chapter 2: Finding Real Problems to Solve"
+    "topic": "Chapter 2: Finding Real Problems to Solve",
+    "distractor_pool": [
+      "Customers always reject a simple product unless it is completely polished before launch.",
+      "Showing an imperfect prototype early permanently damages your reputation with local buyers.",
+      "Testing within the first month guarantees that you will never have to pivot or improve.",
+      "You must build a full-scale automated factory before letting any customer see your product.",
+      "Waiting at least a year before testing with customers doubles your chance of survival.",
+      "Early prototypes should be given only to outside investors rather than real neighborhood buyers.",
+      "Testing a simple version allows you to skip setting success metrics or collecting feedback.",
+      "A rapid prototype proves your idea works even if no customer is willing to pay for it."
+    ],
+    "audit": "All 8 distractors directly contradict Ch. 2 (p. 17) and Ch. 4 (pp. 34–42, which debunk the fears that customers reject simple products or that imperfect products damage reputation, and require real customer feedback/metrics)."
   },
   {
     "q": "When drawing a Community Need Map of your neighborhood, what four things should you mark on the map?",
     "a": [
-      "Competing shops, wholesale suppliers, delivery routes, and available market stalls.",
-      "High-income streets, middle-income streets, low-income streets, and business districts.",
-      "Food vendors, repair workshops, household service providers, and retail stores.",
+      "Corporate headquarters, stock exchange offices, international airports, and overseas shipping ports.",
+      "Television broadcast towers, billboard rental offices, newspaper printing presses, and ad agencies.",
+      "Venture capital firms, commercial bank vaults, patent law offices, and university lecture halls.",
       "Where people gather, where they struggle, where key resources are, and where resources are missing."
     ],
     "c": 3,
     "t": 20,
     "quote": "Activity 1: Community Need Mapping: Draw a simple map of your community (neighborhood, village, or market area). Mark: Where people gather (markets, schools, religious buildings); Where people struggle (long lines, difficult roads, crowded areas); Where important resources are located (water, electricity, shops); Where important resources are missing",
     "src": "Chapter 2, p. 18",
-    "topic": "Chapter 2: Finding Real Problems to Solve"
+    "topic": "Chapter 2: Finding Real Problems to Solve",
+    "distractor_pool": [
+      "Corporate headquarters, stock exchange offices, international airports, and overseas shipping ports.",
+      "Television broadcast towers, billboard rental offices, newspaper printing presses, and ad agencies.",
+      "Venture capital firms, commercial bank vaults, patent law offices, and university lecture halls.",
+      "Luxury department stores, foreign tourist resorts, private golf clubs, and gated mansions.",
+      "Locations in distant provinces where you have never visited or spoken with local residents.",
+      "Streets where no one ever gathers, works, travels, or experiences any daily challenges.",
+      "Only formal Level 4 corporations that employ more than one hundred full-time salaried workers.",
+      "Factory warehouses where you plan to buy a full year of inventory before testing demand."
+    ],
+    "audit": "All 8 distractors are completely absent from Activity 1: Community Need Mapping (Ch. 2, p. 18) and conflict with the textbook's local, bootstrapped micro-entrepreneurship framework."
   },
   {
-    "q": "How many good customer conversations are needed to reveal eighty percent of the important information required to start a business?",
+    "q": "According to Stanford University's Design School research in Chapter 2, how many good customer conversations can reveal 80% of the important information needed to start a business?",
     "a": [
       "Just five to eight thoughtful conversations with potential customers.",
-      "Fifteen to twenty short interviews with shoppers at a local market.",
-      "Twenty-five to thirty informal chats across three different neighborhoods.",
-      "At least forty quick survey questions answered by community members."
+      "At least five hundred formal written surveys collected across three different provinces.",
+      "Zero conversations, because talking to customers early causes competitors to steal your idea.",
+      "A minimum of two hundred paid focus-group interviews conducted by an outside agency."
     ],
     "c": 0,
     "t": 20,
     "quote": "Stanford University’s Design School teaches that customer interviews are the foundation of successful businesses. Their research shows that just 5-8 good customer conversations can reveal 80% of the important information you need to start a business.",
     "src": "Chapter 2, p. 19",
-    "topic": "Chapter 2: Finding Real Problems to Solve"
+    "topic": "Chapter 2: Finding Real Problems to Solve",
+    "distractor_pool": [
+      "At least five hundred formal written surveys collected across three different provinces.",
+      "Zero conversations, because talking to customers early causes competitors to steal your idea.",
+      "A minimum of two hundred paid focus-group interviews conducted by an outside agency.",
+      "At least one thousand online poll responses gathered before building a simple prototype.",
+      "Fifty formal interviews with corporate bank executives who do not live in your community.",
+      "Over three hundred cold-call sales pitches delivered over the telephone in a single week.",
+      "Only one brief conversation with a close family member who wants to be polite to you.",
+      "At least one hundred academic interviews with university professors before making a sale."
+    ],
+    "audit": "All 8 distractors contradict the exact Stanford Design School finding (5–8 good customer conversations reveal 80% of needed info, Ch. 2 p. 19) as well as Ch. 4's warning that polite compliments from one person or avoiding customer conversations leads to failure."
   }
 ]

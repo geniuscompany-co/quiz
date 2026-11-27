@@ -1,212 +1,377 @@
 [
   {
-    "q": "Why does the Lean Startup method recommend building a very simple version of your product first instead of building a \"perfect\" product before showing it to customers?",
+    "q": "Why does the Lean Startup method recommend building a very simple version of your product first instead of trying to build a \"perfect\" product before showing it to customers?",
     "a": [
-      "It allows you to set a high luxury price later when you release the finished version of the product.",
-      "It prevents nearby competitors from guessing your full long-term business plan during your first month.",
+      "It allows you to charge a luxury price later when you release the finished version of the product.",
+      "It prevents local tax authorities from classifying your activity as a real business during your first two years.",
       "It lets you get real customer feedback and improve step by step, making you sixty percent more likely to succeed.",
-      "It keeps your daily production volume small enough that you never need to hire outside workers."
+      "It keeps your daily production volume small enough that you never need to keep financial records or track costs."
     ],
     "c": 2,
     "t": 20,
     "quote": "The core idea is simple: Build a very simple version of your product or service, get customer feedback, and improve it step by step. Research by MIT shows that businesses using this approach are 60% more likely to succeed than those that try to build a 'perfect' product before showing it to customers.",
     "src": "Chapter 4, p. 34",
-    "topic": "Chapter 4: Lean Startup in a No-Capital Environment"
+    "topic": "Chapter 4: Lean Startup in a No-Capital Environment",
+    "distractor_pool": [
+      "It allows you to charge a luxury price later when you release the finished version of the product.",
+      "It prevents local tax authorities from classifying your activity as a real business during your first two years.",
+      "It keeps your daily production volume small enough that you never need to keep financial records or track costs.",
+      "It tricks competitors into thinking your business is failing so they ignore your market entry.",
+      "It satisfies the mandatory trial period required before you can apply for a municipal business license.",
+      "It guarantees that customers will never ask for refunds or complain if the product fails to work.",
+      "It eliminates the need to talk directly with customers because early sales numbers tell you everything you need.",
+      "It allows you to spend your startup budget on paid advertising instead of product materials and equipment."
+    ],
+    "audit": "Chapter 4 (p. 34) explains that the Lean Startup approach builds a simple version first to get customer feedback and improve step by step, which MIT research shows makes businesses 60% more likely to succeed than trying to build a perfect product first; none of the 10 chapters support tax evasion, skipping cost tracking, or paid advertising budgets."
   },
   {
     "q": "What are the three repeating steps at the heart of the Lean Startup cycle?",
     "a": [
-      "Observe, Design, and Sell.",
+      "Borrow, Manufacture, and Advertise.",
       "Build, Measure, and Learn.",
-      "Listen, Sketch, and Launch.",
-      "Test, Price, and Scale."
+      "Plan, Register, and Scale.",
+      "Research, Patent, and Wholesale."
     ],
     "c": 1,
     "t": 20,
     "quote": "The Build-Measure-Learn Cycle: The heart of the Lean Startup approach is a simple three-step cycle: 1. BUILD... 2. MEASURE... 3. LEARN",
     "src": "Chapter 4, pp. 34–35",
-    "topic": "Chapter 4: Lean Startup in a No-Capital Environment"
+    "topic": "Chapter 4: Lean Startup in a No-Capital Environment",
+    "distractor_pool": [
+      "Borrow, Manufacture, and Advertise.",
+      "Plan, Register, and Scale.",
+      "Research, Patent, and Wholesale.",
+      "Forecast, Fundraise, and Franchise.",
+      "Design, Incorporate, and Automate.",
+      "Save, Lease, and Hire.",
+      "Survey, Outsource, and Distribute.",
+      "Invent, License, and Liquidate."
+    ],
+    "audit": "Chapter 4 (pp. 34–35) explicitly names the three-step cycle at the heart of the Lean Startup approach as Build, Measure, and Learn; none of the 8 distractor triads appear as the Lean Startup cycle anywhere in the textbook."
   },
   {
-    "q": "How much of the learning value does a Minimum Viable Product (MVP) provide while cutting initial market entry costs by up to eighty percent?",
+    "q": "According to Stanford University research, how much of the learning value does a Minimum Viable Product (MVP) provide while cutting initial market entry costs by up to eighty percent?",
     "a": [
-      "About thirty percent of the learning value.",
-      "Exactly fifty percent of the learning value.",
-      "Up to ninety percent of the learning value.",
-      "Seventy percent of the learning value."
+      "Twenty-five percent of the learning value.",
+      "Thirty percent of the learning value.",
+      "Ninety percent of the learning value.",
+      "Forty percent of the learning value."
     ],
     "c": 2,
     "t": 20,
     "quote": "Research from Stanford University’s entrepreneurship program found that MVPs reduce the cost of initial market entry by up to 80% while providing 90% of the learning value.",
     "src": "Chapter 4, p. 36",
-    "topic": "Chapter 4: Lean Startup in a No-Capital Environment"
+    "topic": "Chapter 4: Lean Startup in a No-Capital Environment",
+    "distractor_pool": [
+      "Twenty-five percent of the learning value.",
+      "Thirty percent of the learning value.",
+      "Forty percent of the learning value.",
+      "Fifty percent of the learning value.",
+      "Sixty percent of the learning value.",
+      "Seventy percent of the learning value.",
+      "Fifteen percent of the learning value.",
+      "Thirty-five percent of the learning value."
+    ],
+    "audit": "Chapter 4 (p. 36) cites Stanford University research showing MVPs cut initial market entry costs by up to 80% while providing 90% of the learning value; all 8 lower percentage distractors contradict the cited statistic."
   },
   {
-    "q": "Why is the common fear that \"competitors will steal my simple idea\" if you launch a basic Minimum Viable Product (MVP) wrong?",
+    "q": "Why is the common fear that \"competitors will steal my simple idea\" if you launch a basic Minimum Viable Product (MVP) mistaken?",
     "a": [
-      "Most competitors are too busy managing their own daily operations to notice a small new product test.",
-      "You can change your product design and brand name once your initial customer test is finished.",
-      "First-mover advantage guarantees that early customers will stay loyal to the original shop owner.",
-      "Ideas are worthless without execution, and your local knowledge and customer relationships are worth more than the idea."
+      "Local municipal laws automatically grant a two-year legal monopoly to the first person who tests a new product.",
+      "You can easily register an international patent on your MVP for free before showing it to your first customer.",
+      "Competitors are legally prohibited from selling similar products within a five-mile radius of your home workshop.",
+      "Ideas are worthless without execution, and your local knowledge and customer relationships are worth more than the idea itself."
     ],
     "c": 3,
     "t": 20,
     "quote": "'Competitors will steal my simple idea.' Reality: Ideas are worthless without execution. Your local knowledge and customer relationships are more valuable than the idea itself.",
     "src": "Chapter 4, p. 36",
-    "topic": "Chapter 4: Lean Startup in a No-Capital Environment"
+    "topic": "Chapter 4: Lean Startup in a No-Capital Environment",
+    "distractor_pool": [
+      "Local municipal laws automatically grant a two-year legal monopoly to the first person who tests a new product.",
+      "You can easily register an international patent on your MVP for free before showing it to your first customer.",
+      "Competitors are legally prohibited from selling similar products within a five-mile radius of your home workshop.",
+      "You should require every prospective customer to sign a strict non-disclosure contract before looking at your product.",
+      "Most established competitors never pay attention to what customers want or what other local vendors are selling.",
+      "Keeping your product hidden in secret development for two years is the only reliable way to stop copycats.",
+      "If a competitor copies your basic idea, you can immediately sue them for damages in local small-claims court.",
+      "You should purposefully build fake flaws into your MVP so any competitor who copies it will fail."
+    ],
+    "audit": "Chapter 4 (p. 36) directly refutes the fear of idea theft by stating that ideas are worthless without execution and that local knowledge and customer relationships are more valuable than the idea itself; no chapter supports automatic monopolies, free patents, customer NDAs, or building fake flaws."
   },
   {
     "q": "Why does launching an imperfect Minimum Viable Product (MVP) not damage your reputation with early customers?",
     "a": [
-      "Being honest that your product is in development and actively asking for feedback actually builds trust with early buyers.",
-      "Offering a low introductory price makes early customers happy to accept minor flaws without complaining.",
-      "Testing your first version only with close friends and relatives keeps any early mistakes private.",
-      "Giving every early buyer a free replacement warranty protects your reputation while you improve quality."
+      "Being honest that your product is in development and actively seeking feedback actually builds trust with early customers.",
+      "Using a temporary fake business name during your initial test prevents early mistakes from being linked to you.",
+      "Testing your product only in a distant town where nobody knows your family keeps your local reputation safe.",
+      "Early customers never notice quality flaws as long as you give them the product completely free of charge."
     ],
     "c": 0,
     "t": 20,
     "quote": "'I’ll damage my reputation with an imperfect product.' Reality: Being honest about your product being in development and actively seeking feedback actually builds trust with early customers.",
     "src": "Chapter 4, p. 36",
-    "topic": "Chapter 4: Lean Startup in a No-Capital Environment"
+    "topic": "Chapter 4: Lean Startup in a No-Capital Environment",
+    "distractor_pool": [
+      "Using a temporary fake business name during your initial test prevents early mistakes from being linked to you.",
+      "Testing your product only in a distant town where nobody knows your family keeps your local reputation safe.",
+      "Early customers never notice quality flaws as long as you give them the product completely free of charge.",
+      "Having buyers sign a no-complaint waiver before purchase legally stops them from sharing negative reviews with neighbors.",
+      "Wait to put your name or phone number on the packaging until the product has been on the market for a year.",
+      "Blaming any early product defects on your raw material suppliers ensures customers still respect your personal skills.",
+      "Promising early buyers a share of your future company profits makes them overlook poor initial product performance.",
+      "High-pressure sales tactics convince early customers that any imperfections are actually intentional custom design features."
+    ],
+    "audit": "Chapter 4 (p. 36) states that being honest about your product being in development and actively seeking feedback builds trust with early customers (and Chapter 9 emphasizes honesty/transparency); fake names, waivers, blaming suppliers, and high-pressure sales are completely unsupported."
   },
   {
-    "q": "When using the Conversation Test to evaluate a business idea, why should you watch the listener's body language and tone carefully?",
+    "q": "When using the Conversation Test to evaluate a business idea, why should you watch the listener's body language and tone rather than relying only on their words?",
     "a": [
-      "People often say nice things to be polite, while real interest shows in their expressions and questions.",
-      "Body language shows whether the listener prefers shopping in the morning or late in the afternoon.",
-      "A quiet tone of voice indicates that the listener works for a competing shop in a nearby market.",
-      "Listeners who nod quickly are usually willing to pay a higher price for home delivery services."
+      "People often say nice things to be polite, whereas genuine interest shows in their expressions and follow-up questions.",
+      "Body language reveals the exact maximum dollar amount a customer keeps in their monthly household budget.",
+      "A quiet tone of voice proves that the listener secretly works for a competing shop in a nearby market.",
+      "Listeners who nod quickly are legally obligated to purchase your first batch once you finish producing it."
     ],
     "c": 0,
     "t": 20,
     "quote": "Pay attention to their body language and tone, not just their words. People often say nice things to be polite, but their genuine interest shows in their expressions and follow-up questions.",
     "src": "Chapter 4, pp. 36–37",
-    "topic": "Chapter 4: Lean Startup in a No-Capital Environment"
+    "topic": "Chapter 4: Lean Startup in a No-Capital Environment",
+    "distractor_pool": [
+      "Body language reveals the exact maximum dollar amount a customer keeps in their monthly household budget.",
+      "A quiet tone of voice proves that the listener secretly works for a competing shop in a nearby market.",
+      "Listeners who nod quickly are legally obligated to purchase your first batch once you finish producing it.",
+      "Body language tells you whether the person prefers shopping early in the morning or late in the afternoon.",
+      "Facial expressions indicate whether the customer has a formal bank account or prefers using mobile money.",
+      "Watching their posture allows you to skip building a prototype and launch straight into large-scale manufacturing.",
+      "A polite smile guarantees that the listener will recommend your business to at least ten friends and neighbors.",
+      "Tone of voice tells you whether the customer is a government tax inspector conducting an undercover audit."
+    ],
+    "audit": "Chapter 4 (pp. 36–37) specifically explains that people often say nice things to be polite, while genuine interest shows in their facial expressions, tone, and follow-up questions; none of the 8 distractors have any basis in the text."
   },
   {
-    "q": "How does the \"Pre-Order Test\" prove whether your business idea is addressing a real need before you create anything?",
+    "q": "How does the \"Pre-Order Test\" verify whether your business idea addresses a real need before you create anything?",
     "a": [
-      "You ask potential buyers to complete a short pricing survey and choose their favorite product color.",
-      "You share a simple flyer or description and see if buyers will pay a small deposit, sign up for first delivery, or join a waiting list.",
-      "You ask local shopkeepers if they would be willing to display your product on consignment once you make it.",
-      "You calculate whether the total cost of raw materials is lower than the price customers currently pay for alternatives."
+      "You ask passersby to fill out an anonymous questionnaire choosing their favorite brand name and logo color.",
+      "You share a simple flyer or description and see if buyers will commit by paying a small deposit, signing up for first delivery, or joining a waiting list.",
+      "You produce one hundred units in advance and count how many days it takes to sell them at the market.",
+      "You ask local shopkeepers if they would display your product on free consignment after you manufacture a full batch."
     ],
     "c": 1,
     "t": 20,
     "quote": "2. The Pre-Order Test: Before creating anything, see if customers will commit to buying your product or service. Make a simple flyer or description and ask customers to: Pay a small deposit; Sign up for first delivery; Get on a waiting list. If they’re willing to commit somehow, your idea is probably addressing a real need.",
     "src": "Chapter 4, p. 37",
-    "topic": "Chapter 4: Lean Startup in a No-Capital Environment"
+    "topic": "Chapter 4: Lean Startup in a No-Capital Environment",
+    "distractor_pool": [
+      "You ask passersby to fill out an anonymous questionnaire choosing their favorite brand name and logo color.",
+      "You produce one hundred units in advance and count how many days it takes to sell them at the market.",
+      "You ask local shopkeepers if they would display your product on free consignment after you manufacture a full batch.",
+      "You calculate on paper whether the wholesale cost of ingredients is lower than the average retail price in town.",
+      "You post a picture on social media and count how many strangers click the like button without asking anyone to buy.",
+      "You interview a university business professor to get a written grade on your product description and pricing plan.",
+      "You borrow money to rent a storefront for one month and count how many pedestrians walk past your window.",
+      "You distribute free samples to fifty friends and ask them to raise their hands if they enjoyed the taste."
+    ],
+    "audit": "Chapter 4 (p. 37) defines the Pre-Order Test as sharing a simple flyer or description before creating anything and asking customers to commit via a small deposit, signing up for first delivery, or joining a waiting list; anonymous logo surveys, producing 100 units first, social media likes, or free samples without commitment do not test pre-order commitment."
   },
   {
-    "q": "What is the goal of \"The One-Customer Test\" when you are testing a new business idea?",
+    "q": "What is the goal of \"The One-Customer Test\" when validating a new business idea?",
     "a": [
-      "To interview your single best target customer for an hour before buying any tools or materials.",
-      "To prove that at least one buyer is willing to refer their friends before you produce a second batch.",
-      "To find just one customer who will pay you to solve their problem and deliver the solution manually to learn from it.",
-      "To test whether you can make a profit on a single unit when buying raw materials at retail prices."
+      "Sign an exclusive lifetime contract to serve only one wealthy corporate client so you never have to market to the public.",
+      "Build a fully automated production line before selling to your very first customer so you can test peak factory efficiency.",
+      "Find just one customer who will pay you to solve their problem and deliver the solution manually to learn from that transaction.",
+      "Follow a single non-paying neighbor around for a month to observe their shopping habits without offering them a product."
     ],
     "c": 2,
     "t": 20,
     "quote": "3. The One-Customer Test: Instead of planning a whole business, find just ONE customer who will pay you to solve their problem. Deliver your solution manually, even if it’s not efficient or scalable yet. This single transaction teaches you more than weeks of planning.",
     "src": "Chapter 4, p. 37",
-    "topic": "Chapter 4: Lean Startup in a No-Capital Environment"
+    "topic": "Chapter 4: Lean Startup in a No-Capital Environment",
+    "distractor_pool": [
+      "Sign an exclusive lifetime contract to serve only one wealthy corporate client so you never have to market to the public.",
+      "Build a fully automated production line before selling to your very first customer so you can test peak factory efficiency.",
+      "Follow a single non-paying neighbor around for a month to observe their shopping habits without offering them a product.",
+      "Give your product for free to the single most famous celebrity in your province in exchange for an endorsement.",
+      "Test whether a single customer is willing to lend you all the startup capital needed to open a retail shop.",
+      "Spend weeks writing a fifty-page business plan tailored around a fictional customer profile before talking to anyone.",
+      "Refuse to serve a second customer until your first customer has successfully referred ten paying friends to your business.",
+      "Verify that you can earn enough profit from a single high-priced sale to cover an entire month of household living expenses."
+    ],
+    "audit": "Chapter 4 (p. 37) defines the One-Customer Test as finding just one customer who will pay you to solve their problem and delivering the solution manually—even if inefficient or unscalable—because that single transaction teaches more than weeks of planning; all 8 distractors contradict manual, simple, zero-capital testing."
   },
   {
-    "q": "How does \"The Single-Feature Focus\" help you test a complex business idea with almost no money?",
+    "q": "How does \"The Single-Feature Focus\" help you test a business idea with almost no startup capital?",
     "a": [
-      "You start by offering and perfecting just one simple service or benefit, such as hemming pants before opening a full tailoring shop.",
-      "You design a basic product and patent one unique feature that no other competitor in your province offers.",
-      "You focus all of your printed flyers on the single lowest price that your shop offers to walk-in buyers.",
-      "You serve only one demographic age group in your town until your weekly revenue doubles."
+      "You start by offering and perfecting just one core service or benefit—such as hemming pants—before adding more complexity.",
+      "You launch a full menu of twenty services on day one, but highlight only your cheapest item on your flyers.",
+      "You spend six months inventing and patenting one high-tech mechanical feature that no competitor in the country possesses.",
+      "You restrict your business to serving only one single household in your neighborhood for the entire first year."
     ],
     "c": 0,
     "t": 20,
     "quote": "5. The Single-Feature Focus: Instead of offering a complete product or service, start with just one feature or benefit. For example: A full tailoring business might start with just hemming pants... Perfect one element before adding more complexity.",
     "src": "Chapter 4, p. 38",
-    "topic": "Chapter 4: Lean Startup in a No-Capital Environment"
+    "topic": "Chapter 4: Lean Startup in a No-Capital Environment",
+    "distractor_pool": [
+      "You launch a full menu of twenty services on day one, but highlight only your cheapest item on your flyers.",
+      "You spend six months inventing and patenting one high-tech mechanical feature that no competitor in the country possesses.",
+      "You restrict your business to serving only one single household in your neighborhood for the entire first year.",
+      "You purchase one expensive piece of industrial machinery on credit and build your entire business around paying off that loan.",
+      "You focus all of your time on designing a single perfect brand logo before offering any service to real buyers.",
+      "You charge every customer a single flat annual fee that entitles them to unlimited custom tailoring and wardrobe repairs.",
+      "You sell your product on only one day of the year during the biggest regional festival to maximize scarcity.",
+      "You hire one full-time specialist employee before you ever attempt to perform the basic service work yourself."
+    ],
+    "audit": "Chapter 4 (p. 38) explains that the Single-Feature Focus means starting with just one simple feature or benefit (like hemming pants, lunch delivery, or fixing leaky faucets) and perfecting that one element before adding complexity; none of the chapters support launching 20 services on day one, patenting high-tech features, or hiring full-time staff before starting."
   },
   {
-    "q": "How does the Installment Model allow customers to fund a larger custom order when the business owner has no startup capital?",
+    "q": "Among the four models for customer funding, how does \"The Installment Model\" allow you to fulfill a larger custom order when you have no startup capital?",
     "a": [
-      "The customer signs a bank promissory note that the owner cashes at a regional credit union.",
-      "The customer pays in smaller amounts over time, funding each stage of the production process.",
-      "The customer pays the full price plus interest sixty days after the final item is delivered.",
-      "The customer buys the tools for the workshop and deducts the tool cost from the final bill."
+      "You deliver the finished custom order upfront at your own expense and let the buyer pay you back over two years.",
+      "The customer pays in small amounts over time, funding each stage of your production process as you build their order.",
+      "The customer signs a bank promissory note that you sell to a commercial collection agency for immediate startup cash.",
+      "You borrow money from a microfinance institution and pay the loan back in monthly installments after the customer pays you."
     ],
     "c": 1,
     "t": 20,
     "quote": "3. The Installment Model: For larger products or services, customers pay in small amounts over time, funding each stage of your production process.",
     "src": "Chapter 4, p. 39",
-    "topic": "Chapter 4: Lean Startup in a No-Capital Environment"
+    "topic": "Chapter 4: Lean Startup in a No-Capital Environment",
+    "distractor_pool": [
+      "You deliver the finished custom order upfront at your own expense and let the buyer pay you back over two years.",
+      "The customer signs a bank promissory note that you sell to a commercial collection agency for immediate startup cash.",
+      "You borrow money from a microfinance institution and pay the loan back in monthly installments after the customer pays you.",
+      "The customer purchases all the tools for your workshop upfront and deducts the tool cost from their final invoice.",
+      "You hold the customer's personal property as collateral until they can save up a single lump-sum payment at year-end.",
+      "A government subsidy fund pays you in monthly installments whenever you offer free services to low-income residents.",
+      "Your raw material suppliers deliver goods to you on credit and you pay the suppliers in installments over six months.",
+      "The customer pays the full price plus twenty percent interest sixty days after the final completed item is delivered."
+    ],
+    "audit": "Chapter 4 (p. 39) defines the Installment Model as customers paying in small amounts over time to fund each stage of your production process (e.g., buying wood, then hardware, then finishing); delivering upfront before payment or taking bank debt reverses the customer-funded no-capital model."
   },
   {
-    "q": "Why is it important to set specific numeric success metrics before you run a minimum test of your business idea?",
+    "q": "Why is it essential to set specific numeric success metrics before you run a minimum test of your business idea?",
     "a": [
-      "So you can show tax authorities an official forecast of your first-quarter sales revenue.",
-      "So your wholesale distributors can reserve the exact number of shipping crates you need.",
-      "So you can lock in fixed commission rates for your sales staff before opening day.",
-      "So you know in advance what results will prove that your core assumption is true."
+      "So you can submit a legally binding first-quarter revenue guarantee to municipal tax authorities before opening.",
+      "So wholesale distributors can reserve the exact number of shipping containers your factory will require next year.",
+      "So you can lock in fixed sales quotas and commission penalties for your full-time marketing staff.",
+      "So you decide in advance what specific results will prove that your core assumption is actually true."
     ],
     "c": 3,
     "t": 20,
     "quote": "Step 3: Set Clear Success Metrics: Before you test, decide what results would prove your assumption is correct. Be specific about the numbers.",
     "src": "Chapter 4, p. 40",
-    "topic": "Chapter 4: Lean Startup in a No-Capital Environment"
+    "topic": "Chapter 4: Lean Startup in a No-Capital Environment",
+    "distractor_pool": [
+      "So you can submit a legally binding first-quarter revenue guarantee to municipal tax authorities before opening.",
+      "So wholesale distributors can reserve the exact number of shipping containers your factory will require next year.",
+      "So you can lock in fixed sales quotas and commission penalties for your full-time marketing staff.",
+      "So you can prove to outside venture capital investors that your startup will never need to pivot or change plans.",
+      "So local banks will waive their interest charges during the first six months of your commercial loan.",
+      "So you can set a permanent price list that will never need to be adjusted regardless of customer feedback.",
+      "So you can apply for an official government patent by proving your invention meets national industrial output quotas.",
+      "So you never have to collect qualitative opinions or suggestions from customers during your initial market test."
+    ],
+    "audit": "Chapter 4 (p. 40) explains that setting clear, specific numeric success metrics before testing lets you know what results prove your core assumption is correct (e.g., at least 3 of 10 buy and 2 reorder); none of the distractors (tax guarantees, containers, VC investors, skipping qualitative feedback) are supported anywhere in the textbook."
   },
   {
     "q": "When running your minimum test and collecting feedback, what is the difference between quantitative and qualitative feedback?",
     "a": [
-      "Quantitative feedback tracks your material costs and profit margins, while qualitative feedback tracks your product durability.",
-      "Quantitative feedback comes from first-time buyers at the market, while qualitative feedback comes from loyal repeat buyers.",
+      "Quantitative feedback tracks your raw material expenses, while qualitative feedback inspects whether your tools meet safety codes.",
+      "Quantitative feedback comes only from first-time walk-in buyers, while qualitative feedback comes only from loyal repeat buyers.",
       "Quantitative feedback covers numbers and facts like how many bought, while qualitative feedback covers opinions and suggestions.",
-      "Quantitative feedback measures how fast you can make the product, while qualitative feedback measures how much buyers will pay."
+      "Quantitative feedback measures how fast you manufacture an item, while qualitative feedback measures the wholesale price of supplies."
     ],
     "c": 2,
     "t": 20,
     "quote": "Step 4: Run Your Test and Collect Feedback: As you run your test, collect two types of feedback: Quantitative: Numbers and facts (How many customers bought? How much did they pay?); Qualitative: Opinions and suggestions (What did they like? What would they change?)",
     "src": "Chapter 4, p. 40",
-    "topic": "Chapter 4: Lean Startup in a No-Capital Environment"
+    "topic": "Chapter 4: Lean Startup in a No-Capital Environment",
+    "distractor_pool": [
+      "Quantitative feedback tracks your raw material expenses, while qualitative feedback inspects whether your tools meet safety codes.",
+      "Quantitative feedback comes only from first-time walk-in buyers, while qualitative feedback comes only from loyal repeat buyers.",
+      "Quantitative feedback measures how fast you manufacture an item, while qualitative feedback measures the wholesale price of supplies.",
+      "Quantitative feedback is collected by formal government census takers, while qualitative feedback is collected by family members.",
+      "Quantitative feedback counts only bulk wholesale orders, while qualitative feedback counts only single retail purchases.",
+      "Quantitative feedback records your monthly tax payments, while qualitative feedback records your personal household living budget.",
+      "Quantitative feedback measures how many competitors exist in town, while qualitative feedback measures how much rent they pay.",
+      "Quantitative feedback is gathered years after your business launches, while qualitative feedback is gathered only before you build an MVP."
+    ],
+    "audit": "Chapter 4 (p. 40) clearly distinguishes quantitative feedback (numbers and facts: how many bought, how much they paid, how many reordered) from qualitative feedback (opinions and suggestions: what they liked, what they would change, why they bought or didn't); all 8 distractors misdefine both terms."
   },
   {
-    "q": "Why is it important to be willing to pivot (adjust your business direction) based on early customer feedback?",
+    "q": "According to Harvard Business School research, why is it important to be willing to pivot (adjust your business direction) based on early customer feedback?",
     "a": [
-      "Businesses that pivot at least once from customer feedback are thirty-three percent more likely to achieve strong growth than those that stick rigidly to their original plan.",
-      "Adjusting your prices and brand name every month keeps competitors from offering a cheaper version of your service.",
-      "Making weekly changes to your business model qualifies your shop for flexible credit terms from regional banks.",
-      "Pivoting allows you to test several unrelated industries at the same time without keeping a tracking notebook."
+      "Businesses that pivot at least once from customer feedback are thirty-three percent more likely to achieve strong growth than those sticking rigidly to their original plan.",
+      "Changing your product line and business name every week prevents local tax officials from assessing annual license fees.",
+      "Pivoting allows you to abandon dissatisfied customers without refunding their advance deposits or honoring your commitments.",
+      "Making monthly changes to your business model automatically qualifies your shop for zero-interest government grants."
     ],
     "c": 0,
     "t": 20,
     "quote": "Research from Harvard Business School shows that businesses that pivot at least once based on customer feedback are 33% more likely to achieve strong growth than those that stick rigidly to their original plan.",
     "src": "Chapter 4, p. 41",
-    "topic": "Chapter 4: Lean Startup in a No-Capital Environment"
+    "topic": "Chapter 4: Lean Startup in a No-Capital Environment",
+    "distractor_pool": [
+      "Changing your product line and business name every week prevents local tax officials from assessing annual license fees.",
+      "Pivoting allows you to abandon dissatisfied customers without refunding their advance deposits or honoring your commitments.",
+      "Making monthly changes to your business model automatically qualifies your shop for zero-interest government grants.",
+      "Pivoting eliminates the need to keep a financial tracking notebook or calculate your true weekly profit.",
+      "Switching to an unrelated industry every month guarantees that competitors can never match your product quality.",
+      "Businesses that refuse to ever pivot are fifty percent more likely to secure outside venture capital funding.",
+      "Pivoting allows you to skip setting clear success metrics or testing your new assumptions with real buyers.",
+      "Frequent pivots let you charge existing customers higher prices without explaining the value they receive."
+    ],
+    "audit": "Chapter 4 (p. 41) cites Harvard Business School research showing that businesses pivoting at least once based on customer feedback are 33% more likely to achieve strong growth than those sticking rigidly to their original plan (and Kauffman research on p. 38 notes 72% started with a significant pivot); all 8 distractors violate the book's rules on ethics, financial tracking, and testing."
   },
   {
     "q": "Under the four principles for no-capital testing, what does the principle \"Smaller is Better\" mean?",
     "a": [
-      "Focus on serving a small neighborhood street where you already know every household by name.",
+      "Sell only tiny pocket-sized physical objects so you never have to pay for storage space or delivery carts.",
       "Keep your initial test so small—such as five customers or ten items—that a failure would be just a minor setback.",
-      "Sell only compact physical products that can be stored at home without renting a commercial warehouse.",
-      "Charge the lowest price in the market during your first month so buyers do not ask for refunds."
+      "Set your profit margin as small as possible so that no competitor can undercut your introductory retail price.",
+      "Shrink the portion size of your product each week so your raw material costs decline over time."
     ],
     "c": 1,
     "t": 20,
     "quote": "1. Smaller is Better: The smaller your test, the less risk you take. Start with 5 customers, not 50. Make 10 products, not 100. Keep your test so small that failure would be just a minor setback.",
     "src": "Chapter 4, p. 42",
-    "topic": "Chapter 4: Lean Startup in a No-Capital Environment"
+    "topic": "Chapter 4: Lean Startup in a No-Capital Environment",
+    "distractor_pool": [
+      "Sell only tiny pocket-sized physical objects so you never have to pay for storage space or delivery carts.",
+      "Set your profit margin as small as possible so that no competitor can undercut your introductory retail price.",
+      "Shrink the portion size of your product each week so your raw material costs decline over time.",
+      "Keep your business permanently small by refusing to ever serve more than five customers in your community.",
+      "Target only the smallest village in your region because city markets have too many potential buyers.",
+      "Offer only tiny price discounts of one or two percent whenever customers ask to buy in bulk.",
+      "Work on your business for only ten minutes a week so it never interferes with your leisure time.",
+      "Borrow several small high-interest loans from different lenders instead of saving up your own growth fund."
+    ],
+    "audit": "Chapter 4 (p. 42) defines 'Smaller is Better' as keeping your initial test so small (5 customers instead of 50, 10 products instead of 100) that failure would be just a minor setback; it never means selling only pocket-sized objects, shrinking portions, refusing to grow, or taking multiple small loans."
   },
   {
-    "q": "Why is spending at least twenty-five hours getting direct customer feedback before launching so valuable?",
+    "q": "According to a University of Chicago study, how does spending at least twenty-five hours getting direct customer feedback before launching affect an entrepreneur's chances of success?",
     "a": [
-      "It reduces your initial material and equipment waste by more than fifty percent during the first month.",
-      "It satisfies the pre-launch consulting requirement for municipal small-business grant programs.",
-      "It allows you to lock in your final retail prices for three years without running further tests.",
-      "Entrepreneurs who spent at least twenty-five hours getting direct feedback before launching were three and a half times more likely to succeed."
+      "It satisfies the mandatory pre-launch consulting quota required to obtain a municipal business registration certificate.",
+      "It allows you to lock in your final retail prices for five years without running any further product tests.",
+      "It guarantees that one hundred percent of the people you interviewed will become paying subscribers on opening day.",
+      "Entrepreneurs who spent at least twenty-five hours getting direct customer feedback before launching were three and a half times more likely to succeed."
     ],
     "c": 3,
     "t": 20,
     "quote": "A study from the University of Chicago found that entrepreneurs who spent at least 25 hours getting direct customer feedback before launching were 3.5 times more likely to succeed.",
     "src": "Chapter 4, p. 43",
-    "topic": "Chapter 4: Lean Startup in a No-Capital Environment"
+    "topic": "Chapter 4: Lean Startup in a No-Capital Environment",
+    "distractor_pool": [
+      "It satisfies the mandatory pre-launch consulting quota required to obtain a municipal business registration certificate.",
+      "It allows you to lock in your final retail prices for five years without running any further product tests.",
+      "It guarantees that one hundred percent of the people you interviewed will become paying subscribers on opening day.",
+      "It eliminates the need to calculate your direct and indirect costs before setting your retail prices.",
+      "It entitles you to receive a twenty-five percent wholesale discount from regional raw material suppliers.",
+      "It replaces the need to build a simple Minimum Viable Product or run the Build-Measure-Learn cycle.",
+      "It reduces your legal tax liability by thirty-five percent during your first two years of formal operation.",
+      "It proves that your business can scale immediately into multiple locations without creating written operating systems."
+    ],
+    "audit": "Chapter 4 (p. 43) cites the University of Chicago study showing that entrepreneurs who spent at least 25 hours getting direct customer feedback before launching were 3.5 times more likely to succeed; none of the 10 chapters support government consulting quotas, 5-year fixed prices, skipping cost calculations, or skipping MVPs and operating systems."
   }
 ]

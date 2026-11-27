@@ -3,210 +3,375 @@
     "q": "Why do Problem-First Entrepreneurs often outlast businesses that were started purely for profit?",
     "a": [
       "They solve real problems that people in their community face every day.",
-      "They keep their prices lower than older shops by avoiding paid employees.",
-      "They focus on selling durable household goods that never go out of style.",
-      "They build up a full year of personal savings before opening their doors."
+      "They wait to launch until they have saved enough cash for a full year of expenses.",
+      "They secure formal commercial loans before competitors enter the neighborhood market.",
+      "They avoid direct competition by patenting original product inventions before opening."
     ],
     "c": 0,
     "t": 20,
     "quote": "Research from MIT shows that these problem-driven businesses often outlast businesses started purely for profit. Why? Because they solve real problems people face every day.",
     "src": "Chapter 1, p. 5",
-    "topic": "Chapter 1: Problem-First Entrepreneurship"
+    "topic": "Chapter 1: Problem-First Entrepreneurship",
+    "distractor_pool": [
+      "They wait to launch until they have saved enough cash for a full year of expenses.",
+      "They secure formal commercial loans before competitors enter the neighborhood market.",
+      "They avoid direct competition by patenting original product inventions before opening.",
+      "They keep overhead costs fixed by hiring only formally trained corporate managers.",
+      "They focus exclusively on luxury goods that provide the highest possible profit margins.",
+      "They operate under long-term government supply contracts from their very first month.",
+      "They rely on paid traditional advertising campaigns to build early brand recognition.",
+      "They register as formal corporations on day one to qualify for wholesale tax breaks."
+    ],
+    "audit": "All 8 distractors contradict the textbook's teachings across Ch. 1–13, which explicitly reject waiting for perfect savings/loans, relying on patents/new inventions, hiring corporate managers early, focusing purely on luxury margins, paid traditional ads, or formalizing on day one."
   },
   {
     "q": "Which characteristic describes Problem-First Entrepreneurship rather than Opportunity-First Entrepreneurship?",
     "a": [
-      "It focuses on creating a brand-new market for an original product invention.",
+      "It depends on outside angel investors to fund product development before launch.",
       "It starts from urgent needs and grows through customer payments.",
-      "It waits until a formal business plan and market survey are completed first.",
-      "It targets high-margin buyers across several cities from the very first week."
+      "It requires a substantial upfront capital investment before serving its first buyer.",
+      "It targets broad regional or national markets from the very first week of sales."
     ],
     "c": 1,
     "t": 20,
     "quote": "Problem-First Entrepreneurship: Starts from urgent needs or problems; Uses resources you already have; Begins making money quickly; Grows through customer payments; Deeply connected to local community.",
     "src": "Chapter 1, p. 6",
-    "topic": "Chapter 1: Problem-First Entrepreneurship"
+    "topic": "Chapter 1: Problem-First Entrepreneurship",
+    "distractor_pool": [
+      "It depends on outside angel investors to fund product development before launch.",
+      "It requires a substantial upfront capital investment before serving its first buyer.",
+      "It targets broad regional or national markets from the very first week of sales.",
+      "It accepts a long multi-year path to profitability while building market share.",
+      "It starts from general market trends rather than immediate neighborhood frustrations.",
+      "It waits to generate revenue until a polished, full-featured product line is ready.",
+      "It relies on commercial bank loans to lease dedicated retail space before opening.",
+      "It prioritizes rapid geographic expansion across multiple cities over local ties."
+    ],
+    "audit": "All 8 distractors describe Opportunity-First Entrepreneurship (outside investors, startup funding, long path to profitability, broader markets) or textbook-condemned practices (waiting for perfection, bank loans before testing, rapid multi-city expansion)."
   },
   {
     "q": "Why do Problem-First Entrepreneurs create two to three times more lasting jobs than large corporations?",
     "a": [
-      "They focus on labor-intensive services rather than automated machines.",
-      "They hire experienced managers from established regional companies.",
+      "They hire full-time salaried employees before launching their initial business operations.",
+      "They receive government payroll subsidies for hiring workers in informal neighborhood markets.",
       "They build businesses that truly fit local conditions and needs.",
-      "They sign multi-year employment agreements with local trade schools."
+      "They avoid using time-saving production systems so that tasks require more manual workers."
     ],
     "c": 2,
     "t": 20,
     "quote": "A study by the World Bank found that Problem-First Entrepreneurs create 2-3 times more sustainable jobs than large corporations because they build businesses that truly fit local conditions and needs.",
     "src": "Chapter 1, p. 6",
-    "topic": "Chapter 1: Problem-First Entrepreneurship"
+    "topic": "Chapter 1: Problem-First Entrepreneurship",
+    "distractor_pool": [
+      "They hire full-time salaried employees before launching their initial business operations.",
+      "They receive government payroll subsidies for hiring workers in informal neighborhood markets.",
+      "They avoid using time-saving production systems so that tasks require more manual workers.",
+      "They borrow large expansion loans from commercial banks to open multiple branches at once.",
+      "They recruit experienced corporate executives away from established regional competitors.",
+      "They sign mandatory multi-year employment contracts with local vocational trade schools.",
+      "They spend most of their startup funding on formal human resources recruitment agencies.",
+      "They replace local community customs with standardized international corporate workflows."
+    ],
+    "audit": "All 8 distractors are false across all chapters; Ch. 7 specifically warns against hiring full-time staff too quickly or expanding via debt, and stresses building time-saving systems and respecting local culture."
   },
   {
     "q": "Why are Problem-First Entrepreneurs often called \"Necessity Entrepreneurs\"?",
     "a": [
-      "They focus exclusively on selling basic daily necessities like food, water, and soap.",
-      "They provide essential repair services that large corporations refuse to offer locally.",
-      "They operate in rural neighborhoods where residents have no other retail stores nearby.",
+      "They are legally restricted to selling basic household groceries like food, water, and soap.",
+      "They only operate temporary shops until they can find full-time corporate employment.",
+      "They are required by local regulations to pass a government financial necessity test first.",
       "They start a business in order to address an immediate, present need."
     ],
     "c": 3,
     "t": 20,
     "quote": "Problem-First Entrepreneurs address a present need and are often also referred to as Necessity Entrepreneurs.",
     "src": "Chapter 1, p. 6",
-    "topic": "Chapter 1: Problem-First Entrepreneurship"
+    "topic": "Chapter 1: Problem-First Entrepreneurship",
+    "distractor_pool": [
+      "They are legally restricted to selling basic household groceries like food, water, and soap.",
+      "They only operate temporary shops until they can find full-time corporate employment.",
+      "They are required by local regulations to pass a government financial necessity test first.",
+      "They depend on charitable donations and public grants to cover their monthly operating costs.",
+      "They sell their goods at zero profit margin so that every neighbor can afford to buy them.",
+      "They operate exclusively in isolated rural villages where no other retail shops exist.",
+      "They must borrow emergency microfinance loans before they can purchase their first tools.",
+      "They focus solely on providing emergency medical and disaster relief supplies to towns."
+    ],
+    "audit": "None of the 8 distractors are supported anywhere in the textbook; Problem-First/Necessity Entrepreneurs span diverse services and products, aim for sustainable profit from day one, and do not rely on grants or zero-margin pricing."
   },
   {
     "q": "How does starting a business with limited resources help you waste less?",
     "a": [
       "You focus only on what truly matters instead of spending on extras.",
-      "You make every item by hand instead of paying for electric machinery.",
-      "You sell directly from home so you never have to pay for market transport.",
-      "You buy raw materials in small daily amounts at a fixed neighborhood price."
+      "You buy a full year of raw materials in bulk before testing your idea with customers.",
+      "You avoid spending time on customer conversations and launch a finished product right away.",
+      "You skip recording daily financial transactions until your monthly revenue exceeds your costs."
     ],
     "c": 0,
     "t": 20,
     "quote": "You waste less - With limited resources, you focus only on what truly matters",
     "src": "Chapter 1, p. 7",
-    "topic": "Chapter 1: Problem-First Entrepreneurship"
+    "topic": "Chapter 1: Problem-First Entrepreneurship",
+    "distractor_pool": [
+      "You buy a full year of raw materials in bulk before testing your idea with customers.",
+      "You avoid spending time on customer conversations and launch a finished product right away.",
+      "You skip recording daily financial transactions until your monthly revenue exceeds your costs.",
+      "You offer a wide variety of unrelated products at once so no single item goes unsold.",
+      "You manufacture large inventory batches in advance to lower your per-unit production cost.",
+      "You rely on low-cost imported equipment that is designed for short-term disposable use.",
+      "You spend months writing a detailed business plan before making your first prototype.",
+      "You eliminate equipment maintenance expenses by running machines without regular upkeep."
+    ],
+    "audit": "All 8 distractors contradict core textbook rules across Ch. 1–9 (small-batch production, customer interviews, daily transaction tracking, single-feature focus, durability over planned obsolescence, and action over months of planning)."
   },
   {
     "q": "How does starting a business without outside investors help a new entrepreneur become profitable faster?",
     "a": [
-      "You can deduct all of your startup tool purchases from your first year of personal taxes.",
-      "You can set fixed annual prices without waiting for a corporate board of directors to vote.",
+      "Independent founders are exempt from calculating indirect costs like workspace and phone use.",
+      "Businesses without investors do not need to separate personal money from business money.",
       "Even small early profits count as a success when you have no investors to please.",
-      "You qualify for discounted wholesale material rates reserved for independent shop owners."
+      "Bootstrapped shops can charge double the local market price without losing early buyers."
     ],
     "c": 2,
     "t": 20,
     "quote": "You become profitable faster - Without investors to please, even small profits are victories",
     "src": "Chapter 1, p. 7",
-    "topic": "Chapter 1: Problem-First Entrepreneurship"
+    "topic": "Chapter 1: Problem-First Entrepreneurship",
+    "distractor_pool": [
+      "Independent founders are exempt from calculating indirect costs like workspace and phone use.",
+      "Businesses without investors do not need to separate personal money from business money.",
+      "Bootstrapped shops can charge double the local market price without losing early buyers.",
+      "Suppliers automatically grant ninety-day interest-free credit to founders who lack investors.",
+      "Operating without investors allows you to take random cash withdrawals whenever you need.",
+      "Government tax agencies waive all registration rules permanently for self-funded businesses.",
+      "Self-funded entrepreneurs can skip building an emergency cash reserve during their first year.",
+      "Starting without outside capital guarantees that competitors will not enter your market area."
+    ],
+    "audit": "All 8 distractors violate Ch. 3, 6, and 8 principles (calculating full direct/indirect costs, separating business/personal funds, fixed owner salary instead of random withdrawals, building cash reserves, and gradual formalization)."
   },
   {
     "q": "Why do businesses built around real, unmet needs often disrupt entire industries?",
     "a": [
-      "They secure exclusive agreements with regional wholesale distributors early.",
+      "They outspend established corporations on regional television and radio advertising campaigns.",
       "They find simpler and more affordable ways to solve everyday problems.",
-      "They customize every order individually instead of making standard products.",
-      "They spend all of their first-year sales revenue on developing new technology."
+      "They hire expensive outside consultants to design complex, multi-featured product lines.",
+      "They sell below their actual production cost for years to force local competitors to close."
     ],
     "c": 1,
     "t": 20,
     "quote": "Businesses built around real, unmet needs often disrupt entire industries precisely because they find simpler, more affordable ways to solve problems.",
     "src": "Chapter 1, p. 7",
-    "topic": "Chapter 1: Problem-First Entrepreneurship"
+    "topic": "Chapter 1: Problem-First Entrepreneurship",
+    "distractor_pool": [
+      "They outspend established corporations on regional television and radio advertising campaigns.",
+      "They hire expensive outside consultants to design complex, multi-featured product lines.",
+      "They sell below their actual production cost for years to force local competitors to close.",
+      "They secure exclusive patent protections before showing their prototype to any customers.",
+      "They import specialized automated factory machinery before making their first local sale.",
+      "They target every possible customer segment at once with a single general marketing message.",
+      "They borrow large sums of venture capital to open retail branches across several cities.",
+      "They replace personal customer relationships with fully automated digital ordering systems."
+    ],
+    "audit": "All 8 distractors contradict the textbook's teachings on zero-budget marketing (Ch. 5), sustainable pricing covering full costs (Ch. 3), simple MVPs without fear of idea theft (Ch. 4), and organic profit-first scaling (Ch. 7)."
   },
   {
     "q": "How can a new entrepreneur start a business when they have almost no money at all?",
     "a": [
-      "By partnering with an established shopkeeper who agrees to split the daily profits.",
-      "By taking a temporary job in a similar shop until they save five hundred dollars for tools.",
-      "By asking wholesale suppliers to provide the first month of inventory on credit.",
+      "By taking out a high-interest microfinance loan to cover their first six months of rent.",
+      "By waiting several years until they have saved at least five thousand dollars in cash.",
+      "By giving away half of their business ownership to an outside angel investor on day one.",
       "By exchanging services or using materials and tools they already have."
     ],
     "c": 3,
     "t": 20,
     "quote": "Myth 1: 'You need a lot of money to start a business.' Reality: Many successful businesses start with less than $50. Some start with no money at all—just exchanging services or using materials you already have.",
     "src": "Chapter 1, p. 8",
-    "topic": "Chapter 1: Problem-First Entrepreneurship"
+    "topic": "Chapter 1: Problem-First Entrepreneurship",
+    "distractor_pool": [
+      "By taking out a high-interest microfinance loan to cover their first six months of rent.",
+      "By waiting several years until they have saved at least five thousand dollars in cash.",
+      "By giving away half of their business ownership to an outside angel investor on day one.",
+      "By borrowing personal family grocery funds to purchase a large warehouse of inventory.",
+      "By signing a long-term commercial lease and hoping first-month sales cover the deposit.",
+      "By buying expensive professional machinery on credit before testing customer demand.",
+      "By spending their remaining personal savings on paid newspaper and billboard advertisements.",
+      "By completing full Level 4 corporate registration before offering any services to neighbors."
+    ],
+    "audit": "All 8 distractors violate Ch. 1, 4, 5, 6, and 8 guidelines, which warn against borrowing for unproven ideas or operating expenses, mixing family living funds, buying large inventory/equipment upfront, paid ads, or premature Level 4 formalization."
   },
   {
     "q": "Why can an entrepreneur succeed even without formal business training or a college degree?",
     "a": [
       "The most important knowledge comes from understanding your customers and their problems.",
-      "Most small businesses use simple cash pricing that does not require written records.",
-      "Wholesale suppliers usually teach new shop owners how to manage their daily inventory.",
-      "Practical production skills matter much more than marketing or financial management."
+      "Small neighborhood businesses never need to track daily expenses or calculate profit margins.",
+      "A great product sells itself automatically without requiring any customer conversations.",
+      "Local government officials manage accounting and pricing rules for informal micro-businesses."
     ],
     "c": 0,
     "t": 20,
     "quote": "Myth 2: 'You need special training or education.' Reality: The most important knowledge comes from understanding your customers and their problems. You already have valuable knowledge about your community’s needs.",
     "src": "Chapter 1, p. 8",
-    "topic": "Chapter 1: Problem-First Entrepreneurship"
+    "topic": "Chapter 1: Problem-First Entrepreneurship",
+    "distractor_pool": [
+      "Small neighborhood businesses never need to track daily expenses or calculate profit margins.",
+      "A great product sells itself automatically without requiring any customer conversations.",
+      "Local government officials manage accounting and pricing rules for informal micro-businesses.",
+      "Bootstrapped ventures can succeed by copying corporate business plans without any changes.",
+      "Informal businesses operate without direct or indirect costs during their first two years.",
+      "Customers care much more about a founder's technical features than how a product helps them.",
+      "Wholesale suppliers automatically set retail prices and manage cash flow for new shopkeepers.",
+      "Entrepreneurs can rely entirely on memory instead of keeping a written transaction notebook."
+    ],
+    "audit": "All 8 distractors are explicitly refuted by Ch. 2 (customer interviews), Ch. 3 (pricing/costs), Ch. 5 (focus on benefits not features), and Ch. 6 (memory is unreliable; track every transaction and calculate profit margins)."
   },
   {
     "q": "Why are most successful new businesses able to succeed without a completely original invention?",
     "a": [
-      "They register legal trademarks on popular regional product names first.",
+      "They use aggressive high-pressure sales tactics to push undecided shoppers into buying.",
       "They provide existing products or services in a better, faster, cheaper, or easier way.",
-      "They purchase exclusive territorial rights from established national manufacturers.",
-      "They open their shops closer to residential streets than older competitors."
+      "They keep their business concept a strict secret until it is fully built and trademarked.",
+      "They undercut competitors by using low-quality materials while claiming premium quality."
     ],
     "c": 1,
     "t": 20,
     "quote": "Myth 3: 'You need a completely new or original idea.' Reality: Most successful businesses aren’t based on new inventions. They simply provide existing products or services better, faster, cheaper, or more conveniently.",
     "src": "Chapter 1, p. 8",
-    "topic": "Chapter 1: Problem-First Entrepreneurship"
+    "topic": "Chapter 1: Problem-First Entrepreneurship",
+    "distractor_pool": [
+      "They use aggressive high-pressure sales tactics to push undecided shoppers into buying.",
+      "They keep their business concept a strict secret until it is fully built and trademarked.",
+      "They undercut competitors by using low-quality materials while claiming premium quality.",
+      "They spend heavily on radio commercials to make standard products look brand new.",
+      "They lock customers into mandatory long-term contracts that prevent switching to rivals.",
+      "They charge different prices to different neighbors depending on who complains the loudest.",
+      "They copy a competitor's exact product and lower costs by ignoring safety standards.",
+      "They rely on government monopoly permits that block other shops from entering the area."
+    ],
+    "audit": "All 8 distractors violate textbook principles in Ch. 4 (don't hide ideas out of fear of theft), Ch. 5 (no paid mass media ads), Ch. 8 (focus on quality/safety beyond competitors), and Ch. 9 (no high-pressure tactics, misrepresentation, or unfair pricing)."
   },
   {
     "q": "How does the reality of informal businesses compare to the myth that formal businesses are always more successful?",
     "a": [
-      "Informal businesses usually earn higher profit margins because they have no fixed rent.",
-      "Informal businesses build stronger customer trust because buyers prefer personal service.",
+      "Informal businesses should avoid all safety standards and record-keeping until fully licensed.",
+      "Every new business must complete full Level 4 registration before serving its first customer.",
       "Many businesses grow steadily while informal and formalize later once profitable.",
-      "Most small businesses remain informal permanently because registration only helps factories."
+      "Informal businesses never need to separate personal money from business money to grow."
     ],
     "c": 2,
     "t": 20,
     "quote": "Myth 4: 'Formal businesses are more successful than informal ones.' Reality: Many businesses operate informally for years while growing steadily. Formalization can come later, once your business is established and profitable.",
     "src": "Chapter 1, p. 8",
-    "topic": "Chapter 1: Problem-First Entrepreneurship"
+    "topic": "Chapter 1: Problem-First Entrepreneurship",
+    "distractor_pool": [
+      "Informal businesses should avoid all safety standards and record-keeping until fully licensed.",
+      "Every new business must complete full Level 4 registration before serving its first customer.",
+      "Informal businesses never need to separate personal money from business money to grow.",
+      "Most businesses should stay completely informal forever because registration offers no benefits.",
+      "Formal businesses always fail in local communities because neighbors distrust written receipts.",
+      "Informal entrepreneurs should avoid speaking with local officials until an inspection occurs.",
+      "Only formal corporations are able to build loyal customer relationships and community trust.",
+      "Prematurely formalizing on day one makes a micro-business forty percent more likely to thrive."
+    ],
+    "audit": "All 8 distractors are refuted by Ch. 1, 6, and 8: Ch. 8 teaches the 4-level Formalization Spectrum (practicing basic safety/records even at Level 1–2, engaging officials early, and avoiding premature formalization while moving up gradually as the business grows)."
   },
   {
     "q": "How can you train yourself to see everyday problems as business opportunities?",
     "a": [
-      "Visit successful shops in larger towns each week to see what products they display.",
-      "Ask wholesale vendors which raw materials are currently the cheapest to buy in bulk.",
-      "Keep a list of the most profitable service businesses operating in your province.",
+      "Ignore local complaints and copy luxury product trends from wealthy foreign cities.",
+      "Wait for a commercial research firm to publish an annual report on regional industries.",
+      "Focus only on high-tech inventions that no one in your community has ever seen before.",
       "Ask \"How could this be better?\" whenever you encounter frustration or complaints."
     ],
     "c": 3,
     "t": 20,
     "quote": "See Problems as Opportunities: Train yourself to ask 'How could this be better?' whenever you encounter frustration. Every complaint contains a business idea.",
     "src": "Chapter 1, p. 8",
-    "topic": "Chapter 1: Problem-First Entrepreneurship"
+    "topic": "Chapter 1: Problem-First Entrepreneurship",
+    "distractor_pool": [
+      "Ignore local complaints and copy luxury product trends from wealthy foreign cities.",
+      "Wait for a commercial research firm to publish an annual report on regional industries.",
+      "Focus only on high-tech inventions that no one in your community has ever seen before.",
+      "Avoid talking to frustrated neighbors so they do not steal your confidential business idea.",
+      "Look exclusively for business ideas that require no customer feedback or adjustments.",
+      "Choose only problems that customers must be educated for months to understand and value.",
+      "Dismiss everyday household frustrations as too small to support a profitable business.",
+      "Search for ways to sell nice-to-have luxury vitamins rather than urgent daily painkillers."
+    ],
+    "audit": "All 8 distractors directly contradict Ch. 1 and Ch. 2 principles (relying on local insight, listening to complaints/frustrations, passing the Painkiller vs. Vitamin and Right Now tests, and sharing ideas early for feedback)."
   },
   {
     "q": "Why should you design your new business to generate cash from day one?",
     "a": [
       "Even small amounts of early revenue prove that your business idea actually works.",
-      "Building a large cash reserve in your first week prevents competitors from undercutting you.",
-      "Early cash sales allow you to pay yourself a full-time salary starting in your first week.",
-      "Suppliers offer their best bulk discounts to new shops that pay cash on opening day."
+      "First-day revenue allows you to spend all of your incoming cash immediately on personal luxuries.",
+      "Making money on day one means you never have to listen to customer feedback or pivot later.",
+      "Generating early cash eliminates the need to calculate your direct and indirect unit costs."
     ],
     "c": 0,
     "t": 20,
     "quote": "Make Money from Day One: Design your business to generate cash immediately. Even small amounts of early revenue prove your idea works.",
     "src": "Chapter 1, p. 9",
-    "topic": "Chapter 1: Problem-First Entrepreneurship"
+    "topic": "Chapter 1: Problem-First Entrepreneurship",
+    "distractor_pool": [
+      "First-day revenue allows you to spend all of your incoming cash immediately on personal luxuries.",
+      "Making money on day one means you never have to listen to customer feedback or pivot later.",
+      "Generating early cash eliminates the need to calculate your direct and indirect unit costs.",
+      "Day-one sales qualify your business for immediate Level 4 corporate tax exemptions.",
+      "Early revenue proves that your product is already perfect and requires no further testing.",
+      "Cash on opening day lets you hire a full-time staff before documenting your work systems.",
+      "Immediate sales allow you to skip keeping a daily financial notebook during your first year.",
+      "Earning cash right away guarantees that no competitors will ever copy your business model."
+    ],
+    "audit": "All 8 distractors contradict Ch. 3, 4, 6, 7, and 8, which mandate ongoing customer feedback/pivoting, full cost calculation, 50-30-20 financial discipline, daily transaction tracking, and building systems before staged hiring."
   },
   {
     "q": "What advantage do entrepreneurs who start small and adjust to customer feedback have over those who spend months planning before launch?",
     "a": [
-      "They recover their initial tool and material costs in half the time.",
+      "They never need to change their original product design once their doors open for sales.",
       "They are thirty percent more likely to build a lasting, sustainable business.",
-      "They retain twice as many of their first-month customers over the first year.",
-      "They spend forty percent less money on unsold inventory during their first quarter."
+      "They are exempt from setting clear success metrics before running a minimum product test.",
+      "They can skip separating business and personal funds during their first six months of growth."
     ],
     "c": 1,
     "t": 20,
     "quote": "Research from the Kauffman Foundation shows that entrepreneurs who start small and adjust based on customer feedback are 30% more likely to build sustainable businesses than those who spend months planning before launch.",
     "src": "Chapter 1, p. 9",
-    "topic": "Chapter 1: Problem-First Entrepreneurship"
+    "topic": "Chapter 1: Problem-First Entrepreneurship",
+    "distractor_pool": [
+      "They never need to change their original product design once their doors open for sales.",
+      "They are exempt from setting clear success metrics before running a minimum product test.",
+      "They can skip separating business and personal funds during their first six months of growth.",
+      "They automatically qualify for interest-free bank loans without showing financial records.",
+      "They avoid having to calculate their weekly profit because small tests carry zero expenses.",
+      "They can scale immediately to multiple store locations without building time-saving systems.",
+      "They acquire all of their customers through paid mass advertising rather than word-of-mouth.",
+      "They are guaranteed to face zero competition or price pressure in their local market area."
+    ],
+    "audit": "All 8 distractors are false across all chapters (Ch. 4 shows 72% of successful businesses pivot and require clear success metrics; Ch. 6 requires separating funds and weekly profit checks; Ch. 7 requires systems before scaling; Ch. 8 notes competition is a common challenge)."
   },
   {
     "q": "When using the \"Look Around\" exercise to choose your first business opportunity from a list of community problems, which problem should you circle?",
     "a": [
-      "A problem that no other business in your province has ever tried to solve before.",
-      "A problem that guarantees the highest profit margin on each individual sale.",
+      "A problem that requires importing specialized machinery and borrowing large startup loans.",
+      "A rare problem that affects only one or two wealthy households once every few years.",
       "A problem affecting many people that you can start solving with resources you have.",
-      "A problem that local government leaders have promised to fund with public grants."
+      "A problem that is already solved cheaply, quickly, and conveniently by local shops."
     ],
     "c": 2,
     "t": 20,
     "quote": "Circle the problem(s) that: Affects the most people; Is currently solved in an expensive or inconvenient way; You could start addressing with resources you already have.",
     "src": "Chapter 1, pp. 9–10",
-    "topic": "Chapter 1: Problem-First Entrepreneurship"
+    "topic": "Chapter 1: Problem-First Entrepreneurship",
+    "distractor_pool": [
+      "A problem that requires importing specialized machinery and borrowing large startup loans.",
+      "A rare problem that affects only one or two wealthy households once every few years.",
+      "A problem that is already solved cheaply, quickly, and conveniently by local shops.",
+      "A problem that requires you to complete a four-year university degree before starting.",
+      "A problem where you must educate people for months before they realize they have a need.",
+      "A problem that can only be addressed after receiving a government grant or investor funding.",
+      "A nice-to-have luxury improvement that nobody in your community is willing to pay for.",
+      "A complex problem that you neither understand nor have the skills to build a solution for."
+    ],
+    "audit": "All 8 distractors directly reverse the textbook's criteria in Ch. 1 (p. 9–10) and Ch. 2 (pp. 13–16: affects many people, currently expensive/inconvenient, uses resources on hand, founder can build it, painkiller not vitamin, passes Right Now and Willingness to Pay tests)."
   }
 ]

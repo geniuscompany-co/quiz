@@ -1,23 +1,34 @@
 [
   {
-    "q": "What practical benefits do entrepreneurs gain when they clearly explain their business concept?",
+    "q": "What practical benefits do entrepreneurs gain when they can clearly explain their business concept?",
     "a": [
-      "40% more likely to build strong customer ties and 65% more likely to get good supplier terms.",
-      "Gains the first 50 local buyers in half the time and earns 30% higher profit margins.",
-      "Twice as likely to get an equipment loan and 50% more likely to retain employees.",
-      "Cuts customer acquisition costs by 50% and doubles average order size in year one."
+      "They are forty percent more likely to build strong customer relationships and sixty-five percent more likely to secure favorable terms with suppliers.",
+      "They gain their first fifty local buyers in half the time and earn thirty percent higher profit margins.",
+      "They are twice as likely to get an equipment loan and fifty percent more likely to retain employees.",
+      "They cut customer acquisition costs by fifty percent and double their average order size in year one."
     ],
     "c": 0,
     "t": 20,
     "quote": "Research from the World Bank shows that entrepreneurs who can clearly explain their business concept are 40% more likely to build strong customer relationships and 65% more likely to secure favorable terms with suppliers.",
     "src": "Chapter 13, pp. 189–190",
-    "topic": "Chapter 13: Sharing Your Business Story & Next Steps"
+    "topic": "Chapter 13: Sharing Your Business Story & Next Steps",
+    "distractor_pool": [
+      "They gain their first fifty local buyers in half the time and earn thirty percent higher profit margins.",
+      "They are twice as likely to get an equipment loan and fifty percent more likely to retain employees.",
+      "They cut customer acquisition costs by fifty percent and double their average order size in year one.",
+      "They reduce supplier delivery delays by seventy-five percent and qualify for automatic municipal tax exemptions.",
+      "They grow their monthly gross revenue three times faster without needing to test multiple price points.",
+      "They secure prime retail space at a thirty percent discount and convert eighty percent of walk-in browsers.",
+      "They complete full regulatory formalization in half the time and pay forty percent lower microfinance interest rates.",
+      "They retain ninety percent of their seasonal helpers and triple their wholesale distribution partnerships in six months."
+    ],
+    "audit": "All 8 distractors fabricate statistical outcomes on loans, margins, rent discounts, or employee retention that are absent from the World Bank study on pages 189–190 and the rest of the book."
   },
   {
-    "q": "In the Six-Part Framework, what belongs in Part 1 (\"The Problem or Need You Address\")?",
+    "q": "In the Six-Part Framework for explaining your business, what belongs in Part 1 (\"The Problem or Need You Address\")?",
     "a": [
-      "Your formal education, past work history, and five-year income goals.",
-      "A real community problem, why it matters daily, how people cope now, and why current options fail.",
+      "Your formal education, past work history, and five-year personal income goals.",
+      "A real community problem, why it matters in daily life, how people currently deal with it, and why current solutions aren't working well.",
       "Your full retail price list, monthly overhead costs, and target profit margin per unit.",
       "The names of your top three local competitors and how many years they have operated."
     ],
@@ -25,49 +36,93 @@
     "t": 20,
     "quote": "1. The Problem or Need You Address: Begin by describing the everyday challenge or need your business helps with. Key elements: A real problem people in your community face; Why this problem matters in daily life; How people currently deal with this challenge; Why current solutions aren’t working well",
     "src": "Chapter 13, p. 190",
-    "topic": "Chapter 13: Sharing Your Business Story & Next Steps"
+    "topic": "Chapter 13: Sharing Your Business Story & Next Steps",
+    "distractor_pool": [
+      "Your formal education, past work history, and five-year personal income goals.",
+      "Your full retail price list, monthly overhead costs, and target profit margin per unit.",
+      "The names of your top three local competitors and how many years they have operated.",
+      "A technical blueprint of your production equipment and a list of your wholesale raw material suppliers.",
+      "Your business registration certificate, municipal tax identification number, and commercial lease agreement.",
+      "A five-year cash flow projection showing when outside investors will recover their initial startup capital.",
+      "The personal biography of your family founders and the charitable causes your business plans to sponsor.",
+      "Your step-by-step manufacturing checklist, inventory reorder thresholds, and weekly staff shift schedules."
+    ],
+    "audit": "All 8 distractors list internal credentials, financial projections, legal documents, or competitor histories that do not belong in Part 1 of the business story framework."
   },
   {
     "q": "In Part 4 of your business story (\"How Your Business Works\"), what practical details should you explain?",
     "a": [
       "The story of how you first discovered the problem and built your initial prototype.",
       "The personal background of each family helper in your shop and how much you pay them.",
-      "Your products or services and prices, how you manage costs and quality, and your future plans.",
+      "Your products or services and their prices, how you manage costs, how you ensure good quality, and how you are planning for the future.",
       "Your business's legal structure, municipal permit numbers, and annual tax bracket."
     ],
     "c": 2,
     "t": 20,
     "quote": "4. How Your Business Works: Explain the practical aspects of how you operate and sustain your business. Key elements: Your products or services and their prices; How you manage your costs; How you ensure good quality; How you’re planning for the future",
     "src": "Chapter 13, p. 191",
-    "topic": "Chapter 13: Sharing Your Business Story & Next Steps"
+    "topic": "Chapter 13: Sharing Your Business Story & Next Steps",
+    "distractor_pool": [
+      "The story of how you first discovered the problem and built your initial prototype.",
+      "The personal background of each family helper in your shop and how much you pay them.",
+      "Your business's legal structure, municipal permit numbers, and annual tax bracket.",
+      "The exact profit split in your household budget and how much cash you keep in your personal emergency fund.",
+      "A list of every customer you interviewed during your first month and their personal contact details.",
+      "Why your competitors' products fail and how much money your neighbors waste on existing alternatives.",
+      "The secret family recipes or proprietary formulas that prevent other local vendors from copying your work.",
+      "Your academic credentials, vocational certificates, and previous employment references from formal jobs."
+    ],
+    "audit": "All 8 distractors confuse Part 4 ('How Your Business Works') with confidential household budgets, private customer lists, trade secrets, or legal tax brackets not taught in the framework."
   },
   {
     "q": "How do entrepreneurs who cover all six parts of the business story framework perform compared to those who only talk about what they sell?",
     "a": [
       "They close sales in half the time during their first chat with a new buyer.",
       "They are three times more likely to gain customer trust and support.",
-      "They receive 40% more word-of-mouth referrals during their first six months.",
+      "They receive forty percent more word-of-mouth referrals during their first six months.",
       "They are twice as likely to form partnerships with nearby local shops."
     ],
     "c": 1,
     "t": 20,
     "quote": "Research from Harvard Business School found that entrepreneurs who cover all six of these areas when explaining their business are three times more likely to gain customer trust and support compared to those who focus only on what they sell or their personal story.",
     "src": "Chapter 13, p. 192",
-    "topic": "Chapter 13: Sharing Your Business Story & Next Steps"
+    "topic": "Chapter 13: Sharing Your Business Story & Next Steps",
+    "distractor_pool": [
+      "They close sales in half the time during their first chat with a new buyer.",
+      "They receive forty percent more word-of-mouth referrals during their first six months.",
+      "They are twice as likely to form partnerships with nearby local shops.",
+      "They command a fifty percent higher retail price without losing price-sensitive neighborhood shoppers.",
+      "They secure bank lines of credit four times faster than entrepreneurs who use visual storyboards.",
+      "They reduce customer return and complaint rates by eighty percent across their first year of operations.",
+      "They double their weekly unit sales volume without spending any additional hours on community marketing.",
+      "They retain ninety percent of their first-time buyers as permanent monthly subscription customers."
+    ],
+    "audit": "All 8 distractors invent unsupported statistical claims about sales closing speed, price premiums, bank credit, or subscription retention that do not appear in the Harvard Business School study on page 192."
   },
   {
     "q": "When adjusting your business story for family and community members, what should you emphasize?",
     "a": [
       "Three-year cash flow spreadsheets and technical equipment depreciation math.",
       "Complex legal partnership agreements and plans to open stores in distant provinces.",
-      "Stability, careful money and risk management, and how the business supports family and neighbors.",
+      "Reliable support for your family, careful money and risk management, ways the business helps the community, and how they can share in or support your progress.",
       "Why your production tools are more modern than the equipment used by older local vendors."
     ],
     "c": 2,
     "t": 20,
     "quote": "Talking with Family and Community Members: Focus on stability, responsibility, and how your business contributes to the community. What to emphasize: How your business provides reliable support for your family; Your careful approach to money and risk management; Ways your business helps the wider community; How they might share in or support your progress",
     "src": "Chapter 13, p. 193",
-    "topic": "Chapter 13: Sharing Your Business Story & Next Steps"
+    "topic": "Chapter 13: Sharing Your Business Story & Next Steps",
+    "distractor_pool": [
+      "Three-year cash flow spreadsheets and technical equipment depreciation math.",
+      "Complex legal partnership agreements and plans to open stores in distant provinces.",
+      "Why your production tools are more modern than the equipment used by older local vendors.",
+      "How quickly you plan to quit community markets and sell exclusively to corporate buyers outside town.",
+      "Exact unit cost breakdowns, wholesale supplier invoices, and weekly profit margin percentages.",
+      "Why traditional neighborhood businesses are inefficient and how your modern approach will replace them.",
+      "Your plans to borrow maximum microfinance debt to rapidly hire full-time staff within thirty days.",
+      "Formal collateral guarantees and legal repayment schedules in case the business fails during its first year."
+    ],
+    "audit": "All 8 distractors emphasize technical accounting, aggressive debt expansion, or disparaging local traditions, directly contradicting the textbook's guidance for talking with family and community members."
   },
   {
     "q": "When adjusting your business story for potential partners or suppliers, what should you emphasize?",
@@ -75,19 +130,30 @@
       "How much personal cash you have saved in your household emergency account at home.",
       "Why your product is cheaper than imports and how retail buyers can purchase from you today.",
       "Your personal family history and how your business helps you balance work with childcare.",
-      "Mutual business benefits, your reliability and organization, shared growth, and clear expectations."
+      "How the relationship helps both businesses, your reliability and organized approach, shared growth potential, and clear expectations about working together."
     ],
     "c": 3,
     "t": 20,
     "quote": "Talking with Potential Partners or Suppliers: Focus on how working together creates benefits for both of you. What to emphasize: How the relationship helps both businesses; Your reliability and organized approach; Growth potential that benefits them too; Clear expectations about working together",
     "src": "Chapter 13, pp. 193–194",
-    "topic": "Chapter 13: Sharing Your Business Story & Next Steps"
+    "topic": "Chapter 13: Sharing Your Business Story & Next Steps",
+    "distractor_pool": [
+      "How much personal cash you have saved in your household emergency account at home.",
+      "Why your product is cheaper than imports and how retail buyers can purchase from you today.",
+      "Your personal family history and how your business helps you balance work with childcare.",
+      "How you plan to replace their supplies with your own in-house manufacturing as soon as you grow.",
+      "Why they should grant you ninety days of interest-free credit before you place your very first order.",
+      "The names of competing suppliers you are negotiating with to force their wholesale prices down.",
+      "Your emotional struggle starting the business and why local suppliers have a moral duty to help you.",
+      "Detailed testimonials from your relatives about your personal character and neighborhood volunteer work."
+    ],
+    "audit": "All 8 distractors focus on retail customer pitches, personal household finances, adversarial price threats, or emotional appeals rather than mutual business benefit and reliability."
   },
   {
     "q": "When talking with lenders or support organizations, what four pieces of evidence should you emphasize?",
     "a": [
       "Your family background, passion for the craft, community volunteer work, and long-term dreams.",
-      "Careful money management, proof customers value your offer, a clear plan for using support, and risk management.",
+      "Evidence of careful money management, proof that customers value your offering, a clear explanation of how you would use support, and how you handle challenges and risks.",
       "Why competitors are failing, how fast you will open new locations, and why you need money today.",
       "Your supplier price lists, daily work schedule, product recipes, and family living budget."
     ],
@@ -95,54 +161,98 @@
     "t": 20,
     "quote": "Talking with Lenders or Support Organizations: Focus on practical business details and clear planning. What to emphasize: Evidence of careful money management; Proof that customers value what you offer; Clear explanation of how you would use support; How you handle challenges and risks",
     "src": "Chapter 13, p. 194",
-    "topic": "Chapter 13: Sharing Your Business Story & Next Steps"
+    "topic": "Chapter 13: Sharing Your Business Story & Next Steps",
+    "distractor_pool": [
+      "Your family background, passion for the craft, community volunteer work, and long-term dreams.",
+      "Why competitors are failing, how fast you will open new locations, and why you need money today.",
+      "Your supplier price lists, daily work schedule, product recipes, and family living budget.",
+      "How the loan will cover your unpaid personal household bills and pay off older informal debts.",
+      "An ambitious plan to launch five untested product lines simultaneously as soon as funding arrives.",
+      "Verbal promises from friends and neighbors who say they might buy your product once it is built.",
+      "Why your business idea is completely original and has never been tried anywhere in your region.",
+      "How outside funding will allow you to stop doing manual work and immediately hire a full-time manager."
+    ],
+    "audit": "All 8 distractors violate the textbook's rules on microfinance and lender communication by emphasizing unproven ideas, paying off personal debts, rapid multi-location expansion, or vague verbal promises."
   },
   {
     "q": "When is \"The Visual Story\" (5–10 images with minimal text) especially useful for sharing your business?",
     "a": [
       "When submitting a formal application for a bank loan or government grant.",
       "When registering your business structure and tax account at a municipal office.",
-      "At community gatherings, with groups, or when language differences exist.",
+      "At community gatherings, when explaining to groups, or in situations where language differences exist.",
       "When signing a written wholesale supply contract with a regional manufacturer."
     ],
     "c": 2,
     "t": 20,
     "quote": "The Visual Story: Using pictures to explain your business with minimal text. Format: 5-10 images that show key aspects of your business with brief explanations... When to use it: Community gatherings, when explaining to groups, in situations where language differences exist",
     "src": "Chapter 13, pp. 195–196",
-    "topic": "Chapter 13: Sharing Your Business Story & Next Steps"
+    "topic": "Chapter 13: Sharing Your Business Story & Next Steps",
+    "distractor_pool": [
+      "When submitting a formal application for a bank loan or government grant.",
+      "When registering your business structure and tax account at a municipal office.",
+      "When signing a written wholesale supply contract with a regional manufacturer.",
+      "When filing annual income and expense statements with national tax authorities.",
+      "When negotiating commercial lease terms and liability clauses with a property landlord.",
+      "When applying for full Level 4 regulatory licensing and employee benefit registration.",
+      "When presenting audited financial records to a microfinance institution's credit committee.",
+      "When drafting written quality-control checklists and standard operating procedures for new hires."
+    ],
+    "audit": "All 8 distractors describe formal legal, tax, loan, or internal operational documents where the textbook instead requires 'The Complete Business Description' or written checklists."
   },
   {
-    "q": "Why should you prepare at least two formats for explaining your business (such as a 30-second intro and a visual story)?",
+    "q": "Why should you prepare at least two formats for explaining your business (such as a 30-second introduction and a visual story)?",
     "a": [
-      "It cuts the time spent answering basic customer questions about prices and hours by 50%.",
+      "It cuts the time spent answering basic customer questions about prices and hours by fifty percent.",
       "It satisfies the paperwork rules of both local market associations and municipal tax offices.",
       "It lets you test two brand names at once to see which one customers remember better.",
-      "Entrepreneurs with at least two formats are 70% more likely to seize unexpected opportunities."
+      "Entrepreneurs with at least two different ways of explaining their business are seventy percent more likely to take advantage of unexpected opportunities."
     ],
     "c": 3,
     "t": 20,
     "quote": "Research from MIT found that entrepreneurs with at least two different ways of explaining their business were 70% more likely to take advantage of unexpected opportunities than those who created explanations only when specifically asked.",
     "src": "Chapter 13, p. 196",
-    "topic": "Chapter 13: Sharing Your Business Story & Next Steps"
+    "topic": "Chapter 13: Sharing Your Business Story & Next Steps",
+    "distractor_pool": [
+      "It cuts the time spent answering basic customer questions about prices and hours by fifty percent.",
+      "It satisfies the paperwork rules of both local market associations and municipal tax offices.",
+      "It lets you test two brand names at once to see which one customers remember better.",
+      "It qualifies your business for discounted advertising rates in local community newsletters.",
+      "It doubles the amount of trade credit wholesale suppliers will extend on your initial inventory order.",
+      "It reduces the number of customer interviews needed during pre-launch validation from ten down to two.",
+      "It allows you to charge higher prices to institutional buyers while keeping retail prices low for neighbors.",
+      "It guarantees approval when applying for short-term working capital loans from community savings groups."
+    ],
+    "audit": "All 8 distractors invent unsupported operational, regulatory, pricing, or loan-approval benefits that appear nowhere in the MIT study on page 196 or any other chapter."
   },
   {
     "q": "How does \"Speaking in Your Community's Style\" make sharing your business story more effective?",
     "a": [
       "By focusing on financial facts, profit margins, and production stats rather than stories.",
       "By memorizing one script and delivering it the same way to every audience you meet.",
-      "By using common local expressions, respecting cultural attitudes, and matching local expectations.",
-      "By keeping every business chat under 30 seconds so listeners never feel pressured to buy."
+      "By using common local language and expressions, respecting appropriate formality, considering cultural attitudes, and matching local expectations.",
+      "By keeping every business chat under thirty seconds so listeners never feel pressured to buy."
     ],
     "c": 2,
     "t": 20,
     "quote": "Speaking in Your Community’s Style: Adapt your communication to what works in your local context. Key approaches: Use language and expressions that are common locally; Respect appropriate levels of formality in different settings; Consider cultural attitudes about business and success; Adjust your tone, gestures, and examples to match local expectations",
     "src": "Chapter 13, p. 197",
-    "topic": "Chapter 13: Sharing Your Business Story & Next Steps"
+    "topic": "Chapter 13: Sharing Your Business Story & Next Steps",
+    "distractor_pool": [
+      "By focusing on financial facts, profit margins, and production stats rather than stories.",
+      "By memorizing one script and delivering it the same way to every audience you meet.",
+      "By keeping every business chat under thirty seconds so listeners never feel pressured to buy.",
+      "By using formal corporate terminology and academic jargon so listeners view your shop as sophisticated.",
+      "By avoiding any mention of prices or payments until the customer asks at least three times.",
+      "By speaking only in technical industry terms that distinguish you from informal street vendors.",
+      "By copying the exact advertising slogans used by large national brands on television and radio.",
+      "By hiring a professional spokesperson from outside the neighborhood to pitch your products at local markets."
+    ],
+    "audit": "All 8 distractors promote rigid scripts, corporate jargon, facts-only pitches, or outside spokespeople that directly contradict the textbook's communication principles on pages 197–198."
   },
   {
     "q": "Why is \"Demonstrating Rather Than Just Telling\" such an effective way to share your business story?",
     "a": [
-      "Showing samples, live work, or before-and-after results makes you twice as likely to be remembered and recommended.",
+      "Showing samples, live demonstrations, or before-and-after examples makes you twice as likely to be remembered and recommended compared to focusing only on facts and figures.",
       "Giving away free full-sized products at a market forces competitors to lower their prices.",
       "Live demonstrations legally require market spectators who watch to buy at least one item.",
       "Live demonstrations let you skip explaining what problem you solve or how much you charge."
@@ -151,13 +261,24 @@
     "t": 20,
     "quote": "Demonstrating Rather Than Just Telling: Showing practical examples helps people understand your business better. Key approaches: Bring product samples when possible; Demonstrate how your service works; Show before/after examples... Research from the World Economic Forum found that entrepreneurs who incorporate these communication approaches are twice as likely to be remembered and recommended compared to those who focus only on facts and figures.",
     "src": "Chapter 13, p. 198",
-    "topic": "Chapter 13: Sharing Your Business Story & Next Steps"
+    "topic": "Chapter 13: Sharing Your Business Story & Next Steps",
+    "distractor_pool": [
+      "Giving away free full-sized products at a market forces competitors to lower their prices.",
+      "Live demonstrations legally require market spectators who watch to buy at least one item.",
+      "Live demonstrations let you skip explaining what problem you solve or how much you charge.",
+      "Demonstrating your production process in public prevents competitors from copying your business model.",
+      "Showing product samples allows you to charge a thirty percent higher price than shops that use printed signs.",
+      "Live demonstrations eliminate the need to track customer feedback or adjust your offering after launch.",
+      "Bringing physical samples exempts your stall from standard health and safety inspections at local markets.",
+      "Demonstrating your service guarantees that eighty percent of onlookers will sign up for advance payment plans."
+    ],
+    "audit": "All 8 distractors make false claims about legal obligations, price premiums, competitor deterrence, or skipping core business steps that have zero support in the World Economic Forum study or the textbook."
   },
   {
-    "q": "When planning your next steps, why should you focus on just 2 or 3 growth priorities instead of trying to improve everything at once?",
+    "q": "When planning your next steps, why should you focus on just 2 or 3 specific growth priorities instead of trying to improve everything at once?",
     "a": [
-      "Focusing on 2–3 high-impact improvements balances income growth with stability, risk, and personal capacity.",
-      "Limiting your plan to 2–3 priorities guarantees you will finish every improvement within 30 days.",
+      "Focusing on 2–3 high-impact improvements balances short- and long-term needs, income growth, stability, risk management, and personal capacity.",
+      "Limiting your plan to 2–3 priorities guarantees you will finish every improvement within thirty days.",
       "Community savings groups only allow members to work on two business goals per calendar year.",
       "Focusing on 2–3 areas lets you pause daily financial tracking while you work on growth."
     ],
@@ -165,13 +286,24 @@
     "t": 20,
     "quote": "Setting Practical Growth Priorities: Rather than trying to improve everything at once, focus on the most important next steps. Key approaches: Identify 2-3 specific improvements that would make the biggest difference; Consider both short-term needs and longer-term opportunities; Balance income growth with stability and risk management; Account for your personal circumstances and capacity",
     "src": "Chapter 13, p. 199",
-    "topic": "Chapter 13: Sharing Your Business Story & Next Steps"
+    "topic": "Chapter 13: Sharing Your Business Story & Next Steps",
+    "distractor_pool": [
+      "Limiting your plan to 2–3 priorities guarantees you will finish every improvement within thirty days.",
+      "Community savings groups only allow members to work on two business goals per calendar year.",
+      "Focusing on 2–3 areas lets you pause daily financial tracking while you work on growth.",
+      "Municipal licensing boards restrict informal micro-businesses to three operational changes per tax year.",
+      "Working on 2–3 priorities eliminates the need to maintain an emergency cash reserve during expansion.",
+      "Microfinance institutions automatically approve expansion loans when a business plan lists exactly three goals.",
+      "Limiting your focus to 2–3 goals ensures your profit margin will double before the next seasonal slowdown.",
+      "Focusing on 2–3 priorities allows you to delegate all daily customer service to untrained temporary helpers."
+    ],
+    "audit": "All 8 distractors invent arbitrary 30-day guarantees, savings group rules, licensing caps, or excuses to skip financial tracking and cash reserves that contradict the textbook."
   },
   {
     "q": "What are the four recommended approaches for \"Building Support Systems\" as your business grows?",
     "a": [
       "Hire a full-time manager, sign an exclusive distributor, borrow bank money, and retain a law firm.",
-      "Identify needed skills, find experienced mentors, join peer groups or associations, and use local learning resources.",
+      "Identify specific skills or knowledge you need, look for experienced mentors, consider peer groups or business associations, and research accessible community learning resources.",
       "Form a board of directors, sell shares to neighbors, outsource production, and rent a downtown office.",
       "Open a bank credit line, buy factory machines, hire commission sales agents, and trademark your logo."
     ],
@@ -179,12 +311,23 @@
     "t": 20,
     "quote": "Building Support Systems: Growing businesses benefit from appropriate support networks and resources. Key approaches: Identify specific skills or knowledge that would help you grow; Look for mentors with experience in areas you want to develop; Consider peer groups or associations of similar businesses; Research learning resources accessible in your community",
     "src": "Chapter 13, p. 200",
-    "topic": "Chapter 13: Sharing Your Business Story & Next Steps"
+    "topic": "Chapter 13: Sharing Your Business Story & Next Steps",
+    "distractor_pool": [
+      "Hire a full-time manager, sign an exclusive distributor, borrow bank money, and retain a law firm.",
+      "Form a board of directors, sell shares to neighbors, outsource production, and rent a downtown office.",
+      "Open a bank credit line, buy factory machines, hire commission sales agents, and trademark your logo.",
+      "Franchise your brand nationally, hire an accounting firm, lease delivery trucks, and launch paid radio ads.",
+      "Merge with your largest local competitor, take out a commercial mortgage, and automate all customer service.",
+      "Recruit venture capital investors, register an international corporation, and import bulk inventory from abroad.",
+      "Hire full-time administrative staff, purchase enterprise software, and retain a government lobbying consultant.",
+      "Subcontract your core production, lock suppliers into exclusive contracts, and open three branch locations."
+    ],
+    "audit": "All 8 distractors replace community-based learning, mentorship, and peer associations with expensive corporate overhead, outside debt, and premature scaling rejected throughout the textbook."
   },
   {
     "q": "What four things should you consider when \"Balancing Business and Personal Growth\" so development stays sustainable?",
     "a": [
-      "How changes affect family life, keeping health a priority, which work you enjoy most, and your deeper purpose beyond income.",
+      "How business changes affect your family life, keeping health and wellbeing priorities, which aspects of work you enjoy most, and your deeper purposes beyond income.",
       "How to match corporate executive pay, avoid all physical labor, skip taxes, and sell the shop early.",
       "How many hours competitors work weekly, how fast regional factories grow, and how to double staff monthly.",
       "How to keep family out of business discussions, work seven days a week, and retire in two years."
@@ -193,20 +336,42 @@
     "t": 20,
     "quote": "Balancing Business and Personal Growth: Sustainable business development must align with your personal circumstances and goals. Key approaches: Consider how business changes will affect your family life; Ensure your health and wellbeing remain priorities; Think about which aspects of work you enjoy most; Reflect on your deeper purposes beyond income generation",
     "src": "Chapter 13, p. 200",
-    "topic": "Chapter 13: Sharing Your Business Story & Next Steps"
+    "topic": "Chapter 13: Sharing Your Business Story & Next Steps",
+    "distractor_pool": [
+      "How to match corporate executive pay, avoid all physical labor, skip taxes, and sell the shop early.",
+      "How many hours competitors work weekly, how fast regional factories grow, and how to double staff monthly.",
+      "How to keep family out of business discussions, work seven days a week, and retire in two years.",
+      "How to maximize short-term cash withdrawals, postpone equipment maintenance, and eliminate all personal rest days.",
+      "How quickly you can replace local suppliers with cheaper imports and automate every customer interaction.",
+      "How to expand into every neighboring town simultaneously while keeping all operational decisions entirely to yourself.",
+      "How much personal debt you can take on to open a second storefront before your first shop stabilizes.",
+      "How to prioritize revenue volume over profit margins so your business looks larger than competing neighborhood shops."
+    ],
+    "audit": "All 8 distractors promote burnout, overwork, reckless debt, or purely extractive goals that directly oppose the textbook's guidance on personal wellbeing, family alignment, and sustainable growth."
   },
   {
-    "q": "What kind of growth plan makes an entrepreneur three times more likely to achieve sustainable business development?",
+    "q": "What kind of growth plan makes a Problem-First Entrepreneur three times more likely to achieve sustainable business development?",
     "a": [
       "A rigid three-year financial plan with fixed monthly revenue targets for every product.",
-      "An informal day-by-day plan that focuses on daily sales and avoids written goals.",
+      "An informal day-by-day approach that focuses on daily sales and avoids setting written goals.",
       "A cautious plan that keeps products and prices unchanged until you save six months of cash.",
-      "A structured but flexible step-by-step plan that breaks big goals into small, doable actions."
+      "A structured but flexible step-by-step growth plan that breaks larger goals into smaller, achievable actions."
     ],
     "c": 3,
     "t": 20,
     "quote": "Creating Your Growth Path: Plan a step-by-step approach to development rather than attempting major changes all at once. Key approaches: Break larger goals into smaller, achievable steps... Research from the Kauffman Foundation shows that Problem-First Entrepreneurs who create structured but flexible growth plans are three times more likely to achieve sustainable business development than those who either avoid planning entirely or create rigid, overambitious plans.",
     "src": "Chapter 13, pp. 199 & 201",
-    "topic": "Chapter 13: Sharing Your Business Story & Next Steps"
+    "topic": "Chapter 13: Sharing Your Business Story & Next Steps",
+    "distractor_pool": [
+      "A rigid three-year financial plan with fixed monthly revenue targets for every product.",
+      "An informal day-by-day approach that focuses on daily sales and avoids setting written goals.",
+      "A cautious plan that keeps products and prices unchanged until you save six months of cash.",
+      "An aggressive expansion plan that launches multiple new locations at once using microfinance debt.",
+      "A sixty-page formal business plan drafted by an outside consultant before talking to your first customer.",
+      "A fixed five-year corporate roadmap that prohibits pivoting away from your original product concept.",
+      "An investor-backed scaling plan that prioritizes rapid market share capture over immediate monthly profitability.",
+      "A purely reactive plan that copies whatever new products or price cuts your nearest competitors introduce."
+    ],
+    "audit": "All 8 distractors describe rigid overambitious plans, avoiding planning entirely, lengthy pre-launch planning without customer feedback, or debt-fueled rapid expansion, all of which the textbook explicitly contrasts against sustainable Problem-First planning."
   }
 ]

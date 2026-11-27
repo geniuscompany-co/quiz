@@ -11,49 +11,93 @@
     "t": 20,
     "quote": "Research from the Boston Consulting Group shows that businesses with strong ethical practices and community connections are 2.5 times more likely to maintain customer loyalty during economic downturns.",
     "src": "Chapter 9, p. 107",
-    "topic": "Chapter 9: Ethical Entrepreneurship & Social Impact"
+    "topic": "Chapter 9: Ethical Entrepreneurship & Social Impact",
+    "distractor_pool": [
+      "They recover their pre-recession profit margins in half the time of purely price-focused competitors.",
+      "They receive twice as much trade credit from wholesale suppliers when cash flow becomes tight.",
+      "They spend fifty percent less on employee turnover and retraining over a five-year period.",
+      "They secure emergency microfinance loans at half the standard interest rate during local market slumps.",
+      "They maintain eighty percent of their peak seasonal sales volume without offering promotional discounts.",
+      "They reduce their monthly fixed overhead expenses thirty percent faster than non-local corporate competitors.",
+      "They convert first-time buyers into monthly subscription members at three times the regional industry average.",
+      "They qualify for municipal tax deferrals that protect their cash reserves throughout prolonged downturns."
+    ],
+    "audit": "All 8 distractors cite fabricated financial, supplier credit, staffing, or tax deferral metrics that appear nowhere in the Boston Consulting Group study or across Chapters 1–9 and 13."
   },
   {
     "q": "Why do local communities and authorities give \"Preferential Community Support\" to ethical businesses when space or resources become limited?",
     "a": [
-      "Because ethical businesses usually employ more full-time workers than any other shops in the market.",
+      "Because ethical businesses formally pledge to keep their retail prices frozen during community emergencies.",
       "Because long-standing ethical businesses have already paid more cumulative local permit fees over the years.",
       "Because communities rally around businesses they see as genuine contributors rather than extractors.",
-      "Because ethical businesses formally pledge to keep their retail prices frozen during community emergencies."
+      "Because ethical businesses usually employ more full-time workers than any other shops in the market."
     ],
     "c": 2,
     "t": 20,
     "quote": "2. Preferential Community Support: Communities rally around businesses they see as contributors, not extractors.",
     "src": "Chapter 9, p. 108",
-    "topic": "Chapter 9: Ethical Entrepreneurship & Social Impact"
+    "topic": "Chapter 9: Ethical Entrepreneurship & Social Impact",
+    "distractor_pool": [
+      "Because ethical businesses formally pledge to keep their retail prices frozen during community emergencies.",
+      "Because long-standing ethical businesses have already paid more cumulative local permit fees over the years.",
+      "Because ethical businesses usually employ more full-time workers than any other shops in the market.",
+      "Because municipal bylaws require market organizers to allocate prime stalls based on formal tax seniority.",
+      "Because ethical businesses sign legally binding revenue-sharing agreements with neighborhood trade associations.",
+      "Because local suppliers guarantee exclusive wholesale inventory allocations to businesses with clean inspection records.",
+      "Because ethical businesses donate a fixed percentage of their gross weekly revenue to municipal infrastructure funds.",
+      "Because formal business registries rank ethical enterprises higher when issuing restricted commercial operating licenses."
+    ],
+    "audit": "All 8 distractors invent legal mandates, price freezes, permit seniority rules, or mandatory donations that are completely absent from the textbook's discussion of community goodwill."
   },
   {
     "q": "How does building \"relationship capital\" and goodwill through ethical practices help a business during a crisis like a flood or disaster?",
     "a": [
-      "Local government agencies give ethical businesses first priority for emergency reconstruction grants.",
-      "Customers and suppliers are willing to offer assistance with rebuilding because of the goodwill established over years of fair dealing.",
       "Microfinance institutions waive interest payments for up to a year for borrowers with strong community reputations.",
+      "Customers and suppliers are willing to offer assistance with rebuilding because of the goodwill established over years of fair dealing.",
+      "Local government agencies give ethical businesses first priority for emergency reconstruction grants.",
       "Community savings groups cover the full cost of replacing damaged tools for long-term business members."
     ],
     "c": 1,
     "t": 20,
     "quote": "4. Resilience During Difficulties: Ethical businesses can call on relationship capital during challenging times. Example: When a flood damaged Maria’s small shop in Brazil, customers and suppliers offered assistance with rebuilding because of the goodwill she had established through years of ethical practices.",
     "src": "Chapter 9, p. 108",
-    "topic": "Chapter 9: Ethical Entrepreneurship & Social Impact"
+    "topic": "Chapter 9: Ethical Entrepreneurship & Social Impact",
+    "distractor_pool": [
+      "Microfinance institutions waive interest payments for up to a year for borrowers with strong community reputations.",
+      "Local government agencies give ethical businesses first priority for emergency reconstruction grants.",
+      "Community savings groups cover the full cost of replacing damaged tools for long-term business members.",
+      "Commercial landlords automatically forgive up to six months of unpaid rent after a natural disaster.",
+      "Regional wholesale distributors replace ruined inventory at no charge when a shop owner has a clean payment record.",
+      "Municipal tax authorities refund the previous year's business registration fees to fund emergency repairs.",
+      "Local trade associations provide interest-free bridge loans that require no repayment until full profitability returns.",
+      "Insurance cooperatives automatically enroll ethical neighborhood merchants in zero-deductible disaster recovery pools."
+    ],
+    "audit": "All 8 distractors fabricate institutional loan waivers, government grants, rent forgiveness, or free inventory replacement programs that never appear in any chapter of the textbook."
   },
   {
     "q": "Among the Five Foundations of Ethical Business, which practices belong specifically to Foundation 1 (\"Fairness in Every Transaction\")?",
     "a": [
       "Charging value-based sustainable prices, paying suppliers and workers promptly and fairly, honoring commitments, and applying policies consistently.",
       "Requiring written contracts for every cash sale, matching the lowest price in town, and offering thirty-day return policies.",
-      "Dividing weekly business profits equally among all workers, suppliers, and community charity funds at the end of each month.",
-      "Publishing your supplier invoices publicly, charging wealthier buyers higher prices, and waiving fees for first-time shoppers."
+      "Publishing your supplier invoices publicly, charging wealthier buyers higher prices, and waiving fees for first-time shoppers.",
+      "Dividing weekly business profits equally among all workers, suppliers, and community charity funds at the end of each month."
     ],
     "c": 0,
     "t": 20,
     "quote": "1. Fairness in Every Transaction: Ensure that all parties benefit from their interactions with your business. Key practices: Charge prices that provide value to customers while sustaining your business; Pay suppliers and workers promptly and fairly; Honor commitments even when circumstances change; Apply policies consistently for all customers",
     "src": "Chapter 9, pp. 108–109",
-    "topic": "Chapter 9: Ethical Entrepreneurship & Social Impact"
+    "topic": "Chapter 9: Ethical Entrepreneurship & Social Impact",
+    "distractor_pool": [
+      "Requiring written contracts for every cash sale, matching the lowest price in town, and offering thirty-day return policies.",
+      "Publishing your supplier invoices publicly, charging wealthier buyers higher prices, and waiving fees for first-time shoppers.",
+      "Dividing weekly business profits equally among all workers, suppliers, and community charity funds at the end of each month.",
+      "Allowing customers to negotiate their own prices, extending unlimited credit to neighbors, and absorbing all supplier price hikes.",
+      "Setting retail prices at a fixed ten percent markup over materials and offering lifetime warranties on every item sold.",
+      "Paying suppliers on consignment only after goods sell, rotating part-time workers weekly, and discounting slow-moving inventory.",
+      "Benchmarking wages against corporate factories, locking in multi-year supplier contracts, and charging tiered prices by neighborhood.",
+      "Offering automatic refunds without receipts, guaranteeing lower prices than any street vendor, and paying bonuses before covering overhead."
+    ],
+    "audit": "All 8 distractors contradict the textbook's pricing, financial, and ethical rules by inventing profit-sharing mandates, sliding-scale wealth pricing, consignment-only supplier payments, or price-matching guarantees."
   },
   {
     "q": "How did micro-enterprises that incorporated at least three of the five ethical foundations perform compared to businesses focused solely on transactional relationships?",
@@ -67,7 +111,18 @@
     "t": 20,
     "quote": "Research by the Aspen Institute found that micro-enterprises incorporating at least three of these ethical foundations grew their customer base 60% faster than businesses focused solely on transactional relationships.",
     "src": "Chapter 9, p. 110",
-    "topic": "Chapter 9: Ethical Entrepreneurship & Social Impact"
+    "topic": "Chapter 9: Ethical Entrepreneurship & Social Impact",
+    "distractor_pool": [
+      "They earned thirty-five percent higher profit margins per sale.",
+      "They retained eighty percent more of their suppliers over five years.",
+      "They doubled their annual revenue without adding extra work hours.",
+      "They reduced their monthly operating expenses by forty percent within one year.",
+      "They recovered their initial startup equipment costs three times faster.",
+      "They secured fifty percent larger bulk purchasing discounts from regional wholesalers.",
+      "They achieved full regulatory formalization in half the average time.",
+      "They increased their average transaction size by seventy-five percent across all customer segments."
+    ],
+    "audit": "All 8 distractors invent unsupported performance metrics regarding profit margins, supplier retention, work hours, expense reduction, or transaction sizes not found in the Aspen Institute study or any other chapter."
   },
   {
     "q": "What is a core practice of \"Ethical Product and Service Design\" in daily operations?",
@@ -81,7 +136,18 @@
     "t": 20,
     "quote": "Ethical Product and Service Design: Create offerings that genuinely benefit customers and minimize harm. Practical approaches: Consider who might be harmed by your product/service and how to prevent it; Design for durability and reparability rather than planned obsolescence; Use the minimal amount of resources necessary for quality; Prioritize ingredients or components with lower environmental impact",
     "src": "Chapter 9, pp. 110–111",
-    "topic": "Chapter 9: Ethical Entrepreneurship & Social Impact"
+    "topic": "Chapter 9: Ethical Entrepreneurship & Social Impact",
+    "distractor_pool": [
+      "Offering a written lifetime replacement guarantee on every product you manufacture in your workshop.",
+      "Having an independent government laboratory test every batch of raw materials before you begin production.",
+      "Making only custom-ordered items so your workshop never has to store finished goods on a shelf.",
+      "Using imported synthetic materials exclusively so every product looks identical to mass-produced factory goods.",
+      "Designing low-cost single-use versions of your product so customers replace them on a predictable monthly schedule.",
+      "Adding premium decorative packaging to every item so buyers perceive higher value and pay higher margins.",
+      "Patenting your product designs with national trade authorities before showing any prototypes to local customers.",
+      "Restricting your product line to luxury items for high-income buyers who can afford certified organic ingredients."
+    ],
+    "audit": "All 8 distractors promote planned obsolescence, government lab testing, patents, luxury exclusivity, or lifetime warranties that conflict with or appear nowhere in the textbook."
   },
   {
     "q": "Under \"Ethical People Management,\" how should a business owner apply fair treatment across the business?",
@@ -95,7 +161,18 @@
     "t": 20,
     "quote": "Ethical People Management: Treat employees, partners, and yourself with dignity and fairness. Practical approaches: Provide fair compensation for all work, including your own; Create safe, healthy working conditions; Be clear about expectations and provide necessary training; Respect work-life boundaries for yourself and others",
     "src": "Chapter 9, p. 112",
-    "topic": "Chapter 9: Ethical Entrepreneurship & Social Impact"
+    "topic": "Chapter 9: Ethical Entrepreneurship & Social Impact",
+    "distractor_pool": [
+      "Pay every worker an equal share of the weekly profits before taking any personal income for your own household.",
+      "Allow employees to set their own daily quality standards and work schedules once they finish their initial training.",
+      "Pay employees double the local wage during busy weeks in exchange for unpaid standby hours during slow weeks.",
+      "Hire only immediate family members on an informal basis so you can defer wages whenever cash flow is tight.",
+      "Guarantee permanent full-time employment to every seasonal helper as soon as they complete their first week.",
+      "Forgo your own personal salary during the first two years so all excess cash can fund employee bonuses.",
+      "Rotate workers through different job tasks every day without written checklists so nobody feels overly monitored.",
+      "Provide cash advances on future wages whenever employees request extra funds for personal household expenses."
+    ],
+    "audit": "All 8 distractors contradict Chapter 6, 7, and 9 rules on fixed owner pay, clear quality systems, staged hiring, and fair compensation."
   },
   {
     "q": "Why did micro-enterprises with ethical practices across their operations experience forty-five percent lower customer acquisition costs?",
@@ -109,7 +186,18 @@
     "t": 20,
     "quote": "A study by the International Labour Organization found that micro-enterprises implementing ethical practices across their operations experienced 45% lower customer acquisition costs due to stronger word-of-mouth referrals.",
     "src": "Chapter 9, p. 112",
-    "topic": "Chapter 9: Ethical Entrepreneurship & Social Impact"
+    "topic": "Chapter 9: Ethical Entrepreneurship & Social Impact",
+    "distractor_pool": [
+      "Because ethical businesses focus on narrow neighborhood markets where transport and delivery expenses are minimal.",
+      "Because their workers stay on the job longer and become much more efficient at selling to walk-in shoppers.",
+      "Because local business associations print free directory listings for member shops that pass annual ethics reviews.",
+      "Because municipal authorities grant ethical businesses free promotional booths at weekly public markets.",
+      "Because social media platforms boost organic posts from community-focused businesses without charging ad fees.",
+      "Because wholesale suppliers co-fund seasonal promotional flyers for retail shops that pay their invoices early.",
+      "Because ethical businesses sell lower-priced necessity goods that require no explanation or sales demonstrations.",
+      "Because repeat customers pay upfront annual membership fees that cover all seasonal promotional campaigns."
+    ],
+    "audit": "All 8 distractors invent false explanations (free market booths, social media algorithms, supplier-funded flyers, directory listings) not supported anywhere in the textbook."
   },
   {
     "q": "Under Dilemma 1 (\"Quality vs. Affordability\"), what is the ethical approach when rising material costs make it hard to keep prices affordable for customers?",
@@ -123,7 +211,18 @@
     "t": 20,
     "quote": "Dilemma 1: Quality vs. Affordability: When customers need lower prices but quality would suffer. Ethical approach: Be transparent about the quality differences at different price points; Look for creative ways to reduce costs without compromising core functionality; Offer different options with clear explanations of the tradeoffs; Never misrepresent lower-quality options as equivalent to better ones",
     "src": "Chapter 9, p. 113",
-    "topic": "Chapter 9: Ethical Entrepreneurship & Social Impact"
+    "topic": "Chapter 9: Ethical Entrepreneurship & Social Impact",
+    "distractor_pool": [
+      "Freeze your retail prices at their current level and temporarily stop paying yourself a personal wage until material costs fall.",
+      "Require higher-income customers to pay a twenty percent surcharge so you can subsidize discounts for lower-income buyers.",
+      "Borrow money from a microfinance institution to cover the higher material costs so customers do not see any change in price.",
+      "Quietly substitute cheaper raw materials while keeping the product appearance identical so buyers do not worry.",
+      "Reduce package sizes slightly without changing the label so your unit price remains affordable for daily shoppers.",
+      "Suspend production of budget items entirely and focus only on premium products for buyers who can afford price increases.",
+      "Match your lowest competitor's price at a temporary financial loss until inflationary pressures in the local market subside.",
+      "Require customers to purchase items in multi-unit bundles so volume sales offset your shrinking profit margin per unit."
+    ],
+    "audit": "All 8 distractors violate the textbook's financial and ethical principles by advocating hidden shrinkflation, deceptive material substitution, borrowing for operating expenses, or stopping owner pay."
   },
   {
     "q": "Under Dilemma 2 (\"Competitor Misconduct\"), what is the recommended ethical response when competitors gain a short-term advantage through dishonest practices?",
@@ -137,7 +236,18 @@
     "t": 20,
     "quote": "Dilemma 2: Competitor Misconduct: When competitors use unethical practices that give them an advantage. Ethical approach: Focus on educating customers about why your practices matter; Emphasize the long-term benefits of your ethical approach; Build alliances with other ethical businesses for mutual support; Never compromise your standards to match unethical competitors",
     "src": "Chapter 9, p. 113",
-    "topic": "Chapter 9: Ethical Entrepreneurship & Social Impact"
+    "topic": "Chapter 9: Ethical Entrepreneurship & Social Impact",
+    "distractor_pool": [
+      "Publicly name the dishonest competitors at community meetings and warn customers not to visit their stalls.",
+      "Lower your prices below your production cost for one month so buyers return to your shop instead of the competitor's.",
+      "File a daily complaint with municipal market inspectors until authorities close the competing businesses down.",
+      "Temporarily adopt the competitor's cost-cutting shortcuts on your budget line so you do not lose price-sensitive buyers.",
+      "Offer cash rebates to any customer who brings in a receipt from the unethical competitor and switches to your shop.",
+      "Pressure shared wholesale suppliers to boycott the dishonest competitor by threatening to cancel your own supply orders.",
+      "Hire mystery shoppers to document the competitor's deceptive practices and post the evidence on neighborhood bulletin boards.",
+      "Shift your business exclusively to wholesale contracts outside the neighborhood so you avoid competing in the local retail market."
+    ],
+    "audit": "All 8 distractors suggest aggressive retaliation, price wars below cost, supplier boycotts, or compromising standards, all of which are unsupported or explicitly rejected by the textbook."
   },
   {
     "q": "Under the \"Urgency vs. Thoroughness\" dilemma, what should you do when a customer demands an immediate repair that would hurt your quality?",
@@ -151,7 +261,18 @@
     "t": 20,
     "quote": "Dilemma 3: Urgency vs. Thoroughness... Ethical approach: Communicate honestly about realistic timeframes; When delays are inevitable, inform customers immediately; Maintain minimum quality standards even under pressure; Be willing to lose some business rather than doing poor work.",
     "src": "Chapter 9, p. 114",
-    "topic": "Chapter 9: Ethical Entrepreneurship & Social Impact"
+    "topic": "Chapter 9: Ethical Entrepreneurship & Social Impact",
+    "distractor_pool": [
+      "Accept the job at the rushed deadline and offer a partial refund if the repair fails later.",
+      "Charge an extra rush fee and hire a temporary helper to finish the job before the deadline.",
+      "Promise the fast deadline to win the sale, then call the buyer later to explain the delay.",
+      "Perform a quick temporary patch without mentioning its limits so the customer leaves happy today.",
+      "Have the customer sign a liability waiver releasing your shop from responsibility for rushed workmanship.",
+      "Skip your final quality checklist on rush orders so you can meet the customer's schedule without losing revenue.",
+      "Subcontract the urgent repair to an unvetted street vendor and split the fee to keep the customer's business.",
+      "Delay existing orders from earlier customers without telling them so you can prioritize the new rush request."
+    ],
+    "audit": "All 8 distractors promote compromising quality standards, deceiving customers about timelines, skipping quality checks, or using untrained helpers/subcontractors contrary to the textbook."
   },
   {
     "q": "Under Dilemma 5 (\"Cultural Expectations vs. Personal Values\"), what is the recommended approach when a common local practice conflicts with your ethical standards?",
@@ -165,13 +286,24 @@
     "t": 20,
     "quote": "Dilemma 5: Cultural Expectations vs. Personal Values... Ethical approach: Understand the reasoning behind local practices before judging; Look for respectful alternatives that honor both perspectives; Explain your approach in terms of benefits, not criticisms; Find allies who share your values within the community",
     "src": "Chapter 9, pp. 114–115",
-    "topic": "Chapter 9: Ethical Entrepreneurship & Social Impact"
+    "topic": "Chapter 9: Ethical Entrepreneurship & Social Impact",
+    "distractor_pool": [
+      "Follow the local practice temporarily during your first year until your business is strong enough to set its own rules.",
+      "Ask a respected older relative to handle all negotiations with local officials and suppliers on your behalf.",
+      "Limit your sales to private home deliveries so your business does not have to interact with public market customs.",
+      "Publicly criticize the outdated local custom in your marketing materials to attract younger, progressive shoppers.",
+      "Relocate your business to a different district where commercial regulations override traditional neighborhood customs.",
+      "Insist that customers and suppliers sign a written code of conduct before entering into any business transaction.",
+      "Report traditional market practices to national regulatory agencies so outside officials force local merchants to change.",
+      "Create two separate business entities so you can follow local customs informally while keeping your main brand ethical."
+    ],
+    "audit": "All 8 distractors advocate compromising personal ethics, criticizing community traditions, avoiding the local market, or relying on outside coercion, none of which are supported anywhere in the textbook."
   },
   {
     "q": "Why should you integrate social impact into your core business operations instead of treating it as a separate charity activity?",
     "a": [
       "It qualifies your business for reduced municipal tax rates reserved for registered social enterprises.",
-      "Small businesses that integrate social impact into core operations are more likely to achieve long-term profitability.",
+      "Small businesses that integrate social impact into core operations are thirty-five percent more likely to achieve long-term profitability.",
       "It allows you to apply for international foundation grants that do not have to be repaid.",
       "Customers are willing to pay a twenty-five percent price premium for certified charitable products."
     ],
@@ -179,10 +311,21 @@
     "t": 20,
     "quote": "A Stanford Social Innovation Review study found that small businesses integrating social impact into their core operations were 35% more likely to achieve long-term profitability than those treating social responsibility as separate from their business activities.",
     "src": "Chapter 9, p. 117",
-    "topic": "Chapter 9: Ethical Entrepreneurship & Social Impact"
+    "topic": "Chapter 9: Ethical Entrepreneurship & Social Impact",
+    "distractor_pool": [
+      "It qualifies your business for reduced municipal tax rates reserved for registered social enterprises.",
+      "It allows you to apply for international foundation grants that do not have to be repaid.",
+      "Customers are willing to pay a twenty-five percent price premium for certified charitable products.",
+      "It exempts your business from standard municipal licensing fees during your first three years of operation.",
+      "Microfinance institutions require an integrated social mission before approving equipment expansion loans.",
+      "It cuts your monthly raw material expenses in half because local suppliers donate inputs to social ventures.",
+      "Government procurement agencies reserve thirty percent of local supply contracts for integrated social businesses.",
+      "It guarantees that community volunteers will handle your local distribution and delivery without wage costs."
+    ],
+    "audit": "All 8 distractors invent tax exemptions, foundation grants, price premiums, volunteer labor, or government procurement quotas that do not exist anywhere in the textbook."
   },
   {
-    "q": "When measuring your social impact, how does Level 2 Outcome Assessment differ from Level 1 Activity Tracking?",
+    "q": "When measuring your social impact, how does Level 2 (\"Outcome Assessment\") differ from Level 1 (\"Activity Tracking\")?",
     "a": [
       "Level 1 records the social goals you set at the start of the year, while Level 2 compares your results against other local shops.",
       "Level 1 tracks your daily material costs, while Level 2 calculates how much tax revenue your business brings to the town.",
@@ -193,7 +336,18 @@
     "t": 20,
     "quote": "Level 1: Activity Tracking: Count what you do that could create positive impact. Measurement examples: Number of people trained or employed... Level 2: Outcome Assessment: Evaluate what actually changes as a result of your activities. Measurement examples: Skills gained by people you train; Income generated for local suppliers",
     "src": "Chapter 9, pp. 117–118",
-    "topic": "Chapter 9: Ethical Entrepreneurship & Social Impact"
+    "topic": "Chapter 9: Ethical Entrepreneurship & Social Impact",
+    "distractor_pool": [
+      "Level 1 records the social goals you set at the start of the year, while Level 2 compares your results against other local shops.",
+      "Level 1 tracks your daily material costs, while Level 2 calculates how much tax revenue your business brings to the town.",
+      "Level 1 measures how many lower-income buyers visit your shop, while Level 2 calculates how much profit those sales generate.",
+      "Level 1 relies on informal verbal conversations with neighbors, while Level 2 requires an independent audit by a certified accountant.",
+      "Level 1 tracks internal employee satisfaction weekly, while Level 2 measures external brand awareness across the regional market.",
+      "Level 1 counts cash donations given to community charities, while Level 2 deducts those gifts from your taxable business income.",
+      "Level 1 monitors your compliance with municipal safety permits, while Level 2 tracks your progress toward full corporate registration.",
+      "Level 1 documents customer complaints in a notebook, while Level 2 surveys non-customers about why they shop with competitors."
+    ],
+    "audit": "All 8 distractors misrepresent the Three Levels of Impact Measurement by confusing them with tax accounting, competitor benchmarking, regulatory compliance, or profit tracking."
   },
   {
     "q": "When answering Question 1 of Ethical Business Planning (\"Who might be affected by my business?\"), which four stakeholder groups should you identify beyond just your customers?",
@@ -207,6 +361,17 @@
     "t": 20,
     "quote": "1. Who might be affected by my business? Identify all stakeholders beyond just customers: Employees and their families; Suppliers and their communities; Neighbors and local environment; Future generations",
     "src": "Chapter 9, p. 119",
-    "topic": "Chapter 9: Ethical Entrepreneurship & Social Impact"
+    "topic": "Chapter 9: Ethical Entrepreneurship & Social Impact",
+    "distractor_pool": [
+      "Commercial landlords, bank loan officers, insurance agents, and municipal tax collectors.",
+      "Wholesale distributors, freight shipping companies, tool manufacturers, and outside accountants.",
+      "Media reporters, university researchers, advertising agencies, and regional trade regulators.",
+      "Venture capital investors, corporate board members, patent attorneys, and stock market analysts.",
+      "Competing shop owners, seasonal street vendors, foreign importers, and regional chamber officials.",
+      "Software developers, digital marketing consultants, telecom providers, and commercial real estate brokers.",
+      "National customs inspectors, provincial licensing boards, court mediators, and credit rating bureaus.",
+      "Franchise brokers, corporate sponsors, celebrity brand ambassadors, and public relations firms."
+    ],
+    "audit": "All 8 distractors list external institutional, corporate, or regulatory actors rather than the four community and generational stakeholder groups specified on page 119."
   }
 ]

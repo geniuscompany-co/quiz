@@ -1,212 +1,377 @@
 [
   {
-    "q": "How does having a clear business model help an entrepreneur starting with minimal resources?",
+    "q": "According to Harvard Business School research, how does having a clear business model help an entrepreneur starting with minimal resources?",
     "a": [
-      "It doubles your chances of building a sustainable business.",
-      "It cuts the time needed to reach your first fifty customers in half.",
-      "It increases your average first-year profit margin by thirty percent.",
-      "It makes customers three times more likely to pay you in advance."
+      "It doubles your chances of building a sustainable business, even when starting with minimal resources.",
+      "It cuts the time required to reach your first fifty paying customers roughly in half.",
+      "It increases your average first-year profit margin by thirty percent over informal competitors.",
+      "It makes local suppliers three times more likely to extend thirty-day inventory credit terms."
     ],
     "c": 0,
     "t": 20,
     "quote": "Research from Harvard Business School shows that having a clear business model doubles your chances of building a sustainable business, even with minimal resources.",
     "src": "Chapter 3, p. 22",
-    "topic": "Chapter 3: Business Models for Bootstrapped Ventures"
+    "topic": "Chapter 3: Business Models for Bootstrapped Ventures",
+    "distractor_pool": [
+      "It cuts the time required to reach your first fifty paying customers roughly in half.",
+      "It increases your average first-year profit margin by thirty percent over informal competitors.",
+      "It makes local suppliers three times more likely to extend thirty-day inventory credit terms.",
+      "It reduces your monthly overhead expenses by forty percent during the first year of operations.",
+      "It triples the likelihood that commercial banks will approve an unsecured small-business loan.",
+      "It guarantees that your business will break even on all startup costs within sixty days.",
+      "It lowers your customer acquisition costs by fifty percent compared to relying on word-of-mouth.",
+      "It allows you to charge a twenty-five percent price premium over established local competitors."
+    ],
+    "audit": "Harvard Business School research on p. 22 specifically states that a clear business model doubles your chances of building a sustainable business; none of the 10 chapters support claims about halving time to 50 customers, supplier credit multiples, bank loan approvals, or guaranteed 60-day break-even."
   },
   {
     "q": "When starting with limited resources, what are the four criteria of a \"Survival-First\" business model?",
     "a": [
-      "Solves a daily problem, charges low prices, operates from home, and avoids all fixed overhead costs.",
+      "Solves an urgent problem, charges the lowest market price, operates from home, and avoids all fixed overhead.",
       "Makes money within days, needs minimal upfront cash, uses current skills, and serves buyers who can pay now.",
-      "Focuses on food or basic goods, buys materials locally, sells for cash only, and saves half of all profits.",
-      "Starts with five customers, uses borrowed tools, reinvests every sale, and grows through word-of-mouth."
+      "Focuses on essential daily goods, buys materials in bulk, sells for cash only, and saves half of profits.",
+      "Starts with a small loan, leases shared equipment, hires family members, and targets broad regional markets."
     ],
     "c": 1,
     "t": 20,
     "quote": "Survival-First Business Models: When starting with limited resources, your first priority is survival. You need a business model that: Starts making money immediately (within days, not months); Requires minimal upfront investment; Uses skills and resources you already have; Serves customers who can pay you now",
     "src": "Chapter 3, p. 23",
-    "topic": "Chapter 3: Business Models for Bootstrapped Ventures"
+    "topic": "Chapter 3: Business Models for Bootstrapped Ventures",
+    "distractor_pool": [
+      "Solves an urgent problem, charges the lowest market price, operates from home, and avoids all fixed overhead.",
+      "Focuses on essential daily goods, buys materials in bulk, sells for cash only, and saves half of profits.",
+      "Starts with a small loan, leases shared equipment, hires family members, and targets broad regional markets.",
+      "Secures full formal registration, opens a commercial storefront, offers customer credit, and advertises on local radio.",
+      "Copies an established competitor, undercuts their retail prices, offers free home delivery, and operates on thin margins.",
+      "Patents an original invention, raises outside investor funding, builds a large inventory, and scales across multiple towns.",
+      "Partners with wholesale distributors, signs annual supply contracts, hires full-time sales staff, and targets corporate buyers.",
+      "Focuses on luxury products, targets high-income tourists, requires specialized technical certification, and reinvests every dollar."
+    ],
+    "audit": "Chapter 3 (p. 23) defines the exact four criteria of a Survival-First model; none of the chapters endorse lowest-price undercutting, bulk buying at launch, formal loans/storefronts at launch, or saving half of profits (Chapter 6 teaches the 50-30-20 rule where 20% goes to savings)."
   },
   {
     "q": "Why are service-based businesses ideal when you are starting out with almost no money?",
     "a": [
-      "Service businesses earn higher hourly profit margins than product manufacturing shops.",
-      "Customers are willing to pay for services in advance before meeting the business owner.",
+      "Service businesses rarely need to adjust their offerings once they find their first paying buyers.",
+      "Service businesses are legally exempt from local business registration and municipal tax compliance rules.",
       "You can start earning from your first customer using just your time and skills without needing inventory.",
-      "Service businesses rarely need to adjust their offerings once they find their first buyers."
+      "Service businesses always generate higher hourly profit margins than product manufacturing or retail shops."
     ],
     "c": 2,
     "t": 20,
     "quote": "1. Service-Based Businesses: Services are perfect for bootstrapped businesses because they require almost no upfront investment—just your time and skills... Why Services Work When Starting Out: You start earning from your first customer; You can adjust your offering based on feedback; You don’t need inventory or materials (or very little); You build relationships that lead to repeat business",
     "src": "Chapter 3, p. 23",
-    "topic": "Chapter 3: Business Models for Bootstrapped Ventures"
+    "topic": "Chapter 3: Business Models for Bootstrapped Ventures",
+    "distractor_pool": [
+      "Service businesses rarely need to adjust their offerings once they find their first paying buyers.",
+      "Service businesses are legally exempt from local business registration and municipal tax compliance rules.",
+      "Service businesses always generate higher hourly profit margins than product manufacturing or retail shops.",
+      "Customers are willing to sign binding annual contracts for services before testing your work quality.",
+      "Service businesses can scale across multiple cities without requiring written operating systems or staff training.",
+      "Banks and microfinance institutions offer zero-interest startup loans exclusively to local service providers.",
+      "Service businesses never face price competition because every provider charges a standard government rate.",
+      "You can delegate all customer service work to full-time employees on your very first day."
+    ],
+    "audit": "Chapter 3 (p. 23) notes services work because you earn from your first customer using time/skills, adjust based on feedback, and need little or no inventory; the textbook explicitly contradicts rigid offerings, skipping systems/staged hiring (Ch. 7), or tax exemptions (Ch. 8)."
   },
   {
     "q": "How does the Small-Batch Production business model work when you are first starting out?",
     "a": [
-      "You collect pre-orders for fifty items first, then rent factory equipment to make the batch on the weekend.",
-      "You partner with three other home producers to combine your daily batches into one shared wholesale order.",
-      "You make one display sample for your stall and wait until twenty buyers sign a contract before making more.",
+      "You make one display sample for your stall and wait until twenty buyers sign contracts before producing more.",
+      "You borrow microfinance capital to rent commercial factory machinery and produce a month of inventory over one weekend.",
+      "You manufacture fifty units of a single product, store them in a warehouse, and discount whatever fails to sell.",
       "You make very small quantities—often just five to ten items at first—and use the sales money to make more."
     ],
     "c": 3,
     "t": 20,
     "quote": "2. Small-Batch Production: Small-batch production means making products in very small quantities—often just 5-10 items at first—and using the sales money to make more.",
     "src": "Chapter 3, p. 24",
-    "topic": "Chapter 3: Business Models for Bootstrapped Ventures"
+    "topic": "Chapter 3: Business Models for Bootstrapped Ventures",
+    "distractor_pool": [
+      "You make one display sample for your stall and wait until twenty buyers sign contracts before producing more.",
+      "You borrow microfinance capital to rent commercial factory machinery and produce a month of inventory over one weekend.",
+      "You manufacture fifty units of a single product, store them in a warehouse, and discount whatever fails to sell.",
+      "You outsource your manufacturing to a regional factory so you only have to manage packaging and local delivery.",
+      "You produce small quantities of ten different unrelated products at once to see which category sells fastest.",
+      "You give away your first twenty handmade items for free to build brand awareness before charging retail prices.",
+      "You require wholesale buyers to purchase a minimum of one hundred units per order to keep unit costs low.",
+      "You hold all finished goods in storage until peak holiday seasons when customers are willing to pay premium prices."
+    ],
+    "audit": "Chapter 3 (p. 24) defines Small-Batch Production as making 5–10 items at first and using the sales revenue to produce more; none of the chapters support factory outsourcing, borrowing for untested inventory, giving away 20 items for free, or 100-unit wholesale minimums."
   },
   {
     "q": "Why does an Aggregation and Distribution business model work well when starting with limited money?",
     "a": [
-      "You add value through convenience or access without making the products yourself.",
-      "You collect a fixed monthly stocking fee from producers before selling their goods.",
-      "You sell large bulk packages to big families so your packaging costs stay low.",
-      "You lease storage space from existing warehouses only during busy holiday weeks."
+      "You add value through convenience or access by collecting products from various sources without making them yourself.",
+      "You collect a mandatory monthly stocking fee from local producers before agreeing to display their goods.",
+      "You purchase exclusive territorial rights from large factories so no other vendor can sell those items locally.",
+      "You require suppliers to pay for all transportation, marketing, and customer delivery expenses out of their own pockets."
     ],
     "c": 0,
     "t": 20,
     "quote": "3. Aggregation and Distribution: This model involves collecting products from various sources and making them available to customers who can’t easily access them directly... Why Aggregation Works When Starting Out: You don’t need to create products yourself; You add value through convenience or access",
     "src": "Chapter 3, p. 25",
-    "topic": "Chapter 3: Business Models for Bootstrapped Ventures"
+    "topic": "Chapter 3: Business Models for Bootstrapped Ventures",
+    "distractor_pool": [
+      "You collect a mandatory monthly stocking fee from local producers before agreeing to display their goods.",
+      "You purchase exclusive territorial rights from large factories so no other vendor can sell those items locally.",
+      "You require suppliers to pay for all transportation, marketing, and customer delivery expenses out of their own pockets.",
+      "You buy distressed unsold merchandise from bankrupt shops and resell it at steep clearance discounts.",
+      "You manufacture your own private-label goods in bulk and distribute them through a network of commissioned agents.",
+      "You lease a large refrigerated warehouse on credit and charge farmers a daily storage fee for their harvest.",
+      "You import luxury foreign goods in shipping containers to undercut the prices of local neighborhood artisans.",
+      "You lock customers into mandatory two-year purchasing contracts before ordering any goods from your suppliers."
+    ],
+    "audit": "Chapter 3 (p. 25) explains that Aggregation and Distribution works by collecting products from various sources and adding value through convenience or access without manufacturing them yourself; none of the 10 chapters support stocking fees, exclusive factory monopolies, container imports, or two-year buyer contracts."
   },
   {
     "q": "How does a Pay-in-Advance business model eliminate the risk of unsold inventory?",
     "a": [
-      "Wholesale suppliers agree to buy back any leftover goods at the end of the month.",
-      "Suppliers hold the raw materials in their own warehouse until a buyer places an order.",
-      "Clearance brokers purchase extra leftover items at a fixed wholesale rate each week.",
-      "You use customer payments to fund your work and only produce items that are already sold."
+      "Wholesale suppliers sign a buy-back guarantee agreeing to refund any leftover goods at the end of each month.",
+      "Raw material vendors hold your supplies in their own warehouses until you finish selling your current retail stock.",
+      "Local clearance brokers purchase your extra unsold items at a fixed wholesale rate every Friday afternoon.",
+      "Customers pay before delivery to fund your operations, so you only produce items that are already sold."
     ],
     "c": 3,
     "t": 20,
     "quote": "4. Pay-in-Advance Models: With this model, customers pay you before you deliver the product or service, providing the capital you need to fulfill their orders... Why Pay-in-Advance Works When Starting Out: Customers fund your operations; You only produce what’s already sold; No risk of unsold inventory",
     "src": "Chapter 3, p. 26",
-    "topic": "Chapter 3: Business Models for Bootstrapped Ventures"
+    "topic": "Chapter 3: Business Models for Bootstrapped Ventures",
+    "distractor_pool": [
+      "Wholesale suppliers sign a buy-back guarantee agreeing to refund any leftover goods at the end of each month.",
+      "Raw material vendors hold your supplies in their own warehouses until you finish selling your current retail stock.",
+      "Local clearance brokers purchase your extra unsold items at a fixed wholesale rate every Friday afternoon.",
+      "Municipal small-business insurance reimburses micro-entrepreneurs for perishable inventory that spoils before it can be sold.",
+      "You manufacture a large warehouse batch using a bank loan and require buyers to pay cash upon pickup.",
+      "You charge customers a thirty percent restocking penalty whenever they decide not to buy items you produced for display.",
+      "You trade any leftover merchandise at the end of the week with neighboring shopkeepers for office supplies.",
+      "You donate unsold weekly inventory to local charities in exchange for a dollar-for-dollar municipal tax refund."
+    ],
+    "audit": "Chapter 3 (p. 26) explains that Pay-in-Advance eliminates unsold inventory risk because customers pay before delivery and you only produce what is already sold; no chapter supports vendor buy-backs, clearance brokers, inventory insurance, or tax refunds for donations."
   },
   {
     "q": "In the simplified Business Model Canvas for bootstrapped ventures, what does the \"Value Proposition\" section define?",
     "a": [
-      "The total startup capital you need to save before opening your shop doors.",
-      "The specific benefit you offer customers and why they would choose you over alternatives.",
-      "The monthly fixed and variable expenses required to keep your workshop running.",
-      "The weekly schedule of hours you will spend accounting and organizing stock."
+      "The total amount of startup capital you must save before you can open your business doors.",
+      "The specific benefit you offer customers and why they would choose your solution over alternatives.",
+      "The total appraised resale value of all the tools, machinery, and inventory that your business owns.",
+      "The percentage of monthly net profit that you promise to distribute to outside investors and silent partners."
     ],
     "c": 1,
     "t": 20,
     "quote": "2. Value Proposition: What specific benefit do you offer these customers? Why would they choose you over alternatives or doing nothing?",
     "src": "Chapter 3, p. 27",
-    "topic": "Chapter 3: Business Models for Bootstrapped Ventures"
+    "topic": "Chapter 3: Business Models for Bootstrapped Ventures",
+    "distractor_pool": [
+      "The total amount of startup capital you must save before you can open your business doors.",
+      "The total appraised resale value of all the tools, machinery, and inventory that your business owns.",
+      "The percentage of monthly net profit that you promise to distribute to outside investors and silent partners.",
+      "The minimum hourly wage that you assign to your own labor when calculating direct production costs.",
+      "The legal registration category that determines how much annual business tax you owe to local authorities.",
+      "The wholesale discount rate that raw material suppliers give you when you purchase supplies in bulk.",
+      "The maximum credit limit that you allow loyal customers to carry on their monthly payment plans.",
+      "The five-year revenue projection that you submit to microfinance institutions when applying for an expansion loan."
+    ],
+    "audit": "Chapter 3 (p. 27) defines Value Proposition as the specific benefit offered to customers and why they choose you over alternatives or doing nothing; the other 7 canvas boxes and other chapters never define Value Proposition as startup savings, asset appraisal, investor dividends, or tax tiers."
   },
   {
-    "q": "How much more likely are entrepreneurs to build a sustainable business if they complete a simple Business Model Canvas compared to starting without a clear model?",
+    "q": "According to OECD studies, how much more likely are entrepreneurs to build a sustainable business if they complete a simple Business Model Canvas compared to starting without a clear model?",
     "a": [
-      "Twenty percent more likely to build a sustainable business.",
-      "Thirty percent more likely to build a sustainable business.",
+      "Fifteen percent more likely to build a sustainable business.",
+      "Twenty-five percent more likely to build a sustainable business.",
       "Forty percent more likely to build a sustainable business.",
-      "Sixty percent more likely to build a sustainable business."
+      "Fifty percent more likely to build a sustainable business."
     ],
     "c": 2,
     "t": 20,
     "quote": "Studies by the OECD show that entrepreneurs who take time to complete this simple canvas are 40% more likely to build sustainable businesses than those who start without a clear model.",
     "src": "Chapter 3, p. 27",
-    "topic": "Chapter 3: Business Models for Bootstrapped Ventures"
+    "topic": "Chapter 3: Business Models for Bootstrapped Ventures",
+    "distractor_pool": [
+      "Fifteen percent more likely to build a sustainable business.",
+      "Twenty-five percent more likely to build a sustainable business.",
+      "Fifty percent more likely to build a sustainable business.",
+      "Seventy-five percent more likely to build a sustainable business.",
+      "Eighty-five percent more likely to build a sustainable business.",
+      "Ninety percent more likely to build a sustainable business.",
+      "Ten percent more likely to build a sustainable business.",
+      "Ninety-five percent more likely to build a sustainable business."
+    ],
+    "audit": "Chapter 3 (p. 27) cites OECD studies showing entrepreneurs who complete the simple Business Model Canvas are specifically 40% more likely to build sustainable businesses; all 8 distractor percentages are false for this OECD finding."
   },
   {
     "q": "Why does \"Revenue-First Thinking\" focus on generating real customer sales in your very first month instead of waiting until your product is fully developed?",
     "a": [
       "It proves buyers value your solution, funds your growth, and makes your business three times more likely to survive.",
-      "It gives you enough sales data to set a fixed annual price list before competitors can react to your launch.",
-      "It allows you to lock in a multi-year commercial lease before landlords raise neighborhood rental rates.",
-      "It builds a six-month emergency cash reserve before you have to pay your first supplier invoice."
+      "It gives you enough sales data to lock in a fixed annual price list before competitors can react.",
+      "It allows you to sign a multi-year commercial lease before landlords raise neighborhood retail rental rates.",
+      "It satisfies the legal revenue threshold required to register as a formal corporation in your first thirty days."
     ],
     "c": 0,
     "t": 20,
     "quote": "Why Revenue-First Thinking Works: It proves customers value your solution... It creates momentum and confidence... It funds your growth... It keeps you focused on customer needs... A study by Cornell University found that businesses with revenue in their first month were three times more likely to survive than those that focused on development without sales.",
     "src": "Chapter 3, p. 28",
-    "topic": "Chapter 3: Business Models for Bootstrapped Ventures"
+    "topic": "Chapter 3: Business Models for Bootstrapped Ventures",
+    "distractor_pool": [
+      "It gives you enough sales data to lock in a fixed annual price list before competitors can react.",
+      "It allows you to sign a multi-year commercial lease before landlords raise neighborhood retail rental rates.",
+      "It satisfies the legal revenue threshold required to register as a formal corporation in your first thirty days.",
+      "It guarantees that commercial banks will approve an unsecured expansion loan at the end of your first quarter.",
+      "It eliminates the need to track daily expenses or separate your business and personal money during year one.",
+      "It allows you to hire full-time salaried employees immediately instead of starting with family or task-based help.",
+      "It prevents competitors from entering your local market by saturating every household in the first four weeks.",
+      "It lets you skip customer interviews and product testing because early cash buyers never require product improvements."
+    ],
+    "audit": "Chapter 3 (p. 28) states that Revenue-First Thinking proves customers value your solution, creates momentum, funds growth, keeps focus on customer needs, and makes survival 3x more likely (Cornell study); all 8 distractors contradict the textbook's teachings on flexible pricing, staged formalization, financial tracking, staged hiring, and ongoing feedback."
   },
   {
     "q": "When calculating the full cost of providing a product or service to set your price, how should you treat your own time and the equipment you already own?",
     "a": [
-      "Pay yourself from leftover profit at the end of the month rather than adding labor to unit costs.",
-      "Count your hours at the local minimum wage, but exclude equipment that is already paid for.",
-      "Include the cost of equipment use and assign a fair hourly value to your own time.",
-      "Add a flat ten percent fee to your material costs to cover both your labor and tool wear."
+      "Exclude both your own labor and owned tools so you can undercut every competitor in your neighborhood.",
+      "Count your hours at a fair wage, but exclude equipment that was already paid for before launching.",
+      "Include the cost of using equipment you already own and assign a reasonable hourly value to your time.",
+      "Include tool wear and tear, but only pay yourself whatever leftover cash remains at the end of the month."
     ],
     "c": 2,
     "t": 20,
     "quote": "1. Calculate Your Full Costs: Add up everything it costs to provide your product or service: Materials or ingredients; Transportation; Equipment use (even if you already own it); Your time (assign a reasonable hourly value); Any other direct costs",
     "src": "Chapter 3, p. 28",
-    "topic": "Chapter 3: Business Models for Bootstrapped Ventures"
+    "topic": "Chapter 3: Business Models for Bootstrapped Ventures",
+    "distractor_pool": [
+      "Exclude both your own labor and owned tools so you can undercut every competitor in your neighborhood.",
+      "Count your hours at a fair wage, but exclude equipment that was already paid for before launching.",
+      "Include tool wear and tear, but only pay yourself whatever leftover cash remains at the end of the month.",
+      "Ignore your labor hours during the first year until your business achieves full legal formalization and tax registration.",
+      "Value your own time at double the highest executive salary in your city to build a luxury brand image.",
+      "Count the full replacement price of all your owned tools inside the unit cost of your very first item.",
+      "Only include your labor and tool costs when selling to wealthy tourists, while waiving them for local neighbors.",
+      "Defer calculating labor and equipment costs until you hire your first full-time salaried production employee."
+    ],
+    "audit": "Chapter 3 (p. 28) explicitly instructs entrepreneurs calculating full costs to include equipment use (even if already owned) and assign a reasonable hourly value to their own time; every distractor omits or distorts one or both requirements."
   },
   {
     "q": "When researching market prices to help set your own price, what three things should you check?",
     "a": [
-      "The average daily income of local families, the cost of raw materials, and your desired hourly wage.",
+      "Government price ceilings, wholesale import tariff schedules, and the national annual inflation index.",
       "What competitors charge, what buyers pay for alternatives, and the perceived value of your solution.",
-      "The lowest price in the market, the highest price in the market, and the average profit margin of nearby shops.",
-      "What customers paid last year, how often they buy the product, and how much they spend on delivery."
+      "What foreign corporations charge online, how much bank loans cost, and what landlords charge for shop rent.",
+      "The personal savings balances of your neighbors, their monthly utility bills, and their annual tax returns."
     ],
     "c": 1,
     "t": 20,
     "quote": "2. Research Market Prices: Find out what customers currently pay for similar solutions: What do competitors charge? What do customers pay for alternatives? What is the perceived value of your solution?",
     "src": "Chapter 3, p. 29",
-    "topic": "Chapter 3: Business Models for Bootstrapped Ventures"
+    "topic": "Chapter 3: Business Models for Bootstrapped Ventures",
+    "distractor_pool": [
+      "Government price ceilings, wholesale import tariff schedules, and the national annual inflation index.",
+      "What foreign corporations charge online, how much bank loans cost, and what landlords charge for shop rent.",
+      "The personal savings balances of your neighbors, their monthly utility bills, and their annual tax returns.",
+      "The wholesale price of factory machinery, the cost of television advertising, and corporate profit tax rates.",
+      "How much competitors spend on packaging, how many full-time workers they employ, and their business registration level.",
+      "The historical price of raw materials five years ago, international currency exchange rates, and shipping container fees.",
+      "What luxury boutiques in the capital city charge, celebrity endorsement fees, and trademark licensing costs.",
+      "The minimum order quantities required by regional factories, commercial insurance premiums, and chamber of commerce dues."
+    ],
+    "audit": "Chapter 3 (p. 29) specifically lists three market price checks: what competitors charge, what customers pay for alternatives, and the perceived value of your solution; none of the 10 chapters mention import tariffs, inflation indices, corporate tax rates, or luxury capital-city pricing."
   },
   {
     "q": "What four requirements must your final price meet in order to \"Price for Sustainability\"?",
     "a": [
-      "Beat competitor prices, cover direct material costs, reward loyal repeat buyers, and stay fixed all year.",
-      "Cover daily household bills, build a two-month cash reserve, match market averages, and avoid customer debt.",
-      "Include a twenty percent markup, pay for weekly marketing, cover tool replacement, and attract new buyers.",
+      "Undercut every local competitor, cover raw material costs only, stay fixed for three years, and require cash payment.",
+      "Match the lowest price in town, waive your personal labor cost, eliminate profit margins, and maximize daily sales volume.",
+      "Double the highest competitor price, target only wealthy buyers, pay for paid radio ads, and fund investor dividends.",
       "Cover all your costs, provide reasonable profit for reinvestment, reflect the value you provide, and be affordable for target customers."
     ],
     "c": 3,
     "t": 20,
     "quote": "4. Price for Sustainability: Your final price must: Cover all your costs; Provide reasonable profit for reinvestment; Reflect the value you provide; Be affordable for your target customers",
     "src": "Chapter 3, p. 29",
-    "topic": "Chapter 3: Business Models for Bootstrapped Ventures"
+    "topic": "Chapter 3: Business Models for Bootstrapped Ventures",
+    "distractor_pool": [
+      "Undercut every local competitor, cover raw material costs only, stay fixed for three years, and require cash payment.",
+      "Match the lowest price in town, waive your personal labor cost, eliminate profit margins, and maximize daily sales volume.",
+      "Double the highest competitor price, target only wealthy buyers, pay for paid radio ads, and fund investor dividends.",
+      "Cover personal family debts, pay for a commercial storefront lease, include a fifty percent markup, and deter copycats.",
+      "Guarantee a one-hundred percent profit margin, require bulk minimum orders, include non-refundable deposits, and cover bank interest.",
+      "Match government ration pricing, exclude equipment wear and tear, subsidize shipping for suppliers, and avoid all price testing.",
+      "Stay below ten dollars per item, offer automatic credit to every buyer, match wholesale factory rates, and cover fines.",
+      "Cover only direct ingredient costs, rely on tips for profit, offer permanent half-price discounts, and match informal vendors."
+    ],
+    "audit": "Chapter 3 (p. 29) specifies the four requirements of Pricing for Sustainability: cover all costs, provide reasonable profit for reinvestment, reflect value provided, and be affordable for target customers; the textbook explicitly warns against undercutting below full costs or omitting labor and equipment."
   },
   {
-    "q": "If you realize your current prices are too low to cover your true costs, what is the recommended way to introduce a price increase?",
+    "q": "As illustrated by Fatima's Pricing Journey, if you realize your current prices are too low to cover your true costs, what is the recommended way to introduce a price increase?",
     "a": [
       "Test the higher price with new customers first, then gradually raise prices for existing buyers while explaining the value they receive.",
-      "Announce a single across-the-board price increase for all buyers on the first day of the next calendar year.",
-      "Keep your base price the same, but add separate service fees for packaging, preparation, and local delivery.",
-      "Offer your original low price only to customers who buy in bulk, and charge the higher price on single items."
+      "Double your prices overnight for all customers without explanation so you can immediately cover past losses.",
+      "Keep your advertised price low, but secretly shrink portion sizes and switch to lower-quality ingredients.",
+      "Stop serving all of your existing customers and relocate to a wealthier neighborhood where nobody knows your old prices."
     ],
     "c": 0,
     "t": 20,
     "quote": "She tested her new pricing with new customers first. To her surprise, they accepted it readily. She then gradually increased prices for existing customers, explaining the value they received.",
     "src": "Chapter 3, p. 29",
-    "topic": "Chapter 3: Business Models for Bootstrapped Ventures"
+    "topic": "Chapter 3: Business Models for Bootstrapped Ventures",
+    "distractor_pool": [
+      "Double your prices overnight for all customers without explanation so you can immediately cover past losses.",
+      "Keep your advertised price low, but secretly shrink portion sizes and switch to lower-quality ingredients.",
+      "Stop serving all of your existing customers and relocate to a wealthier neighborhood where nobody knows your old prices.",
+      "Keep your base price below cost permanently and require every buyer to purchase an expensive mandatory warranty.",
+      "Refuse to sell single items anymore and force all existing customers to buy ten-unit bulk packages.",
+      "Borrow a microfinance loan to subsidize your underpriced products until your competitors go out of business.",
+      "Charge loyal repeat customers the highest price right away because they are already dependent on your service.",
+      "Add hidden processing and packaging surcharges at the moment of payment without informing buyers in advance."
+    ],
+    "audit": "Chapter 3 (p. 29) uses Fatima's story to demonstrate testing new pricing with new customers first and then gradually increasing prices for existing customers while explaining the value; hidden fees, shrinking quality secretly, and borrowing to subsidize losses violate Chapters 3, 6, and 9."
   },
   {
-    "q": "How does the \"5-Customer Challenge\" help you validate your business model?",
+    "q": "How does the \"5-Customer Challenge\" work to help you validate your business model?",
     "a": [
-      "You ask five trusted neighbors to compare your product against three competing brands and score the quality.",
-      "You offer your simplest version to five buyers, improve it using their feedback, and get five more buyers to pay you.",
-      "You persuade five existing customers to each bring one new friend to your shop in exchange for a small discount.",
-      "You track five repeat buyers for one full month to see how often they reorder and how much they spend."
+      "Give free samples to five hundred passersby at a busy market and wait to see if five return.",
+      "Offer your simplest version to five customers, improve it using their feedback, and get five more customers to pay you.",
+      "Ask five close family members to sign a written pledge promising to buy from you once you open.",
+      "Hire five commissioned sales agents to go door to door selling your product across five different neighborhoods."
     ],
     "c": 1,
     "t": 20,
     "quote": "The 5-Customer Challenge: Create the simplest version of your product or service; Find 5 potential customers and offer it to them; Get their feedback on your offering and price; Make improvements based on their feedback; Get 5 more customers using your improved offering. If you can get 5 customers to pay you, you have the beginning of a viable business model.",
     "src": "Chapter 3, p. 31",
-    "topic": "Chapter 3: Business Models for Bootstrapped Ventures"
+    "topic": "Chapter 3: Business Models for Bootstrapped Ventures",
+    "distractor_pool": [
+      "Give free samples to five hundred passersby at a busy market and wait to see if five return.",
+      "Ask five close family members to sign a written pledge promising to buy from you once you open.",
+      "Hire five commissioned sales agents to go door to door selling your product across five different neighborhoods.",
+      "Interview five local bank managers to ask whether they think your five-year business plan is financially viable.",
+      "Shadow five competing business owners for a full week and copy the five best-selling items in their shops.",
+      "Survey five random strangers online about their favorite colors and logos before deciding what product to build.",
+      "Require your first five buyers to each invest fifty dollars of startup capital in exchange for lifetime discounts.",
+      "Wait until five hundred people join an online waiting list before you offer your product to your first five buyers."
+    ],
+    "audit": "Chapter 3 (p. 31) outlines the 5-Customer Challenge: offer the simplest version to 5 potential customers, get feedback on offering/price, improve it, and get 5 more paying customers; none of the chapters support 500 free samples, bank manager interviews, or requiring equity from the first 5 buyers."
   },
   {
     "q": "Among the six proven business model patterns for bootstrapped ventures, how does the \"Matchmaker\" pattern generate income?",
     "a": [
-      "You patent an original manufacturing machine and collect annual royalties from regional factories.",
-      "You lease commercial market space and sublet smaller tables to independent weekend vendors.",
-      "You connect buyers and sellers or service providers and take a fee or percentage for the connection.",
-      "You offer a fixed annual warranty contract that covers unlimited repairs on household appliances."
+      "You patent an original manufacturing machine and collect annual licensing royalties from regional factories.",
+      "You buy raw materials in bulk, manufacture finished goods in your home, and sell them at a retail markup.",
+      "You connect buyers and sellers or service providers and take a fee or percentage for making the connection.",
+      "You charge customers a fixed monthly subscription fee to receive a daily home delivery of hot cooked meals."
     ],
     "c": 2,
     "t": 20,
     "quote": "6. 'Matchmaker': Connect buyers and sellers, taking a fee for the connection. Example: Finding workers for homeowners who need help, taking a percentage.",
     "src": "Chapter 3, p. 32",
-    "topic": "Chapter 3: Business Models for Bootstrapped Ventures"
+    "topic": "Chapter 3: Business Models for Bootstrapped Ventures",
+    "distractor_pool": [
+      "You patent an original manufacturing machine and collect annual licensing royalties from regional factories.",
+      "You buy raw materials in bulk, manufacture finished goods in your home, and sell them at a retail markup.",
+      "You charge customers a fixed monthly subscription fee to receive a daily home delivery of hot cooked meals.",
+      "You purchase expensive commercial tools and rent them out to neighbors by the hour or by the use.",
+      "You bundle three different household services into a single discounted package for busy working families.",
+      "You collect full advance payment from a buyer before purchasing the ingredients needed to bake their custom cake.",
+      "You lease a large commercial building and sublet individual retail stalls to formal corporate franchises.",
+      "You lend personal savings to local shopkeepers and collect weekly interest payments on the principal balance."
+    ],
+    "audit": "Chapter 3 (p. 32) and Chapter 4 (p. 39) define the Matchmaker pattern as connecting buyers and sellers/service providers for a fee or percentage without investing in inventory or equipment; the other patterns (Reseller/Markup, Subscription, Pay-Per-Use, Service Package, Sell First/Create Later) are distinct models, and patent royalties or money-lending are unsupported."
   }
 ]

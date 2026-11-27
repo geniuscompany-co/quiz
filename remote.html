@@ -875,7 +875,7 @@ h2{font-size:1.18em;margin:.2em 0;font-weight:900}
   <div class="rpm-box">
     <h3>🎮 Play Too on My Phone</h3>
     <p>Join as a live player with a floating <b>🕹 Host controls</b> pill so you can answer questions and advance the session from your phone — and hop back to Full Remote anytime.</p>
-    <input id="rPlayName" class="rpm-in" type="text" maxlength="16" placeholder="Your player nickname (e.g. Coach)…" onkeydown="if(event.key==='Enter')goRemotePlayToo(false)">
+    <input id="rPlayName" class="rpm-in" type="text" placeholder="Your player nickname (e.g. Coach)…" onkeydown="if(event.key==='Enter')goRemotePlayToo(false)">
     <div style="font-size:.77em;opacity:.78;margin-bottom:6px">Note: <b>"Host"</b> is reserved for megaphone broadcasts.</div>
     <div id="rPlayErr" class="err-msg" style="margin:4px 0 8px"></div>
     <div class="rpm-actions">
@@ -907,6 +907,7 @@ let toolsOpen = false, pollStamp = performance.now();
 const $ = document.getElementById('app'), sh = ["▲ ","◆ ","● ","■ ","★ ","⬟ "];
 
 function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+function shortName(n){const a=Array.from(String(n==null?'':n));return a.length>11?a.slice(0,11).join('')+'...':a.join('')}
 async function post(u,b){
  const r = await fetch(u,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b)});
  let d = {};
@@ -1415,7 +1416,7 @@ function closeRemotePlayToo(){
 }
 function goRemotePlayToo(newTab=false){
  const inp = document.getElementById('rPlayName'), err = document.getElementById('rPlayErr');
- const nm = (inp && inp.value ? inp.value : '').trim().slice(0, 16);
+ const nm = (inp && inp.value ? inp.value : '').trim();
  if(!nm){
   if(err){ err.textContent = 'Enter a player nickname first.'; err.style.display = 'block'; }
   return;
@@ -1445,7 +1446,7 @@ function remotePlayTooBar(marginStyle='margin-top:10px'){
  if(!S.play_too_enabled || S.phase === 'final') return '';
  const sv = getSavedRemotePlay();
  if(sv && sv.joined){
-  return `<div class="playtoo-row" style="${marginStyle}"><button type="button" class="playtoo-btn" onclick="resumeRemotePlayToo()">🎮 Resume Playing (${esc(sv.name)})</button><button type="button" class="playtoo-edit" onclick="openRemotePlayToo()" title="Nickname / New Tab">⚙️</button></div>`;
+  return `<div class="playtoo-row" style="${marginStyle}"><button type="button" class="playtoo-btn" onclick="resumeRemotePlayToo()">🎮 Resume Playing (${esc(shortName(sv.name))})</button><button type="button" class="playtoo-edit" onclick="openRemotePlayToo()" title="Nickname / New Tab">⚙️</button></div>`;
  }
  return `<div class="playtoo-row" style="${marginStyle}"><button type="button" class="playtoo-btn" onclick="openRemotePlayToo()">🎮 Play too on my phone</button></div>`;
 }
@@ -1521,7 +1522,7 @@ function buildResultsDetail(denom){
    ? `<div class="meta-callout">📏 <b>Class Rating Average:</b> ${S.scale_avg} / ${(S.answers||[]).length || 5} <small style="opacity:.82">(${esc((S.scale_labels||[])[0]||'Low')} ↔ ${esc((S.scale_labels||[])[1]||'High')})</small></div>`
    : '';
   const defs = (S.defenders || []).length
-   ? `<div class="defend-box">🎤 <b>Call on to defend:</b><br>${S.defenders.map(d => `${sh[d.side]||''}<b>${esc(d.name)}</b> <small style="opacity:.85">(${esc((S.answers||[])[d.side]||'')})</small>`).join('<br>')}</div>`
+   ? `<div class="defend-box">🎤 <b>Call on to defend:</b><br>${S.defenders.map(d => `${sh[d.side]||''}<b>${esc(shortName(d.name))}</b> <small style="opacity:.85">(${esc((S.answers||[])[d.side]||'')})</small>`).join('<br>')}</div>`
    : '';
   return `
    ${scAvg}
@@ -1794,7 +1795,7 @@ function render(){
    : '';
 
   const pendHtml = (S.pending_list || []).length
-   ? `<div class="pend-card"><div class="pend-title">🛡️ Waiting for Name Approval (${S.pending_list.length})</div>${S.pending_list.map(p => `<div class="pend-row"><span>${esc((p.avatar ? p.avatar + ' ' : '') + p.name)}</span><span class="pend-actions"><button class="pend-btn ok" data-n="${esc(p.name)}" onclick="appr(this.dataset.n,true)">✓ Allow</button><button class="pend-btn no" data-n="${esc(p.name)}" onclick="appr(this.dataset.n,false)">✕</button></span></div>`).join('')}</div>`
+   ? `<div class="pend-card"><div class="pend-title">🛡️ Waiting for Name Approval (${S.pending_list.length})</div>${S.pending_list.map(p => `<div class="pend-row"><span title="${esc(p.name)}">${esc((p.avatar ? p.avatar + ' ' : '') + shortName(p.name))}</span><span class="pend-actions"><button class="pend-btn ok" data-n="${esc(p.name)}" onclick="appr(this.dataset.n,true)">✓ Allow</button><button class="pend-btn no" data-n="${esc(p.name)}" onclick="appr(this.dataset.n,false)">✕</button></span></div>`).join('')}</div>`
    : '';
 
   const showTools = (ph !== 'lobby' && ph !== 'final');

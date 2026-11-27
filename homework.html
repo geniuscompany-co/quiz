@@ -15,16 +15,19 @@
   --radius-sm:11px;
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;padding:0;min-height:100vh;min-height:100dvh}
+button,a,.slot,.m-item,.pin-stage{touch-action:manipulation}
+html,body{margin:0;padding:0;min-height:100vh;min-height:-webkit-fill-available;min-height:100dvh}
 body{
   font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
-  background:radial-gradient(1100px 680px at 54% -12%,var(--bg1) 0%,var(--bg2) 52%,var(--bg3) 100%) fixed;
+  background-color:var(--bg3);
+  background-image:radial-gradient(1100px 680px at 54% -12%,var(--bg1) 0%,var(--bg2) 52%,var(--bg3) 100%);
   color:#fff;
   text-align:center;
   display:flex;
   flex-direction:column;
   font-variant-numeric:tabular-nums;
   overflow-x:hidden;
+  -webkit-text-size-adjust:100%;
 }
 body.hc{background:#000!important}
 body.hc .card-panel,body.hc .q-card{background:#111;border:2px solid #fff}
@@ -568,6 +571,7 @@ const hid = new URLSearchParams(location.search).get('id') || '';
 let info = null, me = null, cur = null, sel = [], multiSel = [], matchSelLeft = 0, matchMap = [], sliderVal = 50, pinXY = null, busy = false, answeredDone = false;
 
 function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+function shortName(n){const a=Array.from(String(n==null?'':n));return a.length>11?a.slice(0,11).join('')+'...':a.join('')}
 function zoomImg(src){ document.getElementById('imgBig').src = src; document.getElementById('imgOv').style.display = 'flex'; }
 async function post(u,b){
   const r = await fetch(u,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b)});
@@ -654,7 +658,7 @@ function syncHud(qIdx, qTot){
   if(me && me.name){
     const ansCnt = me.answered || 0;
     const pctTxt = ansCnt > 0 ? ` · ${Math.round(100 * (me.correct || 0) / ansCnt)}%` : '';
-    hm.innerHTML = `<span class="hud-pill"><span class="hp-name">👤 ${esc(me.name)}</span><span class="hp-score">⭐ ${me.score || 0}${pctTxt}</span></span>`;
+    hm.innerHTML = `<span class="hud-pill"><span class="hp-name">👤 ${esc(shortName(me.name))}</span><span class="hp-score">⭐ ${me.score || 0}${pctTxt}</span></span>`;
   } else {
     hm.innerHTML = `<span class="hud-pill">📚 Homework</span>`;
   }
@@ -681,7 +685,8 @@ async function init(){
     return;
   }
   info = await r.json();
-  const saved = localStorage.getItem('hw_name_' + hid);
+  let saved = '';
+  try{ saved = localStorage.getItem('hw_name_' + hid) || ''; }catch(e){}
   if(saved) return begin(saved);
   welcome();
 }
@@ -701,8 +706,8 @@ function welcome(err){
 
       <div class="field-lbl"><span>${info.roster.length ? 'Select Your Name' : 'Your Name'}</span></div>
       ${info.roster.length
-        ? `<select id="nm"><option value="">— Pick your name —</option>${info.roster.map(x => `<option>${esc(x)}</option>`).join('')}</select>`
-        : `<input type="text" id="nm" placeholder="Enter your full name…" maxlength="48" onkeydown="if(event.key==='Enter')begin(this.value)">`
+        ? `<select id="nm"><option value="">— Pick your name —</option>${info.roster.map(x => `<option value="${esc(x)}">${esc(shortName(x))}</option>`).join('')}</select>`
+        : `<input type="text" id="nm" placeholder="Enter your full name…" onkeydown="if(event.key==='Enter')begin(this.value)">`
       }
       ${err ? `<div class="err">${esc(err)}</div>` : ''}
       <button class="go" onclick="begin(document.getElementById('nm').value)">▶️ Start Assignment</button>
@@ -718,11 +723,11 @@ function welcome(err){
 async function begin(name){
   const r = await post('/api/hw_start', {id: hid, name});
   if(!r._httpOk){
-    localStorage.removeItem('hw_name_' + hid);
+    try{ localStorage.removeItem('hw_name_' + hid); }catch(e){}
     return welcome(r.error);
   }
   me = r;
-  localStorage.setItem('hw_name_' + hid, r.name);
+  try{ localStorage.setItem('hw_name_' + hid, r.name); }catch(e){}
   if(r.done) return finish(r);
   cur = r.question;
   show();
@@ -1042,7 +1047,7 @@ function finish(r){
   $.innerHTML = `
     <div class="card-panel">
       <div style="font-size:3.1em;line-height:1">${pct >= 90 ? '🏆' : pct >= 70 ? '🎉' : '💪'}</div>
-      <h1>All Done, ${esc(me.name)}!</h1>
+      <h1>All Done, ${esc(shortName(me.name))}!</h1>
       <div class="meta-row" style="margin-bottom:6px">
         <span class="meta-pill" style="color:#69f0ae;border-color:rgba(105,240,174,.4)">✅ Submitted to Instructor</span>
         <span class="meta-pill" style="color:var(--gold);border-color:rgba(255,223,93,.45)">📊 Grade: ${pct}%</span>

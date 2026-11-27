@@ -3881,7 +3881,7 @@ function hostTagSuggest(){
   const r = await fetch(`/api/names?pin=${encodeURIComponent(pin)}&q=${encodeURIComponent(m[1].trim())}`);
   if(!r.ok) return;
   const d = await r.json();
-  box.innerHTML = (d.names || []).filter(n => n !== 'Host').map(n => `<span data-n="${esc(n)}" onclick="hostPickTag(this.dataset.n)">${esc(n)}</span>`).join('');
+  box.innerHTML = (d.names || []).filter(n => n !== 'Host').map(n => `<span data-n="${esc(n)}" onclick="hostPickTag(this.dataset.n)">${esc(shortName(n))}</span>`).join('');
   box.style.display = box.innerHTML ? 'flex' : 'none';
  }, 120);
 }
@@ -3906,11 +3906,11 @@ async function hostProfile(name, headline){
   document.body.appendChild(el);
  }
  const hq = (!IS_AUDIENCE && host) ? `&host=${encodeURIComponent(host)}` : '';
- const r = await fetch(`/api/profile?pin=${encodeURIComponent(pin)}&name=${encodeURIComponent(name)}${hq}`);
+ const r = await fetch(`/api/profile?pin=${encodeURIComponent(pin)}&name=${encodeURIComponent(name)}${hq}`, {cache:'no-store'});
  if(!r.ok) return;
  const d = await r.json();
  const spd = d.avg_time != null ? `${d.avg_time}s avg` + (d.fastest != null ? ` (best ${d.fastest}s)` : '') : 'No answers yet';
- el.innerHTML = `<div class="card"><h2>${esc((d.team_emoji?d.team_emoji+' ':'')+(d.avatar?d.avatar+' ':'')+d.name)}</h2>
+ el.innerHTML = `<div class="card"><h2>${esc((d.team_emoji?d.team_emoji+' ':'')+(d.avatar?d.avatar+' ':'')+shortName(d.name))}</h2>
   ${headline ? `<div class="hl">${esc(headline)}</div>` : ''}
   ${d.title ? `<div style="text-align:center;margin-bottom:6px"><span class="title-pill">${esc(d.title)}</span></div>` : ''}
   <div class="stat"><span>Rank</span><b>#${d.rank} of ${d.total_players}</b></div>
@@ -3934,13 +3934,13 @@ function hostPlays(){
  try{ nm = localStorage.getItem('brainrush_host_play_name') || ''; }catch(e){}
  m.innerHTML = `<div class="card"><h2>🎮 Play too</h2>
   <p style="margin:4px 0 8px;opacity:.88;font-size:.92em;line-height:1.4">Pick your player nickname. Your player screen opens in a new tab with floating <b>🕹 Host controls</b> so you can play along while advancing the game.</p>
-  <input id="hpName" maxlength="16" placeholder="Your nickname" value="${esc(nm)}">
+  <input id="hpName" placeholder="Your nickname" value="${esc(nm)}">
   <a id="hpGo" class="go" target="_blank" rel="noopener">▶ Open My Player Screen</a>
   <button type="button" class="cl" onclick="document.getElementById('hostPlayModal').style.display='none'">Cancel</button></div>`;
  m.style.display = 'flex';
  const inp = document.getElementById('hpName'), go = document.getElementById('hpGo');
  const upd = () => {
-  const v = inp.value.trim().slice(0, 16);
+  const v = inp.value.trim();
   go.href = v ? `/play?pin=${encodeURIComponent(pin)}&name=${encodeURIComponent(v)}&auto=1&ctl=1#hk=${encodeURIComponent(host)}` : '#';
   go.style.opacity = v ? '1' : '.5';
   try{ if(v) localStorage.setItem('brainrush_host_play_name', v); }catch(e){}
@@ -3980,10 +3980,10 @@ function updateHostChatDot(){
  d.textContent = cnt;
 }
 function hMsgHtml(m){
- const rq = m.reply ? `<div class="rq">↩ ${esc((m.reply.host?'😎 ':'')+m.reply.name)}: ${esc(m.reply.text)}</div>` : '';
+ const rq = m.reply ? `<div class="rq">↩ ${esc((m.reply.host?'😎 ':'')+shortName(m.reply.name))}: ${esc(m.reply.text)}</div>` : '';
  const nm = m.host
   ? `<b>😎 Host</b>`
-  : `<b class="clickable" data-n="${esc(m.name)}" onclick="hostProfile(this.dataset.n)">${esc((m.avatar?m.avatar+' ':'')+m.name)}</b>${m.bot?' <span class="bt">🤖</span>':''}`;
+  : `<b class="clickable" data-n="${esc(m.name)}" onclick="hostProfile(this.dataset.n)">${esc((m.avatar?m.avatar+' ':'')+shortName(m.name))}</b>${m.bot?' <span class="bt">🤖</span>':''}`;
  const chips = Object.entries(m.r || {}).map(([e,n]) => `<span class="rc ${(m.mine||[]).includes(e)?'mine':''}" onclick="hostReact(${m.id},'${e}')">${e} ${n}</span>`).join('');
  const pick = hReactOpen === m.id ? `<div class="rpick">${H_REACTS.map(e => `<span onclick="hostReact(${m.id},'${e}')">${e}</span>`).join('')}</div>` : '';
  return `<div class="${m.host?'hostmsg':''} ${(m.tags||[]).includes('Host')&&!m.host?'tagme':''}">${rq}${nm}: ${hFmtText(m)} <span class="acts"><a onclick="hostStartReply(${m.id})" title="Reply">↩</a><a onclick="hostReactPick(${m.id})" title="React">😀</a></span>${chips?`<div class="rx">${chips}</div>`:''}${pick}</div>`;
@@ -4017,7 +4017,7 @@ function updateHReplyBar(){
  const el = document.getElementById('hostReplyBar');
  if(!el) return;
  el.style.display = hReply ? 'block' : 'none';
- el.innerHTML = hReply ? `↩ Replying to <b>${esc(hReply.name)}</b> <a onclick="hostClearReply()" style="cursor:pointer;margin-left:4px">✖</a>` : '';
+ el.innerHTML = hReply ? `↩ Replying to <b>${esc(shortName(hReply.name))}</b> <a onclick="hostClearReply()" style="cursor:pointer;margin-left:4px">✖</a>` : '';
 }
 function hostReactPick(id){ hReactOpen = (hReactOpen === id) ? null : id; renderHostChat(true); }
 async function hostReact(id, emoji){
@@ -4072,7 +4072,7 @@ function showChatFeed(list){
    if(S.chat_enabled && feed){
     const el = document.createElement('div');
     if(m.host) el.className = 'hf';
-    el.innerHTML = `<b>${esc(m.host ? '😎 Host' : ((m.avatar ? m.avatar + ' ' : '') + m.name))}:</b> ${hFmtText(m)}`;
+    el.innerHTML = `<b>${esc(m.host ? '😎 Host' : ((m.avatar ? m.avatar + ' ' : '') + shortName(m.name)))}:</b> ${hFmtText(m)}`;
     feed.appendChild(el);
     while(feed.children.length > 4) feed.removeChild(feed.firstChild);
     setTimeout(()=>{ if(el.parentNode) el.remove(); }, 6500);
@@ -4348,6 +4348,7 @@ function renderFinal(b){
 
 function quoteBox(){return `<blockquote>&ldquo;${esc(S.quote)}&rdquo;${S.source?`<cite>&mdash; ${esc(S.source)}</cite>`:''}</blockquote>`}
 function esc(s){return String(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+function shortName(n){const a=Array.from(String(n==null?'':n));return a.length>11?a.slice(0,11).join('')+'...':a.join('')}
 const QR = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 29 29" width="240" height="240" style="background:#fff;border-radius:12px;display:block"><path d="M2 2h7v1h-7zM10 2h2v1h-2zM18 2h1v1h-1zM20 2h7v1h-7zM2 3h1v1h-1zM8 3h1v1h-1zM16 3h1v1h-1zM20 3h1v1h-1zM26 3h1v1h-1zM2 4h1v1h-1zM4 4h3v1h-3zM8 4h1v1h-1zM10 4h1v1h-1zM13 4h6v1h-6zM20 4h1v1h-1zM22 4h3v1h-3zM26 4h1v1h-1zM2 5h1v1h-1zM4 5h3v1h-3zM8 5h1v1h-1zM10 5h2v1h-2zM13 5h1v1h-1zM15 5h4v1h-4zM20 5h1v1h-1zM22 5h3v1h-3zM26 5h1v1h-1zM2 6h1v1h-1zM4 6h3v1h-3zM8 6h1v1h-1zM10 6h4v1h-4zM15 6h4v1h-4zM20 6h1v1h-1zM22 6h3v1h-3zM26 6h1v1h-1zM2 7h1v1h-1zM8 7h1v1h-1zM11 7h1v1h-1zM14 7h2v1h-2zM18 7h1v1h-1zM20 7h1v1h-1zM26 7h1v1h-1zM2 8h7v1h-7zM10 8h1v1h-1zM12 8h1v1h-1zM14 8h1v1h-1zM16 8h1v1h-1zM18 8h1v1h-1zM20 8h7v1h-7zM11 9h1v1h-1zM13 9h1v1h-1zM17 9h1v1h-1zM2 10h4v1h-4zM8 10h1v1h-1zM10 10h1v1h-1zM16 10h1v1h-1zM18 10h2v1h-2zM22 10h3v1h-3zM26 10h1v1h-1zM2 11h1v1h-1zM4 11h1v1h-1zM6 11h2v1h-2zM9 11h1v1h-1zM11 11h1v1h-1zM15 11h1v1h-1zM18 11h1v1h-1zM21 11h1v1h-1zM25 11h1v1h-1zM2 12h2v1h-2zM5 12h2v1h-2zM8 12h3v1h-3zM15 12h1v1h-1zM18 12h1v1h-1zM20 12h1v1h-1zM22 12h1v1h-1zM3 13h4v1h-4zM9 13h1v1h-1zM13 13h3v1h-3zM17 13h1v1h-1zM21 13h1v1h-1zM23 13h2v1h-2zM4 14h2v1h-2zM8 14h4v1h-4zM13 14h1v1h-1zM15 14h2v1h-2zM19 14h4v1h-4zM24 14h3v1h-3zM3 15h1v1h-1zM7 15h1v1h-1zM10 15h1v1h-1zM12 15h2v1h-2zM17 15h1v1h-1zM20 15h3v1h-3zM26 15h1v1h-1zM3 16h3v1h-3zM7 16h3v1h-3zM12 16h1v1h-1zM14 16h1v1h-1zM19 16h1v1h-1zM22 16h1v1h-1zM24 16h2v1h-2zM2 17h1v1h-1zM9 17h2v1h-2zM12 17h1v1h-1zM14 17h1v1h-1zM17 17h3v1h-3zM21 17h2v1h-2zM26 17h1v1h-1zM6 18h1v1h-1zM8 18h6v1h-6zM15 18h1v1h-1zM18 18h9v1h-9zM10 19h1v1h-1zM14 19h3v1h-3zM18 19h1v1h-1zM22 19h1v1h-1zM24 19h1v1h-1zM26 19h1v1h-1zM2 20h7v1h-7zM12 20h3v1h-3zM16 20h1v1h-1zM18 20h1v1h-1zM20 20h1v1h-1zM22 20h1v1h-1zM24 20h3v1h-3zM2 21h1v1h-1zM8 21h1v1h-1zM14 21h1v1h-1zM17 21h2v1h-2zM22 21h1v1h-1zM25 21h1v1h-1zM2 22h1v1h-1zM4 22h3v1h-3zM8 22h1v1h-1zM13 22h1v1h-1zM16 22h1v1h-1zM18 22h6v1h-6zM26 22h1v1h-1zM2 23h1v1h-1zM4 23h3v1h-3zM8 23h1v1h-1zM10 23h1v1h-1zM14 23h1v1h-1zM16 23h1v1h-1zM20 23h1v1h-1zM22 23h5v1h-5zM2 24h1v1h-1zM4 24h3v1h-3zM8 24h1v1h-1zM10 24h1v1h-1zM13 24h1v1h-1zM15 24h6v1h-6zM22 24h1v1h-1zM24 24h2v1h-2zM2 25h1v1h-1zM8 25h1v1h-1zM10 25h1v1h-1zM12 25h1v1h-1zM15 25h2v1h-2zM19 25h2v1h-2zM22 25h1v1h-1zM24 25h1v1h-1zM2 26h7v1h-7zM10 26h7v1h-7zM21 26h6v1h-6z" fill="#2b0d57"/></svg>';
 const WHEEL_IDS = ['speed','robin','crate','streak2x'], WHEEL_EMO = ['⚡','🏹','🎁','🔥'];
 let spunQ = -1;
@@ -4605,7 +4606,7 @@ function render(){
    const av = fmtAvatar(p);
    const tPre = (p.tag && p.avatar && p.tag.indexOf(p.avatar) > 0) ? esc(p.tag.slice(0, p.tag.indexOf(p.avatar))) : '';
    const body = (av || p.av_hat || p.av_ring)
-    ? `${tPre}${av}${av?' ':''}${esc(p.name)}${p.bot?' 🤖':''}`
+    ? `${tPre}${av}${av?' ':''}${esc(shortName(p.name))}${p.bot?' 🤖':''}`
     : esc(p.tag);
    return `<span${p.color?` style="color:${p.color}"`:''}>${body}${p.ctag?`<em class="ctag">${esc(p.ctag)}</em>`:''}<button class="kick" title="Remove ${esc(p.name)}" data-n="${esc(p.name)}" onclick="kickPlayer(this.dataset.n)">✖</button></span>`;
   }).join('');
@@ -5000,7 +5001,7 @@ function resultExtras(){
  let h = '';
  if(S.team_results && S.team_results.length) h += `<div class="team-res">${S.team_results.map(t=>`<span class="tr" style="background:${t.color}">${t.emoji} ${esc(t.name)} ${t.correct?'✅ +300 each':'❌'}</span>`).join('')}</div>`;
  if(S.hot) h += `<div class="hot-banner">🔥 ${esc(S.hot.name)} ${S.hot.ok?'NAILED IT! (+400)':'missed it!'} · ${S.hot.right||0} predictor(s) guessed right (+200 each)</div>`;
- if(S.tiebreak && S.tb_winner) h += `<div class="tb-banner">👑 ${esc(S.tb_winner)} wins the tiebreaker!</div>`;
+ if(S.tiebreak && S.tb_winner) h += `<div class="tb-banner">👑 ${esc(shortName(S.tb_winner))} wins the tiebreaker!</div>`;
  h += sharedResultExtrasHtml();
  return h;
 }
@@ -5363,14 +5364,14 @@ function getToken(){ return localStorage.getItem('brainrush_token') || localStor
 function getUser(){ return localStorage.getItem('brainrush_user') || ''; }
 function nameHtml(x){
  const c = x.color && /^#[0-9a-f]{3,8}$/i.test(x.color);
- return `<span${c?` style="color:${x.color}"`:''}>${esc(x.name)}</span>${x.ctag?`<em class="ctag">${esc(x.ctag)}</em>`:''}`;
+ return `<span${c?` style="color:${x.color}"`:''}>${esc(shortName(x.name))}</span>${x.ctag?`<em class="ctag">${esc(x.ctag)}</em>`:''}`;
 }
 function pendingHtml(){
  const pl = S.pending_list || [];
  if(!pl.length) return '';
  return `<div class="pend-box"><b>🛡️ Waiting for approval:</b> ${pl.map(p=>{
   const av = fmtAvatar(p);
-  return `<span class="pend">${av?av+' ':''}${esc(p.name)} <button data-n="${esc(p.name)}" onclick="approveName(this.dataset.n,true)">✓</button><button style="background:#e21b3c" data-n="${esc(p.name)}" onclick="approveName(this.dataset.n,false)">✕</button></span>`;
+  return `<span class="pend" title="${esc(p.name)}">${av?av+' ':''}${esc(shortName(p.name))} <button data-n="${esc(p.name)}" onclick="approveName(this.dataset.n,true)">✓</button><button style="background:#e21b3c" data-n="${esc(p.name)}" onclick="approveName(this.dataset.n,false)">✕</button></span>`;
  }).join('')}</div>`;
 }
 async function approveName(name, ok){ await post('/api/approve', {pin, host, name, approve: ok}); await poll(); if(document.getElementById('modModal').classList.contains('open')) refreshMod(); }
@@ -7486,7 +7487,7 @@ resultExtras = function(){
  if(!S.case && S.qtype !== 'brainstorm' && S.qtype !== 'scale') return _resultExtras0();
  let h = sharedResultExtrasHtml();
  if(S.qtype==='poll'){
-  const defs = (S.defenders||[]).length ? `🎤 <b>Defend your side!</b><br>${S.defenders.map(d=>`${esc(d.name)} speaks for <b>${sh[d.side%sh.length]}${esc((S.answers||[])[d.side]||'')}</b>`).join('<br>')}<br>` : '';
+  const defs = (S.defenders||[]).length ? `🎤 <b>Defend your side!</b><br>${S.defenders.map(d=>`${esc(shortName(d.name))} speaks for <b>${sh[d.side%sh.length]}${esc((S.answers||[])[d.side]||'')}</b>`).join('<br>')}<br>` : '';
   if(defs || !IS_AUDIENCE || S.discuss_left != null){
    h += `<div class="defend">${defs}${!defs&&S.discuss_left!=null?'🗣️ <b>Discussion:</b> ':''}<span id="dtimer" style="font-weight:900;font-size:1.3em;color:#ffdf5d">${discussText()}</span> ${discussCtrlHtml('discussSecInp','⏱️ Start Discussion')}</div>`;
   }
@@ -7993,7 +7994,7 @@ function renderPresenter(){
     const av = fmtAvatar(p);
     const scoreTxt = (S.scoring_mode === 'percent' && p.pct != null) ? `${p.pct}% (${p.score})` : p.score;
     return `<div class="pcon-p">
-     <span style="cursor:pointer;text-decoration:underline dotted" title="Inspect live stats for ${esc(p.name)}" data-n="${esc(p.name)}" onclick="hostProfile(this.dataset.n)">${i+1}. ${av?av+' ':''}${esc(p.name)}${p.bot?' <small style="opacity:.65">🤖</small>':''}</span>
+     <span style="cursor:pointer;text-decoration:underline dotted" title="Inspect live stats for ${esc(p.name)}" data-n="${esc(p.name)}" onclick="hostProfile(this.dataset.n)">${i+1}. ${av?av+' ':''}${esc(shortName(p.name))}${p.bot?' <small style="opacity:.65">🤖</small>':''}</span>
      <span><b style="color:#ffdf5d;margin-right:6px">${scoreTxt}</b><button title="Remove ${esc(p.name)}" data-n="${esc(p.name)}" onclick="kickPlayer(this.dataset.n)">✖</button></span>
     </div>`;
    }).join('') : '<div style="opacity:.68;font-size:.9em">No players joined yet.</div>'}
