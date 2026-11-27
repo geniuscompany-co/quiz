@@ -323,5 +323,980 @@
     "t": 20,
     "topic": "Thanksgiving Around the World",
     "quote": "Because Canada is farther north, its harvest season arrives earlier—so Canadian Thanksgiving is celebrated on the second Monday of October!"
+  },
+  {
+    "q": "Which Native American from the Patuxet tribe spoke English, taught the Pilgrims how to plant corn with fish fertilizer, and served as interpreter at the 1621 feast?",
+    "a": [
+      "Tisquantum (Squanto)",
+      "Pocahontas",
+      "Sacagawea",
+      "Sitting Bull"
+    ],
+    "c": 0,
+    "t": 20,
+    "topic": "Thanksgiving History",
+    "quote": "Tisquantum (Squanto) had learned English during earlier voyages to Europe and helped broker peace between the Plymouth colonists and Wampanoag chief Massasoit."
+  },
+  {
+    "q": "About how many Wampanoag guests joined the 53 surviving Plymouth colonists at the three-day 1621 harvest feast?",
+    "a": [
+      "Only Chief Massasoit alone",
+      "About 90 guests",
+      "Over 500 guests",
+      "12 guests"
+    ],
+    "c": 1,
+    "t": 20,
+    "topic": "Thanksgiving History",
+    "quote": "Wampanoag leader Massasoit arrived with roughly 90 men—nearly double the number of surviving Mayflower colonists—and stayed for three days!"
+  },
+  {
+    "q": "Why was there almost certainly no pumpkin pie or bread stuffing at the 1621 Plymouth feast?",
+    "a": [
+      "Pumpkins had not been discovered in North America yet",
+      "English law forbade eating dessert on feast days",
+      "The Pilgrims had run out of sugar and wheat flour and had no oven for baking pastries",
+      "All of their pumpkins had frozen in an October blizzard"
+    ],
+    "c": 2,
+    "t": 20,
+    "topic": "Thanksgiving History",
+    "quote": "The Mayflower's flour and sugar stores had dwindled, so the colonists likely hollowed out pumpkins and roasted them with honey, spices, or milk over open fires instead of baking crusted pies."
+  },
+  {
+    "q": "Before crossing the Atlantic on the Mayflower, in which Dutch city did many of the Pilgrims live for over a decade—where an annual October 3rd 'Leidens Ontzet' thanksgiving feast inspired their harvest traditions?",
+    "a": [
+      "Leiden",
+      "Amsterdam",
+      "Rotterdam",
+      "The Hague"
+    ],
+    "c": 0,
+    "t": 20,
+    "topic": "Thanksgiving History",
+    "quote": "The Separatists lived in Leiden, Netherlands, from 1609 to 1620, where locals celebrated an annual October 3rd thanksgiving feast commemorating the lifting of the 1574 Spanish siege."
+  },
+  {
+    "q": "Which ship was supposed to sail alongside the Mayflower in 1620, but sprang a leak twice and had to turn back to England, crowding all 102 passengers onto the Mayflower?",
+    "a": [
+      "The Speedwell",
+      "The Half Moon",
+      "The Discovery",
+      "The Susan Constant"
+    ],
+    "c": 0,
+    "t": 20,
+    "topic": "Thanksgiving History",
+    "quote": "The ironically named Speedwell leaked so badly twice that it was left behind in Plymouth, England, delaying the Mayflower's departure until September 1620."
+  },
+  {
+    "q": "Where did the Mayflower first drop anchor in November 1620—where the Pilgrims signed the Mayflower Compact—before sailing across the bay to Plymouth?",
+    "a": [
+      "Martha's Vineyard",
+      "Nantucket Island",
+      "Provincetown Harbor at the tip of Cape Cod",
+      "Boston Harbor"
+    ],
+    "c": 2,
+    "t": 20,
+    "topic": "Thanksgiving History",
+    "quote": "The Pilgrims first landed at the tip of Cape Cod (modern-day Provincetown) on November 11, 1620, and spent five weeks exploring before choosing Plymouth."
+  },
+  {
+    "q": "Who was the longtime governor of Plymouth Colony whose handwritten history, 'Of Plimoth Plantation,' was lost during the Revolutionary War and rediscovered in a London bishop's library in 1855?",
+    "a": [
+      "John Winthrop",
+      "William Bradford",
+      "John Smith",
+      "Miles Standish"
+    ],
+    "c": 1,
+    "t": 20,
+    "topic": "Thanksgiving History",
+    "quote": "William Bradford's manuscript was missing for over 70 years until it was found in Fulham Palace in London in 1855, reviving national interest in the 1621 Plymouth story!"
+  },
+  {
+    "q": "Two years before the Mayflower landed, on December 4, 1619, English settlers stepped ashore at Berkeley Hundred along the James River and held a service of thanksgiving in which colony?",
+    "a": [
+      "Maryland",
+      "Virginia",
+      "Rhode Island",
+      "Georgia"
+    ],
+    "c": 1,
+    "t": 20,
+    "topic": "Thanksgiving History",
+    "quote": "The 1619 Berkeley Plantation charter in Virginia declared that the day of their ship's arrival 'shall be yearly and perpetually kept holy as a day of thanksgiving'!"
+  },
+  {
+    "q": "Spanish explorer Pedro Menéndez de Avilés and members of the Timucua tribe shared a feast of salted pork, garbanzo beans, and red wine after a Mass of Thanksgiving on September 8, 1565, in which modern U.S. city?",
+    "a": [
+      "San Diego, California",
+      "Santa Fe, New Mexico",
+      "St. Augustine, Florida",
+      "San Antonio, Texas"
+    ],
+    "c": 2,
+    "t": 20,
+    "topic": "Thanksgiving History",
+    "quote": "Historians point to St. Augustine, Florida—founded 56 years before the Plymouth feast—as the site of the earliest documented European-Native American thanksgiving meal in what is now the United States."
+  },
+  {
+    "q": "In what year did President George Washington issue the very first Presidential Thanksgiving Proclamation by the new U.S. federal government?",
+    "a": [
+      "1789",
+      "1812",
+      "1801",
+      "1776"
+    ],
+    "c": 0,
+    "t": 20,
+    "topic": "Thanksgiving History",
+    "quote": "On October 3, 1789, George Washington proclaimed Thursday, November 26, 1789, as a national day of public thanksgiving and prayer in honor of the new U.S. Constitution."
+  },
+  {
+    "q": "Which U.S. President refused to issue any Thanksgiving proclamations during his presidency because he believed the Constitution built a 'wall of separation between Church and State'?",
+    "a": [
+      "Thomas Jefferson",
+      "James Madison",
+      "Andrew Jackson",
+      "John Adams"
+    ],
+    "c": 0,
+    "t": 20,
+    "topic": "Thanksgiving History",
+    "quote": "Thomas Jefferson felt that proclaiming national days of fasting or thanksgiving was a religious matter best left to individual states and citizens."
+  },
+  {
+    "q": "Which influential 19th-century women's magazine did Sarah Josepha Hale edit for 40 years while publishing yearly editorials and recipes campaigning for a national Thanksgiving holiday?",
+    "a": [
+      "Harper's Bazaar",
+      "Good Housekeeping",
+      "Ladies' Home Journal",
+      "Godey's Lady's Book"
+    ],
+    "c": 3,
+    "t": 20,
+    "topic": "Thanksgiving History",
+    "quote": "As editor of 'Godey's Lady's Book'—the most widely read magazine in pre-Civil War America—Sarah Josepha Hale popularized roast turkey and pumpkin pie as standard Thanksgiving fare."
+  },
+  {
+    "q": "Which major Civil War Union victory in July 1863—followed by his famous November address there—helped inspire President Abraham Lincoln to proclaim a national Thanksgiving holiday in October 1863?",
+    "a": [
+      "The Battle of Shiloh",
+      "The Siege of Petersburg",
+      "The Battle of Gettysburg",
+      "The Battle of Antietam"
+    ],
+    "c": 2,
+    "t": 20,
+    "topic": "Thanksgiving History",
+    "quote": "Written by Secretary of State William Seward and signed by Lincoln on October 3, 1863, the proclamation urged Americans to 'heal the wounds of the nation' on the final Thursday of November."
+  },
+  {
+    "q": "When Congress passed a joint resolution in December 1941 to end the 'Franksgiving' confusion once and for all, which day did it legally lock in as Thanksgiving Day?",
+    "a": [
+      "The third Thursday of November",
+      "November 25th every year",
+      "The fourth Thursday of November",
+      "The last Thursday of November"
+    ],
+    "c": 2,
+    "t": 20,
+    "topic": "Thanksgiving History",
+    "quote": "Because November sometimes has five Thursdays, Congress specified the FOURTH Thursday of November so the date never lands as late as November 29 or 30."
+  },
+  {
+    "q": "In 1970, Wampanoag leader Wamsutta (Frank) James established a solemn annual gathering on Cole's Hill overlooking Plymouth Rock on Thanksgiving Day known by what name?",
+    "a": [
+      "Wampanoag Harvest Remembrance",
+      "First Nations Heritage Day",
+      "Plymouth Unity Vigil",
+      "National Day of Mourning"
+    ],
+    "c": 3,
+    "t": 20,
+    "topic": "Thanksgiving History",
+    "quote": "Every Thanksgiving since 1970, Indigenous people and allies have gathered at Cole's Hill in Plymouth for the National Day of Mourning to honor Native ancestors and resilience."
+  },
+  {
+    "q": "How did a bird native exclusively to North and Central America end up being called a 'turkey' in English?",
+    "a": [
+      "Its gobble sounded like the Turkish word for 'hello'",
+      "The first European turkey farm was built in Istanbul",
+      "16th-century English buyers confused it with guinea fowl imported through Constantinople by Levant ('Turkey') merchants",
+      "Christopher Columbus thought he had landed in the Ottoman Empire"
+    ],
+    "c": 2,
+    "t": 20,
+    "topic": "Turkey Trivia",
+    "quote": "When Spanish explorers brought domesticated Aztec turkeys to Europe, English traders lumped them together with exotic 'turkey-cocks' (guinea fowl) shipped by Ottoman Levant merchants!"
+  },
+  {
+    "q": "Which ancient Mesoamerican civilization was the first to domesticate the wild turkey more than 2,000 years ago?",
+    "a": [
+      "The Polynesian navigators",
+      "The Incas of Peru",
+      "The Vikings of Greenland",
+      "The Maya and Aztecs of Mexico and Central America"
+    ],
+    "c": 3,
+    "t": 20,
+    "topic": "Turkey Trivia",
+    "quote": "Archaeological evidence shows indigenous peoples of south-central Mexico domesticated turkeys around 800 B.C.–200 B.C., centuries before Europeans arrived."
+  },
+  {
+    "q": "Which U.S. state raises the most turkeys every year—producing roughly 38 to 40 million birds annually?",
+    "a": [
+      "Kentucky",
+      "California",
+      "Minnesota",
+      "Texas"
+    ],
+    "c": 2,
+    "t": 20,
+    "topic": "Turkey Trivia",
+    "quote": "Minnesota is America's #1 turkey-producing state, followed closely by North Carolina, Arkansas, and Indiana!"
+  },
+  {
+    "q": "What are baby turkeys officially called during their first few weeks of life?",
+    "a": [
+      "Goslings",
+      "Chicks",
+      "CygNETS",
+      "Poults"
+    ],
+    "c": 3,
+    "t": 20,
+    "topic": "Turkey Trivia",
+    "quote": "Baby turkeys are called poults! For the first month of life, they feed mostly on insects and berries before switching to seeds and acorns."
+  },
+  {
+    "q": "What can the bare skin on a live wild turkey's head and neck do in seconds when the bird gets excited, scared, or ready to court?",
+    "a": [
+      "Inflate to the size of a basketball",
+      "Glow in the dark",
+      "Change color between bright red, white, and vivid blue",
+      "Shed and regrow feathers overnight"
+    ],
+    "c": 2,
+    "t": 20,
+    "topic": "Turkey Trivia",
+    "quote": "As blood vessels dilate or constrict, a turkey's bare head can shift between patriotic red, white, and blue in just a few seconds!"
+  },
+  {
+    "q": "Where do wild turkeys sleep at night to stay safe from coyotes, foxes, and bobcats?",
+    "a": [
+      "High up in tree branches",
+      "Inside hollow cactuses",
+      "Floating on the middle of ponds",
+      "Inside underground burrows"
+    ],
+    "c": 0,
+    "t": 20,
+    "topic": "Turkey Trivia",
+    "quote": "At dusk, wild turkeys fly up into high tree branches to roost for the night, descending back to the ground at dawn."
+  },
+  {
+    "q": "What is the bristle-like tuft of modified feathers sticking out from the center of a male wild turkey's chest called?",
+    "a": [
+      "The apron",
+      "The beard",
+      "The mane",
+      "The tassel"
+    ],
+    "c": 1,
+    "t": 20,
+    "topic": "Turkey Trivia",
+    "quote": "It's called a beard! A tom turkey's beard grows continuously about 3 to 5 inches per year (and about 10% of female hens grow one too)."
+  },
+  {
+    "q": "Roughly how many feathers does a fully grown adult turkey have covering its body?",
+    "a": [
+      "Over 50,000 feathers",
+      "About 300 feathers",
+      "About 1,000 feathers",
+      "About 5,000 to 6,000 feathers"
+    ],
+    "c": 3,
+    "t": 20,
+    "topic": "Turkey Trivia",
+    "quote": "An adult turkey has between 5,000 and 6,000 feathers! Only male toms fan their 18 large tail feathers into a full wheel to show off."
+  },
+  {
+    "q": "Which two senses are strongest in a turkey (while its sense of smell is quite poor)?",
+    "a": [
+      "Hearing and 270-degree color vision",
+      "Whisker vibration and magnetic navigation",
+      "Infrared heat sensing and taste",
+      "Smell and night echolocation"
+    ],
+    "c": 0,
+    "t": 20,
+    "topic": "Turkey Trivia",
+    "quote": "Because a turkey's eyes are on the sides of its head, it has a 270-degree field of color vision—and even though it has no external ear flaps, it can pinpoint a sound a mile away!"
+  },
+  {
+    "q": "Who was the young boy in 1863 who begged his father—President Abraham Lincoln—to spare a live turkey named Jack that had been sent to the White House for Christmas dinner?",
+    "a": [
+      "Charlie Taft",
+      "John Quincy Adams",
+      "Tad Lincoln",
+      "Quentin Roosevelt"
+    ],
+    "c": 2,
+    "t": 20,
+    "topic": "Turkey Trivia",
+    "quote": "Ten-year-old Tad Lincoln adopted the turkey as a pet named Jack, and Lincoln wrote out a reprieve on a card so Jack wouldn't be cooked!"
+  },
+  {
+    "q": "In November 1963, President John F. Kennedy spared a 55-pound White House gift turkey wearing a sign around its neck that read what?",
+    "a": [
+      "'Vote for Turkey!'",
+      "'Good Eating, Mr. President!'",
+      "'Please Don't Eat Me!'",
+      "'Too Big for the Oven!'"
+    ],
+    "c": 1,
+    "t": 20,
+    "topic": "Turkey Trivia",
+    "quote": "Looking at the huge bird wearing a 'Good Eating, Mr. President!' banner on November 19, 1963, JFK smiled and said, 'We'll just let this one grow.'"
+  },
+  {
+    "q": "Under the modern White House turkey pardon tradition, how many turkeys travel to Washington, D.C., each November—and why?",
+    "a": [
+      "Twelve turkeys representing the 12 months of the year",
+      "Fifty turkeys—one from every U.S. state",
+      "Exactly one lone turkey",
+      "Two turkeys (a primary bird and an official alternate) in case one gets stage fright or falls ill"
+    ],
+    "c": 3,
+    "t": 20,
+    "topic": "Turkey Trivia",
+    "quote": "Two turkeys are raised and trained with music and camera flashes to handle the Rose Garden crowd—and both the official bird and its alternate receive a presidential pardon!"
+  },
+  {
+    "q": "What were the rhyming names of the pair of White House turkeys pardoned in 2014 that became an instant social media joke?",
+    "a": [
+      "Salt and Pepper",
+      "Drumstick and Wishbone",
+      "Biscuit and Gravy",
+      "Mac and Cheese"
+    ],
+    "c": 3,
+    "t": 20,
+    "topic": "Turkey Trivia",
+    "quote": "Over the years, pardoned White House turkey pairs have included Mac and Cheese (2014), Tater and Tot (2016), Bread and Butter (2019), Peanut Butter and Jelly (2021), and Liberty and Bell (2023)!"
+  },
+  {
+    "q": "Which turkey bone is dried and pulled apart by two people after Thanksgiving dinner to see who gets the bigger half ('the lucky break')?",
+    "a": [
+      "The femur (thighbone)",
+      "The sternum (breastbone)",
+      "The furcula (fused collarbone)",
+      "The fibula (drumstick splint)"
+    ],
+    "c": 2,
+    "t": 20,
+    "topic": "Turkey Trivia",
+    "quote": "The wishbone is the furcula—two fused collarbones that give birds springy strength for flapping their wings. The wish-snapping custom dates back to ancient Etruscans and Romans!"
+  },
+  {
+    "q": "In a traditional farmyard turkey, roughly what percentage of the bird's meat is white meat versus dark meat?",
+    "a": [
+      "About 70% white meat and 30% dark meat",
+      "50% white meat and 50% dark meat",
+      "100% white meat",
+      "20% white meat and 80% dark meat"
+    ],
+    "c": 0,
+    "t": 20,
+    "topic": "Turkey Trivia",
+    "quote": "A typical Thanksgiving turkey yields roughly 70% white meat (breast and wings) and 30% dark meat (thighs and drumsticks, which have more myoglobin from walking)."
+  },
+  {
+    "q": "Approximately how many turkeys are prepared for Thanksgiving across the United States each year?",
+    "a": [
+      "About 300 million",
+      "About 150 million",
+      "About 5 million",
+      "About 46 million"
+    ],
+    "c": 3,
+    "t": 20,
+    "topic": "Food & Feast",
+    "quote": "According to the National Turkey Federation, Americans cook roughly 46 million turkeys for Thanksgiving each year (plus another 22 million at Christmas)!"
+  },
+  {
+    "q": "Why did the Butterball Turkey Co. originally establish the 'Turkey Talk-Line' (1-800-BUTTERBALL) in November 1981?",
+    "a": [
+      "To run a national turkey-calling contest",
+      "To take complaints about broken oven thermometers",
+      "Six home economists answered 11,000 live phone calls from nervous home cooks asking how to thaw and roast a turkey",
+      "To sell mail-order stuffing mixes over the phone"
+    ],
+    "c": 2,
+    "t": 20,
+    "topic": "Food & Feast",
+    "quote": "Started with 6 home economists in 1981, the Butterball Turkey Talk-Line now fields over 100,000 questions every November and December via phone, text, and voice assistants!"
+  },
+  {
+    "q": "According to USDA food-safety guidelines, how long does it take to safely thaw a frozen 16-pound turkey in the refrigerator?",
+    "a": [
+      "About 4 days (24 hours for every 4 to 5 pounds)",
+      "Overnight on the kitchen counter",
+      "About 4 hours",
+      "About 14 days"
+    ],
+    "c": 0,
+    "t": 20,
+    "topic": "Food & Feast",
+    "quote": "The USDA's golden rule is 24 hours of refrigerator thawing for every 4 to 5 pounds of turkey—meaning a 16-pound bird needs about 4 full days in the fridge!"
+  },
+  {
+    "q": "What is the USDA-recommended minimum internal temperature for a fully cooked Thanksgiving turkey (measured in the thickest part of the breast, thigh, and stuffing)?",
+    "a": [
+      "165°F",
+      "250°F",
+      "212°F",
+      "135°F"
+    ],
+    "c": 0,
+    "t": 20,
+    "topic": "Food & Feast",
+    "quote": "Food safety experts confirm a turkey (and any stuffing cooked inside the cavity) is safely cooked when a meat thermometer reaches 165°F."
+  },
+  {
+    "q": "What culinary difference separates 'stuffing' from 'dressing' on a Thanksgiving menu—even though region often determines which word families use?",
+    "a": [
+      "Stuffing uses wheat bread, while dressing only uses rice",
+      "Stuffing is cooked inside the turkey cavity, while dressing is baked in a separate pan or casserole dish",
+      "Stuffing contains meat, while dressing is strictly vegetarian",
+      "Stuffing is served cold, while dressing is served hot"
+    ],
+    "c": 1,
+    "t": 20,
+    "topic": "Food & Feast",
+    "quote": "Technically, stuffing is stuffed inside the bird while dressing is baked in a separate dish—though in the American South, 'cornbread dressing' is the universal name either way!"
+  },
+  {
+    "q": "Which company introduced Stove Top Stuffing in 1972—invented by home economist Ruth Siems—promising delicious stuffing in 5 minutes without a turkey?",
+    "a": [
+      "Pillsbury",
+      "General Foods (Kraft Heinz)",
+      "Kellogg's",
+      "Quaker Oats"
+    ],
+    "c": 1,
+    "t": 20,
+    "topic": "Food & Feast",
+    "quote": "General Foods home economist Ruth Siems patented the exact size and crumb texture of bread cubes so Stove Top Stuffing could rehydrate in a saucepan in just five minutes!"
+  },
+  {
+    "q": "Which state produces roughly 85% of all the canned pumpkin sold in the United States—and declared pumpkin pie its official state pie in 2015?",
+    "a": [
+      "Illinois",
+      "Florida",
+      "Oregon",
+      "Maine"
+    ],
+    "c": 0,
+    "t": 20,
+    "topic": "Food & Feast",
+    "quote": "Illinois grows more pumpkins than any other state by far—and the town of Morton, Illinois (home to the Libby's cannery), calls itself the 'Pumpkin Capital of the World'!"
+  },
+  {
+    "q": "What variety of squash is actually inside a can of 100% Pure Pumpkin (such as Libby's) rather than an orange Halloween carving jack-o'-lantern?",
+    "a": [
+      "Green zucchini dyed orange",
+      "Acorn squash mixed with carrots",
+      "The Dickinson pumpkin (a tan, sweet, dense squash closely related to butternut squash)",
+      "Watermelon rind mixed with sweet potato"
+    ],
+    "c": 2,
+    "t": 20,
+    "topic": "Food & Feast",
+    "quote": "Carving jack-o'-lanterns are stringy and watery, so canneries use the tan-skinned Dickinson cultivar of Cucurbita moschata, prized for its creamy, sweet orange flesh!"
+  },
+  {
+    "q": "How do farmers harvest wet-harvested cranberries in Massachusetts and Wisconsin every autumn?",
+    "a": [
+      "Drain the lakes completely and dig the roots up like potatoes",
+      "Send trained diving dogs into the ponds",
+      "Wait for the bogs to freeze solid and vacuum the berries off the ice",
+      "They flood the bogs with water, use water reels to knock the floating berries loose, and corral them"
+    ],
+    "c": 3,
+    "t": 20,
+    "topic": "Food & Feast",
+    "quote": "Cranberries don't actually grow underwater! They grow on dry low vines in sandy beds, and farmers flood the bogs the night before harvest because air pockets inside the berries make them float."
+  },
+  {
+    "q": "Who was the Massachusetts lawyer and cranberry grower who first boiled damaged cranberries with sugar and water in 1912 and canned them—founding the cooperative that became Ocean Spray?",
+    "a": [
+      "Clarence Birdseye",
+      "John Harvey Kellogg",
+      "Marcus Urann",
+      "Henry J. Heinz"
+    ],
+    "c": 2,
+    "t": 20,
+    "topic": "Food & Feast",
+    "quote": "Marcus Urann wanted a way to make the short six-week autumn cranberry crop available year-round—and today millions of families serve jellied cranberry sauce ridges and all!"
+  },
+  {
+    "q": "Why are the orange-fleshed tubers in a Thanksgiving casserole almost always 'sweet potatoes' in U.S. grocery stores, even when the can or recipe calls them 'candied yams'?",
+    "a": [
+      "True yams are rough-skinned tropical tubers native to Africa and Asia, while soft orange U.S. varieties are sweet potatoes",
+      "A sweet potato turns into a yam once marshmallows are melted on top",
+      "'Yam' is just the French word for baked potato",
+      "Yams and sweet potatoes are the exact same plant picked in different months"
+    ],
+    "c": 0,
+    "t": 20,
+    "topic": "Food & Feast",
+    "quote": "In the 1930s, Louisiana growers marketed their soft, orange-fleshed sweet potatoes as 'yams' (from the West African word 'nyami') to distinguish them from firmer, pale-fleshed northern sweet potatoes."
+  },
+  {
+    "q": "In what decade did a booklet commissioned by angel-food cake and marshmallow makers first popularize topping Thanksgiving sweet potatoes with toasted marshmallows?",
+    "a": [
+      "The 2000s",
+      "The 1770s",
+      "The 1980s",
+      "The 1910s (1917)"
+    ],
+    "c": 3,
+    "t": 20,
+    "topic": "Food & Feast",
+    "quote": "In 1917, the Angelus Marshmallow company hired Boston Cooking School Magazine founder Janet McKenzie Hill to create home recipes using mass-produced marshmallows—and sweet potato casserole with marshmallows was born!"
+  },
+  {
+    "q": "Which crunchy, nutty pie—made with corn syrup, eggs, butter, sugar, and native tree nuts—became a Thanksgiving staple across the American South in the 1920s and 1930s after Karo syrup printed the recipe on its labels?",
+    "a": [
+      "Key lime pie",
+      "Rhubarb pie",
+      "Pecan pie",
+      "Shoofly pie"
+    ],
+    "c": 2,
+    "t": 20,
+    "topic": "Food & Feast",
+    "quote": "Pecans are the only major tree nut native to North America, and the sales manager's wife at Karo Corn Syrup popularized the modern pecan pie recipe in the 1930s!"
+  },
+  {
+    "q": "What are the 'giblets' often found tucked inside a paper or plastic pouch inside a store-bought whole turkey?",
+    "a": [
+      "The wishbone and drumsticks",
+      "The heart, gizzard, liver, and neck (often simmered to make rich turkey gravy or stuffing stock)",
+      "The wingtips and tail feathers",
+      "Extra packets of sage and thyme"
+    ],
+    "c": 1,
+    "t": 20,
+    "topic": "Food & Feast",
+    "quote": "Many a rookie Thanksgiving cook has accidentally roasted the little giblet bag still tucked inside the turkey's neck or body cavity!"
+  },
+  {
+    "q": "Which culinary technique—wrapping or tying a turkey's legs and wings close to its body with kitchen twine—helps the bird roast evenly without drying out the breast?",
+    "a": [
+      "Trussing",
+      "Flambéing",
+      "Blanching",
+      "Braising"
+    ],
+    "c": 0,
+    "t": 20,
+    "topic": "Food & Feast",
+    "quote": "Trussing pulls the wings and drumsticks snug against the body so the extremities don't overcook before the thickest part of the turkey reaches 165°F."
+  },
+  {
+    "q": "Which Thanksgiving turkey cooking method—cutting out the backbone and pressing the bird flat so it roasts in nearly half the time with crispy skin all over—has become a favorite of modern chefs?",
+    "a": [
+      "Spatchcocking (butterflying)",
+      "Steaming",
+      "Sous-vide",
+      "Poaching"
+    ],
+    "c": 0,
+    "t": 20,
+    "topic": "Food & Feast",
+    "quote": "Spatchcocking a turkey exposes the dark-meat thighs to higher direct heat so the thighs and breast finish cooking at the exact same time!"
+  },
+  {
+    "q": "According to the National Fire Protection Association, Thanksgiving Day has more than triple the daily average of home cooking fires—most often caused by what backyard cooking mishap?",
+    "a": [
+      "Toasting marshmallows with a candle",
+      "Boiling cranberries on a camp stove",
+      "Dropping a partially frozen or wet turkey into an overfilled outdoor propane deep-fryer",
+      "Warming dinner rolls in a toaster"
+    ],
+    "c": 2,
+    "t": 20,
+    "topic": "Food & Feast",
+    "quote": "When ice or water inside a turkey hits 350°F peanut oil, it instantly flashes to steam and expands 1,700 times in volume, causing boiling oil to spill over the pot onto the burner flame!"
+  },
+  {
+    "q": "According to nutrition researchers at the Calorie Control Council, roughly how many calories does the average American consume during a full Thanksgiving dinner (including appetizers, sides, drinks, and dessert)?",
+    "a": [
+      "About 1,200 calories",
+      "About 600 calories",
+      "Over 15,000 calories",
+      "About 3,000 to 4,500 calories"
+    ],
+    "c": 3,
+    "t": 20,
+    "topic": "Food & Feast",
+    "quote": "Between buttery mashed potatoes, stuffing, gravy, pie, and seconds, a full Thanksgiving feast plus nibbles can easily top 3,000 to 4,500 calories!"
+  },
+  {
+    "q": "Which famous guest always closes out the finale of the Macy's Thanksgiving Day Parade in Herald Square, officially kicking off the holiday season?",
+    "a": [
+      "The Mayor of New York riding a giant turkey",
+      "The Statue of Liberty",
+      "Uncle Sam",
+      "Santa Claus on his sleigh float"
+    ],
+    "c": 3,
+    "t": 20,
+    "topic": "Parades & Traditions",
+    "quote": "Santa Claus has closed out every Macy's Parade since the very first one in 1924 (except 1933, when he led the parade at the very front)!"
+  },
+  {
+    "q": "Who was the theatrical puppeteer and designer who invented the first giant character balloons for the Macy's Thanksgiving Day Parade in 1927?",
+    "a": [
+      "Walt Disney",
+      "Jim Henson",
+      "P.T. Barnum",
+      "Tony Sarg"
+    ],
+    "c": 3,
+    "t": 20,
+    "topic": "Parades & Traditions",
+    "quote": "Master puppeteer Tony Sarg designed upside-down marionettes filled with air and helium in partnership with the Goodyear Tire & Rubber Company in Akron, Ohio!"
+  },
+  {
+    "q": "Between 1928 and 1932, how did Macy's dispose of its giant parade balloons at the end of the parade—until a pilot nearly crashed trying to catch one?",
+    "a": [
+      "They donated them to the circus as tents",
+      "They popped them with pins in Central Park",
+      "They floated them across the Hudson River on barges",
+      "They released them into the sky to float away for days, offering a $100 reward to anyone who mailed a deflated balloon back"
+    ],
+    "c": 3,
+    "t": 20,
+    "topic": "Parades & Traditions",
+    "quote": "For five years Macy's let the balloons drift away with return-address labels attached—until 1932, when a student pilot flew into a drifting Tom Cat balloon over Queens and barely escaped!"
+  },
+  {
+    "q": "Why was the Macy's Thanksgiving Day Parade canceled for three straight years in 1942, 1943, and 1944?",
+    "a": [
+      "Record-breaking New York City blizzards",
+      "A citywide subway strike",
+      "Macy's flagship store was being rebuilt",
+      "World War II shortages—Macy's deflated and donated 650 pounds of balloon rubber to the U.S. military war effort"
+    ],
+    "c": 3,
+    "t": 20,
+    "topic": "Parades & Traditions",
+    "quote": "During World War II, helium and rubber were vital military supplies. Macy's ceremonial deflation of a giant dragon balloon yielded 650 pounds of scrap rubber for the armed forces!"
+  },
+  {
+    "q": "Which iconic float has led the front of the Macy's Thanksgiving Day Parade almost every year since 1979?",
+    "a": [
+      "The Golden Pumpkin Carriage",
+      "Tom Turkey (the giant head-bobbing, wing-flapping turkey float)",
+      "The Mayflower Spaceship",
+      "The Empire State Express Train"
+    ],
+    "c": 1,
+    "t": 20,
+    "topic": "Parades & Traditions",
+    "quote": "Tom Turkey is the official mascot and lead float of the Macy's Thanksgiving Day Parade, greeting millions of spectators at the start of the 2.5-mile Manhattan route!"
+  },
+  {
+    "q": "What is the oldest Thanksgiving Day parade in the United States—founded in 1920, four years before Macy's first parade?",
+    "a": [
+      "Boston's Plymouth Rock March",
+      "Houston's H-E-B Thanksgiving Parade",
+      "Chicago's State Street Parade",
+      "Philadelphia's Thanksgiving Day Parade (originally the Gimbel Brothers Parade)"
+    ],
+    "c": 3,
+    "t": 20,
+    "topic": "Parades & Traditions",
+    "quote": "Department store rival Gimbel Brothers launched the first Thanksgiving parade in Philadelphia in 1920 with 50 people, 15 cars, and a fireman dressed as Santa!"
+  },
+  {
+    "q": "What marches down the streets of Plymouth, Massachusetts, in 'America's Hometown Thanksgiving Parade' instead of fictional cartoon balloons?",
+    "a": [
+      "Sailboats pulled on trailers",
+      "Floats made entirely out of cranberries",
+      "Only antique tractors from the 1920s",
+      "Chronological historical units, drum corps, and living-history reenactors portraying four centuries of American history"
+    ],
+    "c": 3,
+    "t": 20,
+    "topic": "Parades & Traditions",
+    "quote": "Plymouth's parade arranges its floats and marchers strictly in chronological order from the 17th-century Pilgrims and Wampanoag through the 20th century!"
+  },
+  {
+    "q": "What is the oldest continuously run footrace in North America—held every Thanksgiving morning since 1896 when six runners raced 5 miles down dirt roads?",
+    "a": [
+      "The Golden Gate Gobbler 10K",
+      "The Buffalo YMCA Turkey Trot in Buffalo, New York",
+      "The Boston Marathon",
+      "The Dallas Cowboy Dash"
+    ],
+    "c": 1,
+    "t": 20,
+    "topic": "Sports & Traditions",
+    "quote": "Founded on Thanksgiving 1896 with just six runners, the Buffalo YMCA Turkey Trot is the oldest consecutively run footrace in North America (even older than the 1897 Boston Marathon)!"
+  },
+  {
+    "q": "Why did Detroit Lions owner George A. Richards originally schedule a Thanksgiving Day home football game in 1934?",
+    "a": [
+      "Because the Detroit Tigers baseball team was using the field on Sunday",
+      "Because the stadium lights were broken for night games",
+      "To celebrate his birthday",
+      "As a marketing stunt to pack the stadium and broadcast the game coast-to-coast on his 94-station NBC radio network"
+    ],
+    "c": 3,
+    "t": 20,
+    "topic": "Sports & Traditions",
+    "quote": "Richards owned radio station WJR and convinced NBC to air the Lions vs. undefeated Chicago Bears live on Thanksgiving 1934—selling out all 26,000 seats and launching an annual tradition!"
+  },
+  {
+    "q": "Since 2006, the NFL has played how many Thanksgiving Day football games each year (afternoon in Detroit, late afternoon in Dallas, plus an evening matchup)?",
+    "a": [
+      "One game",
+      "Six games",
+      "Three games",
+      "Two games"
+    ],
+    "c": 2,
+    "t": 20,
+    "topic": "Sports & Traditions",
+    "quote": "In 2006, the NFL added a third prime-time night game (now honoring the John Madden Thanksgiving Celebration) alongside the classic Detroit Lions and Dallas Cowboys afternoon games."
+  },
+  {
+    "q": "What is the name of the playful Thanksgiving Day matchup featuring rescue puppies and senior dogs shown alongside the National Dog Show?",
+    "a": [
+      "The Westminster Winter Classic",
+      "The Pilgrim Pooch Pageant",
+      "The Gobble Hound Grand Prix",
+      "The National Dog Show (hosted by the Kennel Club of Philadelphia right after the Macy's Parade)"
+    ],
+    "c": 3,
+    "t": 20,
+    "topic": "Sports & Traditions",
+    "quote": "Since 2002, over 20 million viewers have tuned in right after the Macy's Parade on NBC to watch the Kennel Club of Philadelphia's National Dog Show!"
+  },
+  {
+    "q": "In the freak 1993 Thanksgiving snow-and-sleet game between the Miami Dolphins and Dallas Cowboys, whose last-second blunder on a blocked field goal allowed Miami to kick a winning retry?",
+    "a": [
+      "The stadium snowplow driver",
+      "Dolphins quarterback Dan Marino",
+      "Cowboys coach Jimmy Johnson",
+      "Cowboys defensive lineman Leon Lett, who slid into the live football on the snowy turf"
+    ],
+    "c": 3,
+    "t": 20,
+    "topic": "Sports & Traditions",
+    "quote": "Dallas had blocked Miami's game-winning field goal in the snow and only needed to stay away from the ball—but Leon Lett tried to recover it, slipped, and touched it, giving Miami possession at the 1-yard line!"
+  },
+  {
+    "q": "In the 1998 Thanksgiving overtime coin toss in Detroit, Steelers running back Jerome Bettis swore he called 'tails,' while referee Phil Luckett heard 'heads-tails' and awarded the ball to Detroit—prompting what NFL rule change?",
+    "a": [
+      "Captains must now state their coin-toss call BEFORE the referee flips the coin into the air",
+      "Overtime games are decided by a field-goal contest instead of a coin toss",
+      "Coaches flip the coin themselves on the sideline",
+      "Thanksgiving games can no longer go to overtime"
+    ],
+    "c": 0,
+    "t": 20,
+    "topic": "Sports & Traditions",
+    "quote": "After the infamous 'Heels/Heads-Tails' Thanksgiving coin-toss controversy, the NFL changed its rulebook so the visiting captain calls heads or tails before the coin leaves the referee's thumb!"
+  },
+  {
+    "q": "Which two college football programs first met on Thanksgiving Day in 1876 in Hoboken, New Jersey, starting a 19th-century holiday college football craze that predated the NFL by 58 years?",
+    "a": [
+      "Ohio State and Michigan",
+      "USC and UCLA",
+      "Alabama and Auburn",
+      "Yale and Princeton"
+    ],
+    "c": 3,
+    "t": 20,
+    "topic": "Sports & Traditions",
+    "quote": "Yale and Princeton played their first Thanksgiving championship game in 1876—by the 1890s, over 40,000 fans packed Manhattan's Polo Grounds every Thanksgiving to watch!"
+  },
+  {
+    "q": "In the famous 1947 holiday movie that begins during the Macy's Thanksgiving Day Parade, an actor hired to play Santa Claus insists he is the real Kris Kringle. What is the film's title?",
+    "a": [
+      "White Christmas",
+      "It's a Wonderful Life",
+      "Miracle on 34th Street",
+      "Holiday Inn"
+    ],
+    "c": 2,
+    "t": 20,
+    "topic": "Pop Culture & Fun Facts",
+    "quote": "The opening scenes of 'Miracle on 34th Street' were filmed live during the actual 1946 Macy's Thanksgiving Day Parade in New York City, with star Edmund Gwenn riding the real Santa float!"
+  },
+  {
+    "q": "Which beloved 1987 comedy stars Steve Martin and John Candy as two mismatched travelers trying to get home to Chicago for Thanksgiving dinner by train, bus, and burned-out rental car?",
+    "a": [
+      "Dutch",
+      "Uncle Buck",
+      "Planes, Trains and Automobiles",
+      "Home for the Holidays"
+    ],
+    "c": 2,
+    "t": 20,
+    "topic": "Pop Culture & Fun Facts",
+    "quote": "John Hughes wrote 'Planes, Trains and Automobiles' after his own real-life nightmare flight from New York to Chicago was diverted to Wichita and took three days!"
+  },
+  {
+    "q": "In the classic 1978 Thanksgiving episode of the sitcom 'WKRP in Cincinnati' ('Turkeys Away'), what happens when station manager Arthur Carlson drops live turkeys from a helicopter as a promotion?",
+    "a": [
+      "The turkeys land peacefully on the mayor's roof",
+      "A hawk chases the helicopter back to the airport",
+      "The domestic turkeys can't fly and plummet into the shopping center parking lot, prompting the line: 'As God is my witness, I thought turkeys could fly!'",
+      "The turkeys fly away to Florida with the station's banner"
+    ],
+    "c": 2,
+    "t": 20,
+    "topic": "Pop Culture & Fun Facts",
+    "quote": "Based on a real 1950s Dallas radio station promotion (where turkeys were tossed from a truck), 'Turkeys Away' was named by TV Guide as one of the greatest sitcom episodes in television history!"
+  },
+  {
+    "q": "On the TV show 'Friends,' which character famously puts a whole raw Thanksgiving turkey over their head (complete with sunglasses and a fez) to cheer up Chandler?",
+    "a": [
+      "Rachel Green",
+      "Ross Geller",
+      "Phoebe Buffay",
+      "Monica Geller (after Joey did it first to scare Chandler)"
+    ],
+    "c": 3,
+    "t": 20,
+    "topic": "Pop Culture & Fun Facts",
+    "quote": "In Season 5's 'The One with All the Thanksgivings,' Joey gets his head stuck inside a 19-pound turkey first, and Monica later puts it on with a fez and sunglasses—making Chandler blurt out 'I love you' for the first time!"
+  },
+  {
+    "q": "In another famous 'Friends' Thanksgiving episode, why does Rachel's homemade English trifle taste like 'feet' to Ross?",
+    "a": [
+      "Two cookbook pages stuck together, so she layered ladyfingers, custard, and jam with beef sautéed with peas and onions",
+      "She accidentally used salt instead of powdered sugar",
+      "She baked it with garlic butter instead of vanilla",
+      "She dropped the bowl on the apartment carpet"
+    ],
+    "c": 0,
+    "t": 20,
+    "topic": "Pop Culture & Fun Facts",
+    "quote": "Half English trifle and half shepherd's pie—only Joey EATS every bite and declares: 'Custard? Good. Jam? Good. Meat? Goooood!'"
+  },
+  {
+    "q": "Which comedic 1990s singer performed 'The Thanksgiving Song' on Saturday Night Live's Weekend Update ('Turkey for me, turkey for you, let's eat the turkey in my big brown shoe')?",
+    "a": [
+      "Mike Myers",
+      "Will Ferrell",
+      "Chris Farley",
+      "Adam Sandler"
+    ],
+    "c": 3,
+    "t": 20,
+    "topic": "Pop Culture & Fun Facts",
+    "quote": "Adam Sandler debuted 'The Thanksgiving Song' on SNL in November 1992 after realizing radio stations had hundreds of Christmas songs but almost no funny Thanksgiving songs!"
+  },
+  {
+    "q": "Folk singer Arlo Guthrie's 18-minute talking-blues anthem 'Alice's Restaurant Massacree'—played by rock radio stations every Thanksgiving since 1967—begins with what real-life Thanksgiving Day misadventure?",
+    "a": [
+      "Losing a pet turkey on the New York Thruway",
+      "Getting arrested in Stockbridge, Massachusetts, for littering after finding the town dump closed on Thanksgiving",
+      "Burning down Alice's restaurant kitchen with a deep-fryer",
+      "Getting snowed in at a roadside diner for a week"
+    ],
+    "c": 1,
+    "t": 20,
+    "topic": "Pop Culture & Fun Facts",
+    "quote": "On Thanksgiving 1965, 18-year-old Arlo Guthrie and a friend tried to haul out Alice Brock's church-home trash in a VW microbus, leading to the famous 'twenty-seven 8-by-10 color glossy pictures with circles and arrows'!"
+  },
+  {
+    "q": "What was the title of the 2013 animated comedy film in which two turkeys named Reggie and Jake (voiced by Owen Wilson and Woody Harrelson) use a time machine to travel back to 1621 to get turkeys off the Thanksgiving menu?",
+    "a": [
+      "Chicken Run 2",
+      "The Gobble Squad",
+      "Free Birds",
+      "Pilgrim Pigeons"
+    ],
+    "c": 2,
+    "t": 20,
+    "topic": "Pop Culture & Fun Facts",
+    "quote": "In 'Free Birds' (2013), the time-traveling turkeys replace turkey at the 1621 Plymouth feast with delivery pizza from Chuck E. Cheese!"
+  },
+  {
+    "q": "In 1578—43 years before the Plymouth feast—English explorer Martin Frobisher held the first recorded European Thanksgiving ceremony in North America after surviving icy waters in what is now which territory?",
+    "a": [
+      "Alaska",
+      "Puerto Rico",
+      "Nunavut, Canada (Frobisher Bay on Baffin Island)",
+      "Bermuda"
+    ],
+    "c": 2,
+    "t": 20,
+    "topic": "Thanksgiving Around the World",
+    "quote": "Frobisher and his crew gave formal thanks on Baffin Island in 1578 with a communion service and a meal of salt beef, biscuits, and mushy peas—the historical root of Canadian Thanksgiving!"
+  },
+  {
+    "q": "Which West African nation—founded in the 19th century by freed African Americans—celebrates a national Thanksgiving Day on the first Thursday of November with concerts and roasted chicken or mashed cassavas?",
+    "a": [
+      "Liberia",
+      "Ethiopia",
+      "Madagascar",
+      "Morocco"
+    ],
+    "c": 0,
+    "t": 20,
+    "topic": "Thanksgiving Around the World",
+    "quote": "Liberia established its national Thanksgiving Day in the 1880s on the first Thursday of November, blending American harvest traditions with vibrant West African music and spicy dishes!"
+  },
+  {
+    "q": "On tiny Norfolk Island (an Australian territory in the South Pacific), why do residents celebrate American Thanksgiving on the last Wednesday of November with cornbread and pumpkin pie?",
+    "a": [
+      "19th-century American whaling ships and traders brought the holiday to the island in the 1890s",
+      "The Mayflower stopped there on a world tour",
+      "It marks the island's volcano harvest day",
+      "Wild turkeys swim to the island every November"
+    ],
+    "c": 0,
+    "t": 20,
+    "topic": "Thanksgiving Around the World",
+    "quote": "American trader Isaac Robinson decorated Norfolk Island's All Saints Church with palm leaves and cornstalks for Thanksgiving in the 1890s, and islanders have celebrated it ever since!"
+  },
+  {
+    "q": "In the Dutch city of Leiden—where the Pilgrims lived before sailing on the Mayflower—which historic church still holds an annual non-denominational American Thanksgiving Day service every November?",
+    "a": [
+      "The Tulip Basilica",
+      "The Royal Palace Chapel",
+      "The Windmill Cathedral",
+      "The Pieterskerk (St. Peter's Church, where Pilgrim pastor John Robinson is buried)"
+    ],
+    "c": 3,
+    "t": 20,
+    "topic": "Thanksgiving Around the World",
+    "quote": "Every fourth Thursday of November, the 900-year-old Pieterskerk in Leiden hosts an annual Thanksgiving Day service honoring the hospitality shown to the Pilgrims in the 1600s."
+  },
+  {
+    "q": "What name did the National Retail Federation coin in 2005 for the Monday after Thanksgiving weekend, when millions of workers returned to their office computers to shop online?",
+    "a": [
+      "Web Wednesday",
+      "Digital Tuesday",
+      "Mouse-Click Monday",
+      "Cyber Monday"
+    ],
+    "c": 3,
+    "t": 20,
+    "topic": "Pop Culture & Fun Facts",
+    "quote": "Ellen Davis and Scott Silverman at Shop.org coined 'Cyber Monday' in a 2005 press release after noticing online retail traffic spiked every Monday after Thanksgiving when people used fast office internet connections!"
   }
 ]
